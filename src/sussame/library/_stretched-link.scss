@@ -1,18 +1,15 @@
 // Makes the parent element compatable for stretched link!
 // It cannot be used when there are multiple links inside of a parrent element!
-@mixin stretchedLink {
-    position: relative;
-    a {
-        &:after {
-            content: "";
-            position: absolute;
-            pointer-events: auto;
-            background-color: rgba(0,0,0,0);
-            top: 0;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            z-index: 1;
-        }
+@mixin stretched-link {
+    &::after {
+        content: "";
+        position: absolute;
+        pointer-events: auto;
+        background-color: rgba(0,0,0,0);
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 1;
     }
 }

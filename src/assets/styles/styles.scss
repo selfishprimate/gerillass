@@ -1,4 +1,4 @@
-@import '../../dipsass/dipsass';
+@import '../../sussame/sussame';
 
 body{
     background-color: rgb(250,250,240);
@@ -27,5 +27,21 @@ body{
     display: flex;
     align-items:center;
     justify-content: center;
+}
+
+.article-list{
+    article{
+        &:not(:şast-child){
+            margin-bottom: 50px;
+        }
+        &.featured-article{
+            padding: 30px;
+            @include bg-image-with-solid-filter(
+                $filter-color: purple,
+                $filter-opacity: .8,
+                $image-url: "../images/portraits/01.jpg"
+            );
+        }
+    }
 }
 

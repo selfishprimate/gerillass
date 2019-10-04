@@ -1,3 +1,4 @@
+@charset "UTF-8";
 body {
   background-color: #fafaf0;
   padding: 50px;
@@ -50,4 +51,35 @@ body {
   -webkit-box-pack: center;
   -ms-flex-pack: center;
   justify-content: center;
+}
+
+.article-list article:not(:şast-child) {
+  margin-bottom: 50px;
+}
+
+.article-list article.featured-article {
+  padding: 30px;
+  position: relative;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  color: #7fff7f;
+  background-image: url("../images/portraits/01.jpg");
+}
+
+.article-list article.featured-article > * {
+  position: relative;
+  z-index: 1;
+}
+
+.article-list article.featured-article:after {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: purple;
+  opacity: 0.8;
 }
