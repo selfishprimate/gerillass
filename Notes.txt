@@ -1,0 +1,14 @@
+
+Important!
+
+1. Mac veya Linux sistemlerde npm install komutu yetki sorunları yüzünden düzgün çalışmıyorsa aşağıdaki komutu çalıştırın.
+
+sudo npm install --unsafe-perm=true --allow-root
+
+2. node_modules klasörünü kaldırmak için aşağıdaki komutu kullanın (Not: node_modules klasörünün olduğu dizine girdiğinizden emin olun!):
+
+sudo rm -rf node_modules
+
+"internalBinding is not defined" hatasına karşı aşağıdaki komutu kullan:
+
+sudo npm install natives@1.1.6

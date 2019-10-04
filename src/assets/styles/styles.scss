@@ -1,0 +1,31 @@
+@import '../../dipsass/dipsass';
+
+body{
+    background-color: rgb(250,250,240);
+    padding: 50px;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+@include border-box;
+
+.carousel-container{
+    @include carousel(
+        $gutter: 20px,
+        $hiddenScrollbar: true
+    );
+}
+
+.thumb{
+    width: 200px;
+    height: 200px;
+    background-color: rgb(200,200,200);
+    border-radius: 10px;
+    font-size: 40px;
+    font-weight: bold;
+    display: flex;
+    align-items:center;
+    justify-content: center;
+}
+

@@ -1,0 +1,35 @@
+@mixin generateTriangle($direction: right, $height: 10px, $width: 10px, $color: black) {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: $height 0 $height $width;
+    border-color: transparent transparent transparent $color;
+    @if $direction == "up" {
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 0 $height $width $height;
+        border-color: transparent transparent $color transparent;
+    }
+    @else if $direction == "down" {
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: $width $height 0 $height;
+        border-color: $color transparent transparent transparent;
+    }
+    @else if $direction == "left" {
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: $height $width $height 0;
+        border-color: transparent $color transparent transparent;
+    }
+    @else if $direction == "right" {
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: $height 0 $height $width;
+        border-color: transparent transparent transparent $color;
+    }
+}

@@ -1,0 +1,37 @@
+$xsmall: 0;
+$small: 576px;
+$medium: 768px;
+$large: 992px;
+$xlarge: 1200px;
+
+@mixin breakPoint($value) {
+    @if $value == "xsmall" {
+        @media (min-width: $xsmall) {
+            @content;
+        }
+    }
+
+    @else if $value == "small" {
+        @media (min-width: $small){
+            @content;
+        }
+    }
+
+    @else if $value == "medium" {
+        @media (min-width: $medium){
+            @content;
+        }
+    }
+
+    @else if $value == "large" {
+        @media (min-width: $large){
+            @content;
+        }
+    }
+
+    @else if $value == "xlarge" {
+        @media (min-width: $xlarge){
+            @content;
+        }
+    }
+}
