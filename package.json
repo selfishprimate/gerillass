@@ -1,14 +1,14 @@
 {
-  "name": "Sassame",
+  "name": "Sussame",
   "version": "1.0.0",
-  "description": "The easiest workflow for frontend development.",
+  "description": "A handy SASS toolkit for Ali Baba and the Forty Thieves!",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/babilkuyusu/Sassame.git.git"
+    "url": "https://github.com/babilkuyusu/Sussame.git.git"
   },
   "author": "Halil İbrahim Çakıroğlu",
   "license": "ISC",
