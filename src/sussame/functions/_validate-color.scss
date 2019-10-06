@@ -1,0 +1,3 @@
+@function isColor($color) {
+  @return (type-of($color) == color) or ($color == "currentColor");
+}

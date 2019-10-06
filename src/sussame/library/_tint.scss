@@ -1,0 +1,11 @@
+@function tint(
+  $color,
+  $percent
+) {
+  @if not validate-color($color) {
+    @error "`#{$color}` is not a valid color for the `$color` argument in " +
+           "the `tint` mixin.";
+  } @else {
+    @return mix(#fff, $color, $percent);
+  }
+}

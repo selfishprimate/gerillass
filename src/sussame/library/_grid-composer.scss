@@ -1,19 +1,14 @@
-
-// Grid layout with CSS calculation
-@mixin gridLayoutWithCalc($columns, $gutter, $flex-grow: 1) {
+@mixin grid-composer($columns, $gutter, $flex-grow: 1) {
     display: flex;
     flex-wrap: wrap;
     padding: $gutter $gutter 0;
-
     & > * {
         flex: $flex-grow 0 calc((100% - (#{$columns} - 1) * #{$gutter}) / #{$columns});
         margin-bottom: $gutter;
         padding: $gutter;
-
         &:not(:last-child) {
             margin-right: $gutter;
         }
-
         &:nth-child(#{$columns}n) {
             margin-right: 0;
         }

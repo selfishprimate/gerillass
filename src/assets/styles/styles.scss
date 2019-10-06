@@ -21,18 +21,36 @@ body{
     width: 200px;
     height: 200px;
     background-color: rgb(200,200,200);
-    border-radius: 10px;
     font-size: 40px;
     font-weight: bold;
     display: flex;
     align-items:center;
     justify-content: center;
+    @include border-radius(
+        $corner: null,
+        $value: 50px
+    );
 }
 
 .article-list{
     article{
-        &:not(:şast-child){
+        position: relative;
+        &:not(:last-child){
             margin-bottom: 50px;
+        }
+        &:not(.featured-article){
+            &:after{
+                content: "";
+                position: absolute;
+                right: -20px;
+                top: 0;
+                @include triangle(
+                    $direction: "down",
+                    $width: 10px,
+                    $height: 10px,
+                    $color: brown
+                );
+            }
         }
         &.featured-article{
             padding: 30px;
