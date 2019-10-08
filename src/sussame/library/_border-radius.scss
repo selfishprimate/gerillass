@@ -17,11 +17,12 @@
           "bottom-left"
           "bottom-right"
           "left"
-          "right",
+          "right"
+          "all",
         $corner
       )
     {
-      @error "Corner value must be one of the followings: `top`, `top-left`, `top-right`, `bottom`, `bottom-left`, `bottom-right`, `left`, `right`.";
+      @error "Corner value must be one of the followings: `top`, `top-left`, `top-right`, `bottom`, `bottom-left`, `bottom-right`, `left`, `right`, `all`.";
     } @else if $corner == "top" {
       border-top-left-radius: $value;
       border-top-right-radius: $value;
@@ -42,6 +43,8 @@
     } @else if $corner == "right" {
       border-top-right-radius: $value;
       border-bottom-right-radius: $value;
+    } @else if $corner == "all" {
+      border-radius: $value;
     }
   }
 }

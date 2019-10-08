@@ -23,7 +23,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  @include border-radius(top-right, 50px);
+  @include border-radius(all, 30px);
 }
 
 .article-list {
