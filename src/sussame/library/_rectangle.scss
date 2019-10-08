@@ -1,0 +1,12 @@
+@mixin rectangle($params...){
+    $sizeX: nth($params, 1);
+    $sizeY: nth($params, length($params));
+    $size: nth($params, length($params));
+    @if length($params) == 1 {
+        width: $size;
+        height: $size;
+    } @else {
+        width: $sizeX;
+        height: $sizeY;
+    }
+}

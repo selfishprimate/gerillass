@@ -52,6 +52,30 @@ body {
   border-radius: 30px;
 }
 
+.rectangle {
+  background-color: red;
+  width: 120px;
+  height: 120px;
+}
+
+.responsive-video {
+  position: relative;
+  background-color: purple;
+  padding-top: 56.25%;
+}
+
+.responsive-video iframe,
+.responsive-video embed,
+.responsive-video object {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+}
+
 .article-list article {
   position: relative;
 }

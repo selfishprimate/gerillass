@@ -3,7 +3,7 @@
 body {
   background-color: rgb(250, 250, 240);
   padding: 50px;
-  width: 100%;
+  width: 100%; 
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -24,6 +24,15 @@ body {
   align-items: center;
   justify-content: center;
   @include border-radius(all, 30px);
+}
+
+.rectangle{
+  background-color: red;
+  @include rectangle(120px);
+}
+
+.responsive-video{
+  @include responsive-video(16, 9);
 }
 
 .article-list {
