@@ -3,9 +3,10 @@
     position: relative;
     background-color: purple;
     padding-top: #{$ratio + "%"};
-    iframe,
-    embed, 
-    object{
+    > *,
+    > iframe,
+    > embed, 
+    > object{
         position: absolute;
         left: 0;
         right: 0;
