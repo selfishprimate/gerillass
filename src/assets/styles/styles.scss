@@ -33,7 +33,7 @@ body {
 }
 
 .responsive-video {
-  @include responsive-video(16, 9);
+  @include responsive-video();
 }
 
 .article-list {
@@ -66,3 +66,4 @@ body {
     }
   }
 }
+
