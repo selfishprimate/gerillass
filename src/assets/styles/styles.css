@@ -90,11 +90,6 @@ body {
   position: absolute;
   right: -20px;
   top: 0;
-  border-style: solid;
-  height: 0;
-  width: 0;
-  border-color: brown transparent transparent;
-  border-width: 10px 5px 0;
 }
 
 .article-list article.featured-article {
@@ -122,4 +117,31 @@ body {
   height: 100%;
   background-color: black;
   opacity: 0.8;
+}
+
+.breadcrumbs ul, .breadcrumbs ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+
+.breadcrumbs ul li, .breadcrumbs ol li {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  position: relative;
+}
+
+.breadcrumbs ul li:not(:last-child):after, .breadcrumbs ol li:not(:last-child):after {
+  content: "/";
+  font-size: 1em;
+  margin: 0 .5em;
 }
