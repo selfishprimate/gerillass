@@ -67,3 +67,7 @@ body {
   );
 }
 
+.tooltip{
+  @include tooltip;
+}
+

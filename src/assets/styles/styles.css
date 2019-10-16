@@ -145,3 +145,30 @@ body {
   font-size: 1em;
   margin: 0 .5em;
 }
+
+.tooltip {
+  position: relative;
+  text-decoration: underline;
+}
+
+.tooltip input {
+  display: none;
+}
+
+.tooltip .tooltip-content {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: gainsboro;
+  -webkit-transform: translateY(-webkit-calc(-100% - 8px));
+  -ms-transform: translateY(calc(-100% - 8px));
+  transform: translateY(calc(-100% - 8px));
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.tooltip input:checked ~ .tooltip-content {
+  display: block;
+}
