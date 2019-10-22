@@ -33,7 +33,7 @@ body {
 }
 
 .responsive-video {
-  @include responsive-video("16:9");
+  @include responsive-video(16,9);
 }
 
 .article-list {
@@ -42,14 +42,6 @@ body {
     &:not(:last-child) {
       margin-bottom: 50px;
     }
-    &:not(.featured-article) {
-      &:after {
-        content: "";
-        position: absolute;
-        right: -20px;
-        top: 0;
-      }
-    }
     &.featured-article {
       padding: 30px;
       @include bg-image-with-solid-filter(
@@ -57,6 +49,10 @@ body {
         $filter-opacity: 0.8,
         $image-url: "../images/portraits/01.jpg"
       );
+    }
+    h2{
+      font-size: __fontSizer(20px, 2);
+      margin: 0;
     }
   }
 }
@@ -67,7 +63,34 @@ body {
   );
 }
 
-.tooltip{
-  @include tooltip;
+.example{
+  background-color: red;
+  @include hide-visually;
 }
 
+.ellipsis{
+  @include ellipsis;
+}
+
+.before{
+  @include before(
+    $content: "\2192",
+    $spacing: 5px,
+    $size: .9em
+  );
+}
+
+.after{
+  @include after("...");
+}
+
+.gradient{
+  padding: 20px;
+  @include gradient(top,teal, green)
+}
+
+.border-radius{
+  padding: 20px;
+  background-color: teal;
+  @include border-radius(cross-right, 20px);
+}

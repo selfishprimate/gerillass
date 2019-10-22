@@ -1,0 +1,11 @@
+@mixin after(
+    $content,
+    $spacing: null,
+    $size: null
+){
+    &:after{
+        content: "#{$content}";
+        font-size: $size;
+        padding-left: $spacing;
+    }
+}

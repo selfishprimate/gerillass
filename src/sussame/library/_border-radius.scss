@@ -1,10 +1,12 @@
 @mixin border-radius($params...) {
     $corner: nth($params, 1);
     $value: nth($params, length($params));
-    @if length($params) > 2 {
-        @error "Please, pass not more than 2 arguments!";
+    @if length($params) > 2 and length($params) < 4 and length($params) > 4 {
+        @error "Please, pass 2 or 4 arguments!";
     } @else if length($params) == 1 {
         border-radius: $value;
+    } @else if length($params) == 4 {
+        border-radius: nth($params, 1) nth($params, 2) nth($params, 3) nth($params, 4); 
     } @else {
         @if $corner != null and not index("top" "top-left" "top-right" "bottom" "bottom-left" "bottom-right" "left" "right" "cross-left" "cross-right" "all", $corner){
         @error "Corner value must be one of the followings: `top`, `top-left`, `top-right`, `bottom`, `bottom-left`, `bottom-right`, `left`, `right`, `cross-left`, `cross-right`, `all`.";

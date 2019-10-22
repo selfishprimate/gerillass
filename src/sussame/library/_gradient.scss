@@ -1,0 +1,24 @@
+@mixin gradient(
+    $direction,
+    $params...
+){
+    @if $direction == "top" {
+        background-image: linear-gradient(to top, $params);
+    } @else if $direction == "top-left" {
+        background-image: linear-gradient(to top left, $params);
+    } @else if $direction == "top-right" {
+        background-image: linear-gradient(to top right, $params);
+    } @else if $direction == "bottom" {
+        background-image: linear-gradient(to bottom, $params);
+    } @else if $direction == "bottom-left" {
+        background-image: linear-gradient(to bottom left, $params);
+    } @else if $direction == "bottom-right" {
+        background-image: linear-gradient(to bottom right, $params);
+    } @else if $direction == "left" {
+        background-image: linear-gradient(to left, $params);
+    } @else if $direction == "right" {
+        background-image: linear-gradient(to right, $params);
+    } @else{
+        background-image: linear-gradient($direction, $params);
+    }
+}

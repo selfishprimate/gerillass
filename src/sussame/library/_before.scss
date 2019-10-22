@@ -1,0 +1,11 @@
+@mixin before(
+    $content,
+    $spacing: null,
+    $size: null
+){
+    &:before{
+        content: "#{$content}";
+        font-size: $size;
+        padding-right: $spacing;
+    }
+}

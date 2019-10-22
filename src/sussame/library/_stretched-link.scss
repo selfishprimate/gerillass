@@ -1,5 +1,3 @@
-// Makes the parent element compatable for stretched link!
-// It cannot be used when there are multiple links inside of a parrent element!
 @mixin stretched-link {
     &::after {
         content: "";

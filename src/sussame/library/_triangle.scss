@@ -9,6 +9,8 @@
     } @else if not validate-color($color){
         @error "`#{$color}` is not a valid color for the `$color` argument in the `triangle` mixin.";
     } @else {
+        content: "";
+        display: block;
         border-style: solid;
         height: 0;
         width: 0;
