@@ -33,7 +33,7 @@ body {
 }
 
 .responsive-video {
-  @include responsive-video(16,9);
+  @include responsive-video("16:9");
 }
 
 .article-list {
@@ -86,11 +86,15 @@ body {
 
 .gradient{
   padding: 20px;
-  @include gradient(top,teal, green)
+  @include gradient(top-right, red, orange, yellow, green, purple, purple)
 }
 
 .border-radius{
   padding: 20px;
-  background-color: teal;
-  @include border-radius(cross-right, 20px);
+  background-color: rgb(220,220,220);
+  @include border-radius(cross-left, 20px);
+}
+
+.placeholder{
+  @include placeholder(blue);
 }

@@ -1,0 +1,31 @@
+@mixin placeholder(
+    $color: null,
+    $font-size: null,
+    $opacity: null
+){
+    ::-webkit-input-placeholder {
+        font-size: $font-size;
+        opacity: $opacity;
+        color: $color;
+    }
+    ::-moz-placeholder {
+        font-size: $font-size;
+        opacity: $opacity;
+        color: $color;
+    }
+    :-ms-input-placeholder {
+        font-size: $font-size;
+        opacity: $opacity;
+        color: $color;
+    }
+    :-moz-placeholder {
+        font-size: $font-size;
+        opacity: $opacity;
+        color: $color;
+    }
+    ::placeholder{
+        font-size: $font-size;
+        opacity: $opacity;
+        color: $color;
+    }
+}

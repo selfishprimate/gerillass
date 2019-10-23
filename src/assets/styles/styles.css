@@ -182,15 +182,39 @@ body {
 
 .gradient {
   padding: 20px;
-  background-image: -webkit-gradient(linear, left bottom, left top, from(teal), to(green));
-  background-image: -webkit-linear-gradient(bottom, teal, green);
-  background-image: -o-linear-gradient(bottom, teal, green);
-  background-image: linear-gradient(to top, teal, green);
+  background-image: -webkit-gradient(linear, left bottom, right top, from(red), color-stop(orange), color-stop(yellow), color-stop(green), color-stop(purple), to(purple));
+  background-image: -webkit-linear-gradient(bottom left, red, orange, yellow, green, purple, purple);
+  background-image: -o-linear-gradient(bottom left, red, orange, yellow, green, purple, purple);
+  background-image: linear-gradient(to top right, red, orange, yellow, green, purple, purple);
 }
 
 .border-radius {
   padding: 20px;
-  background-color: teal;
-  border-top-right-radius: 20px;
-  border-bottom-left-radius: 20px;
+  background-color: gainsboro;
+  border-top-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.placeholder ::-webkit-input-placeholder {
+  color: blue;
+}
+
+.placeholder ::-moz-placeholder {
+  color: blue;
+}
+
+.placeholder :-ms-input-placeholder {
+  color: blue;
+}
+
+.placeholder :-moz-placeholder {
+  color: blue;
+}
+
+.placeholder ::-ms-input-placeholder {
+  color: blue;
+}
+
+.placeholder ::placeholder {
+  color: blue;
 }
