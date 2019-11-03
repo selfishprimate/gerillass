@@ -182,10 +182,10 @@ body {
 
 .gradient {
   padding: 20px;
-  background-image: -webkit-gradient(linear, left bottom, right top, from(red), color-stop(orange), color-stop(yellow), color-stop(green), color-stop(purple), to(purple));
-  background-image: -webkit-linear-gradient(bottom left, red, orange, yellow, green, purple, purple);
-  background-image: -o-linear-gradient(bottom left, red, orange, yellow, green, purple, purple);
-  background-image: linear-gradient(to top right, red, orange, yellow, green, purple, purple);
+  background: -webkit-gradient(linear, left bottom, right top, from(red), color-stop(orange), color-stop(yellow), color-stop(green), color-stop(purple), to(purple));
+  background: -webkit-linear-gradient(bottom left, red, orange, yellow, green, purple, purple);
+  background: -o-linear-gradient(bottom left, red, orange, yellow, green, purple, purple);
+  background: linear-gradient(to top right, red, orange, yellow, green, purple, purple);
 }
 
 .border-radius {
@@ -196,25 +196,36 @@ body {
 }
 
 .placeholder ::-webkit-input-placeholder {
-  color: blue;
+  color: purple;
 }
 
 .placeholder ::-moz-placeholder {
-  color: blue;
+  color: purple;
 }
 
 .placeholder :-ms-input-placeholder {
-  color: blue;
+  color: purple;
 }
 
 .placeholder :-moz-placeholder {
-  color: blue;
+  color: purple;
 }
 
 .placeholder ::-ms-input-placeholder {
-  color: blue;
+  color: purple;
 }
 
 .placeholder ::placeholder {
-  color: blue;
+  color: purple;
+}
+
+.circle {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  border-radius: 50px;
+  background: -webkit-gradient(linear, right bottom, left top, from(red), color-stop(orange), to(yellow));
+  background: -webkit-linear-gradient(bottom right, red, orange, yellow);
+  background: -o-linear-gradient(bottom right, red, orange, yellow);
+  background: linear-gradient(to top left, red, orange, yellow);
 }

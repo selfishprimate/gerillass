@@ -96,5 +96,10 @@ body {
 }
 
 .placeholder{
-  @include placeholder(blue);
+  @include placeholder(purple);
+}
+
+.circle{
+  @include circle(50px);
+  @include gradient(top-left, red, orange, yellow);
 }
