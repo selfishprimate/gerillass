@@ -28,8 +28,8 @@ body {
 
 .rectangle {
   background-color: red;
-  @include rectangle(120px);
-  margin: __shorthand-property(10px 20px 30px 100px);
+  @include rectangle(120px, 30px);
+  margin: __shorthand-property(0);
 }
 
 .responsive-video {
@@ -86,7 +86,8 @@ body {
 
 .gradient{
   padding: 20px;
-  @include gradient(top-right, red, orange, yellow, green, purple, purple)
+  @include gradient(top-right, red, orange, yellow, orange);
+  @include border-radius(all, 30px);
 }
 
 .border-radius{
@@ -102,4 +103,17 @@ body {
 .circle{
   @include circle(50px);
   @include gradient(top-left, red, orange, yellow);
+}
+
+.badge{
+  @include badge(
+    $rounded: false,
+    $border-radius: 500px
+  );
+}
+
+.notched-area{
+  background-color: orange;
+  padding: 20px;
+  @include cutted-edge(10px);
 }

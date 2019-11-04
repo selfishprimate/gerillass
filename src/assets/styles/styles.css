@@ -58,8 +58,8 @@ body {
 .rectangle {
   background-color: red;
   width: 120px;
-  height: 120px;
-  margin: 10px 20px 30px 100px;
+  height: 30px;
+  margin: 0;
 }
 
 .responsive-video {
@@ -182,10 +182,11 @@ body {
 
 .gradient {
   padding: 20px;
-  background: -webkit-gradient(linear, left bottom, right top, from(red), color-stop(orange), color-stop(yellow), color-stop(green), color-stop(purple), to(purple));
-  background: -webkit-linear-gradient(bottom left, red, orange, yellow, green, purple, purple);
-  background: -o-linear-gradient(bottom left, red, orange, yellow, green, purple, purple);
-  background: linear-gradient(to top right, red, orange, yellow, green, purple, purple);
+  background: -webkit-gradient(linear, left bottom, right top, from(red), color-stop(orange), color-stop(yellow), to(orange));
+  background: -webkit-linear-gradient(bottom left, red, orange, yellow, orange);
+  background: -o-linear-gradient(bottom left, red, orange, yellow, orange);
+  background: linear-gradient(to top right, red, orange, yellow, orange);
+  border-radius: 30px;
 }
 
 .border-radius {
@@ -228,4 +229,19 @@ body {
   background: -webkit-linear-gradient(bottom right, red, orange, yellow);
   background: -o-linear-gradient(bottom right, red, orange, yellow);
   background: linear-gradient(to top left, red, orange, yellow);
+}
+
+.badge {
+  display: inline-block;
+  background-color: gainsboro;
+  font-size: 1em;
+  color: inherit;
+  padding: 5px 10px;
+}
+
+.notched-area {
+  background-color: orange;
+  padding: 20px;
+  -webkit-clip-path: polygon(0 10px, 10px 0, -webkit-calc(100% - 10px) 0, 100% 10px, 100% -webkit-calc(100% - 10px), -webkit-calc(100% - 10px) 100%, 10px 100%, 0 -webkit-calc(100% - 10px));
+  clip-path: polygon(0 10px, 10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px));
 }

@@ -1,0 +1,41 @@
+// You have to pass the units as arguments!
+
+@mixin cutted-edge($params...){
+  @if length($params) == 0 {
+    $value: 20px;
+    clip-path: polygon(
+      0 #{$value},
+      #{$value} 0,
+      calc(100% - #{$value}) 0,
+      100% #{$value},
+      100% calc(100% - #{$value}),
+      calc(100% - #{$value}) 100%,
+      #{$value} 100%,
+      0 calc(100% - #{$value})
+    );
+  } @else if length($params) == 1 {
+      $value: nth($params, 1);
+      clip-path: polygon(
+        0 #{$value},
+        #{$value} 0,
+        calc(100% - #{$value}) 0,
+        100% #{$value},
+        100% calc(100% - #{$value}),
+        calc(100% - #{$value}) 100%,
+        #{$value} 100%,
+        0 calc(100% - #{$value})
+      );
+  } @else if length($params) > 1 and length($params) < 5 {
+      clip-path: polygon(
+        0 #{nth($params, 1)},  
+        #{nth($params, 1)} 0,
+        calc(100% - #{nth($params, 2)}) 0,
+        100% #{nth($params, 2)},
+        100% calc(100% - #{nth($params, 3)}),
+        calc(100% - #{nth($params, 3)}) 100%,
+        #{nth($params, 4)} 100%,
+        0 calc(100% - #{nth($params, 4)}
+      )
+    );
+  }
+}

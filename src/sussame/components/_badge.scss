@@ -1,0 +1,16 @@
+@mixin badge(
+    $background-color: rgb(220,220,220),
+    $font-size: 1em,
+    $color: inherit,
+    $rounded: true,
+    $border-radius: 100px
+){
+    display: inline-block;
+    background-color: $background-color;
+    font-size: $font-size;
+    color: $color;
+    padding: 5px 10px;
+    @if $rounded == true {
+        border-radius: $border-radius;
+    }
+}
