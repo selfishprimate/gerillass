@@ -115,5 +115,39 @@ body {
 .notched-area{
   background-color: orange;
   padding: 20px;
-  @include cutted-edge(10px);
+  @include cutted-edge(20px, 0px, 0px, 0px);
+}
+
+.gradient-text{
+  display: inline-block;
+  @include gradient-text(right, red, yellow, green, blue);
+}
+
+.list-wrapper{
+  list-style: none;
+  li{
+    padding: 10px;
+    background-color: rgb(230,230,230);
+    @include except-last{
+      margin-bottom: 15px;
+    }
+  }
+}
+
+.except-first{
+  li{
+    @include except-first{
+      background-color: green;
+      color: white,
+    }
+  }
+}
+
+.except-last{
+  li{
+    @include except-last{
+      background-color: brown;
+      color: white;
+    }
+  }
 }

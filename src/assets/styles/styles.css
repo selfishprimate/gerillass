@@ -242,6 +242,40 @@ body {
 .notched-area {
   background-color: orange;
   padding: 20px;
-  -webkit-clip-path: polygon(0 10px, 10px 0, -webkit-calc(100% - 10px) 0, 100% 10px, 100% -webkit-calc(100% - 10px), -webkit-calc(100% - 10px) 100%, 10px 100%, 0 -webkit-calc(100% - 10px));
-  clip-path: polygon(0 10px, 10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px));
+  -webkit-clip-path: polygon(0 20px, 20px 0, -webkit-calc(100% - 0px) 0, 100% 0px, 100% -webkit-calc(100% - 0px), -webkit-calc(100% - 0px) 100%, 0px 100%, 0 -webkit-calc(100% - 0px));
+  clip-path: polygon(0 20px, 20px 0, calc(100% - 0px) 0, 100% 0px, 100% calc(100% - 0px), calc(100% - 0px) 100%, 0px 100%, 0 calc(100% - 0px));
+}
+
+.gradient-text {
+  display: inline-block;
+  background: -webkit-gradient(linear, left top, right top, from(red), color-stop(yellow), color-stop(green), to(blue));
+  background: -webkit-linear-gradient(left, red, yellow, green, blue);
+  background: -o-linear-gradient(left, red, yellow, green, blue);
+  background: linear-gradient(to right, red, yellow, green, blue);
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.list-wrapper {
+  list-style: none;
+}
+
+.list-wrapper li {
+  padding: 10px;
+  background-color: #e6e6e6;
+}
+
+.list-wrapper li:not(:last-of-type) {
+  margin-bottom: 15px;
+}
+
+.except-first li:not(:first-of-type) {
+  background-color: green;
+  color: white;
+}
+
+.except-last li:not(:last-of-type) {
+  background-color: brown;
+  color: white;
 }

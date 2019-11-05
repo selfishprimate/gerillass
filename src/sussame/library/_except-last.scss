@@ -1,0 +1,5 @@
+@mixin except-last{
+    &:not(:last-of-type){
+        @content;
+    }
+}

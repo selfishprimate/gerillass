@@ -1,0 +1,5 @@
+@mixin except-first{
+    &:not(:first-of-type){
+        @content;
+    }
+}

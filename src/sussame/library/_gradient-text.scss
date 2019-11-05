@@ -1,0 +1,27 @@
+@mixin gradient-text(
+    $direction,
+    $params...
+){
+    @if $direction == "top" {
+        background: linear-gradient(to top, $params);
+    } @else if $direction == "top-left" {
+        background: linear-gradient(to top left, $params);
+    } @else if $direction == "top-right" {
+        background: linear-gradient(to top right, $params);
+    } @else if $direction == "bottom" {
+        background: linear-gradient(to bottom, $params);
+    } @else if $direction == "bottom-left" {
+        background: linear-gradient(to bottom left, $params);
+    } @else if $direction == "bottom-right" {
+        background: linear-gradient(to bottom right, $params);
+    } @else if $direction == "left" {
+        background: linear-gradient(to left, $params);
+    } @else if $direction == "right" {
+        background: linear-gradient(to right, $params);
+    } @else{
+        background: linear-gradient($direction, $params);
+    }
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+}
