@@ -120,7 +120,7 @@ body {
 
 .gradient-text{
   display: inline-block;
-  @include gradient-text(right, red, yellow, green, blue);
+  @include gradient-text(right, teal, purple);
 }
 
 .list-wrapper{
@@ -153,5 +153,17 @@ body {
 }
 
 .text-wrap-circular{
-  @include text-wrap-circular(200px);
+  @include text-wrap-circular(300px);
+}
+
+.selected-text{
+  @include screen-resolution("1x"){
+    @include selected-text(orange, white);
+  }
+  @include screen-resolution("2x"){
+    @include selected-text(purple, yellow);
+  }
+  @include screen-resolution("3x"){
+    @include selected-text(teal, white);
+  }
 }

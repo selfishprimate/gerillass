@@ -1,0 +1,10 @@
+@mixin selected-text(
+    $background-color: null,
+    $color: null
+){
+    &::selection,
+    & *::selection{
+        background-color: $background-color;
+        color: $color;
+    }
+}   

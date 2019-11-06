@@ -1,0 +1,15 @@
+@mixin screen-resolution ($value){
+    @if $value ==  "1x" {
+        @media (min-resolution: 96dpi) {
+            @content;
+        }
+    } @else if $value ==  "2x" {
+        @media (min-resolution: 192dpi) {
+            @content;
+        }
+    } @else if $value == "3x" {
+        @media (min-resolution: 288dpi) {
+            @content;
+        }
+    }
+}

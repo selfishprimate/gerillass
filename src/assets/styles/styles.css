@@ -248,10 +248,10 @@ body {
 
 .gradient-text {
   display: inline-block;
-  background: -webkit-gradient(linear, left top, right top, from(red), color-stop(yellow), color-stop(green), to(blue));
-  background: -webkit-linear-gradient(left, red, yellow, green, blue);
-  background: -o-linear-gradient(left, red, yellow, green, blue);
-  background: linear-gradient(to right, red, yellow, green, blue);
+  background: -webkit-gradient(linear, left top, right top, from(teal), to(purple));
+  background: -webkit-linear-gradient(left, teal, purple);
+  background: -o-linear-gradient(left, teal, purple);
+  background: linear-gradient(to right, teal, purple);
   color: transparent;
   -webkit-background-clip: text;
   background-clip: text;
@@ -282,8 +282,8 @@ body {
 
 .text-wrap-circular {
   display: block;
-  width: 200px;
-  height: 200px;
+  width: 300px;
+  height: 300px;
   margin: 0;
   padding: 0;
   float: left;
@@ -292,8 +292,8 @@ body {
 
 .text-wrap-circular img {
   position: relative;
-  width: -webkit-calc(200px - 20px);
-  width: calc(200px - 20px);
+  width: -webkit-calc(300px - 20px);
+  width: calc(300px - 20px);
   vertical-align: top;
   border-radius: 50%;
   top: 50%;
@@ -301,4 +301,43 @@ body {
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
   left: -8px;
+}
+
+@media (-webkit-min-device-pixel-ratio: 1), (-o-min-device-pixel-ratio: 1/1), (min-resolution: 96dpi) {
+  .selected-text::-moz-selection,
+  .selected-text *::-moz-selection {
+    background-color: orange;
+    color: white;
+  }
+  .selected-text::selection,
+  .selected-text *::selection {
+    background-color: orange;
+    color: white;
+  }
+}
+
+@media (-webkit-min-device-pixel-ratio: 2), (-o-min-device-pixel-ratio: 2/1), (min-resolution: 192dpi) {
+  .selected-text::-moz-selection,
+  .selected-text *::-moz-selection {
+    background-color: purple;
+    color: yellow;
+  }
+  .selected-text::selection,
+  .selected-text *::selection {
+    background-color: purple;
+    color: yellow;
+  }
+}
+
+@media (-webkit-min-device-pixel-ratio: 3), (-o-min-device-pixel-ratio: 3/1), (min-resolution: 288dpi) {
+  .selected-text::-moz-selection,
+  .selected-text *::-moz-selection {
+    background-color: teal;
+    color: white;
+  }
+  .selected-text::selection,
+  .selected-text *::selection {
+    background-color: teal;
+    color: white;
+  }
 }
