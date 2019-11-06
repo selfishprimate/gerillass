@@ -151,3 +151,7 @@ body {
     }
   }
 }
+
+.text-wrap-circular{
+  @include text-wrap-circular(200px);
+}

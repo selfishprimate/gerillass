@@ -1,0 +1,22 @@
+// This function can be achieved by the clip-path property (It can be updated!)...
+
+@mixin text-wrap-circular(
+    $size: null,
+){
+    display: block;
+    width: $size;
+    height: $size;
+    margin: 0;
+    padding: 0;
+    float: left;
+    shape-outside: circle(50%);
+    img{
+        position: relative;
+        width: calc(#{$size} - 20px);
+        vertical-align: top;
+        border-radius: 50%;
+        top: 50%;
+        transform: translateY(-50%);
+        left: -8px;
+    }
+}

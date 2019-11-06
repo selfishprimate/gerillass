@@ -279,3 +279,26 @@ body {
   background-color: brown;
   color: white;
 }
+
+.text-wrap-circular {
+  display: block;
+  width: 200px;
+  height: 200px;
+  margin: 0;
+  padding: 0;
+  float: left;
+  shape-outside: circle(50%);
+}
+
+.text-wrap-circular img {
+  position: relative;
+  width: -webkit-calc(200px - 20px);
+  width: calc(200px - 20px);
+  vertical-align: top;
+  border-radius: 50%;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  left: -8px;
+}
