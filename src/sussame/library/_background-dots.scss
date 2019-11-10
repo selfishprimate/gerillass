@@ -1,0 +1,13 @@
+@mixin background-dots(
+    $color: red,
+    $dot-size: 3px,
+    $outer-size: 20px,
+    $position: $outer-size/2
+){
+    background-image: 
+        radial-gradient($color $dot-size, transparent 0),
+        radial-gradient($color $dot-size, transparent 0),
+    ;
+    background-size: $outer-size $outer-size;
+    background-position: 0 0, $position $position;
+}

@@ -1,21 +1,23 @@
 @import "../../../node_modules/bourbon/core/bourbon";
 
 @import "functions/validate-color";
+@import "functions/validate-unit";
 @import "functions/font-sizer";
 
 @import "utilities/shorthand-property";
 
 @import "library/after";
+@import "library/background-dots";
 @import "library/background-image";
 @import "library/before";
 @import "library/border-box";
 @import "library/border-radius";
 @import "library/circle";
 @import "library/clearfix";
+@import "library/counter";
 @import "library/cutted-edge";
 @import "library/ellipsis";
 @import "library/gradient";
-@import "library/gradient-text";
 @import "library/grid-composer";
 @import "library/except-first";
 @import "library/except-last";
@@ -24,9 +26,13 @@
 @import "library/responsive-video";
 @import "library/responsive-image";
 @import "library/screen-resolution";
-@import "library/selected-text";
 @import "library/stretched-link";
+
+@import "library/text-gradient";
+@import "library/text-outline";
+@import "library/text-selection";
 @import "library/text-wrap-circular";
+
 @import "library/triangle";
 @import "library/tint";
 

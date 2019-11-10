@@ -239,14 +239,14 @@ body {
   padding: 5px 10px;
 }
 
-.notched-area {
+.cutted-edge {
   background-color: orange;
   padding: 20px;
   -webkit-clip-path: polygon(0 20px, 20px 0, -webkit-calc(100% - 0px) 0, 100% 0px, 100% -webkit-calc(100% - 0px), -webkit-calc(100% - 0px) 100%, 0px 100%, 0 -webkit-calc(100% - 0px));
   clip-path: polygon(0 20px, 20px 0, calc(100% - 0px) 0, 100% 0px, 100% calc(100% - 0px), calc(100% - 0px) 100%, 0px 100%, 0 calc(100% - 0px));
 }
 
-.gradient-text {
+.text-gradient {
   display: inline-block;
   background: -webkit-gradient(linear, left top, right top, from(teal), to(purple));
   background: -webkit-linear-gradient(left, teal, purple);
@@ -304,40 +304,79 @@ body {
 }
 
 @media (-webkit-min-device-pixel-ratio: 1), (-o-min-device-pixel-ratio: 1/1), (min-resolution: 96dpi) {
-  .selected-text::-moz-selection,
-  .selected-text *::-moz-selection {
+  .text-selection::-moz-selection,
+  .text-selection *::-moz-selection {
     background-color: orange;
     color: white;
   }
-  .selected-text::selection,
-  .selected-text *::selection {
+  .text-selection::selection,
+  .text-selection *::selection {
     background-color: orange;
     color: white;
   }
 }
 
 @media (-webkit-min-device-pixel-ratio: 2), (-o-min-device-pixel-ratio: 2/1), (min-resolution: 192dpi) {
-  .selected-text::-moz-selection,
-  .selected-text *::-moz-selection {
+  .text-selection::-moz-selection,
+  .text-selection *::-moz-selection {
     background-color: purple;
     color: yellow;
   }
-  .selected-text::selection,
-  .selected-text *::selection {
+  .text-selection::selection,
+  .text-selection *::selection {
     background-color: purple;
     color: yellow;
   }
 }
 
 @media (-webkit-min-device-pixel-ratio: 3), (-o-min-device-pixel-ratio: 3/1), (min-resolution: 288dpi) {
-  .selected-text::-moz-selection,
-  .selected-text *::-moz-selection {
+  .text-selection::-moz-selection,
+  .text-selection *::-moz-selection {
     background-color: teal;
     color: white;
   }
-  .selected-text::selection,
-  .selected-text *::selection {
+  .text-selection::selection,
+  .text-selection *::selection {
     background-color: teal;
     color: white;
   }
+}
+
+.counter {
+  list-style-type: none;
+  padding: 0;
+}
+
+.counter li {
+  position: relative;
+  padding-left: 30px;
+}
+
+.counter.start {
+  counter-reset: myCounter;
+}
+
+.counter.start li::before,
+.counter.continue li::before {
+  position: absolute;
+  left: 0;
+  text-align: right;
+  content: counter(myCounter) ". ";
+  counter-increment: myCounter;
+}
+
+.text-outline {
+  color: inherit;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke-color: inherit;
+  -webkit-text-stroke-width: 1px;
+}
+
+.background-dots {
+  padding: 20px;
+  background-image: -webkit-radial-gradient(rgba(0, 0, 0, 0.3) 1px, transparent 0), -webkit-radial-gradient(rgba(0, 0, 0, 0.3) 1px, transparent 0);
+  background-image: -o-radial-gradient(rgba(0, 0, 0, 0.3) 1px, transparent 0), -o-radial-gradient(rgba(0, 0, 0, 0.3) 1px, transparent 0);
+  background-image: radial-gradient(rgba(0, 0, 0, 0.3) 1px, transparent 0), radial-gradient(rgba(0, 0, 0, 0.3) 1px, transparent 0);
+  background-size: 10px 10px;
+  background-position: 0 0, 5px 5px;
 }

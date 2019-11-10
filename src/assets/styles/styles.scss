@@ -112,15 +112,15 @@ body {
   );
 }
 
-.notched-area{
+.cutted-edge{
   background-color: orange;
   padding: 20px;
-  @include cutted-edge(20px, 0px, 0px, 0px);
+  @include cutted-edge(20, 0, 0, 0);
 }
 
-.gradient-text{
+.text-gradient{
   display: inline-block;
-  @include gradient-text(right, teal, purple);
+  @include text-gradient(right, teal, purple);
 }
 
 .list-wrapper{
@@ -156,14 +156,31 @@ body {
   @include text-wrap-circular(300px);
 }
 
-.selected-text{
+.text-selection{
   @include screen-resolution("1x"){
-    @include selected-text(orange, white);
+    @include text-selection(orange, white);
   }
   @include screen-resolution("2x"){
-    @include selected-text(purple, yellow);
+    @include text-selection(purple, yellow);
   }
   @include screen-resolution("3x"){
-    @include selected-text(teal, white);
+    @include text-selection(teal, white);
   }
+}
+
+.counter{
+  @include counter;
+}
+
+.text-outline{
+  @include text-outline;
+}
+
+.background-dots{
+  padding: 20px;
+  @include background-dots(
+    $color:rgba(0,0,0,.3),
+    $dot-size: 1px,
+    $outer-size: 10px,
+  );
 }

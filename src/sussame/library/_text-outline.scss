@@ -1,0 +1,9 @@
+@mixin text-outline(
+    $color: inherit,
+    $size: 1px,
+){
+    color: $color;
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke-color: $color;
+    -webkit-text-stroke-width: $size;
+}

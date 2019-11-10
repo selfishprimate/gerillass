@@ -1,0 +1,19 @@
+@mixin counter{
+    list-style-type: none;
+    padding: 0;
+    li{
+        position: relative;
+        padding-left: 30px;
+    }
+    &.start{
+        counter-reset: myCounter;
+    }
+    &.start li::before,
+    &.continue li::before{
+        position: absolute;
+        left: 0;
+        text-align: right;
+        content: counter(myCounter) ". ";
+        counter-increment: myCounter;
+    }
+}

@@ -1,0 +1,9 @@
+// This function checks if the argument has been passes with a unit. If not, the function adds a px unit to the end of the argument. 
+
+@function __validateUnit($value) {
+    @if unitless($value) == true{
+        @return $value + px;
+    } @else if unitless($value) == false {
+        @return $value;
+    }
+}
