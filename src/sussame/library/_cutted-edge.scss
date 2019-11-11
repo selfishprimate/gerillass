@@ -1,5 +1,5 @@
 // Using the __validateUnit validator function to check if the argument has a unit.
-// Don't try to understand the code below, but try to understand the logic of Polygon.
+// Don't try to understand the code below, but try to understand the logic of the clip-path: polygon property instead.
 
 @mixin cutted-edge($params...){
   @if length($params) == 0 {
