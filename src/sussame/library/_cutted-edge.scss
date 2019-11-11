@@ -5,26 +5,27 @@
   @if length($params) == 0 {
     $value: 20px;
     clip-path: polygon(
-      0 #{__validateUnit($value)},
-      #{__validateUnit($value)} 0,
-      calc(100% - #{__validateUnit($value)}) 0,
-      100% #{__validateUnit($value)},
-      100% calc(100% - #{__validateUnit($value)}),
-      calc(100% - #{__validateUnit($value)}) 100%,
-      #{__validateUnit($value)} 100%,
-      0 calc(100% - #{__validateUnit($value)})
+      0 #{$value},
+      #{$value} 0,
+      calc(100% - #{$value}) 0,
+      100% #{$value},
+      100% calc(100% - #{$value}),
+      calc(100% - #{$value}) 100%,
+      #{$value} 100%,
+      0 calc(100% - #{$value})
     );
   } @else if length($params) == 1 {
       $value: nth($params, 1);
+      $validatedValue: __validateUnit($value);
       clip-path: polygon(
-        0 #{__validateUnit($value)},
-        #{__validateUnit($value)} 0,
-        calc(100% - #{__validateUnit($value)}) 0,
-        100% #{__validateUnit($value)},
-        100% calc(100% - #{__validateUnit($value)}),
-        calc(100% - #{__validateUnit($value)}) 100%,
-        #{__validateUnit($value)} 100%,
-        0 calc(100% - #{__validateUnit($value)})
+        0 #{$validatedValue},
+        #{$validatedValue} 0,
+        calc(100% - #{$validatedValue}) 0,
+        100% #{$validatedValue},
+        100% calc(100% - #{$validatedValue}),
+        calc(100% - #{$validatedValue}) 100%,
+        #{$validatedValue} 100%,
+        0 calc(100% - #{$validatedValue})
       );
   } @else if length($params) > 1 and length($params) < 5 {
       clip-path: polygon(

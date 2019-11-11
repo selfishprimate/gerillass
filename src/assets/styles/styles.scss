@@ -115,7 +115,7 @@ body {
 .cutted-edge{
   background-color: orange;
   padding: 20px;
-  @include cutted-edge(20, 0, 0, 0);
+  @include cutted-edge(30, 0, 0, 0);
 }
 
 .text-gradient{

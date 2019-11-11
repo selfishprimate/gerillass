@@ -242,8 +242,8 @@ body {
 .cutted-edge {
   background-color: orange;
   padding: 20px;
-  -webkit-clip-path: polygon(0 20px, 20px 0, -webkit-calc(100% - 0px) 0, 100% 0px, 100% -webkit-calc(100% - 0px), -webkit-calc(100% - 0px) 100%, 0px 100%, 0 -webkit-calc(100% - 0px));
-  clip-path: polygon(0 20px, 20px 0, calc(100% - 0px) 0, 100% 0px, 100% calc(100% - 0px), calc(100% - 0px) 100%, 0px 100%, 0 calc(100% - 0px));
+  -webkit-clip-path: polygon(0 30px, 30px 0, -webkit-calc(100% - 0px) 0, 100% 0px, 100% -webkit-calc(100% - 0px), -webkit-calc(100% - 0px) 100%, 0px 100%, 0 -webkit-calc(100% - 0px));
+  clip-path: polygon(0 30px, 30px 0, calc(100% - 0px) 0, 100% 0px, 100% calc(100% - 0px), calc(100% - 0px) 100%, 0px 100%, 0 calc(100% - 0px));
 }
 
 .text-gradient {
