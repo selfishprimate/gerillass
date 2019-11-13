@@ -380,3 +380,49 @@ body {
   background-size: 10px 10px;
   background-position: 0 0, 5px 5px;
 }
+
+.all-buttons .buttons {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.all-buttons button, .all-buttons [type='button'], .all-buttons [type='reset'], .all-buttons [type='submit'] {
+  background-color: #f00;
+  color: white;
+  border: 0;
+  padding: 10px 20px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  font-size: 16px;
+  -webkit-transition: .3s;
+  -o-transition: .3s;
+  transition: .3s;
+}
+
+.all-buttons button:not(:last-child), .all-buttons [type='button']:not(:last-child), .all-buttons [type='reset']:not(:last-child), .all-buttons [type='submit']:not(:last-child) {
+  margin-right: 15px;
+}
+
+.all-buttons button:hover, .all-buttons [type='button']:hover, .all-buttons [type='reset']:hover, .all-buttons [type='submit']:hover {
+  background-color: green;
+  cursor: pointer;
+  -webkit-transform: translateY(-2px);
+  -ms-transform: translateY(-2px);
+  transform: translateY(-2px);
+}
+
+.all-buttons button:focus, .all-buttons [type='button']:focus, .all-buttons [type='reset']:focus, .all-buttons [type='submit']:focus {
+  background-color: purple;
+}
+
+.all-buttons button:active, .all-buttons [type='button']:active, .all-buttons [type='reset']:active, .all-buttons [type='submit']:active {
+  background-color: blue;
+}

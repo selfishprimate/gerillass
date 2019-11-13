@@ -1,0 +1,27 @@
+$all-buttons: __pseudoSelector($list-of-buttons);
+$all-buttons-hover: __pseudoSelector($list-of-buttons, hover);
+$all-buttons-focus: __pseudoSelector($list-of-buttons, focus);
+$all-buttons-active: __pseudoSelector($list-of-buttons, active);
+
+@mixin all-buttons($pseudo: null){
+    @if $pseudo == null{
+        #{$all-buttons}{
+            @content;
+        }   
+    } @else if $pseudo == "hover"{
+        #{$all-buttons-hover}{
+            @content;
+        }
+    } @else if $pseudo == "focus"{
+        #{$all-buttons-focus}{
+            @content;
+        }
+    } @else if $pseudo == "active" {
+        #{$all-buttons-active}{
+            @content;
+        }
+    } @else{
+        @error "The argument must be `null` or one of the followings: `hover`, `focus` or `active`.";
+    }
+
+}

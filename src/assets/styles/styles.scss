@@ -184,3 +184,40 @@ body {
     $outer-size: 10px,
   );
 }
+
+.all-buttons{
+  .buttons{
+    display: flex;
+  }
+
+  @include all-buttons{
+    background-color: #f00;
+    color: white;
+    border: 0;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    transition: .3s;
+    &:not(:last-child){
+      margin-right: 15px;
+    }
+  }
+
+  @include all-buttons(hover){
+    background-color: green;
+    cursor: pointer;
+    transform: translateY(-2px);
+  }
+
+  @include all-buttons(focus){
+    background-color: purple;
+  }
+
+  @include all-buttons(active){
+    background-color: blue;
+  }
+
+}
+
