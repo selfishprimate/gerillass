@@ -426,3 +426,40 @@ body {
 .all-buttons button:active, .all-buttons [type='button']:active, .all-buttons [type='reset']:active, .all-buttons [type='submit']:active {
   background-color: blue;
 }
+
+.all-text-inputs [type='color'], .all-text-inputs [type='date'], .all-text-inputs [type='datetime'], .all-text-inputs [type='datetime-local'], .all-text-inputs [type='email'], .all-text-inputs [type='month'], .all-text-inputs [type='number'], .all-text-inputs [type='password'], .all-text-inputs [type='search'], .all-text-inputs [type='tel'], .all-text-inputs [type='text'], .all-text-inputs [type='time'], .all-text-inputs [type='url'], .all-text-inputs [type='week'], .all-text-inputs input:not([type]), .all-text-inputs textarea {
+  background-color: blue;
+  min-height: 50px;
+  border: 2px solid black;
+  margin-bottom: 15px;
+}
+
+.all-text-inputs [type='color']:not(:last-of-type), .all-text-inputs [type='date']:not(:last-of-type), .all-text-inputs [type='datetime']:not(:last-of-type), .all-text-inputs [type='datetime-local']:not(:last-of-type), .all-text-inputs [type='email']:not(:last-of-type), .all-text-inputs [type='month']:not(:last-of-type), .all-text-inputs [type='number']:not(:last-of-type), .all-text-inputs [type='password']:not(:last-of-type), .all-text-inputs [type='search']:not(:last-of-type), .all-text-inputs [type='tel']:not(:last-of-type), .all-text-inputs [type='text']:not(:last-of-type), .all-text-inputs [type='time']:not(:last-of-type), .all-text-inputs [type='url']:not(:last-of-type), .all-text-inputs [type='week']:not(:last-of-type), .all-text-inputs input:not([type]):not(:last-of-type), .all-text-inputs textarea:not(:last-of-type) {
+  margin-right: 15px;
+}
+
+.all-text-inputs [type='color']:hover, .all-text-inputs [type='date']:hover, .all-text-inputs [type='datetime']:hover, .all-text-inputs [type='datetime-local']:hover, .all-text-inputs [type='email']:hover, .all-text-inputs [type='month']:hover, .all-text-inputs [type='number']:hover, .all-text-inputs [type='password']:hover, .all-text-inputs [type='search']:hover, .all-text-inputs [type='tel']:hover, .all-text-inputs [type='text']:hover, .all-text-inputs [type='time']:hover, .all-text-inputs [type='url']:hover, .all-text-inputs [type='week']:hover, .all-text-inputs input:not([type]):hover, .all-text-inputs textarea:hover {
+  background-color: green;
+  cursor: text;
+}
+
+.all-text-inputs [type='color']:active, .all-text-inputs [type='date']:active, .all-text-inputs [type='datetime']:active, .all-text-inputs [type='datetime-local']:active, .all-text-inputs [type='email']:active, .all-text-inputs [type='month']:active, .all-text-inputs [type='number']:active, .all-text-inputs [type='password']:active, .all-text-inputs [type='search']:active, .all-text-inputs [type='tel']:active, .all-text-inputs [type='text']:active, .all-text-inputs [type='time']:active, .all-text-inputs [type='url']:active, .all-text-inputs [type='week']:active, .all-text-inputs input:not([type]):active, .all-text-inputs textarea:active {
+  background-color: pink;
+}
+
+.all-text-inputs [type='color']:focus, .all-text-inputs [type='date']:focus, .all-text-inputs [type='datetime']:focus, .all-text-inputs [type='datetime-local']:focus, .all-text-inputs [type='email']:focus, .all-text-inputs [type='month']:focus, .all-text-inputs [type='number']:focus, .all-text-inputs [type='password']:focus, .all-text-inputs [type='search']:focus, .all-text-inputs [type='tel']:focus, .all-text-inputs [type='text']:focus, .all-text-inputs [type='time']:focus, .all-text-inputs [type='url']:focus, .all-text-inputs [type='week']:focus, .all-text-inputs input:not([type]):focus, .all-text-inputs textarea:focus {
+  background-color: purple;
+}
+
+.all-text-inputs [type='color']:invalid, .all-text-inputs [type='date']:invalid, .all-text-inputs [type='datetime']:invalid, .all-text-inputs [type='datetime-local']:invalid, .all-text-inputs [type='email']:invalid, .all-text-inputs [type='month']:invalid, .all-text-inputs [type='number']:invalid, .all-text-inputs [type='password']:invalid, .all-text-inputs [type='search']:invalid, .all-text-inputs [type='tel']:invalid, .all-text-inputs [type='text']:invalid, .all-text-inputs [type='time']:invalid, .all-text-inputs [type='url']:invalid, .all-text-inputs [type='week']:invalid, .all-text-inputs input:not([type]):invalid, .all-text-inputs textarea:invalid {
+  background-color: red;
+}
+
+.all-text-inputs [type='color']:disabled, .all-text-inputs [type='date']:disabled, .all-text-inputs [type='datetime']:disabled, .all-text-inputs [type='datetime-local']:disabled, .all-text-inputs [type='email']:disabled, .all-text-inputs [type='month']:disabled, .all-text-inputs [type='number']:disabled, .all-text-inputs [type='password']:disabled, .all-text-inputs [type='search']:disabled, .all-text-inputs [type='tel']:disabled, .all-text-inputs [type='text']:disabled, .all-text-inputs [type='time']:disabled, .all-text-inputs [type='url']:disabled, .all-text-inputs [type='week']:disabled, .all-text-inputs input:not([type]):disabled, .all-text-inputs textarea:disabled {
+  background-color: gray;
+}
+
+.all-text-inputs [type='color']:required, .all-text-inputs [type='date']:required, .all-text-inputs [type='datetime']:required, .all-text-inputs [type='datetime-local']:required, .all-text-inputs [type='email']:required, .all-text-inputs [type='month']:required, .all-text-inputs [type='number']:required, .all-text-inputs [type='password']:required, .all-text-inputs [type='search']:required, .all-text-inputs [type='tel']:required, .all-text-inputs [type='text']:required, .all-text-inputs [type='time']:required, .all-text-inputs [type='url']:required, .all-text-inputs [type='week']:required, .all-text-inputs input:not([type]):required, .all-text-inputs textarea:required {
+  background-color: yellow;
+  border-color: red;
+}

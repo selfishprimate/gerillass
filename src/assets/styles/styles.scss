@@ -221,3 +221,42 @@ body {
 
 }
 
+.all-text-inputs{
+  @include all-text-inputs{
+    background-color: blue;
+    min-height: 50px;
+    border: 2px solid black;
+    margin-bottom: 15px;
+    @include except-last{
+      margin-right: 15px;
+    }
+  }
+
+  @include all-text-inputs(hover){
+    background-color: green;
+    cursor: text;
+  }
+
+  @include all-text-inputs(active){
+    background-color: pink;
+  }
+
+  @include all-text-inputs(focus){
+    background-color: purple;
+  }
+
+  @include all-text-inputs(invalid){
+    background-color: red;
+  }
+
+  @include all-text-inputs(disabled){
+    background-color: gray;
+  }
+
+  @include all-text-inputs(required){
+    background-color: yellow;
+    border-color: red
+  }
+
+}
+
