@@ -1,3 +1,5 @@
+// Parent container of the link must have "position: relative;" decleration.
+
 @mixin stretched-link {
     &::after {
         content: "";

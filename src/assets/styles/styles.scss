@@ -152,6 +152,23 @@ body {
   }
 }
 
+.only-first{
+  li{
+    @include only-first{
+      background-color: blue;
+      color: white;
+    }
+  }
+}
+.only-last{
+  li{
+    @include only-last{
+      background-color: purple;
+      color: white;
+    }
+  }
+}
+
 .text-wrap-circular{
   @include text-wrap-circular(300px);
 }
@@ -183,6 +200,12 @@ body {
     $dot-size: 1px,
     $outer-size: 10px,
   );
+}
+
+.background-stripes{
+  padding: 20px;
+  @include background-stripes(pink, 5%, 45);
+  background-color: orange
 }
 
 .all-buttons{

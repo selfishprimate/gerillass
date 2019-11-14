@@ -1,0 +1,5 @@
+@mixin only-last{
+    &:last-of-type{
+        @content;
+    }
+}

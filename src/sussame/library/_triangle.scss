@@ -6,7 +6,7 @@
 ){
     @if not index("up" "up-left" "up-right" "down" "down-left" "down-right" "left" "right", $direction){
         @error "Direction value must be one of the followings: `up`, `up-left`, `up-right`, `down`, `down-left`, `down-right`, `left`, `right`.";
-    } @else if not validate-color($color){
+    } @else if not __validateColor($color){
         @error "`#{$color}` is not a valid color for the `$color` argument in the `triangle` mixin.";
     } @else {
         content: "";

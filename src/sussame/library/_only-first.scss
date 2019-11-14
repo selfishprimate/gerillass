@@ -1,0 +1,5 @@
+@mixin only-first{
+    &:first-of-type{
+        @content;
+    }
+}

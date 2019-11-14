@@ -1,0 +1,45 @@
+@mixin background-stripes(
+    $params...
+){
+    @if length($params) == 0 {
+        background: repeating-linear-gradient(
+            -45deg,
+            rgba(0,0,0,.1) 0,
+            rgba(0,0,0,.1) 10px,
+            transparent 10px,
+            transparent 20px,
+        );
+    } @else if length($params) == 1 {
+        $color: nth($params, 1);
+        background: repeating-linear-gradient(
+            -45deg,
+            $color 0,
+            $color 10px,
+            transparent 10px,
+            transparent 20px,
+        );
+    } @else if length($params) == 2 {
+        $color: nth($params, 1);
+        $thickness: nth($params, 2);
+        background: repeating-linear-gradient(
+            -45deg,
+            $color 0,
+            $color $thickness,
+            transparent $thickness,
+            transparent $thickness * 2,
+        );
+    } @else if length($params) == 3 {
+        $color: nth($params, 1);
+        $thickness: nth($params, 2);
+        $rotation: nth($params, 3);
+        background: repeating-linear-gradient(
+            if(not index('deg', unit($rotation)), $rotation + deg, $rotation), /* Checks if there is a "deg" unit passed with the third argument. If no, adds it. */
+            $color 0,
+            $color $thickness,
+            transparent $thickness,
+            transparent $thickness * 2,
+        );
+    } @else if length($params) > 3 {
+        @error "You can't pass more than 3 arguments.";
+    }
+}

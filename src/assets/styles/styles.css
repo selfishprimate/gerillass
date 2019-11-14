@@ -280,6 +280,16 @@ body {
   color: white;
 }
 
+.only-first li:first-of-type {
+  background-color: blue;
+  color: white;
+}
+
+.only-last li:last-of-type {
+  background-color: purple;
+  color: white;
+}
+
 .text-wrap-circular {
   display: block;
   width: 300px;
@@ -379,6 +389,14 @@ body {
   background-image: radial-gradient(rgba(0, 0, 0, 0.3) 1px, transparent 0), radial-gradient(rgba(0, 0, 0, 0.3) 1px, transparent 0);
   background-size: 10px 10px;
   background-position: 0 0, 5px 5px;
+}
+
+.background-stripes {
+  padding: 20px;
+  background: -webkit-repeating-linear-gradient(45deg, pink 0, pink 5%, transparent 5%, transparent 10%);
+  background: -o-repeating-linear-gradient(45deg, pink 0, pink 5%, transparent 5%, transparent 10%);
+  background: repeating-linear-gradient(45deg, pink 0, pink 5%, transparent 5%, transparent 10%);
+  background-color: orange;
 }
 
 .all-buttons .buttons {

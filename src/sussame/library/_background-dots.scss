@@ -1,5 +1,5 @@
 @mixin background-dots(
-    $color: red,
+    $color:rgba(0,0,0,.2),
     $dot-size: 3px,
     $outer-size: 20px,
     $position: $outer-size/2
