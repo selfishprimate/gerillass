@@ -1,11 +1,19 @@
-@mixin after(
-    $content,
-    $spacing: null,
-    $size: null
-){
-    &:after{
-        content: "#{$content}";
-        font-size: $size;
-        padding-left: $spacing;
+@mixin after($params...){
+    @if length($params) == 0 {
+        &:after{
+            @content;
+        }
+    } @else {
+        $content: null;
+        $size: null;
+        $spacing: null;
+        &:after{
+            content: "#{$content}";
+            font-size: $size;
+            padding-left: $spacing;
+        }   
     }
 }
+
+
+

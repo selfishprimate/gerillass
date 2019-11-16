@@ -1,4 +1,3 @@
-@charset "UTF-8";
 /* stylelint-disable order/properties-alphabetical-order */
 /* stylelint-enable */
 body {
@@ -170,14 +169,8 @@ body {
   overflow: hidden;
 }
 
-.before:before {
-  content: "→";
-  font-size: 0.9em;
-  padding-right: 5px;
-}
-
 .after:after {
-  content: "...";
+  content: "";
 }
 
 .gradient {
@@ -270,9 +263,33 @@ body {
   margin-bottom: 15px;
 }
 
+.except-first li {
+  position: relative;
+}
+
 .except-first li:not(:first-of-type) {
   background-color: green;
   color: white;
+}
+
+.except-first li:after {
+  content: "";
+  display: block;
+  border-style: solid;
+  height: 0;
+  width: 0;
+  border-color: blue transparent transparent;
+  border-width: 20px 10px 0;
+}
+
+.except-first li:before {
+  content: "";
+  display: block;
+  border-style: solid;
+  height: 0;
+  width: 0;
+  border-color: blue transparent transparent;
+  border-width: 20px 10px 0;
 }
 
 .except-last li:not(:last-of-type) {
@@ -393,9 +410,9 @@ body {
 
 .background-stripes {
   padding: 20px;
-  background: -webkit-repeating-linear-gradient(45deg, pink 0, pink 5%, transparent 5%, transparent 10%);
-  background: -o-repeating-linear-gradient(45deg, pink 0, pink 5%, transparent 5%, transparent 10%);
-  background: repeating-linear-gradient(45deg, pink 0, pink 5%, transparent 5%, transparent 10%);
+  background: -webkit-repeating-linear-gradient(135deg, rgba(255, 0, 0, 0.2) 0, rgba(255, 0, 0, 0.2) 30px, transparent 30px, transparent 60px);
+  background: -o-repeating-linear-gradient(135deg, rgba(255, 0, 0, 0.2) 0, rgba(255, 0, 0, 0.2) 30px, transparent 30px, transparent 60px);
+  background: repeating-linear-gradient(-45deg, rgba(255, 0, 0, 0.2) 0, rgba(255, 0, 0, 0.2) 30px, transparent 30px, transparent 60px);
   background-color: orange;
 }
 

@@ -136,9 +136,17 @@ body {
 
 .except-first{
   li{
+    position: relative;
     @include except-first{
       background-color: green;
       color: white,
+    }
+    @include after{
+      @include triangle(down, 20px, 20px, blue);
+    }
+
+    @include before{
+      @include triangle(down, 20px, 20px, blue);
     }
   }
 }
@@ -204,7 +212,11 @@ body {
 
 .background-stripes{
   padding: 20px;
-  @include background-stripes(pink, 5%, 45);
+  @include background-stripes(
+    $color: transparentize(red, 0.8),
+    $thickness: 30,
+    $rotation: -45
+  );
   background-color: orange
 }
 
