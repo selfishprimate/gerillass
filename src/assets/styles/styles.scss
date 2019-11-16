@@ -75,12 +75,12 @@ body {
 .before{
   @include before{
     content: "This is before mixin is running!";
-    background-color: pink;
+    background-color: green;
   };
 }
 
 .after{
-  @include after("This is after mixin is running!");
+  @include after("This is after mixin is running! Try, it's easy!");
 }
 
 .gradient{
@@ -206,8 +206,8 @@ body {
   padding: 20px;
   @include background-stripes(
     $color: transparentize(red, 0.8),
-    $thickness: 30,
-    $rotation: -45
+    $thickness: 50px,
+    $rotation: 45
   );
   background-color: orange
 }
@@ -287,3 +287,8 @@ body {
 
 }
 
+@include breakPoint(xsmall){
+  body{
+    background-color: purple;
+  }
+}

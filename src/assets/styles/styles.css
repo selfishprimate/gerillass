@@ -171,11 +171,11 @@ body {
 
 .before:before {
   content: "This is before mixin is running!";
-  background-color: pink;
+  background-color: green;
 }
 
 .after:after {
-  content: "This is after mixin is running!";
+  content: "This is after mixin is running! Try, it's easy!";
 }
 
 .gradient {
@@ -395,9 +395,9 @@ body {
 
 .background-stripes {
   padding: 20px;
-  background: -webkit-repeating-linear-gradient(135deg, rgba(255, 0, 0, 0.2) 0, rgba(255, 0, 0, 0.2) 30px, transparent 30px, transparent 60px);
-  background: -o-repeating-linear-gradient(135deg, rgba(255, 0, 0, 0.2) 0, rgba(255, 0, 0, 0.2) 30px, transparent 30px, transparent 60px);
-  background: repeating-linear-gradient(-45deg, rgba(255, 0, 0, 0.2) 0, rgba(255, 0, 0, 0.2) 30px, transparent 30px, transparent 60px);
+  background: -webkit-repeating-linear-gradient(45deg, rgba(255, 0, 0, 0.2) 0, rgba(255, 0, 0, 0.2) 50px, transparent 50px, transparent 100px);
+  background: -o-repeating-linear-gradient(45deg, rgba(255, 0, 0, 0.2) 0, rgba(255, 0, 0, 0.2) 50px, transparent 50px, transparent 100px);
+  background: repeating-linear-gradient(45deg, rgba(255, 0, 0, 0.2) 0, rgba(255, 0, 0, 0.2) 50px, transparent 50px, transparent 100px);
   background-color: orange;
 }
 
@@ -482,4 +482,10 @@ body {
 .all-text-inputs [type='color']:required, .all-text-inputs [type='date']:required, .all-text-inputs [type='datetime']:required, .all-text-inputs [type='datetime-local']:required, .all-text-inputs [type='email']:required, .all-text-inputs [type='month']:required, .all-text-inputs [type='number']:required, .all-text-inputs [type='password']:required, .all-text-inputs [type='search']:required, .all-text-inputs [type='tel']:required, .all-text-inputs [type='text']:required, .all-text-inputs [type='time']:required, .all-text-inputs [type='url']:required, .all-text-inputs [type='week']:required, .all-text-inputs input:not([type]):required, .all-text-inputs textarea:required {
   background-color: yellow;
   border-color: red;
+}
+
+@media (min-width: 0) {
+  body {
+    background-color: purple;
+  }
 }
