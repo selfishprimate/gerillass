@@ -169,8 +169,13 @@ body {
   overflow: hidden;
 }
 
+.before:before {
+  content: "This is before mixin is running!";
+  background-color: pink;
+}
+
 .after:after {
-  content: "";
+  content: "This is after mixin is running!";
 }
 
 .gradient {
@@ -270,26 +275,6 @@ body {
 .except-first li:not(:first-of-type) {
   background-color: green;
   color: white;
-}
-
-.except-first li:after {
-  content: "";
-  display: block;
-  border-style: solid;
-  height: 0;
-  width: 0;
-  border-color: blue transparent transparent;
-  border-width: 20px 10px 0;
-}
-
-.except-first li:before {
-  content: "";
-  display: block;
-  border-style: solid;
-  height: 0;
-  width: 0;
-  border-color: blue transparent transparent;
-  border-width: 20px 10px 0;
 }
 
 .except-last li:not(:last-of-type) {

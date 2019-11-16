@@ -73,15 +73,14 @@ body {
 }
 
 .before{
-  @include before(
-    $content: "\2192",
-    $spacing: 5px,
-    $size: .9em
-  );
+  @include before{
+    content: "This is before mixin is running!";
+    background-color: pink;
+  };
 }
 
 .after{
-  @include after("...");
+  @include after("This is after mixin is running!");
 }
 
 .gradient{
@@ -140,13 +139,6 @@ body {
     @include except-first{
       background-color: green;
       color: white,
-    }
-    @include after{
-      @include triangle(down, 20px, 20px, blue);
-    }
-
-    @include before{
-      @include triangle(down, 20px, 20px, blue);
     }
   }
 }

@@ -1,16 +1,12 @@
-@mixin before($params...){
-    @if length($params) == 0 {
-        &:before{
+@mixin before(
+    $content: null
+) {
+    &:before{
+        @if $content != null{
+            content: "#{$content}";
+        }
+        @if $content == null {
             @content;
         }
-    } @else {
-        $content: null;
-        $size: null;
-        $spacing: null;
-        &:before{
-            content: "#{$content}";
-            font-size: $size;
-            padding-left: $spacing;
-        }   
     }
 }
