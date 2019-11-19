@@ -287,8 +287,8 @@ body {
 
 }
 
-@include breakPoint(xsmall, large){
+@include breakPoint(xlarge){
   body{
-    background-color: green
+    background-color: brown;
   }
 }

@@ -24,8 +24,8 @@
             }
         }
     } @else if length($params) == 2 {
-        @media only screen and (min-width: map-get($list-of-breakpoints, nth($params, 1)) + 1) and (max-width: map-get($list-of-breakpoints, nth($params, 2)) - 1) { 
-            @content; 
-        }
+        @media only screen and (
+            min-width: map-get($list-of-breakpoints, nth($params, 1)) + 1) 
+                and (max-width: map-get($list-of-breakpoints, nth($params, 2)) - 1) { @content;}
     }
 }
