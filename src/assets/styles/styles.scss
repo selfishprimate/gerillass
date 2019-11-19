@@ -287,8 +287,4 @@ body {
 
 }
 
-@include breakPoint(xsmall){
-  body{
-    background-color: purple;
-  }
-}
+@include breakPoint(xsmall){}
