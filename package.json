@@ -24,7 +24,6 @@
     "gulp-sass": "^4.0.1",
     "gulp-sourcemaps": "^2.6.4",
     "run-sequence": "^2.2.1",
-    "sassdoc": "^2.7.1"
   },
   "dependencies": {
     "bootstrap": "^4.3.1",

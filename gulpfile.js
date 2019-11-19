@@ -4,7 +4,6 @@ var browserSync = require('browser-sync').create();
 var cache = require('gulp-cache');
 var autoprefixer = require('gulp-autoprefixer');
 var sourcemaps = require('gulp-sourcemaps');
-var sassdoc = require('sassdoc');
 
 // Sass Compile
 gulp.task('sass', function () {
@@ -24,11 +23,6 @@ gulp.task('sass', function () {
     .pipe(browserSync.reload({
       stream: true
     }))
-});
-
-gulp.task('sassdoc', function () {
-  return gulp.src('src/**/*.scss')
-    .pipe(sassdoc());
 });
 
 // Runs the BrowserSync
