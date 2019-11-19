@@ -43,9 +43,8 @@ gulp.task('cache:clear', function (callback) {
 
 // Watches the file changes
 //gulp.watch('files-to-watch', ['task-to-run']);
-gulp.task('start', ['browserSync', 'sass', 'sassdoc'], function () {
+gulp.task('start', ['browserSync', 'sass'], function () {
   gulp.watch('src/**/*.scss', ['sass']);
-  gulp.watch('src/**/*.scss', ['sassdoc']);
   gulp.watch('src/*.html', browserSync.reload);
   // Put here all the other files that you want to be watched
 });
