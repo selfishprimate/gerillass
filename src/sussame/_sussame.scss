@@ -3,14 +3,13 @@
 @import "functions/font-sizer";
 @import "functions/is-number";
 @import "functions/pseudo-selector";
+@import "functions/shorthand-property";
 @import "functions/validate-color";
 @import "functions/validate-unit";
 
 @import "lists/list-of-breakpoints";
 @import "lists/list-of-buttons";
 @import "lists/list-of-text-inputs";
-
-@import "utilities/shorthand-property";
 
 @import "library/after";
 @import "library/align-vertical";

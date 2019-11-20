@@ -1,31 +1,30 @@
-@mixin breakPoint($params...){
-
-    @if length($params) == 1 {
-        $value: nth($params, 1);
-        @if $value == "xsmall" {
-            @media (min-width: map-get($list-of-breakpoints, xsmall)) {
-                @content;
-            }
-        } @else if $value == "small" {
-            @media (min-width: map-get($list-of-breakpoints, small)){
-                @content;
-            }
-        } @else if $value == "medium" {
-            @media (min-width: map-get($list-of-breakpoints, medium)){
-                @content;
-            }
-        } @else if $value == "large" {
-            @media (min-width: map-get($list-of-breakpoints, large)){
-                @content;
-            }
-        } @else if $value == "xlarge" {
-            @media (min-width: map-get($list-of-breakpoints, xlarge)){
-                @content;
-            }
-        }
-    } @else if length($params) == 2 {
-        @media only screen and (
-            min-width: map-get($list-of-breakpoints, nth($params, 1)) + 1) 
-                and (max-width: map-get($list-of-breakpoints, nth($params, 2)) - 1) { @content;}
+@mixin breakPoint($params...) {
+  @if length($params) == 1 {
+    $value: nth($params, 1);
+    @if $value == "xsmall" {
+      @media (min-width: map-get($list-of-breakpoints, xsmall)) {
+        @content;
+      }
+    } @else if $value == "small" {
+      @media (min-width: map-get($list-of-breakpoints, small)) {
+        @content;
+      }
+    } @else if $value == "medium" {
+      @media (min-width: map-get($list-of-breakpoints, medium)) {
+        @content;
+      }
+    } @else if $value == "large" {
+      @media (min-width: map-get($list-of-breakpoints, large)) {
+        @content;
+      }
+    } @else if $value == "xlarge" {
+      @media (min-width: map-get($list-of-breakpoints, xlarge)) {
+        @content;
+      }
     }
+  } @else if length($params) == 2 {
+    @media only screen and (min-width: map-get($list-of-breakpoints, nth($params, 1)) + 1) and (max-width: map-get($list-of-breakpoints, nth($params, 2)) - 1) {
+      @content;
+    }
+  }
 }
