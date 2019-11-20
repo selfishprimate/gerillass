@@ -1,4 +1,4 @@
-@function __shorthand-property($value) {
+@function __shorthandProperty($value) {
   @if length($value) == 1 {
     @return $value;
   } @else if length($value) == 2 {

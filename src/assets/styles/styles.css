@@ -502,6 +502,12 @@ body {
   }
 }
 
+@media (min-width: 220px) {
+  body {
+    background-color: purple;
+  }
+}
+
 @media (min-width: 577px) and (max-width: 1199px) {
   body {
     background-color: purple;

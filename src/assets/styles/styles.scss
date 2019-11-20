@@ -29,7 +29,7 @@ body {
 .rectangle {
   background-color: red;
   @include rectangle(120px, 30px);
-  margin: __shorthand-property(0);
+  margin: __shorthandProperty(0);
 }
 
 .responsive-video {
@@ -300,6 +300,12 @@ body {
 }
 
 @include breakpointMin(xlarge){
+  body{
+    background-color: purple;
+  }
+}
+
+@include breakpointMin(220px){
   body{
     background-color: purple;
   }
