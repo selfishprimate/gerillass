@@ -287,8 +287,33 @@ body {
 
 }
 
-@include breakPoint(xlarge){
+@include breakpointOnly(large){
   body{
-    background-color: brown;
+    background-color: green;
   }
 }
+
+@include breakpointOnly(320px){
+  body{
+    background-color: green;
+  }
+}
+
+@include breakpointMin(xlarge){
+  body{
+    background-color: purple;
+  }
+}
+
+@include breakpointBetween(small, xlarge){
+  body{
+    background-color: purple;
+  }
+}
+
+@include breakpointBetween(320px, 500px){
+  body{
+    background-color: purple;
+  }
+}
+

@@ -1,30 +1,59 @@
-@mixin breakPoint($params...) {
-  @if length($params) == 1 {
-    $value: nth($params, 1);
-    @if $value == "xsmall" {
-      @media (min-width: map-get($list-of-breakpoints, xsmall)) {
-        @content;
-      }
-    } @else if $value == "small" {
-      @media (min-width: map-get($list-of-breakpoints, small)) {
-        @content;
-      }
-    } @else if $value == "medium" {
-      @media (min-width: map-get($list-of-breakpoints, medium)) {
-        @content;
-      }
-    } @else if $value == "large" {
-      @media (min-width: map-get($list-of-breakpoints, large)) {
-        @content;
-      }
-    } @else if $value == "xlarge" {
-      @media (min-width: map-get($list-of-breakpoints, xlarge)) {
-        @content;
-      }
+// This code will be improved.
+
+@mixin breakpointOnly($value){
+    @if map-has-key($list-of-breakpoints, $value){
+        @media (width: map-get($list-of-breakpoints, $value)) {
+            @content;
+        }
+    } @else {
+        @media (width: $value) {
+            @content;
+        }
     }
-  } @else if length($params) == 2 {
-    @media only screen and (min-width: map-get($list-of-breakpoints, nth($params, 1)) + 1) and (max-width: map-get($list-of-breakpoints, nth($params, 2)) - 1) {
-      @content;
+}
+
+@mixin breakpointMin($value){
+    @if map-has-key($list-of-breakpoints, $value){
+        @media (min-width: map-get($list-of-breakpoints, $value)) {
+            @content;
+        }
+    } @else {
+        @media (min-width: $value) {
+            @content;
+        }
     }
-  }
+}
+
+@mixin breakpointMax($value){
+    @if map-has-key($list-of-breakpoints, $value){
+        @media (min-width: map-get($list-of-breakpoints, $value)) {
+            @content;
+        }
+    } @else {
+        @media (min-width: $value) {
+            @content;
+        }
+    }
+}
+
+@mixin breakpointBetween($params...){
+    @if map-has-key($list-of-breakpoints, nth($params, 1)) and map-has-key($list-of-breakpoints, nth($params, 2)){
+        $start: map-get($list-of-breakpoints, nth($params, 1));
+        $end: map-get($list-of-breakpoints, nth($params, 2));
+        @if $start == 0 {
+            @media (min-width: $start) and (max-width:  $end - 1) {
+                @content;
+            }
+        } @else {
+            @media (min-width: $start + 1) and (max-width:  $end - 1) {
+                @content;
+            }
+        }
+    } @else {
+        $start: nth($params, 1);
+        $end: nth($params, 2);
+        @media (min-width: $start) and (max-width:  $end) {
+            @content;
+        }
+    }
 }

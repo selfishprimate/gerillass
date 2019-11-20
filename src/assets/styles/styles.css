@@ -484,8 +484,32 @@ body {
   border-color: red;
 }
 
+@media (width: 992px) {
+  body {
+    background-color: green;
+  }
+}
+
+@media (width: 320px) {
+  body {
+    background-color: green;
+  }
+}
+
 @media (min-width: 1200px) {
   body {
-    background-color: brown;
+    background-color: purple;
+  }
+}
+
+@media (min-width: 577px) and (max-width: 1199px) {
+  body {
+    background-color: purple;
+  }
+}
+
+@media (min-width: 320px) and (max-width: 500px) {
+  body {
+    background-color: purple;
   }
 }
