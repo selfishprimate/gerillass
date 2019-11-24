@@ -1,0 +1,31 @@
+// This mixin will be improved. There must be a validation for the corner arguments.
+
+@mixin position(
+  $position,
+  $corner
+) {
+    position: $position;
+    @if length($corner) == 1{
+        top: nth($corner, 1);
+        right: nth($corner, 1);
+        bottom: nth($corner, 1);
+        left: nth($corner, 1);
+    } @else if length($corner) == 2{
+        top: nth($corner, 1);
+        right: nth($corner, 2);
+        bottom: nth($corner, 1);
+        left: nth($corner, 2);
+    } @else if length($corner) == 3{
+        top: nth($corner, 1);
+        right: nth($corner, 2);
+        bottom: nth($corner, 3);
+        left: nth($corner, 2);
+    } @else if length($corner) == 4 {
+        top: nth($corner, 1);
+        right: nth($corner, 2);
+        bottom: nth($corner, 3);
+        left: nth($corner, 4);
+    }
+}
+
+

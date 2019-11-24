@@ -307,7 +307,7 @@ body {
 
 @include breakpointMin(220px){
   body{
-    background-color: purple;
+    background-color: rgb(230,230,230);
   }
 }
 
@@ -319,7 +319,14 @@ body {
 
 @include breakpointBetween(320px, 500px){
   body{
-    background-color: purple;
+    background-color: rgb(230,230,230);
   }
+}
+
+.position{
+  width: 300px;
+  height: 300px;
+  background-color: crimson;
+  @include position(absolute, 20px 30px);
 }
 
