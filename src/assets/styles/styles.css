@@ -521,12 +521,12 @@ body {
 }
 
 .position {
-  width: 300px;
-  height: 300px;
+  width: 200px;
+  height: 200px;
   background-color: crimson;
   position: absolute;
   top: 20px;
-  right: 30px;
+  right: 20px;
   bottom: 20px;
-  left: 30px;
+  left: 20px;
 }

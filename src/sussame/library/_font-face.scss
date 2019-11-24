@@ -1,0 +1,9 @@
+@mixin font-face{
+    font-family: "My font";
+    src: url("my-font.eot"); /* IE9 compatibility */
+    src: url("my-font.eot?#iefix") format('embedded-opentype'), /* IE6-IE8 compatibility */
+         url("my-font.woff2") format('woff2'), /* Most modern browsers */
+         url("my-font.woff") format('woff'), /* Modern browsers */
+         url("my-font.ttf") format('truetype'), /* Safari, Android and iOS compatibility */
+         url("my-font.svg#svgFontName") format('svg'), /* Legacy iOS */
+}
