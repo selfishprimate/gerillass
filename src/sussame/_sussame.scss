@@ -6,10 +6,12 @@
 @import "functions/pseudo-selector";
 @import "functions/shorthand-property";
 @import "functions/validate-color";
+@import "functions/validate-length";
 @import "functions/validate-unit";
 
 @import "lists/list-of-breakpoints";
 @import "lists/list-of-buttons";
+@import "lists/list-of-length-units";
 @import "lists/list-of-text-inputs";
 
 @import "library/after";

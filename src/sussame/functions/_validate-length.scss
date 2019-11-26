@@ -1,7 +1,14 @@
 //This mixin checks for a valid CSS length.
 
-@function __validateLength($value) {
-  @return type-of($value) != "null" and (str-slice($value + "", 1, 4) == "calc"
-       or index(auto inherit initial 0, $value)
-       or (type-of($value) == "number" and not(unitless($value))));
+$list-of-values: ("auto", "inherit", "initial", 0);
+
+@function __validateLength($value){
+  @if index($list-of-values, $value){
+      @return $value;
+  } @else if type-of($value) == "number" and not unitless($value){
+      @return $value;
+  } @else {
+      @warn "Please pass some values with unit like `#{$value}px`, `#{$value}em`, or `#{$value}%` etc. or pass one of the following arguments: `auto`, ìnherit`, ìnitial` or `0`.";
+      @return $value;
+  }
 }
