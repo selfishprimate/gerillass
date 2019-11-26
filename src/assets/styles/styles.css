@@ -524,17 +524,40 @@ body {
   width: 200px;
   height: 200px;
   background-color: crimson;
+  position: relative;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  border-radius: 40px;
+}
+
+body {
+  margin-top: 100;
+}
+
+body {
+  margin-bottom: 150px;
+}
+
+.box-shadow {
   position: absolute;
-  top: 20px;
-  right: 20px;
-  bottom: 20px;
-  left: 20px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  width: 300px;
+  height: 300px;
+  border-radius: 20px;
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  -webkit-transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  -o-transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  background-color: white;
 }
 
-body {
-  margin-top: 430;
-}
-
-body {
-  margin-bottom: 50cm;
+.box-shadow:hover {
+  -webkit-box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
 }

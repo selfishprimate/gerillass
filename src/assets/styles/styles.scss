@@ -327,13 +327,22 @@ body {
   width: 200px;
   height: 200px;
   background-color: crimson;
-  @include position(absolute, 20px);
+  @include position(relative, 0);
+  @include border-radius("all", 40px);
 }
 
 body{
-  margin-top: __clearUnit(430);
+  margin-top: __clearUnit(100px);
 }
 
 body{
-  margin-bottom: __validateLength(50cm);
+  margin-bottom: __validateLength(150px);
+}
+
+.box-shadow{
+  @include position(absolute, 0);
+  @include rectangle(300px);
+  @include border-radius(20px);
+  @include box-shadow;
+  background-color: white;
 }
