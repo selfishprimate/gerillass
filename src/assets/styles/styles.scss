@@ -85,7 +85,7 @@ body {
 
 .gradient{
   padding: 20px;
-  @include gradient(top-right, red, orange, yellow, orange);
+  @include gradient(bottom-left, red, orange, green);
   @include border-radius(all, 30px);
 }
 
@@ -336,13 +336,11 @@ body{
 }
 
 body{
-  margin-bottom: __validateLength(150px);
+  margin-bottom: __validateLength(250px);
 }
 
 .box-shadow{
-  @include position(absolute, 0);
   @include rectangle(300px);
-  @include border-radius(20px);
-  @include box-shadow;
+  @include box-shadow(xsmall);
   background-color: white;
 }

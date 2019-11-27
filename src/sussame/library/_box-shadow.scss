@@ -1,24 +1,37 @@
 @mixin box-shadow(
-    $offset-x: 0,
-    $offset-y: 1px,
-    $blur-radius: 3px,
-    $spread-radius: null,
-    $color: rgba(0,0,0,0.12),
-    // $second-color: rgba(0,0,0,0.24) $second-color değikeni otomatize edilecek. İlk rengin opacity değeri alınacak ve 2 ile çarpılacak.
-    $inset: false,
+    $distance: null,
     $hover: true,
+    $inset: false,
 ){
-    box-shadow: if($inset == true, inset $offset-x $offset-y $blur-radius $color, $offset-x $offset-y $blur-radius $color);
-    transition: all 0.3s cubic-bezier(.25,.8,.25,1); // Transition function can be used here!
-    @if $hover == true {
-        &:hover{
-            box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
-        }
-    } 
+    $offset-x: 0;
+    $offset-y: 1px;
+    $blur-radius: 3px;
+    $spread-radius: null;
+    $alpha: 0.10;
+    $color: rgba(0,0,0,$alpha);
+    
+    @if $distance == "xsmall"{
+        box-shadow: if($inset == true, inset $offset-x $offset-y $blur-radius $color, $offset-x $offset-y $blur-radius $color);
+        transition: .3s;
+        @if $hover == true {
+            &:hover{
+                box-shadow: $offset-x ($offset-y * 5) ($blur-radius * 5) rgba(0,0,0, ($alpha * 2));
+            }
+        }   
+    }
+
+
+    
+    
+
+
 }
+
+
 
 // z-depth variable will be used here to define the distance between the element and ground.
 
 // 5 farklı derinlik tipi kullanılacak gölgeler için. Bunlar, önceden tanımlanmış değerler de olabilir. Kullnıcı bu değerleri de istediği gibi değiştirebilecek.
 
 // Hover true durumdayken kullanıcı hover için derinlik ayarı yapabilecek.
+
