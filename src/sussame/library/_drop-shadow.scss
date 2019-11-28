@@ -1,16 +1,17 @@
 @mixin drop-shadow(
     $offset-x: 0,
     $offset-y: 2px,
-    $blur-radius: 6px,
+    $blur: 6px,
+    $spread: null,
     $color: black,
-    $hover: true,
+    $hover: true
 ){
+    $color-string: str-slice(quote($color), 1, 4);
     transition: .3s;
-    box-shadow: $offset-x $offset-y $blur-radius rgba($color, .10);
+    box-shadow: $offset-x $offset-y $blur $spread if(index("rgba", $color-string), $color, transparentize($color, .90));
     @if $hover == true {
         &:hover{
-            box-shadow: $offset-x ($offset-y * 2) ($blur-radius * 4) rgba($color, .15);
+            box-shadow: $offset-x ($offset-y * 2) ($blur * 4) if($spread != null, $spread * 2, $spread) transparentize($color, .80);
         }
     }
 }
-

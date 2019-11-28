@@ -584,13 +584,14 @@ body {
 }
 
 .drop-shadow-wrapper {
+  padding: 20px 0;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
 }
 
 .drop-shadow-wrapper [class^="drop-shadow"] {
-  border-radius: 20px;
+  border-radius: 10px;
   width: 150px;
   height: 150px;
   background-color: white;
@@ -605,21 +606,26 @@ body {
   -webkit-transition: .3s;
   -o-transition: .3s;
   transition: .3s;
-  -webkit-box-shadow: 0 2px 6px rgba(255, 0, 0, 0.1);
-  box-shadow: 0 2px 6px rgba(255, 0, 0, 0.1);
+  -webkit-box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .drop-shadow-wrapper .drop-shadow-01:hover {
-  -webkit-box-shadow: 0 4px 24px rgba(255, 0, 0, 0.15);
-  box-shadow: 0 4px 24px rgba(255, 0, 0, 0.15);
+  -webkit-box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
 }
 
 .drop-shadow-wrapper .drop-shadow-02 {
   -webkit-transition: .3s;
   -o-transition: .3s;
   transition: .3s;
-  -webkit-box-shadow: 0 2px 6px rgba(0, 128, 0, 0.1);
-  box-shadow: 0 2px 6px rgba(0, 128, 0, 0.1);
+  -webkit-box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.drop-shadow-wrapper .drop-shadow-02:hover {
+  -webkit-box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
 }
 
 .drop-shadow-wrapper .drop-shadow-03 {
@@ -631,8 +637,8 @@ body {
 }
 
 .drop-shadow-wrapper .drop-shadow-03:hover {
-  -webkit-box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+  -webkit-box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
 }
 
 .drop-shadow-wrapper .drop-shadow-04 {
@@ -644,8 +650,8 @@ body {
 }
 
 .drop-shadow-wrapper .drop-shadow-04:hover {
-  -webkit-box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+  -webkit-box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
 }
 
 .drop-shadow-wrapper .drop-shadow-05 {
@@ -657,6 +663,6 @@ body {
 }
 
 .drop-shadow-wrapper .drop-shadow-05:hover {
-  -webkit-box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+  -webkit-box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
 }

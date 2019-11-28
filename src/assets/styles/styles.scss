@@ -333,9 +333,10 @@ body{
 }
 
 .drop-shadow-wrapper{
+  padding: 20px 0;
   display: flex;
   [class^="drop-shadow"]{
-    @include border-radius(20px);
+    @include border-radius(10px);
     @include rectangle(150px);
     background-color: white;
     margin-right: 30px;
@@ -344,15 +345,10 @@ body{
     }
   }
   .drop-shadow-01{
-    @include drop-shadow(
-      $color: red
-    );
+    @include drop-shadow;
   }
   .drop-shadow-02{
-    @include drop-shadow(
-      $color: green,
-      $hover: false
-    );
+    @include drop-shadow;
   }
   .drop-shadow-03{
     @include drop-shadow;
@@ -364,4 +360,6 @@ body{
     @include drop-shadow;
   }
 }
+
+    
 
