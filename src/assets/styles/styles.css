@@ -62,6 +62,7 @@ table {
 }
 
 body {
+  font-family: sans-serif;
   background-color: #fafaf0;
   padding: 50px;
   width: 100%;
@@ -558,19 +559,7 @@ body {
 
 @media (min-width: 220px) {
   body {
-    background-color: #e6e6e6;
-  }
-}
-
-@media (min-width: 577px) and (max-width: 1199px) {
-  body {
-    background-color: purple;
-  }
-}
-
-@media (min-width: 320px) and (max-width: 500px) {
-  body {
-    background-color: #e6e6e6;
+    background-color: #f0f0f0;
   }
 }
 
@@ -602,52 +591,72 @@ body {
 
 .drop-shadow-wrapper [class^="drop-shadow"] {
   border-radius: 20px;
-  width: 300px;
-  height: 300px;
+  width: 150px;
+  height: 150px;
   background-color: white;
   margin-right: 30px;
 }
 
-.drop-shadow-wrapper .drop-shadow-xsmall {
+.drop-shadow-wrapper [class^="drop-shadow"]:hover {
+  cursor: pointer;
+}
+
+.drop-shadow-wrapper .drop-shadow-01 {
   -webkit-transition: .3s;
   -o-transition: .3s;
   transition: .3s;
-  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow: 0 2px 6px rgba(255, 0, 0, 0.1);
+  box-shadow: 0 2px 6px rgba(255, 0, 0, 0.1);
 }
 
-.drop-shadow-wrapper .drop-shadow-xsmall:hover {
-  -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+.drop-shadow-wrapper .drop-shadow-01:hover {
+  -webkit-box-shadow: 0 4px 24px rgba(255, 0, 0, 0.15);
+  box-shadow: 0 4px 24px rgba(255, 0, 0, 0.15);
 }
 
-.drop-shadow-wrapper .drop-shadow-small {
+.drop-shadow-wrapper .drop-shadow-02 {
   -webkit-transition: .3s;
   -o-transition: .3s;
   transition: .3s;
-  -webkit-box-shadow: 0 2px 6px rgba(0, 0, 0, 0.22);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.22);
+  -webkit-box-shadow: 0 2px 6px rgba(0, 128, 0, 0.1);
+  box-shadow: 0 2px 6px rgba(0, 128, 0, 0.1);
 }
 
-.drop-shadow-wrapper .drop-shadow-small:hover {
-  -webkit-box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-}
-
-.drop-shadow-wrapper .drop-shadow-medium {
+.drop-shadow-wrapper .drop-shadow-03 {
   -webkit-transition: .3s;
   -o-transition: .3s;
   transition: .3s;
+  -webkit-box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-.drop-shadow-wrapper .drop-shadow-large {
+.drop-shadow-wrapper .drop-shadow-03:hover {
+  -webkit-box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+}
+
+.drop-shadow-wrapper .drop-shadow-04 {
   -webkit-transition: .3s;
   -o-transition: .3s;
   transition: .3s;
+  -webkit-box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-.drop-shadow-wrapper .drop-shadow-xlarge {
+.drop-shadow-wrapper .drop-shadow-04:hover {
+  -webkit-box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+}
+
+.drop-shadow-wrapper .drop-shadow-05 {
   -webkit-transition: .3s;
   -o-transition: .3s;
   transition: .3s;
+  -webkit-box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.drop-shadow-wrapper .drop-shadow-05:hover {
+  -webkit-box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
 }

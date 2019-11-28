@@ -1,43 +1,16 @@
 @mixin drop-shadow(
-    $distance: null,
+    $offset-x: 0,
+    $offset-y: 2px,
+    $blur-radius: 6px,
+    $color: black,
     $hover: true,
-    $params...
 ){
-    $offset-x: 0;
-    $offset-y: 1px;
-    $blur-radius: 3px;
-    $spread-radius: null;
-    $alpha: 0.10;
-    $color: rgba(0,0,0,$alpha);
     transition: .3s;
-    @if $distance == "xsmall"{
-        box-shadow: $offset-x $offset-y $blur-radius $color;
-        @if $hover == true {
-            &:hover{
-                box-shadow: $offset-x ($offset-y * 5) ($blur-radius * 5) rgba(0,0,0, ($alpha * 2));
-            }
-        }   
-    } @else if $distance == "small" {
-        box-shadow: $offset-x $offset-y * 2 $blur-radius * 2 rgba(0,0,0, ($alpha * 2.2));
-        @if $hover == true {
-            &:hover{
-                box-shadow: $offset-x ($offset-y * 10) ($blur-radius * 10) rgba(0,0,0, ($alpha * 6));
-            }
-        } 
+    box-shadow: $offset-x $offset-y $blur-radius rgba($color, .10);
+    @if $hover == true {
+        &:hover{
+            box-shadow: $offset-x ($offset-y * 2) ($blur-radius * 4) rgba($color, .15);
+        }
     }
-
-
-    
-    
-
-
 }
-
-
-
-// z-depth variable will be used here to define the distance between the element and ground.
-
-// 5 farklı derinlik tipi kullanılacak gölgeler için. Bunlar, önceden tanımlanmış değerler de olabilir. Kullnıcı bu değerleri de istediği gibi değiştirebilecek.
-
-// Hover true durumdayken kullanıcı hover için derinlik ayarı yapabilecek.
 

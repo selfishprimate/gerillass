@@ -3,6 +3,7 @@
 @include border-box;
 
 body {
+  font-family: sans-serif;
   background-color: rgb(250, 250, 240);
   padding: 50px;
   width: 100%;
@@ -307,21 +308,13 @@ body {
 
 @include breakpointMin(220px){
   body{
-    background-color: rgb(230,230,230);
+    background-color: rgb(240,240,240);
   }
 }
 
-@include breakpointBetween(small, xlarge){
-  body{
-    background-color: purple;
-  }
-}
+@include breakpointBetween(small, xlarge){}
 
-@include breakpointBetween(320px, 500px){
-  body{
-    background-color: rgb(230,230,230);
-  }
-}
+@include breakpointBetween(320px, 500px){}
 
 .position{
   width: 200px;
@@ -343,24 +336,32 @@ body{
   display: flex;
   [class^="drop-shadow"]{
     @include border-radius(20px);
-    @include rectangle(300px);
+    @include rectangle(150px);
     background-color: white;
     margin-right: 30px;
+    &:hover{
+      cursor: pointer;
+    }
   }
-  .drop-shadow-xsmall{
-    @include drop-shadow(xsmall);
+  .drop-shadow-01{
+    @include drop-shadow(
+      $color: red
+    );
   }
-  .drop-shadow-small{
-    @include drop-shadow(small);
+  .drop-shadow-02{
+    @include drop-shadow(
+      $color: green,
+      $hover: false
+    );
   }
-  .drop-shadow-medium{
-    @include drop-shadow(medium);
+  .drop-shadow-03{
+    @include drop-shadow;
   }
-  .drop-shadow-large{
-    @include drop-shadow(large);
+  .drop-shadow-04{
+    @include drop-shadow;
   }
-  .drop-shadow-xlarge{
-    @include drop-shadow(xlarge);
+  .drop-shadow-05{
+    @include drop-shadow;
   }
 }
 
