@@ -1,7 +1,7 @@
-@mixin box-shadow(
+@mixin drop-shadow(
     $distance: null,
     $hover: true,
-    $inset: false,
+    $params...
 ){
     $offset-x: 0;
     $offset-y: 1px;
@@ -9,15 +9,21 @@
     $spread-radius: null;
     $alpha: 0.10;
     $color: rgba(0,0,0,$alpha);
-    
+    transition: .3s;
     @if $distance == "xsmall"{
-        box-shadow: if($inset == true, inset $offset-x $offset-y $blur-radius $color, $offset-x $offset-y $blur-radius $color);
-        transition: .3s;
+        box-shadow: $offset-x $offset-y $blur-radius $color;
         @if $hover == true {
             &:hover{
                 box-shadow: $offset-x ($offset-y * 5) ($blur-radius * 5) rgba(0,0,0, ($alpha * 2));
             }
         }   
+    } @else if $distance == "small" {
+        box-shadow: $offset-x $offset-y * 2 $blur-radius * 2 rgba(0,0,0, ($alpha * 2.2));
+        @if $hover == true {
+            &:hover{
+                box-shadow: $offset-x ($offset-y * 10) ($blur-radius * 10) rgba(0,0,0, ($alpha * 6));
+            }
+        } 
     }
 
 

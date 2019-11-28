@@ -1,11 +1,57 @@
 /* stylelint-disable order/properties-alphabetical-order */
 /* stylelint-enable */
+/* http://meyerweb.com/eric/tools/css/reset/ 
+    v2.0 | 20110126
+    License: none (public domain)
+    */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, main, nav, section {
+  display: block;
+}
+
 body {
-  background-color: #fafaf0;
-  padding: 50px;
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
+  line-height: 1;
+}
+
+ol, ul {
+  list-style: none;
+}
+
+blockquote, q {
+  quotes: none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
 }
 
 *,
@@ -13,6 +59,14 @@ body {
 *::after {
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
+}
+
+body {
+  background-color: #fafaf0;
+  padding: 50px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .carousel-container {
@@ -540,18 +594,60 @@ body {
   margin-bottom: 250px;
 }
 
-.box-shadow {
+.drop-shadow-wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.drop-shadow-wrapper [class^="drop-shadow"] {
+  border-radius: 20px;
   width: 300px;
   height: 300px;
-  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  margin-right: 30px;
+}
+
+.drop-shadow-wrapper .drop-shadow-xsmall {
   -webkit-transition: .3s;
   -o-transition: .3s;
   transition: .3s;
-  background-color: white;
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.box-shadow:hover {
+.drop-shadow-wrapper .drop-shadow-xsmall:hover {
   -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.drop-shadow-wrapper .drop-shadow-small {
+  -webkit-transition: .3s;
+  -o-transition: .3s;
+  transition: .3s;
+  -webkit-box-shadow: 0 2px 6px rgba(0, 0, 0, 0.22);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.22);
+}
+
+.drop-shadow-wrapper .drop-shadow-small:hover {
+  -webkit-box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+}
+
+.drop-shadow-wrapper .drop-shadow-medium {
+  -webkit-transition: .3s;
+  -o-transition: .3s;
+  transition: .3s;
+}
+
+.drop-shadow-wrapper .drop-shadow-large {
+  -webkit-transition: .3s;
+  -o-transition: .3s;
+  transition: .3s;
+}
+
+.drop-shadow-wrapper .drop-shadow-xlarge {
+  -webkit-transition: .3s;
+  -o-transition: .3s;
+  transition: .3s;
 }

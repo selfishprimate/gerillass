@@ -1,4 +1,6 @@
 @import "../../sussame/sussame";
+@include reset-css;
+@include border-box;
 
 body {
   background-color: rgb(250, 250, 240);
@@ -7,8 +9,6 @@ body {
   max-width: 1200px;
   margin: 0 auto;
 }
-
-@include border-box;
 
 .carousel-container {
   @include carousel($gutter: 20px, $hiddenScrollbar: true);
@@ -339,8 +339,28 @@ body{
   margin-bottom: __validateLength(250px);
 }
 
-.box-shadow{
-  @include rectangle(300px);
-  @include box-shadow(xsmall);
-  background-color: white;
+.drop-shadow-wrapper{
+  display: flex;
+  [class^="drop-shadow"]{
+    @include border-radius(20px);
+    @include rectangle(300px);
+    background-color: white;
+    margin-right: 30px;
+  }
+  .drop-shadow-xsmall{
+    @include drop-shadow(xsmall);
+  }
+  .drop-shadow-small{
+    @include drop-shadow(small);
+  }
+  .drop-shadow-medium{
+    @include drop-shadow(medium);
+  }
+  .drop-shadow-large{
+    @include drop-shadow(large);
+  }
+  .drop-shadow-xlarge{
+    @include drop-shadow(xlarge);
+  }
 }
+
