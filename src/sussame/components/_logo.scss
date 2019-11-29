@@ -1,0 +1,70 @@
+@mixin logo-w3c(
+    $width: null,
+    $height: null
+){
+    overflow: hidden;
+    width: $width;
+    height: $height;
+    a{
+        position: relative;
+        display: block;
+        width: $width;
+        height: $height;
+        z-index: 1;
+        img{
+            width: 100%;
+            height: auto;
+        }
+        .alt-logo{
+            position: absolute;
+            width: 0;
+            height: 0;
+            overflow: hidden;
+            color: transparent;
+            z-index: 0;
+        }
+    }
+}
+
+@mixin logo-kellum(
+    $width: null,
+    $height: null,
+    $image: null
+){
+    width: 264px;
+    height: 106px;
+    background: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/123941/SitePointLogo.png");
+    text-indent: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    color: inherit;
+    text-decoration: none;
+}
+
+@mixin logo-sussame(
+    $width: null,
+    $height: null,
+    $image: null
+){
+    position: relative;
+    display: inline-block;
+    width: $width;
+    height: $height;
+    background-image: url($image);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100%;
+    a{
+        display: block;
+        width: 0;
+        height: 0;
+        overflow: hidden;
+        text-indent: 100%;
+        @include stretched-link;
+    }
+}
+
+
+
+
+ 

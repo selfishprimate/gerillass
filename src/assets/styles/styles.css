@@ -235,10 +235,10 @@ body {
 
 .gradient {
   padding: 20px;
-  background: -webkit-gradient(linear, left top, right top, color-stop(0, red), color-stop(25%, orange), color-stop(50%, green));
-  background: -webkit-linear-gradient(left, red 0 25%, orange 25% 50%, green 50% 100%);
-  background: -o-linear-gradient(left, red 0 25%, orange 25% 50%, green 50% 100%);
-  background: linear-gradient(to right, red 0 25%, orange 25% 50%, green 50% 100%);
+  background: -webkit-gradient(linear, left top, right top, from(red), color-stop(25%, orange), color-stop(50%, green));
+  background: -webkit-linear-gradient(left, red, orange 25% 50%, green 50% 100%);
+  background: -o-linear-gradient(left, red, orange 25% 50%, green 50% 100%);
+  background: linear-gradient(to right, red, orange 25% 50%, green 50% 100%);
   border-radius: 30px;
 }
 
@@ -740,4 +740,35 @@ body {
   -webkit-transition: 0s;
   -o-transition: 0s;
   transition: 0s;
+}
+
+.logo-sussame {
+  position: relative;
+  display: inline-block;
+  width: 150px;
+  height: 80px;
+  background-image: url("https://logos-download.com/wp-content/uploads/2016/06/FedEx_Express_logo.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100%;
+}
+
+.logo-sussame a {
+  display: block;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  text-indent: 100%;
+}
+
+.logo-sussame a::after {
+  content: "";
+  position: absolute;
+  pointer-events: auto;
+  background-color: rgba(0, 0, 0, 0);
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
 }

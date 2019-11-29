@@ -86,7 +86,7 @@ body {
 
 .gradient{
   padding: 20px;
-  @include linear-gradient(right, red 0 25%, orange 25% 50%, green 50% 100%);
+  @include linear-gradient(right, red, orange 25% 50%, green 50% 100%);
   @include border-radius(all, 30px);
 }
 
@@ -384,5 +384,15 @@ body{
   }
 }
 
-    
+.logo-w3c{}
+
+.logo-kellum{}
+
+.logo-sussame{
+  @include logo-sussame(
+    $width: 150px,
+    $height: 80px,
+    $image: "https://logos-download.com/wp-content/uploads/2016/06/FedEx_Express_logo.png"
+  );
+}
 
