@@ -235,10 +235,10 @@ body {
 
 .gradient {
   padding: 20px;
-  background: -webkit-gradient(linear, right top, left bottom, from(red), color-stop(orange), to(green));
-  background: -webkit-linear-gradient(top right, red, orange, green);
-  background: -o-linear-gradient(top right, red, orange, green);
-  background: linear-gradient(to bottom left, red, orange, green);
+  background: -webkit-gradient(linear, left top, right top, color-stop(0, red), color-stop(25%, orange), color-stop(50%, green));
+  background: -webkit-linear-gradient(left, red 0 25%, orange 25% 50%, green 50% 100%);
+  background: -o-linear-gradient(left, red 0 25%, orange 25% 50%, green 50% 100%);
+  background: linear-gradient(to right, red 0 25%, orange 25% 50%, green 50% 100%);
   border-radius: 30px;
 }
 
@@ -665,4 +665,79 @@ body {
 .drop-shadow-wrapper .drop-shadow-05:hover {
   -webkit-box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+}
+
+.buttons.ripple-effect {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.buttons.ripple-effect .btn {
+  height: 50px;
+  background-color: #8c8c8c;
+  border-radius: 5px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  color: white;
+}
+
+.buttons.ripple-effect .btn:not(last-child) {
+  margin-right: 20px;
+}
+
+.buttons.ripple-effect .btn:hover {
+  cursor: pointer;
+}
+
+.buttons.ripple-effect .btn.ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.buttons.ripple-effect .btn.ripple:after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background-image: -webkit-radial-gradient(circle, white 10%, transparent 10%);
+  background-image: -o-radial-gradient(circle, white 10%, transparent 10%);
+  background-image: radial-gradient(circle, white 10%, transparent 10%);
+  background-repeat: no-repeat;
+  background-position: 50%;
+  -webkit-transform: scale(10, 10);
+  -ms-transform: scale(10, 10);
+  transform: scale(10, 10);
+  opacity: 0;
+  -webkit-transition: opacity 1s, -webkit-transform .3s;
+  transition: opacity 1s, -webkit-transform .3s;
+  -o-transition: transform .3s, opacity 1s;
+  transition: transform .3s, opacity 1s;
+  transition: transform .3s, opacity 1s, -webkit-transform .3s;
+}
+
+.buttons.ripple-effect .btn.ripple:active:after {
+  -webkit-transform: scale(0, 0);
+  -ms-transform: scale(0, 0);
+  transform: scale(0, 0);
+  opacity: .2;
+  -webkit-transition: 0s;
+  -o-transition: 0s;
+  transition: 0s;
 }

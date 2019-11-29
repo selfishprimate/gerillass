@@ -86,7 +86,7 @@ body {
 
 .gradient{
   padding: 20px;
-  @include gradient(bottom-left, red, orange, green);
+  @include linear-gradient(right, red 0 25%, orange 25% 50%, green 50% 100%);
   @include border-radius(all, 30px);
 }
 
@@ -102,7 +102,7 @@ body {
 
 .circle{
   @include circle(50px);
-  @include gradient(top-left, red, orange, yellow);
+  @include linear-gradient(top-left, red, orange, yellow);
 }
 
 .badge{
@@ -358,6 +358,29 @@ body{
   }
   .drop-shadow-05{
     @include drop-shadow;
+  }
+}
+
+.buttons.ripple-effect{
+  display: flex;
+  .btn{
+    height: 50px;
+    background-color: rgb(140,140,140);
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    color: white;
+    &:not(last-child){
+      margin-right: 20px;
+    }
+    &:hover{
+      cursor: pointer;
+    }
+    &.ripple{
+      @include ripple-effect;
+    }
   }
 }
 

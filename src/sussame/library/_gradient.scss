@@ -1,4 +1,6 @@
-@mixin gradient(
+// Radial Gradient will be added!
+
+@mixin linear-gradient(
     $direction,
     $params...
 ){
@@ -22,3 +24,5 @@
         background: linear-gradient($direction, $params);
     }
 }
+
+@mixin radial-gradient{};
