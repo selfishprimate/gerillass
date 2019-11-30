@@ -742,11 +742,31 @@ body {
   transition: 0s;
 }
 
-.logo-sussame {
+.logo-wrapper {
+  margin-bottom: 40px;
+}
+
+.logo-kellum {
   position: relative;
   display: inline-block;
   width: 150px;
   height: 80px;
+  text-indent: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  color: inherit;
+  text-decoration: none;
+  background-image: url("https://logos-download.com/wp-content/uploads/2016/06/FedEx_Express_logo.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100%;
+}
+
+.logo-sussame {
+  position: relative;
+  display: inline-block;
+  width: 100px;
+  height: 60px;
   background-image: url("https://logos-download.com/wp-content/uploads/2016/06/FedEx_Express_logo.png");
   background-repeat: no-repeat;
   background-position: center;

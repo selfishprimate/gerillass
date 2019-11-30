@@ -384,14 +384,21 @@ body{
   }
 }
 
-.logo-w3c{}
+.logo-wrapper{
+  margin-bottom: 40px;
+}
 
-.logo-kellum{}
+.logo-kellum{
+  @include brand-logo(
+    $approach: "kellum",
+    $image: "https://logos-download.com/wp-content/uploads/2016/06/FedEx_Express_logo.png"
+  )
+}
 
 .logo-sussame{
-  @include logo-sussame(
-    $width: 150px,
-    $height: 80px,
+  @include brand-logo(
+    $width: 100px,
+    $height: 60px,
     $image: "https://logos-download.com/wp-content/uploads/2016/06/FedEx_Express_logo.png"
   );
 }
