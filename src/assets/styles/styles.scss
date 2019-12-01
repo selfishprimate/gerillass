@@ -422,3 +422,11 @@ body{
   border: 2px solid rgb(140,140,140); 
   @include resizable;
 }
+
+.image-wrapper{
+  width: 300px;
+  background-color:green;
+  .responsive-image{
+    @include responsive-image;
+  }
+}

@@ -1,0 +1,12 @@
+// Use this screen reader mixin to make some elements readable for the screen reader, which should be visually hidden in the document.
+
+@mixin screen-reader{
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    white-space: nowrap;
+    border: 0;
+}

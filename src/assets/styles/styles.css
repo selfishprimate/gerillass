@@ -773,4 +773,15 @@ body {
   border: 2px solid #8c8c8c;
   resize: both;
   overflow: auto;
+  max-width: 100%;
+}
+
+.image-wrapper {
+  width: 300px;
+  background-color: green;
+}
+
+.image-wrapper .responsive-image {
+  display: block;
+  width: 100%;
 }
