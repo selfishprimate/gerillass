@@ -750,3 +750,27 @@ body {
   right: 0;
   z-index: 1;
 }
+
+.reset-figure {
+  width: 300px;
+  margin: 0;
+}
+
+.reset-figure img {
+  width: 100%;
+  height: auto;
+  vertical-align: top;
+}
+
+.reset-list {
+  padding: 0;
+  list-style: none;
+}
+
+.resizable {
+  padding: 20px;
+  background-color: gainsboro;
+  border: 2px solid #8c8c8c;
+  resize: both;
+  overflow: auto;
+}

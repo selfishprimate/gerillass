@@ -407,3 +407,18 @@ body{
   );
 }
 
+.reset-figure{
+  width: 300px;
+  @include reset-figure;
+}
+
+.reset-list{
+  @include reset-list;
+}
+
+.resizable{
+  padding: 20px;
+  background-color: rgb(220,220,220);
+  border: 2px solid rgb(140,140,140); 
+  @include resizable;
+}

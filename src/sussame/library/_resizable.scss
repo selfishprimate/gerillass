@@ -1,4 +1,4 @@
 @mixin resizable($value: both, $overflow: auto){
-    resize: $value;
+    resize: $value;
     overflow: $overflow;
 }
