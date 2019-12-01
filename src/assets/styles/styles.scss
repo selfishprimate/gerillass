@@ -1,5 +1,5 @@
 @import "../../sussame/sussame";
-@include reset-css;
+// @include reset-css;
 @include border-box;
 
 body {
@@ -317,11 +317,15 @@ body {
 @include breakpointBetween(320px, 500px){}
 
 .position{
-  width: 200px;
-  height: 200px;
   background-color: crimson;
+  @include rectangle(200px);
   @include position(relative, 0);
-  @include border-radius("all", 40px);
+  @include drop-shadow(
+    $blur: 20px,
+    $color: rgba(0,0,0,.5)
+  );
+  @include border-radius(left, 20px);
+  z-index: 200;
 }
 
 body{
