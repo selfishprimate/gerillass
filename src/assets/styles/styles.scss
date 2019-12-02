@@ -430,3 +430,15 @@ body{
     @include responsive-image;
   }
 }
+
+.first-letter{
+  @include first-letter;
+}
+
+.first-line{
+  @include first-line{
+    display: block;
+    background-color: green;
+    color: white;
+  }
+}

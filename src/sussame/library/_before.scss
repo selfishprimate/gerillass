@@ -1,7 +1,7 @@
 @mixin before(
     $content: null
 ) {
-    &:before{
+    &::before{
         @if $content != null{
             content: "#{$content}";
         }

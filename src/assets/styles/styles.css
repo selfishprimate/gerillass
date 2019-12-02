@@ -170,12 +170,12 @@ body {
   overflow: hidden;
 }
 
-.before:before {
+.before::before {
   content: "This is before mixin is running!";
   background-color: green;
 }
 
-.after:after {
+.after::after {
   content: "This is after mixin is running! Try, it's easy!";
 }
 
@@ -784,4 +784,18 @@ body {
 .image-wrapper .responsive-image {
   display: block;
   width: 100%;
+}
+
+.first-letter::first-letter {
+  float: left;
+  font-size: 4em;
+  line-height: 0.9em;
+  padding-right: 0.1em;
+  margin-bottom: -0.2em;
+}
+
+.first-line::first-line {
+  display: block;
+  background-color: green;
+  color: white;
 }

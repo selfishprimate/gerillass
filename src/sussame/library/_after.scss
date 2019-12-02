@@ -1,7 +1,7 @@
 @mixin after(
     $content: null
 ) {
-    &:after{
+    &::after{
         @if $content != null{
             content: "#{$content}";
         }

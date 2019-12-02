@@ -1,0 +1,10 @@
+@mixin first-letter{
+    &::first-letter{
+        float: left;
+        font-size: 4em;
+        line-height: 0.9em;
+        padding-right: 0.1em;
+        margin-bottom: -0.2em;
+        @content;
+    }
+}
