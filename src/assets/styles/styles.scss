@@ -442,3 +442,7 @@ body{
     color: white;
   }
 }
+
+body{
+  @include opacity(1);
+}

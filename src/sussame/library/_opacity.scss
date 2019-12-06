@@ -1,0 +1,8 @@
+// Eski browserlar için opacity desteği sağlar. Gerek var mı? Henüz bilmiyorum.
+
+@mixin opacity($value){
+    $treated-value: $value * 100;
+    opacity: $value;
+    filter: alpha(opacity=$treated-value); /* IE8 Support */
+    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=#{$treated-value})"; /* IE7 Support */
+}
