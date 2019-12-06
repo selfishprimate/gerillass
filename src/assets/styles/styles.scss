@@ -29,7 +29,7 @@ body {
 
 .rectangle {
   background-color: red;
-  @include rectangle(120px, 30px);
+  @include rectangle(200px);
   margin: __shorthandProperty(0);
 }
 
@@ -445,4 +445,5 @@ body{
 
 body{
   @include opacity(1);
+  @include remify(18px);
 }

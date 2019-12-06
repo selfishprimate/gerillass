@@ -57,8 +57,8 @@ body {
 
 .rectangle {
   background-color: red;
-  width: 120px;
-  height: 30px;
+  width: 200px;
+  height: 200px;
   margin: 0;
 }
 
@@ -800,8 +800,13 @@ body {
 
 body {
   opacity: 1;
-  filter: alpha(opacity=100);
-  /* IE8 Support */
+  -moz-opacity: 1;
+  /* Less than Firefox 0.9 */
+  -khtml-opacity: 1;
+  /* Safari 1.x (This is the pre -webkit form */
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
   /* IE7 Support */
+  filter: alpha(opacity=100);
+  /* IE8 and IE 9 Support */
+  font-size: 1.125rem;
 }

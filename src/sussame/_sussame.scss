@@ -1,6 +1,7 @@
 @import "../../../node_modules/bourbon/core/bourbon";
 
 @import "functions/clear-unit";
+@import "functions/convert-to-rem";
 @import "functions/font-sizer";
 @import "functions/is-number";
 @import "functions/pseudo-selector";
@@ -44,6 +45,7 @@
 @import "library/placeholder";
 @import "library/position";
 @import "library/rectangle";
+@import "library/remify";
 @import "library/reset-css";
 @import "library/reset-figure";
 @import "library/reset-list";
