@@ -153,6 +153,15 @@ body {
   }
 }
 
+.except-this{
+  li{
+    @include except-this(".this"){
+      background-color: pink;
+      color: white;
+    }
+  }
+}
+
 .only-first{
   li{
     @include only-first{
@@ -210,7 +219,7 @@ body {
     $thickness: 50px,
     $rotation: 45
   );
-  background-color: orange
+  background-color: orange;
 }
 
 .all-buttons{
@@ -446,4 +455,9 @@ body{
 body{
   @include opacity(1);
   @include remify(18px);
+}
+
+.text-shadow{
+  font-size: 4em !important;
+  @include text-shadow (rgba(0,0,0,.01), 20);
 }

@@ -1,0 +1,5 @@
+@mixin except-this($value){
+    &:not(#{$value}){
+        @content;
+    }
+}

@@ -1,0 +1,17 @@
+@mixin text-shadow($color, $depth, $blur-radius: null, $rotation: null) {
+    $value: ();
+    @for $i from 1 through $depth {
+        $concat: $i + px;
+        @if $rotation != null {
+            @if $rotation == "bottom" {
+                $shadow: 0 #{$concat} $color;
+                $value: append($value, $shadow, comma);
+            }
+        } @else {
+            $shadow: -#{$concat} #{$concat} $color;
+            $value: append($value, $shadow, comma);
+        }
+
+    }
+    text-shadow: $value;
+}
