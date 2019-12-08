@@ -1,17 +1,40 @@
-@mixin text-shadow($color, $depth, $blur-radius: null, $rotation: null) {
+@mixin text-shadow(
+        $direction: "bottom",
+        $color: rgba(0,0,0,.02),
+        $size: 20,
+        $blur: 0
+    ){
     $value: ();
-    @for $i from 1 through $depth {
+    $blur: __validateUnit($blur);
+    @for $i from 1 through $size {
         $concat: $i + px;
-        @if $rotation != null {
-            @if $rotation == "bottom" {
-                $shadow: 0 #{$concat} $color;
+        @if $direction != null {
+            @if $direction == "top" {
+                $shadow: 0 -#{$concat} $blur $color;
+                $value: append($value, $shadow, comma);
+            } @else if $direction == "top-left" {
+                $shadow: -#{$concat} -#{$concat} $blur $color;
+                $value: append($value, $shadow, comma);
+            } @else if $direction == "top-right" {
+                $shadow: #{$concat} -#{$concat} $blur $color;
+                $value: append($value, $shadow, comma);
+            } @else if $direction == "bottom" {
+                $shadow: 0 #{$concat} $blur $color;
+                $value: append($value, $shadow, comma);
+            } @else if $direction == "bottom-left" {
+                $shadow: -#{$concat} #{$concat} $blur $color;
+                $value: append($value, $shadow, comma);
+            } @else if $direction == "bottom-right" {
+                $shadow: #{$concat} #{$concat} $blur $color;
+                $value: append($value, $shadow, comma);
+            } @else if $direction == "left" {
+                $shadow: -#{$concat} 0 $blur $color;
+                $value: append($value, $shadow, comma);
+            } @else if $direction == "right" {
+                $shadow: #{$concat} 0 $blur $color;
                 $value: append($value, $shadow, comma);
             }
-        } @else {
-            $shadow: -#{$concat} #{$concat} $color;
-            $value: append($value, $shadow, comma);
         }
-
-    }
+    }   
     text-shadow: $value;
 }

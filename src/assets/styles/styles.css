@@ -824,10 +824,20 @@ body {
   /* IE7 Support */
   filter: alpha(opacity=100);
   /* IE8 and IE 9 Support */
-  font-size: 1.125rem;
 }
 
 .text-shadow {
-  font-size: 4em !important;
-  text-shadow: -1px 1px rgba(0, 0, 0, 0.01), -2px 2px rgba(0, 0, 0, 0.01), -3px 3px rgba(0, 0, 0, 0.01), -4px 4px rgba(0, 0, 0, 0.01), -5px 5px rgba(0, 0, 0, 0.01), -6px 6px rgba(0, 0, 0, 0.01), -7px 7px rgba(0, 0, 0, 0.01), -8px 8px rgba(0, 0, 0, 0.01), -9px 9px rgba(0, 0, 0, 0.01), -10px 10px rgba(0, 0, 0, 0.01), -11px 11px rgba(0, 0, 0, 0.01), -12px 12px rgba(0, 0, 0, 0.01), -13px 13px rgba(0, 0, 0, 0.01), -14px 14px rgba(0, 0, 0, 0.01), -15px 15px rgba(0, 0, 0, 0.01), -16px 16px rgba(0, 0, 0, 0.01), -17px 17px rgba(0, 0, 0, 0.01), -18px 18px rgba(0, 0, 0, 0.01), -19px 19px rgba(0, 0, 0, 0.01), -20px 20px rgba(0, 0, 0, 0.01);
+  position: relative;
+  color: white;
+  font-size: 4.375rem !important;
+  text-shadow: -1px 0 5px rgba(0, 0, 0, 0.02), -2px 0 5px rgba(0, 0, 0, 0.02), -3px 0 5px rgba(0, 0, 0, 0.02), -4px 0 5px rgba(0, 0, 0, 0.02), -5px 0 5px rgba(0, 0, 0, 0.02), -6px 0 5px rgba(0, 0, 0, 0.02), -7px 0 5px rgba(0, 0, 0, 0.02), -8px 0 5px rgba(0, 0, 0, 0.02), -9px 0 5px rgba(0, 0, 0, 0.02), -10px 0 5px rgba(0, 0, 0, 0.02), -11px 0 5px rgba(0, 0, 0, 0.02), -12px 0 5px rgba(0, 0, 0, 0.02), -13px 0 5px rgba(0, 0, 0, 0.02), -14px 0 5px rgba(0, 0, 0, 0.02), -15px 0 5px rgba(0, 0, 0, 0.02), -16px 0 5px rgba(0, 0, 0, 0.02), -17px 0 5px rgba(0, 0, 0, 0.02), -18px 0 5px rgba(0, 0, 0, 0.02), -19px 0 5px rgba(0, 0, 0, 0.02), -20px 0 5px rgba(0, 0, 0, 0.02), -21px 0 5px rgba(0, 0, 0, 0.02), -22px 0 5px rgba(0, 0, 0, 0.02), -23px 0 5px rgba(0, 0, 0, 0.02), -24px 0 5px rgba(0, 0, 0, 0.02), -25px 0 5px rgba(0, 0, 0, 0.02), -26px 0 5px rgba(0, 0, 0, 0.02), -27px 0 5px rgba(0, 0, 0, 0.02), -28px 0 5px rgba(0, 0, 0, 0.02), -29px 0 5px rgba(0, 0, 0, 0.02), -30px 0 5px rgba(0, 0, 0, 0.02), -31px 0 5px rgba(0, 0, 0, 0.02), -32px 0 5px rgba(0, 0, 0, 0.02), -33px 0 5px rgba(0, 0, 0, 0.02), -34px 0 5px rgba(0, 0, 0, 0.02), -35px 0 5px rgba(0, 0, 0, 0.02), -36px 0 5px rgba(0, 0, 0, 0.02), -37px 0 5px rgba(0, 0, 0, 0.02), -38px 0 5px rgba(0, 0, 0, 0.02), -39px 0 5px rgba(0, 0, 0, 0.02), -40px 0 5px rgba(0, 0, 0, 0.02), -41px 0 5px rgba(0, 0, 0, 0.02), -42px 0 5px rgba(0, 0, 0, 0.02), -43px 0 5px rgba(0, 0, 0, 0.02), -44px 0 5px rgba(0, 0, 0, 0.02), -45px 0 5px rgba(0, 0, 0, 0.02), -46px 0 5px rgba(0, 0, 0, 0.02), -47px 0 5px rgba(0, 0, 0, 0.02), -48px 0 5px rgba(0, 0, 0, 0.02), -49px 0 5px rgba(0, 0, 0, 0.02), -50px 0 5px rgba(0, 0, 0, 0.02);
+}
+
+.text-shadow:after {
+  content: attr(data-content);
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 0;
+  text-shadow: 1px 0 5px rgba(0, 0, 0, 0.02), 2px 0 5px rgba(0, 0, 0, 0.02), 3px 0 5px rgba(0, 0, 0, 0.02), 4px 0 5px rgba(0, 0, 0, 0.02), 5px 0 5px rgba(0, 0, 0, 0.02), 6px 0 5px rgba(0, 0, 0, 0.02), 7px 0 5px rgba(0, 0, 0, 0.02), 8px 0 5px rgba(0, 0, 0, 0.02), 9px 0 5px rgba(0, 0, 0, 0.02), 10px 0 5px rgba(0, 0, 0, 0.02), 11px 0 5px rgba(0, 0, 0, 0.02), 12px 0 5px rgba(0, 0, 0, 0.02), 13px 0 5px rgba(0, 0, 0, 0.02), 14px 0 5px rgba(0, 0, 0, 0.02), 15px 0 5px rgba(0, 0, 0, 0.02), 16px 0 5px rgba(0, 0, 0, 0.02), 17px 0 5px rgba(0, 0, 0, 0.02), 18px 0 5px rgba(0, 0, 0, 0.02), 19px 0 5px rgba(0, 0, 0, 0.02), 20px 0 5px rgba(0, 0, 0, 0.02), 21px 0 5px rgba(0, 0, 0, 0.02), 22px 0 5px rgba(0, 0, 0, 0.02), 23px 0 5px rgba(0, 0, 0, 0.02), 24px 0 5px rgba(0, 0, 0, 0.02), 25px 0 5px rgba(0, 0, 0, 0.02), 26px 0 5px rgba(0, 0, 0, 0.02), 27px 0 5px rgba(0, 0, 0, 0.02), 28px 0 5px rgba(0, 0, 0, 0.02), 29px 0 5px rgba(0, 0, 0, 0.02), 30px 0 5px rgba(0, 0, 0, 0.02), 31px 0 5px rgba(0, 0, 0, 0.02), 32px 0 5px rgba(0, 0, 0, 0.02), 33px 0 5px rgba(0, 0, 0, 0.02), 34px 0 5px rgba(0, 0, 0, 0.02), 35px 0 5px rgba(0, 0, 0, 0.02), 36px 0 5px rgba(0, 0, 0, 0.02), 37px 0 5px rgba(0, 0, 0, 0.02), 38px 0 5px rgba(0, 0, 0, 0.02), 39px 0 5px rgba(0, 0, 0, 0.02), 40px 0 5px rgba(0, 0, 0, 0.02), 41px 0 5px rgba(0, 0, 0, 0.02), 42px 0 5px rgba(0, 0, 0, 0.02), 43px 0 5px rgba(0, 0, 0, 0.02), 44px 0 5px rgba(0, 0, 0, 0.02), 45px 0 5px rgba(0, 0, 0, 0.02), 46px 0 5px rgba(0, 0, 0, 0.02), 47px 0 5px rgba(0, 0, 0, 0.02), 48px 0 5px rgba(0, 0, 0, 0.02), 49px 0 5px rgba(0, 0, 0, 0.02), 50px 0 5px rgba(0, 0, 0, 0.02);
 }

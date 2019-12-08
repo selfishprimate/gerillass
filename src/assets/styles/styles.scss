@@ -454,10 +454,29 @@ body{
 
 body{
   @include opacity(1);
-  @include remify(18px);
 }
 
 .text-shadow{
-  font-size: 4em !important;
-  @include text-shadow (rgba(0,0,0,.01), 20);
+  position: relative;
+  color: white;
+  @include remify(70px);
+  @include text-shadow(
+    $direction: left,
+    $color: rgba(0,0,0,.02),
+    $size: 50,
+    $blur: 5
+  );
+  &:after{
+    content: attr(data-content);
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 0;
+    @include text-shadow(
+      $direction: right,
+      $color: rgba(0,0,0,.02),
+      $size: 50,
+      $blur: 5
+    );
+  }
 }

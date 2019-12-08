@@ -1,5 +1,5 @@
 // Takes the px value and turns it to the rem.
 
 @mixin remify($value){
-    font-size: __convertToRem($value);
+    font-size: __convertToRem($value) !important;
 }
