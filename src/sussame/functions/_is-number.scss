@@ -1,3 +1,7 @@
 @function __isNumber($value) {
-  @return type-of($value) == 'number';
+  @if type-of($value) == 'number' {
+    @return $value;
+  } @else {
+    @warn "Please make sure you pass a valid number!";
+  }
 }

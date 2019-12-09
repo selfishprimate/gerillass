@@ -6,25 +6,25 @@
 ) {
     position: $position;
     @if length($corner) == 1{
-        top: __validateUnit(nth($corner, 1));
-        right: __validateUnit(nth($corner, 1));
-        bottom: __validateUnit(nth($corner, 1));
-        left: __validateUnit(nth($corner, 1));
+        top: __pixelify(nth($corner, 1));
+        right: __pixelify(nth($corner, 1));
+        bottom: __pixelify(nth($corner, 1));
+        left: __pixelify(nth($corner, 1));
     } @else if length($corner) == 2{
-        top: __validateUnit(nth($corner, 1));
-        right: __validateUnit(nth($corner, 2));
-        bottom: __validateUnit(nth($corner, 1));
-        left: __validateUnit(nth($corner, 2));
+        top: __pixelify(nth($corner, 1));
+        right: __pixelify(nth($corner, 2));
+        bottom: __pixelify(nth($corner, 1));
+        left: __pixelify(nth($corner, 2));
     } @else if length($corner) == 3{
-        top: __validateUnit(nth($corner, 1));
-        right: __validateUnit(nth($corner, 2));
-        bottom: __validateUnit(nth($corner, 3));
-        left: __validateUnit(nth($corner, 2));
+        top: __pixelify(nth($corner, 1));
+        right: __pixelify(nth($corner, 2));
+        bottom: __pixelify(nth($corner, 3));
+        left: __pixelify(nth($corner, 2));
     } @else if length($corner) == 4 {
-        top: __validateUnit(nth($corner, 1));
-        right: __validateUnit(nth($corner, 2));
-        bottom: __validateUnit(nth($corner, 3));
-        left: __validateUnit(nth($corner, 4));
+        top: __pixelify(nth($corner, 1));
+        right: __pixelify(nth($corner, 2));
+        bottom: __pixelify(nth($corner, 3));
+        left: __pixelify(nth($corner, 4));
     }
 }
 

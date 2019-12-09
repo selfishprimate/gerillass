@@ -9,8 +9,6 @@
                                             
                     created by Halil İbrahim Çakıroğlu
 */
-/* stylelint-disable order/properties-alphabetical-order */
-/* stylelint-enable */
 *,
 *::before,
 *::after {
@@ -552,6 +550,7 @@ body {
 }
 
 body {
+  font-size: 26px;
   margin-bottom: 250px;
 }
 

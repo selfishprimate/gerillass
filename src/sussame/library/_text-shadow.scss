@@ -1,3 +1,5 @@
+// This mixin will be improved.
+
 @mixin text-shadow(
         $direction: "bottom",
         $color: rgba(0,0,0,.02),
@@ -5,7 +7,7 @@
         $blur: 0
     ){
     $value: ();
-    $blur: __validateUnit($blur);
+    $blur: __pixelify($blur);
     @for $i from 1 through $size {
         $concat: $i + px;
         @if $direction != null {

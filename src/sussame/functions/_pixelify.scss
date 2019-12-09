@@ -1,0 +1,11 @@
+// This function checks if the argument has been passes with a unit. If not, the function adds a px unit to the end of the argument.
+
+@function __pixelify($value) {
+  @if unit($value) == 'px' {
+      @return $value;
+  } @else if unit($value) != 'px' {
+      @return __clearUnit($value) + px;
+  } @else if unitless($value) == true {
+      @return $value + px;
+  }
+}

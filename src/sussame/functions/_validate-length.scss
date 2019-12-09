@@ -5,7 +5,7 @@ $list-of-values: ("auto", "inherit", "initial", 0);
 @function __validateLength($value){
   @if index($list-of-values, $value){
       @return $value;
-  } @else if type-of($value) == "number" and not unitless($value){
+  } @else if type-of($value) == 'number' and not unitless($value){
       @return $value;
   } @else {
       @warn "Please pass some values with unit like `#{$value}px`, `#{$value}em`, or `#{$value}%` etc. or pass one of the following arguments: `auto`, ìnherit`, ìnitial` or `0`.";

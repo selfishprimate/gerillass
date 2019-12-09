@@ -7,8 +7,8 @@
     background: repeating-linear-gradient(
         if(not index("deg", unit($rotation)), $rotation + deg, $rotation),
         $color 0,
-        $color __validateUnit($thickness),
-        $secondary-color __validateUnit($thickness),
-        $secondary-color __validateUnit($thickness * 2),
+        $color __pixelify($thickness),
+        $secondary-color __pixelify($thickness),
+        $secondary-color __pixelify($thickness * 2),
     );  
 }

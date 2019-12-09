@@ -1,4 +1,4 @@
-// Using the __validateUnit validator function to check if the argument has a unit.
+// Using the __pixelify validator function to check if the argument has a unit.
 // Don't try to understand the code below, but try to understand the logic of the clip-path: polygon property instead.
 
 @mixin cutted-edge($params...){
@@ -16,7 +16,7 @@
     );
   } @else if length($params) == 1 {
       $value: nth($params, 1);
-      $validatedValue: __validateUnit($value);
+      $validatedValue: __pixelify($value);
       clip-path: polygon(
         0 #{$validatedValue},
         #{$validatedValue} 0,
@@ -29,14 +29,14 @@
       );
   } @else if length($params) > 1 and length($params) < 5 {
       clip-path: polygon(
-        0 #{__validateUnit(nth($params, 1))},  
-        #{__validateUnit(nth($params, 1))} 0,
-        calc(100% - #{__validateUnit(nth($params, 2))}) 0,
-        100% #{__validateUnit(nth($params, 2))},
-        100% calc(100% - #{__validateUnit(nth($params, 3))}),
-        calc(100% - #{__validateUnit(nth($params, 3))}) 100%,
-        #{__validateUnit(nth($params, 4))} 100%,
-        0 calc(100% - #{__validateUnit(nth($params, 4))}
+        0 #{__pixelify(nth($params, 1))},  
+        #{__pixelify(nth($params, 1))} 0,
+        calc(100% - #{__pixelify(nth($params, 2))}) 0,
+        100% #{__pixelify(nth($params, 2))},
+        100% calc(100% - #{__pixelify(nth($params, 3))}),
+        calc(100% - #{__pixelify(nth($params, 3))}) 100%,
+        #{__pixelify(nth($params, 4))} 100%,
+        0 calc(100% - #{__pixelify(nth($params, 4))}
       )
     );
   }
