@@ -342,7 +342,7 @@ body{
 }
 
 body{
-  font-size: __pixelify(26);
+  font-size: __pixelify(18);
   margin-bottom: __validateLength(250px);
 }
 
@@ -480,4 +480,9 @@ body{
       $blur: 5
     );
   }
+}
+
+.tint{
+  padding: 20px;
+  background-color: __whiten(purple, 90%);
 }
