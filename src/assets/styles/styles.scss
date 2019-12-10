@@ -485,10 +485,7 @@ body{
 .whiten{
   padding: 20px;
   color: white;
-  background-color: purple;
-  &:hover{
-    background-color: __whiten(purple, 50%);
-  }
+  background-color: __whiten(purple, 60%);
 }
 
 .darken{

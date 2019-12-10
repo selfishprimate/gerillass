@@ -7,7 +7,7 @@
   ____) | |_| \__ \__ \ (_| | | | | | |  __/
  |_____/ \__,_|___/___/\__,_|_| |_| |_|\___|
                                             
-                    created by Halil İbrahim Çakıroğlu
+                    - Created by Halil İbrahim Çakıroğlu
 */
 *,
 *::before,
@@ -844,11 +844,7 @@ body {
 .whiten {
   padding: 20px;
   color: white;
-  background-color: purple;
-}
-
-.whiten:hover {
-  background-color: #c080c0;
+  background-color: #cc99cc;
 }
 
 .darken {

@@ -1,8 +1,8 @@
-@function __darken($color, $percent) {
+@function __darken($color, $percentage) {
   @if not __isColor($color) {
     @error "`#{$color}` is not a valid color for the `$color` argument in " +
            "the `tint` mixin.";
   } @else {
-    @return mix(#000, $color, $percent);
+    @return mix(#000, $color, $percentage);
   }
 }
