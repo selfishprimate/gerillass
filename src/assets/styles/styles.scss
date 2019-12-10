@@ -482,7 +482,20 @@ body{
   }
 }
 
-.tint{
+.whiten{
   padding: 20px;
-  background-color: __whiten(purple, 90%);
+  color: white;
+  background-color: purple;
+  &:hover{
+    background-color: __whiten(purple, 50%);
+  }
+}
+
+.darken{
+  padding: 20px;
+  color: white;
+  background-color: orange;
+  &:hover{
+    background-color: __darken(orange, 20%);
+  }
 }

@@ -841,7 +841,22 @@ body {
   text-shadow: 1px 0 5px rgba(0, 0, 0, 0.02), 2px 0 5px rgba(0, 0, 0, 0.02), 3px 0 5px rgba(0, 0, 0, 0.02), 4px 0 5px rgba(0, 0, 0, 0.02), 5px 0 5px rgba(0, 0, 0, 0.02), 6px 0 5px rgba(0, 0, 0, 0.02), 7px 0 5px rgba(0, 0, 0, 0.02), 8px 0 5px rgba(0, 0, 0, 0.02), 9px 0 5px rgba(0, 0, 0, 0.02), 10px 0 5px rgba(0, 0, 0, 0.02), 11px 0 5px rgba(0, 0, 0, 0.02), 12px 0 5px rgba(0, 0, 0, 0.02), 13px 0 5px rgba(0, 0, 0, 0.02), 14px 0 5px rgba(0, 0, 0, 0.02), 15px 0 5px rgba(0, 0, 0, 0.02), 16px 0 5px rgba(0, 0, 0, 0.02), 17px 0 5px rgba(0, 0, 0, 0.02), 18px 0 5px rgba(0, 0, 0, 0.02), 19px 0 5px rgba(0, 0, 0, 0.02), 20px 0 5px rgba(0, 0, 0, 0.02), 21px 0 5px rgba(0, 0, 0, 0.02), 22px 0 5px rgba(0, 0, 0, 0.02), 23px 0 5px rgba(0, 0, 0, 0.02), 24px 0 5px rgba(0, 0, 0, 0.02), 25px 0 5px rgba(0, 0, 0, 0.02), 26px 0 5px rgba(0, 0, 0, 0.02), 27px 0 5px rgba(0, 0, 0, 0.02), 28px 0 5px rgba(0, 0, 0, 0.02), 29px 0 5px rgba(0, 0, 0, 0.02), 30px 0 5px rgba(0, 0, 0, 0.02), 31px 0 5px rgba(0, 0, 0, 0.02), 32px 0 5px rgba(0, 0, 0, 0.02), 33px 0 5px rgba(0, 0, 0, 0.02), 34px 0 5px rgba(0, 0, 0, 0.02), 35px 0 5px rgba(0, 0, 0, 0.02), 36px 0 5px rgba(0, 0, 0, 0.02), 37px 0 5px rgba(0, 0, 0, 0.02), 38px 0 5px rgba(0, 0, 0, 0.02), 39px 0 5px rgba(0, 0, 0, 0.02), 40px 0 5px rgba(0, 0, 0, 0.02), 41px 0 5px rgba(0, 0, 0, 0.02), 42px 0 5px rgba(0, 0, 0, 0.02), 43px 0 5px rgba(0, 0, 0, 0.02), 44px 0 5px rgba(0, 0, 0, 0.02), 45px 0 5px rgba(0, 0, 0, 0.02), 46px 0 5px rgba(0, 0, 0, 0.02), 47px 0 5px rgba(0, 0, 0, 0.02), 48px 0 5px rgba(0, 0, 0, 0.02), 49px 0 5px rgba(0, 0, 0, 0.02), 50px 0 5px rgba(0, 0, 0, 0.02);
 }
 
-.tint {
+.whiten {
   padding: 20px;
-  background-color: #f2e6f2;
+  color: white;
+  background-color: purple;
+}
+
+.whiten:hover {
+  background-color: #c080c0;
+}
+
+.darken {
+  padding: 20px;
+  color: white;
+  background-color: orange;
+}
+
+.darken:hover {
+  background-color: #cc8400;
 }
