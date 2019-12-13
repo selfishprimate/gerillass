@@ -1199,3 +1199,19 @@ body {
 .darken:hover {
   background-color: #cc8400;
 }
+
+.container h1 {
+  color: blue;
+}
+
+.desktop.container h1 {
+  color: red;
+}
+
+.mobile.container h1 {
+  color: pink;
+}
+
+.tablet .container h1 {
+  color: teal;
+}

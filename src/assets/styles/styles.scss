@@ -497,3 +497,20 @@ body{
     background-color: __darken(orange, 20%);
   }
 }
+
+
+.container{
+  h1{
+    color: blue;
+    @include escaper(".desktop"){
+      color: red;
+    }
+    @include escaper(".mobile"){
+      color: pink
+    }
+    @at-root .tablet &{
+      color: teal
+    }
+  }
+
+}
