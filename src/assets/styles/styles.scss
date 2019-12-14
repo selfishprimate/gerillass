@@ -512,5 +512,16 @@ body{
       color: teal
     }
   }
-
 }
+
+.hidden{
+  display: flex;
+  padding: 20px;
+  background-color: pink;
+  @include hidden(320px);
+  @include hidden(small, medium);
+  @include hidden(medium, large);
+}
+
+
+
