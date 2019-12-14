@@ -1271,3 +1271,7 @@ body {
   background-image: url("../images/bird-sprite.jpg");
   background-repeat: no-repeat;
 }
+
+.desktop .sprite .sprite-image {
+  background-color: blue;
+}

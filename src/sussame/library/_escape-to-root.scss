@@ -1,0 +1,5 @@
+@mixin escape-to-root($value){
+    #{$value} & {
+        @content;
+    }
+}

@@ -504,10 +504,10 @@ body{
 .container{
   h1{
     color: blue;
-    @include escaper(".desktop"){
+    @include escape-to-parent(".desktop"){
       color: red;
     }
-    @include escaper(".mobile"){
+    @include escape-to-parent(".mobile"){
       color: pink
     }
     @at-root .tablet &{
@@ -537,6 +537,9 @@ body{
       $image-url: "../images/bird-sprite.jpg",
       $position: 0px -78px,
     );
+    @include escape-to-root(".desktop"){
+      background-color: blue;
+    }
   }
 }
 

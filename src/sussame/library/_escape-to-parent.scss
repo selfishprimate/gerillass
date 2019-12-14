@@ -1,6 +1,6 @@
 // Bu fonksiyon bir komponentin skope'undan kaçmamıza ve böylece aynı komponenti multiple class'lar ile tekrar target edebilmeye yarar. Bu şekilde, aynı komponentin mobile, teblet ve desktop gibi farklı cihazlarda nasıl davranması gerektiğini kontrol edebiliriz.
 
-@mixin escaper($selector: null){
+@mixin escape-to-parent($selector: null){
     @at-root #{$selector}#{&}{
         @content;
     }
