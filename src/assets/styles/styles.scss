@@ -1,4 +1,6 @@
 @import "../../sussame/sussame";
+
+// @import "../../../node_modules/bourbon/core/bourbon";
 // @include reset-css;
 @include normalize-css;
 @include border-box;
@@ -519,9 +521,25 @@ body{
   padding: 20px;
   background-color: pink;
   @include hidden(320px);
+  @include hidden(min, large);
+  @include hidden(max, medium);
   @include hidden(small, medium);
-  @include hidden(medium, large);
+  @include hidden(medium, 1300px);
 }
+.sprite{
+  display: flex;
+  .sprite-image{
+    margin-right: 20px;
+    flex-shrink: 0;
+    @include sprite(
+      $width: 180px,
+      $height: 140px,
+      $image-url: "../images/bird-sprite.jpg",
+      $position: 0px -78px,
+    );
+  }
+}
+
 
 
 

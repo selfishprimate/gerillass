@@ -1230,14 +1230,44 @@ body {
   }
 }
 
+@media (min-width: 992px) {
+  .hidden {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .hidden {
+    display: none;
+  }
+}
+
 @media (min-width: 576px) and (max-width: 767px) {
   .hidden {
     display: none;
   }
 }
 
-@media (min-width: 768px) and (max-width: 991px) {
+@media (min-width: 768px) and (max-width: 1300px) {
   .hidden {
     display: none;
   }
+}
+
+.sprite {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.sprite .sprite-image {
+  margin-right: 20px;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  display: inline-block;
+  width: 180px;
+  height: 140px;
+  background-position: 0px -78px;
+  background-image: url("../images/bird-sprite.jpg");
+  background-repeat: no-repeat;
 }

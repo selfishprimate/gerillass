@@ -1,0 +1,13 @@
+@mixin sprite(
+    $width: null,
+    $height: $width,
+    $image-url: null,
+    $position: null,
+){
+    display: inline-block;
+    width: $width;
+    height: $height;
+    background-position: nth($position, 1) nth($position, 2);
+    background-image: url($image-url);
+    background-repeat: no-repeat;
+}
