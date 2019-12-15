@@ -25,4 +25,30 @@
     }
 }
 
-@mixin radial-gradient{};
+@mixin radial-gradient(
+    $shape: circle,
+    $direction: null,
+    $params...
+){
+    @if $direction == "top" {
+        background: radial-gradient($shape at top, $params);
+    } @else if $direction == "top-left" {
+        background: radial-gradient($shape at top left, $params);
+    } @else if $direction == "top-right" {
+        background: radial-gradient($shape at top right, $params);
+    } @else if $direction == "bottom" {
+        background: radial-gradient($shape at bottom, $params);
+    } @else if $direction == "bottom-left" {
+        background: radial-gradient($shape at bottom left, $params);
+    } @else if $direction == "bottom-right" {
+        background: radial-gradient($shape at bottom right, $params);
+    } @else if $direction == "left" {
+        background: radial-gradient($shape at left, $params);
+    } @else if $direction == "right" {
+        background: radial-gradient($shape at right, $params);
+    } @else if $direction == "center" {
+        background: radial-gradient($shape at center, $params);
+    } @else {
+        @error "Please pass a velid value.";
+    }
+}

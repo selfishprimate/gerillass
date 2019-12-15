@@ -87,16 +87,20 @@ body {
   @include after("This is after mixin is running! Try, it's easy!");
 }
 
-.gradient{
+.linear-gradient{
   padding: 20px;
-  @include linear-gradient(right, red, orange 25% 50%, green 50% 100%);
-  @include border-radius(all, 30px);
+  @include linear-gradient(right, __darken(red, 20%), __lighten(orange, 40%) 25% 50%, green 50% 100%);
+}
+
+.radial-gradient{
+  padding: 20px;
+  @include radial-gradient(circle, center, teal, __darken(teal, 20%));
+  color: white;
 }
 
 .border-radius{
   padding: 20px;
   background-color: rgb(220,220,220);
-  @include border-radius(cross-left, 20px);
 }
 
 .placeholder{
@@ -488,7 +492,10 @@ body{
 .whiten{
   padding: 20px;
   color: white;
-  background-color: __whiten(purple, 60%);
+  background-color: purple;
+  &:hover{
+    background-color: __lighten(purple, 20%);
+  }
 }
 
 .darken{

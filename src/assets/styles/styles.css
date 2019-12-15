@@ -529,20 +529,25 @@ body {
   content: "This is after mixin is running! Try, it's easy!";
 }
 
-.gradient {
+.linear-gradient {
   padding: 20px;
-  background: -webkit-gradient(linear, left top, right top, from(red), color-stop(25%, orange), color-stop(50%, green));
-  background: -webkit-linear-gradient(left, red, orange 25% 50%, green 50% 100%);
-  background: -o-linear-gradient(left, red, orange 25% 50%, green 50% 100%);
-  background: linear-gradient(to right, red, orange 25% 50%, green 50% 100%);
-  border-radius: 30px;
+  background: -webkit-gradient(linear, left top, right top, from(#cc0000), color-stop(25%, #ffc966), color-stop(50%, green));
+  background: -webkit-linear-gradient(left, #cc0000, #ffc966 25% 50%, green 50% 100%);
+  background: -o-linear-gradient(left, #cc0000, #ffc966 25% 50%, green 50% 100%);
+  background: linear-gradient(to right, #cc0000, #ffc966 25% 50%, green 50% 100%);
+}
+
+.radial-gradient {
+  padding: 20px;
+  background: -webkit-radial-gradient(center, circle, teal, #006666);
+  background: -o-radial-gradient(center, circle, teal, #006666);
+  background: radial-gradient(circle at center, teal, #006666);
+  color: white;
 }
 
 .border-radius {
   padding: 20px;
   background-color: gainsboro;
-  border-top-left-radius: 20px;
-  border-bottom-right-radius: 20px;
 }
 
 .placeholder ::-webkit-input-placeholder {
@@ -1187,7 +1192,11 @@ body {
 .whiten {
   padding: 20px;
   color: white;
-  background-color: #cc99cc;
+  background-color: purple;
+}
+
+.whiten:hover {
+  background-color: #993399;
 }
 
 .darken {
