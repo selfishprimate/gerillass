@@ -1,0 +1,14 @@
+// This mixin can be improved in the future.
+
+@mixin adaptive-container(
+    $gutter: 60px,
+){
+    margin: 0 auto;
+    $actual-breakpoints: map-remove($list-of-breakpoints, "xsmall");
+    @each $item, $value in $actual-breakpoints{
+        @media (min-width: #{$value}){
+            max-width: calc(#{$value} - #{$gutter});
+        }
+    }
+}
+
