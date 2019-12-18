@@ -1,4 +1,5 @@
 // This mixin can be improved in the future.
+// This mixin means that the edge of the browser can get as closer as half of the $gutter paramater's value to the edge of the container.
 
 @mixin adaptive-container(
     $gutter: 60px,
