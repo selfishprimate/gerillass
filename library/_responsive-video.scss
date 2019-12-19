@@ -14,20 +14,15 @@
     } @if length($params) == 0{
         padding-top: 56.25%;
     } @else if length($params) == 1 {
-
-        $ratio: unquote(nth($params, 1));
-        $ratio-index: str-index($ratio, ":");
-
-        $width: unquote(str-slice($ratio, 1, $ratio-index - 1));
-        $height: unquote(str-slice($ratio, $ratio-index + 1));
-        
-        $pixel-width: $width + "%";
-        $pixel-height: $height + "%";
-
-        padding-top: calc((#{$pixel-height} - #{$pixel-width}));
-
+        $ratio: nth($params, 1);
+        $colon-index: str-index($ratio, ":");
+        $width: __convertToNumber(str-slice($ratio, 1, $colon-index - 1));
+        $height: __convertToNumber(str-slice($ratio, $colon-index + 1));
+        $calc: ($height / $width) * 100;
+        padding-top: #{$calc + "%"};
     }
 }
+
 
 
 
