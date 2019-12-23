@@ -1,14 +1,29 @@
 // This function converts any string value between 0 and 9 to actual number.
 
-@function __convertToNumber($string) {
-    $strings: '0' '1' '2' '3' '4' '5' '6' '7' '8' '9';
-    $numbers: 0 1 2 3 4 5 6 7 8 9;
-    $result: 0;
-    @for $i from 1 through str-length($string) {
-        $character: str-slice($string, $i, $i);
-        $index: index($strings, $character);
-        $number: nth($numbers, $index);
-        $result: $result * 10 + $number;
+@function __convertToNumber($value) {
+
+    $string-numerals: "0" "1" "2" "3" "4" "5" "6" "7" "8" "9";
+    $calc: 0;
+
+    @for $i from 1 through str-length($value) {
+
+        //Takes every digits in the $value
+        $digit: str-slice($value, $i, $i);
+
+        //Finds the index position of $digit in the $value
+        $index-of-digit: index($string-numerals, $digit);
+
+        // That is because SASS strings are not "0" based but "1", the index position of every digits will be more by one. Here is the simple calculation to find the actual number.
+        $actual-digit: $index-of-digit - 1;
+
+        // Calculates the actual number.
+        $calc: $calc * 10 + $actual-digit;
+
     }
-    @return $result;
+    @return $calc;
 }
+
+// @error __convertToNumber("23435");
+
+
+
