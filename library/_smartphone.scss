@@ -1,0 +1,9 @@
+// Else durumu geliştirilecek. Bir hata veya uyarı mesajı basılabilir.
+
+@mixin smartphone($value){
+    @if map-has-key($list-of-smartphones, $value){
+        @media only screen and (min-device-width : __mapDeepGet($list-of-smartphones, $value, 'width')) and (max-device-height : __mapDeepGet($list-of-smartphones, $value, 'height')){
+            @content;
+        }
+    }
+}

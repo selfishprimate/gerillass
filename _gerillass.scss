@@ -2,9 +2,11 @@
 @import "lists/list-of-breakpoints";
 @import "lists/list-of-buttons";
 @import "lists/list-of-length-units";
+@import "lists/list-of-smartphones";
 @import "lists/list-of-text-inputs";
 
 @import "functions/clear-unit";
+@import "functions/convert-to-em";
 @import "functions/convert-to-number";
 @import "functions/convert-to-rem";
 @import "functions/darken";
@@ -12,6 +14,7 @@
 @import "functions/is-color";
 @import "functions/is-number";
 @import "functions/lighten";
+@import "functions/map-deep-get";
 @import "functions/pixelify";
 @import "functions/pseudo-selector";
 @import "functions/shorthand-property";
@@ -64,6 +67,7 @@
 @import "library/responsive-video";
 @import "library/ripple-effect";
 @import "library/screen-resolution";
+@import "library/smartphone";
 @import "library/sprite";
 @import "library/stretched-link";
 @import "library/text-gradient";
