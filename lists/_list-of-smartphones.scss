@@ -1,31 +1,20 @@
 
 $list-of-smartphones: (
-    "iPhone4" : (
-        width: 320px,
-        height: 480px
-    ),
-    "iPhone5-SE" : (
-        width: 320px,
-        height: 568px
-    ),
-    "iPhone6" : (
-        width: 375px,
-        height: 667px
-    ),
-    "iPhone6-Plus" : (
-        width: 414px,
-        height: 736px
-    ),
-    "iPhone7" : (
-        width: 375px,
-        height: 667px
-    ),
-    "iPhone7-Plus" : (
-        width: 414px,
-        height: 736px
-    ),
-    "iPhoneX" : (
-        width: 375px,
-        height: 812px
-    )
+
+    // Apple Devices
+
+    "iPhone4" : (width: 320px, height: 480px),
+    "iPhone-SE" : (width: 320px, height: 568px),
+    "iPhone5-SE" : (width: 320px, height: 568px),
+    "iPhone6" : (width: 375px, height: 667px),
+    "iPhone6-Plus" : (width: 414px, height: 736px),
+    "iPhone7" : (width: 375px, height: 667px),
+    "iPhone7-Plus" : (width: 414px, height: 736px),
+    "iPhone8" : (width: 375px, height: 667px),
+    "iPhone8-Plus" : (width: 414px, height: 736px),
+    "iPhone11" : (width: 414px, height: 896px),
+    "iPhone11-Pro" : (width: 375px, height: 812px),
+    "iPhone11-Pro-Max" : (width: 414px, height: 896px),
+    "iPhoneX" : (width: 375px, height: 812px)
+    
 );
