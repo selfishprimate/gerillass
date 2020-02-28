@@ -1,0 +1,24 @@
+@mixin tablet(
+        $value, 
+        $orientation: null
+    ){
+    @if map-has-key($list-of-tablets, $value){
+        @if $orientation == portrait or $orientation == null{
+            @media only screen 
+            and (device-width: __mapDeepGet($list-of-tablets, $value, 'width')) 
+            and (device-height: __mapDeepGet($list-of-tablets, $value, 'height'))
+            and (orientation: portrait){
+                @content;
+            }
+        } @else if $orientation == landscape {
+                @media only screen 
+                and (device-width: __mapDeepGet($list-of-tablets, $value, 'height')) 
+                and (device-height: __mapDeepGet($list-of-tablets, $value, 'width'))
+                and (orientation: landscape){
+                @content;
+            }
+        }
+    } @else {
+        @warn "#{$value} is a wrong device name! The value must be one of the followings: #{__getKey($list-of-tablets)}";
+    }
+}
