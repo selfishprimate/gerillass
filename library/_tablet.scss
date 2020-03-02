@@ -19,6 +19,6 @@
             }
         }
     } @else {
-        @warn "#{$device} is a wrong device name! The argument must be one of the followings: #{__getKey($list-of-tablets)}";
+        @warn "#{$device} is a wrong device name! The argument must be one of the followings: #{map-keys($list-of-tablets)}";
     }
 }
