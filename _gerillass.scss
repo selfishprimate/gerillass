@@ -1,11 +1,12 @@
 @import "lists/list-of-anchor-pseudo-classes";
-@import "lists/list-of-breakpoints";
 @import "lists/list-of-buttons";
 @import "lists/list-of-directions";
 @import "lists/list-of-length-units";
-@import "lists/list-of-smartphones";
-@import "lists/list-of-tablets";
 @import "lists/list-of-text-inputs";
+
+@import "maps/map-for-breakpoints";
+@import "maps/map-for-smartphones";
+@import "maps/map-for-tablets";
 
 @import "functions/clear-unit";
 @import "functions/convert-to-em";

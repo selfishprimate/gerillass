@@ -2,23 +2,23 @@
     $device, 
     $orientation: null
 ){
-    @if map-has-key($list-of-tablets, $device){
+    @if map-has-key($map-for-tablets, $device){
         @if $orientation == portrait or $orientation == null{
             @media only screen 
-            and (device-width: __mapDeepGet($list-of-tablets, $device, 'width')) 
-            and (device-height: __mapDeepGet($list-of-tablets, $device, 'height'))
+            and (device-width: __mapDeepGet($map-for-tablets, $device, 'width')) 
+            and (device-height: __mapDeepGet($map-for-tablets, $device, 'height'))
             and (orientation: portrait){
                 @content;
             }
         } @else if $orientation == landscape {
             @media only screen 
-            and (device-width: __mapDeepGet($list-of-tablets, $device, 'height')) 
-            and (device-height: __mapDeepGet($list-of-tablets, $device, 'width'))
+            and (device-width: __mapDeepGet($map-for-tablets, $device, 'height')) 
+            and (device-height: __mapDeepGet($map-for-tablets, $device, 'width'))
             and (orientation: landscape){
                 @content;
             }
         }
     } @else {
-        @warn "#{$device} is a wrong device name! The argument must be one of the followings: #{map-keys($list-of-tablets)}";
+        @warn "#{$device} is a wrong device name! The argument must be one of the followings: #{map-keys($map-for-tablets)}";
     }
 }

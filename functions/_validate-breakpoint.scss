@@ -1,8 +1,8 @@
-// Argümanın $list-of-breakpoint'teki bir değerle eşleşip eşleşmediğine bakar. Eşleşiyor ise $list-of-breakpoint'teki elemanın değerini, değilse argüman olarak geçilen değeri döner!
+// Argümanın $map-for-breakpoints'teki bir değerle eşleşip eşleşmediğine bakar. Eşleşiyor ise $list-of-breakpoint'teki elemanın değerini, değilse argüman olarak geçilen değeri döner!
 
 @function __validateBreakpoint($value){
-    @if map-has-key($list-of-breakpoints, $value){
-        @return map-get($list-of-breakpoints, $value);
+    @if map-has-key($map-for-breakpoints, $value){
+        @return map-get($map-for-breakpoints, $value);
     } @else {
         @return $value;
     }

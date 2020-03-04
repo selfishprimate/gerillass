@@ -1,4 +1,5 @@
-$list-of-tablets: (
+$map-for-tablets: (
+    // Apple Devices
     "iPadMini" : (
         width: 768px,
         height: 1024px
@@ -15,6 +16,7 @@ $list-of-tablets: (
         width: 1024px,
         height: 1366px
     ),
+    // Android Devices
     "Nexus7" : (
         width: 600px,
         height: 960px

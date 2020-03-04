@@ -1,6 +1,6 @@
 @mixin breakpointOnly($value){
-    @if map-has-key($list-of-breakpoints, $value){
-        @media (width: map-get($list-of-breakpoints, $value)) {
+    @if map-has-key($map-for-breakpoints, $value){
+        @media (width: map-get($map-for-breakpoints, $value)) {
             @content;
         }
     } @else {
@@ -11,8 +11,8 @@
 }
 
 @mixin breakpointMin($value){
-    @if map-has-key($list-of-breakpoints, $value){
-        @media (min-width: map-get($list-of-breakpoints, $value)) {
+    @if map-has-key($map-for-breakpoints, $value){
+        @media (min-width: map-get($map-for-breakpoints, $value)) {
             @content;
         }
     } @else {
@@ -23,8 +23,8 @@
 }
 
 @mixin breakpointMax($value){
-    @if map-has-key($list-of-breakpoints, $value){
-        @media (max-width: map-get($list-of-breakpoints, $value)) {
+    @if map-has-key($map-for-breakpoints, $value){
+        @media (max-width: map-get($map-for-breakpoints, $value)) {
             @content;
         }
     } @else {
@@ -37,12 +37,12 @@
 @mixin breakpointBetween($params...){
     $start: __validateBreakpoint(nth($params, 1));
     $end: __validateBreakpoint(nth($params, 2));
-    @if map-has-key($list-of-breakpoints, nth($params, 1)) and map-has-key($list-of-breakpoints, nth($params, 2)){
+    @if map-has-key($map-for-breakpoints, nth($params, 1)) and map-has-key($map-for-breakpoints, nth($params, 2)){
         @media (min-width: $start) and (max-width:  $end - 1) {
             @content;
         }
     } @else {
-        @if map-has-key($list-of-breakpoints, nth($params, 2)){
+        @if map-has-key($map-for-breakpoints, nth($params, 2)){
             @media (min-width: $start) and (max-width:  $end - 1) {
                 @content;
             }
