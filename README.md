@@ -13,11 +13,11 @@ Gerillass is an open-source toolkit that contains a set of Sass mixins to help d
 
 ## Installation
 
-1. Install the Gerillass gem using the [RubyGems] package manager:
+Install the Gerillass gem using the [RubyGems] package manager:
 
-    ```bash
-    gem install gerillass
-    ```
+```bash
+gem install gerillass
+```
 
 
 ## Npm Installation
