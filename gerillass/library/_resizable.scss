@@ -1,5 +1,0 @@
-@mixin resizable($value: both, $overflow: auto){
-    resize: $value;
-    overflow: $overflow;
-    max-width: 100%;
-}
