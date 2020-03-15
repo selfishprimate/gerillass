@@ -1,0 +1,13 @@
+@mixin only-this($value){
+    @if type-of($value) == "number"  {
+        &:nth-child(#{$value}){
+            @content;
+        }
+    }
+    @else if type-of($value) == "string" {
+        &#{$value}{
+            @content;
+        }
+    }
+    // Here will be an @error message if the argument is not either number or string!
+}
