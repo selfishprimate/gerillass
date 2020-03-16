@@ -1,10 +1,9 @@
 @mixin only-this($value){
     @if type-of($value) == "number"  {
-        &:nth-child(#{$value}){
+        &:nth-of-type(#{$value}){
             @content;
         }
-    }
-    @else if type-of($value) == "string" {
+    } @else if type-of($value) == "string" {
         &#{$value}{
             @content;
         }
