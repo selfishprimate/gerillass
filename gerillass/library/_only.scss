@@ -1,4 +1,4 @@
-@mixin only-this($value){
+@mixin only($value){
     @if type-of($value) == "number"  {
         &:nth-of-type(#{$value}){
             @content;
