@@ -6,12 +6,20 @@
                 @content;
             }
         } @else if type-of($value) == "string" {
-            @if $value == "even" {
+            @if $value == "odd" {
+                &:nth-of-type(odd){
+                    @content;
+                }
+            } @else if $value == "even" {
                 &:nth-of-type(even){
                     @content;
                 }
-            } @else if $value == "odd" {
-                &:nth-of-type(odd){
+            } @else if $value == "first" {
+                &:first-of-type{
+                    @content;
+                }
+            } @else if $value == "last" {
+                &:last-of-type{
                     @content;
                 }
             } @else {
