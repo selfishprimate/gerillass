@@ -1,5 +1,7 @@
 @mixin only($params...){
-    @if length($params) == 1 {
+    @if length($params) == 0 {
+        @error "@Error Message!";
+    } @else if length($params) == 1 {
         $value: nth($params, 1);
         @if type-of($value) == "number" {
             &:nth-of-type(#{$value}){
