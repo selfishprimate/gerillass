@@ -6,7 +6,7 @@ $all-text-inputs-invalid: __pseudoSelector($list-of-text-inputs, invalid);
 $all-text-inputs-required: __pseudoSelector($list-of-text-inputs, required);
 $all-text-inputs-disabled: __pseudoSelector($list-of-text-inputs, disabled);
 
-@mixin all-text-inputs($pseudo: null){
+@mixin gls-all-text-inputs($pseudo: null){
     @if $pseudo == null {
         #{$all-text-inputs}{
             @content;

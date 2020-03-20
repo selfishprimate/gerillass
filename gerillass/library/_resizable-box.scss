@@ -1,4 +1,4 @@
-@mixin resizable-box($direction: both, $overflow: auto){
+@mixin gls-resizable-box($direction: both, $overflow: auto){
     resize: $direction;
     overflow: $overflow;
     max-width: 100%;

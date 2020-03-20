@@ -1,4 +1,4 @@
-@mixin breakpointOnly($value){
+@mixin gls-breakpointOnly($value){
     @if map-has-key($map-for-breakpoints, $value){
         @media (width: map-get($map-for-breakpoints, $value)) {
             @content;
@@ -10,7 +10,7 @@
     }
 }
 
-@mixin breakpointMin($value){
+@mixin gls-breakpointMin($value){
     @if map-has-key($map-for-breakpoints, $value){
         @media (min-width: map-get($map-for-breakpoints, $value)) {
             @content;
@@ -22,7 +22,7 @@
     }
 }
 
-@mixin breakpointMax($value){
+@mixin gls-breakpointMax($value){
     @if map-has-key($map-for-breakpoints, $value){
         @media (max-width: map-get($map-for-breakpoints, $value)) {
             @content;
@@ -34,7 +34,7 @@
     }
 }
 
-@mixin breakpointBetween($params...){
+@mixin gls-breakpointBetween($params...){
     $start: __validateBreakpoint(nth($params, 1));
     $end: __validateBreakpoint(nth($params, 2));
     @if map-has-key($map-for-breakpoints, nth($params, 1)) and map-has-key($map-for-breakpoints, nth($params, 2)){

@@ -1,4 +1,4 @@
-@mixin border-radius($params...) {
+@mixin gls-border-radius($params...) {
     $corner: nth($params, 1);
     $value: nth($params, length($params));
     @if length($params) > 2 and length($params) < 4 and length($params) > 4 {

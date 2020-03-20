@@ -1,4 +1,4 @@
-@mixin before(
+@mixin gls-before(
     $content: null
 ) {
     &::before{

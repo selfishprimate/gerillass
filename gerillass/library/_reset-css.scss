@@ -1,4 +1,4 @@
-@mixin reset-css(
+@mixin gls-reset-css(
     $approach: null
 ){
     @if $approach == null or $approach == "eric-meyer" {

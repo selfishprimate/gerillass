@@ -1,4 +1,4 @@
-@mixin grid-composer($columns, $gutter, $flex-grow: 1) {
+@mixin gls-grid-composer($columns, $gutter, $flex-grow: 1) {
     display: flex;
     flex-wrap: wrap;
     padding: $gutter $gutter 0;

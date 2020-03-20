@@ -1,4 +1,4 @@
-@mixin font-face{
+@mixin gls-font-face{
     font-family: "My font";
     src: url("my-font.eot"); /* IE9 compatibility */
     src: url("my-font.eot?#iefix") format('embedded-opentype'), /* IE6-IE8 compatibility */

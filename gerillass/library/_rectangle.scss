@@ -1,6 +1,6 @@
 // The name of the mixin might be change to Sizing or Sizer
 
-// @mixin rectangle($params...){
+// @mixin gls-rectangle($params...){
 //     $sizeX: nth($params, 1);
 //     $sizeY: nth($params, length($params));
 //     $size: nth($params, length($params));
@@ -15,7 +15,7 @@
 
 
 // Hugo Giraudel Vers.
-@mixin rectangle($width, $height: $width ){
+@mixin gls-rectangle($width, $height: $width ){
     width: $width;
     height: $height;
 }

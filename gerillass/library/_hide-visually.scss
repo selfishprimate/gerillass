@@ -2,7 +2,7 @@
 
 // Use this screen reader mixin to make some elements readable for the screen reader, which should be visually hidden in the document.
 
-@mixin hide-visually{
+@mixin gls-hide-visually{
     position: absolute;
     width: 1px;
     height: 1px;

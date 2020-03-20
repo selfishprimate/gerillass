@@ -1,4 +1,4 @@
-@mixin screen-resolution ($value){
+@mixin gls-screen-resolution ($value){
     @if $value ==  "1x" {
         @media (min-resolution: 96dpi) {
             @content;

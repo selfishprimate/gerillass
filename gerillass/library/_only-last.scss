@@ -1,4 +1,4 @@
-@mixin only-last{
+@mixin gls-only-last{
     &:last-of-type{
         @content;
     }

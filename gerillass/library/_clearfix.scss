@@ -1,4 +1,4 @@
-@mixin clearfix{ 
+@mixin gls-clearfix{ 
     &::after {
         content: "";
         display: block;

@@ -1,6 +1,6 @@
 // Eski browserlar için opacity desteği sağlar. Gerek var mı? Henüz bilmiyorum.
 
-@mixin opacity($value){
+@mixin gls-opacity($value){
     $treated-value: $value * 100;
     opacity: $value;
     -moz-opacity: $value; /* Less than Firefox 0.9 */

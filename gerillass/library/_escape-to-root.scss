@@ -1,4 +1,4 @@
-@mixin escape-to-root($value){
+@mixin gls-escape-to-root($value){
     #{$value} & {
         @content;
     }

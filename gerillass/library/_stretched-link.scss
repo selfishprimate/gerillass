@@ -1,6 +1,6 @@
 // Parent container of the link must have "position: relative;" decleration.
 
-@mixin stretched-link {
+@mixin gls-stretched-link {
     &::after {
         content: "";
         position: absolute;

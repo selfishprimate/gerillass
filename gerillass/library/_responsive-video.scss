@@ -1,4 +1,4 @@
-@mixin responsive-video($params...){
+@mixin gls-responsive-video($params...){
     position: relative;
     > *,
     > iframe,

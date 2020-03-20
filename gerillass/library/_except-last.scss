@@ -1,4 +1,4 @@
-@mixin except-last{
+@mixin gls-except-last{
     &:not(:last-of-type){
         @content;
     }

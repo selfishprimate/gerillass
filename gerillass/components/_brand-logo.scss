@@ -1,4 +1,4 @@
-@mixin brand-logo(
+@mixin gls-brand-logo(
     $approach: null,
     $width: 150px,
     $height: 80px,
@@ -33,7 +33,7 @@
             height: 0;
             overflow: hidden;
             text-indent: 100%;
-            @include stretched-link;
+            @include  gls-stretched-link;
         }
     }
 }

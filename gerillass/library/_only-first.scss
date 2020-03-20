@@ -1,4 +1,4 @@
-@mixin only-first{
+@mixin gls-only-first{
     &:first-of-type{
         @content;
     }

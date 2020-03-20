@@ -1,7 +1,7 @@
 // Using the __pixelify validator function to check if the argument has a unit.
 // Don't try to understand the code below, but try to understand the logic of the clip-path: polygon property instead.
 
-@mixin cutted-edge($params...){
+@mixin gls-cutted-edge($params...){
   @if length($params) == 0 {
     $value: 20px;
     clip-path: polygon(

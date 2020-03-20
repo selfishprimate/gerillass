@@ -1,4 +1,4 @@
-@mixin except($params...) {
+@mixin gls-except($params...) {
     @if length($params) == 0 {
         @error '@Error Message';
     } @else if length($params) == 1 {

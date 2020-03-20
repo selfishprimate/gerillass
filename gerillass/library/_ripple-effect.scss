@@ -1,4 +1,4 @@
-@mixin ripple-effect(
+@mixin gls-ripple-effect(
     $color1: white,
 ){
     position: relative;
@@ -6,8 +6,8 @@
     &:after{
         content: "";
         display: block;
-        @include position(absolute, 0);
-        @include rectangle(100%);
+        @include  gls-position(absolute, 0);
+        @include  gls-rectangle(100%);
         pointer-events: none;
         background-image: radial-gradient(circle, $color1 10%, transparent 10%);
         background-repeat: no-repeat;

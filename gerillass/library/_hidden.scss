@@ -1,9 +1,9 @@
-@mixin hidden($params...){
+@mixin gls-hidden($params...){
     @if length($params) == 0 {
         display: none;
     } @else if length($params) == 1 {
         $value: nth($params, 1);
-        @include breakpointOnly($value){
+        @include  gls-breakpointOnly($value){
             display: none;
         }
     } @else if length($params) == 2 {
@@ -11,18 +11,18 @@
             $direction: nth($params, 1);
             $value: nth($params, 2);
             @if $direction == "min" {
-                @include breakpointMin($value){
+                @include  gls-breakpointMin($value){
                     display: none;
                 }
             } @else if $direction == "max" {
-                @include breakpointMax($value){
+                @include  gls-breakpointMax($value){
                     display: none;
                 }
             }
         } @else {
             $start: nth($params, 1);
             $end: nth($params, 2);
-            @include breakpointBetween($start, $end){
+            @include  gls-breakpointBetween($start, $end){
                 display: none;
             }
         }

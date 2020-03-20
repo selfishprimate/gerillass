@@ -1,4 +1,4 @@
-@mixin first-line{
+@mixin gls-first-line{
     &::first-line{
         @content;
     }

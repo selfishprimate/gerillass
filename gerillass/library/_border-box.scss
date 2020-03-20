@@ -5,7 +5,7 @@
 // IMPORTANT: It must be only used within sytle rules.
 // Default is "null" and acts like "all"
 
-@mixin border-box($value: null){
+@mixin gls-border-box($value: null){
 
   @if $value == null{
     *,

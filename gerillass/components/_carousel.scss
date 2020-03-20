@@ -1,7 +1,7 @@
 /// Purely CSS written carousel slider.
 /// Just style your boxes and put them into the \<div> element with a `carousel-item` class name.
 
-@mixin carousel(
+@mixin gls-carousel(
     $gutter: null,
     $itemWidth: null,
     $itemHeight: null,

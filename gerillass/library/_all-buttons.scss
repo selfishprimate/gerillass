@@ -3,7 +3,7 @@ $all-buttons-hover: __pseudoSelector($list-of-buttons, hover);
 $all-buttons-focus: __pseudoSelector($list-of-buttons, focus);
 $all-buttons-active: __pseudoSelector($list-of-buttons, active);
 
-@mixin all-buttons($pseudo: null){
+@mixin gls-all-buttons($pseudo: null){
     @if $pseudo == null{
         #{$all-buttons}{
             @content;

@@ -1,6 +1,6 @@
 // Radial Gradient will be added!
 
-@mixin linear-gradient(
+@mixin gls-linear-gradient(
     $direction,
     $params...
 ){
@@ -25,7 +25,7 @@
     }
 }
 
-@mixin radial-gradient(
+@mixin gls-radial-gradient(
     $shape: circle,
     $direction: null,
     $params...
