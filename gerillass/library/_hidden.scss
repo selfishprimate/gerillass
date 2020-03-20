@@ -3,7 +3,7 @@
         display: none;
     } @else if length($params) == 1 {
         $value: nth($params, 1);
-        @include  gls-breakpointOnly($value){
+        @include  gls-breakpoint-only($value){
             display: none;
         }
     } @else if length($params) == 2 {
@@ -11,18 +11,18 @@
             $direction: nth($params, 1);
             $value: nth($params, 2);
             @if $direction == "min" {
-                @include  gls-breakpointMin($value){
+                @include  gls-breakpoint-min($value){
                     display: none;
                 }
             } @else if $direction == "max" {
-                @include  gls-breakpointMax($value){
+                @include  gls-breakpoint-max($value){
                     display: none;
                 }
             }
         } @else {
             $start: nth($params, 1);
             $end: nth($params, 2);
-            @include  gls-breakpointBetween($start, $end){
+            @include  gls-breakpoint-between($start, $end){
                 display: none;
             }
         }
