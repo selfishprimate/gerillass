@@ -4,8 +4,8 @@
   @if unit($value) == 'px' {
       @return $value;
   } @else if unit($value) != 'px' {
-      @return __clearUnit($value) + px;
+      @return __clearUnit($value) * 1px;
   } @else if unitless($value) == true {
-      @return $value + px;
+      @return $value * 1px;
   }
 }
