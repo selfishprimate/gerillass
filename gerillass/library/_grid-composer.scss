@@ -1,3 +1,5 @@
+@charset "UTF-8";
+
 @mixin gls-grid-composer($columns, $gutter, $flex-grow: 1) {
     display: flex;
     flex-wrap: wrap;

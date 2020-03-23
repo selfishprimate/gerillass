@@ -1,3 +1,5 @@
+@charset "UTF-8";
+
 @function __darken($color, $percentage) {
   @if not __isColor($color) {
     @error "`#{$color}` is not a valid color for the `$color` argument in " +

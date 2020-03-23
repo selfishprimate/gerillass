@@ -1,3 +1,5 @@
+@charset "UTF-8";
+
 @mixin gls-first-letter{
     &::first-letter{
         float: left;

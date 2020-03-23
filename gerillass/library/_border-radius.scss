@@ -1,3 +1,5 @@
+@charset "UTF-8";
+
 @mixin gls-border-radius($params...) {
     $corner: nth($params, 1);
     $value: nth($params, length($params));

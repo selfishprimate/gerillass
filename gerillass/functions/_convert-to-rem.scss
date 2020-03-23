@@ -1,3 +1,5 @@
+@charset "UTF-8";
+
 // This function converts the px value to rem based on the browser's default font size.
 
 @function __convertToRem($value){

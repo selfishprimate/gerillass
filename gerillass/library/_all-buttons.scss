@@ -1,3 +1,5 @@
+@charset "UTF-8";
+
 $all-buttons: __pseudoSelector($list-of-buttons);
 $all-buttons-hover: __pseudoSelector($list-of-buttons, hover);
 $all-buttons-focus: __pseudoSelector($list-of-buttons, focus);

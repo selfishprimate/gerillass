@@ -1,3 +1,5 @@
+@charset "UTF-8";
+
 $all-text-inputs: __pseudoSelector($list-of-text-inputs);
 $all-text-inputs-active: __pseudoSelector($list-of-text-inputs, active);
 $all-text-inputs-focus: __pseudoSelector($list-of-text-inputs, focus);

@@ -1,3 +1,5 @@
+@charset "UTF-8";
+
 @mixin gls-breakpoint-only($value){
     @if map-has-key($map-for-breakpoints, $value){
         @media (width: map-get($map-for-breakpoints, $value)) {

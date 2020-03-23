@@ -1,3 +1,5 @@
+@charset "UTF-8";
+
 @function __fontSizer($size, $time){
     @return $size * $time;
 }

@@ -1,3 +1,5 @@
+@charset "UTF-8";
+
 @mixin gls-resizable($direction: both, $overflow: auto){
     resize: $direction;
     overflow: $overflow;

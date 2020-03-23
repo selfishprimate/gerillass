@@ -1,3 +1,5 @@
+@charset "UTF-8";
+
 @mixin gls-first-line{
     &::first-line{
         @content;

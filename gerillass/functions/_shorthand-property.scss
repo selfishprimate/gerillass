@@ -1,3 +1,5 @@
+@charset "UTF-8";
+
 @function __shorthandProperty($value) {
   @if length($value) == 1 {
     @return $value;

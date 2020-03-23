@@ -1,3 +1,5 @@
+@charset "UTF-8";
+
 @function __clearUnit($value){
     @return $value / ($value * 0 + 1);
 }

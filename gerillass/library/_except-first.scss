@@ -1,3 +1,5 @@
+@charset "UTF-8";
+
 @mixin gls-except-first{
     &:not(:first-of-type){
         @content;

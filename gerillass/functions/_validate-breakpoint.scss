@@ -1,3 +1,5 @@
+@charset "UTF-8";
+
 // Argümanın $map-for-breakpoints'teki bir değerle eşleşip eşleşmediğine bakar. Eşleşiyor ise $list-of-breakpoint'teki elemanın değerini, değilse argüman olarak geçilen değeri döner!
 
 @function __validateBreakpoint($value){

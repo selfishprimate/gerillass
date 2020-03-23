@@ -1,3 +1,5 @@
+@charset "UTF-8";
+
 @mixin gls-only-first{
     &:first-of-type{
         @content;

@@ -1,3 +1,5 @@
+@charset "UTF-8";
+
 // Gets every given items in a list!
 @function __getItems($list) {
     $new-list: ();
