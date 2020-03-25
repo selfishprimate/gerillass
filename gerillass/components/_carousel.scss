@@ -10,7 +10,7 @@
     $hiddenScrollbar: true
     ){
     overflow: hidden;
-    .carousel-wrapper{
+    .gls-carousel-wrapper{
         display: flex;
         flex-wrap: no-wrap;
         overflow-x: auto;
@@ -23,7 +23,7 @@
         @if $hiddenScrollbar == false {
             margin-bottom: 0;
         }
-        .carousel-item{
+        .gls-carousel-item{
             &:not(:last-child){
                 @if $gutter == null{
                     margin-right: 15px;
