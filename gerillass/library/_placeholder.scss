@@ -1,33 +1,19 @@
 @charset "UTF-8";
 
-@mixin gls-placeholder(
-    $color: null,
-    $font-size: null,
-    $opacity: null
-){
-    ::-webkit-input-placeholder {
-        font-size: $font-size;
-        opacity: $opacity;
-        color: $color;
+@mixin gls-placeholder{
+    &::-webkit-input-placeholder {
+        @content;
     }
-    ::-moz-placeholder {
-        font-size: $font-size;
-        opacity: $opacity;
-        color: $color;
+    &::-moz-placeholder {
+        @content;
     }
-    :-ms-input-placeholder {
-        font-size: $font-size;
-        opacity: $opacity;
-        color: $color;
+    &:-ms-input-placeholder {
+        @content;
     }
-    :-moz-placeholder {
-        font-size: $font-size;
-        opacity: $opacity;
-        color: $color;
+    &:-moz-placeholder {
+        @content;
     }
-    ::placeholder{
-        font-size: $font-size;
-        opacity: $opacity;
-        color: $color;
+    &::placeholder{
+        @content;
     }
 }
