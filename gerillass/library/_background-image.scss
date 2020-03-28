@@ -17,7 +17,7 @@
     background-size: cover;
     overflow: hidden;
     color: $text-color;
-    @if ($image-url != null){
+    @if $image-url != null {
         background-image: url($image-url);
     }
     &:after{
