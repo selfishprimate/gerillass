@@ -1,42 +1,27 @@
 @charset "UTF-8";
 
-// Takes two arguments: "all" and "this"
+// Takes only one arguments: "all" or "this"
 // "all" applies the rules for all the HTML elements in the DOM.
 // "this" applies the rules for one specific HTML element in the DOM and its children.
-// IMPORTANT: It must be only used within sytle rules.
-// Default is "null" and acts like "all"
+// "null" acts like "all" and targets all the HTML elements in the DOM
 
 @mixin gls-border-box($value: null){
-
-  @if $value == null{
-    *,
-    *::before,
-    *::after{
-        box-sizing: border-box;
+    @if $value == null or $value == "all" {
+        @at-root{
+            *, 
+            *:before, 
+            *:after{
+                box-sizing: border-box;
+            }
+        }
+    } @else if $value == "this" {
+        &, 
+        &:before, 
+        &:after,
+        *, 
+        *:before, 
+        *:after{
+            box-sizing: border-box;
+        }
     }
-  }
-
-  @if $value == "all" {
-    @at-root{
-      *,
-      *::before,
-      *::after{
-          box-sizing: border-box;
-      }
-    }
-  }
-
-  @if $value == "this" {
-    &,
-    *,
-    *::before,
-    *::after{
-        box-sizing: border-box;
-    }
-  }
-
-  @if $value != "all" and $value != "this" and $value != null {
-    @error "Use one of the following arguments: (this) for one specific element and its' children and (all) for all the DOM elements!";
-  }
-
 }
