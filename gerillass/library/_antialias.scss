@@ -1,0 +1,56 @@
+@charset "UTF-8";
+
+// Willbedescribed!
+
+// Willbefixed!
+
+// Takes only one of the following arguments: "all", "this" or "from-this"
+// "all" applies the given rules for all the HTML elements in the DOM.
+// "only" applies the given rules for only one specific HTML element in the DOM.
+// "start-from" applies the given rules for one specific HTML element in the DOM and its children.
+// "null" acts like "all" and targets all the HTML elements in the DOM
+
+// You can read the below articles about antialiasing!
+
+// https://usabilitypost.com/2012/11/05/stop-fixing-font-smoothing/
+// https://developer.mozilla.org/en-US/docs/Web/CSS/font-smooth
+// https://www.zachleat.com/web/font-smooth/
+
+@mixin gls-antialias($value: null){
+    @if not & {
+        *, 
+        *:before, 
+        *:after{
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+    }
+    @else if $value == "all" {
+        @at-root{
+            *, 
+            *:before, 
+            *:after{
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+            }
+        }
+    } @else if $value == "only" {
+        &, 
+        &:before, 
+        &:after{
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+    } @else {
+        &, 
+        &:before, 
+        &:after,
+        *, 
+        *:before, 
+        *:after{
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+    }
+}
+
