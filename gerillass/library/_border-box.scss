@@ -1,12 +1,17 @@
 @charset "UTF-8";
 
-// Takes only one arguments: "all" or "this"
-// "all" applies the rules for all the HTML elements in the DOM.
-// "this" applies the rules for one specific HTML element in the DOM and its children.
-// "null" acts like "all" and targets all the HTML elements in the DOM
+// Willbecommented!
+
+// Willbefixed!
 
 @mixin gls-border-box($value: null){
-    @if $value == null or $value == "all" {
+    @if not & {
+        *, 
+        *:before, 
+        *:after{
+            box-sizing: border-box;
+        }
+    } @else if $value == "all" {
         @at-root{
             *, 
             *:before, 
@@ -14,7 +19,7 @@
                 box-sizing: border-box;
             }
         }
-    } @else if $value == "this" {
+    } @else {
         &, 
         &:before, 
         &:after,
