@@ -1,32 +1,32 @@
 {
-  "name": "gerillass",
-  "description": "Gerillass is an open-source toolkit that contains a set of Sass mixins to help designers and developers to create better, faster and consistent user interfaces.",
-  "main": "gerillass/_gerillass.scss",
-  "authors": [
-    "Halil İbrahim Çakıroğlu"
-  ],
-  "license": "ISC",
-  "keywords": [
-    "gerillass",
-    "guerrillass",
-    "sass",
-    "scss",
-    "style",
-    "mixins",
-    "css",
-    "css3",
-    "sass-mixins",
-    "sass-toolkit",
-    "sass-library",
-    "sass-framework",
-    "sass-tool-set"
-  ],
-  "homepage": "https://github.com/babilkuyusu/gerillass",
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
-  ]
+    "name": "gerillass",
+    "description": "Gerillass is an open-source toolkit that contains a set of Sass mixins to help designers and developers to create better, faster and consistent user interfaces.",
+    "main": "core/_gerillass.scss",
+    "authors": [
+        "Halil İbrahim Çakıroğlu"
+    ],
+    "license": "ISC",
+    "keywords": [
+        "gerillass",
+        "guerrillass",
+        "sass",
+        "scss",
+        "style",
+        "mixins",
+        "css",
+        "css3",
+        "sass-mixins",
+        "sass-toolkit",
+        "sass-library",
+        "sass-framework",
+        "sass-tool-set"
+    ],
+    "homepage": "https://github.com/babilkuyusu/gerillass",
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "test",
+        "tests"
+    ]
 }

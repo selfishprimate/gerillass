@@ -1,5 +1,7 @@
 @charset "UTF-8";
 
+// This mixin provides one-line method for setting border-radius on a specific edges of an HTML element. Pass one argument as a "number" to effect all the edges of a box.
+
 // Willbefixed!
 
 @mixin gls-border-radius($params...) {
