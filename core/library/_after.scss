@@ -3,7 +3,7 @@
 @mixin gls-after(
     $content: null
 ) {
-    &:after{
+    &::after{
         @if $content == null {
             @content;
         } @else if $content != null{
