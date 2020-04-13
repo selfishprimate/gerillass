@@ -1,7 +1,5 @@
 @charset "UTF-8";
 
-// Parent container of the link must have "position: relative;" decleration.
-
 @mixin stretched-link-code {
     content: "";
     position: absolute;
@@ -14,7 +12,7 @@
     z-index: 1;
 }
 
-@mixin gls-stretched-link($value: null){
+@mixin gls-stretched-link($value: null) {
     @if $value == null {
         &::before {
             @include stretched-link-block;
