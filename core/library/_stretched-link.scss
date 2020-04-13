@@ -15,11 +15,11 @@
 @mixin gls-stretched-link($value: null) {
     @if $value == null {
         &::before {
-            @include stretched-link-block;
+            @include stretched-link-code;
         }
     } @else if $value == "before" or $value == "after" {
         &::#{$value} {
-            @include stretched-link-block;
+            @include stretched-link-code;
         }
     } @else {
         @error "'#{$value}' is a wrong argument. This mixin accepts 'before' or 'after' as an argument. If you don't pass any argument default it will target the '::before' pseudo-element of the selected element."
