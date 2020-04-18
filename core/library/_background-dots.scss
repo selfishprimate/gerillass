@@ -1,23 +1,23 @@
 @charset "UTF-8";
 
 @mixin gls-background-dots(
-    $color:rgba(0,0,0,.2),
-    $size: 2px,
+    $size: 1em,
     $gutter: $size * 5,
-    $offset: null,
-    $x-offset: null,
-    $y-offset: null
+    $diagonal: true,
+    $params...
 ){
-    background-image: radial-gradient($color $size, transparent 0);
+    @if $diagonal == true {
+        $color: nth($params, 1);
+        background-image: 
+            radial-gradient(nth($color, 1) $size, transparent 0),
+            radial-gradient(nth($color, length($color)) $size, transparent 0)
+        ;
+        background-position: ($gutter / 2) ($gutter / 2), ($gutter * 2) ($gutter * 2);
+    } @else if $diagonal == false {
+        $color: nth($params, 1);
+        background-image: radial-gradient(nth($color, 1) $size, transparent 0);
+        background-position: ($gutter / 2) ($gutter / 2);
+    } 
     background-size: $gutter $gutter;
     background-repeat: repeat;
-    @if not $offset and not $x-offset and not $y-offset{
-        background-position: ($gutter / 2) ($gutter / 2);
-    } @else if $offset {
-        background-position: $offset $offset;
-    } @else if $x-offset {
-        background-position: $x-offset ($gutter / 2);
-    } @else if $y-offset {
-        background-position: ($gutter / 2) $y-offset;
-    }
 }
