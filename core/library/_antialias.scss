@@ -3,25 +3,25 @@
 @mixin gls-antialias($value: null){
     @if not & and $value == null {
         *, 
-        *:before, 
-        *:after{
+        *::before, 
+        *::after{
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
     } @else if & and $value == "only" {
         &, 
-        &:before, 
-        &:after{
+        &::before, 
+        &::after{
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
     } @else if & and $value == null{
         &, 
-        &:before, 
-        &:after,
+        &::before, 
+        &::after,
         *, 
-        *:before, 
-        *:after{
+        *::before, 
+        *::after{
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
