@@ -1,12 +1,18 @@
 @charset "UTF-8";
 
-@mixin gls-text-selection(
-    $background-color: null,
-    $color: null
-){
-    &::selection,
-    & *::selection{
-        background-color: $background-color;
-        color: $color;
+@mixin gls-text-selection($value: null){
+    @if not & and $value == null{
+        ::selection {
+            @content;
+        }
+    } @else if & and $value == "only"{
+        &::selection{
+            @content;
+        }
+    } @else if & and $value == null{
+        &::selection,
+        *::selection{
+            @content;
+        }
     }
 }   
