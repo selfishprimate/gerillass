@@ -1,7 +1,0 @@
-@charset "UTF-8";
-
-@mixin gls-escape-to-root($value){
-    #{$value} & {
-        @content;
-    }
-}
