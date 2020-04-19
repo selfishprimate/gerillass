@@ -1,40 +1,19 @@
 @charset "UTF-8";
 
-// Willbedescribed!
-
-// This mixin sets the box-sizing CSS property value to border-box. What is box-sizing? Check out the following link: 
-
-// https://developer.mozilla.org/en-US/docs/Web/CSS/box-sizing
-
-// Argument Type: String
-
-// Arguments: "all"
-
-// 1. Bir .parent-selector içinde çağrılırsa o seçiciyi ve altındaki tüm HTML elemanlarını hedefler.
-
-// 2. Herhangi bir seçicinin dışında çağrılırsa DOM içindeki tüm HTML elemanlarını hedefler.
-
-// 3. "all" algümanı ile çağrılırsa nerede çağrıldığına bakılmaksızın DOM içindeki tüm HTML elemanlarını hedefler.
-
-
-// Willbefixed!
-
 @mixin gls-border-box($value: null){
-    @if not & {
+    @if not & and $value == null {
         *, 
         *:before, 
         *:after{
             box-sizing: border-box;
         }
-    } @else if $value == "all" {
-        @at-root{
-            *, 
-            *:before, 
-            *:after{
-                box-sizing: border-box;
-            }
+    } @else if & and $value == "only" {
+        &, 
+        &:before, 
+        &:after{
+            box-sizing: border-box;
         }
-    } @else {
+    } @else if & and $value == null {
         &, 
         &:before, 
         &:after,
