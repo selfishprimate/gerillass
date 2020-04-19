@@ -10,8 +10,7 @@
         $color: nth($params, 1);
         background-image: 
             radial-gradient(nth($color, 1) $size, transparent 0),
-            radial-gradient(nth($color, length($color)) $size, transparent 0)
-        ;
+            radial-gradient(nth($color, length($color)) $size, transparent 0);
         background-position: ($gutter / 2) ($gutter / 2), ($gutter * 2) ($gutter * 2);
     } @else if $diagonal == false {
         $color: nth($params, 1);
