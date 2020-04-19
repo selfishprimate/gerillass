@@ -1,7 +1,5 @@
 @charset "UTF-8";
 
-// This will allow you to escape to the parent element and use multiple classes with it. Thus you can easily control how a particular design element appear differently on mobile, tablet and desktop devices.
-
 @mixin gls-escape-to-parent($selector: null){
     @at-root #{$selector}#{&}{
         @content;
