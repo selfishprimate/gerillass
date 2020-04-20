@@ -1,0 +1,13 @@
+@charset "UTF-8";
+
+@mixin gls-text-stroke(
+    $fallback-color: black,
+    $fill-color: transparent,
+    $stroke-color: black,
+    $stroke-width: 1px,
+){
+    color: $fallback-color;
+    -webkit-text-fill-color: $fill-color;
+    -webkit-text-stroke-color: $stroke-color;
+    -webkit-text-stroke-width: $stroke-width;
+}
