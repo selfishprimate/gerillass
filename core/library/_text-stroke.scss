@@ -7,7 +7,7 @@
     $fallback-color: black
 ){
     color: $fallback-color;
-    -webkit-text-fill-color: $fill-color;
+    -webkit-text-fill-color: $color;
     -webkit-text-stroke-color: $stroke-color;
     -webkit-text-stroke-width: $stroke-width;
 }
