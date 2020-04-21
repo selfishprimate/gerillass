@@ -1,16 +1,37 @@
 @charset "UTF-8";
 
 @mixin gls-background-stripes(
-    $color: rgba(0,0,0,.1),
-    $secondary-color: transparent,
+    $color: null,
     $thickness: 10px,
-    $rotation: -45deg
+    $rotation: -45deg,
 ){
-    background: repeating-linear-gradient(
-        if(not index("deg", unit($rotation)), $rotation + deg, $rotation),
-        $color 0,
-        $color __pixelify($thickness),
-        $secondary-color __pixelify($thickness),
-        $secondary-color __pixelify($thickness * 2),
-    );  
+    $color1: nth($color, 1);
+    $color2: nth($color, length($color));
+    $validate-unit: if(not index("deg", unit($rotation)), $rotation + deg, $rotation);
+    @if not $color {
+        $color: rgba(0,0,0,0.1);
+        background-image: repeating-linear-gradient(
+            $validate-unit,
+            $color 0,
+            $color $thickness,
+            transparent $thickness,
+            transparent $thickness * 2
+        );
+    } @else if length($color) == 1 {
+        background-image: repeating-linear-gradient(
+            $validate-unit,
+            $color1 0,
+            $color1 $thickness,
+            transparent $thickness,
+            transparent $thickness * 2
+        );
+    } @else if length($color) == 2 {
+        background-image: repeating-linear-gradient(
+            $validate-unit,
+            $color1 0,
+            $color1 $thickness,
+            $color2 $thickness,
+            $color2 $thickness * 2
+        );
+    }
 }
