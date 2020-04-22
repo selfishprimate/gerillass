@@ -25,13 +25,19 @@
             transparent $thickness,
             transparent $thickness * 2
         );
-    } @else if length($color) == 2 {
+    } @else if length($color) > 1 {
+        $first-color: nth($color, 1);
+        $list: ();
+        @for $i from 2 through length($color) {
+            $remaining-colors: nth($color, $i);
+            $style-rule: $remaining-colors ($thickness * $i) - $thickness, $remaining-colors $thickness * $i;
+            $list: append($list, $style-rule, comma);
+        }
         background-image: repeating-linear-gradient(
             $validate-unit,
-            $color1 0,
-            $color1 $thickness,
-            $color2 $thickness,
-            $color2 $thickness * 2
+            $first-color 0,
+            $first-color $thickness,
+            $list
         );
     }
 }
