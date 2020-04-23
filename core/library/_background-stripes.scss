@@ -5,8 +5,6 @@
     $thickness: 10px,
     $rotation: -45deg,
 ){
-    $color1: nth($color, 1);
-    $color2: nth($color, length($color));
     $validate-unit: if(not index("deg", unit($rotation)), $rotation + deg, $rotation);
     @if not $color {
         $color: rgba(0,0,0,0.1);
@@ -20,8 +18,8 @@
     } @else if length($color) == 1 {
         background-image: repeating-linear-gradient(
             $validate-unit,
-            $color1 0,
-            $color1 $thickness,
+            $color 0,
+            $color $thickness,
             transparent $thickness,
             transparent $thickness * 2
         );
