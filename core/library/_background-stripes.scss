@@ -24,17 +24,14 @@
             transparent $thickness * 2
         );
     } @else if length($color) > 1 {
-        $first-color: nth($color, 1);
         $list: ();
-        @for $i from 2 through length($color) {
-            $remaining-colors: nth($color, $i);
-            $style-rule: $remaining-colors ($thickness * $i) - $thickness, $remaining-colors $thickness * $i;
+        @for $i from 1 through length($color) {
+            $index-color: nth($color, $i);
+            $style-rule: $index-color ($thickness * $i) - $thickness, $index-color $thickness * $i;
             $list: append($list, $style-rule, comma);
         }
         background-image: repeating-linear-gradient(
             $validate-unit,
-            $first-color 0,
-            $first-color $thickness,
             $list
         );
     }
