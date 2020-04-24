@@ -1,22 +1,54 @@
 @charset "UTF-8";
 
 @mixin gls-background-dots(
-    $size: 1em,
+    $color: null,
+    $size: 1em / 2,
     $gutter: $size * 5,
     $diagonal: true,
-    $params...
+    $image: null
 ){
-    @if $diagonal == true {
-        $color: nth($params, 1);
-        background-image: 
-            radial-gradient(nth($color, 1) $size, transparent 0),
-            radial-gradient(nth($color, length($color)) $size, transparent 0);
-        background-position: ($gutter / 2) ($gutter / 2), ($gutter * 2) ($gutter * 2);
-    } @else if $diagonal == false {
-        $color: nth($params, 1);
-        background-image: radial-gradient(nth($color, 1) $size, transparent 0);
-        background-position: ($gutter / 2) ($gutter / 2);
+    @if not $color {
+        $color: rgba(0,0,0,0.1);
+        @if $diagonal == true {
+            background-image: 
+                radial-gradient($color $size, transparent 0),
+                radial-gradient($color $size, transparent 0);
+            background-position: ($gutter / 2) ($gutter / 2), ($gutter * 2) ($gutter * 2);
+        } @else if $diagonal == false {
+            background-image: radial-gradient($color $size, transparent 0);
+            background-position: ($gutter / 2) ($gutter / 2);
+        }
+    } @else if $color {
+        @if $diagonal == true {
+            background-image: 
+                radial-gradient(nth($color, 1) $size, transparent 0),
+                radial-gradient(nth($color, length($color)) $size, transparent 0);
+            background-position: ($gutter / 2) ($gutter / 2), ($gutter * 2) ($gutter * 2);
+        } @else if $diagonal == false {
+            background-image: radial-gradient(nth($color, 1) $size, transparent 0);
+            background-position: ($gutter / 2) ($gutter / 2);
+            @if length($color) > 1 {
+                @error "Please do not pass more than one argument when you disable 'diagonal' property! Simply remove the argument(s) after '#{nth($color, 1)}' to resolve the problem.";
+            }
+        }
     } 
     background-size: $gutter $gutter;
     background-repeat: repeat;
+    @if $image {
+        position: relative;
+        &::before{
+            content: "";
+            display: block;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background-image: url(unquote($image));
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            z-index: -1;
+        }
+    }
 }
