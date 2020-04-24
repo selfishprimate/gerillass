@@ -1,15 +1,15 @@
 @charset "UTF-8";
 
 @function __shorthandProperty($value) {
-  @if length($value) == 1 {
-    @return $value;
-  } @else if length($value) == 2 {
-    @return nth($value, 1) nth($value, 2) nth($value, 1) nth($value, 2);
-  } @else if length($value) == 3 {
-    @return nth($value, 1) nth($value, 2) nth($value, 3) nth($value, 2);
-  } @else if length($value) == 4 {
-    @return nth($value, 1) nth($value, 2) nth($value, 3) nth($value, 4) ;
-  } @else if length($value) > 4 {
-      @error "You've passed #{length($value)} arguments. Please do not pass more than 4.";
-  }
+    @if length($value) == 1 {
+        @return nth($value, 1) nth($value, 1) nth($value, 1) nth($value, 1);
+    } @else if length($value) == 2 {
+        @return nth($value, 1) nth($value, 2) nth($value, 1) nth($value, 2);
+    } @else if length($value) == 3 {
+        @return nth($value, 1) nth($value, 2) nth($value, 3) nth($value, 2);
+    } @else if length($value) == 4 {
+        @return nth($value, 1) nth($value, 2) nth($value, 3) nth($value, 4) ;
+    } @else if length($value) > 4 {
+        @error "You've passed #{length($value)} arguments. Please do not pass more than 4.";
+    }
 }
