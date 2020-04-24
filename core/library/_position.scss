@@ -1,10 +1,8 @@
 @charset "UTF-8";
 
-// Bourbon.io Willbefixed
-
 @mixin gls-position(
-    $position,
-    $offsets
+    $position: position,
+    $offsets: 0
 ) {
     $offsets: __shorthandProperty($offsets);
     $positioning-offsets: (
