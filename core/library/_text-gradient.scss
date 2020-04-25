@@ -2,26 +2,21 @@
 
 @mixin gls-text-gradient(
     $direction,
-    $params...
+    $colors
 ){
-    @if $direction == "top" {
-        background: linear-gradient(to top, $params);
-    } @else if $direction == "top-left" {
-        background: linear-gradient(to top left, $params);
-    } @else if $direction == "top-right" {
-        background: linear-gradient(to top right, $params);
-    } @else if $direction == "bottom" {
-        background: linear-gradient(to bottom, $params);
-    } @else if $direction == "bottom-left" {
-        background: linear-gradient(to bottom left, $params);
-    } @else if $direction == "bottom-right" {
-        background: linear-gradient(to bottom right, $params);
-    } @else if $direction == "left" {
-        background: linear-gradient(to left, $params);
-    } @else if $direction == "right" {
-        background: linear-gradient(to right, $params);
-    } @else{
-        background: linear-gradient($direction, $params);
+    $list: ();
+    $colors: __isColor($colors);
+    @for $i from 1 through length($colors) {
+        $list: append($list, nth($colors, $i), comma);
+    }
+    @if map-has-key($map-for-directions, $direction){
+        background: linear-gradient(map-get($map-for-directions, $direction), $list);
+    } @else if not map-has-key($map-for-directions, $direction) {
+        @if not index("deg", unit($direction)) {
+            @error "#{$direction} is a wrong value for the $direction parameter. The value must be eighter a number followed by the 'deg' unit or one of the followings: #{map-keys($map-for-directions)}.";
+        } @else {
+            background: linear-gradient($direction, $list);
+        }
     }
     color: transparent;
     -webkit-background-clip: text;
