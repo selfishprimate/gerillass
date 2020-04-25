@@ -1,9 +1,13 @@
 @charset "UTF-8";
 
 @function __isColor($value) {
-  @if type-of($value) == 'color' {
-    @return $value;
-  } @else {
-    @warn "Please make sure you pass a valid color value!";
-  }
+    $list: ();
+    @for $i from 1 through length($value) {
+        @if type-of(nth($value, $i)) == 'color' {
+            $list: append($list, nth($value, $i), comma);
+        } @else {
+            @error "'#{nth($value, $i)}' is not a color value, please replace it with a valid one.";
+        }
+    }
+    @return $list;
 }
