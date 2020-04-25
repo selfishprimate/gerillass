@@ -5,7 +5,6 @@
     $colors
 ){
     $list: ();
-    $colors: __isColor($colors);
     @for $i from 1 through length($colors) {
         $list: append($list, nth($colors, $i), comma);
     }

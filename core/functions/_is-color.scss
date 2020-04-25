@@ -1,5 +1,6 @@
 @charset "UTF-8";
 
+// This function checks the type of a value or a list of values. 
 @function __isColor($value) {
     $list: ();
     @for $i from 1 through length($value) {
