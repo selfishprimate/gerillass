@@ -1,15 +1,12 @@
 @charset "UTF-8";
 
-// Willbefixed!
-
 @mixin gls-background-image(
     $image-url: null,
-    $filter-type: null,
-    $filter-color: null, 
+    $filter-color: rgba(0,0,0,0.3), 
     $filter-opacity: null,
-    $gradient-direction: null,
-    $gradient-colors: null,
-    $text-color: if($filter-color != null, invert($filter-color), null)
+    $filter-type: solid,
+    $filter-direction: top-left,
+    $text-color: if($filter-color, invert(nth($filter-color, 1)), null)
 ){
     position: relative;
     background-repeat: no-repeat;
@@ -17,10 +14,10 @@
     background-size: cover;
     overflow: hidden;
     color: $text-color;
-    @if $image-url != null {
+    @if $image-url {
         background-image: url($image-url);
     }
-    &:after{
+    &::after{
         content: "";
         display: block;
         position: absolute;
@@ -28,12 +25,13 @@
         top: 0;
         width: 100%;
         height: 100%;
-        @if $filter-type != null {
+        @if $filter-type{
             @if $filter-type == "solid" {
                 background: $filter-color;
                 opacity: $filter-opacity;
             } @else if $filter-type == "gradient" {
-                @include gls-linear-gradient($gradient-direction, $gradient-colors);
+                @include gls-linear-gradient($filter-direction, $filter-color);
+                opacity: $filter-opacity;
             }
         }
     }

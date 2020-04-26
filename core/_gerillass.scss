@@ -11,6 +11,7 @@
 
 @import "maps/map-for-breakpoints";
 @import "maps/map-for-directions";
+@import "maps/map-for-positions";
 @import "maps/map-for-smartphones";
 @import "maps/map-for-tablets";
 
@@ -56,10 +57,10 @@
 @import "library/except";
 @import "library/first-letter";
 @import "library/first-line";
-@import "library/gradient";
 @import "library/grid-composer";
 @import "library/hidden";
 @import "library/hide-visually";
+@import "library/linear-gradient";
 @import "library/normalize-css";
 @import "library/only-first";
 @import "library/only-last";
@@ -67,6 +68,7 @@
 @import "library/placeholder-shown";
 @import "library/placeholder";
 @import "library/position";
+@import "library/radial-gradient";
 @import "library/rectangle";
 @import "library/remify";
 @import "library/reset-css";
