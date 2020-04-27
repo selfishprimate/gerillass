@@ -6,14 +6,12 @@
     $filter-opacity: null,
     $filter-type: solid,
     $filter-direction: top-left,
-    $text-color: if($filter-color, invert(nth($filter-color, 1)), null)
 ){
     position: relative;
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
     overflow: hidden;
-    color: $text-color;
     @if $image-url {
         background-image: url($image-url);
     }
