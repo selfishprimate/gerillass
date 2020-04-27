@@ -27,6 +27,7 @@
                     @content;
                 }
             } @else {
+                // For class, id or attribute selectors.
                 &#{$value} {
                     @content;
                 }

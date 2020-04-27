@@ -1,0 +1,8 @@
+@charset "UTF-8";
+
+// Hugo Giraudel Vers.
+@mixin gls-sizer($width, $height: $width ){
+    width: $width;
+    height: $height;
+}
+
