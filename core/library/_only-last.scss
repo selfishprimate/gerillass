@@ -1,7 +1,0 @@
-@charset "UTF-8";
-
-@mixin gls-only-last{
-    &:last-of-type{
-        @content;
-    }
-}
