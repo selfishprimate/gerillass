@@ -1,18 +1,32 @@
 @charset "UTF-8";
 
-// This means that the edge of the browser can get as closer as $gutter paramater's value to the edge of the container. 
+// This means that the edges of the browser can get as closer as the $gutter value to the edge of the selected element(s). 
 
-// Willbefixed!
+%adaptive-center{
+    margin: 0 auto;
+}
 
 @mixin gls-adaptive-container(
-    $gutter: 30px,
+    $params...
 ){
-    margin: 0 auto;
-    $actual-breakpoints: map-remove($map-for-breakpoints, "xsmall");
-    @each $item, $value in $actual-breakpoints{
-        @media (min-width: #{$value}){
-            max-width: calc(#{$value} - (#{$gutter} * 2));
+    @if length($params) == 1 {
+        $gutter: nth($params, 1);
+        $actual-breakpoints: map-remove($map-for-breakpoints, "xsmall");
+        margin: 0 auto;
+        @each $item, $value in $actual-breakpoints{
+            @media (min-width: #{$value}){
+                max-width: calc(#{$value} - (#{$gutter} * 2));
+            }
+        }
+    } @else if length($params) == 2 {
+        $breakpoint: nth($params, 1);
+        $gutter: nth($params, 2);
+        @extend %adaptive-center;
+        @if map-has-key($map-for-breakpoints, $breakpoint) {
+            $breakpoint-value: map-get($map-for-breakpoints, $breakpoint);
+            @media (min-width: $breakpoint-value){
+                max-width: calc(100% - (#{$gutter} * 2));
+            }
         }
     }
 }
-

@@ -1,8 +1,8 @@
 @charset "UTF-8";
 
-@mixin gls-cutted-edge($corners){
+@mixin gls-cutter($corners){
     @if length($corners) == 1 {
-        $corners: __validateCuttedEdge($corners);
+        $corners: __validateCutter($corners);
         clip-path: polygon(
             0 #{nth($corners, 1)},
             #{nth($corners, 1)} 0,
@@ -14,7 +14,7 @@
             0 calc(100% - #{nth($corners, 1)})
         );
     } @else if length($corners) == 4{
-        $corners: __validateCuttedEdge($corners);
+        $corners: __validateCutter($corners);
         clip-path: polygon(
             0 #{nth($corners, 1)},  
             #{nth($corners, 1)} 0,

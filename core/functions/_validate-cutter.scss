@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-@function __validateCuttedEdge($value) {
+@function __validateCutter($value) {
     $list: ();
     @for $i from 1 through length($value) {
         @if nth($value, $i) == null {
