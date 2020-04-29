@@ -1,45 +1,29 @@
 @charset "UTF-8";
 
-// Using the __pixelify validator function to check if the argument has a unit.
-// Don't try to understand the code below, but try to understand the logic of the clip-path: polygon property instead.
-
-@mixin gls-cutted-edge($params...){
-  @if length($params) == 0 {
-    $value: 20px;
-    clip-path: polygon(
-      0 #{$value},
-      #{$value} 0,
-      calc(100% - #{$value}) 0,
-      100% #{$value},
-      100% calc(100% - #{$value}),
-      calc(100% - #{$value}) 100%,
-      #{$value} 100%,
-      0 calc(100% - #{$value})
-    );
-  } @else if length($params) == 1 {
-      $value: nth($params, 1);
-      $validatedValue: __pixelify($value);
-      clip-path: polygon(
-        0 #{$validatedValue},
-        #{$validatedValue} 0,
-        calc(100% - #{$validatedValue}) 0,
-        100% #{$validatedValue},
-        100% calc(100% - #{$validatedValue}),
-        calc(100% - #{$validatedValue}) 100%,
-        #{$validatedValue} 100%,
-        0 calc(100% - #{$validatedValue})
-      );
-  } @else if length($params) > 1 and length($params) < 5 {
-      clip-path: polygon(
-        0 #{__pixelify(nth($params, 1))},  
-        #{__pixelify(nth($params, 1))} 0,
-        calc(100% - #{__pixelify(nth($params, 2))}) 0,
-        100% #{__pixelify(nth($params, 2))},
-        100% calc(100% - #{__pixelify(nth($params, 3))}),
-        calc(100% - #{__pixelify(nth($params, 3))}) 100%,
-        #{__pixelify(nth($params, 4))} 100%,
-        0 calc(100% - #{__pixelify(nth($params, 4))}
-      )
-    );
-  }
+@mixin gls-cutted-edge($corners){
+    @if length($corners) == 1 {
+        $corners: __validateCuttedEdge($corners);
+        clip-path: polygon(
+            0 #{nth($corners, 1)},
+            #{nth($corners, 1)} 0,
+            calc(100% - #{nth($corners, 1)}) 0,
+            100% #{nth($corners, 1)},
+            100% calc(100% - #{nth($corners, 1)}),
+            calc(100% - #{nth($corners, 1)}) 100%,
+            #{nth($corners, 1)} 100%,
+            0 calc(100% - #{nth($corners, 1)})
+        );
+    } @else if length($corners) == 4{
+        $corners: __validateCuttedEdge($corners);
+        clip-path: polygon(
+            0 #{nth($corners, 1)},  
+            #{nth($corners, 1)} 0,
+            calc(100% - #{nth($corners, 2)}) 0,
+            100% #{nth($corners, 2)},
+            100% calc(100% - #{nth($corners, 3)}),
+            calc(100% - #{nth($corners, 3)}) 100%,
+            #{nth($corners, 4)} 100%,
+            0 calc(100% - #{nth($corners, 4)})
+        );
+    }
 }
