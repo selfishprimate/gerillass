@@ -1,16 +1,20 @@
 @charset "UTF-8";
 
-@mixin gls-screen-resolution ($value){
-    @if $value ==  "1x" {
+@mixin gls-screen-agent ($resolution){
+    @if $resolution ==  "1x" {
         @media (min-resolution: 96dpi) {
             @content;
         }
-    } @else if $value ==  "2x" {
+    } @else if $resolution ==  "2x" {
         @media (min-resolution: 192dpi) {
             @content;
         }
-    } @else if $value == "3x" {
+    } @else if $resolution == "3x" {
         @media (min-resolution: 288dpi) {
+            @content;
+        }
+    } @else {
+        @media (min-resolution: #{$resolution}) {
             @content;
         }
     }
