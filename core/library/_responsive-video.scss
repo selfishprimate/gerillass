@@ -1,6 +1,8 @@
 @charset "UTF-8";
 
-@mixin gls-responsive-video($params...){
+@mixin gls-responsive-video(
+        $ratio: null
+    ) {
     position: relative;
     & > * {
         width: 100%;
@@ -10,31 +12,17 @@
         right: 0;
         bottom: 0;
         left: 0;
-    } @if length($params) == 0{
+    } @if not $ratio{
         padding-top: 56.25%;
-    } @else if length($params) == 1 {
-        $ratio: nth($params, 1);
+    } @else if $ratio {
         @if type-of($ratio) == string {
-            $colon-index: str-index($ratio, ":");
             $fslash-index: str-index($ratio, "/");
-            @if $colon-index {
-                $width: __convertToNumber(str-slice($ratio, 1, $colon-index - 1));
-                $height: __convertToNumber(str-slice($ratio, $colon-index + 1));
-                $calc: ($height / $width) * 100;
-                padding-top: #{$calc * 1%};
-            } @else if $fslash-index {
-                $width: __convertToNumber(str-slice($ratio, 1, $fslash-index - 1));
-                $height: __convertToNumber(str-slice($ratio, $fslash-index + 1));
-                $calc: ($height / $width) * 100;
-                padding-top: #{$calc * 1%};
-            }
+            $width: __convertToNumber(str-slice($ratio, 1, $fslash-index - 1));
+            $height: __convertToNumber(str-slice($ratio, $fslash-index + 1));
+            $calc: ($height / $width) * 100;
+            padding-top: #{$calc * 1%};
         } @else if type-of($ratio) == number {
             padding-top: (1 / $ratio) * 100%;
         }
-    } @else if length($params) == 2 {
-        $width: nth($params, 1); 
-        $height: nth($params, 2);
-        $calc: ($height / $width) * 100;
-        padding-top: #{$calc * 1%};
     }
 }
