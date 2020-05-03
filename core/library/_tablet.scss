@@ -4,19 +4,19 @@
     $device, 
     $orientation: null
 ){
-    @if map-has-key($map-for-tablets, $device){
-        @if $orientation == portrait or $orientation == null{
+    @if map-has-key($map-for-tablets, $device) {
+        @if $orientation == portrait or $orientation == null {
             @media only screen 
             and (device-width: __mapDeepGet($map-for-tablets, $device, 'width')) 
             and (device-height: __mapDeepGet($map-for-tablets, $device, 'height'))
-            and (orientation: portrait){
+            and (orientation: portrait) {
                 @content;
             }
         } @else if $orientation == landscape {
             @media only screen 
             and (device-width: __mapDeepGet($map-for-tablets, $device, 'height')) 
             and (device-height: __mapDeepGet($map-for-tablets, $device, 'width'))
-            and (orientation: landscape){
+            and (orientation: landscape) {
                 @content;
             }
         }
