@@ -3,8 +3,6 @@
 @mixin gls-reset-figure{
     margin: 0;
     img{
-        width: 100%;
-        height: auto;
-        vertical-align: top;
+        @include gls-responsive-image;
     }
 }
