@@ -3,10 +3,10 @@
 @mixin gls-before(
     $content: null
 ) {
-    &::before{
+    &::before {
         @if $content == null {
             @content;
-        } @else if $content != null{
+        } @else if $content != null {
             $data: str-slice($content, 1, 5);
             @if $data == "data-" {
                 content: attr(#{$content});

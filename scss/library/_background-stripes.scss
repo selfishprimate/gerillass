@@ -5,7 +5,7 @@
     $thickness: 1em,
     $rotation: -45deg,
     $image: null
-){
+) {
     $validate-unit: if(not index("deg", unit($rotation)), $rotation + deg, $rotation);
     $get-image: if($image, unquote(", ") + url(unquote($image)), unquote(""));
     @if not $color {

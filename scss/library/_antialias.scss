@@ -1,27 +1,27 @@
 @charset "UTF-8";
 
-@mixin gls-antialias($value: null){
+@mixin gls-antialias($value: null) {
     @if not & and $value == null {
         *, 
         *::before, 
-        *::after{
+        *::after {
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
     } @else if & and $value == "only" {
         &, 
         &::before, 
-        &::after{
+        &::after {
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
-    } @else if & and $value == null{
+    } @else if & and $value == null {
         &, 
         &::before, 
         &::after,
         *, 
         *::before, 
-        *::after{
+        *::after {
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }

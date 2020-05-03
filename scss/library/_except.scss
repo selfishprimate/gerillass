@@ -11,19 +11,19 @@
             }
         } @else if type-of($value) == "string" {
             @if $value == "odd" {
-                &:not(:nth-of-type(odd)){
+                &:not(:nth-of-type(odd)) {
                     @content;
                 }
             } @else if $value == "even" {
-                &:not(:nth-of-type(even)){
+                &:not(:nth-of-type(even)) {
                     @content;
                 }
             } @else if $value == "first" {
-                &:not(:first-of-type){
+                &:not(:first-of-type) {
                     @content;
                 }
             } @else if $value == "last" {
-                &:not(:last-of-type){
+                &:not(:last-of-type) {
                     @content;
                 }
             } @else {

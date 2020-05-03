@@ -6,7 +6,7 @@
     $filter-opacity: null,
     $filter-type: solid,
     $filter-direction: top-left,
-){
+) {
     position: relative;
     background-repeat: no-repeat;
     background-position: center center;
@@ -15,7 +15,7 @@
     @if $image-url {
         background-image: url($image-url);
     }
-    &::after{
+    &::after {
         content: "";
         display: block;
         position: absolute;
@@ -23,7 +23,7 @@
         top: 0;
         width: 100%;
         height: 100%;
-        @if $filter-type{
+        @if $filter-type {
             @if $filter-type == "solid" {
                 background: $filter-color;
                 opacity: $filter-opacity;
@@ -33,7 +33,7 @@
             }
         }
     }
-    & > *{
+    & > * {
         position: relative;
         z-index: 1;
     }

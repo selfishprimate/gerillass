@@ -8,33 +8,33 @@ $all-text-inputs-invalid: __pseudoSelector($list-of-text-inputs, invalid);
 $all-text-inputs-required: __pseudoSelector($list-of-text-inputs, required);
 $all-text-inputs-disabled: __pseudoSelector($list-of-text-inputs, disabled);
 
-@mixin gls-all-text-inputs($pseudo: null){
+@mixin gls-all-text-inputs($pseudo: null) {
     @if $pseudo == null {
-        #{$all-text-inputs}{
+        #{$all-text-inputs} {
             @content;
         }
     } @else if $pseudo == "active" {
-        #{$all-text-inputs-active}{
+        #{$all-text-inputs-active} {
             @content;
         }
     } @else if $pseudo == "focus" {
-        #{$all-text-inputs-focus}{
+        #{$all-text-inputs-focus} {
             @content;
         }
     } @else if $pseudo == "hover" {
-        #{$all-text-inputs-hover}{
+        #{$all-text-inputs-hover} {
             @content;
         }
     } @else if $pseudo == "invalid" {
-        #{$all-text-inputs-invalid}{
+        #{$all-text-inputs-invalid} {
             @content;
         }
     } @else if $pseudo == "disabled" {
-        #{$all-text-inputs-disabled}{
+        #{$all-text-inputs-disabled} {
             @content;
         }
     } @else if $pseudo == "required" {
-        #{$all-text-inputs-required}{
+        #{$all-text-inputs-required} {
             @content;
         }
     } @else {

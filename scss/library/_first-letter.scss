@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
-@mixin gls-first-letter{
-    &::first-letter{
+@mixin gls-first-letter {
+    &::first-letter {
         float: left;
         font-size: 4em;
         line-height: 0.9em;
