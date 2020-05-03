@@ -1,7 +1,7 @@
 {
     "name": "gerillass",
     "description": "Gerillass is an open-source toolkit that contains a set of Sass mixins to help designers and developers to create better, faster and consistent user interfaces.",
-    "main": "core/_gerillass.scss",
+    "main": "scss/_gerillass.scss",
     "authors": [
         "Halil İbrahim Çakıroğlu"
     ],

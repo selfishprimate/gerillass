@@ -2,7 +2,7 @@
     "name": "gerillass",
     "version": "1.0.0",
     "description": "Gerillass is an open-source toolkit that contains a set of Sass mixins to help designers and developers to create better, faster and consistent user interfaces.",
-    "main": "core/_gerillass.scss",
+    "main": "scss/_gerillass.scss",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
     },
