@@ -1,10 +1,9 @@
 @charset "UTF-8";
 
-@mixin gls-reset-css(
-    $approach: null
-){
-    @if $approach == null or $approach == "eric-meyer" {
-
+@mixin gls-reset-css {
+    @if & {
+        @error "Please call the mixin at the root of your style sheet.";
+    } @else {
         /* http://meyerweb.com/eric/tools/css/reset/ 
         v2.0 | 20110126
         License: none (public domain)
@@ -53,8 +52,5 @@
             border-collapse: collapse;
             border-spacing: 0;
         }
-    }
-    @else{
-        // Here will come other CSS reset approaches.
     }
 }
