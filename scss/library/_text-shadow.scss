@@ -28,7 +28,7 @@
         // The $fill argument is optional. This makes shadow fill the gap between the actual text and shadow's end-point. The default value is set to false.
         $fill: null;
 
-        // Assigns the optional subarguments to the 
+        // Assigns the optional sub-arguments to the actual argument.
         @if length($item) == 4 and type-of(nth($item, 4)) == number {
             $blur: nth($item, length($item));
         } @else if length($item) == 4 and type-of(nth($item, 4)) == bool {
