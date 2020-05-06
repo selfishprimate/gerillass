@@ -1,11 +1,11 @@
 @charset "UTF-8";
 
-// Argümanın $map-for-breakpoints'teki bir değerle eşleşip eşleşmediğine bakar. Eşleşiyor ise $list-of-breakpoint'teki elemanın değerini, değilse argüman olarak geçilen değeri döner!
-
-@function __validateBreakpoint($value){
-    @if map-has-key($map-for-breakpoints, $value){
-        @return map-get($map-for-breakpoints, $value);
-    } @else {
-        @return $value;
+@function __validateBreakpoint($value) {
+    @for $i from 1 through length($value) {
+        @if map-has-key($map-for-breakpoints, $value) {
+            @return map-get($map-for-breakpoints, nth($value, $i));
+        } @else {
+            @return nth($value, $i);
+        }
     }
 }
