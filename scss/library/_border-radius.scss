@@ -1,13 +1,14 @@
 @charset "UTF-8";
 
 @mixin gls-border-radius($params...) {
+    $list: "top", "top-right", "right", "bottom-right", "bottom", "bottom-left", "left", "top-left", "cross-left", "cross-right", "all";
     @if length($params) == 1 {
         $value: nth($params, 1);
         border-radius: __nullToZero($value, space);
     } @else if length($params) == 2 {
         $corner: nth($params, 1);
         $value: nth($params, 2);
-        @if index("top" "top-left" "top-right" "bottom" "bottom-left" "bottom-right" "left" "right" "cross-left" "cross-right" "all", $corner) {
+        @if index($list, $corner) {
             @if $corner == "top" {
                 border-top-left-radius: $value;
                 border-top-right-radius: $value;
@@ -38,7 +39,7 @@
                 border-bottom-left-radius: $value; 
             }
         } @else {
-            @error "Corner value must be one of the followings: `top`, `top-right`, `right`, `bottom-right`, `bottom`, `bottom-left`, `left`, `top-left`, `cross-left`, `cross-right`, `all`.";
+            @error "Corner value must be one of the followings: #{quote($list)}.";
         }
     }
 }
