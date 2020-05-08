@@ -14,7 +14,6 @@
         }
     } @else if length($params) == 2 {
         @if not index("only" "min" "max" "between", nth($params, 1)) {
-            @debug "It's working!";
             $start: nth($params, 1);
             $end: nth($params, 2);
             @media (min-width: #{__validateBreakpoint($start)}) and (max-width: #{if(map-has-key($map-for-breakpoints, $end), __validateBreakpoint($end) - 1, $end)}) {
