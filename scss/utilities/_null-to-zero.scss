@@ -1,0 +1,13 @@
+@charset "UTF-8";
+
+@function __nullToZero($value, $seperation: comma) {
+    $list: ();
+    @for $i from 1 through length($value) {
+        @if nth($value, $i) == null {
+            $list: append($list, 0, $seperation);
+        } @else {
+            $list: append($list, nth($value, $i), $seperation);
+        }
+    }
+    @return $list;
+}

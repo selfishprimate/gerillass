@@ -1,49 +1,44 @@
 @charset "UTF-8";
 
-// This mixin provides one-line method for setting border-radius on a specific edges of an HTML element. Pass one argument as a "number" to effect all the edges of a box.
-
-// Willbefixed!
-
-@mixin gls-border-radius($params...) {
-    $corner: nth($params, 1);
-    $value: nth($params, length($params));
-    @if length($params) > 2 and length($params) < 4 and length($params) > 4 {
-        @error "Please, pass 2 or 4 arguments!";
-    } @else if length($params) == 1 {
-        border-radius: $value;
-    } @else if length($params) == 4 {
-        border-radius: nth($params, 1) nth($params, 2) nth($params, 3) nth($params, 4); 
-    } @else {
-        @if $corner != null and not index("top" "top-left" "top-right" "bottom" "bottom-left" "bottom-right" "left" "right" "cross-left" "cross-right" "all", $corner){
-        @error "Corner value must be one of the followings: `top`, `top-left`, `top-right`, `bottom`, `bottom-left`, `bottom-right`, `left`, `right`, `cross-left`, `cross-right`, `all`.";
-        } @else if $corner == "top" {
-            border-top-left-radius: $value;
-            border-top-right-radius: $value;
-        } @else if $corner == "top-left" {
-            border-top-left-radius: $value;
-        } @else if $corner == "top-right" {
-            border-top-right-radius: $value;
-        } @else if $corner == "bottom" {
-            border-bottom-left-radius: $value;
-            border-bottom-right-radius: $value;
-        } @else if $corner == "bottom-left" {
-            border-bottom-left-radius: $value;
-        } @else if $corner == "bottom-right" {
-            border-bottom-right-radius: $value;
-        } @else if $corner == "left" {
-            border-top-left-radius: $value;
-            border-bottom-left-radius: $value;
-        } @else if $corner == "right" {
-            border-top-right-radius: $value;
-            border-bottom-right-radius: $value;
-        } @else if $corner == "all" {
-            border-radius: $value;
-        } @else if $corner == "cross-left" {
-            border-top-left-radius: $value;
-            border-bottom-right-radius: $value;
-        } @else if $corner == "cross-right" {
-            border-top-right-radius: $value;
-            border-bottom-left-radius: $value;
+@mixin radius($params...) {
+    @if length($params) == 1 {
+        $value: nth($params, 1);
+        border-radius: __nullToZero($value, space);
+    } @else if length($params) == 2 {
+        $corner: nth($params, 1);
+        $value: nth($params, 2);
+        @if index("top" "top-left" "top-right" "bottom" "bottom-left" "bottom-right" "left" "right" "cross-left" "cross-right" "all", $corner) {
+            @if $corner == "top" {
+                border-top-left-radius: $value;
+                border-top-right-radius: $value;
+            } @else if $corner == "top-right" {
+                border-top-right-radius: $value;
+            } @else if $corner == "right" {
+                border-top-right-radius: $value;
+                border-bottom-right-radius: $value;
+            } @else if $corner == "bottom-right" {
+                border-bottom-right-radius: $value;
+            } @else if $corner == "bottom" {
+                border-bottom-left-radius: $value;
+                border-bottom-right-radius: $value;
+            } @else if $corner == "bottom-left" {
+                border-bottom-left-radius: $value;
+            } @else if $corner == "left" {
+                border-top-left-radius: $value;
+                border-bottom-left-radius: $value;
+            } @else if $corner == "top-left" {
+                border-top-left-radius: $value;
+            } @else if $corner == "all" {
+                border-radius: $value;
+            } @else if $corner == "cross-left" {
+                border-top-left-radius: $value;
+                border-bottom-right-radius: $value;
+            } @else if $corner == "cross-right" {
+                border-top-right-radius: $value;
+                border-bottom-left-radius: $value; 
+            }
+        } @else {
+            @error "Corner value must be one of the followings: `top`, `top-right`, `right`, `bottom-right`, `bottom`, `bottom-left`, `left`, `top-left`, `cross-left`, `cross-right`, `all`.";
         }
     }
 }
