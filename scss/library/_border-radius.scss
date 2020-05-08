@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-@mixin radius($params...) {
+@mixin gls-border-radius($params...) {
     @if length($params) == 1 {
         $value: nth($params, 1);
         border-radius: __nullToZero($value, space);
