@@ -4,7 +4,7 @@
     $list: "top", "top-right", "right", "bottom-right", "bottom", "bottom-left", "left", "top-left", "cross-left", "cross-right", "all";
     @if length($params) == 1 {
         $value: nth($params, 1);
-        border-radius: __nullToZero($value, space);
+        border-radius: __null($value, space);
     } @else if length($params) == 2 {
         $corner: nth($params, 1);
         $value: nth($params, 2);
@@ -41,5 +41,10 @@
         } @else {
             @error "Corner value must be one of the followings: #{quote($list)}.";
         }
+    } @else if length($params) ==  4 {
+        border-top-left-radius: #{__null(nth($params, 1), space, true)};
+        border-top-right-radius: #{__null(nth($params, 2), space, true)};
+        border-bottom-right-radius: #{__null(nth($params, 3), space, true)};
+        border-bottom-left-radius: #{__null(nth($params, 4), space, true)};
     }
 }
