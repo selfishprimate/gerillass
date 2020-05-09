@@ -42,9 +42,10 @@
             @error "Corner value must be one of the followings: #{quote($list)}.";
         }
     } @else if length($params) ==  4 {
-        border-top-left-radius: #{__null(nth($params, 1), space, true)};
-        border-top-right-radius: #{__null(nth($params, 2), space, true)};
-        border-bottom-right-radius: #{__null(nth($params, 3), space, true)};
-        border-bottom-left-radius: #{__null(nth($params, 4), space, true)};
+        $params: __null($params, space, true);
+        border-top-left-radius: nth($params, 1);
+        border-top-right-radius: nth($params, 2);
+        border-bottom-right-radius: nth($params, 3);
+        border-bottom-left-radius: nth($params, 4);
     }
 }
