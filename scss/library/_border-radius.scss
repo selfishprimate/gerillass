@@ -1,13 +1,13 @@
 @charset "UTF-8";
 
-@mixin gls-border-radius($params...) {
+@mixin gls-border-radius($args...) {
     $list: "top", "top-right", "right", "bottom-right", "bottom", "bottom-left", "left", "top-left", "cross-left", "cross-right", "all";
-    @if length($params) == 1 {
-        $value: nth($params, 1);
+    @if length($args) == 1 {
+        $value: nth($args, 1);
         border-radius: __null($value, space);
-    } @else if length($params) == 2 {
-        $corner: nth($params, 1);
-        $value: nth($params, 2);
+    } @else if length($args) == 2 {
+        $corner: nth($args, 1);
+        $value: nth($args, 2);
         @if index($list, $corner) {
             @if $corner == "top" {
                 border-top-left-radius: $value;
@@ -41,11 +41,11 @@
         } @else {
             @error "Corner value must be one of the followings: #{quote($list)}.";
         }
-    } @else if length($params) ==  4 {
-        $params: __null($params, space, true);
-        border-top-left-radius: nth($params, 1);
-        border-top-right-radius: nth($params, 2);
-        border-bottom-right-radius: nth($params, 3);
-        border-bottom-left-radius: nth($params, 4);
+    } @else if length($args) ==  4 {
+        $args: __null($args, space, true);
+        border-top-left-radius: nth($args, 1);
+        border-top-right-radius: nth($args, 2);
+        border-bottom-right-radius: nth($args, 3);
+        border-bottom-left-radius: nth($args, 4);
     }
 }
