@@ -31,8 +31,8 @@
 @import "utilities/pseudo-selector";
 @import "utilities/shorthand-property";
 @import "utilities/validate-breakpoint";
-@import "utilities/validate-cutter";
 @import "utilities/validate-length";
+@import "utilities/validate-scissors";
 
 @import "library/adaptive";
 @import "library/after";
@@ -50,7 +50,6 @@
 @import "library/circle";
 @import "library/clearfix";
 @import "library/counter";
-@import "library/cutter";
 @import "library/drop-shadow";
 @import "library/ellipsis";
 @import "library/escape-to-parent";
@@ -75,6 +74,7 @@
 @import "library/responsive-table";
 @import "library/responsive-video";
 @import "library/ripple-effect";
+@import "library/scissors";
 @import "library/screen-agent";
 @import "library/sizer";
 @import "library/smartphone";

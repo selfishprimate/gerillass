@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-@function __validateCutter($value) {
+@function __validateScissors($value) {
     $list: ();
     @for $i from 1 through length($value) {
         @if nth($value, $i) == null {
