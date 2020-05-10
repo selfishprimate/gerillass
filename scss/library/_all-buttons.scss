@@ -1,13 +1,13 @@
 @charset "UTF-8";
 
-@mixin gls-all-buttons($value: null) {
+@mixin gls-all-buttons($pseudo: null) {
     $list: "hover", "focus", "active", "disabled";
-    @if not $value {
+    @if not $pseudo {
         #{$list-of-buttons} {
             @content;
         }   
-    } @else if index($list, $value) {
-        $all-buttons: __pseudoSelector($list-of-buttons, $value);
+    } @else if index($list, $pseudo) {
+        $all-buttons: __pseudoSelector($list-of-buttons, $pseudo);
         #{$all-buttons} {
             @content;
         }
