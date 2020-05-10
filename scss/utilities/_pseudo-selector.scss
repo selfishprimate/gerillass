@@ -6,7 +6,6 @@
 ){
     $list: ();
     @each $element in $elements {
-        $element: unquote($element);
         $element: if($pseudo, $element + ":" + $pseudo, $element);
         $list: append($list, $element, comma);
     }
