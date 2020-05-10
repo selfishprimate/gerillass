@@ -1,7 +1,0 @@
-@charset "UTF-8";
-
-// Takes the px value and turns it to the rem.
-
-@mixin gls-remify($value){
-    font-size: __convertToRem($value) !important;
-}
