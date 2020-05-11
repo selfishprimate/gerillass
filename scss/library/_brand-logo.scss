@@ -1,45 +1,25 @@
 @charset "UTF-8";
 
 @mixin gls-brand-logo(
-    $approach: null,
-    $width: 150px,
-    $height: 80px,
-    $image: null,
-){
-    @if $approach == "kellum" {
-        position: relative;
-        display: inline-block;
-        width: $width;
-        height: $height;
-        text-indent: 100%;
-        white-space: nowrap;
+    $width,
+    $height,
+    $image-url: null,
+) {
+    display: inline-block;
+    position: relative;
+    width: $width;
+    height: $height;
+    @if $image-url {
+        background-image: url($image-url);
+    }
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    a {
+        display: block;
+        width: 0;
+        height: 0;
         overflow: hidden;
-        color: inherit;
-        text-decoration: none;
-        background-image: url($image);
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: 100%;
-    } @else if $approach == "gerillass" or $approach == null {
-        position: relative;
-        display: inline-block;
-        width: $width;
-        height: $height;
-        background-image: url($image);
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: 100%;
-        a{
-            display: block;
-            width: 0;
-            height: 0;
-            overflow: hidden;
-            text-indent: 100%;
-            @include gls-stretched-link;
-        }
+        @include gls-stretched-link(after);
     }
 }
-
-
-
- 
