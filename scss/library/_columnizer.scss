@@ -1,13 +1,11 @@
 @charset "UTF-8";
 
-@mixin gls-grid-composer($columns, $gutter, $flex-grow: 1) {
+@mixin gls-columnizer($columns, $gutter, $fill: true) {
     display: flex;
     flex-wrap: wrap;
-    padding: $gutter $gutter 0;
     & > * {
-        flex: $flex-grow 0 calc((100% - (#{$columns} - 1) * #{$gutter}) / #{$columns});
+        flex: if($fill == true, 1, 0) 0 calc((100% - (#{$columns} - 1) * #{$gutter}) / #{$columns});
         margin-bottom: $gutter;
-        padding: $gutter;
         &:not(:last-child) {
             margin-right: $gutter;
         }
