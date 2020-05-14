@@ -1,15 +1,15 @@
 @charset "UTF-8";
 
-@mixin gls-remove($params...){
+@mixin gls-remove($params...) {
     @if length($params) == 0 {
         display: none;
     } @else if length($params) == 1 {
         $value: nth($params, 1);
-        @include  gls-breakpoint($value){
+        @include  gls-breakpoint($value) {
             display: none;
         }
     } @else if length($params) == 2 {
-        @if index("min" "max", nth($params, 1)){
+        @if index("min" "max", nth($params, 1)) {
             $direction: nth($params, 1);
             $value: nth($params, 2);
             @if $direction == "min" {
