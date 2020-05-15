@@ -1,16 +1,28 @@
 @charset "UTF-8";
 
-// display: none kullanılarak gizlenen bir etiket screen readerlar tarafından okunmaz. Bir HTML etiketini screen readerların da tarayabileceği bir şekilde düzenlemek için aşağıdaki mixin'i kullanabilirsiniz.
-
-// Use this screen reader mixin to make some elements readable for the screen reader, which should be visually hidden in the document.
-
-@mixin gls-hide-visually{
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    overflow: hidden;
-    clip: rect(0,0,0,0);
-    white-space: nowrap;
-    border: 0;
+@mixin gls-hide($toggle: "hide") {
+    @if $toggle == "hide" {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        border: 0;
+        overflow: hidden;
+        clip: rect(1px, 1px, 1px, 1px);
+        clip-path: inset(100%);
+        white-space: nowrap;
+    } @else if $toggle == "unhide" {
+        position: static;
+        width: auto;
+        height: auto;
+        overflow: visible;
+        clip: auto;
+        clip-path: none;
+        white-space: inherit;
+    } @else if not index ("hide" "unhide", $toggle) {
+        @error "#{$toggle} is not a valid value for the `$toggle` argument. The value must be either `hide` or `unhide`.";
+    }
 }
+
+
+
