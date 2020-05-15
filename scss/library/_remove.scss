@@ -10,14 +10,14 @@
         }
     } @else if length($params) == 2 {
         @if index("min" "max", nth($params, 1)) {
-            $direction: nth($params, 1);
+            $mode: nth($params, 1);
             $value: nth($params, 2);
-            @if $direction == "min" {
+            @if $mode == "min" {
                 @include  gls-breakpoint(min, $value){
                     @debug "min works!";
                     display: none;
                 }
-            } @else if $direction == "max" {
+            } @else if $mode == "max" {
                 @include  gls-breakpoint(max, $value){
                     display: none;
                 }
