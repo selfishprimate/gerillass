@@ -4,26 +4,40 @@ _The best Sass tool set ever for guerrilla type of CSS coders._
 
 ## What is Gerillass?
 
-Gerillass is an open-source toolkit that contains a set of Sass mixins to help designers and developers to create better, faster and consistent user interfaces.
+Gerillass is a library built on top of Sass (Syntactically Awesome Style Sheets) to give you flexibility for your projects and accelerate your performance and creativity.
 
-## Requirements
+Many of the utilities that come with Gerillass are the solutions I have come up with for the challenges I have faced as a frontend developer over the years. These solutions have been shaped by the inspiration of other popular libraries and frameworks like Bourbon, Scut, Compass, Bootstrap, etc. over time and helped me create Gerillass.
 
-[Sass](https://github.com/sass/sass)  
-[LibSass](https://github.com/sass/libsass)
+Hope you’ll enjoy using it!
 
 ## Installation
 
-Install the Gerillass gem using the [RubyGems] package manager:
+You can Install the Gerillass library via npm (Node Package Manager), Yarn, Bower and include the source files into your projects. Or you can download it manually into your local computer.
 
-```bash
-gem install gerillass
-```
+## Terminal Installation
 
+Open the terminal window. Target the folder that you want Gerillass to be installed. Copy and past the command below and hit the enter to install the library into your local computer.
 
-## Npm Installation
+    git clone https://github.com/babilkuyusu/gerillass.git
 
-You can add Gerillass as a dependency:
+## Node.js Installation
 
-```bash
-npm install --save-dev gerillass
-```
+If you are working on a Node project you can add Gerillass as a dependency. Package files don’t include documentation. So please check out this very site to learn how to use Gerillass.
+
+**npm installation:**
+
+    npm install gerillass
+
+**Yarn installation:**
+
+    yarn add gerillass
+
+**Bower installation:**
+
+    bower install gerillass
+
+## How to Include?
+
+Import Gerillass at the beginning of your stylesheet
+
+    @import "gerillass/core/gerillass";
