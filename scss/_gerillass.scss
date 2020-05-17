@@ -11,15 +11,18 @@
 
 @import "maps/map-for-breakpoints";
 @import "maps/map-for-directions";
+@import "maps/map-for-font-formats";
 @import "maps/map-for-positions";
 @import "maps/map-for-smartphones";
 @import "maps/map-for-tablets";
 
 @import "utilities/clear-unit";
+@import "utilities/clear-whitespace";
 @import "utilities/convert-to-em";
 @import "utilities/convert-to-number";
 @import "utilities/darken";
 @import "utilities/font-sizer";
+@import "utilities/font-source";
 @import "utilities/get-items";
 @import "utilities/is-color";
 @import "utilities/is-number";
@@ -55,6 +58,7 @@
 @import "library/ellipsis";
 @import "library/escape-to-parent";
 @import "library/except";
+@import "library/font-face";
 @import "library/hide";
 @import "library/linear-gradient";
 @import "library/only";

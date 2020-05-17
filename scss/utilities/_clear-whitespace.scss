@@ -1,0 +1,9 @@
+@charset "UTF-8";
+
+@function __clearWhitespace($string) {
+    @while (str-index($string, ' ') != null) {
+        $index: str-index($string, ' ');
+        $string: "#{str-slice($string, 0, $index - 1)}#{str-slice($string, $index + 1)}";
+    }
+    @return $string;
+}

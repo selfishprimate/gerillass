@@ -1,11 +1,20 @@
 @charset "UTF-8";
 
-@mixin gls-font-face{
-    font-family: "My font";
-    src: url("my-font.eot"); /* IE9 compatibility */
-    src: url("my-font.eot?#iefix") format('embedded-opentype'), /* IE6-IE8 compatibility */
-         url("my-font.woff2") format('woff2'), /* Most modern browsers */
-         url("my-font.woff") format('woff'), /* Modern browsers */
-         url("my-font.ttf") format('truetype'), /* Safari, Android and iOS compatibility */
-         url("my-font.svg#svgFontName") format('svg'), /* Legacy iOS */
+@mixin gls-font-face (
+    $font-family,
+    $file-path,
+    $file-formats: eot woff2 woff ttf svg,
+) {
+    $list: ();
+    @font-face {
+        font-family: $font-family;
+        @if index($file-formats, eot) {
+            src: url('#{$file-path}.eot');
+        }
+        @for $i from 1 through length($file-formats) {
+            $list: append($list, __fontSource($font-family, $file-path, nth($file-formats, $i)), comma);
+        }
+        src: $list;
+        @content;
+    }
 }
