@@ -17,9 +17,10 @@
     background-size: 100%;
     a {
         display: block;
-        width: 0;
-        height: 0;
+        width: 1px;
+        height: 1px;
         overflow: hidden;
+        text-indent: 100%;
         @include gls-stretched-link(after);
     }
 }
