@@ -3,9 +3,15 @@
 @mixin gls-font-face (
     $font-family,
     $file-path,
+    $font-style: normal,
+    $font-weight: 400,
     $file-formats: eot woff2 woff ttf svg,
 ) {
     $list: ();
+    @if index(100 200 300 400 500 600 700 800 900, $font-style) {
+        $font-weight: $font-style;
+        $font-style: normal;
+    }
     @font-face {
         font-family: $font-family;
         @if index($file-formats, eot) {
@@ -15,6 +21,8 @@
             $list: append($list, __fontSource($font-family, $file-path, nth($file-formats, $i)), comma);
         }
         src: $list;
+        font-style: $font-style;
+        font-weight: $font-weight;
         @content;
     }
 }
