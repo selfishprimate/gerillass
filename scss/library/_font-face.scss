@@ -8,7 +8,7 @@
     $file-formats: eot woff2 woff ttf svg
 ) {
     @if & {
-        @error "You must call the mixin at the root level of your style sheeti, not in the selector `#{&+'{'+'}'}`.";
+        @error "You must call the mixin at the root level of your style sheet, not in the `#{&+'{'+'}'}` selector.";
     } @else {
 
         $list: ();
