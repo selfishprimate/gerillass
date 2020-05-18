@@ -7,22 +7,26 @@
     $font-weight: 400,
     $file-formats: eot woff2 woff ttf svg,
 ) {
-    $list: ();
-    @if index(100 200 300 400 500 600 700 800 900, $font-style) {
-        $font-weight: $font-style;
-        $font-style: normal;
-    }
-    @font-face {
-        font-family: $font-family;
-        @if index($file-formats, eot) {
-            src: url('#{$file-path}.eot');
+    @if & {
+        @error "You must call the mixin at the root level of your style sheet not in the selector `#{&+'{'+'}'}`.";
+    } @else {
+        $list: ();
+        @if index(100 200 300 400 500 600 700 800 900, $font-style) {
+            $font-weight: $font-style;
+            $font-style: normal;
         }
-        @for $i from 1 through length($file-formats) {
-            $list: append($list, __fontSource($font-family, $file-path, nth($file-formats, $i)), comma);
+        @font-face {
+            font-family: $font-family;
+            @if index($file-formats, eot) {
+                src: url('#{$file-path}.eot');
+            }
+            @for $i from 1 through length($file-formats) {
+                $list: append($list, __fontSource($font-family, $file-path, nth($file-formats, $i)), comma);
+            }
+            src: $list;
+            font-style: $font-style;
+            font-weight: $font-weight;
+            @content;
         }
-        src: $list;
-        font-style: $font-style;
-        font-weight: $font-weight;
-        @content;
     }
 }
