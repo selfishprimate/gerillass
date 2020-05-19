@@ -1,15 +1,16 @@
 @charset "UTF-8";
 
 @mixin gls-sprite(
-    $width: null,
-    $height: $width,
-    $image-url: null,
+    $size: null,
+    $image: null,
     $position: null,
 ){
     display: inline-block;
-    width: $width;
-    height: $height;
-    background-position: nth($position, 1) nth($position, 2);
-    background-image: url($image-url);
+    width: nth($size, 1);
+    height: if(length($size) == 1, $size, nth($size, 2));
+    background-position: $position;
+    @if $image {
+        background-image: url($image);
+    }
     background-repeat: no-repeat;
 }
