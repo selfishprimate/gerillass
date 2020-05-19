@@ -2,39 +2,37 @@
 
 @mixin gls-background-image(
     $image-url: null,
-    $filter-color: rgba(0,0,0,0.3), 
-    $filter-opacity: null,
-    $filter-type: solid,
-    $filter-direction: top-left,
+    $filter-color: null, 
+    $filter-direction: null,
 ) {
     position: relative;
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: cover;
-    overflow: hidden;
     @if $image-url {
         background-image: url($image-url);
     }
-    &::after {
-        content: "";
-        display: block;
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        @if $filter-type {
-            @if $filter-type == "solid" {
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    @if $filter-color { 
+        @if not $filter-direction {
+            $filter-direction: "top";
+        }
+        &::after {
+            content: "";
+            display: block;
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            @if length($filter-color) == 1 {
                 background: $filter-color;
-                opacity: $filter-opacity;
-            } @else if $filter-type == "gradient" {
+            } @else if length($filter-color) > 1 {
                 @include gls-linear-gradient($filter-direction, $filter-color);
-                opacity: $filter-opacity;
             }
         }
-    }
-    & > * {
-        position: relative;
-        z-index: 1;
+        & > * {
+            position: relative;
+            z-index: 1;
+        }
     }
 }
