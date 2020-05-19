@@ -2,8 +2,8 @@
 
 @mixin gls-sprite(
     $size: null,
-    $image: null,
     $position: null,
+    $image: null,
 ){
     display: inline-block;
     width: nth($size, 1);
