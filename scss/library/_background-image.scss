@@ -3,17 +3,36 @@
 @mixin gls-background-image(
     $image-url: null,
     $filter-color: null, 
-    $filter-direction: null,
+    $filter-direction: null
 ) {
     position: relative;
     @if $image-url {
-        background-image: url($image-url);
-    }
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    @if $filter-color { 
-        overflow: hidden;
+        @if $filter-color {
+            @if length($filter-color) == 1 {
+                background-image: linear-gradient($filter-color), url($image-url);
+            } @else if length($filter-color) > 1 {
+                $color-list: ();
+                @for $i from 1 through length($filter-color) {
+                    $color-list: append($color-list, nth($filter-color, $i), comma);
+                }
+                @if $filter-direction {
+                    @if map-has-key($map-for-directions, $filter-direction) {
+                        background-image: linear-gradient(map-get($map-for-directions, $filter-direction), $color-list), url($image-url);
+                    } @else {
+                        @if index("deg", unit($filter-direction)) {
+                            background-image: linear-gradient($filter-direction, $color-list), url($image-url);
+                        } @else {
+                            @error "#{$filter-direction} is a wrong value for the $filter-direction parameter. The value must be either a number followed by the 'deg' unit or one of the following pre-defined values: #{quote(map-keys($map-for-directions))}.";
+                        }
+                    }
+                } @else {
+                    background-image: linear-gradient(to top, $color-list), url($image-url);
+                }
+            }
+        } @else {
+            background-image: url($image-url);
+        }
+    } @else {
         &::after {
             content: "";
             display: block;
@@ -33,4 +52,8 @@
             z-index: 1;
         }
     }
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
+
