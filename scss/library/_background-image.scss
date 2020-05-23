@@ -5,7 +5,6 @@
     $filter-color: null, 
     $filter-direction: null
 ) {
-    position: relative;
     @if $image-url {
         @if $filter-color {
             @if length($filter-color) == 1 {
@@ -33,6 +32,7 @@
             background-image: url($image-url);
         }
     } @else {
+        position: relative;
         &::after {
             content: "";
             display: block;
