@@ -1,21 +1,21 @@
 @charset "UTF-8";
 
-@mixin gls-counter{
-    list-style-type: none;
-    padding: 0;
-    li{
-        position: relative;
-        padding-left: 30px;
+@mixin gls-counter(
+    $counter-style: decimal,
+    $counter-style-before: null,
+    $counter-style-after: null,
+    $pseudo: "before"
+) {
+    @if $counter-style == null {
+        $counter-style: decimal;
     }
     &.start{
-        counter-reset: myCounter;
+        counter-reset: glsCounter;
     }
-    &.start li::before,
-    &.continue li::before{
-        position: absolute;
-        left: 0;
-        text-align: right;
-        content: counter(myCounter) ". ";
-        counter-increment: myCounter;
+    &.start > *#{"::"+$pseudo},
+    &.continue > *#{"::"+$pseudo} {
+        content: "#{$counter-style-before}" counter(glsCounter, #{$counter-style}) "#{$counter-style-after}";
+        counter-increment: glsCounter;
+        @content;
     }
 }
