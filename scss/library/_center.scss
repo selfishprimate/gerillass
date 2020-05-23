@@ -1,12 +1,15 @@
 @charset "UTF-8";
 
 @mixin gls-center(
-    $axis: null
+    $axis: "both"
 ) {
-    @if $axis == null or $axis == "vertical" {
+    @if $axis == "both" or $axis == "vertical" {
         top: 50%;
-    } @if $axis == null or $axis == "horizontal" {
+    } @if $axis == "both" or $axis == "horizontal" {
         left: 50%;
     }
-    transform: if($axis == "horizontal", translateX(-50%), if(not $axis, translateX(-50%), null)) if($axis == "vertical", translateY(-50%), if(not $axis,  translateY(-50%), null));
+    transform: 
+        if($axis == "horizontal", translateX(-50%), if($axis == "both", translateX(-50%), null)) 
+        if($axis == "vertical", translateY(-50%), if($axis == "both", translateY(-50%), null))
+    ;
 }
