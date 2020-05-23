@@ -1,25 +1,17 @@
 @charset "UTF-8";
 
-@mixin stretched-link-code {
-    content: "";
-    position: absolute;
-    pointer-events: auto;
-    background-color: rgba(0,0,0,0);
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 1;
-}
-
-@mixin gls-stretched-link($value: null) {
-    @if $value == null {
-        &::before {
-            @include stretched-link-code;
-        }
-    } @else if $value == "before" or $value == "after" {
-        &::#{$value} {
-            @include stretched-link-code;
+@mixin gls-stretched-link($value: "before") {
+    @if index("before" "after", $value) {
+        &#{"::"+$value} {
+            content: "";
+            position: absolute;
+            pointer-events: auto;
+            background-color: rgba(0,0,0,0);
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 1;
         }
     } @else {
         @error "'#{$value}' is a wrong argument. This mixin accepts 'before' or 'after' as an argument. If you don't pass any argument default it will target the '::before' pseudo-element of the selected element."
