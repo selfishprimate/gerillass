@@ -9,7 +9,7 @@
     @if $image-url {
         @if $filter-color {
             @if length($filter-color) == 1 {
-                background-image: linear-gradient($filter-color), url($image-url);
+                background-image: linear-gradient(to top, $filter-color, $filter-color), url($image-url);
             } @else if length($filter-color) > 1 {
                 $color-list: ();
                 @for $i from 1 through length($filter-color) {
