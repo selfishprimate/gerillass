@@ -1,20 +1,43 @@
 @charset "UTF-8";
 
 @mixin gls-counter(
-    $counter-style: decimal,
-    $counter-style-before: null,
-    $counter-style-after: null,
-    $pseudo: "before"
+    $params...
 ) {
-    @if $counter-style == null {
-        $counter-style: decimal;
+    $counter: null;
+    $counter-before: null;
+    $counter-after: null;
+
+    @if length($params) == 1 {
+        @if index($list-of-counter-styles, nth($params, 1)) {
+            $counter: nth($params, 1);
+        } @else {
+            $counter-after: nth($params, 1);
+        }
+    } @else if length($params) == 2 {
+        @if index($list-of-counter-styles, nth($params, 1)) {
+            $counter: nth($params, 1);
+            $counter-after: nth($params, 2);
+        } @else if index($list-of-counter-styles, nth($params, 2)) {
+            $counter-before: nth($params, 1);
+            $counter: nth($params, 2);
+        } @else {
+            $counter-before: nth($params, 1);
+            $counter-after: nth($params, 2);
+        }
+    } @else if length($params) == 3 {
+        @if index($list-of-counter-styles, nth($params, 2)) {
+            $counter-before: nth($params, 1);
+            $counter: nth($params, 2);
+            $counter-after: nth($params, 3);
+        }
     }
+
     &.start{
         counter-reset: glsCounter;
     }
-    &.start > *#{"::"+$pseudo},
-    &.continue > *#{"::"+$pseudo} {
-        content: "#{$counter-style-before}" counter(glsCounter, #{$counter-style}) "#{$counter-style-after}";
+    &.start > *::before,
+    &.continue > *::before {
+        content: #{if($counter-before, '"' + $counter-before + '"' + " ", null)}counter(glsCounter#{if($counter,", " + $counter, null)})#{if($counter-after, " " + '"' + $counter-after + '"', null)};
         counter-increment: glsCounter;
         @content;
     }
