@@ -32,11 +32,11 @@
         }
     }
 
-    &.start{
+    &.counter-start{
         counter-reset: glsCounter;
     }
-    &.start > *::before,
-    &.continue > *::before {
+    &.counter-start .counter-item::before,
+    &.counter-continue .counter-item::before {
         content: #{if($counter-before, '"' + $counter-before + '"' + " ", null)}counter(glsCounter#{if($counter,", " + $counter, null)})#{if($counter-after, " " + '"' + $counter-after + '"', null)};
         counter-increment: glsCounter;
         @content;
