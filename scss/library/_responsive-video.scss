@@ -1,8 +1,6 @@
 @charset "UTF-8";
 
-@mixin gls-responsive-video(
-        $ratio: null
-    ) {
+@mixin gls-responsive-video($ratio: null) {
     position: relative;
     &::before {
         content: "";
