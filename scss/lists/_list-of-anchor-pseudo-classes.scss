@@ -1,9 +1,3 @@
 @charset "UTF-8";
 
-$list-of-anchor-pseudo-classes: (
-    "link",
-    "visited",
-    "hover",
-    "active",
-    "focus"
-);
+$list-of-anchor-pseudo-classes: ("link", "visited", "hover", "active", "focus");

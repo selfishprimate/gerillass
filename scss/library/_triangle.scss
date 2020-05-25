@@ -1,17 +1,17 @@
 @charset "UTF-8";
 
 @mixin gls-triangle(
-    $direction: "top",
+    $direction: "bottom",
     $color: black,
     $size: 10px 8px,
 ) {
     @if index($list-of-directions, $direction) {
         @if __isColor($color){
             content: "";
-            display: inline-block;
-            border-style: solid;
             height: 0;
             width: 0;
+            display: inline-block;
+            border-style: solid;
             @if $direction == "top"{
                 border-color: transparent transparent $color;
                 border-width: 0 (nth($size, 1) / 2) if(length($size) == 2, nth($size, 2), nth($size, 1));
