@@ -1,45 +1,45 @@
 @charset "UTF-8";
 
 @mixin gls-triangle(
-    $direction,
-    $width,
-    $height,
-    $color
-){
-    @if not index($list-of-directions, $direction){
-        @error "The argument for direction must be one of the followings: #{__getItems($list-of-directions)}";
-    } @else if not __isColor($color){
-        @error "`#{$color}` is not a valid color for the `$color` argument in the `triangle` mixin.";
-    } @else {
-        content: "";
-        display: block;
-        border-style: solid;
-        height: 0;
-        width: 0;
-        @if $direction == "top"{
-            border-color: transparent transparent $color;
-            border-width: 0 ($width / 2) $height;
-        } @else if $direction == "top-left" {
-            border-color: $color transparent transparent;
-            border-width: $width $width 0 0;
-        } @else if $direction == "top-right" {
-            border-color: transparent $color transparent transparent;
-            border-width: 0 $width $width 0;
-        } @else if $direction == "bottom" {
-            border-color: $color transparent transparent;
-            border-width: $height ($width / 2) 0;
-        } @else if $direction == "bottom-left" {
-            border-color: transparent transparent transparent $color;
-            border-width: $width 0 0 $width;
-        } @else if $direction == "bottom-right" {
-            border-color: transparent transparent $color;
-            border-width: 0 0 $width $width;
-        } @else if $direction == "left" {
-            border-color: transparent $color transparent transparent;
-            border-width: ($height / 2) $width ($height / 2) 0;
-        } @else if $direction == "right" {
-            border-color: transparent transparent transparent $color;
-            border-width: ($height / 2) 0 ($height / 2) $width;
+    $direction: "top",
+    $color: black,
+    $size: 10px 8px,
+) {
+    @if index($list-of-directions, $direction) {
+        @if __isColor($color){
+            content: "";
+            display: inline-block;
+            border-style: solid;
+            height: 0;
+            width: 0;
+            @if $direction == "top"{
+                border-color: transparent transparent $color;
+                border-width: 0 (nth($size, 1) / 2) if(length($size) == 2, nth($size, 2), nth($size, 1));
+            } @else if $direction == "top-right" {
+                border-color: transparent $color transparent transparent;
+                border-width: 0 nth($size, 1) nth($size, 1) 0;
+            } @else if $direction == "right" {
+                border-color: transparent transparent transparent $color;
+                border-width: (if(length($size) == 2, nth($size, 2), nth($size, 1)) / 2) 0 (if(length($size) == 2, nth($size, 2), nth($size, 1)) / 2) nth($size, 1);
+            } @else if $direction == "bottom-right" {
+                border-color: transparent transparent $color;
+                border-width: 0 0 nth($size, 1) nth($size, 1);
+            } @else if $direction == "bottom" {
+                border-color: $color transparent transparent;
+                border-width: if(length($size) == 2, nth($size, 2), nth($size, 1)) (nth($size, 1) / 2) 0;
+            } @else if $direction == "bottom-left" {
+                border-color: transparent transparent transparent $color;
+                border-width: nth($size, 1) 0 0 nth($size, 1);
+            } @else if $direction == "left" {
+                border-color: transparent $color transparent transparent;
+                border-width: (if(length($size) == 2, nth($size, 2), nth($size, 1)) / 2) nth($size, 1) (if(length($size) == 2, nth($size, 2), nth($size, 1)) / 2) 0;
+            } @else if $direction == "top-left" {
+                border-color: $color transparent transparent;
+                border-width: nth($size, 1) nth($size, 1) 0 0;
+            }
+            @content;
         } 
+    } @else {
+        @error "The argument for direction must be one of the followings: #{quote($list-of-directions)}";
     }
 }
