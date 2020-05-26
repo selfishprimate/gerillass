@@ -1,10 +1,7 @@
 @charset "UTF-8";
 
 @function __lighten($color, $percentage) {
-  @if not __isColor($color) {
-    @error "`#{$color}` is not a valid color for the `$color` argument in " +
-           "the `tint` mixin.";
-  } @else {
-    @return mix(white, $color, $percentage);
-  }
+    @if __isColor($color) {
+        @return mix(white, $color, $percentage);
+    } 
 }
