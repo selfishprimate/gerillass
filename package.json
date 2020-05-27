@@ -31,7 +31,5 @@
         "url": "https://github.com/babilkuyusu/gerillass/issues"
     },
     "homepage": "https://gerillass.com",
-    "devDependencies": {
-        "eyeglass": "^2.4.2"
-    }
+    "devDependencies": {}
 }
