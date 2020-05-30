@@ -8,7 +8,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/babilkuyusu/gerillass.git"
+        "url": "git+https://github.com/selfishprimate/gerillass.git"
     },
     "keywords": [
         "gerillass",
@@ -28,7 +28,7 @@
     "author": "Halil İbrahim Çakıroğlu",
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/babilkuyusu/gerillass/issues"
+        "url": "https://github.com/selfihsprimate/gerillass/issues"
     },
     "homepage": "https://gerillass.com",
     "devDependencies": {}

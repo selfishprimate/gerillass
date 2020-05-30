@@ -18,7 +18,7 @@ You can Install the Gerillass library via npm (Node Package Manager), Yarn, Bowe
 
 Open the terminal window. Target the folder that you want Gerillass to be installed. Copy and past the command below and hit the enter to install the library into your local computer.
 
-    git clone https://github.com/babilkuyusu/gerillass.git
+    git clone https://github.com/selfishprimate/gerillass.git
 
 ## Node.js Installation
 
