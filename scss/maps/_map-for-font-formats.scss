@@ -6,4 +6,4 @@ $map-for-font-formats: (
     "woff": format("woff"),
     "ttf": format("truetype"),
     "svg": format("svg")
-);
+) !default;

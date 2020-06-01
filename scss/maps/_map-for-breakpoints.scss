@@ -1,11 +1,9 @@
 @charset "UTF-8";
 
-// Predefined breakpoint values. Same values as Bootstrap! You can change, add or remove them!
-
 $map-for-breakpoints: (
-    'xsmall': 0px,
-    'small': 576px,
-    'medium': 768px,
-    'large': 992px,
-    'xlarge': 1200px
-);
+    "xsmall": 0,
+    "small": 576px,
+    "medium": 768px,
+    "large": 992px,
+    "xlarge": 1200px
+) !default;
