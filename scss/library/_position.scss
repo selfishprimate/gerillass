@@ -1,20 +1,17 @@
 @charset "UTF-8";
 
-@mixin gls-position(
-    $position: absolute,
-    $offsets: 0
-) {
-    $offsets: __shorthandProperty($offsets);
-    $positioning-offsets: (
-        top: nth($offsets, 1),
-        right: nth($offsets, 2),
-        bottom: nth($offsets, 3),
-        left: nth($offsets, 4)
-    );
-    position: $position;
-    @each $offset, $value in $positioning-offsets {
-        @if __validateLength($value) {
-            #{$offset}: $value;
-        }
+@mixin gls-position($position: absolute, $offsets: 0) {
+  $offsets: __shorthandProperty($offsets);
+  $positioning-offsets: (
+    top: nth($offsets, 1),
+    right: nth($offsets, 2),
+    bottom: nth($offsets, 3),
+    left: nth($offsets, 4),
+  );
+  position: $position;
+  @each $offset, $value in $positioning-offsets {
+    @if __validateLength($value) {
+      #{$offset}: $value;
     }
+  }
 }

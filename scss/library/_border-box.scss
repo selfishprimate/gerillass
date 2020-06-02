@@ -1,26 +1,26 @@
 @charset "UTF-8";
 
 @mixin gls-border-box($value: null) {
-    @if not & and $value == null {
-        *, 
-        *::before, 
-        *::after{
-            box-sizing: border-box;
-        }
-    } @else if & and $value == "only" {
-        &, 
-        &::before, 
-        &::after {
-            box-sizing: border-box;
-        }
-    } @else if & and $value == null {
-        &, 
-        &::before, 
-        &::after,
-        *, 
-        *::before, 
-        *::after {
-            box-sizing: border-box;
-        }
+  @if not & and $value == null {
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
     }
+  } @else if & and $value == "only" {
+    &,
+    &::before,
+    &::after {
+      box-sizing: border-box;
+    }
+  } @else if & and $value == null {
+    &,
+    &::before,
+    &::after,
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+  }
 }

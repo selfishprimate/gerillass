@@ -1,26 +1,22 @@
 @charset "UTF-8";
 
-@mixin gls-brand-logo(
-    $width,
-    $height,
-    $image-url: null,
-) {
-    display: inline-block;
-    position: relative;
-    width: $width;
-    height: $height;
-    @if $image-url {
-        background-image: url($image-url);
-    }
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: 100%;
-    a {
-        display: block;
-        width: 1px;
-        height: 1px;
-        overflow: hidden;
-        text-indent: 100%;
-        @include gls-stretched-link(after);
-    }
+@mixin gls-brand-logo($width, $height, $image-url: null) {
+  display: inline-block;
+  position: relative;
+  width: $width;
+  height: $height;
+  @if $image-url {
+    background-image: url($image-url);
+  }
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  a {
+    display: block;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    text-indent: 100%;
+    @include gls-stretched-link(after);
+  }
 }

@@ -1,20 +1,18 @@
 @charset "UTF-8";
 
-@function __fontSource (
-    $font-family,
-    $file-path,
-    $file-formats
-) {
-    $list: ();
-    @if map-has-key($map-for-font-formats, $file-formats) {
-        @if index(eot woff2 woff ttf, $file-formats) {
-            $src-value: url('#{$file-path}.#{if(not index(eot, $file-formats), $file-formats, $file-formats+"?#iefix")}') #{map-get($map-for-font-formats, $file-formats)};
-            $list: append($list, $src-value, comma);
-        } @else if index(svg, $file-formats) {
-            $font-family: __clearWhitespace($font-family);
-            $src-value: url('#{$file-path}.#{$file-formats + "#" + $font-family}') #{map-get($map-for-font-formats, $file-formats)};
-            $list: append($list, $src-value, comma);
-        }
+@function __fontSource($font-family, $file-path, $file-formats) {
+  $list: ();
+  @if map-has-key($map-for-font-formats, $file-formats) {
+    @if index(eot woff2 woff ttf, $file-formats) {
+      $src-value: url('#{$file-path}.#{if(not index(eot, $file-formats), $file-formats, $file-formats+"?#iefix")}')
+        #{map-get($map-for-font-formats, $file-formats)};
+      $list: append($list, $src-value, comma);
+    } @else if index(svg, $file-formats) {
+      $font-family: __clearWhitespace($font-family);
+      $src-value: url('#{$file-path}.#{$file-formats + "#" + $font-family}')
+        #{map-get($map-for-font-formats, $file-formats)};
+      $list: append($list, $src-value, comma);
     }
-    @return $list;
+  }
+  @return $list;
 }

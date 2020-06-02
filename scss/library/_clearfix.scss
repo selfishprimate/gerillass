@@ -1,9 +1,9 @@
 @charset "UTF-8";
 
-@mixin gls-clearfix { 
-    &::after {
-        content: "";
-        display: block;
-        clear: both;
-    }
+@mixin gls-clearfix {
+  &::after {
+    content: "";
+    display: block;
+    clear: both;
+  }
 }

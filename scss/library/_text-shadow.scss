@@ -1,149 +1,132 @@
 @charset "UTF-8";
 
 @mixin gls-text-shadow($params...) {
+  $value: ();
 
-    $value: ();
+  @for $i from 1 through length($params) {
+    // Takes each items come from $params.
+    $item: nth($params, $i);
 
-    @for $i from 1 through length($params) {
+    // The first value comes from the $item is direction.
+    // This will be used in the @if, @else statements with $size to control the offset of the shadows.
+    $direction: nth($item, 1);
 
-        // Takes each items come from $params.
-        $item: nth($params, $i);
+    // Second value is the color.
+    $color: nth($item, 2);
 
-        // The first value comes from the $item is direction. 
-        // This will be used in the @if, @else statements with $size to control the offset of the shadows.
-        $direction: nth($item, 1);
+    // The third value is the actual offset value of the shadows.
+    $size: nth($item, 3);
 
-        // Second value is the color.
-        $color: nth($item, 2);
+    // Takes the unit of the $size value to use it later to increment the amount of shadow based on the unit.
+    $sizeUnit: unit($size);
 
-        // The third value is the actual offset value of the shadows.
-        $size: nth($item, 3);
+    // The $blur argument is optional. It controls the size of the blur.
+    $blur: null;
 
-        // Takes the unit of the $size value to use it later to increment the amount of shadow based on the unit.
-        $sizeUnit: unit($size);
+    // The $fill argument is optional. This makes shadow fill the gap between the actual text and shadow's end-point. The default value is set to false.
+    $fill: null;
 
-        // The $blur argument is optional. It controls the size of the blur.
-        $blur: null;
-
-        // The $fill argument is optional. This makes shadow fill the gap between the actual text and shadow's end-point. The default value is set to false.
-        $fill: null;
-
-        // Assigns the optional sub-arguments to the actual argument.
-        @if length($item) == 4 and type-of(nth($item, 4)) == number {
-            $blur: nth($item, length($item));
-        } @else if length($item) == 4 and type-of(nth($item, 4)) == bool {
-            $fill: nth($item, length($item));
-        } @else if length($item) == 5 {
-            $blur: nth($item, 4);
-            $fill: nth($item, length($item));
-        }
-
-        // The code below changes the angle of $direction of the shadow based on the predefined values.
-        @if $direction == "top" {
-            @if $fill == true {
-                // The __clearUnit(); function is used here due to it is not possible to count $size with a unit. First, it clears the unit from the $size argument and then adds it back again in the @for loop.
-                @for $i from 1 through __clearUnit($size) {
-                    $increase: $i * 1+$sizeUnit;
-                    $shadow: 0 -#{$increase} $blur $color;
-                    $value: append($value, $shadow, comma);
-                }
-            } @else {
-                $shadow: 0 -#{$size} $blur $color;
-                $value: append($value, $shadow, comma);
-            }
-        } 
-        
-        @else if $direction == "top-left" {
-            @if $fill == true {
-                @for $i from 1 through __clearUnit($size) {
-                    $increase: $i * 1+$sizeUnit;
-                    $shadow: -#{$increase} -#{$increase} $blur $color;
-                    $value: append($value, $shadow, comma);
-                }
-            } @else {
-                $shadow: -#{$size} -#{$size} $blur $color;
-                $value: append($value, $shadow, comma);
-            }
-        } 
-        
-        @else if $direction == "top-right" {
-            @if $fill == true {
-                @for $i from 1 through __clearUnit($size) {
-                    $increase: $i * 1+$sizeUnit;
-                    $shadow: #{$increase} -#{$increase} $blur $color;
-                    $value: append($value, $shadow, comma);
-                }
-            } @else {
-                $shadow: #{$size} -#{$size} $blur $color;
-                $value: append($value, $shadow, comma);
-            }
-        } 
-        
-        @else if $direction == "bottom" {
-            @if $fill == true {
-                @for $i from 1 through __clearUnit($size) {
-                    $increase: $i * 1+$sizeUnit;
-                    $shadow: 0 #{$increase} $blur $color;
-                    $value: append($value, $shadow, comma);
-                }
-            } @else {
-                $shadow: 0 #{$size} $blur $color;
-                $value: append($value, $shadow, comma);
-            }
-        } 
-        
-        @else if $direction == "bottom-left" {
-            @if $fill == true {
-                @for $i from 1 through __clearUnit($size) {
-                    $increase: $i * 1+$sizeUnit;
-                    $shadow: -#{$increase} #{$increase} $blur $color;
-                    $value: append($value, $shadow, comma);
-                }
-            } @else {
-                $shadow: -#{$size} #{$size} $blur $color;
-                $value: append($value, $shadow, comma);
-            }
-        } 
-        
-        @else if $direction == "bottom-right" {
-            @if $fill == true {
-                @for $i from 1 through __clearUnit($size) { 
-                    $increase: $i * 1+$sizeUnit;
-                    $shadow: #{$increase} #{$increase} $blur $color;
-                    $value: append($value, $shadow, comma);
-                }
-            } @else {
-                $shadow: #{$size} #{$size} $blur $color;
-                $value: append($value, $shadow, comma);
-            }
-        } 
-        
-        @else if $direction == "left" {
-            @if $fill == true {
-                @for $i from 1 through __clearUnit($size) {
-                    $increase: $i * 1+$sizeUnit;
-                    $shadow: -#{$increase} 0 $blur $color;
-                    $value: append($value, $shadow, comma);
-                }
-            } @else {
-                $shadow: -#{$size} 0 $blur $color;
-                $value: append($value, $shadow, comma);
-            }
-        } 
-        
-        @else if $direction == "right" {
-            @if $fill == true {
-                @for $i from 1 through __clearUnit($size) {
-                    $increase: $i * 1+$sizeUnit;
-                    $shadow: #{$increase} 0 $blur $color;
-                    $value: append($value, $shadow, comma);
-                }
-            } @else {
-                $shadow: #{$size} 0 $blur $color;
-                $value: append($value, $shadow, comma);
-            }
-        }
-
+    // Assigns the optional sub-arguments to the actual argument.
+    @if length($item) == 4 and type-of(nth($item, 4)) == number {
+      $blur: nth($item, length($item));
+    } @else if length($item) == 4 and type-of(nth($item, 4)) == bool {
+      $fill: nth($item, length($item));
+    } @else if length($item) == 5 {
+      $blur: nth($item, 4);
+      $fill: nth($item, length($item));
     }
-    text-shadow: $value;
+
+    // The code below changes the angle of $direction of the shadow based on the predefined values.
+    @if $direction == "top" {
+      @if $fill == true {
+        // The __clearUnit(); function is used here due to it is not possible to count $size with a unit. First, it clears the unit from the $size argument and then adds it back again in the @for loop.
+        @for $i from 1 through __clearUnit($size) {
+          $increase: $i * 1 + $sizeUnit;
+          $shadow: 0 -#{$increase} $blur $color;
+          $value: append($value, $shadow, comma);
+        }
+      } @else {
+        $shadow: 0 -#{$size} $blur $color;
+        $value: append($value, $shadow, comma);
+      }
+    } @else if $direction == "top-left" {
+      @if $fill == true {
+        @for $i from 1 through __clearUnit($size) {
+          $increase: $i * 1 + $sizeUnit;
+          $shadow: -#{$increase} -#{$increase} $blur $color;
+          $value: append($value, $shadow, comma);
+        }
+      } @else {
+        $shadow: -#{$size} -#{$size} $blur $color;
+        $value: append($value, $shadow, comma);
+      }
+    } @else if $direction == "top-right" {
+      @if $fill == true {
+        @for $i from 1 through __clearUnit($size) {
+          $increase: $i * 1 + $sizeUnit;
+          $shadow: #{$increase} -#{$increase} $blur $color;
+          $value: append($value, $shadow, comma);
+        }
+      } @else {
+        $shadow: #{$size} -#{$size} $blur $color;
+        $value: append($value, $shadow, comma);
+      }
+    } @else if $direction == "bottom" {
+      @if $fill == true {
+        @for $i from 1 through __clearUnit($size) {
+          $increase: $i * 1 + $sizeUnit;
+          $shadow: 0 #{$increase} $blur $color;
+          $value: append($value, $shadow, comma);
+        }
+      } @else {
+        $shadow: 0 #{$size} $blur $color;
+        $value: append($value, $shadow, comma);
+      }
+    } @else if $direction == "bottom-left" {
+      @if $fill == true {
+        @for $i from 1 through __clearUnit($size) {
+          $increase: $i * 1 + $sizeUnit;
+          $shadow: -#{$increase} #{$increase} $blur $color;
+          $value: append($value, $shadow, comma);
+        }
+      } @else {
+        $shadow: -#{$size} #{$size} $blur $color;
+        $value: append($value, $shadow, comma);
+      }
+    } @else if $direction == "bottom-right" {
+      @if $fill == true {
+        @for $i from 1 through __clearUnit($size) {
+          $increase: $i * 1 + $sizeUnit;
+          $shadow: #{$increase} #{$increase} $blur $color;
+          $value: append($value, $shadow, comma);
+        }
+      } @else {
+        $shadow: #{$size} #{$size} $blur $color;
+        $value: append($value, $shadow, comma);
+      }
+    } @else if $direction == "left" {
+      @if $fill == true {
+        @for $i from 1 through __clearUnit($size) {
+          $increase: $i * 1 + $sizeUnit;
+          $shadow: -#{$increase} 0 $blur $color;
+          $value: append($value, $shadow, comma);
+        }
+      } @else {
+        $shadow: -#{$size} 0 $blur $color;
+        $value: append($value, $shadow, comma);
+      }
+    } @else if $direction == "right" {
+      @if $fill == true {
+        @for $i from 1 through __clearUnit($size) {
+          $increase: $i * 1 + $sizeUnit;
+          $shadow: #{$increase} 0 $blur $color;
+          $value: append($value, $shadow, comma);
+        }
+      } @else {
+        $shadow: #{$size} 0 $blur $color;
+        $value: append($value, $shadow, comma);
+      }
+    }
+  }
+  text-shadow: $value;
 }

@@ -1,21 +1,21 @@
 @charset "UTF-8";
 
-@mixin gls-screen-agent ($resolution){
-    @if $resolution ==  "1x" {
-        @media (min-resolution: 96dpi) {
-            @content;
-        }
-    } @else if $resolution ==  "2x" {
-        @media (min-resolution: 192dpi) {
-            @content;
-        }
-    } @else if $resolution == "3x" {
-        @media (min-resolution: 288dpi) {
-            @content;
-        }
-    } @else {
-        @media (min-resolution: #{$resolution}) {
-            @content;
-        }
+@mixin gls-screen-agent($resolution) {
+  @if $resolution == "1x" {
+    @media (min-resolution: 96dpi) {
+      @content;
     }
+  } @else if $resolution == "2x" {
+    @media (min-resolution: 192dpi) {
+      @content;
+    }
+  } @else if $resolution == "3x" {
+    @media (min-resolution: 288dpi) {
+      @content;
+    }
+  } @else {
+    @media (min-resolution: #{$resolution}) {
+      @content;
+    }
+  }
 }

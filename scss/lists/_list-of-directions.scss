@@ -1,3 +1,12 @@
 @charset "UTF-8";
 
-$list-of-directions: ("top", "top-right", "right", "bottom-right", "bottom", "bottom-left", "left", "top-left");
+$list-of-directions: (
+  "top",
+  "top-right",
+  "right",
+  "bottom-right",
+  "bottom",
+  "bottom-left",
+  "left",
+  "top-left"
+) !default;

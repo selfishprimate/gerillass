@@ -1,29 +1,29 @@
 @charset "UTF-8";
 
 @mixin gls-scissors($corners) {
-    @if length($corners) == 1 {
-        $corners: __validateScissors($corners);
-        clip-path: polygon(
-            0 #{nth($corners, 1)},
-            #{nth($corners, 1)} 0,
-            calc(100% - #{nth($corners, 1)}) 0,
-            100% #{nth($corners, 1)},
-            100% calc(100% - #{nth($corners, 1)}),
-            calc(100% - #{nth($corners, 1)}) 100%,
-            #{nth($corners, 1)} 100%,
-            0 calc(100% - #{nth($corners, 1)})
-        );
-    } @else if length($corners) == 4 {
-        $corners: __validateScissors($corners);
-        clip-path: polygon(
-            0 #{nth($corners, 1)},  
-            #{nth($corners, 1)} 0,
-            calc(100% - #{nth($corners, 2)}) 0,
-            100% #{nth($corners, 2)},
-            100% calc(100% - #{nth($corners, 3)}),
-            calc(100% - #{nth($corners, 3)}) 100%,
-            #{nth($corners, 4)} 100%,
-            0 calc(100% - #{nth($corners, 4)})
-        );
-    }
+  @if length($corners) == 1 {
+    $corners: __validateScissors($corners);
+    clip-path: polygon(
+      0 #{nth($corners, 1)},
+      #{nth($corners, 1)} 0,
+      calc(100% - #{nth($corners, 1)}) 0,
+      100% #{nth($corners, 1)},
+      100% calc(100% - #{nth($corners, 1)}),
+      calc(100% - #{nth($corners, 1)}) 100%,
+      #{nth($corners, 1)} 100%,
+      0 calc(100% - #{nth($corners, 1)})
+    );
+  } @else if length($corners) == 4 {
+    $corners: __validateScissors($corners);
+    clip-path: polygon(
+      0 #{nth($corners, 1)},
+      #{nth($corners, 1)} 0,
+      calc(100% - #{nth($corners, 2)}) 0,
+      100% #{nth($corners, 2)},
+      100% calc(100% - #{nth($corners, 3)}),
+      calc(100% - #{nth($corners, 3)}) 100%,
+      #{nth($corners, 4)} 100%,
+      0 calc(100% - #{nth($corners, 4)})
+    );
+  }
 }

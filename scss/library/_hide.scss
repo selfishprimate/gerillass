@@ -1,25 +1,25 @@
 @charset "UTF-8";
 
 @mixin gls-hide($toggle: "hide") {
-    @if $toggle == "hide" {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        padding: 0;
-        border: 0;
-        overflow: hidden;
-        clip: rect(1px, 1px, 1px, 1px);
-        clip-path: inset(100%);
-        white-space: nowrap;
-    } @else if $toggle == "unhide" {
-        position: static;
-        width: auto;
-        height: auto;
-        overflow: visible;
-        clip: auto;
-        clip-path: none;
-        white-space: inherit;
-    } @else if not index ("hide" "unhide", $toggle) {
-        @error "#{$toggle} is not a valid value for the `$toggle` argument. The value must be either `hide` or `unhide`.";
-    }
+  @if $toggle == "hide" {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    clip: rect(1px, 1px, 1px, 1px);
+    clip-path: inset(100%);
+    white-space: nowrap;
+  } @else if $toggle == "unhide" {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip: auto;
+    clip-path: none;
+    white-space: inherit;
+  } @else if not index ("hide" "unhide", $toggle) {
+    @error "#{$toggle} is not a valid value for the `$toggle` argument. The value must be either `hide` or `unhide`.";
+  }
 }

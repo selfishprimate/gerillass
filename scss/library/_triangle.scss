@@ -1,45 +1,41 @@
 @charset "UTF-8";
 
-@mixin gls-triangle(
-    $direction: "bottom",
-    $color: black,
-    $size: 10px 8px,
-) {
-    @if index($list-of-directions, $direction) {
-        @if __isColor($color){
-            content: "";
-            height: 0;
-            width: 0;
-            display: inline-block;
-            border-style: solid;
-            @if $direction == "top"{
-                border-color: transparent transparent $color;
-                border-width: 0 (nth($size, 1) / 2) if(length($size) == 2, nth($size, 2), nth($size, 1));
-            } @else if $direction == "top-right" {
-                border-color: transparent $color transparent transparent;
-                border-width: 0 nth($size, 1) nth($size, 1) 0;
-            } @else if $direction == "right" {
-                border-color: transparent transparent transparent $color;
-                border-width: (if(length($size) == 2, nth($size, 2), nth($size, 1)) / 2) 0 (if(length($size) == 2, nth($size, 2), nth($size, 1)) / 2) nth($size, 1);
-            } @else if $direction == "bottom-right" {
-                border-color: transparent transparent $color;
-                border-width: 0 0 nth($size, 1) nth($size, 1);
-            } @else if $direction == "bottom" {
-                border-color: $color transparent transparent;
-                border-width: if(length($size) == 2, nth($size, 2), nth($size, 1)) (nth($size, 1) / 2) 0;
-            } @else if $direction == "bottom-left" {
-                border-color: transparent transparent transparent $color;
-                border-width: nth($size, 1) 0 0 nth($size, 1);
-            } @else if $direction == "left" {
-                border-color: transparent $color transparent transparent;
-                border-width: (if(length($size) == 2, nth($size, 2), nth($size, 1)) / 2) nth($size, 1) (if(length($size) == 2, nth($size, 2), nth($size, 1)) / 2) 0;
-            } @else if $direction == "top-left" {
-                border-color: $color transparent transparent;
-                border-width: nth($size, 1) nth($size, 1) 0 0;
-            }
-            @content;
-        } 
-    } @else {
-        @error "The argument for direction must be one of the followings: #{quote($list-of-directions)}";
+@mixin gls-triangle($direction: "bottom", $color: black, $size: 10px 8px) {
+  @if index($list-of-directions, $direction) {
+    @if __isColor($color){
+      content: "";
+      height: 0;
+      width: 0;
+      display: inline-block;
+      border-style: solid;
+      @if $direction == "top"{
+        border-color: transparent transparent $color;
+        border-width: 0 (nth($size, 1) / 2) if(length($size) == 2, nth($size, 2), nth($size, 1));
+      } @else if $direction == "top-right" {
+        border-color: transparent $color transparent transparent;
+        border-width: 0 nth($size, 1) nth($size, 1) 0;
+      } @else if $direction == "right" {
+        border-color: transparent transparent transparent $color;
+        border-width: (if(length($size) == 2, nth($size, 2), nth($size, 1)) / 2) 0 (if(length($size) == 2, nth($size, 2), nth($size, 1)) / 2) nth($size, 1);
+      } @else if $direction == "bottom-right" {
+        border-color: transparent transparent $color;
+        border-width: 0 0 nth($size, 1) nth($size, 1);
+      } @else if $direction == "bottom" {
+        border-color: $color transparent transparent;
+        border-width: if(length($size) == 2, nth($size, 2), nth($size, 1)) (nth($size, 1) / 2) 0;
+      } @else if $direction == "bottom-left" {
+        border-color: transparent transparent transparent $color;
+        border-width: nth($size, 1) 0 0 nth($size, 1);
+      } @else if $direction == "left" {
+        border-color: transparent $color transparent transparent;
+        border-width: (if(length($size) == 2, nth($size, 2), nth($size, 1)) / 2) nth($size, 1) (if(length($size) == 2, nth($size, 2), nth($size, 1)) / 2) 0;
+      } @else if $direction == "top-left" {
+        border-color: $color transparent transparent;
+        border-width: nth($size, 1) nth($size, 1) 0 0;
+      }
+      @content;
     }
+  } @else {
+    @error "The argument for direction must be one of the followings: #{quote($list-of-directions)}";
+  }
 }

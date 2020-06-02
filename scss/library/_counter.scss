@@ -1,44 +1,45 @@
 @charset "UTF-8";
 
-@mixin gls-counter(
-    $params...
-) {
-    $counter: null;
-    $counter-before: null;
-    $counter-after: null;
+@mixin gls-counter($params...) {
+  $counter: null;
+  $counter-before: null;
+  $counter-after: null;
 
-    @if length($params) == 1 {
-        @if index($list-of-counter-styles, nth($params, 1)) {
-            $counter: nth($params, 1);
-        } @else {
-            $counter-after: nth($params, 1);
-        }
-    } @else if length($params) == 2 {
-        @if index($list-of-counter-styles, nth($params, 1)) {
-            $counter: nth($params, 1);
-            $counter-after: nth($params, 2);
-        } @else if index($list-of-counter-styles, nth($params, 2)) {
-            $counter-before: nth($params, 1);
-            $counter: nth($params, 2);
-        } @else {
-            $counter-before: nth($params, 1);
-            $counter-after: nth($params, 2);
-        }
-    } @else if length($params) == 3 {
-        @if index($list-of-counter-styles, nth($params, 2)) {
-            $counter-before: nth($params, 1);
-            $counter: nth($params, 2);
-            $counter-after: nth($params, 3);
-        }
+  @if length($params) == 1 {
+    @if index($list-of-counter-styles, nth($params, 1)) {
+      $counter: nth($params, 1);
+    } @else {
+      $counter-after: nth($params, 1);
     }
+  } @else if length($params) == 2 {
+    @if index($list-of-counter-styles, nth($params, 1)) {
+      $counter: nth($params, 1);
+      $counter-after: nth($params, 2);
+    } @else if index($list-of-counter-styles, nth($params, 2)) {
+      $counter-before: nth($params, 1);
+      $counter: nth($params, 2);
+    } @else {
+      $counter-before: nth($params, 1);
+      $counter-after: nth($params, 2);
+    }
+  } @else if length($params) == 3 {
+    @if index($list-of-counter-styles, nth($params, 2)) {
+      $counter-before: nth($params, 1);
+      $counter: nth($params, 2);
+      $counter-after: nth($params, 3);
+    }
+  }
 
-    &.counter-start{
-        counter-reset: glsCounter;
-    }
-    &.counter-start .counter-item::before,
-    &.counter-continue .counter-item::before {
-        content: #{if($counter-before, '"' + $counter-before + '"' + " ", null)}counter(glsCounter#{if($counter,", " + $counter, null)})#{if($counter-after, " " + '"' + $counter-after + '"', null)};
-        counter-increment: glsCounter;
-        @content;
-    }
+  &.counter-start {
+    counter-reset: glsCounter;
+  }
+  &.counter-start .counter-item::before,
+  &.counter-continue .counter-item::before {
+    content: #{if($counter-before, '"' + $counter-before + '"' + " ", null)}counter(
+        glsCounter#{if($counter, ", " + $counter, null)}
+      )
+      #{if($counter-after, " " + '"' + $counter-after + '"', null)};
+    counter-increment: glsCounter;
+    @content;
+  }
 }

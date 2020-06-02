@@ -1,9 +1,9 @@
 @charset "UTF-8";
 
 $map-for-font-formats: (
-    "eot": format("embedded-opentype"),
-    "woff2": format("woff2"),
-    "woff": format("woff"),
-    "ttf": format("truetype"),
-    "svg": format("svg")
+  "eot": format("embedded-opentype"),
+  "woff2": format("woff2"),
+  "woff": format("woff"),
+  "ttf": format("truetype"),
+  "svg": format("svg"),
 ) !default;

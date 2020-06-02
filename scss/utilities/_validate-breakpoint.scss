@@ -1,11 +1,11 @@
 @charset "UTF-8";
 
 @function __validateBreakpoint($value) {
-    @for $i from 1 through length($value) {
-        @if map-has-key($map-for-breakpoints, $value) {
-            @return map-get($map-for-breakpoints, nth($value, $i));
-        } @else {
-            @return nth($value, $i);
-        }
+  @for $i from 1 through length($value) {
+    @if map-has-key($map-for-breakpoints, $value) {
+      @return map-get($map-for-breakpoints, nth($value, $i));
+    } @else {
+      @return nth($value, $i);
     }
+  }
 }

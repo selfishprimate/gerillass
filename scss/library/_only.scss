@@ -1,46 +1,45 @@
 @charset "UTF-8";
 
-@mixin gls-only($params...){
-    @if length($params) == 0 {
-        @error "@Error Message!";
-    } @else if length($params) == 1 {
-        $value: nth($params, 1);
-        @if type-of($value) == "number" {
-            &:nth-of-type(#{$value}){
-                @content;
-            }
-        } @else if type-of($value) == "string" {
-            @if $value == "odd" {
-                &:nth-of-type(odd){
-                    @content;
-                }
-            } @else if $value == "even" {
-                &:nth-of-type(even){
-                    @content;
-                }
-            } @else if $value == "first" {
-                &:first-of-type{
-                    @content;
-                }
-            } @else if $value == "last" {
-                &:last-of-type{
-                    @content;
-                }
-            } @else {
-                // For class, id or attribute selectors.
-                &#{$value} {
-                    @content;
-                }
-            }
+@mixin gls-only($params...) {
+  @if length($params) == 0 {
+    @error "@Error Message!";
+  } @else if length($params) == 1 {
+    $value: nth($params, 1);
+    @if type-of($value) == "number" {
+      &:nth-of-type(#{$value}) {
+        @content;
+      }
+    } @else if type-of($value) == "string" {
+      @if $value == "odd" {
+        &:nth-of-type(odd) {
+          @content;
         }
-    } @else if length($params) > 1 {
-        $list: ();
-        @for $i from 1 through length($params){
-            $list: append($list, unquote("&:nth-of-type(#{nth($params, $i)})"), comma);
+      } @else if $value == "even" {
+        &:nth-of-type(even) {
+          @content;
         }
-        #{$list}{
-            @content;
+      } @else if $value == "first" {
+        &:first-of-type {
+          @content;
         }
+      } @else if $value == "last" {
+        &:last-of-type {
+          @content;
+        }
+      } @else {
+        // For class, id or attribute selectors.
+        &#{$value} {
+          @content;
+        }
+      }
     }
-    // Here will be an @error message if the argument is not either number or string!
+  } @else if length($params) > 1 {
+    $list: ();
+    @for $i from 1 through length($params) {
+      $list: append($list, unquote("&:nth-of-type(#{nth($params, $i)})"), comma);
+    }
+    #{$list} {
+      @content;
+    }
+  }
 }

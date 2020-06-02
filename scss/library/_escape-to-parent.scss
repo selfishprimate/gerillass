@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 @mixin gls-escape-to-parent($selector: null) {
-    @at-root #{$selector}#{&}{
-        @content;
-    }
+  @at-root #{$selector}#{&} {
+    @content;
+  }
 }

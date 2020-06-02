@@ -1,8 +1,8 @@
 @charset "UTF-8";
 
 @mixin gls-circle($size) {
-    width: $size;
-    height: $size;
-    display: inline-block;
-    border-radius: 100%;
+  width: $size;
+  height: $size;
+  display: inline-block;
+  border-radius: 100%;
 }

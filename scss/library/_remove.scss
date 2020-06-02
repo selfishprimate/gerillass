@@ -1,35 +1,35 @@
 @charset "UTF-8";
 
 @mixin gls-remove($params...) {
-    @if length($params) == 0 {
-        display: none;
-    } @else if length($params) == 1 {
-        $value: nth($params, 1);
-        @include  gls-breakpoint($value) {
-            display: none;
-        }
-    } @else if length($params) == 2 {
-        @if index("min" "max", nth($params, 1)) {
-            $mode: nth($params, 1);
-            $value: nth($params, 2);
-            @if $mode == "min" {
-                @include  gls-breakpoint(min, $value){
-                    @debug "min works!";
-                    display: none;
-                }
-            } @else if $mode == "max" {
-                @include  gls-breakpoint(max, $value){
-                    display: none;
-                }
-            }
-        } @else {
-            $start: nth($params, 1);
-            $end: nth($params, 2);
-            @include  gls-breakpoint($start, $end){
-                display: none;
-            }
-        }
-    } @else {
-        @error "Error!";
+  @if length($params) == 0 {
+    display: none;
+  } @else if length($params) == 1 {
+    $value: nth($params, 1);
+    @include gls-breakpoint($value) {
+      display: none;
     }
+  } @else if length($params) == 2 {
+    @if index("min" "max", nth($params, 1)) {
+      $mode: nth($params, 1);
+      $value: nth($params, 2);
+      @if $mode == "min" {
+        @include gls-breakpoint(min, $value) {
+          @debug "min works!";
+          display: none;
+        }
+      } @else if $mode == "max" {
+        @include gls-breakpoint(max, $value) {
+          display: none;
+        }
+      }
+    } @else {
+      $start: nth($params, 1);
+      $end: nth($params, 2);
+      @include gls-breakpoint($start, $end) {
+        display: none;
+      }
+    }
+  } @else {
+    @error "Error!";
+  }
 }

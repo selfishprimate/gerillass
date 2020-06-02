@@ -1,5 +1,23 @@
 @charset "UTF-8";
 
-$list-of-absolute-length-units: ("cm", "mm", "Q", "in", "pc", "pt", "px");
+$list-of-absolute-length-units: (
+  "cm",
+  "mm",
+  "Q",
+  "in",
+  "pc",
+  "pt",
+  "px"
+) !default;
 
-$list-of-relative-length-units: ("em", "ex", "ch", "rem", "lh", "vw", "vh", "vmin", "vmax");
+$list-of-relative-length-units: (
+  "em",
+  "ex",
+  "ch",
+  "rem",
+  "lh",
+  "vw",
+  "vh",
+  "vmin",
+  "vmax"
+) !default;

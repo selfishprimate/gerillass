@@ -1,58 +1,68 @@
 @charset "UTF-8";
 
 @mixin gls-background-image(
-    $image-url: null,
-    $filter-color: null, 
-    $filter-direction: null
+  $image-url: null,
+  $filter-color: null,
+  $filter-direction: null
 ) {
-    @if $image-url {
-        @if $filter-color {
-            @if length($filter-color) == 1 {
-                background-image: linear-gradient(to top, $filter-color, $filter-color), url($image-url);
-            } @else if length($filter-color) > 1 {
-                $color-list: ();
-                @for $i from 1 through length($filter-color) {
-                    $color-list: append($color-list, nth($filter-color, $i), comma);
-                }
-                @if $filter-direction {
-                    @if map-has-key($map-for-directions, $filter-direction) {
-                        background-image: linear-gradient(map-get($map-for-directions, $filter-direction), $color-list), url($image-url);
-                    } @else {
-                        @if index("deg", unit($filter-direction)) {
-                            background-image: linear-gradient($filter-direction, $color-list), url($image-url);
-                        } @else {
-                            @error "#{$filter-direction} is a wrong value for the $filter-direction parameter. The value must be either a number followed by the 'deg' unit or one of the following pre-defined values: #{quote(map-keys($map-for-directions))}.";
-                        }
-                    }
-                } @else {
-                    background-image: linear-gradient(to top, $color-list), url($image-url);
-                }
+  @if $image-url {
+    @if $filter-color {
+      @if length($filter-color) == 1 {
+        background-image: linear-gradient(to top, $filter-color, $filter-color),
+          url($image-url);
+      } @else if length($filter-color) > 1 {
+        $color-list: ();
+        @for $i from 1 through length($filter-color) {
+          $color-list: append($color-list, nth($filter-color, $i), comma);
+        }
+        @if $filter-direction {
+          @if map-has-key($map-for-directions, $filter-direction) {
+            background-image: linear-gradient(
+                map-get($map-for-directions, $filter-direction),
+                $color-list
+              ),
+              url($image-url);
+          } @else {
+            @if index("deg", unit($filter-direction)) {
+              background-image: linear-gradient($filter-direction, $color-list),
+                url($image-url);
+            } @else {
+              @error "#{$filter-direction} is a wrong value for the $filter-direction parameter. The value must be either a number followed by the 'deg' unit or one of the following pre-defined values: #{quote(map-keys($map-for-directions))}.";
             }
+          }
         } @else {
-            background-image: url($image-url);
+          background-image: linear-gradient(to top, $color-list),
+            url($image-url);
         }
+      }
     } @else {
-        position: relative;
-        &::after {
-            content: "";
-            display: block;
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            @if length($filter-color) == 1 {
-                background: $filter-color;
-            } @else if length($filter-color) > 1 {
-                @include gls-linear-gradient(if(not $filter-direction, "top", $filter-direction), $filter-color);
-            }
-        }
-        & > * {
-            position: relative;
-            z-index: 1;
-        }
+      background-image: url($image-url);
     }
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
+  } @else {
+    position: relative;
+    &::after {
+      content: "";
+      display: block;
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      @if length($filter-color) == 1 {
+        background: $filter-color;
+      } @else if length($filter-color) > 1 {
+        @include gls-linear-gradient(
+          if(not $filter-direction, "top", $filter-direction),
+          $filter-color
+        );
+      }
+    }
+    & > * {
+      position: relative;
+      z-index: 1;
+    }
+  }
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }

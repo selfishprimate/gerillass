@@ -1,19 +1,18 @@
 @charset "UTF-8";
 
-@mixin gls-radial-gradient(
-    $shape,
-    $position,
-    $colors,
-){
-    $list: ();
-    $shape: unquote($shape);
-    $position: unquote($position);
-    @for $i from 1 through length($colors) {
-        $list: append($list, nth($colors, $i), comma);
-    }
-    @if map-has-key($map-for-positions, $position){
-        background: radial-gradient($shape map-get($map-for-positions, $position), $list);
-    } @else if not map-has-key($map-for-positions, $position) {
-        background: radial-gradient($shape $position, $list);
-    }
+@mixin gls-radial-gradient($shape, $position, $colors) {
+  $list: ();
+  $shape: unquote($shape);
+  $position: unquote($position);
+  @for $i from 1 through length($colors) {
+    $list: append($list, nth($colors, $i), comma);
+  }
+  @if map-has-key($map-for-positions, $position) {
+    background: radial-gradient(
+      $shape map-get($map-for-positions, $position),
+      $list
+    );
+  } @else if not map-has-key($map-for-positions, $position) {
+    background: radial-gradient($shape $position, $list);
+  }
 }

@@ -1,15 +1,13 @@
 @charset "UTF-8";
 
-@mixin gls-text-image(
-    $image: null
-){
-    @if $image {
-        background-image: url($image);
-    }
-    background-size: cover;
-    background-position: center;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    color: transparent;
+@mixin gls-text-image($image: null) {
+  @if $image {
+    background-image: url($image);
+  }
+  background-size: cover;
+  background-position: center;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
 }

@@ -3,11 +3,11 @@
 // This function checks if the argument has a px unit. If not, it adds a px unit to the end of the argument.
 
 @function __pixelify($value) {
-  @if unit($value) == 'px' {
-      @return $value;
-  } @else if unit($value) != 'px' {
-      @return __clearUnit($value) * 1px;
+  @if unit($value) == "px" {
+    @return $value;
+  } @else if unit($value) != "px" {
+    @return __clearUnit($value) * 1px;
   } @else if unitless($value) == true {
-      @return $value * 1px;
+    @return $value * 1px;
   }
 }

@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 @function __lighten($color, $percentage) {
-    @if __isColor($color) {
-        @return mix(white, $color, $percentage);
-    } 
+  @if __isColor($color) {
+    @return mix(white, $color, $percentage);
+  }
 }

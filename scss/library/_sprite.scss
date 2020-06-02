@@ -1,27 +1,27 @@
 @charset "UTF-8";
 
-@mixin gls-sprite($params...){
-    @if length($params) == 1 {
-        @if type-of(nth($params, 1)) == "string" {
-            $str-length: str-length(nth($params, 1));
-            $str-end: str-slice(nth($params, 1), $str-length - 3);
-            @if index(".png" ".jpg" ".svg", $str-end) {
-                $image-url: nth($params, 1);
-                display: inline-block;
-                background-image: url($image-url);
-                background-repeat: no-repeat;
-            }
-        } @else {
-            $position: nth($params, 1);
-            background-position: $position;
-        }
-    } @else if length($params) == 2 {
+@mixin gls-sprite($params...) {
+  @if length($params) == 1 {
+    @if type-of(nth($params, 1)) == "string" {
+      $str-length: str-length(nth($params, 1));
+      $str-end: str-slice(nth($params, 1), $str-length - 3);
+      @if index(".png" ".jpg" ".svg", $str-end) {
         $image-url: nth($params, 1);
-        $position: nth($params, 2);
         display: inline-block;
         background-image: url($image-url);
-        background-position: $position;
         background-repeat: no-repeat;
+      }
+    } @else {
+      $position: nth($params, 1);
+      background-position: $position;
     }
-    @content;
+  } @else if length($params) == 2 {
+    $image-url: nth($params, 1);
+    $position: nth($params, 2);
+    display: inline-block;
+    background-image: url($image-url);
+    background-position: $position;
+    background-repeat: no-repeat;
+  }
+  @content;
 }

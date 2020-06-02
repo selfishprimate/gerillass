@@ -1,46 +1,50 @@
 @charset "UTF-8";
 
-@mixin gls-font-face (
-    $font-family,
-    $file-path,
-    $font-style: normal,
-    $font-weight: 400,
-    $file-formats: eot woff2 woff ttf svg
+@mixin gls-font-face(
+  $font-family,
+  $file-path,
+  $font-style: normal,
+  $font-weight: 400,
+  $file-formats: eot woff2 woff ttf svg
 ) {
-    @if & {
-        @error "You must call the mixin at the root level of your style sheet, not in the `#{&+'{'+'}'}` selector.";
-    } @else {
+  @if & {
+    @error "You must call the mixin at the root level of your style sheet, not in the `#{&+'{'+'}'}` selector.";
+  } @else {
+    
+    $list: ();
 
-        $list: ();
-
-        @if index(100 200 300 400 500 600 700 800 900, $font-style) {
-            $font-weight: $font-style;
-            $font-style: normal;
-        } @else if not index("normal" "italic" "oblique", $font-style) and type-of($font-style) != "number" {
-            $font-style-list: ();
-            @for $i from 1 through length($font-style) {
-                $font-style-list: append($font-style-list, nth($font-style, $i), comma);
-            }
-            @for $i from 1 through length($font-style-list) {
-                @if index("eot" "woff2" "woff" "ttf" "svg", nth($font-style-list, $i)) {
-                    $file-formats: $font-style-list;
-                    $font-style: normal;
-                }
-            }
+    @if index(100 200 300 400 500 600 700 800 900, $font-style) {
+      $font-weight: $font-style;
+      $font-style: normal;
+    } @else if not
+      index("normal" "italic" "oblique", $font-style) and
+      type-of($font-style) !=
+      "number"
+    {
+      $font-style-list: ();
+      @for $i from 1 through length($font-style) {
+        $font-style-list: append($font-style-list, nth($font-style, $i), comma);
+      }
+      @for $i from 1 through length($font-style-list) {
+        @if index("eot" "woff2" "woff" "ttf" "svg", nth($font-style-list, $i)) {
+          $file-formats: $font-style-list;
+          $font-style: normal;
         }
-
-        @font-face {
-            font-family: $font-family;
-            @if index($file-formats, eot) {
-                src: url('#{$file-path}.eot');
-            }
-            @for $i from 1 through length($file-formats) {
-                $list: append($list, __fontSource($font-family, $file-path, nth($file-formats, $i)), comma);
-            }
-            src: $list;
-            font-style: $font-style;
-            font-weight: $font-weight;
-            @content;
-        }
+      }
     }
+
+    @font-face {
+      font-family: $font-family;
+      @if index($file-formats, eot) {
+        src: url("#{$file-path}.eot");
+      }
+      @for $i from 1 through length($file-formats) {
+        $list: append($list, __fontSource($font-family, $file-path, nth($file-formats, $i)), comma);
+      }
+      src: $list;
+      font-style: $font-style;
+      font-weight: $font-weight;
+      @content;
+    }
+  }
 }

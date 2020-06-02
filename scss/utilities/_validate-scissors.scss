@@ -1,16 +1,16 @@
 @charset "UTF-8";
 
 @function __validateScissors($value) {
-    $list: ();
-    @for $i from 1 through length($value) {
-        @if nth($value, $i) == null {
-            $list: append($list, 0px, comma);
-        } @else if unitless(nth($value, $i)) {
-            $pixelified: __pixelify(nth($value, $i));
-            $list: append($list, $pixelified, comma);
-        } @else {
-            $list: append($list, nth($value, $i), comma);
-        }
+  $list: ();
+  @for $i from 1 through length($value) {
+    @if nth($value, $i) == null {
+      $list: append($list, 0px, comma);
+    } @else if unitless(nth($value, $i)) {
+      $pixelified: __pixelify(nth($value, $i));
+      $list: append($list, $pixelified, comma);
+    } @else {
+      $list: append($list, nth($value, $i), comma);
     }
-    @return $list;
+  }
+  @return $list;
 }

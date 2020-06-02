@@ -1,17 +1,17 @@
 @charset "UTF-8";
 
 @mixin gls-all-text-inputs($pseudo: null) {
-    $list: "hover", "focus", "active", "invalid", "required", "disabled";
-    @if not $pseudo {
-        #{$list-of-text-inputs} {
-            @content;
-        }
-    } @else if index($list, $pseudo) {
-        $all-text-inputs: __pseudoSelector($list-of-text-inputs, $pseudo);
-        #{$all-text-inputs} {
-            @content;
-        }
-    } @else {
-        @error "The argument must be `null` or one of the followings: #{quote($list)}";
+  $list: "hover", "focus", "active", "invalid", "required", "disabled";
+  @if not $pseudo {
+    #{$list-of-text-inputs} {
+      @content;
     }
+  } @else if index($list, $pseudo) {
+    $all-text-inputs: __pseudoSelector($list-of-text-inputs, $pseudo);
+    #{$all-text-inputs} {
+      @content;
+    }
+  } @else {
+    @error "The argument must be `null` or one of the followings: #{quote($list)}";
+  }
 }
