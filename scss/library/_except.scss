@@ -2,12 +2,18 @@
 
 @mixin gls-except($params...) {
   @if length($params) == 0 {
-    @error '@Error Message';
+    @error "Please pass an argument. The argument must be either a negative or positive number or list of numbers. Or pass one of the following predefined string values: 'first', 'last', 'odd', 'even'.";
   } @else if length($params) == 1 {
     $value: nth($params, 1);
     @if type-of($value) == "number" {
-      &:not(:nth-of-type(#{$value})) {
-        @content;
+      @if $value < 0 {
+        &:not(:nth-last-of-type(#{$value * -1})) {
+          @content;
+        }
+      } @else {
+        &:not(:nth-of-type(#{$value})) {
+          @content;
+        }
       }
     } @else if type-of($value) == "string" {
       @if $value == "odd" {
@@ -35,7 +41,7 @@
   } @else if length($params) > 1 {
     $items: "";
     @for $i from 1 through length($params) {
-      $items: $items + unquote(":not(:nth-of-type(#{nth($params, $i)}))");
+      $items: $items + if(nth($params, $i) < 0, unquote(":not(:nth-last-of-type(#{nth($params, $i) * -1}))"), unquote(":not(:nth-of-type(#{nth($params, $i)}))"));
     }
     &#{$items} {
       @content;
