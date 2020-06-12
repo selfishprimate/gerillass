@@ -16,14 +16,18 @@
     } @else if length($params) == 2 {
       @if type-of(nth($params, 2)) == bool {
         $fill: nth($params, length($params));
-        flex: #{if($fill == true, 1, 0)} 0 calc(100% / #{$columns});
+        flex-grow: #{if($fill == true, 1, 0)};
+        flex-shrink: 0;
+        flex-basis: calc(100% / #{$columns});
         margin-bottom: 0;
         &:not(:last-child) {
           margin-right: 0;
         }
       } @else if type-of(nth($params, 2)) == number {
         $gutter: nth($params, length($params));
-        flex: 0 0 calc((100% - (#{$columns} - 1) * #{$gutter}) / #{$columns});
+        flex-grow: 0;
+        flex-shrink: 0;
+        flex-basis: calc((100% - (#{$columns} - 1) * #{$gutter}) / #{$columns});
         margin-bottom: $gutter;
         &:not(:last-child) {
           margin-right: $gutter;
@@ -35,7 +39,9 @@
     } @else if length($params) == 3 {
       $gutter: nth($params, 2);
       $fill: nth($params, length($params));
-      flex: if($fill == true, 1, 0) 0 calc((100% - (#{$columns} - 1) * #{$gutter}) / #{$columns});
+      flex-grow: if($fill == true, 1, 0);
+      flex-shrink: 0;
+      flex-basis: calc((100% - (#{$columns} - 1) * #{$gutter}) / #{$columns});
       margin-bottom: $gutter;
       &:not(:last-child) {
         margin-right: $gutter;
