@@ -1,0 +1,34 @@
+@charset "UTF-8";
+
+@mixin gls-debugger($selector: null) {
+  @if & {
+    &::before {
+      @content;
+      @each $key, $value in $map-for-breakpoints {
+        @media (min-width: #{$value}) {
+          content: "#{$key}";
+        }
+      }
+    }
+  } @else {
+    @if $selector {
+      #{$selector}::before {
+        @content;
+        @each $key, $value in $map-for-breakpoints {
+          @media (min-width: #{$value}) {
+            content: "#{$key}";
+          }
+        }
+      }
+    } @else {
+      body::before {
+        @content;
+        @each $key, $value in $map-for-breakpoints {
+          @media (min-width: #{$value}) {
+            content: "#{$key}";
+          }
+        }
+      }
+    }
+  }
+}
