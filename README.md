@@ -48,11 +48,11 @@ Or you can add it as a submodule into your Git based project ([What is a submodu
 
 ## How to Include?
 
-Import Gerillass at the beginning of your stylesheet:
+`@import` Gerillass at the beginning of your stylesheet:
 
 **1. Using with React.js**
 
-Simply import the stylesheet at the beginning of your App.scss file.
+Simply `@import` the library at the beginning of your App.scss file without using the **node_modules** path.
 
     @import 'gerillass';
 
@@ -68,6 +68,8 @@ You can add a new Gulp task as in the below example or simply add `includePath: 
         }).on('error', sass.logError))
         .pipe(gulp.dest('dist/css'));
     });
+    
+    @import 'gerillass';
 
 **3. Using with Grunt (and Yeoman)**
 
@@ -84,8 +86,10 @@ You can add Gerillass library by editing your Gruntfile.js at the root level of 
         }
       }
     }
+    
+    @import 'gerillass';
 
-**3. Using with Eyeglass**
+**4. Using with Eyeglass**
 
 If you're working with an eyeglass setup, simply import it without providing the **npm_modules** path.
 
