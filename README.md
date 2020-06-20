@@ -79,5 +79,5 @@ Please read the [user guide]() for contribution and feel free to contribute to t
 
 ## Additional Info
 
-This project is made with the loving music of **Anna German** and dedicated to **James Williamson**: The best web educator ever. For more information about James, please check out his legacy blog page at www.simpleprimate.com or watch the his video lectures about **Web** and **Accessibility** on [LinkedIn Learning](https://www.linkedin.com/learning/instructors/james-williamson).
+This project is made with the loving music of **Anna German** and dedicated to **James Williamson**: The best web educator ever. For more information about James, please check out his legacy blog page at www.simpleprimate.com or watch his video lectures about **Web** and **Accessibility** on [LinkedIn Learning](https://www.linkedin.com/learning/instructors/james-williamson).
 
