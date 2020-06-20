@@ -10,24 +10,20 @@ Many of the utilities that come with Gerillass are the solutions I have come up 
 
 Hope you’ll enjoy using it!
 
-[Gerillass Website](https://gerillass.com)  
-[Gerillass Documentation](https://docs.gerillass.com)  
-[Twitter](https://twitter.com/gerillass)
+* [Gerillass Website](https://gerillass.com)  
+* [Gerillass Documentation](https://docs.gerillass.com)  
+* [Twitter](https://twitter.com/gerillass)
 
 
 ## Installation
 
-You can Install the Gerillass library via **npm**, **Yarn**, Bower and include the source files into your projects. Or you can download it manually into your local computer.
+    npm install gerillass
 
-## Terminal Installation
+You can Install the Gerillass Sass library via **npm**, **Yarn**, or you can download it manually into your local computer via Github.
 
-Open the terminal window. Target the folder that you want Gerillass to be installed. Copy and past the command below and hit the enter to install the library into your local computer.
+**1. Node.js Installation**
 
-    git clone https://github.com/selfishprimate/gerillass.git
-
-## Node.js Installation
-
-If you are working on a Node project you can add Gerillass as a dependency. Package files don’t include documentation. So please check out this very site to learn how to use Gerillass.
+If you are working on a Node project you can add Gerillass as a dependency.
 
 **npm installation:**
 
@@ -37,12 +33,36 @@ If you are working on a Node project you can add Gerillass as a dependency. Pack
 
     yarn add gerillass
 
-**Bower installation:**
+**2. Terminal Installation**
 
-    bower install gerillass
+Open the terminal window. Target the folder that you want Gerillass to be installed. Copy and past the command below and hit the enter to install the library into your local computer.
+
+    git clone https://github.com/selfishprimate/gerillass.git
+   
+If you're running on a git project you can Gerillass as a submodule.
+
+    git submodule add https://github.com/selfishprimate/gerillass.git
+    
 
 ## How to Include?
 
-Import Gerillass at the beginning of your stylesheet
+Import Gerillass at the beginning of your stylesheet:
 
-    @import "gerillass/core/gerillass";
+**1. Using Gulp**
+
+You can add a new Gulp task or change the current if you have one ().
+
+    gulp.task('sass', function() {
+      return gulp.src('scss/*.scss')
+          .pipe(sass({
+              outputStyle: 'compressed',
+              includePaths: ['node_modules/gerillass/scss']
+          }).on('error', sass.logError))
+          .pipe(gulp.dest('dist/css'));
+    });
+
+**2. Using Eyeglass**
+
+If you're workin with an eyeglass setup, simply import it without providing the **npm_modules** path.
+
+    @import 'gerillass';
