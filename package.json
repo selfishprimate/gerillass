@@ -34,7 +34,7 @@
     "sassDir": "scss",
     "exports": false,
     "name": "gerillass",
-    "needs": "^1.0.0"
+    "needs": "^3.0.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
