@@ -39,7 +39,7 @@ You can clone the repository.
 
     git clone https://github.com/selfishprimate/gerillass.git
    
-Or you can add it as a submodule into you Git based project ([What is a submodule?](https://git-scm.com/book/en/v2/Git-Tools-Submodules)).
+Or you can add it as a submodule into your Git based project ([What is a submodule?](https://git-scm.com/book/en/v2/Git-Tools-Submodules)).
 
     git submodule add https://github.com/selfishprimate/gerillass.git
     
@@ -56,7 +56,7 @@ Simply import the stylesheet at the beginning of your App.scss file.
 
 **2. Using Gulp**
 
-You can add a new Gulp task or change the current if you have one ().
+You can add a new Gulp task as in the below example or simply add `includePath: ['node_modules/gerillass/scss']` option to the task if you have one already.
 
     gulp.task('sass', function() {
       return gulp.src('scss/*.scss')
@@ -72,3 +72,12 @@ You can add a new Gulp task or change the current if you have one ().
 If you're workin with an eyeglass setup, simply import it without providing the **npm_modules** path.
 
     @import 'gerillass';
+    
+## Contribution
+
+Please read the [user guide]() for contribution and feel free to contribute to the library.
+
+## Additional Info
+
+This project is made with the loving music of **Anna German** and dedicated to **James Williamson**: The best web educator ever. For more information about James, please check out his legacy blog page at www.simpleprimate.com or watch the his video lectures about **Web** and **Accessibility** on [LinkedIn Learning](https://www.linkedin.com/learning/instructors/james-williamson).
+
