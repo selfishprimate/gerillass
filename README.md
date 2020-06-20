@@ -17,9 +17,13 @@ Hope you’ll enjoy using it!
 
 ## Installation
 
+You can Install the Gerillass library via **npm**, **Yarn**. Or you can clone it manually into your local computer from Github.
+
     npm install gerillass
 
-You can Install the Gerillass Sass library via **npm**, **Yarn**. Or you can clone it manually into your local computer via Github.
+Just `@import` Gerillass with `node_modules` path at the root level of your stylesheet.
+
+    @import '{node_modules_path}/gerillass/scss/gerillass';
 
 **1. Node.js Installation**
 
@@ -48,28 +52,44 @@ Or you can add it as a submodule into your Git based project ([What is a submodu
 
 Import Gerillass at the beginning of your stylesheet:
 
-**1. Using React.js**
+**1. Using with React.js**
 
 Simply import the stylesheet at the beginning of your App.scss file.
 
     @import 'gerillass';
 
-**2. Using Gulp**
+**2. Using with Gulp**
 
 You can add a new Gulp task as in the below example or simply add `includePath: ['node_modules/gerillass/scss']` option to the task if you have one already.
 
     gulp.task('sass', function() {
       return gulp.src('scss/*.scss')
-          .pipe(sass({
-              outputStyle: 'compressed',
-              includePaths: ['node_modules/gerillass/scss']
-          }).on('error', sass.logError))
-          .pipe(gulp.dest('dist/css'));
+        .pipe(sass({
+            outputStyle: 'compressed',
+            includePaths: ['node_modules/gerillass/scss']
+        }).on('error', sass.logError))
+        .pipe(gulp.dest('dist/css'));
     });
 
-**3. Using Eyeglass**
+**3. Using with Grunt (and Yeoman)**
 
-If you're workin with an eyeglass setup, simply import it without providing the **npm_modules** path.
+You can add Gerillass library by editing your Gruntfile.js at the root level of your project. Simply find the sass related rules and add `require: 'gerillass'` inside the `options` object.
+
+    sass: {
+      dist: {
+        options: {
+          style: 'expanded',
+          require: 'gerillass'
+        },
+        files: {
+          'css/style.css': 'scss/style.scss'
+        }
+      }
+    }
+
+**3. Using with Eyeglass**
+
+If you're working with an eyeglass setup, simply import it without providing the **npm_modules** path.
 
     @import 'gerillass';
     
