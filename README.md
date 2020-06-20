@@ -19,7 +19,7 @@ Hope you’ll enjoy using it!
 
     npm install gerillass
 
-You can Install the Gerillass Sass library via **npm**, **Yarn**, or you can download it manually into your local computer via Github.
+You can Install the Gerillass Sass library via **npm**, **Yarn**. Or you can clone it manually into your local computer via Github.
 
 **1. Node.js Installation**
 
@@ -48,7 +48,13 @@ Or you can add it as a submodule into you Git based project ([What is a submodul
 
 Import Gerillass at the beginning of your stylesheet:
 
-**1. Using Gulp**
+**1. React.js**
+
+Simply import the stylesheet at the beginning of your App.scss file.
+
+    @import 'gerillass';
+
+**2. Using Gulp**
 
 You can add a new Gulp task or change the current if you have one ().
 
@@ -61,7 +67,7 @@ You can add a new Gulp task or change the current if you have one ().
           .pipe(gulp.dest('dist/css'));
     });
 
-**2. Using Eyeglass**
+**3. Using Eyeglass**
 
 If you're workin with an eyeglass setup, simply import it without providing the **npm_modules** path.
 
