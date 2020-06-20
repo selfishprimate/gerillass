@@ -14,6 +14,19 @@ Hope you’ll enjoy using it!
 * [Gerillass Documentation](https://docs.gerillass.com)  
 * [Twitter](https://twitter.com/gerillass)
 
+## Table of Contents
+
+- [Installation](#installation)
+    - [Node.js Installation](#nodejs-installation)
+    - [Cloning the Repository from Github](#cloning-the-repository-from-github)
+- [How to Include?](#how-to-include)
+    - [Using with React.js](#using-with-reactjs)
+    - [Using with Gulp](#using-with-gulp)
+    - [Using with Grunt](#using-with-grunt-and-yeoman)
+    - [Using with Eyeglass](#using-with-eyeglass)
+- [Contribution](#contribution)
+- [Additional Info](#additional-info)
+
 
 ## Installation
 
@@ -23,19 +36,19 @@ You can `@import` Gerillass with `node_modules` path at the root level of your s
 
     @import '{node_modules_path}/gerillass/scss/gerillass';
 
-**1. Node.js Installation**
+### Node.js Installation
 
 If you are working on a Node project you can add Gerillass as a dependency.
 
-**npm installation:**
+#### npm installation
 
     npm install gerillass
 
-**Yarn installation:**
+#### Yarn installation
 
     yarn add gerillass
 
-**2. Cloning the repository from Github**
+### Cloning the repository from Github
 
 You can clone the repository into your local computer from Github.
 
@@ -50,13 +63,13 @@ Or you can add it as a submodule into your Git based project ([What is a submodu
 
 `@import` Gerillass at the beginning of your stylesheet:
 
-**1. Using with React.js**
+### Using with React.js
 
 Simply `@import` the library at the beginning of your App.scss file without using the **node_modules** path.
 
     @import 'gerillass';
 
-**2. Using with Gulp**
+### Using with Gulp
 
 You can add a new Gulp task as in the below example or simply add `includePath: ['node_modules/gerillass/scss']` option to the task if you have one already.
 
@@ -71,7 +84,7 @@ You can add a new Gulp task as in the below example or simply add `includePath: 
     
     @import 'gerillass';
 
-**3. Using with Grunt (and Yeoman)**
+### Using with Grunt (and Yeoman)
 
 You can add Gerillass library by editing your Gruntfile.js at the root level of your project. Simply find the sass related rules and add `require: 'gerillass'` inside the `options` object.
 
@@ -89,7 +102,7 @@ You can add Gerillass library by editing your Gruntfile.js at the root level of 
     
     @import 'gerillass';
 
-**4. Using with Eyeglass**
+### Using with Eyeglass
 
 If you're working with an eyeglass setup, simply import it without providing the **npm_modules** path.
 
