@@ -33,13 +33,13 @@ If you are working on a Node project you can add Gerillass as a dependency.
 
     yarn add gerillass
 
-**2. Terminal Installation**
+**2. Cloning the repository ftom Github**
 
-Open the terminal window. Target the folder that you want Gerillass to be installed. Copy and past the command below and hit the enter to install the library into your local computer.
+You can clone the repository.
 
     git clone https://github.com/selfishprimate/gerillass.git
    
-If you're running on a git project you can Gerillass as a submodule.
+Or you can add it as a submodule into you Git based project ([What is a submodule?](https://git-scm.com/book/en/v2/Git-Tools-Submodules)).
 
     git submodule add https://github.com/selfishprimate/gerillass.git
     
