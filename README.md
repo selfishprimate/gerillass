@@ -4,15 +4,20 @@ _The best Sass tool set ever for guerrilla type of CSS coders._
 
 ## What is Gerillass?
 
-Gerillass is a library built on top of Sass (Syntactically Awesome Style Sheets) to give you flexibility for your projects and accelerate your performance and creativity.
+[Gerillass](https://gerillass.com) is a library built on top of [Sass (Syntactically Awesome Style Sheets)](https://sass-lang.com/) to give you flexibility for your projects and accelerate your performance and creativity.
 
-Many of the utilities that come with Gerillass are the solutions I have come up with for the challenges I have faced as a frontend developer over the years. These solutions have been shaped by the inspiration of other popular libraries and frameworks like Bourbon, Scut, Compass, Bootstrap, etc. over time and helped me create Gerillass.
+Many of the utilities that come with Gerillass are the solutions I have come up with for the challenges I have faced as a frontend developer over the years. These solutions have been shaped by the inspiration of other popular libraries and frameworks like [Bourbon](https://www.bourbon.io/), [Susy](https://www.oddbird.net/), [Scut](https://davidtheclark.github.io/scut/), [Bootstrap](https://getbootstrap.com/), etc. over time and helped me create Gerillass.
 
 Hope you’ll enjoy using it!
 
+[Gerillass Website](https://gerillass.com)
+[Gerillass Documentation](https://docs.gerillass.com)
+[Twitter](https://twitter.com/gerillass)
+
+
 ## Installation
 
-You can Install the Gerillass library via npm (Node Package Manager), Yarn, Bower and include the source files into your projects. Or you can download it manually into your local computer.
+You can Install the Gerillass library via **npm**, **Yarn**, Bower and include the source files into your projects. Or you can download it manually into your local computer.
 
 ## Terminal Installation
 
