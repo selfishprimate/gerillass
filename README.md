@@ -33,7 +33,7 @@ If you are working on a Node project you can add Gerillass as a dependency.
 
     yarn add gerillass
 
-**2. Cloning the repository ftom Github**
+**2. Cloning the repository from Github**
 
 You can clone the repository.
 
