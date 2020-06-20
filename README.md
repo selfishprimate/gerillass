@@ -17,11 +17,9 @@ Hope you’ll enjoy using it!
 
 ## Installation
 
-You can Install the Gerillass library via **npm**, **Yarn**. Or you can clone it manually into your local computer from Github.
-
     npm install gerillass
 
-Just `@import` Gerillass with `node_modules` path at the root level of your stylesheet.
+You can `@import` Gerillass with `node_modules` path at the root level of your stylesheet. **To add the library without the {node_modules_path} see the examples below**.
 
     @import '{node_modules_path}/gerillass/scss/gerillass';
 
@@ -39,7 +37,7 @@ If you are working on a Node project you can add Gerillass as a dependency.
 
 **2. Cloning the repository from Github**
 
-You can clone the repository.
+You can clone the repository into your local computer from Github.
 
     git clone https://github.com/selfishprimate/gerillass.git
    
