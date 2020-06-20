@@ -48,7 +48,7 @@ Or you can add it as a submodule into your Git based project ([What is a submodu
 
 Import Gerillass at the beginning of your stylesheet:
 
-**1. React.js**
+**1. Using React.js**
 
 Simply import the stylesheet at the beginning of your App.scss file.
 
