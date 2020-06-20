@@ -1,35 +1,42 @@
 {
+  "name": "gerillass",
+  "title": "Gerillass",
+  "description": "Gerillass is an open-source toolkit that contains a set of Sass mixins to help designers and developers to create better, faster and consistent user interfaces.",
+  "homepage": "https://gerillass.com",
+  "author": "Halil İbrahim Çakıroğlu",
+  "main": "scss/_gerillass.scss",
+  "license": "MIT",
+  "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/selfishprimate/gerillass"
+  },
+  "bugs": {
+    "url": "https://github.com/selfihsprimate/gerillass/issues"
+  },
+  "keywords": [
+    "gerillass",
+    "guerrillass",
+    "sass",
+    "scss",
+    "style",
+    "mixins",
+    "css",
+    "css3",
+    "sass-mixins",
+    "sass-toolkit",
+    "sass-library",
+    "sass-framework",
+    "sass-tool-set",
+    "eyeglass-module"
+  ],
+  "eyeglass": {
+    "sassDir": "scss",
+    "exports": false,
     "name": "gerillass",
-    "version": "1.0.0",
-    "description": "Gerillass is an open-source toolkit that contains a set of Sass mixins to help designers and developers to create better, faster and consistent user interfaces.",
-    "main": "scss/_gerillass.scss",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/selfishprimate/gerillass.git"
-    },
-    "keywords": [
-        "gerillass",
-        "guerrillass",
-        "sass",
-        "scss",
-        "style",
-        "mixins",
-        "css",
-        "css3",
-        "sass-mixins",
-        "sass-toolkit",
-        "sass-library",
-        "sass-framework",
-        "sass-tool-set"
-    ],
-    "author": "Halil İbrahim Çakıroğlu",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/selfihsprimate/gerillass/issues"
-    },
-    "homepage": "https://gerillass.com",
-    "devDependencies": {}
+    "needs": "^1.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
 }
