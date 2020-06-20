@@ -10,8 +10,8 @@ Many of the utilities that come with Gerillass are the solutions I have come up 
 
 Hope you’ll enjoy using it!
 
-[Gerillass Website](https://gerillass.com)
-[Gerillass Documentation](https://docs.gerillass.com)
+[Gerillass Website](https://gerillass.com)  
+[Gerillass Documentation](https://docs.gerillass.com)  
 [Twitter](https://twitter.com/gerillass)
 
 
