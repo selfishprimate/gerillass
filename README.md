@@ -36,6 +36,10 @@ You can `@import` Gerillass with `node_modules` path at the root level of your s
 
     @import '{node_modules_path}/gerillass/scss/gerillass';
 
+If you're working with an **eyeglass** setup, simply import it without providing the **npm_modules** path.
+
+    @import 'gerillass';
+
 ### Node.js Installation
 
 If you are working on a Node project you can add Gerillass as a dependency.
@@ -106,11 +110,6 @@ Including to the project:
     
     @import 'gerillass';
 
-### Using with Eyeglass
-
-If you're working with an eyeglass setup, simply import it without providing the **npm_modules** path.
-
-    @import 'gerillass';
     
 ## Contribution
 
