@@ -35,11 +35,11 @@ Simply **import** the library at the beginning of your stylesheet:
 
     @import 'gerillass/scss/gerillass';
 
-If you're running a Node based project you can **import** Gerillass with `node_modules` path. **To add the library without using the {node_modules_path} see the examples below**.
+If you're running a Node based project you can **import** Gerillass with **node_modules** path. **To add the library without using the {node_modules_path} see the examples below**.
 
     @import '{node_modules_path}/gerillass/scss/gerillass';
 
-If you're working with an **eyeglass** setup, simply import it without providing the **npm_modules** path.
+If you're working with an **eyeglass** setup, simply import it without providing the **node_modules** path.
 
     @import 'gerillass';
 
