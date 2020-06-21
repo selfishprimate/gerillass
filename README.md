@@ -82,6 +82,8 @@ You can add a new Gulp task as in the below example or simply add `includePath: 
         .pipe(gulp.dest('dist/css'));
     });
     
+Including to the project:
+    
     @import 'gerillass';
 
 ### Using with Grunt (and Yeoman)
@@ -99,6 +101,8 @@ You can add Gerillass library by editing your Gruntfile.js at the root level of 
         }
       }
     }
+    
+Including to the project:
     
     @import 'gerillass';
 
