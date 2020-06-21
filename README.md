@@ -23,7 +23,6 @@ Hope you’ll enjoy using it!
     - [Using with React.js](#using-with-reactjs)
     - [Using with Gulp](#using-with-gulp)
     - [Using with Grunt](#using-with-grunt-and-yeoman)
-    - [Using with Eyeglass](#using-with-eyeglass)
 - [Contribution](#contribution)
 - [Additional Info](#additional-info)
 
