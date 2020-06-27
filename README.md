@@ -81,7 +81,7 @@ You can add a new Gulp task as in the below example or simply add `includePath: 
         src("assets/sass/**/*.scss")
         .pipe(sass({
           outputStyle: "expanded",
-          includePaths: ["node_modules/gorillass/core"],
+          includePaths: ["node_modules/gerillass/scss"],
         }).on('error', sass.logError))
         .pipe(dest("assets/css"))
       );
