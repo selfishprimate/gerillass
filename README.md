@@ -76,14 +76,17 @@ Simply `@import` the library at the beginning of your App.scss file without usin
 
 You can add a new Gulp task as in the below example or simply add `includePath: ['node_modules/gerillass/scss']` option to the task if you have one already.
 
-    gulp.task('sass', function() {
-      return gulp.src('scss/*.scss')
+    function sassify(done) {
+      return (
+        src("assets/sass/**/*.scss")
         .pipe(sass({
-            outputStyle: 'compressed',
-            includePaths: ['node_modules/gerillass/scss']
+          outputStyle: "expanded",
+          includePaths: ["node_modules/gorillass/core"],
         }).on('error', sass.logError))
-        .pipe(gulp.dest('dist/css'));
-    });
+        .pipe(dest("assets/css"))
+      );
+      done()
+    }
     
 Including to the project:
     
