@@ -21,7 +21,7 @@ Hope you’ll enjoy using it!
     - [Cloning the Repository from Github](#cloning-the-repository-from-github)
     - [Using with React.js](#using-with-reactjs)
     - [Using with Gulp](#using-with-gulp)
-    - [Using with Grunt](#using-with-grunt-and-yeoman)
+    - [Using with Grunt](#using-with-grunt)
 - [Contribution](#contribution)
 - [Additional Info](#additional-info)
 
