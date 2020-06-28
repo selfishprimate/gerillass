@@ -94,7 +94,7 @@ Including to the project:
 
 ### Using with Grunt
 
-You can add Gerillass library by editing your Gruntfile.js at the root level of your project. Simply find the sass related rules and add `['node_modules/gerillass/scss']` inside the `options` object.
+You can add the Gerillass library by editing your Gruntfile.js at the root level of your project. Simply find the sass related rules and add `['node_modules/gerillass/scss']` inside the `options` object.
 
     sass: {
       dist: {
