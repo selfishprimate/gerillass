@@ -32,11 +32,7 @@ Hope you’ll enjoy using it!
 
     npm install gerillass
 
-Simply **import** the library at the beginning of your stylesheet:
-
-    @import 'gerillass/scss/gerillass';
-
-If you're running a Node based project you can **import** Gerillass with **node_modules** path. **To add the library without using the {node_modules_path} see the examples below**.
+You can **import** Gerillass with **node_modules** path. **To add the library without using the {node_modules_path} see the examples below**.
 
     @import '{node_modules_path}/gerillass/scss/gerillass';
 
@@ -53,6 +49,10 @@ You can clone the repository into your local computer from Github.
 Or you can add it as a submodule into your Git based project ([What is a submodule?](https://git-scm.com/book/en/v2/Git-Tools-Submodules)).
 
     git submodule add https://github.com/selfishprimate/gerillass.git
+    
+Including to the project:
+
+    @import 'gerillass/scss/gerillass';
 
 ### Node.js Installation
 
