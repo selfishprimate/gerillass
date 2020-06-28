@@ -32,9 +32,11 @@ Hope you’ll enjoy using it!
 
     npm install gerillass
 
-You can **import** Gerillass with **node_modules** path. **To add the library without using the {node_modules_path} see the examples below**.
+You can **import** Gerillass with **node_modules** path.
 
     @import '{node_modules_path}/gerillass/scss/gerillass';
+
+_To add the library without using the {node_modules_path} see the examples below._
 
 If you're working with an **eyeglass** setup, simply import it without providing the **node_modules** path.
 
