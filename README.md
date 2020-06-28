@@ -121,7 +121,7 @@ Please read the [user guide]() for contribution and feel free to contribute to t
 
 ## Experimenting
 
-Experimenting Gerillass is easy. You can either [download]() the library and include it into your project or you can use [Gulpazan](). Gulpazan is a Gulp based workflow and it comes with Gerillass. [Learn how you can install Gulpazan].
+Experimenting Gerillass is easy. You can either [download the Gerillass library] and include it into your project or you can use [Gulpazan](). Gulpazan is a Gulp based workflow and it comes with Gerillass. [Learn how you can install Gulpazan].
 
 ## Additional Info
 
