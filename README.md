@@ -25,7 +25,7 @@ Hope you’ll enjoy using it!
     - [Using with Gulp](#using-with-gulp)
     - [Using with Grunt](#using-with-grunt)
 - [Contribution](#contribution)
-- [Experiment Gerillass](#experiment-gerillass)
+- [Experimenting](#experimenting)
 - [Additional Info](#additional-info)
 
 ## Installation
@@ -119,9 +119,9 @@ Including to the project:
 
 Please read the [user guide]() for contribution and feel free to contribute to the library.
 
-## Experiment Gerillass
+## Experimenting
 
-Experimenting Gerillass is easy. You can either download the library and include it into your project or you can use Gulpazan. Gulpazan is a Gulp based workflow and it comes with Gerillass. For more information checkout the Gulpazan's repository page.
+Experimenting Gerillass is easy. You can either [download]() the library and include it into your project or you can use [Gulpazan](). Gulpazan is a Gulp based workflow and it comes with Gerillass. [Learn how you can install Gulpazan].
 
 ## Additional Info
 
