@@ -1,0 +1,40 @@
+@import 'true';
+@import '../../scss/library/after';
+
+@include describe('after()') {
+  @include it('Return a decleration block and a given attribute name as a content value.') {
+    @include assert {
+      @include output {
+        .element {
+          @include gls-after("data-content") {
+            color: orange
+          };
+        }
+      }
+      @include expect {
+        .element::after{
+          content: attr(data-content);
+          color: orange;
+        }
+      }
+    }
+  }
+  @include it('Return a decleration block for `::after` pseudo element.') {
+    @include assert {
+      @include output {
+        .element {
+          @include gls-after {
+            content: "Test content.";
+            color: orange;
+          };
+        }
+      }
+      @include expect {
+        .element::after{
+          content: "Test content.";
+          color: orange;
+        }
+      }
+    }
+  }
+}

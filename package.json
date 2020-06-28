@@ -37,6 +37,12 @@
     "needs": "^3.0.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
+  },
+  "dependencies": {
+    "glob": "^7.1.6",
+    "jest": "^26.1.0",
+    "node-sass": "^4.14.1",
+    "sass-true": "^5.0.0"
   }
 }

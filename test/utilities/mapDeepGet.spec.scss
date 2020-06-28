@@ -1,0 +1,9 @@
+@import 'true';
+@import '../../scss/utilities/map-deep-get';
+@import '../../scss/maps/map-for-tablets';
+
+@include describe('__mapDeepGet()') {
+  @include it('Return the value from a deep-map request.') {
+    @include assert-equal(__mapDeepGet($map-for-tablets, 'iPadPro', 'height'), 1366px);
+  }
+}
