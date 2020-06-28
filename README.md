@@ -25,8 +25,8 @@ Hope you’ll enjoy using it!
     - [Using with Gulp](#using-with-gulp)
     - [Using with Grunt](#using-with-grunt)
 - [Contribution](#contribution)
+- [Experiment Gerillass](#experiment-gerillass)
 - [Additional Info](#additional-info)
-
 
 ## Installation
 
@@ -36,7 +36,7 @@ You can **import** Gerillass with **node_modules** path.
 
     @import '{node_modules_path}/gerillass/scss/gerillass';
 
-_To add the library without using the {node_modules_path} see the examples below._
+**To add the library without using the {node_modules_path} see the examples below.**
 
 If you're working with an **eyeglass** setup, simply import it without providing the **node_modules** path.
 
@@ -118,6 +118,10 @@ Including to the project:
 ## Contribution
 
 Please read the [user guide]() for contribution and feel free to contribute to the library.
+
+## Experiment Gerillass
+
+Experimenting Gerillass is easy. You can either download the library and include it into your project or you can use Gulpazan. Gulpazan is a Gulp based workflow and it comes with Gerillass. For more information checkout the Gulpazan's repository page.
 
 ## Additional Info
 
