@@ -117,9 +117,9 @@ Including to the project:
     
 ## Contribution
 
-Please read the [user guide]() for contribution and feel free to contribute to the library.
+Please read the [contribution text]() and feel free to contribute to the library.
 
-## Experimenting
+## Experimenting Gerillass
 
 Experimenting Gerillass is easy. You can either [download the Gerillass library]() and include it into your project or you can use [Gulpazan](). Gulpazan is a Gulp based workflow and it comes with Gerillass. [Learn how you can install Gulpazan]().
 
