@@ -2,7 +2,7 @@
 
 Hey there! The future contributor of Gerillass! 
 
-I hope you'll find it very easy to contribute to the project. My advice for you to check out the code in the "scss" folder first. I think you'll understand the logic behind the structure at first sight! 
+I hope you'll find it very easy to contribute to the project. My advice for you to check out the code in the "scss" folder first. I think you'll understand the logic behind the structure soon! 
 
 If you don't somehow, you have to read the details below line-by-line, unfortunately.
 
