@@ -8,11 +8,14 @@ If you don't somehow, you have to read the details below line-by-line, unfortuna
 
 ## Gerillass Style Guide
 
-I Used Prettier to format the code.
+_I Used Prettier to format the code._
 
 * Indent with two spaces (not with tab)
-* Use camelCase format for function names only and start with two underscore characters (e.g. `__remify`).
-* Use `gls-`namespace for mixins (**not for the file names**).
+* Use **camelCase** naming convention for function names only and start with two underscore characters (e.g. `__remify`).
+* Use **kebab-case** naming convention for the rest of the code.
+* Use `gls-` namespace for mixins (**not for the file names**).
+* Use `map-`prefix for the maps you create.
+* Use `list-` prefix for the lists you create.
 
 ### Functions
 
