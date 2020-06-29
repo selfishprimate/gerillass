@@ -117,7 +117,7 @@ Including to the project:
     
 ## Contribution
 
-Please read the [contribution text]() and feel free to contribute to the library.
+Please read the [contribution text](CONTRIBUTING.md) and feel free to contribute to the library.
 
 ## Experimenting Gerillass
 
