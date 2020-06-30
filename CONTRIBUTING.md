@@ -1,7 +1,7 @@
 # Contribution
 _To contribute, or not to contribute, that is the question!_
 
-Hey there! The future contributor of Gerillass! 
+**Hey there, the future contributor of Gerillass!**
 
 I hope you'll find it very easy to contribute to the project. My advice for you to check out the code in the "scss" folder first. I think you'll understand the logic behind the structure soon! 
 
