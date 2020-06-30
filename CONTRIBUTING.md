@@ -1,4 +1,5 @@
 # Contribution
+_To contribute, or not to contribute, that is the question!_
 
 Hey there! The future contributor of Gerillass! 
 
