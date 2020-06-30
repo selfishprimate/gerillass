@@ -15,8 +15,8 @@ _I Used Prettier to format the code._
 * Use **camelCase** naming convention for function names only and start with two underscore characters (e.g. `__remify`).
 * Use **kebab-case** naming convention for the rest of the code.
 * Use `gls-` namespace for mixins (**not for the file names**) (e.g. `gls-new-mixin`).
-* Use `map-for-`prefix for the maps you create (e.g. `$map-for-direcitons`).
-* Use `list-of-` prefix for the lists you create (e.g. `$list-of-devices`).
+* Use `map-for-`prefix for the maps you create (e.g. `$map-for-directions`).
+* Use `list-of-` prefix for the lists you create (e.g. `$list-of-colors`).
 
 ### Functions
 
