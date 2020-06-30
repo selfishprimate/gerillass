@@ -5,7 +5,7 @@
   "homepage": "https://gerillass.com",
   "author": "Halil İbrahim Çakıroğlu",
   "main": "scss/_gerillass.scss",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "version": "1.0.0",
   "repository": {
     "type": "git",
