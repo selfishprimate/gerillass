@@ -18,15 +18,16 @@ Hope you’ll enjoy using it!
 
 ## Table of Contents
 
-- [Installation](#installation)
-    - [Node.js Installation](#nodejs-installation)
-    - [Cloning the Repository from Github](#cloning-the-repository-from-github)
-    - [Using with React.js](#using-with-reactjs)
-    - [Using with Gulp](#using-with-gulp)
-    - [Using with Grunt](#using-with-grunt)
-- [Contribution](#contribution)
-- [Experimenting](#experimenting)
-- [Additional Info](#additional-info)
+* [Installation](#installation)
+    * [Node.js Installation](#nodejs-installation)
+    * [Cloning the Repository from Github](#cloning-the-repository-from-github)
+    * [Using with React.js](#using-with-reactjs)
+    * [Using with Gulp](#using-with-gulp)
+    * [Using with Grunt](#using-with-grunt)
+* [Contribution](#contribution)
+* [Experimenting](#experimenting-gerillass)
+* [License](#license)
+* [Additional Info](#additional-info)
 
 ## Installation
 
@@ -125,6 +126,9 @@ Experimenting Gerillass is easy. You can either [download the Gerillass library]
 
 **Important Note:** Don't forget that you must have [Node.js](https://nodejs.org/en/) and [Gulp](https://gulpjs.com/docs/en/getting-started/quick-start) installed globally on your machine.
 
+## License
+
+Gerillass is licensed under the Apache License, Version 2.0. For more [see the license content](https://github.com/selfishprimate/gerillass/blob/master/LICENSE.md).
 
 ## Additional Info
 
