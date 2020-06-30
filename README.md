@@ -121,7 +121,7 @@ Please read the [contribution text](CONTRIBUTING.md) and feel free to contribute
 
 ## Experimenting Gerillass
 
-Experimenting Gerillass is easy. You can either [download the Gerillass library](https://github.com/selfishprimate/gerillass/archive/master.zip) and include it into your project or you can use [Gulpazan](https://github.com/selfishprimate/gulpazan). Gulpazan is a Gulp based workflow and it comes with Gerillass and Sass integration that it needs. [Learn how you can install Gulpazan](https://github.com/selfishprimate/gulpazan). 
+Experimenting Gerillass is easy. You can either [download the Gerillass library](https://github.com/selfishprimate/gerillass/archive/master.zip) and include it into your project or you can use [Gulpazan](https://github.com/selfishprimate/gulpazan). Gulpazan is a Gulp based workflow and it comes with Gerillass and ann the Sass related packages and configurations that Gerillass runs on. [Learn how you can install Gulpazan](https://github.com/selfishprimate/gulpazan). 
 
 **Important Note:** Don't forget that you must have [Node.js](https://nodejs.org/en/) and [Gulp](https://gulpjs.com/docs/en/getting-started/quick-start) installed globally on your machine.
 
