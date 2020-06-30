@@ -25,7 +25,7 @@ Hope you’ll enjoy using it!
     * [Using with Gulp](#using-with-gulp)
     * [Using with Grunt](#using-with-grunt)
 * [Contribution](#contribution)
-* [Experimenting](#experimenting-gerillass)
+* [Experimenting Gerillass](#experimenting-gerillass)
 * [License](#license)
 * [Additional Info](#additional-info)
 
