@@ -49,7 +49,7 @@ You can clone the repository into your local computer from Github.
 
     git clone https://github.com/selfishprimate/gerillass.git
    
-Or you can add it as a submodule into your Git based project ([What is a submodule?](https://git-scm.com/book/en/v2/Git-Tools-Submodules)).
+Or you can add the library as a submodule into your Git based project ([What is a submodule?](https://git-scm.com/book/en/v2/Git-Tools-Submodules)).
 
     git submodule add https://github.com/selfishprimate/gerillass.git
     
