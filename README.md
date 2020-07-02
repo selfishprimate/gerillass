@@ -132,5 +132,5 @@ Gerillass is licensed under the Apache License, Version 2.0. For more [see the l
 
 ## Additional Info
 
-This project is made with the loving music of **Anna German** and dedicated to **James Williamson**: The best web educator ever. For more information about James, please check out his legacy blog page at www.simpleprimate.com or watch his video lectures about **Web** and **Accessibility** on [LinkedIn Learning](https://www.linkedin.com/learning/instructors/james-williamson).
+This project is dedicated to **James Williamson**: The best web educator ever. For more information about James, please check out his legacy blog page at www.simpleprimate.com or watch his video lectures about **Web** and **Accessibility** on [LinkedIn Learning](https://www.linkedin.com/learning/instructors/james-williamson).
 
