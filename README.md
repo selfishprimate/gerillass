@@ -19,11 +19,11 @@ Hope you’ll enjoy using it!
 ## Table of Contents
 
 * [Installation](#installation)
-    * [Node.js Installation](#nodejs-installation)
-    * [Cloning the Repository from Github](#cloning-the-repository-from-github)
-    * [Using with React.js](#using-with-reactjs)
-    * [Using with Gulp](#using-with-gulp)
-    * [Using with Grunt](#using-with-grunt)
+   * [Cloning the Repository from Github](#cloning-the-repository-from-github)
+   * [Node.js Installation](#nodejs-installation)
+   * [Using with React.js](#using-with-reactjs)
+   * [Using with Gulp](#using-with-gulp)
+   * [Using with Grunt](#using-with-grunt)
 * [Contribution](#contribution)
 * [Experimenting Gerillass](#experimenting-gerillass)
 * [License](#license)
