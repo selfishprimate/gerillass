@@ -24,6 +24,7 @@ Hope you’ll enjoy using it!
    * [Using with React.js](#using-with-reactjs)
    * [Using with Gulp](#using-with-gulp)
    * [Using with Grunt](#using-with-grunt)
+* [Vendor Prefixes](#vendor-prefixes)
 * [Contribution](#contribution)
 * [Experimenting Gerillass](#experimenting-gerillass)
 * [License](#license)
@@ -115,6 +116,11 @@ Including to the project:
     
     @import 'gerillass';
 
+## Vendor Prefixes
+
+Because of the vast usage of bundlers like Gulp, Grunt, Webpack, etc.(these frameworks run some other plugins like Autoprefixer to support vendor prefixes) Gerillass doesn't provide vendor prefix support. 
+
+So, feel free to use any kind of tool to support that. My suggestion is **Autoprefixer**. If you are not using one of the bundlers mentioned above, you can also add vendor prefixes manually by using the [Autoprefixer CSS Online](https://autoprefixer.github.io/) tool.
     
 ## Contribution
 
