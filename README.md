@@ -25,8 +25,8 @@ Hope you’ll enjoy using it!
    * [Using with Gulp](#using-with-gulp)
    * [Using with Grunt](#using-with-grunt)
 * [Vendor Prefixes](#vendor-prefixes)
-* [Contribution](#contribution)
 * [Experimenting Gerillass](#experimenting-gerillass)
+* [Contribution](#contribution)
 * [License](#license)
 * [Additional Info](#additional-info)
 
@@ -121,16 +121,16 @@ Including to the project:
 Because of the vast usage of bundlers like Gulp, Grunt, Webpack, etc.(these frameworks run some other plugins like Autoprefixer to support vendor prefixes) Gerillass doesn't provide vendor prefix support. 
 
 So, feel free to use any kind of tool to support that. My suggestion is **Autoprefixer**. If you are not using one of the bundlers mentioned above, you can also add vendor prefixes manually by using the [Autoprefixer CSS Online](https://autoprefixer.github.io/) tool.
-    
-## Contribution
-
-Please read the [contribution details](CONTRIBUTING.md) and feel free to contribute to the library.
 
 ## Experimenting Gerillass
 
 Experimenting Gerillass is easy. You can either [download the Gerillass library](https://github.com/selfishprimate/gerillass/archive/master.zip) and include it into your project or you can use [Gulpazan](https://github.com/selfishprimate/gulpazan). Gulpazan is a Gulp based workflow and it comes with Gerillass and all the packages and configurations that you'll need to work with Sass. [Learn how you can install Gulpazan](https://github.com/selfishprimate/gulpazan). 
 
 **Important Note:** Don't forget that you must have [Node.js](https://nodejs.org/en/) and [Gulp](https://gulpjs.com/docs/en/getting-started/quick-start) installed globally on your machine.
+
+## Contribution
+
+Please read the [contribution details](CONTRIBUTING.md) and feel free to contribute to the library.
 
 ## License
 
