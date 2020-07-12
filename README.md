@@ -1,6 +1,6 @@
 # Gerillass
 
-_The best Sass tool set ever for guerrilla type of CSS authors._
+_Meet the best Sass toolset for the guerrilla type of CSS authors._
 
 ## What is Gerillass?
 
