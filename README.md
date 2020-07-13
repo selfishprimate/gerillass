@@ -1,5 +1,5 @@
 <p>
-  <a href="http://sketchize.com/" target="_blank">
+  <a href="https://gerillass.com" target="_blank">
     <img src="https://gerillass.com/images/logo/logo-sassy.svg">
   </a>
 </p>
