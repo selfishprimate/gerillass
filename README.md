@@ -124,9 +124,9 @@ So, feel free to use any tool to support that. My suggestion is Autoprefixer. If
 
 ## Experimenting Gerillass
 
-Experimenting Gerillass is easy. You can either [download the Gerillass library](https://github.com/selfishprimate/gerillass/archive/master.zip) and include it into your project or you can use [Gulpazan](https://github.com/selfishprimate/gulpazan). Gulpazan is a Gulp based workflow and it comes with Gerillass and all the packages and configurations that you'll need to work with Sass. [Learn how you can install Gulpazan](https://github.com/selfishprimate/gulpazan). 
+Experimenting Gerillass is easy. You can [download the Gerillass library](https://github.com/selfishprimate/gerillass/archive/master.zip), include it in your project, or use [Gulpazan](https://github.com/selfishprimate/gulpazan). Gulpazan is a Gulp based workflow, and it comes with Gerillass and all the packages and configurations that you'll need to work with Sass. [Learn how you can install Gulpazan](https://github.com/selfishprimate/gulpazan).
 
-**Important Note:** Don't forget that you must have [Node.js](https://nodejs.org/en/) and [Gulp](https://gulpjs.com/docs/en/getting-started/quick-start) installed globally on your machine.
+**Important Note**: Don't forget that you must have [Node.js](https://nodejs.org/en/) and [Gulp](https://gulpjs.com/docs/en/getting-started/quick-start) installed globally on your machine.
 
 ## Contribution
 
