@@ -1,6 +1,10 @@
-# Gerillass
+<p>
+  <a href="http://sketchize.com/" target="_blank">
+    <img src="https://gerillass.com/images/logo/logo-sassy.svg">
+  </a>
+</p>
 
-_Meet the best Sass toolset for the guerrilla type of CSS authors._
+>Meet the best Sass toolset for the guerrilla type of CSS authors.
 
 [Gerillass](https://gerillass.com) is a library built on top of [Sass (Syntactically Awesome Style Sheets)](https://sass-lang.com/) to give you flexibility for your projects and accelerate your performance and creativity.
 
