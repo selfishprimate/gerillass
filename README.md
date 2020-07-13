@@ -4,7 +4,9 @@
   </a>
 </p>
 
->Meet the best Sass toolset for the guerrilla type of CSS authors.
+***
+
+_Meet the best Sass toolset for the guerrilla type of CSS authors._
 
 [Gerillass](https://gerillass.com) is a library built on top of [Sass (Syntactically Awesome Style Sheets)](https://sass-lang.com/) to give you flexibility for your projects and accelerate your performance and creativity.
 
