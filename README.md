@@ -14,24 +14,24 @@ Hope you’ll enjoy using it!
 
 **Related Links:**
 
-* [Gerillass Website](https://gerillass.com)  
-* [Gerillass Documentation](https://docs.gerillass.com)  
-* [Twitter](https://twitter.com/gerillass)
+- [Gerillass Website](https://gerillass.com)
+- [Gerillass Documentation](https://docs.gerillass.com)
+- [Twitter](https://twitter.com/gerillass)
 
 ## Table of Contents
 
-* [Installation](#installation)
-   * [Cloning the Repository from Github](#cloning-the-repository-from-github)
-   * [Node.js Installation](#nodejs-installation)
-   * [Using with React.js](#using-with-reactjs)
-   * [Using with Gulp](#using-with-gulp)
-   * [Using with Grunt](#using-with-grunt)
-* [Vendor Prefix Support](#vendor-prefix-support)
-* [Experimenting](#experimenting)
-* [Testing](#testing)
-* [Contribution](#contribution)
-* [License](#license)
-* [Additional Info](#additional-info)
+- [Installation](#installation)
+  - [Cloning the Repository from Github](#cloning-the-repository-from-github)
+  - [Node.js Installation](#nodejs-installation)
+  - [Using with React.js](#using-with-reactjs)
+  - [Using with Gulp](#using-with-gulp)
+  - [Using with Grunt](#using-with-grunt)
+- [Vendor Prefix Support](#vendor-prefix-support)
+- [Experimenting](#experimenting)
+- [Testing](#testing)
+- [Contribution](#contribution)
+- [License](#license)
+- [Additional Info](#additional-info)
 
 ## Installation
 
@@ -46,17 +46,17 @@ You can **import** Gerillass with **node_modules** path.
 If you're working with an **eyeglass** setup, simply import it without providing the **node_modules** path.
 
     @import 'gerillass';
-    
+
 ### Cloning the repository from Github
 
 You can clone the repository into your local computer from Github.
 
     git clone https://github.com/selfishprimate/gerillass.git
-   
+
 Or you can add the library as a submodule into your Git based project ([What is a submodule?](https://git-scm.com/book/en/v2/Git-Tools-Submodules)).
 
     git submodule add https://github.com/selfishprimate/gerillass.git
-    
+
 Including to the project:
 
     @import 'gerillass/scss/gerillass';
@@ -94,10 +94,10 @@ You can add a new Gulp task as in the below example or simply add `includePath: 
       );
       done()
     }
-    
+
 Including to the project:
-    
-    @import 'gerillass';
+  
+ @import 'gerillass';
 
 ### Using with Grunt
 
@@ -114,10 +114,10 @@ You can add the Gerillass library by editing your Gruntfile.js at the root level
         }
       }
     }
-    
+
 Including to the project:
-    
-    @import 'gerillass';
+  
+ @import 'gerillass';
 
 ## Vendor Prefix Support
 
@@ -133,7 +133,7 @@ Experimenting Gerillass is easy. You can [download the Gerillass library](https:
 
 ## Testing
 
-Gerillass comes with a unit-testing module named [True](https://github.com/oddbird/true), which makes Sass unit testing possible (endless thanks to the [OddBird Team](https://github.com/oddbird)). 
+Gerillass comes with a unit-testing module named [True](https://github.com/oddbird/true), which makes Sass unit testing possible (endless thanks to the [OddBird Team](https://github.com/oddbird)).
 
 You can find two test examples under the test folder, take your time, examine the codes, and then write your unit tests. After that, run the following command to see if the tests pass.
 
@@ -150,4 +150,3 @@ Gerillass is licensed under the Apache License, Version 2.0. For more [see the l
 ## Additional Info
 
 This project is created with the loving music of **Anna German** and dedicated to **James Williamson**: The best web educator ever. For more information about James, please check his legacy blog page at www.simpleprimate.com or watch his video lectures about **Web** and **Accessibility** on [LinkedIn Learning](https://www.linkedin.com/learning/instructors/james-williamson).
-
