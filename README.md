@@ -27,7 +27,8 @@ Hope you’ll enjoy using it!
    * [Using with Gulp](#using-with-gulp)
    * [Using with Grunt](#using-with-grunt)
 * [Vendor Prefix Support](#vendor-prefix-support)
-* [Experimenting Gerillass](#experimenting-gerillass)
+* [Experimenting](#experimenting)
+* [Testing](#testing)
 * [Contribution](#contribution)
 * [License](#license)
 * [Additional Info](#additional-info)
@@ -124,11 +125,19 @@ Because of the vast usage of bundlers like Gulp, Grunt, Webpack, etc.(these fram
 
 So, feel free to use any tool to support that. My suggestion is Autoprefixer. If you are not using one of the bundlers mentioned above, you can also manually add vendor prefixes using the [Autoprefixer CSS Online](https://autoprefixer.github.io/) tool.
 
-## Experimenting Gerillass
+## Experimenting
 
 Experimenting Gerillass is easy. You can [download the Gerillass library](https://github.com/selfishprimate/gerillass/archive/master.zip), include it in your project, or use [Gulpazan](https://github.com/selfishprimate/gulpazan). Gulpazan is a Gulp based workflow, and it comes with Gerillass and all the packages and configurations that you'll need to work with Sass. [Learn how you can install Gulpazan](https://github.com/selfishprimate/gulpazan).
 
 **Important Note**: Don't forget that you must have [Node.js](https://nodejs.org/en/) and [Gulp](https://gulpjs.com/docs/en/getting-started/quick-start) installed globally on your machine.
+
+## Testing
+
+Gerillass comes with a unit-testing module named [True](), which makes Sass unit testing possible (endless thanks to the [OddBird Team](https://github.com/oddbird)). 
+
+You can find two test examples under the test folder, take your time, examine the codes, and then write your unit tests. After that, run the following code to see if the tests pass.
+
+    npm test
 
 ## Contribution
 
