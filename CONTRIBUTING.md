@@ -15,8 +15,9 @@ Please examine the code and match the style with the code you write. You can use
 
 **Overview**
 
-* Indent with two spaces (not with tab).
+* Use two spaces indentation (no tabs).
 * Use double quotes only (never single quotes).
+* Use `@charset "utf-8";` line in every Sass related files to avoid any potential issues.
 * Use **camelCase** naming convention for function names only and start with two underscore characters (e.g. `__remify`).
 * Use **kebab-case** naming convention for the rest of the code.
 * Use `gls-` namespace for mixins (**not for the file names**) (e.g. `gls-new-mixin`).
