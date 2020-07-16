@@ -135,7 +135,7 @@ Experimenting Gerillass is easy. You can [download the Gerillass library](https:
 
 Gerillass comes with a unit-testing module named [True](https://github.com/oddbird/true), which makes Sass unit testing possible (endless thanks to the [OddBird Team](https://github.com/oddbird)). 
 
-You can find two test examples under the test folder, take your time, examine the codes, and then write your unit tests. After that, run the following code to see if the tests pass.
+You can find two test examples under the test folder, take your time, examine the codes, and then write your unit tests. After that, run the following command to see if the tests pass.
 
     npm test
 
