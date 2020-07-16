@@ -11,9 +11,12 @@ If you don't somehow, you have to read the details below line-by-line, unfortuna
 
 ## Gerillass Style Guide
 
-_I Used Prettier to format the code._
+Please examine the code and match the style with the code you write. You can use **Prettier** to format the code.
+
+**Overview**
 
 * Indent with two spaces (not with tab).
+* Use double quotes only (never single quotes).
 * Use **camelCase** naming convention for function names only and start with two underscore characters (e.g. `__remify`).
 * Use **kebab-case** naming convention for the rest of the code.
 * Use `gls-` namespace for mixins (**not for the file names**) (e.g. `gls-new-mixin`).
@@ -26,9 +29,37 @@ The functions should be placed in the **utilities** folder. The function names s
 
 In the entire library, only the function names are following the camelCase naming convention to make a strict distinction between the functions and the mixins. Rest of the code follows **kebab-case** (also known as spinal-case) naming convention.
 
+
 ### Mixins
 
-The mixins should be placed in the **library** folder and they must follow the kebab-case naming convention.
+The mixin files should be placed in the **library** folder and they must follow the kebab-case naming convention. Use `gls-` namespace for mixin names (**not for the file names**) as in the example below:
+
+    @mixin gls-your-mixin ($your-argument) {
+      // Do stuff!
+    }
+
+### Lists
+
+The list files should be placed in the **lists** folder, and the name of the list must start with the `list-of` prefix.
+
+    $list-of-buttons: (
+      "button",
+      "[type='button']",
+      "[type='reset']",
+      "[type='submit']"
+    ) !default;
+
+### Maps
+
+The maps should be placed in the **maps** folder, and the name of the map must be start with `map-for` prefix.
+
+    $map-for-breakpoints: (
+      "xsmall": 0,
+      "small": 576px,
+      "medium": 768px,
+      "large": 992px,
+      "xlarge": 1200px,
+    ) !default;
 
 ### Experimenting Gerillass
 
