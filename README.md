@@ -97,7 +97,7 @@ You can add a new Gulp task as in the below example or simply add `includePath: 
 
 Including to the project:
   
- @import 'gerillass';
+    @import 'gerillass';
 
 ### Using with Grunt
 
