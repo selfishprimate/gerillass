@@ -121,7 +121,7 @@ Including to the project:
 
 ## Vendor Prefix Support
 
-Because of the vast usage of bundlers like Gulp, Grunt, Webpack, etc.(these frameworks run some other plugins like Autoprefixer to support vendor prefixes), Gerillass doesn't provide vendor prefix support.
+Because of the vast usage of bundlers like [Gulp](https://gulpjs.com/), [Grunt](https://gruntjs.com/), [Webpack](https://webpack.js.org/), etc.(these frameworks run some other plugins like Autoprefixer to support vendor prefixes), Gerillass doesn't provide vendor prefix support.
 
 So, feel free to use any tool to support that. My suggestion is Autoprefixer. If you are not using one of the bundlers mentioned above, you can also manually add vendor prefixes using the [Autoprefixer CSS Online](https://autoprefixer.github.io/) tool.
 
