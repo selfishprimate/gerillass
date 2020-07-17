@@ -117,7 +117,7 @@ You can add the Gerillass library by editing your Gruntfile.js at the root level
 
 Including to the project:
   
- @import 'gerillass';
+    @import 'gerillass';
 
 ## Vendor Prefix Support
 
