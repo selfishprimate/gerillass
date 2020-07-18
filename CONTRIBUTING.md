@@ -5,7 +5,7 @@ _To contribute, or not to contribute, that is the question!_
 
 **The future contributor of Gerillass,**
 
-I hope you'll find it quite simple to contribute to the project. I encourage you to check out the code in the "scss" folder first so that I think you'll understand the logic behind the structure.
+I'm sure you will find it quite easy to contribute to the project. I encourage you to examine the code in the "scss" folder first to understand the logic behind the structure.
 
 If you don't somehow, you have to read the details below line-by-line, unfortunately.
 
@@ -16,13 +16,13 @@ Please examine the code and match the style with the code you write. You can use
 **Overview**
 
 * Use two spaces indentation (no tabs).
-* Use double quotes only (never single quotes).
 * Use `@charset "UTF-8";` line in every Sass related files to avoid any potential issues with character encoding.
 * Use **camelCase** naming convention for function names only and start with two underscore characters (e.g. `__remify`).
 * Use **kebab-case** naming convention for the rest of the code.
 * Use `gls-` namespace for mixins (**not for the file names**) (e.g. `gls-new-mixin`).
 * Use `map-for-`prefix for the map names (e.g. `$map-for-directions`).
-* Use `list-of-` prefix for the list names (e.g. `$list-of-colors`).
+* Use `list-of-` prefix for the list names (e.g. `$list-of-color-names`).
+* Don't use single quotes unless you have to.
 
 ### Functions
 
@@ -61,9 +61,7 @@ The maps should be placed in the **maps** folder, and the name of the map must b
       "large": 992px,
       "xlarge": 1200px,
     ) !default;
-
-### Experimenting Gerillass
-
-The method I recommend for experimenting Gerillass is to use [Gulpazan](https://github.com/selfishprimate/gulpazan). Gulpazan is a Gulp based workflow that I built for to create static pages easily, and it comes with Gerillass. It is very easy to power up a project. Simply download the repository, `npm install` to install all the dependencies that Gulpazan needs, and then write `gulp start` and hit the enter to power up the project.
+ 
+ _This document will be updated soon!_
 
 Well, that's all.
