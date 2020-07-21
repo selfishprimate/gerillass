@@ -35,7 +35,7 @@ Hope you’ll enjoy using it!
 
 ## Installation
 
-    npm install gerillass
+    npm install gerillass --save-dev
 
 You can **import** Gerillass with **node_modules** path.
 
@@ -67,7 +67,7 @@ If you are working on a Node project you can add Gerillass as a dependency.
 
 #### npm installation
 
-    npm install gerillass
+    npm install gerillass --save-dev
 
 #### Yarn installation
 
