@@ -1,4 +1,7 @@
 .*
 **/.*
-node_modules
+*.md
+lib
 test
+node_modules
+gerillass.gemspec
