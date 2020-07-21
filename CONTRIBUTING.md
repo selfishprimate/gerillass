@@ -11,7 +11,7 @@ If you don't somehow, you have to read the details below line-by-line, unfortuna
 
 ## Gerillass Style Guide
 
-Please examine the code and match the style with the code you write. You can use **Prettier** to format the code.
+Please examine the code and match the style with the code you write. _You can use **Prettier** to format the code._
 
 **Overview**
 
