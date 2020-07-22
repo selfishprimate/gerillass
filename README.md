@@ -59,7 +59,7 @@ Or you can add the library as a submodule into your Git based project ([What is 
 
 Including to the project:
 
-    @import 'gerillass/scss/gerillass';
+    @import '{folder_path}/gerillass/scss/gerillass';
 
 ### Node.js Installation
 
