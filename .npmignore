@@ -3,5 +3,6 @@
 *.md
 lib
 test
+assets
 node_modules
 gerillass.gemspec
