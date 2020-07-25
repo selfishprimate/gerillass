@@ -1,6 +1,6 @@
 <p>
   <a href="https://gerillass.com" target="_blank">
-    <img src="https://gerillass.com/images/logo/logo-sassy.svg">:link:
+    <img src="https://github.com/selfishprimate/gerillass/blob/master/assets/images/gerillass_logo_sassy.svg">:link:
   </a>
 </p>
 
