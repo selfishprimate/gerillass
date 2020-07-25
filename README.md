@@ -4,7 +4,7 @@
   </a>
 </p>
 
-## _Meet the Coolest Sass Toolset!_ :metal:
+## _<img src="https://github.com/selfishprimate/gerillass/blob/master/assets/images/heart_khaki.svg"> Meet the Coolest Sass Toolset! <img src="https://github.com/selfishprimate/gerillass/blob/master/assets/images/heart_khaki.svg">_
 
 [Gerillass](https://gerillass.com) is a library built on top of [Sass (Syntactically Awesome Style Sheets)](https://sass-lang.com/) to give you flexibility for your projects and accelerate your performance and creativity.
 
