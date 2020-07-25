@@ -1,10 +1,10 @@
 <p>
   <a href="https://gerillass.com" target="_blank">
-    <img src="https://gerillass.com/images/logo/logo-sassy.svg">
+    <img src="https://gerillass.com/images/logo/logo-sassy.svg">:link:
   </a>
 </p>
 
-## _Meet the Coolest Sass Toolset!_
+## _Meet the Coolest Sass Toolset!_ :metal:
 
 [Gerillass](https://gerillass.com) is a library built on top of [Sass (Syntactically Awesome Style Sheets)](https://sass-lang.com/) to give you flexibility for your projects and accelerate your performance and creativity.
 
@@ -21,11 +21,11 @@ Hope you’ll enjoy using it!
 ## Table of Contents
 
 - [Installation](#installation)
-  - [Cloning the Repository from Github](#cloning-the-repository-from-github)
   - [Node.js Installation](#nodejs-installation)
   - [Using with React.js](#using-with-reactjs)
   - [Using with Gulp](#using-with-gulp)
   - [Using with Grunt](#using-with-grunt)
+  - [Cloning the Repository from Github](#cloning-the-repository-from-github)
 - [Vendor Prefix Support](#vendor-prefix-support)
 - [Experimenting](#experimenting)
 - [Testing](#testing)
@@ -46,20 +46,6 @@ You can **import** Gerillass with **node_modules** path.
 If you're working with an **eyeglass** setup, simply import it without providing the **node_modules** path.
 
     @import 'gerillass';
-
-### Cloning the repository from Github
-
-You can clone the repository into your local computer from Github.
-
-    git clone https://github.com/selfishprimate/gerillass.git
-
-Or you can add the library as a submodule into your Git based project ([What is a submodule?](https://git-scm.com/book/en/v2/Git-Tools-Submodules)).
-
-    git submodule add https://github.com/selfishprimate/gerillass.git
-
-Including to the project:
-
-    @import '{folder_path}/gerillass/scss/gerillass';
 
 ### Node.js Installation
 
@@ -118,6 +104,20 @@ You can add the Gerillass library by editing your Gruntfile.js at the root level
 Including to the project:
   
     @import 'gerillass';
+    
+### Cloning the repository from Github
+
+You can clone the repository into your local computer from Github.
+
+    git clone https://github.com/selfishprimate/gerillass.git
+
+Or you can add the library as a submodule into your Git based project ([What is a submodule?](https://git-scm.com/book/en/v2/Git-Tools-Submodules)).
+
+    git submodule add https://github.com/selfishprimate/gerillass.git
+
+Including to the project:
+
+    @import '{folder_path}/gerillass/scss/gerillass';
 
 ## Vendor Prefix Support
 
