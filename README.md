@@ -1,10 +1,10 @@
 <p>
   <a href="https://gerillass.com" target="_blank">
-    <img src="https://github.com/selfishprimate/gerillass/blob/master/assets/images/gerillass_logo_sassy.svg">:link:
+    <img src="https://gerillass.com/images/github/gerillass_logo_sassy.svg">:link:
   </a>
 </p>
 
-## _<img src="https://github.com/selfishprimate/gerillass/blob/master/assets/images/heart_khaki.svg"> Meet the Coolest Sass Toolset! <img src="https://github.com/selfishprimate/gerillass/blob/master/assets/images/heart_khaki.svg">_
+## _<span><img src="https://gerillass.com/images/github/heart_red.svg"></span> Meet the Coolest Sass Toolset! <span><img src="https://gerillass.com/images/github/heart_red.svg"></span>_
 
 [Gerillass](https://gerillass.com) is a library built on top of [Sass (Syntactically Awesome Style Sheets)](https://sass-lang.com/) to give you flexibility for your projects and accelerate your performance and creativity.
 
