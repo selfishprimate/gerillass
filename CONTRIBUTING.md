@@ -11,7 +11,7 @@ If you don't somehow, you have to read the details below line-by-line, unfortuna
 
 ## Gerillass Style Guide
 
-Please examine the code and match the style with the code you write (**Prettier** plugin for you code editor can pretty much help you to format your code).
+Please examine the code and match the style with the code you write (**Prettier** plugin for your code editor can pretty much help you to format your code).
 
 ### Overview
 
