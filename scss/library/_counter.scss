@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-@mixin gls-counter($params...) {
+@mixin counter($params...) {
   $counter: null;
   $counter-before: null;
   $counter-after: null;

@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-@mixin gls-breakpoint($params...) {
+@mixin breakpoint($params...) {
   @if length($params) == 1 {
     $value: nth($params, 1);
     @if map-has-key($map-for-breakpoints, $value) {

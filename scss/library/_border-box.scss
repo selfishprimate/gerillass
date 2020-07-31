@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-@mixin gls-border-box($value: null) {
+@mixin border-box($value: null) {
   @if not & and $value == null {
     *,
     *::before,

@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-@mixin gls-ratio-box($ratio: null) {
+@mixin ratio-box($ratio: null) {
   position: relative;
   &::before {
     content: "";

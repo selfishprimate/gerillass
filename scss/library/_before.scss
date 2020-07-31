@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-@mixin gls-before($content: null) {
+@mixin before($content: null) {
   &::before {
     @if $content == null {
       @content;

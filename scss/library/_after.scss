@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-@mixin gls-after($content: null) {
+@mixin after($content: null) {
   &::after {
     @if $content == null {
       @content;

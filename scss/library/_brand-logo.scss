@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-@mixin gls-brand-logo($width, $height, $image-url: null) {
+@mixin brand-logo($width, $height, $image-url: null) {
   display: inline-block;
   position: relative;
   width: $width;

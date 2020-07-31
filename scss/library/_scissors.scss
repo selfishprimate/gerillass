@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-@mixin gls-scissors($corners) {
+@mixin scissors($corners) {
   @if length($corners) == 1 {
     $corners: __validateScissors($corners);
     clip-path: polygon(

@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-@mixin gls-placeholder-shown {
+@mixin placeholder-shown {
   &:placeholder-shown {
     @content;
   }

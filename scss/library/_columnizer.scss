@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-@mixin gls-columnizer($params...) {
+@mixin columnizer($params...) {
   $columns: nth($params, 1);
   $gutter: null;
   $fill: false;

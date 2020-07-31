@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-@mixin gls-tablet($device, $orientation: null) {
+@mixin tablet($device, $orientation: null) {
   @if map-has-key($map-for-tablets, $device) {
     @if $orientation == portrait or $orientation == null {
       @media only screen 

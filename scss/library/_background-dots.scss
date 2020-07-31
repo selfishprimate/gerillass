@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-@mixin gls-background-dots(
+@mixin background-dots(
   $color: null,
   $size: 1em,
   $gutter: $size * 5,

@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-@mixin gls-text-shadow($params...) {
+@mixin text-shadow($params...) {
   $value: ();
 
   @for $i from 1 through length($params) {

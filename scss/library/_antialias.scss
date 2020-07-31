@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-@mixin gls-antialias($value: null) {
+@mixin antialias($value: null) {
   @if not & and $value == null {
     *,
     *::before,

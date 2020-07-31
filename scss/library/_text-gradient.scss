@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-@mixin gls-text-gradient($direction, $colors) {
+@mixin text-gradient($direction, $colors) {
   $list: ();
   @for $i from 1 through length($colors) {
     $list: append($list, nth($colors, $i), comma);

@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-@mixin gls-hide($toggle: "hide") {
+@mixin hide($toggle: "hide") {
   @if $toggle == "hide" {
     position: absolute;
     width: 1px;

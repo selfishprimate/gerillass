@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-@mixin gls-reset-css {
+@mixin reset-css {
     @if & {
         @error "Please call the mixin at the root of your style sheet.";
     } @else {

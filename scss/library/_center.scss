@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-@mixin gls-center($axis: "both") {
+@mixin center($axis: "both") {
   @if $axis == "both" or $axis == "vertical" {
     top: 50%;
   }

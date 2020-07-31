@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-@mixin gls-breakpointer($selector: null) {
+@mixin breakpointer($selector: null) {
   @if & {
     &::before {
       @content;

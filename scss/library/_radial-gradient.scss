@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-@mixin gls-radial-gradient($shape, $position, $colors) {
+@mixin radial-gradient($shape, $position, $colors) {
   $list: ();
   $shape: unquote($shape);
   $position: unquote($position);

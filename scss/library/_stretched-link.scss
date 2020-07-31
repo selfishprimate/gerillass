@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-@mixin gls-stretched-link($value: "before") {
+@mixin stretched-link($value: "before") {
   @if index("before" "after", $value) {
     &#{"::" + $value} {
       content: "";

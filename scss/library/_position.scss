@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-@mixin gls-position($position: absolute, $offsets: 0) {
+@mixin position($position: absolute, $offsets: 0) {
   $offsets: __shorthandProperty($offsets);
   $positioning-offsets: (
     top: nth($offsets, 1),

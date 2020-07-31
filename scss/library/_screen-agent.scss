@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-@mixin gls-screen-agent($resolution) {
+@mixin screen-agent($resolution) {
   @if $resolution == "1x" {
     @media (min-resolution: 96dpi) {
       @content;

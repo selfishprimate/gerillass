@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-@mixin gls-text-selection($value: null) {
+@mixin text-selection($value: null) {
   @if not & and $value == null {
     ::selection {
       @content;

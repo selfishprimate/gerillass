@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-@mixin gls-adaptive($gutter: 30px) {
+@mixin adaptive($gutter: 30px) {
   $actual-breakpoints: map-remove($map-for-breakpoints, "xsmall");
   margin: 0 auto;
   @each $item, $value in $actual-breakpoints {

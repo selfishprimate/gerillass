@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-@mixin gls-all-text-inputs($pseudo: null) {
+@mixin all-text-inputs($pseudo: null) {
   $list: "hover", "focus", "active", "invalid", "required", "disabled";
   @if not $pseudo {
     #{$list-of-text-inputs} {

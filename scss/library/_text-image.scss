@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-@mixin gls-text-image($image: null) {
+@mixin text-image($image: null) {
   @if $image {
     background-image: url($image);
   }

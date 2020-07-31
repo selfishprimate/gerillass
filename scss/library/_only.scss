@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-@mixin gls-only($params...) {
+@mixin only($params...) {
   @if length($params) == 0 {
     @error "Please pass an argument. The argument must be either a negative or positive number or list of numbers. Or pass one of the following predefined string values: 'first', 'last', 'odd', 'even'.";
   } @else if length($params) == 1 {

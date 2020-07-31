@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-@mixin gls-border-radius($args...) {
+@mixin border-radius($args...) {
   $list: join($list-of-directions, ("cross-left", "cross-right", "all"));
   @if length($args) == 1 {
     $value: nth($args, 1);

@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-@mixin gls-remove($params...) {
+@mixin remove($params...) {
   @if length($params) == 0 {
     display: none;
   } @else if length($params) == 1 {
