@@ -1,6 +1,6 @@
 <p>
   <a href="https://gerillass.com" target="_blank">
-    <img src="https://gerillass.com/images/github/gerillass_logo_sassy.svg">:link:
+    <img src="https://gerillass.com/images/github/gerillass_logo_sassy.svg">
   </a>
 </p>
 
@@ -26,6 +26,7 @@ Hope you’ll enjoy using it!
   - [Using with Gulp](#using-with-gulp)
   - [Using with Grunt](#using-with-grunt)
   - [Cloning the Repository from Github](#cloning-the-repository-from-github)
+- [Namespace Usage](#namespace-usage)
 - [Vendor Prefix Support](#vendor-prefix-support)
 - [Experimenting](#experimenting)
 - [Testing](#testing)
@@ -118,6 +119,10 @@ Or you can add the library as a submodule into your Git based project ([What is 
 Including to the project:
 
     @import '{folder_path}/gerillass/scss/gerillass';
+
+## Namespace Usage
+
+You can use Gerillass with or without `gls-` namespace. It is optional, but I strongly recommend you to use it to prevent having conflicts with other Sass libraries or frameworks like Bootstrap.
 
 ## Vendor Prefix Support
 

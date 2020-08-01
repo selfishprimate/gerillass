@@ -19,7 +19,6 @@ Please examine the code and match the style with the code you write (**Prettier*
 * Use `@charset "UTF-8";` line in every Sass related files to avoid any potential issues with character encoding.
 * Use **camelCase** naming convention for function names only and start with two underscore characters (e.g. `__remify`).
 * Use **kebab-case** naming convention for the rest of the code.
-* Use `gls-` namespace for mixins (**not for the file names**) (e.g. `gls-new-mixin`).
 * Use `map-for-`prefix for the map names (e.g. `$map-for-directions`).
 * Use `list-of-` prefix for the list names (e.g. `$list-of-colors`).
 * Don't use single quotes unless you have to.
@@ -37,11 +36,21 @@ In the entire library, only the function names are following the camelCase namin
 
 ### Mixins
 
-The mixin files should be placed in the **library** folder and they must follow the kebab-case naming convention. Use `gls-` namespace for mixin names (**not for the file names**) as in the example below:
+The mixin files should be placed in the **library** folder and they must follow the kebab-case naming convention.
 
-    @mixin gls-your-mixin($parameter) {
+    @mixin your-mixin($parameter) {
       // Your code!
     }
+
+After you create a mixin run following command to test it:
+
+    npm test
+
+If the test pass run following command to generate your mixin's prefixed version:
+
+    gulp start
+
+**Important Note:** You must have Gulp installed globally on your machine.
 
 ### Lists
 

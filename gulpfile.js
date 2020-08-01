@@ -1,13 +1,34 @@
-const { series, src, dest, watch } = require("gulp");
+const { series, src, dest } = require("gulp");
+const concat = require("gulp-concat");
+const replace = require("gulp-replace");
+const header = require("gulp-header");
 
-const rename = require("gulp-rename");
-
-
-function namify(done) {
-  return src("./scss/_gerillass.scss")
-    .pipe(rename({ prefix: "_gls-", basename: "gerillass", extname: ".scss" }))
-    .pipe(dest("./scss"));
+function gather_mixins(done) {
+  return src(["scss/library/**/*.scss"])
+    .pipe(concat("_gerillass-prefix.scss"))
+    .pipe(dest("scss"));
   done();
 }
 
-exports.start = series(namify);
+function del_charset(done) {
+  return src("scss/_gerillass-prefix.scss")
+    .pipe(replace('@charset "UTF-8";', ''))
+    .pipe(dest("scss"));
+  done();
+}
+
+function add_charset(done) {
+  return src("scss/_gerillass-prefix.scss")
+    .pipe(header('@charset "UTF-8";'))
+    .pipe(dest("scss"));
+  done();
+}
+
+function add_prefix(done) {
+  return src("scss/_gerillass-prefix.scss")
+    .pipe(replace('@mixin ', "@mixin gls-"))
+    .pipe(dest("scss"));
+  done();
+}
+
+exports.start = series(gather_mixins, del_charset, add_charset, add_prefix);
