@@ -42,7 +42,9 @@ The mixin files should be placed in the **library** folder and they must follow 
       // Your code!
     }
 
-After you create a mixin run following command to test it:
+After you create a mixin, try writing a test to see if your mixin works.
+
+You can find two test examples under the `test` folder, take your time, examine the codes, and then write your test. After that, run the following command to see if the test pass.
 
     npm test
 

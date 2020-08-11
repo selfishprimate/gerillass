@@ -4,5 +4,6 @@
 lib
 test
 assets
+gulpfile.js
 node_modules
 gerillass.gemspec
