@@ -6,7 +6,7 @@
     @include assert {
       @include output {
         .element {
-          @include gls-after("data-content") {
+          @include after("data-content") {
             color: orange
           };
         }
@@ -23,7 +23,7 @@
     @include assert {
       @include output {
         .element {
-          @include gls-after {
+          @include after {
             content: "Test content.";
             color: orange;
           };
