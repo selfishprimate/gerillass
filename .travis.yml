@@ -1,6 +1,6 @@
 language: node_js
 node_js: 10
 before_install:
- - npm install gerillass --save-dev
- - yarn add gerillass
+ - npm install
+ - yarn install
 script: npm test
