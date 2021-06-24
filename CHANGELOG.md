@@ -1,6 +1,9 @@
 # Changelog
 _Change is the essence._
 
+## 1.1.2
+* Uptade for security vulnerabilities.
+
 ## 1.1.1
 * Bugfix for a comment.
 
