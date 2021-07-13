@@ -1,6 +1,9 @@
 # Changelog
 _Change is the essence._
 
+## 1.1.3
+* Add box-sizing property to Columnizer mixin.
+
 ## 1.1.2
 * Uptade for security vulnerabilities.
 

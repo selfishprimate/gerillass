@@ -6,6 +6,7 @@
   $fill: false;
   display: flex;
   flex-wrap: wrap;
+  @include border-box;
   > * {
     @if length($params) == 1 {
       flex: 0 0 calc(100% / #{$columns});
