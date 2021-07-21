@@ -17,7 +17,7 @@ Please examine the code and match the style with the code you write (**Prettier*
 
 * Use two spaces indentation (no tabs).
 * Use `@charset "UTF-8";` line in every Sass related files to avoid any potential issues with character encoding.
-* Use **camelCase** naming convention for function names only and start with two underscore characters (e.g. `__remify`).
+* Use **camelCase** naming convention for function names only and start with two underscore characters (e.g. `__newFunction {}`).
 * Use **kebab-case** naming convention for the rest of the code.
 * Use `map-for-`prefix for the map names (e.g. `$map-for-directions`).
 * Use `list-of-` prefix for the list names (e.g. `$list-of-colors`).
