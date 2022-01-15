@@ -797,6 +797,30 @@
 
 
 
+@mixin gls-loadify($params...) {
+  @if not & and length($params) == 0 {
+    @keyframes loadify {
+      to {
+        opacity: 1;
+      }
+    }
+  } @else if not & and length($params) > 0 {
+    @warn "PLEASE DO NOT PASS AN ARGUMENT WHEN YOU CALL THE MIXIN AT THE ROOT OF YOUR STYLESHEET! \A";
+  } @else if & and length($params) == 0 {
+    @warn "PLEASE PASS AN ARGUMENT TO SPECIFY HOW MANY SECONDS OR MILLISECONDS THE ELEMENTS WILL BE DELAYED! \A \A .element { \A   @incude loadify(0.2s); \A } \A ";
+  } @else if length($params) > 0 and length($params) < 3 {
+    opacity: 0;
+    animation-name: loadify;
+    animation-fill-mode: forwards;
+    animation-delay: nth($params, 1);
+    animation-duration: if(length($params) == 2, #{nth($params, 2)}, 0.5s);
+  } @else if length($params) > 2 {
+    @error "NO MORE THAN 2 ARGUMENTS ARE ALLOWED! \A";
+  }
+}
+
+
+
 @mixin gls-only($params...) {
   @if length($params) == 0 {
     @error "Please pass an argument. The argument must be either a negative or positive number or list of numbers. Or pass one of the following predefined string values: 'first', 'last', 'odd', 'even'.";

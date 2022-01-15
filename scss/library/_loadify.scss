@@ -1,0 +1,33 @@
+@charset "UTF-8";
+
+@mixin loadify($params...) {
+  @if not & and length($params) == 0 {
+    @keyframes loadify {
+      to {
+        opacity: 1;
+        visibility: visible;
+        backface-visibility: visible;
+      }
+    }
+  } @else if not & and length($params) > 0 {
+    @error "PLEASE DO NOT PASS AN ARGUMENT WHEN YOU CALL LOADIFY MIXIN AT THE ROOT OF YOUR STYLESHEET! \A";
+  } @else if & and length($params) == 0 or length($params) < 3 {
+    opacity: 0;
+    visibility: hidden;
+    backface-visibility: hidden;
+    animation-name: loadify;
+    animation-fill-mode: forwards;
+    @if length($params) == 0 {
+      animation-delay: 0.2s;
+      animation-duration: 0.5s;
+    } @else if length($params) == 1 {
+      animation-delay: #{nth($params, 1)};
+      animation-duration: 0.5s;
+    } @else if length($params) == 2 {
+      animation-delay: #{nth($params, 1)};
+      animation-duration: #{nth($params, 2)};
+    }
+  } @else if length($params) > 2 {
+    @error "NO MORE THAN 2 ARGUMENTS ARE ALLOWED! \A";
+  }
+}
