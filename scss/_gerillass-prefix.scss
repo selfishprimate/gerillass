@@ -802,18 +802,31 @@
     @keyframes loadify {
       to {
         opacity: 1;
+        visibility: visible;
+        backface-visibility: visible;
       }
     }
+    .static-rules {
+      opacity: 0;
+      visibility: hidden;
+      backface-visibility: hidden;
+      animation-name: loadify;
+      animation-fill-mode: forwards;
+    }
   } @else if not & and length($params) > 0 {
-    @warn "PLEASE DO NOT PASS AN ARGUMENT WHEN YOU CALL THE MIXIN AT THE ROOT OF YOUR STYLESHEET! \A";
-  } @else if & and length($params) == 0 {
-    @warn "PLEASE PASS AN ARGUMENT TO SPECIFY HOW MANY SECONDS OR MILLISECONDS THE ELEMENTS WILL BE DELAYED! \A \A .element { \A   @incude loadify(0.2s); \A } \A ";
-  } @else if length($params) > 0 and length($params) < 3 {
-    opacity: 0;
-    animation-name: loadify;
-    animation-fill-mode: forwards;
-    animation-delay: nth($params, 1);
-    animation-duration: if(length($params) == 2, #{nth($params, 2)}, 0.5s);
+    @error "PLEASE DO NOT PASS AN ARGUMENT WHEN YOU CALL LOADIFY MIXIN AT THE ROOT OF YOUR STYLESHEET! \A";
+  } @else if & and length($params) == 0 or length($params) < 3 {
+    @extend .static-rules;
+    @if length($params) == 0 {
+      animation-delay: 0.2s;
+      animation-duration: 0.5s;
+    } @else if length($params) == 1 {
+      animation-delay: #{nth($params, 1)};
+      animation-duration: 0.5s;
+    } @else if length($params) == 2 {
+      animation-delay: #{nth($params, 1)};
+      animation-duration: #{nth($params, 2)};
+    }
   } @else if length($params) > 2 {
     @error "NO MORE THAN 2 ARGUMENTS ARE ALLOWED! \A";
   }

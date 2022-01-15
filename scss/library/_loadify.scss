@@ -9,14 +9,17 @@
         backface-visibility: visible;
       }
     }
+    .static-rules {
+      opacity: 0;
+      visibility: hidden;
+      backface-visibility: hidden;
+      animation-name: loadify;
+      animation-fill-mode: forwards;
+    }
   } @else if not & and length($params) > 0 {
     @error "PLEASE DO NOT PASS AN ARGUMENT WHEN YOU CALL LOADIFY MIXIN AT THE ROOT OF YOUR STYLESHEET! \A";
   } @else if & and length($params) == 0 or length($params) < 3 {
-    opacity: 0;
-    visibility: hidden;
-    backface-visibility: hidden;
-    animation-name: loadify;
-    animation-fill-mode: forwards;
+    @extend .static-rules;
     @if length($params) == 0 {
       animation-delay: 0.2s;
       animation-duration: 0.5s;

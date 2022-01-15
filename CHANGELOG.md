@@ -1,6 +1,9 @@
 # Changelog
 _Change is the essence._
 
+## 1.2.1
+* Add @extend fuctionality to use Loadify mixin for multiple selectors.
+
 ## 1.2.0
 * Add Loadify: A new mixin to help page elements render more natural during the time of page loads.
 
