@@ -1,36 +1,74 @@
 @charset "UTF-8";
 
 @mixin loadify($params...) {
-  @if not & and length($params) == 0 {
-    @keyframes loadify {
-      to {
-        opacity: 1;
-        visibility: visible;
-        backface-visibility: visible;
-      }
-    }
-    .static-rules {
-      opacity: 0;
-      visibility: hidden;
-      backface-visibility: hidden;
-      animation-name: loadify;
-      animation-fill-mode: forwards;
-    }
-  } @else if not & and length($params) > 0 {
-    @error "PLEASE DO NOT PASS AN ARGUMENT WHEN YOU CALL LOADIFY MIXIN AT THE ROOT OF YOUR STYLESHEET! \A";
-  } @else if & and length($params) == 0 or length($params) < 3 {
-    @extend .static-rules;
+  @if not & {
+    // ROOT LEVEL
     @if length($params) == 0 {
+      // NO ARGUMENT PASSED
+      @keyframes loadify {
+        to {
+          opacity: 1;
+          visibility: visible;
+          backface-visibility: visible;
+        }
+      }
+      .loadify-static-rules {
+        opacity: 0;
+        visibility: hidden;
+        backface-visibility: hidden;
+        animation-name: loadify;
+        animation-fill-mode: forwards;
+      }
+    } @else if length($params) == 1 {
+      // ONE ARGUMENT PASSED
+      @if type-of(nth($params, 1)) == "string" {
+        // THE ARGUMENT TYPE IS STRING
+        @if nth($params, 1) == "init" {
+          // THE ARGUMENT VALUE IS `INIT`
+          @keyframes loadify {
+            to {
+              opacity: 1;
+              visibility: visible;
+              backface-visibility: visible;
+            }
+          }
+          .loadify-static-rules {
+            opacity: 0;
+            visibility: hidden;
+            backface-visibility: hidden;
+            animation-name: loadify;
+            animation-fill-mode: forwards;
+          }
+        } @else {
+          // THE ARGUMENT VALUE IS SOMETHING OTHER THAN INIT!
+          @error "#{nth($params, 1)} is not a valid argument. Please pass `init` as an argument to initialize the effect or do not pass any argument at all.";
+        }
+      } @else {
+        // THE ARGUMENT TYPE IS NOT STRING!
+        @error "#{nth($params, 1)} is not a valid argument. Please pass `init` as an argument to initialize the effect or do not pass any argument at all.";
+      }
+    } @else if length($params) > 1 {
+      // MORE THAN ONE ARGUMENTS PASSED!
+      @error "Only one argument is allowed when you call this mixin at the root of your stylesheet! Please pass `init` as an argument to initialize the effect or do not pass any argument at all.";
+    }
+  } @else if & {
+    // SELECTOR LEVEL
+    @extend .loadify-static-rules;
+    @if length($params) == 0 {
+      // NO ARGUMENT PASSED!
       animation-delay: 0.2s;
       animation-duration: 0.5s;
     } @else if length($params) == 1 {
+      // ONLY ONE ARGUMENT IS PASSED!
       animation-delay: #{nth($params, 1)};
       animation-duration: 0.5s;
     } @else if length($params) == 2 {
+      // TWO ARGUMENTS ARE PASSED!
       animation-delay: #{nth($params, 1)};
       animation-duration: #{nth($params, 2)};
+    } @else if length($params) > 2 {
+      // MORE THAN TWO ARGUMENTS ARE PASSED!
+      @error "You cannot pass more than two arguments.";
     }
-  } @else if length($params) > 2 {
-    @error "NO MORE THAN 2 ARGUMENTS ARE ALLOWED! \A";
   }
 }
