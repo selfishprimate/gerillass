@@ -1,6 +1,16 @@
 # Changelog
 _Change is the essence._
 
+## 1.2.3
+
+### Added
+
+- Added `__isTime` function to validate the time values.
+
+### Updated
+
+- Loadify mixin has been refactored.
+
 ## 1.2.2
 
 ### Changed
