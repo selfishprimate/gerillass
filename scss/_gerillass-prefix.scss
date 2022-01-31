@@ -807,7 +807,7 @@
           backface-visibility: visible;
         }
       }
-      .loadify-static-rules {
+      %loadify {
         opacity: 0;
         visibility: hidden;
         backface-visibility: hidden;
@@ -820,7 +820,7 @@
       @error "Only one argument is allowed when you call this mixin at the root of your stylesheet! Please pass `init` as an argument to initialize the effect or do not pass any argument at all.";
     }
   } @else if & {
-    @extend .loadify-static-rules;
+    @extend %loadify;
     @if length($params) == 0 {
       animation-delay: 0.2s;
       animation-duration: 0.5s;

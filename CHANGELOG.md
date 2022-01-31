@@ -1,5 +1,12 @@
-# Changelog
+# Change Log
 _Change is the essence._
+
+## 1.2.4
+
+### Updated
+
+- Updated `extend` usage for Loadify mixin.
+- Updated the title of `CHANGELOG.md` file.
 
 ## 1.2.3
 
