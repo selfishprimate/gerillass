@@ -1,6 +1,17 @@
 # Change Log
 _Change is the essence._
 
+## 1.2.6
+
+### Added
+
+- Added `sass-loader` package.
+- Added `sass` package.
+
+### Removed
+
+- Removed `node-sass` in order to fix vulnerability issues.
+
 ## 1.2.5
 
 ### Updated
