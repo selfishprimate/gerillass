@@ -1,6 +1,12 @@
 # Change Log
 _Change is the essence._
 
+## 1.2.5
+
+### Updated
+
+- Updated `node-sass` version from ^4.14.1 to ^7.0.1.
+
 ## 1.2.4
 
 ### Updated

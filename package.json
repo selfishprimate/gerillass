@@ -6,7 +6,7 @@
   "author": "Halil İbrahim Çakıroğlu",
   "main": "scss/_gerillass.scss",
   "license": "Apache-2.0",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "repository": {
     "type": "git",
     "url": "https://github.com/selfishprimate/gerillass"
@@ -42,7 +42,7 @@
   "dependencies": {
     "glob": "^7.1.6",
     "jest": "^26.1.0",
-    "node-sass": "^4.14.1",
+    "node-sass": "^7.0.1",
     "sass-true": "^5.0.0"
   },
   "devDependencies": {
