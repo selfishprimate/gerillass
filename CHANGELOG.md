@@ -1,6 +1,12 @@
 # Change Log
 _Change is the essence._
 
+## 1.2.7
+
+### Removed
+
+- Removed `yarn.lock` file.
+
 ## 1.2.6
 
 ### Added
