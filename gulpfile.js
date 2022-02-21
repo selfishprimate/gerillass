@@ -24,6 +24,13 @@ function add_charset(done) {
   done();
 }
 
+function add_sassmath(done) {
+  return src("scss/_gerillass-prefix.scss")
+    .pipe(header('\n@use "sass:math";'))
+    .pipe(dest("scss"));
+  done();
+}
+
 function add_prefix(done) {
   return src("scss/_gerillass-prefix.scss")
     .pipe(replace('@mixin ', "@mixin gls-"))
@@ -31,4 +38,4 @@ function add_prefix(done) {
   done();
 }
 
-exports.start = series(gather_mixins, del_charset, add_charset, add_prefix);
+exports.start = series(gather_mixins, del_charset, add_sassmath, add_charset, add_prefix);

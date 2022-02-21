@@ -12,21 +12,21 @@
     @if $diagonal == true {
       background-image: radial-gradient($color $size, transparent 0),
         radial-gradient($color $size, transparent 0);
-      background-position: ($gutter / 2) ($gutter / 2),
+      background-position: math.div($gutter, 2) math.div($gutter, 2),
         ($gutter * 2) ($gutter * 2);
     } @else if $diagonal == false {
       background-image: radial-gradient($color $size, transparent 0);
-      background-position: ($gutter / 2) ($gutter / 2);
+      background-position: math.div($gutter, 2) math.div($gutter, 2);
     }
   } @else if $color {
     @if $diagonal == true {
       background-image: radial-gradient(nth($color, 1) $size, transparent 0),
         radial-gradient(nth($color, length($color)) $size, transparent 0);
-      background-position: ($gutter / 2) ($gutter / 2),
+      background-position: math.div($gutter, 2) math.div($gutter, 2),
         ($gutter * 2) ($gutter * 2);
     } @else if $diagonal == false {
       background-image: radial-gradient(nth($color, 1) $size, transparent 0);
-      background-position: ($gutter / 2) ($gutter / 2);
+      background-position: math.div($gutter, 2) math.div($gutter, 2);
       @if length($color) > 1 {
         @error "Please do not pass more than one argument when you disable 'diagonal' property! Simply remove the argument(s) after '#{nth($color, 1)}' to resolve the problem.";
       }

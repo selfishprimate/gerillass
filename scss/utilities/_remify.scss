@@ -2,6 +2,6 @@
 
 @function __remify($value) {
   $base-value: 16px;
-  $rem-value: $value / $base-value;
+  $rem-value: math.div($value, $base-value);
   @return $rem-value * 1rem;
 }

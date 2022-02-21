@@ -1,94 +1,64 @@
 # Change Log
 _Change is the essence._
 
+## 1.3.0
+
+- **Updated:** The usage of division outside of calc() has been updated for the future versions of Dart Sass. Deprecated codes have been replaced with math.div() method. **Updated mixins and functions are as follows:** `background-dots`, `ratio-box`, `responsive-video`, `triangle`, `clear-unit`, `convert-to-em`, `remify`.
+- **Added:** `@use "sass:math";` at rule has been added at the top of `gerillass.scss` and `gerillass-prefix.scss` files in order to be able to use `math.div()` method.
+
 ## 1.2.7
 
-### Removed
-
-- Removed `yarn.lock` file.
+- **Removed:** `yarn.lock` file is removed.
 
 ## 1.2.6
 
-### Added
-
-- Added `sass-loader` package.
-- Added `sass` package.
-
-### Removed
-
-- Removed `node-sass` in order to fix vulnerability issues.
+- **Added:** `sass-loader` package has been added.
+- **Added:** `sass` package has been added.
+- **Removed:** `node-sass` package is removed in order to fix vulnerability issues.
 
 ## 1.2.5
 
-### Updated
-
-- Updated `node-sass` version from ^4.14.1 to ^7.0.1.
+- **Updated:** `node-sass` version is updated from ^4.14.1 to ^7.0.1.
 
 ## 1.2.4
 
-### Updated
-
-- Updated `extend` usage for Loadify mixin.
-- Updated the title of `CHANGELOG.md` file.
+- **Updated:** `extend` usage is updated for Loadify mixin.
+- **Updated:** The title of `CHANGELOG.md` file has been changed.
 
 ## 1.2.3
 
-### Added
-
-- Added `__isTime` function to validate the time values.
-
-### Updated
-
-- Loadify mixin has been refactored.
+- **Added:** `__isTime` function is added to validate the time values.
+- **Updated:** Loadify mixin has been refactored.
 
 ## 1.2.2
 
-### Changed
-
-- Improved Loadify mixin. The `init` argument is now available to initialize the mixin at the root level of stylesheet.
-
-### Removed
-
-- Removed `.travis.yml` file. Travis CI integration no longer available.
+- **Updated:** Loadify mixin has been updated. The `init` argument is now available to initialize the mixin at the root level of stylesheet.
+- **Removed:** `.travis.yml` file. Travis CI integration no longer available.
 
 ## 1.2.1
 
-### Added
-
-- The `extend` directive has been added to use Loadify mixin for multiple selectors.
+- **Added:** The `extend` directive has been added to use Loadify mixin for multiple selectors.
 
 ## 1.2.0
 
-### Added
-
-- Added Loadify: A new mixin to help page elements render more natural during the time of page loads.
+- **Added:** Loadify mixin added to the library in order to help page elements render more natural during the time of page loads.
 
 ## 1.1.3
 
-### Added
-
-- Added box-sizing property to Columnizer mixin.
+- **Updated:** `box-sizing` property has been added to the Columnizer mixin.
 
 ## 1.1.2
 
-### Updated
-
-- Uptade for security vulnerabilities.
+- **Uptaded:** An update for security vulnerabilities.
 
 ## 1.1.1
-
-### Fixed
 
 - Bugfix for a comment.
 
 ## 1.1.0
 
-### Removed
-
 - Remove all the `gls-` prefixes from the mixin files under the `library` folder and make prefix usage optional (`gls-` prefix still can ben use).
 
 ## 0.0.1
-
-### Added
 
 - Changelog created!

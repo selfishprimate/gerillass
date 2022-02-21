@@ -10,25 +10,25 @@
       border-style: solid;
       @if $direction == "top"{
         border-color: transparent transparent $color;
-        border-width: 0 (nth($size, 1) / 2) if(length($size) == 2, nth($size, 2), nth($size, 1));
+        border-width: 0 math.div(nth($size, 1), 2) if(length($size) == 2, nth($size, 2), nth($size, 1));
       } @else if $direction == "top-right" {
         border-color: transparent $color transparent transparent;
         border-width: 0 nth($size, 1) nth($size, 1) 0;
       } @else if $direction == "right" {
         border-color: transparent transparent transparent $color;
-        border-width: (if(length($size) == 2, nth($size, 2), nth($size, 1)) / 2) 0 (if(length($size) == 2, nth($size, 2), nth($size, 1)) / 2) nth($size, 1);
+        border-width: math.div(if(length($size) == 2, nth($size, 2), nth($size, 1)),  2) 0 math.div(if(length($size) == 2, nth($size, 2), nth($size, 1)), 2) nth($size, 1);
       } @else if $direction == "bottom-right" {
         border-color: transparent transparent $color;
         border-width: 0 0 nth($size, 1) nth($size, 1);
       } @else if $direction == "bottom" {
         border-color: $color transparent transparent;
-        border-width: if(length($size) == 2, nth($size, 2), nth($size, 1)) (nth($size, 1) / 2) 0;
+        border-width: if(length($size) == 2, nth($size, 2), nth($size, 1)) math.div(nth($size, 1), 2) 0;
       } @else if $direction == "bottom-left" {
         border-color: transparent transparent transparent $color;
         border-width: nth($size, 1) 0 0 nth($size, 1);
       } @else if $direction == "left" {
         border-color: transparent $color transparent transparent;
-        border-width: (if(length($size) == 2, nth($size, 2), nth($size, 1)) / 2) nth($size, 1) (if(length($size) == 2, nth($size, 2), nth($size, 1)) / 2) 0;
+        border-width: math.div(if(length($size) == 2, nth($size, 2), nth($size, 1)), 2) nth($size, 1) math.div(if(length($size) == 2, nth($size, 2), nth($size, 1)), 2) 0;
       } @else if $direction == "top-left" {
         border-color: $color transparent transparent;
         border-width: nth($size, 1) nth($size, 1) 0 0;
