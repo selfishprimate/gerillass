@@ -3,7 +3,10 @@ _Change is the essence._
 
 ## 1.3.0
 
+- **Important Note:** Because LibSass and the packages built on it, including Node Sass, are deprecated, **Gerillass will no longer support LibSass since v1.3.0** If you're having a problem running Gerillass v1.3.0 please consider using Dart Sass instead of LibSass. [Read more about the issue!](https://sass-lang.com/blog/libsass-is-deprecated)
+
 - **Updated:** The usage of division outside of calc() has been updated for the future versions of Dart Sass. Deprecated codes have been replaced with math.div() method. **Updated mixins and functions are as follows:** `background-dots`, `ratio-box`, `responsive-video`, `triangle`, `clear-unit`, `convert-to-em`, `remify`.
+
 - **Added:** `@use "sass:math";` at rule has been added at the top of `gerillass.scss` and `gerillass-prefix.scss` files in order to be able to use `math.div()` method.
 
 ## 1.2.7
