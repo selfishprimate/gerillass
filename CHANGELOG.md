@@ -1,6 +1,10 @@
 # Change Log
 _Change is the essence._
 
+## 1.3.1
+
+- **Updated:** Update `package-lock.json` file to fix some vulnerability issues.
+
 ## 1.3.0
 
 - **Important Note:** Because LibSass and the packages built on it, including Node Sass, are deprecated, **Gerillass will no longer support LibSass since v1.3.0** If you're having a problem running Gerillass v1.3.0 please consider using Dart Sass instead of LibSass. [Read more about the issue!](https://sass-lang.com/blog/libsass-is-deprecated)
