@@ -3,7 +3,7 @@ _Change is the essence._
 
 ## 1.3.1
 
-- **Updated:** Update `package-lock.json` file to fix some vulnerability issues.
+- **Added:** `yarn.lock`file is added due to the development problems with **npm**. If you're willing to develop a feature for Gerillass, please consider using **Yarn** instead.
 
 ## 1.3.0
 
