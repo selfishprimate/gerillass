@@ -10,7 +10,7 @@ describe("Sass", () => {
   );
 
   // Run True on every file found with the describe and it methods provided
-  sassTestFiles.forEach((file) => sassTrue.runSass({ file }, { describe, it }));
+  sassTestFiles.forEach((file) => sassTrue.runSass({ describe, it }, file));
 });
 
 // Above code is taken from Dale Sande's article about Sass Unit Tests (https://www.educative.io/blog/sass-tutorial-unit-testing-with-sass-true)

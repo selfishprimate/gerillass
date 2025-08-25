@@ -1,7 +1,6 @@
 const { series, src, dest } = require("gulp");
 const concat = require("gulp-concat");
 const replace = require("gulp-replace");
-const header = require("gulp-header");
 
 function gather_mixins(done) {
   return src(["scss/library/**/*.scss"])
@@ -19,14 +18,14 @@ function del_charset(done) {
 
 function add_charset(done) {
   return src("scss/_gerillass-prefix.scss")
-    .pipe(header('@charset "UTF-8";'))
+    .pipe(replace(/^/, '@charset "UTF-8";'))
     .pipe(dest("scss"));
   done();
 }
 
 function add_sassmath(done) {
   return src("scss/_gerillass-prefix.scss")
-    .pipe(header('\n@use "sass:math";'))
+    .pipe(replace(/^/, '\n@use "sass:math";'))
     .pipe(dest("scss"));
   done();
 }
