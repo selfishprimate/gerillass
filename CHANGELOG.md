@@ -1,6 +1,20 @@
 # Change Log
 _Change is the essence._
 
+## 1.3.2
+
+- **Security:** Fixed 57 security vulnerabilities in dependency tree.
+- **Updated:** Jest from ^27.5.1 to ^30.0.5 (major security and feature updates).
+- **Updated:** Sass from ^1.49.7 to ^1.90.0 (latest stable with performance improvements).
+- **Updated:** Gulp from ^4.0.2 to ^5.0.1 (major version bump with security fixes).
+- **Updated:** sass-true from ^6.0.1 to ^9.0.0 (updated API integration).
+- **Updated:** glob from ^7.2.0 to ^11.0.0, sass-loader from ^12.5.0 to ^16.0.3.
+- **Removed:** gulp-header package (vulnerable lodash.template dependency).
+- **Added:** gulp-replace as secure alternative to gulp-header functionality.
+- **Added:** Security resolutions for braces (>=3.0.3) and micromatch (>=4.0.8).
+- **Fixed:** Updated test suite to work with sass-true v9.0.0 API.
+- **Verified:** All tests passing, build system fully functional, zero vulnerabilities.
+
 ## 1.3.1
 
 - **Added:** `yarn.lock`file is added due to the development problems with **npm**. If you're willing to develop a feature for Gerillass, please consider using **Yarn** instead.
