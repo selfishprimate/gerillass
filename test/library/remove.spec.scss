@@ -1,0 +1,39 @@
+// Loads the whole library rather than scss/library/remove, because the remove
+// mixin calls the prefixed gls-breakpoint and cannot resolve it in isolation.
+@use 'true' as *;
+@use '../../scss/gerillass' as *;
+
+@include describe('remove()') {
+  @include it('Hide the element at a named breakpoint.') {
+    @include assert {
+      @include output {
+        .element {
+          @include remove("medium");
+        }
+      }
+      @include expect {
+        @media (width: 768px) {
+          .element {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+  @include it('Hide the element from a named breakpoint upwards.') {
+    @include assert {
+      @include output {
+        .element {
+          @include remove("min", "medium");
+        }
+      }
+      @include expect {
+        @media (min-width: 768px) {
+          .element {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}

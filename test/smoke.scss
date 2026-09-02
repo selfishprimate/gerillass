@@ -1,0 +1,76 @@
+@charset "UTF-8";
+
+// Smoke test: include every public mixin at least once.
+//
+// Sass evaluates mixin bodies lazily, so simply importing the library proves
+// nothing -- a partial can reference an undefined variable, function or mixin
+// and still compile until someone actually calls it. This file forces every
+// mixin to be evaluated, which is what turns "the library imports" into "the
+// library works". Compiled by test/smoke.spec.js.
+//
+// Add a line here whenever you add a mixin to scss/library/.
+
+@import "gerillass";
+
+// --- Root-level mixins -------------------------------------------------------
+
+@include reset-css;
+@include font-face("Smoke", "/fonts/smoke");
+@include loadify(init);
+@include text-selection {
+  background: yellow;
+}
+
+// --- Selector-level mixins ---------------------------------------------------
+
+.adaptive { @include adaptive; }
+.after { @include after("data-content") { color: red; } }
+.all-buttons { @include all-buttons { color: red; } }
+.all-text-inputs { @include all-text-inputs { color: red; } }
+.antialias { @include antialias; }
+.background-dots { @include background-dots; }
+.background-image { @include background-image("/img/a.png"); }
+.background-image-filtered { @include background-image("/img/a.png", rgba(0, 0, 0, 0.5)); }
+.background-stripes { @include background-stripes; }
+.before { @include before("data-content") { color: red; } }
+.border-box { @include border-box; }
+.border-radius { @include border-radius(10px); }
+.brand-logo { @include brand-logo(100px, 40px, "/img/logo.svg"); }
+.breakpoint { @include breakpoint("medium") { color: red; } }
+.breakpoint-min { @include breakpoint("min", "medium") { color: red; } }
+.breakpoint-max { @include breakpoint("max", "medium") { color: red; } }
+.breakpoint-between { @include breakpoint("between", "medium" "large") { color: red; } }
+.breakpointer { @include breakpointer; }
+.center { @include center; }
+.circle { @include circle(50px); }
+.clearfix { @include clearfix; }
+.columnizer { @include columnizer(3); }
+.counter { @include counter("decimal"); }
+.ellipsis { @include ellipsis; }
+.escape-to-parent { @include escape-to-parent(".parent") { color: red; } }
+.except { @include except("first") { color: red; } }
+.hide { @include hide; }
+.linear-gradient { @include linear-gradient("top", red blue); }
+.only { @include only("first") { color: red; } }
+.placeholder { @include placeholder { color: gray; } }
+.placeholder-shown { @include placeholder-shown { color: gray; } }
+.position { @include position(absolute, 0 10px); }
+.radial-gradient { @include radial-gradient(circle, "center", red blue); }
+.ratio-box { @include ratio-box(16 9); }
+.remove { @include remove("medium"); }
+.reset-figure { @include reset-figure; }
+.resizable { @include resizable; }
+.responsive-image { @include responsive-image; }
+.responsive-video { @include responsive-video(16 9); }
+.scissors { @include scissors(10px); }
+.screen-agent { @include screen-agent("2x") { color: red; } }
+.sizer { @include sizer(100px); }
+.smartphone { @include smartphone("iPhone11") { color: red; } }
+.sprite { @include sprite("/img/sprite.png"); }
+.stretched-link { @include stretched-link; }
+.tablet { @include tablet("iPadPro") { color: red; } }
+.text-gradient { @include text-gradient("top", red blue); }
+.text-image { @include text-image("/img/text.png"); }
+.text-shadow { @include text-shadow(bottom-right red 5px); }
+.text-stroke { @include text-stroke; }
+.triangle { @include triangle; }
