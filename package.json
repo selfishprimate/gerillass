@@ -39,17 +39,14 @@
   "scripts": {
     "test": "jest"
   },
-  "dependencies": {
-    "glob": "^11.0.0",
-    "jest": "^30.0.5",
-    "sass": "^1.90.0",
-    "sass-loader": "^16.0.3",
-    "sass-true": "^9.0.0"
-  },
   "devDependencies": {
+    "glob": "^11.0.0",
     "gulp": "^5.0.1",
     "gulp-concat": "^2.6.1",
-    "gulp-replace": "^1.1.4"
+    "gulp-replace": "^1.1.4",
+    "jest": "^30.0.5",
+    "sass": "^1.90.0",
+    "sass-true": "^9.0.0"
   },
   "resolutions": {
     "braces": ">=3.0.3",
