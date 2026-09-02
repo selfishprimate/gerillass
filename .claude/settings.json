@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PROJECT_DIR:-.}/.claude/hooks/guard-dependencies.sh\"",
+            "timeout": 15,
+            "statusMessage": "Checking package.json dependencies"
+          },
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PROJECT_DIR:-.}/.claude/hooks/sync-prefix.sh\"",
+            "timeout": 120,
+            "statusMessage": "Regenerating gls- prefix bundle"
+          }
+        ]
+      }
+    ]
+  }
+}
