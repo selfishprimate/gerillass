@@ -1,6 +1,14 @@
 # Change Log
 _Change is the essence._
 
+## 1.3.3
+
+- **Security:** Fixed 24 security vulnerabilities (20 high, 4 moderate) reported by Dependabot.
+- **Fixed:** Gerillass publishes only the `scss/` directory and therefore has no runtime dependencies. `glob`, `jest`, `sass` and `sass-true` were declared under `dependencies`, which forced everyone installing the package to pull in the whole test toolchain and its transitive tree. They have been moved to `devDependencies`, where they belong.
+- **Removed:** `sass-loader` package. It is a webpack loader and was never used in this project.
+- **Updated:** `yarn.lock` has been regenerated and now resolves the patched versions of `brace-expansion`, `minimatch`, `picomatch`, `browserslist` and `glob`.
+- **Changed:** The default branch of the repository has been renamed from `master` to `main`.
+
 ## 1.3.2
 
 - **Security:** Fixed 57 security vulnerabilities in dependency tree.
