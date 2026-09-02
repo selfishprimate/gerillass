@@ -139,7 +139,7 @@ So, feel free to use any tool to support that. My suggestion is Autoprefixer. If
 
 ## Experimenting
 
-Experimentation with Gerillass is easy: If you're processing Sass files on your computer already, [download the Gerillass Sass library](https://github.com/selfishprimate/gerillass/archive/master.zip), include it in your project, and start using it. If not, use [Gerillass Play](https://github.com/selfishprimate/gerillass-play)! Gerillass Play is a Gulp based playground, built for you to get started with [Sass](https://sass-lang.com/) and [Gerillass](https://gerillass.com/) quickly.
+Experimentation with Gerillass is easy: If you're processing Sass files on your computer already, [download the Gerillass Sass library](https://github.com/selfishprimate/gerillass/archive/main.zip), include it in your project, and start using it. If not, use [Gerillass Play](https://github.com/selfishprimate/gerillass-play)! Gerillass Play is a Gulp based playground, built for you to get started with [Sass](https://sass-lang.com/) and [Gerillass](https://gerillass.com/) quickly.
 
 **Important Note**: Don't forget that you must have [Node.js](https://nodejs.org/en/) and [Gulp CLI](https://gulpjs.com/docs/en/getting-started/quick-start) installed on your machine to work with Gerillass Play.
 
@@ -157,7 +157,7 @@ Please read the [contribution details](CONTRIBUTING.md) and feel free to contrib
 
 ## License
 
-Gerillass is licensed under the Apache License, Version 2.0. For more [see the license content](https://github.com/selfishprimate/gerillass/blob/master/LICENSE.md).
+Gerillass is licensed under the Apache License, Version 2.0. For more [see the license content](https://github.com/selfishprimate/gerillass/blob/main/LICENSE.md).
 
 ## Additional Info
 
