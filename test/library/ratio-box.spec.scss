@@ -1,0 +1,61 @@
+@import 'true';
+@import '../../scss/gerillass';
+
+@include describe('ratio-box()') {
+  @include it('Return a ratio box for a slash separated string.') {
+    @include assert {
+      @include output {
+        .element {
+          @include ratio-box("4/3");
+        }
+      }
+      @include expect {
+        .element {
+          position: relative;
+        }
+        .element::before {
+          content: "";
+          display: block;
+          padding-top: 75%;
+        }
+        .element > * {
+          width: 100%;
+          height: 100%;
+          position: absolute;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          left: 0;
+        }
+      }
+    }
+  }
+  @include it('Fall back to the 16/9 default when no ratio is given.') {
+    @include assert {
+      @include output {
+        .element {
+          @include ratio-box;
+        }
+      }
+      @include expect {
+        .element {
+          position: relative;
+        }
+        .element::before {
+          content: "";
+          display: block;
+          padding-top: 56.25%;
+        }
+        .element > * {
+          width: 100%;
+          height: 100%;
+          position: absolute;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          left: 0;
+        }
+      }
+    }
+  }
+}

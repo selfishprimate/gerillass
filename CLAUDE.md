@@ -71,7 +71,13 @@ Four layers, loaded in dependency order by `scss/_gerillass.scss`. The order is 
 
 The `__` prefix on utilities is a deliberate visual marker for "internal, not part of the public API", and camelCase is used *only* for functions so that functions and mixins can never be confused at a call site. Utilities cluster around three jobs: type guards (`__isColor`, `__isNumber`, `__isTime`), validators that `@warn`/`@error` and return (`__validateLength`, `__validateBreakpoint`, `__validateScissors`), and converters (`__remify`, `__pixelify`, `__convertToEm`, `__shorthandProperty`).
 
-Mixins validate their input and `@error` with a message that names the accepted values — 16 of the 51 do this. Match that style rather than failing silently.
+Mixins validate their input and `@error` with a message that names the accepted values — 18 of the 51 do this, 16 inline and 2 (`ratio-box`, `responsive-video`) through `__validateRatio`. Match that style rather than failing silently.
+
+Silent failure is the trap to watch for. A mixin that branches on `type-of` and
+has no `@else` emits nothing at all for an unexpected type, which surfaces as a
+missing declaration rather than an error. `ratio-box` had this until v1.4.0: a
+list argument produced a ratio box with no ratio, and the smoke test still
+passed because it only asserts that mixins evaluate.
 
 ### The dual API and the generated prefix bundle
 
