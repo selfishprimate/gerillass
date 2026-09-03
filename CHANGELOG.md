@@ -1,6 +1,16 @@
 # Change Log
 _Change is the essence._
 
+## 1.5.0
+
+- **Added:** An `exports` map in `package.json` with a `sass` condition, so Dart Sass's built-in package importer can resolve the library by name. `@use "pkg:gerillass"` now works with `NodePackageImporter` or `sass --pkg-importer=node`; it failed before. `@use "gerillass"` now also works under Vite, which does not read the `main` field.
+- **Note:** The map includes a `"./*"` wildcard on purpose. `exports` is a whitelist, and without it every subpath such as `pkg:gerillass/scss/library/ellipsis` would have become unreachable.
+- **Note:** Verified against a packed tarball with no regressions anywhere. Load-path based setups such as Gulp and Grunt resolve through the filesystem and cannot be affected by `exports` at all.
+- **Updated:** The installation section of the README has been rewritten around the tools people actually use. Vite, webpack, Next.js, Angular, Gulp and Grunt each get their own recipe, and every one of them was verified by installing that toolchain and building a real stylesheet against the packed tarball. The versions used are listed in the README.
+- **Fixed:** The Gulp and Grunt recipes in the README did not work. Gulp used `includePaths`, which is the Node Sass option name and no longer resolves under Dart Sass, and Grunt used `loadPath`. Both are `loadPaths`. Angular is the exception and wants `stylePreprocessorOptions.includePaths`.
+- **Removed:** The React.js section, which described a Create React App setup. Anything Vite based, React included, now needs no configuration at all.
+- **Updated:** The README now leads with `@use "gerillass"` and the `pkg:` importer, and documents that the eyeglass route no longer works. eyeglass 3.0.3 has been unmaintained since June 2022 and its importer fails on any `@import` with current Dart Sass, independently of Gerillass. The eyeglass metadata is left in place for now and is queued for removal in 2.0.0.
+
 ## 1.4.0
 
 - **Fixed:** `ratio-box` and `responsive-video` silently emitted no `padding-top` when the ratio was not a string or a number. A list argument produced a ratio box with no ratio at all, with no error to explain it. Both now validate their argument and `@error` with a message naming the accepted forms.
