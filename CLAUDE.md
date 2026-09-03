@@ -9,7 +9,7 @@ Gerillass is a **pure Sass library** — a toolkit of mixins and functions, in t
 Two consequences follow from this and drive most decisions in the repo:
 
 1. **`package.json` must have no `dependencies`.** Everything (`jest`, `sass`, `sass-true`, `glob`, `gulp*`) belongs in `devDependencies`. Consumers get only `.scss` files, so a runtime dependency here forces the entire test toolchain onto every downstream project. This was the cause of 24 Dependabot alerts fixed in v1.3.3 — do not reintroduce it.
-2. **Only `scss/` ships.** `.npmignore` excludes `test`, `assets`, `gulpfile.js`, dotfiles and `*.md`; npm always adds `README.md`, `LICENSE.md` and `package.json` back. Verify with `npm pack --dry-run` before any release (89 files / ~23 kB as of v1.4.0).
+2. **Only `scss/` ships.** `.npmignore` excludes `test`, `assets`, `gulpfile.js`, dotfiles and `*.md`; npm always adds `README.md`, `LICENSE.md` and `package.json` back. Verify with `npm pack --dry-run` before any release (89 files / ~24 kB as of v1.5.0).
 
 Dart Sass only. LibSass/node-sass has been unsupported since v1.3.0.
 
@@ -159,3 +159,65 @@ The security fix only reaches users when the npm package is republished — upda
 5. `npm publish`. The account has 2FA enabled, so this needs `--otp=<code>` and must be run by the maintainer.
 
 Default branch is `main` (renamed from `master` in v1.3.3). A repository ruleset blocks force-pushes and deletion of the default branch, with no bypass actors — direct pushes are allowed.
+
+## Pending work
+
+Known and deliberately deferred, roughly in the order it makes sense to pick up.
+Each of these was verified to still be true as of v1.5.0.
+
+### Small, non-breaking
+
+- **`bugs` URL is misspelled.** `package.json` points at
+  `github.com/selfihsprimate/gerillass/issues` — note `selfihsprimate`. A
+  one-character fix that currently sends every bug reporter to a dead page.
+- **Five `@error` messages throw instead of printing.** `quote()` takes a
+  string and throws on a list, so every `@error` that interpolates
+  `quote($some-list)` replaces its own helpful message with
+  `$string: (...) is not a string`. Interpolation alone (`#{$list}`) handles
+  lists fine, so dropping `quote()` is the fix. Confirmed by triggering each:
+
+  | File | Line |
+  |---|---|
+  | `_triangle.scss` | 39 |
+  | `_all-buttons.scss` | 15 |
+  | `_all-text-inputs.scss` | 15 |
+  | `_border-radius.scss` | 42 |
+  | `_background-image.scss` | 30 — `quote(map-keys(…))`, same shape, but no input was found that reaches this branch |
+
+  These are the mixins whose validation the library advertises, so the failure
+  mode is worse than no message at all.
+- **Test coverage is thin.** `test/smoke.scss` includes all 51 mixins, but only
+  five members have real assertions (`after`, `remove`, `ratio-box`,
+  `__mapDeepGet`, `__validateRatio`). The smoke test proves a mixin evaluates,
+  never that its output is correct — it happily passed a `ratio-box` call that
+  emitted no ratio at all. Use the `/sass-test` skill.
+
+### Modernisation
+
+- **`ratio-box` and `responsive-video` still use the padding-top hack.**
+  `aspect-ratio` is Baseline Widely Available, so both could emit it directly.
+  This is a behaviour change in generated CSS, so it wants a minor version and
+  a decision about whether to keep a fallback.
+
+### Reserved for 2.0.0
+
+- **The `@use`/`@forward` module migration.** See "Module-system status" above
+  for the two verified blockers. A half-finished attempt is parked in
+  `git stash` on this machine as `WIP: @use/@forward module migration (v2.0.0)
+  - parked`. **It exists only locally and only in the stash** — it was never
+  committed or pushed, so a fresh clone does not have it and any stash-dropping
+  operation loses it. If it is still wanted, promote it to a real branch.
+  `sass-migrator module --migrate-deps` reproduces most of it anyway, and
+  handles the sibling `@use` blocker automatically; it does mangle
+  `_gerillass-prefix.scss`, which must be excluded and regenerated.
+- **Remove the eyeglass metadata.** The `eyeglass` block and the
+  `eyeglass-module` keyword. Deferred rather than done because dropping them is
+  breaking for a hypothetical user on an old toolchain, even though eyeglass
+  itself is broken with current Dart Sass. See "How consumers load it" above.
+- **Retire the `gls-` prefix bundle.** `@use "gerillass" as gls` already gives
+  native namespacing, which is the whole point of the generated bundle. Dropping
+  it removes 1511 lines of build output, three Gulp devDependencies,
+  `gulpfile.js`, and one of the two hooks. It also breaks every existing
+  `gls-*` call site, so it belongs with the module migration and needs a
+  migration note for users. `sass-migrator --remove-prefix` can generate
+  backward-compatible forwarding.
