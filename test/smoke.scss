@@ -56,12 +56,12 @@
 .placeholder-shown { @include placeholder-shown { color: gray; } }
 .position { @include position(absolute, 0 10px); }
 .radial-gradient { @include radial-gradient(circle, "center", red blue); }
-.ratio-box { @include ratio-box(16 9); }
+.ratio-box { @include ratio-box("16/9"); }
 .remove { @include remove("medium"); }
 .reset-figure { @include reset-figure; }
 .resizable { @include resizable; }
 .responsive-image { @include responsive-image; }
-.responsive-video { @include responsive-video(16 9); }
+.responsive-video { @include responsive-video("16/9"); }
 .scissors { @include scissors(10px); }
 .screen-agent { @include screen-agent("2x") { color: red; } }
 .sizer { @include sizer(100px); }
