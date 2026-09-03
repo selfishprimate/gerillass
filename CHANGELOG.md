@@ -1,6 +1,13 @@
 # Change Log
 _Change is the essence._
 
+## 1.4.0
+
+- **Fixed:** `ratio-box` and `responsive-video` silently emitted no `padding-top` when the ratio was not a string or a number. A list argument produced a ratio box with no ratio at all, with no error to explain it. Both now validate their argument and `@error` with a message naming the accepted forms.
+- **Added:** `__validateRatio` function, which both mixins now share instead of duplicating the same parsing logic.
+- **Note:** This matters for Dart Sass 2.0.0. Once slash division is removed, the documented unquoted `ratio-box(16/9)` form becomes a slash separated list rather than a number, which is exactly the case that used to fail silently. Prefer the quoted `"16/9"` form, which is unaffected.
+- **Added:** Unit tests for `ratio-box`, `remove` and `__validateRatio`, plus a smoke test that includes all 51 mixins so a broken one cannot pass unnoticed.
+
 ## 1.3.3
 
 - **Security:** Fixed 24 security vulnerabilities (20 high, 4 moderate) reported by Dependabot.
