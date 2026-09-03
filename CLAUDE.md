@@ -68,6 +68,43 @@ sass --load-path=scss --quiet /tmp/check.scss
 
 This distinction matters: a change can look fine and still be broken for every user of a mixin you did not include in your test file.
 
+## Verifying a claim
+
+This is a published library with real users, so a wrong claim either ships a
+defect or deletes something someone depends on. Every claim below was made
+during earlier work on this repo from a secondary signal — a grep count, an npm
+timestamp, a reading of the source — and every one was wrong:
+
+| Signal | Conclusion drawn | What was actually true |
+|---|---|---|
+| no mixin calls these six utilities | dead code, delete them | documented public API; `__remify` has its own docs page |
+| eyeglass unpublished since June 2022 | dead package, drop the config | ~6800 downloads/month; the real fault was its importer breaking on any `@import` |
+| `ratio-box` branches on `type-of == string` | a string is the correct argument | a list was accepted too, and silently produced a ratio box with no ratio |
+
+Techniques that did work, in rough order of usefulness:
+
+1. **A/B the output.** Capture it to a file, make the change, `diff`. This is
+   what makes "nothing regressed" a fact instead of a hope.
+2. **Isolate with controls.** When eyeglass failed, three runs — eyeglass with
+   no `@import`, Gerillass without eyeglass, eyeglass with an unrelated local
+   file — located the fault exactly. Guessing would not have.
+3. **Test the packed artifact, not the working tree.** `npm pack`, install the
+   tarball, build against it. `.npmignore` and `exports` mean the two are not
+   the same thing.
+4. **Enumerate variants instead of reasoning about which is right.** Four Grunt
+   option spellings were tried; one worked. Faster and more certain than
+   arguing from documentation.
+5. **Ask what would disprove it.** For "dead code" the disproof was "is it
+   documented, and does it work when called" — a thirty-second check.
+6. **When a test fails, suspect the test first.** Three false failures happened
+   here: a webpack config missing ESM support, a spec loading `ellipsis` while
+   calling `ratio-box`, and a glob pointing at the wrong Vite output directory.
+   All three looked like real breakage.
+7. **Name what you did not test, in the same breath as the claim.** No input
+   was found that reaches the `@error` in `_background-image.scss`; Parcel and
+   esbuild were never installed. Saying so is better than letting silence imply
+   coverage.
+
 ## Repo tooling
 
 `.claude/` carries the automation for the two mistakes this project has actually
