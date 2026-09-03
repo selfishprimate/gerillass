@@ -13,6 +13,32 @@ Two consequences follow from this and drive most decisions in the repo:
 
 Dart Sass only. LibSass/node-sass has been unsupported since v1.3.0.
 
+### How consumers load it
+
+`package.json` declares both `main` and an `exports` map with a `sass`
+condition, which is what lets Dart Sass's `pkg:` importer resolve
+`@use "pkg:gerillass"`. The `"./*"` wildcard in that map is not decorative —
+`exports` is a whitelist, so without it every subpath (`pkg:gerillass/scss/…`)
+becomes unreachable.
+
+Four routes were verified against a packed tarball, and all four must keep
+working after any change to `main`, `exports`, or the location of
+`_gerillass.scss`:
+
+| Route | Notes |
+|---|---|
+| `@use "pkg:gerillass"` | needs `NodePackageImporter` or `--pkg-importer=node`; requires `exports` |
+| `@use "gerillass"` | Vite resolves this through `exports`; webpack through `main` |
+| `@use "gerillass/scss/gerillass"` | subpath, needs the `"./*"` wildcard |
+| `loadPaths` / `includePaths` | filesystem-based, unaffected by `exports` — this is what the Gulp and Grunt recipes in the README use |
+
+**eyeglass metadata is inert.** The `eyeglass` block and the `eyeglass-module`
+keyword are still there, but eyeglass 3.0.3 (June 2022, unmaintained) is broken
+with current Dart Sass: any `@import` fails with `doneImporting is not a
+function`, with or without Gerillass. It also rides the legacy JS API, which
+Dart Sass removes in 2.0.0. Removing the block is a breaking change for a
+hypothetical old-toolchain user, so it is queued for 2.0.0 rather than done now.
+
 ## Commands
 
 ```bash

@@ -5,6 +5,16 @@
   "homepage": "https://gerillass.com",
   "author": "Halil İbrahim Çakıroğlu",
   "main": "scss/_gerillass.scss",
+  "exports": {
+    ".": {
+      "sass": "./scss/_gerillass.scss",
+      "default": "./scss/_gerillass.scss"
+    },
+    "./*": {
+      "sass": "./*",
+      "default": "./*"
+    }
+  },
   "license": "Apache-2.0",
   "version": "1.4.0",
   "repository": {

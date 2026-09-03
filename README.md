@@ -45,15 +45,33 @@ Because LibSass and the packages built on it, including Node Sass, are deprecate
 
     npm install gerillass --save-dev
 
-You can **import** Gerillass with **node_modules** path.
+The shortest way, if your setup resolves packages from **node_modules** (Vite, webpack, and most modern bundlers do):
 
-    @import '{node_modules_path}/gerillass/scss/gerillass';
+    @use 'gerillass' as *;
+
+If you are calling Dart Sass yourself rather than through a bundler, enable its package importer and use a `pkg:` URL:
+
+    @use 'pkg:gerillass' as *;
+
+```js
+// Dart Sass 1.71.0 or later
+import * as sass from 'sass';
+import { NodePackageImporter } from 'sass';
+
+sass.compile('style.scss', { importers: [new NodePackageImporter()] });
+```
+
+Or from the command line:
+
+    sass --pkg-importer=node style.scss style.css
+
+You can also point at the file directly, which always works:
+
+    @use '{node_modules_path}/gerillass/scss/gerillass' as *;
 
 **To add the library without using the {node_modules_path} see the examples below.**
 
-If you're working with an **eyeglass** setup, simply import it without providing the **node_modules** path.
-
-    @import 'gerillass';
+> **A note on eyeglass.** Gerillass still ships eyeglass module metadata, but eyeglass has not been released since June 2022 and its importer is broken with current Dart Sass — any `@import` fails with `doneImporting is not a function`, whether Gerillass is involved or not. It also relies on the legacy JS API, which Dart Sass removes in 2.0.0. Use the `pkg:` importer above instead; it is the built-in equivalent.
 
 ### Node.js Installation
 
