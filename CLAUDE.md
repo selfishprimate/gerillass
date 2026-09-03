@@ -9,7 +9,7 @@ Gerillass is a **pure Sass library** — a toolkit of mixins and functions, in t
 Two consequences follow from this and drive most decisions in the repo:
 
 1. **`package.json` must have no `dependencies`.** Everything (`jest`, `sass`, `sass-true`, `glob`, `gulp*`) belongs in `devDependencies`. Consumers get only `.scss` files, so a runtime dependency here forces the entire test toolchain onto every downstream project. This was the cause of 24 Dependabot alerts fixed in v1.3.3 — do not reintroduce it.
-2. **Only `scss/` ships.** `.npmignore` excludes `test`, `assets`, `gulpfile.js`, dotfiles and `*.md`; npm always adds `README.md`, `LICENSE.md` and `package.json` back. Verify with `npm pack --dry-run` before any release (expect ~88 files / ~23 kB).
+2. **Only `scss/` ships.** `.npmignore` excludes `test`, `assets`, `gulpfile.js`, dotfiles and `*.md`; npm always adds `README.md`, `LICENSE.md` and `package.json` back. Verify with `npm pack --dry-run` before any release (89 files / ~23 kB as of v1.4.0).
 
 Dart Sass only. LibSass/node-sass has been unsupported since v1.3.0.
 
@@ -64,12 +64,14 @@ Four layers, loaded in dependency order by `scss/_gerillass.scss`. The order is 
 |---|---|---|---|
 | 1 | `scss/lists/` | flat value lists (`$list-of-buttons`) | `list-of-` prefix, `!default` |
 | 2 | `scss/maps/` | keyed config (`$map-for-breakpoints`) | `map-for-` prefix, `!default` |
-| 3 | `scss/utilities/` | 20 private helper **functions** | `__camelCase`, two leading underscores |
-| 4 | `scss/library/` | 51 public **mixins** — the actual API | `kebab-case` |
+| 3 | `scss/utilities/` | 21 helper **functions** | `__camelCase`, two leading underscores |
+| 4 | `scss/library/` | 51 **mixins** — the bulk of the API | `kebab-case` |
 
 `_gerillass.scss` lists every partial explicitly. **A new file is invisible until you add its `@import` line there**, in the correct layer block.
 
-The `__` prefix on utilities is a deliberate visual marker for "internal, not part of the public API", and camelCase is used *only* for functions so that functions and mixins can never be confused at a call site. Utilities cluster around three jobs: type guards (`__isColor`, `__isNumber`, `__isTime`), validators that `@warn`/`@error` and return (`__validateLength`, `__validateBreakpoint`, `__validateScissors`), and converters (`__remify`, `__pixelify`, `__convertToEm`, `__shorthandProperty`).
+Per `CONTRIBUTING.md`, the `__` prefix and camelCase exist for one reason: to make functions impossible to confuse with mixins at a call site. **They do not mean "private".** Utilities are part of the public API and users call them directly — `__remify` has its own page in the docs. Utilities cluster around three jobs: type guards (`__isColor`, `__isNumber`, `__isTime`), validators that `@warn`/`@error` and return (`__validateLength`, `__validateBreakpoint`, `__validateRatio`, `__validateScissors`), and converters (`__remify`, `__pixelify`, `__convertToEm`, `__fontSizer`, `__lighten`, `__darken`, `__shorthandProperty`).
+
+**A utility that nothing in `scss/` calls is not dead code.** `__remify`, `__convertToEm`, `__fontSizer`, `__isNumber`, `__lighten` and `__darken` are called by no mixin at all — they are there for users, and removing them would break stylesheets. Never treat "no internal callers" as a reason to delete a member; the library is the smaller half of its own audience.
 
 Mixins validate their input and `@error` with a message that names the accepted values — 18 of the 51 do this, 16 inline and 2 (`ratio-box`, `responsive-video`) through `__validateRatio`. Match that style rather than failing silently.
 

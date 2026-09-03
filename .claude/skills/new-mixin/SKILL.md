@@ -13,13 +13,13 @@ Do all of them.
 | Adding | Folder | Naming |
 |---|---|---|
 | public mixin | `scss/library/` | `kebab-case` |
-| private helper function | `scss/utilities/` | `__camelCase`, two leading underscores |
+| helper function | `scss/utilities/` | `__camelCase`, two leading underscores |
 | value list | `scss/lists/` | `$list-of-…`, with `!default` |
 | keyed config | `scss/maps/` | `$map-for-…`, with `!default` |
 
 One member per file, and **the filename must match the member name** —
 `_border-radius.scss` holds `@mixin border-radius`. This holds for all 51
-existing mixins and 20 utilities; do not be the exception.
+existing mixins and 21 utilities; do not be the exception.
 
 ## 2. Write the file
 
