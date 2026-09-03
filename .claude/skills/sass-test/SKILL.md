@@ -6,8 +6,8 @@ description: Write or debug sass-true unit tests for Gerillass mixins and utilit
 # Write a sass-true test
 
 Coverage is the weakest part of this repository: `test/smoke.scss` proves all 51
-mixins still evaluate, but only a handful assert what they actually produce.
-Adding a real spec is almost always worth it.
+mixins still evaluate, but only a few assert what they actually produce. Adding
+a real spec is almost always worth it.
 
 ## How the suite is wired
 
@@ -16,24 +16,54 @@ Adding a real spec is almost always worth it.
 each `describe`/`it` as a Jest test. There is no registration step — dropping a
 new `.spec.scss` file in is enough.
 
+Two things about that glob: the filename must end in `.spec.scss`, and it must
+not start with a dot. A leading dot makes the file invisible to `glob` and the
+spec silently never runs.
+
 Mirror the source layout: a mixin from `scss/library/` gets
 `test/library/<name>.spec.scss`, a function from `scss/utilities/` gets
 `test/utilities/<camelCaseName>.spec.scss`.
 
-Note the spec files use `@use`, while the library itself is still `@import`-based.
-That is not an inconsistency to fix — the specs load individual partials
-directly, which is what lets them test one member in isolation.
+## Loading what you need
+
+Specs use `@import`, matching the library. Do **not** use `@use` here — there
+are no `_index.scss` files in `scss/`, so `@use "../../scss/utilities"` fails
+with `Can't find stylesheet to import`.
+
+Two working shapes:
+
+```scss
+@import 'true';
+@import '../../scss/library/after';        // one partial, for an isolated member
+```
+
+```scss
+@import 'true';
+@import '../../scss/gerillass';            // the whole library
+```
+
+Prefer the single partial — it keeps the test honest about what the member
+actually depends on. Reach for the whole library when the member needs more
+than itself:
+
+- it calls a `gls-` prefixed mixin (`_remove.scss`, `_reset-figure.scss`,
+  `_brand-logo.scss`, `_background-image.scss`), which only exists in the
+  generated bundle
+- it calls `math.div`, which resolves through the `@use "sass:math"` at the top
+  of `_gerillass.scss`
+- it reads a map or list, or calls another utility
+
+A partial that needs a map can also import just that map, as
+`test/utilities/mapDeepGet.spec.scss` does.
 
 ## Testing a mixin — assert the CSS
 
-Mixins emit declarations, so compare rendered output against expected output:
-
 ```scss
-@use "true" as *;
-@use "../../scss/library/your-mixin" as *;
+@import 'true';
+@import '../../scss/library/your-mixin';
 
-@include describe("your-mixin()") {
-  @include it("Describe what the mixin returns.") {
+@include describe('your-mixin()') {
+  @include it('Describe what the mixin returns.') {
     @include assert {
       @include output {
         .element {
@@ -55,33 +85,30 @@ matter but selectors and property order do.
 
 ## Testing a function — assert the value
 
-Functions return values, so no output block is needed:
-
 ```scss
-@use "true" as *;
-@use "../../scss/utilities" as *;
-@use "../../scss/maps" as *;
+@import 'true';
+@import '../../scss/gerillass';
 
-@include describe("__yourFunction()") {
-  @include it("Describe what the function returns.") {
+@include describe('__yourFunction()') {
+  @include it('Describe what the function returns.') {
     @include assert-equal(__yourFunction($input), $expected);
   }
 }
 ```
 
-`test/utilities/mapDeepGet.spec.scss` is the working example. Note it pulls in
-`scss/maps` as well — a utility that reads a map needs that map loaded.
+## Assert the failure cases too
 
-## Pulling in dependencies
+Several mixins `@error` on bad input, and that behaviour is worth locking in —
+but sass-true cannot catch an `@error`, since it aborts the whole compilation.
+Verify those by hand instead:
 
-`@use` only what the member under test actually needs. A mixin that reads
-`$map-for-breakpoints` needs `@use "../../scss/maps" as *`; one that calls
-`__validateLength` needs `@use "../../scss/utilities" as *`.
+```bash
+printf '@import "gerillass";\n.a { @include your-mixin(nonsense); }\n' > /tmp/t.scss
+sass --load-path=scss /tmp/t.scss
+```
 
-If a partial calls a `gls-` prefixed mixin — `_remove.scss`, `_reset-figure.scss`,
-`_brand-logo.scss` and `_background-image.scss` do — the isolated partial will not
-resolve it. Load the whole library with `@use "../../scss/gerillass" as *` for
-those four instead of the single file.
+Check that the message names the accepted values. A mixin that silently emits
+nothing for bad input is a bug — `ratio-box` did exactly that before v1.4.0.
 
 ## Running
 
