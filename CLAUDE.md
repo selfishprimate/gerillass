@@ -265,13 +265,10 @@ Default branch is `main` (renamed from `master` in v1.3.3). A repository ruleset
 ## Pending work
 
 Known and deliberately deferred, roughly in the order it makes sense to pick up.
-Verified as of v1.6.0.
+Verified as of v1.6.1.
 
 ### Small, non-breaking
 
-- **`bugs` URL is misspelled.** `package.json` points at
-  `github.com/selfihsprimate/gerillass/issues` — note `selfihsprimate`. A
-  one-character fix that currently sends every bug reporter to a dead page.
 - ~~`columnizer` interpolates its `calc()`~~ — **do not "fix" this.** The
   interpolation is load-bearing: it is what lets `columnizer(var(--cols))` and
   a `var()` gutter work at all. Evaluating the expression would simplify
@@ -320,7 +317,7 @@ Verified as of v1.6.0.
   itself is broken with current Dart Sass. See "How consumers load it" above.
 - **Retire the `gls-` prefix bundle.** `@use "gerillass" as gls` already gives
   native namespacing, which is the whole point of the generated bundle. Dropping
-  it removes 1511 lines of build output, three Gulp devDependencies,
+  it removes ~1600 lines of build output, three Gulp devDependencies,
   `gulpfile.js`, and one of the two hooks. It also breaks every existing
   `gls-*` call site, so it belongs with the module migration and needs a
   migration note for users. `sass-migrator --remove-prefix` can generate
