@@ -118,11 +118,20 @@ made, plus the workflows that are easy to half-finish:
   `scss/library/`, so the `gls-` bundle cannot go stale.
 - **`hooks/sync-manifest.sh`** — rebuilds `gerillass.json` and `SKILL.md` after
   any edit under `scss/library/`, `scss/utilities/` or `meta/`.
+- **`hooks/check-docs.sh`** — runs `tools/check-docs.js`, which compares the
+  counts the documentation claims against the counts the repository has, and
+  blocks on a mismatch. It also prints a reminder naming the prose that usually
+  needs updating when `tools/`, `test/` or `.claude/` changes, because that part
+  is a judgement no script can make.
 - **`/release`, `/new-mixin`, `/sass-test`, `/audit-library`** — the release
   checklist, the add-a-member checklist, the sass-true conventions, and the
   adversarial sweep over every mixin (`tools/audit.js`).
 
-All three hooks are `PostToolUse` on `Write|Edit` and exit 2 (blocking) on failure.
+All four hooks are `PostToolUse` on `Write|Edit` and exit 2 (blocking) on
+failure. **They only fire for edits made through the editor** — a file changed
+by a shell command does not trigger them, which is how the `gls-` bundle went
+stale mid-session once. Run `npx gulp start` and `npm run manifest` by hand
+after scripted edits.
 
 ## The manifest and the skill
 
