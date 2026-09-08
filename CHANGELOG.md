@@ -10,7 +10,8 @@ _Change is the essence._
 - **Added:** `gerillass.json`, a machine-readable description of every mixin and function — signature, accepted argument values, worked examples, and inputs that are rejected. Ships in the package and resolves through the `exports` map.
 - **Added:** `SKILL.md`, generated from that manifest, so coding agents can load how to use the library instead of guessing at it.
 - **Note:** Output for every documented valid call is unchanged; only previously silent failures now error. Verified by diffing 56 invocations before and after.
-- **Note:** The manifest and the skill are generated and cannot drift: the test suite compiles every example, asserts every recorded rejection actually fails, and fails the build if either file is out of date. Test count went from 14 to 177.
+- **Note:** The manifest and the skill are generated and cannot drift: the test suite compiles every example, asserts every recorded rejection actually fails, and fails the build if either file is out of date.
+- **Added:** Coverage for the `gls-` prefixed mixins, which had none. Every example now runs under both names and the CSS must be byte-identical, so a fault in the generated bundle can no longer ship unnoticed. Test count went from 14 to 308.
 
 ## 1.5.0
 

@@ -21,8 +21,9 @@ confirm before touching anything:
 ## 1. Verify the tree before anything else
 
 ```bash
-npm test                    # must pass, including the smoke test
+npm test                    # must pass: specs, smoke test and the manifest suite
 yarn audit                  # must be zero across all severities
+node tools/audit.js         # the SILENT bucket must be empty
 git status --short          # know exactly what is going out
 ```
 
@@ -53,8 +54,9 @@ Write what changed for a **user of the library**, not what changed in the repo.
 npm pack --dry-run
 ```
 
-Expect roughly 88 files / ~23 kB: everything under `scss/`, plus `README.md`,
-`LICENSE.md` and `package.json`. If `test/`, `gulpfile.js`, `yarn.lock` or
+Expect 91 files / ~37 kB as of v1.6.0: everything under `scss/`, the generated
+`gerillass.json` and `SKILL.md`, plus `README.md`, `LICENSE.md` and
+`package.json`. If `test/`, `meta/`, `tools/`, `gulpfile.js`, `yarn.lock` or
 `node_modules` appear, `.npmignore` is broken — stop and fix it.
 
 ## 4. Commit, tag, push
