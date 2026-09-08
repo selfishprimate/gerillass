@@ -1,6 +1,14 @@
 # Change Log
 _Change is the essence._
 
+## 1.6.1
+
+- **Fixed:** `__validateLength` warned about `var()`, `calc()`, `clamp()`, `min()`, `max()` and `env()`, which are all valid CSS lengths. Anyone using a custom property or a calculation with `position` was being told their correct code looked wrong. It now accepts Sass calculations and CSS functions, along with `unset` and `revert`.
+- **Fixed:** Nine more arguments answered bad input with an internal Sass message instead of their own. `linear-gradient` and `text-gradient` `$direction`, `background-stripes` `$rotation` and `$image`, `background-dots` `$image`, `radial-gradient` `$shape` and `$position`, and `font-face` `$font-family` and `$file-path` now check the type first and name what they accept.
+- **Fixed:** `after` and `before` given a non-string, `scissors` given a non-number, `text-shadow` given a malformed group, and `breakpointer` and `escape-to-parent` given a non-selector all leaked messages naming a Sass builtin's own parameter, such as `$n: Invalid index 2 for a list with 1 elements`. All now explain what the mixin wanted.
+- **Fixed:** Four utility functions did the same — `__clearWhitespace`, `__convertToNumber`, `__null` and `__pixelify`.
+- **Note:** No valid call changed. Verified by diffing the output of every documented invocation before and after.
+
 ## 1.6.0
 
 - **Fixed:** Thirteen mixins silently emitted nothing when given an argument that matched none of their branches. `antialias`, `border-box`, `text-selection`, `center`, `border-radius` with three arguments, `scissors` with two corners, `sprite` with a path that is not an image, and `only`/`except` given a colour all produced a completely empty rule, with no error to explain it. They now `@error` with a message naming what they accept.
