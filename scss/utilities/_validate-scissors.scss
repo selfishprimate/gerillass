@@ -1,21 +1,25 @@
 @charset "UTF-8";
 
+@use "sass:list";
+@use "sass:math";
+@use "sass:meta";
+
 @function validateScissors($value) {
   $list: ();
-  @for $i from 1 through length($value) {
-    $item: nth($value, $i);
-    // unitless() below throws on anything that is not a number, and its message
+  @for $i from 1 through list.length($value) {
+    $item: list.nth($value, $i);
+    // math.is-unitless() below throws on anything that is not a number, and its message
     // names its own parameter rather than the corner that was wrong.
-    @if $item != null and type-of($item) != "number" {
+    @if $item != null and meta.type-of($item) != "number" {
       @error "`#{$item}` is not a valid corner size. Pass a length such as `12px`, or a unitless number which is treated as pixels.";
     }
-    @if nth($value, $i) == null {
-      $list: append($list, 0px, comma);
-    } @else if unitless(nth($value, $i)) {
-      $pixelified: pixelify(nth($value, $i));
-      $list: append($list, $pixelified, comma);
+    @if list.nth($value, $i) == null {
+      $list: list.append($list, 0px, comma);
+    } @else if math.is-unitless(list.nth($value, $i)) {
+      $pixelified: pixelify(list.nth($value, $i));
+      $list: list.append($list, $pixelified, comma);
     } @else {
-      $list: append($list, nth($value, $i), comma);
+      $list: list.append($list, list.nth($value, $i), comma);
     }
   }
   @return $list;

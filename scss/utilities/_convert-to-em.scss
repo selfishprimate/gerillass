@@ -1,7 +1,10 @@
 @charset "UTF-8";
 
+@use "sass:string";
+@use "sass:math";
+
 @function convertToEm($value) {
   $base-value: 16px;
   $rem-value: math.div($value, $base-value);
-  @return $rem-value + unquote("em");
+  @return $rem-value + string.unquote("em");
 }

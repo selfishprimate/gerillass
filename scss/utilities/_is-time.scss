@@ -1,6 +1,11 @@
+
+@use "sass:list";
+@use "sass:math";
+@use "sass:meta";
+
 @function isTime($value) {
-  @for $i from 1 through length($value) {
-    @if (type-of($value) == "number" and index("ms" "s", unit($value)) != null) or $value == 0 {
+  @for $i from 1 through list.length($value) {
+    @if (meta.type-of($value) == "number" and list.index("ms" "s", math.unit($value)) != null) or $value == 0 {
       @return $value;
     } @else {
       @error "'#{$value}' is not a valid time value. Time values must be specified in either seconds (s) or milliseconds (ms). Please try one of the following forms: '1s', '0.2s', or '3ms'";

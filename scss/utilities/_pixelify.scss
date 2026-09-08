@@ -1,16 +1,19 @@
 @charset "UTF-8";
 
+@use "sass:math";
+@use "sass:meta";
+
 // This function checks if the argument has a px unit. If not, it adds a px unit to the end of the argument.
 
 @function pixelify($value) {
-  @if type-of($value) != "number" {
+  @if meta.type-of($value) != "number" {
     @error "`#{$value}` is not a valid $value for `pixelify`. Pass a number, with or without a unit.";
   }
-  @if unit($value) == "px" {
+  @if math.unit($value) == "px" {
     @return $value;
-  } @else if unit($value) != "px" {
+  } @else if math.unit($value) != "px" {
     @return clearUnit($value) * 1px;
-  } @else if unitless($value) == true {
+  } @else if math.is-unitless($value) == true {
     @return $value * 1px;
   }
 }

@@ -1,12 +1,15 @@
 @charset "UTF-8";
 
+@use "sass:list";
+@use "sass:meta";
+
 @function isColor($value) {
   $list: ();
-  @for $i from 1 through length($value) {
-    @if type-of(nth($value, $i)) == "color" {
-      $list: append($list, nth($value, $i), comma);
+  @for $i from 1 through list.length($value) {
+    @if meta.type-of(list.nth($value, $i)) == "color" {
+      $list: list.append($list, list.nth($value, $i), comma);
     } @else {
-      @error "'#{nth($value, $i)}' is not a color value, please replace it with a valid one.";
+      @error "'#{list.nth($value, $i)}' is not a color value, please replace it with a valid one.";
     }
   }
   @return $list;

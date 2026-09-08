@@ -1,22 +1,27 @@
 @charset "UTF-8";
 
+@use "sass:list";
+@use "sass:math";
+@use "sass:meta";
+@use "sass:string";
+
 @function validateLength($value) {
   $keywords: ("auto", "inherit", "initial", "unset", "revert", 0);
 
-  @if index($keywords, $value) {
+  @if list.index($keywords, $value) {
     @return $value;
   }
-  @if type-of($value) == "number" and not unitless($value) {
+  @if meta.type-of($value) == "number" and not math.is-unitless($value) {
     @return $value;
   }
   // calc(), clamp(), min() and max() arrive as Sass calculations; var() and
   // env() arrive as unquoted strings holding a parenthesis. Both are valid
   // lengths, and warning about them means warning about correct modern CSS,
   // which this function used to do.
-  @if type-of($value) == "calculation" {
+  @if meta.type-of($value) == "calculation" {
     @return $value;
   }
-  @if type-of($value) == "string" and str-index(quote($value), "(") {
+  @if meta.type-of($value) == "string" and string.index(string.quote($value), "(") {
     @return $value;
   }
 

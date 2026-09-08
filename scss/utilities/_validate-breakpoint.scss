@@ -1,11 +1,14 @@
 @charset "UTF-8";
 
+@use "sass:list";
+@use "sass:map";
+
 @function validateBreakpoint($value) {
-  @for $i from 1 through length($value) {
-    @if map-has-key($map-for-breakpoints, $value) {
-      @return map-get($map-for-breakpoints, nth($value, $i));
+  @for $i from 1 through list.length($value) {
+    @if map.has-key($map-for-breakpoints, $value) {
+      @return map.get($map-for-breakpoints, list.nth($value, $i));
     } @else {
-      @return nth($value, $i);
+      @return list.nth($value, $i);
     }
   }
 }

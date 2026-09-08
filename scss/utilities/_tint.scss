@@ -1,7 +1,9 @@
 @charset "UTF-8";
 
+@use "sass:color";
+
 @function tint($color, $percentage) {
   @if isColor($color) {
-    @return mix(white, $color, $percentage);
+    @return color.mix(white, $color, $percentage);
   }
 }

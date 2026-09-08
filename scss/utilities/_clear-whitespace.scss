@@ -1,12 +1,15 @@
 @charset "UTF-8";
 
+@use "sass:meta";
+@use "sass:string";
+
 @function clearWhitespace($string) {
-  @if type-of($string) != "string" {
+  @if meta.type-of($string) != "string" {
     @error "`#{$string}` is not a valid $string for `clearWhitespace`. Pass a string.";
   }
-  @while (str-index($string, " ") != null) {
-    $index: str-index($string, " ");
-    $string: "#{str-slice($string, 0, $index - 1)}#{str-slice($string, $index + 1)}";
+  @while (string.index($string, " ") != null) {
+    $index: string.index($string, " ");
+    $string: "#{string.slice($string, 0, $index - 1)}#{string.slice($string, $index + 1)}";
   }
   @return $string;
 }

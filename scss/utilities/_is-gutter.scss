@@ -1,20 +1,23 @@
 @charset "UTF-8";
 
+@use "sass:meta";
+@use "sass:string";
+
 // True for anything that can legally sit where a CSS length is expected: a
 // number, a Sass calculation such as calc() or clamp(), or an unquoted string
 // holding a parenthesis, which is how var() and env() arrive.
 //
-// Written because `type-of($value) == number` rejects `var(--gap)`, and a
+// Written because `meta.type-of($value) == number` rejects `var(--gap)`, and a
 // gutter expressed as a custom property is perfectly reasonable CSS.
 
 @function isGutter($value) {
-  @if type-of($value) == "number" {
+  @if meta.type-of($value) == "number" {
     @return true;
   }
-  @if type-of($value) == "calculation" {
+  @if meta.type-of($value) == "calculation" {
     @return true;
   }
-  @if type-of($value) == "string" and str-index(quote($value), "(") {
+  @if meta.type-of($value) == "string" and string.index(string.quote($value), "(") {
     @return true;
   }
   @return false;

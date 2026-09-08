@@ -1,7 +1,9 @@
 @charset "UTF-8";
 
+@use "sass:meta";
+
 @function isNumber($value) {
-  @if type-of($value) == "number" {
+  @if meta.type-of($value) == "number" {
     @return $value;
   } @else {
     @warn "Please make sure you pass a valid number!";

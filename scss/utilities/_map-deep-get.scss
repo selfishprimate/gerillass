@@ -1,8 +1,10 @@
 @charset "UTF-8";
 
+@use "sass:map";
+
 @function mapDeepGet($map, $keys...) {
   @each $key in $keys {
-    $map: map-get($map, $key);
+    $map: map.get($map, $key);
   }
   @return $map;
 }
