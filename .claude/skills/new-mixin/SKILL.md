@@ -41,7 +41,7 @@ rejects the whole thing (`@use rules must be written before any other rules`).
 Library partials rely on the global namespace `_gerillass.scss` builds; that is
 deliberate until the 2.0.0 module migration.
 
-Validate arguments and fail loudly. 35 of the 45 mixins that take arguments do
+Validate arguments and fail loudly. 33 of the 43 mixins that take arguments do
 this, and the message should name what is acceptable:
 
 ```scss

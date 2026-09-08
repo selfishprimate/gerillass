@@ -5,7 +5,7 @@ description: Use the Gerillass Sass mixin library — loading it, the mixin cata
 
 # Gerillass
 
-A Sass mixin library: 51 mixins and 22 functions that emit CSS from
+A Sass mixin library: 49 mixins and 22 functions that emit CSS from
 semantic declarations. It is Sass source only — there is no runtime and no
 utility classes, so styles live in your stylesheet and your markup stays clean.
 
@@ -37,7 +37,7 @@ Dart Sass only. LibSass and node-sass are not supported.
 
 ## Two names for every mixin
 
-Every mixin exists twice: bare (`ratio-box`) and prefixed (`gls-ratio-box`).
+Every mixin exists twice: bare (`circle`) and prefixed (`gls-circle`).
 They are the same mixin. The prefix exists to avoid collisions with other
 libraries. Pick one and stay with it; do not mix them in a file.
 
@@ -45,17 +45,17 @@ With the module system you can namespace instead, which is usually cleaner:
 
 ```scss
 @use "gerillass" as gls;
-.hero { @include gls.ratio-box("16/9"); }
+.avatar { @include gls.circle(50px); }
 ```
 
 ## Getting arguments right
 
 The conventions are not uniform across the library, so check before guessing.
-The single most common mistake is passing a ratio as a list:
+A mixin that wants a string will not take a bare value:
 
 ```scss
-.hero { @include ratio-box(16 9); }    // wrong — errors
-.hero { @include ratio-box("16/9"); }  // right
+.a { @include after(42) { color: red; } }    // wrong — errors
+.a { @include after("→") { color: red; } }   // right
 ```
 
 Mixins that reject bad input do so with a message naming what they accept. If
@@ -86,10 +86,8 @@ a dropped declaration rather than an error.
 | `loadify` | `@include loadify(nonsense);` |
 | `only` | `.a { @include only(#ff0000) { margin: 0; } }` |
 | `radial-gradient` | `.a { @include radial-gradient(42, "center", (red, blue)); }` |
-| `ratio-box` | `.hero { @include ratio-box(16 9); }` |
 | `remove` | `.a { @include remove(a, b, c); }` |
 | `reset-css` | `.a { @include reset-css; }` |
-| `responsive-video` | `.video { @include responsive-video(16 9); }` |
 | `scissors` | `.a { @include scissors(5px 10px); }` |
 | `smartphone` | `.a { @include smartphone(Nokia3310) { display: none; } }` |
 | `sprite` | `.icon { @include sprite("/img/sprite.txt"); }` |
@@ -135,13 +133,11 @@ a dropped declaration rather than an error.
 | `placeholder` | Styles the placeholder text of an input across vendor prefixes. |
 | `position($position: absolute, $offsets: 0)` | Sets position and offsets in one call, using shorthand order. |
 | `radial-gradient($shape, $position, $colors)` | Radial gradient background from a shape and a position. |
-| `ratio-box($ratio: null)` | Container that holds a fixed aspect ratio. Its single direct child is stretched to fill it. |
 | `remove($params...)` | Hides an element outright, or only within a breakpoint range. |
 | `reset-css` | Meyer reset. Must be called at the root of the stylesheet. |
 | `reset-figure` | Removes default figure margins and makes the image inside responsive. |
 | `resizable($direction: both, $overflow: auto)` | Makes an element user-resizable. |
 | `responsive-image` | Makes an image fill its container width. |
-| `responsive-video($ratio: null)` | Wrapper that keeps an embedded video at a fixed aspect ratio. |
 | `scissors($corners)` | Cuts the corners off an element with clip-path. |
 | `screen-agent($resolution)` | Media query targeting a screen pixel density. |
 | `sizer($width, $height: $width)` | Sets width and height together; one argument makes a square. |

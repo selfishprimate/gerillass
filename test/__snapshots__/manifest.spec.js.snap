@@ -823,39 +823,6 @@ exports[`Manifest examples radial-gradient: .a { @include radial-gradient(circle
 }"
 `;
 
-exports[`Manifest examples ratio-box: .default { @include ratio-box; } 1`] = `
-".default {
-  position: relative;
-  aspect-ratio: 16 / 9;
-}
-.default > * {
-  width: 100%;
-  height: 100%;
-}"
-`;
-
-exports[`Manifest examples ratio-box: .hero { @include ratio-box("16/9"); } 1`] = `
-".hero {
-  position: relative;
-  aspect-ratio: 16 / 9;
-}
-.hero > * {
-  width: 100%;
-  height: 100%;
-}"
-`;
-
-exports[`Manifest examples ratio-box: .square { @include ratio-box("1/1"); } 1`] = `
-".square {
-  position: relative;
-  aspect-ratio: 1 / 1;
-}
-.square > * {
-  width: 100%;
-  height: 100%;
-}"
-`;
-
 exports[`Manifest examples remify: .a { font-size: remify(24px); } 1`] = `
 ".a {
   font-size: 1.5rem;
@@ -970,28 +937,6 @@ exports[`Manifest examples responsive-image: img { @include responsive-image; } 
 "img {
   display: block;
   width: 100%;
-}"
-`;
-
-exports[`Manifest examples responsive-video: .video { @include responsive-video("16/9"); } 1`] = `
-".video {
-  position: relative;
-  aspect-ratio: 16 / 9;
-}
-.video > * {
-  width: 100%;
-  height: 100%;
-}"
-`;
-
-exports[`Manifest examples responsive-video: .video { @include responsive-video; } 1`] = `
-".video {
-  position: relative;
-  aspect-ratio: 16 / 9;
-}
-.video > * {
-  width: 100%;
-  height: 100%;
 }"
 `;
 

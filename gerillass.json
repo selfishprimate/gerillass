@@ -880,33 +880,6 @@
       ]
     },
     {
-      "name": "ratio-box",
-      "kind": "mixin",
-      "arguments": [
-        {
-          "name": "$ratio",
-          "default": "null",
-          "accepts": [
-            "a string such as \"16/9\" or \"16:9\"",
-            "a unitless number such as 1.77",
-            "null for the 16/9 default"
-          ]
-        }
-      ],
-      "file": "scss/library/_ratio-box.scss",
-      "signature": "ratio-box($ratio: null)",
-      "summary": "Container that holds a fixed aspect ratio. Its single direct child is stretched to fill it.",
-      "examples": [
-        ".hero { @include ratio-box(\"16/9\"); }",
-        ".square { @include ratio-box(\"1/1\"); }",
-        ".default { @include ratio-box; }"
-      ],
-      "rejects": [
-        ".hero { @include ratio-box(16 9); }",
-        ".hero { @include ratio-box(16px); }"
-      ]
-    },
-    {
       "name": "remove",
       "kind": "mixin",
       "arguments": [
@@ -998,31 +971,6 @@
         "img { @include responsive-image; }"
       ],
       "rejects": []
-    },
-    {
-      "name": "responsive-video",
-      "kind": "mixin",
-      "arguments": [
-        {
-          "name": "$ratio",
-          "default": "null",
-          "accepts": [
-            "a string such as \"16/9\" or \"16:9\"",
-            "a unitless number",
-            "null for the 16/9 default"
-          ]
-        }
-      ],
-      "file": "scss/library/_responsive-video.scss",
-      "signature": "responsive-video($ratio: null)",
-      "summary": "Wrapper that keeps an embedded video at a fixed aspect ratio.",
-      "examples": [
-        ".video { @include responsive-video(\"16/9\"); }",
-        ".video { @include responsive-video; }"
-      ],
-      "rejects": [
-        ".video { @include responsive-video(16 9); }"
-      ]
     },
     {
       "name": "scissors",

@@ -211,17 +211,17 @@ None of them is required — pick whichever reads best in your project, and stay
 **Bare.** The shortest, and fine unless another library defines the same name.
 
     @use 'gerillass' as *;
-    .hero { @include ratio-box('16/9'); }
+    .avatar { @include circle(50px); }
 
 **With the `gls-` prefix.** Every mixin also answers to a prefixed name, which avoids collisions with Bootstrap and friends.
 
     @use 'gerillass' as *;
-    .hero { @include gls-ratio-box('16/9'); }
+    .avatar { @include gls-circle(50px); }
 
 **Through a namespace.** Sass's own mechanism, and the tidiest of the three: nothing enters your global scope at all, so a collision is impossible. The name after `as` is yours to choose.
 
     @use 'gerillass' as gls;
-    .hero { @include gls.ratio-box('16/9'); }
+    .avatar { @include gls.circle(50px); }
 
 All three produce identical CSS. The prefix predates the Sass module system; if you are starting fresh, the namespace does the same job without the extra name.
 

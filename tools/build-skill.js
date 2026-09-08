@@ -64,7 +64,7 @@ Dart Sass only. LibSass and node-sass are not supported.
 
 ## Two names for every mixin
 
-Every mixin exists twice: bare (\`ratio-box\`) and prefixed (\`${manifest.prefix}ratio-box\`).
+Every mixin exists twice: bare (\`circle\`) and prefixed (\`${manifest.prefix}circle\`).
 They are the same mixin. The prefix exists to avoid collisions with other
 libraries. Pick one and stay with it; do not mix them in a file.
 
@@ -72,17 +72,17 @@ With the module system you can namespace instead, which is usually cleaner:
 
 \`\`\`scss
 @use "gerillass" as gls;
-.hero { @include gls.ratio-box("16/9"); }
+.avatar { @include gls.circle(50px); }
 \`\`\`
 
 ## Getting arguments right
 
 The conventions are not uniform across the library, so check before guessing.
-The single most common mistake is passing a ratio as a list:
+A mixin that wants a string will not take a bare value:
 
 \`\`\`scss
-.hero { @include ratio-box(16 9); }    // wrong — errors
-.hero { @include ratio-box("16/9"); }  // right
+.a { @include after(42) { color: red; } }    // wrong — errors
+.a { @include after("→") { color: red; } }   // right
 \`\`\`
 
 Mixins that reject bad input do so with a message naming what they accept. If
