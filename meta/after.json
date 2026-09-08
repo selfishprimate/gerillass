@@ -16,5 +16,8 @@
     ".a { @include after(\"data-label\") { color: red; } }",
     ".a { @include after { content: \"x\"; } }"
   ],
-  "rejects": []
+  "rejects": [
+    ".a { @include after(42) { color: red; } }",
+    ".a { @include after(16 9) { color: red; } }"
+  ]
 }

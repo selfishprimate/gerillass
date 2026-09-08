@@ -7,6 +7,13 @@
     // Takes each items come from $params.
     $item: nth($params, $i);
 
+    // Each group must carry at least a direction, a colour and a size. Without
+    // this the nth() calls below fail with "Invalid index", which says nothing
+    // about what the mixin wanted.
+    @if length($item) < 3 {
+      @error "`#{$item}` is not a valid shadow for `text-shadow`. Each group needs a direction, a colour and a size, such as `bottom-right red 5px`. An optional blur and a fill flag may follow.";
+    }
+
     // The first value comes from the $item is direction.
     // This will be used in the @if, @else statements with $size to control the offset of the shadows.
     $direction: nth($item, 1);

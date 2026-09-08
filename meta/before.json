@@ -15,5 +15,7 @@
     ".a { @include before(\"→\") { color: red; } }",
     ".a { @include before(\"data-label\") { color: red; } }"
   ],
-  "rejects": []
+  "rejects": [
+    ".a { @include before(42) { color: red; } }"
+  ]
 }

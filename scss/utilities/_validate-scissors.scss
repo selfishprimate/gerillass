@@ -3,6 +3,12 @@
 @function __validateScissors($value) {
   $list: ();
   @for $i from 1 through length($value) {
+    $item: nth($value, $i);
+    // unitless() below throws on anything that is not a number, and its message
+    // names its own parameter rather than the corner that was wrong.
+    @if $item != null and type-of($item) != "number" {
+      @error "`#{$item}` is not a valid corner size. Pass a length such as `12px`, or a unitless number which is treated as pixels.";
+    }
     @if nth($value, $i) == null {
       $list: append($list, 0px, comma);
     } @else if unitless(nth($value, $i)) {

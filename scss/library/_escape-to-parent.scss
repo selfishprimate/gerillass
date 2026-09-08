@@ -1,6 +1,9 @@
 @charset "UTF-8";
 
 @mixin escape-to-parent($selector: null) {
+  @if $selector != null and type-of($selector) != "string" {
+    @error "`#{$selector}` is not a valid $selector for `escape-to-parent`. Pass a selector as a string, such as `\".theme-dark\"`.";
+  }
   @at-root #{$selector}#{&} {
     @content;
   }

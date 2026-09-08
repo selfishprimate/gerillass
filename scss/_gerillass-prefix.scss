@@ -17,7 +17,9 @@
   &::after {
     @if $content == null {
       @content;
-    } @else if $content != null {
+    } @else if type-of($content) != "string" {
+      @error "`#{$content}` is not a valid $content for `after`. Pass a string to use as the content value, a data- attribute name such as `\"data-label\"` to render it with attr(), or no argument at all and write the content yourself.";
+    } @else {
       $data: str-slice($content, 1, 5);
       @if $data == "data-" {
         content: attr(#{$content});
@@ -284,7 +286,9 @@
   &::before {
     @if $content == null {
       @content;
-    } @else if $content != null {
+    } @else if type-of($content) != "string" {
+      @error "`#{$content}` is not a valid $content for `before`. Pass a string to use as the content value, a data- attribute name such as `\"data-label\"` to render it with attr(), or no argument at all and write the content yourself.";
+    } @else {
       $data: str-slice($content, 1, 5);
       @if $data == "data-" {
         content: attr(#{$content});
@@ -473,6 +477,9 @@
 
 
 @mixin gls-breakpointer($selector: null) {
+  @if $selector != null and type-of($selector) != "string" {
+    @error "`#{$selector}` is not a valid $selector for `breakpointer`. Pass a selector as a string, such as `\".debug\"`, or no argument at all to attach it to body.";
+  }
   @if & {
     &::before {
       @content;
@@ -663,6 +670,9 @@
 
 
 @mixin gls-escape-to-parent($selector: null) {
+  @if $selector != null and type-of($selector) != "string" {
+    @error "`#{$selector}` is not a valid $selector for `escape-to-parent`. Pass a selector as a string, such as `\".theme-dark\"`.";
+  }
   @at-root #{$selector}#{&} {
     @content;
   }
@@ -1368,6 +1378,13 @@
   @for $i from 1 through length($params) {
     // Takes each items come from $params.
     $item: nth($params, $i);
+
+    // Each group must carry at least a direction, a colour and a size. Without
+    // this the nth() calls below fail with "Invalid index", which says nothing
+    // about what the mixin wanted.
+    @if length($item) < 3 {
+      @error "`#{$item}` is not a valid shadow for `text-shadow`. Each group needs a direction, a colour and a size, such as `bottom-right red 5px`. An optional blur and a fill flag may follow.";
+    }
 
     // The first value comes from the $item is direction.
     // This will be used in the @if, @else statements with $size to control the offset of the shadows.

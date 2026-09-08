@@ -1,6 +1,9 @@
 @charset "UTF-8";
 
 @mixin breakpointer($selector: null) {
+  @if $selector != null and type-of($selector) != "string" {
+    @error "`#{$selector}` is not a valid $selector for `breakpointer`. Pass a selector as a string, such as `\".debug\"`, or no argument at all to attach it to body.";
+  }
   @if & {
     &::before {
       @content;

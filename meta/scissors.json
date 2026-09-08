@@ -15,6 +15,7 @@
     ".a { @include scissors(4px 8px 12px 16px); }"
   ],
   "rejects": [
-    ".a { @include scissors(5px 10px); }"
+    ".a { @include scissors(5px 10px); }",
+    ".a { @include scissors(nonsense); }"
   ]
 }

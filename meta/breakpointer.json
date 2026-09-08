@@ -14,5 +14,7 @@
     "@include breakpointer;",
     ".a { @include breakpointer; }"
   ],
-  "rejects": []
+  "rejects": [
+    ".a { @include breakpointer(42); }"
+  ]
 }

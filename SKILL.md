@@ -65,15 +65,19 @@ a dropped declaration rather than an error.
 
 | Mixin | Rejects, for example |
 |---|---|
+| `after` | `.a { @include after(42) { color: red; } }` |
 | `all-buttons` | `@include all-buttons(nonsense) { color: red; }` |
 | `all-text-inputs` | `@include all-text-inputs(nonsense) { color: red; }` |
 | `antialias` | `@include antialias(only);` |
 | `background-dots` | `.a { @include background-dots(red, 1em, 5em, maybe); }` |
 | `background-image` | `.a { @include background-image("/img/a.png", (red, blue), sideways); }` |
+| `before` | `.a { @include before(42) { color: red; } }` |
 | `border-box` | `@include border-box(only);` |
 | `border-radius` | `.a { @include border-radius(1px, 2px, 3px); }` |
+| `breakpointer` | `.a { @include breakpointer(42); }` |
 | `center` | `.modal { @include center(diagonal); }` |
 | `columnizer` | `.grid { @include columnizer(3, 20px, true, 9); }` |
+| `escape-to-parent` | `.a { @include escape-to-parent(42) { color: red; } }` |
 | `except` | `.a { @include except(#ff0000) { margin: 0; } }` |
 | `font-face` | `.a { @include font-face("Inter", "/fonts/inter"); }` |
 | `hide` | `.a { @include hide(nonsense); }` |
@@ -89,6 +93,7 @@ a dropped declaration rather than an error.
 | `stretched-link` | `.card a { @include stretched-link(middle); }` |
 | `tablet` | `.a { @include tablet(Surface) { display: none; } }` |
 | `text-selection` | `.a { @include text-selection(bogus) { background: yellow; } }` |
+| `text-shadow` | `.a { @include text-shadow(42); }` |
 | `triangle` | `.caret { @include triangle(sideways); }` |
 
 ## Mixins

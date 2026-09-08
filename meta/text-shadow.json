@@ -12,5 +12,8 @@
   "examples": [
     ".a { @include text-shadow(bottom-right red 5px); }"
   ],
-  "rejects": []
+  "rejects": [
+    ".a { @include text-shadow(42); }",
+    ".a { @include text-shadow(top red); }"
+  ]
 }
