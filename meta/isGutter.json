@@ -1,5 +1,5 @@
 {
-  "name": "__isGutter",
+  "name": "isGutter",
   "summary": "True for anything that can sit where a CSS length is expected: a number, a calculation, or a CSS function such as var().",
   "arguments": [
     {
@@ -10,8 +10,8 @@
     }
   ],
   "examples": [
-    ".a { --x: #{__isGutter(20px)}; }",
-    ".a { --x: #{__isGutter(var(--gap))}; }"
+    ".a { --x: #{isGutter(20px)}; }",
+    ".a { --x: #{isGutter(var(--gap))}; }"
   ],
   "rejects": []
 }

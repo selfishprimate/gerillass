@@ -126,9 +126,9 @@ matter but selectors and property order do.
 @import 'true';
 @import '../../scss/gerillass';
 
-@include describe('__yourFunction()') {
+@include describe('yourFunction()') {
   @include it('Describe what the function returns.') {
-    @include assert-equal(__yourFunction($input), $expected);
+    @include assert-equal(yourFunction($input), $expected);
   }
 }
 ```

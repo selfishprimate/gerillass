@@ -1,5 +1,5 @@
 {
-  "name": "__mapDeepGet",
+  "name": "mapDeepGet",
   "summary": "Reads a value out of a nested map by following a chain of keys.",
   "arguments": [
     {
@@ -16,7 +16,7 @@
     }
   ],
   "examples": [
-    ".a { height: __mapDeepGet($map-for-tablets, \"iPadPro\", \"height\"); }"
+    ".a { height: mapDeepGet($map-for-tablets, \"iPadPro\", \"height\"); }"
   ],
   "rejects": []
 }

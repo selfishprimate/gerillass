@@ -1,8 +1,8 @@
 @charset "UTF-8";
 
-@function __clearWhitespace($string) {
+@function clearWhitespace($string) {
   @if type-of($string) != "string" {
-    @error "`#{$string}` is not a valid $string for `__clearWhitespace`. Pass a string.";
+    @error "`#{$string}` is not a valid $string for `clearWhitespace`. Pass a string.";
   }
   @while (str-index($string, " ") != null) {
     $index: str-index($string, " ");

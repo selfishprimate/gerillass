@@ -14,7 +14,7 @@ silently, which is worse. Do all of them.
 | Adding | Folder | Naming |
 |---|---|---|
 | public mixin | `scss/library/` | `kebab-case` |
-| helper function | `scss/utilities/` | `__camelCase`, two leading underscores |
+| helper function | `scss/utilities/` | `camelCase` |
 | value list | `scss/lists/` | `$list-of-…`, with `!default` |
 | keyed config | `scss/maps/` | `$map-for-…`, with `!default` |
 
@@ -59,14 +59,14 @@ instead of yours.
 
 Do **not** validate a value that is passed straight through to CSS. CSS accepts
 an open-ended set there: `var()`, `calc()`, `clamp()`, `env()`, `unset` and
-whatever ships next. A strict check rejects correct code — `__validateLength`
+whatever ships next. A strict check rejects correct code — `validateLength`
 used to warn about `var(--gap)` for exactly this reason. Validate the shape of
 the call (arity, which keyword, which type) and leave the values alone.
 
-Reuse the existing utilities rather than reimplementing them — `__isColor`,
-`__isNumber`, `__isTime` for type guards; `__validateLength`,
-`__validateBreakpoint`, `__validateRatio`, `__validateScissors` for validation;
-`__remify`, `__pixelify`, `__convertToEm`, `__shorthandProperty` for
+Reuse the existing utilities rather than reimplementing them — `isColor`,
+`isNumber`, `isTime` for type guards; `validateLength`,
+`validateBreakpoint`, `validateRatio`, `validateScissors` for validation;
+`remify`, `pixelify`, `convertToEm`, `shorthandProperty` for
 conversion.
 
 ## 3. Wire it into `_gerillass.scss`

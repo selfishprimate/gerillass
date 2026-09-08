@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-@function __isNumber($value) {
+@function isNumber($value) {
   @if type-of($value) == "number" {
     @return $value;
   } @else {

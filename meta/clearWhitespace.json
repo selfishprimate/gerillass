@@ -1,5 +1,5 @@
 {
-  "name": "__clearWhitespace",
+  "name": "clearWhitespace",
   "summary": "Removes every space from a string.",
   "arguments": [
     {
@@ -10,9 +10,9 @@
     }
   ],
   "examples": [
-    ".a { content: __clearWhitespace(\"a b c\"); }"
+    ".a { content: clearWhitespace(\"a b c\"); }"
   ],
   "rejects": [
-    ".a { --x: #{__clearWhitespace(42)}; }"
+    ".a { --x: #{clearWhitespace(42)}; }"
   ]
 }

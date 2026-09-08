@@ -1,5 +1,5 @@
 {
-  "name": "__validateScissors",
+  "name": "validateScissors",
   "summary": "Normalises corner values for the scissors mixin, adding px where missing.",
   "arguments": [
     {
@@ -10,7 +10,7 @@
     }
   ],
   "examples": [
-    ".a { content: \"#{__validateScissors(12px)}\"; }"
+    ".a { content: \"#{validateScissors(12px)}\"; }"
   ],
   "rejects": []
 }

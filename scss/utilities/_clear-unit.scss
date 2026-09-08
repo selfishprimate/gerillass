@@ -1,5 +1,5 @@
 @charset "UTF-8";
 
-@function __clearUnit($value) {
+@function clearUnit($value) {
   @return math.div($value, ($value * 0 + 1));
 }

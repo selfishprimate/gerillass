@@ -1,5 +1,5 @@
 {
-  "name": "__convertToNumber",
+  "name": "convertToNumber",
   "summary": "Parses a string of digits into a number.",
   "arguments": [
     {
@@ -10,9 +10,9 @@
     }
   ],
   "examples": [
-    ".a { z-index: __convertToNumber(\"42\"); }"
+    ".a { z-index: convertToNumber(\"42\"); }"
   ],
   "rejects": [
-    ".a { --x: #{__convertToNumber(42)}; }"
+    ".a { --x: #{convertToNumber(42)}; }"
   ]
 }

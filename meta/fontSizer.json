@@ -1,5 +1,5 @@
 {
-  "name": "__fontSizer",
+  "name": "fontSizer",
   "summary": "Multiplies a size by a factor. Handy for a modular scale.",
   "arguments": [
     {
@@ -16,7 +16,7 @@
     }
   ],
   "examples": [
-    ".a { font-size: __fontSizer(16px, 1.5); }"
+    ".a { font-size: fontSizer(16px, 1.5); }"
   ],
   "rejects": []
 }

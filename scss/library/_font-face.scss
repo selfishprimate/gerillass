@@ -43,7 +43,7 @@
         src: url("#{$file-path}.eot");
       }
       @for $i from 1 through length($file-formats) {
-        $list: append($list, __fontSource($font-family, $file-path, nth($file-formats, $i)), comma);
+        $list: append($list, fontSource($font-family, $file-path, nth($file-formats, $i)), comma);
       }
       src: $list;
       font-style: $font-style;

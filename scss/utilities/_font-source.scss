@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-@function __fontSource($font-family, $file-path, $file-formats) {
+@function fontSource($font-family, $file-path, $file-formats) {
   $list: ();
   @if map-has-key($map-for-font-formats, $file-formats) {
     @if index(eot woff2 woff ttf, $file-formats) {
@@ -8,7 +8,7 @@
         #{map-get($map-for-font-formats, $file-formats)};
       $list: append($list, $src-value, comma);
     } @else if index(svg, $file-formats) {
-      $font-family: __clearWhitespace($font-family);
+      $font-family: clearWhitespace($font-family);
       $src-value: url('#{$file-path}.#{$file-formats + "#" + $font-family}')
         #{map-get($map-for-font-formats, $file-formats)};
       $list: append($list, $src-value, comma);

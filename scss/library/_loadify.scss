@@ -28,11 +28,11 @@
       animation-delay: 0.2s;
       animation-duration: 0.5s;
     } @else if length($params) == 1 {
-      animation-delay: #{__isTime(nth($params, 1))};
+      animation-delay: #{isTime(nth($params, 1))};
       animation-duration: 0.5s;
     } @else if length($params) == 2 {
-      animation-delay: #{__isTime(nth($params, 1))};
-      animation-duration: #{__isTime(nth($params, 2))};
+      animation-delay: #{isTime(nth($params, 1))};
+      animation-duration: #{isTime(nth($params, 2))};
     } @else if length($params) > 2 {
       @error "You cannot pass more than two arguments.";
     }

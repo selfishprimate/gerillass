@@ -1,6 +1,6 @@
 {
-  "name": "__lighten",
-  "summary": "Mixes a colour towards white by a percentage.",
+  "name": "shade",
+  "summary": "Mixes a colour towards black by a percentage.",
   "arguments": [
     {
       "name": "$color",
@@ -16,9 +16,9 @@
     }
   ],
   "examples": [
-    ".a { color: __lighten(red, 20%); }"
+    ".a { color: shade(red, 20%); }"
   ],
   "rejects": [
-    ".a { color: __lighten(notacolor, 20%); }"
+    ".a { color: shade(notacolor, 20%); }"
   ]
 }

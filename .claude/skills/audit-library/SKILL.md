@@ -49,7 +49,7 @@ reaching for `str-slice`, `nth` or `unit`. Sass's own `Missing argument $name` i
 not in this bucket: it names the argument, which is enough.
 
 **WARNED ONLY — the build succeeded with a warning.** A warning most pipelines
-never surface. Today all of these are `__validateLength` on a value that is not
+never surface. Today all of these are `validateLength` on a value that is not
 a length, six of them reached through `position`, and they stay warnings on
 purpose: that function cannot be certain, and making it strict is what used to
 reject `var(--gap)`.
@@ -122,13 +122,13 @@ Also report mixins that take arguments and still validate none of them:
 for f in scss/library/_*.scss; do
   grep -q '^@mixin [a-z-]*(' "$f" || continue          # takes no arguments
   grep -q '@error' "$f" && continue                    # validates inline
-  grep -q '__validate\|__is[A-Z]' "$f" && continue     # validates through a utility
+  grep -qE 'validate[A-Z]|is[A-Z][a-z]' "$f" && continue  # validates through a utility
   basename "$f" .scss | sed 's/^_//'
 done
 ```
 
 The last filter matters: `ratio-box` and `responsive-video` carry no `@error` of
-their own but reject bad input through `__validateRatio`, so a plain grep for
+their own but reject bad input through `validateRatio`, so a plain grep for
 `@error` reports them as unvalidated and is wrong.
 
 ## 5. The packed artifact

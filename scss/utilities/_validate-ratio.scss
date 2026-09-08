@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-@function __validateRatio($ratio) {
+@function validateRatio($ratio) {
   // No argument at all keeps the 16/9 default.
   @if $ratio == null {
     @return 56.25%;
@@ -26,8 +26,8 @@
       @error "`#{$ratio}` is not a valid ratio. A string ratio must separate width and height with `/` or `:`, like `\"16/9\"` or `\"16:9\"`.";
     }
 
-    $width: __convertToNumber(str-slice($ratio, 1, $separator - 1));
-    $height: __convertToNumber(str-slice($ratio, $separator + 1));
+    $width: convertToNumber(str-slice($ratio, 1, $separator - 1));
+    $height: convertToNumber(str-slice($ratio, $separator + 1));
 
     @if $width == 0 {
       @error "`#{$ratio}` is not a valid ratio. The width must be greater than zero.";

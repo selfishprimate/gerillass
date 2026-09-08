@@ -1,5 +1,5 @@
 {
-  "name": "__pixelify",
+  "name": "pixelify",
   "summary": "Returns the value with a px unit, adding one if it is missing.",
   "arguments": [
     {
@@ -10,9 +10,9 @@
     }
   ],
   "examples": [
-    ".a { width: __pixelify(24); }"
+    ".a { width: pixelify(24); }"
   ],
   "rejects": [
-    ".a { --x: #{__pixelify(nonsense)}; }"
+    ".a { --x: #{pixelify(nonsense)}; }"
   ]
 }

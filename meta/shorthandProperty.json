@@ -1,5 +1,5 @@
 {
-  "name": "__shorthandProperty",
+  "name": "shorthandProperty",
   "summary": "Expands one to four values into the four-value CSS shorthand order.",
   "arguments": [
     {
@@ -10,9 +10,9 @@
     }
   ],
   "examples": [
-    ".a { margin: __shorthandProperty(10px 20px); }"
+    ".a { margin: shorthandProperty(10px 20px); }"
   ],
   "rejects": [
-    ".a { margin: __shorthandProperty(1px 2px 3px 4px 5px); }"
+    ".a { margin: shorthandProperty(1px 2px 3px 4px 5px); }"
   ]
 }

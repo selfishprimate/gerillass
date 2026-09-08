@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-@function __pseudoSelector($elements, $pseudo: null) {
+@function pseudoSelector($elements, $pseudo: null) {
   $list: ();
   @each $element in $elements {
     $element: if($pseudo, $element + ":" + $pseudo, $element);

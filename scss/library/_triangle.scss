@@ -2,7 +2,7 @@
 
 @mixin triangle($direction: "bottom", $color: black, $size: 10px 8px) {
   @if index($list-of-directions, $direction) {
-    @if __isColor($color){
+    @if isColor($color){
       content: "";
       height: 0;
       width: 0;

@@ -1,5 +1,5 @@
 {
-  "name": "__validateLength",
+  "name": "validateLength",
   "summary": "Returns the value if it is a length or one of auto, inherit, initial, 0.",
   "arguments": [
     {
@@ -10,7 +10,7 @@
     }
   ],
   "examples": [
-    ".a { width: __validateLength(20px); }"
+    ".a { width: validateLength(20px); }"
   ],
   "rejects": []
 }

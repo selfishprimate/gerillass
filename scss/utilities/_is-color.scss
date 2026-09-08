@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-@function __isColor($value) {
+@function isColor($value) {
   $list: ();
   @for $i from 1 through length($value) {
     @if type-of(nth($value, $i)) == "color" {

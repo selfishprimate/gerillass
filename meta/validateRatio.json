@@ -1,5 +1,5 @@
 {
-  "name": "__validateRatio",
+  "name": "validateRatio",
   "summary": "Turns an aspect ratio into the padding-top percentage that holds it.",
   "arguments": [
     {
@@ -12,9 +12,9 @@
     }
   ],
   "examples": [
-    ".a { padding-top: __validateRatio(\"16/9\"); }"
+    ".a { padding-top: validateRatio(\"16/9\"); }"
   ],
   "rejects": [
-    ".a { padding-top: __validateRatio(16 9); }"
+    ".a { padding-top: validateRatio(16 9); }"
   ]
 }

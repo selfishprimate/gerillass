@@ -7,7 +7,7 @@
 // Written because `type-of($value) == number` rejects `var(--gap)`, and a
 // gutter expressed as a custom property is perfectly reasonable CSS.
 
-@function __isGutter($value) {
+@function isGutter($value) {
   @if type-of($value) == "number" {
     @return true;
   }

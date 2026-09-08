@@ -1,5 +1,5 @@
 {
-  "name": "__validateBreakpoint",
+  "name": "validateBreakpoint",
   "summary": "Resolves a breakpoint name to its width, passing other values through.",
   "arguments": [
     {
@@ -10,7 +10,7 @@
     }
   ],
   "examples": [
-    ".a { width: __validateBreakpoint(\"medium\"); }"
+    ".a { width: validateBreakpoint(\"medium\"); }"
   ],
   "rejects": []
 }

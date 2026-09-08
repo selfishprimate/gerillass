@@ -27,7 +27,7 @@
         &:not(:last-child) {
           margin-right: 0;
         }
-      } @else if __isGutter(nth($params, 2)) {
+      } @else if isGutter(nth($params, 2)) {
         $gutter: nth($params, length($params));
         flex-grow: 0;
         flex-shrink: 0;

@@ -163,28 +163,28 @@ functions rather than mixins; they are public API.
 
 | Signature | What it does |
 |---|---|
-| `__clearUnit($value)` | Strips the unit off a number, returning it unitless. |
-| `__clearWhitespace($string)` | Removes every space from a string. |
-| `__convertToEm($value)` | Converts a pixel length to em, against a 16px base. |
-| `__convertToNumber($value)` | Parses a string of digits into a number. |
-| `__darken($color, $percentage)` | Mixes a colour towards black by a percentage. |
-| `__fontSizer($size, $time)` | Multiplies a size by a factor. Handy for a modular scale. |
-| `__fontSource($font-family, $file-path, $file-formats)` | Builds one src entry for an @font-face rule. |
-| `__isColor($value)` | Returns the value if every item in it is a colour, and errors otherwise. |
-| `__isGutter($value)` | True for anything that can sit where a CSS length is expected: a number, a calculation, or a CSS function such as var(). |
-| `__isNumber($value)` | Returns the value if it is a number. |
-| `__isTime($value)` | Returns the value if it is a time in s or ms, and errors otherwise. |
-| `__lighten($color, $percentage)` | Mixes a colour towards white by a percentage. |
-| `__mapDeepGet($map, $keys...)` | Reads a value out of a nested map by following a chain of keys. |
-| `__null($value, $seperation: comma, $skip: false)` | Replaces null entries in a list with 0, or drops them. |
-| `__pixelify($value)` | Returns the value with a px unit, adding one if it is missing. |
-| `__pseudoSelector($elements, $pseudo: null)` | Appends a pseudo-class to every selector in a list. |
-| `__remify($value)` | Converts a pixel length to rem, against a 16px root. |
-| `__shorthandProperty($value)` | Expands one to four values into the four-value CSS shorthand order. |
-| `__validateBreakpoint($value)` | Resolves a breakpoint name to its width, passing other values through. |
-| `__validateLength($value)` | Returns the value if it is a length or one of auto, inherit, initial, 0. |
-| `__validateRatio($ratio)` | Turns an aspect ratio into the padding-top percentage that holds it. |
-| `__validateScissors($value)` | Normalises corner values for the scissors mixin, adding px where missing. |
+| `clearUnit($value)` | Strips the unit off a number, returning it unitless. |
+| `clearWhitespace($string)` | Removes every space from a string. |
+| `convertToEm($value)` | Converts a pixel length to em, against a 16px base. |
+| `convertToNumber($value)` | Parses a string of digits into a number. |
+| `fillNulls($value, $seperation: comma, $skip: false)` | Replaces null entries in a list with 0, or drops them. |
+| `fontSizer($size, $time)` | Multiplies a size by a factor. Handy for a modular scale. |
+| `fontSource($font-family, $file-path, $file-formats)` | Builds one src entry for an @font-face rule. |
+| `isColor($value)` | Returns the value if every item in it is a colour, and errors otherwise. |
+| `isGutter($value)` | True for anything that can sit where a CSS length is expected: a number, a calculation, or a CSS function such as var(). |
+| `isNumber($value)` | Returns the value if it is a number. |
+| `isTime($value)` | Returns the value if it is a time in s or ms, and errors otherwise. |
+| `mapDeepGet($map, $keys...)` | Reads a value out of a nested map by following a chain of keys. |
+| `pixelify($value)` | Returns the value with a px unit, adding one if it is missing. |
+| `pseudoSelector($elements, $pseudo: null)` | Appends a pseudo-class to every selector in a list. |
+| `remify($value)` | Converts a pixel length to rem, against a 16px root. |
+| `shade($color, $percentage)` | Mixes a colour towards black by a percentage. |
+| `shorthandProperty($value)` | Expands one to four values into the four-value CSS shorthand order. |
+| `tint($color, $percentage)` | Mixes a colour towards white by a percentage. |
+| `validateBreakpoint($value)` | Resolves a breakpoint name to its width, passing other values through. |
+| `validateLength($value)` | Returns the value if it is a length or one of auto, inherit, initial, 0. |
+| `validateRatio($ratio)` | Turns an aspect ratio into the padding-top percentage that holds it. |
+| `validateScissors($value)` | Normalises corner values for the scissors mixin, adding px where missing. |
 
 ## Checking your work
 

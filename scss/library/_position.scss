@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 @mixin position($position: absolute, $offsets: 0) {
-  $offsets: __shorthandProperty($offsets);
+  $offsets: shorthandProperty($offsets);
   $positioning-offsets: (
     top: nth($offsets, 1),
     right: nth($offsets, 2),
@@ -10,7 +10,7 @@
   );
   position: $position;
   @each $offset, $value in $positioning-offsets {
-    @if __validateLength($value) {
+    @if validateLength($value) {
       #{$offset}: $value;
     }
   }

@@ -43,7 +43,7 @@ hypothetical old-toolchain user, so it is queued for 2.0.0 rather than done now.
 
 ```bash
 npm test                          # Jest: sass-true specs, the smoke test, and the manifest suite
-npx jest -t "__mapDeepGet()"      # single test, filtered by the describe/it name
+npx jest -t "mapDeepGet()"      # single test, filtered by the describe/it name
 npm run manifest                  # regenerate gerillass.json and SKILL.md (see below)
 node tools/audit.js               # adversarial sweep: bad arguments at every mixin
 npx gulp start                    # regenerate scss/_gerillass-prefix.scss (see below)
@@ -79,7 +79,7 @@ timestamp, a reading of the source — and every one was wrong:
 
 | Signal | Conclusion drawn | What was actually true |
 |---|---|---|
-| no mixin calls these six utilities | dead code, delete them | documented public API; `__remify` has its own docs page |
+| no mixin calls these six utilities | dead code, delete them | documented public API; `remify` has its own docs page |
 | eyeglass unpublished since June 2022 | dead package, drop the config | ~6800 downloads/month; the real fault was its importer breaking on any `@import` |
 | `ratio-box` branches on `type-of == string` | a string is the correct argument | a list was accepted too, and silently produced a ratio box with no ratio |
 
@@ -172,16 +172,18 @@ Four layers, loaded in dependency order by `scss/_gerillass.scss`. The order is 
 |---|---|---|---|
 | 1 | `scss/lists/` | flat value lists (`$list-of-buttons`) | `list-of-` prefix, `!default` |
 | 2 | `scss/maps/` | keyed config (`$map-for-breakpoints`) | `map-for-` prefix, `!default` |
-| 3 | `scss/utilities/` | 22 helper **functions** | `__camelCase`, two leading underscores |
+| 3 | `scss/utilities/` | 22 helper **functions** | `camelCase` |
 | 4 | `scss/library/` | 51 **mixins** — the bulk of the API | `kebab-case` |
 
 `_gerillass.scss` lists every partial explicitly. **A new file is invisible until you add its `@import` line there**, in the correct layer block.
 
-Per `CONTRIBUTING.md`, the `__` prefix and camelCase exist for one reason: to make functions impossible to confuse with mixins at a call site. **They do not mean "private".** Utilities are part of the public API and users call them directly — `__remify` has its own page in the docs. Utilities cluster around three jobs: type guards (`__isColor`, `__isNumber`, `__isTime`), validators that `@warn`/`@error` and return (`__validateLength`, `__validateBreakpoint`, `__validateRatio`, `__validateScissors`), and converters (`__remify`, `__pixelify`, `__convertToEm`, `__fontSizer`, `__lighten`, `__darken`, `__shorthandProperty`).
+Functions are `camelCase`, mixins are `kebab-case`, and that is what keeps them apart at a call site — together with `@include`, which a mixin always needs and a function never has. Utilities are public API and users call them directly; `remify` has its own page in the docs.
 
-**A utility that nothing in `scss/` calls is not dead code.** `__remify`, `__convertToEm`, `__fontSizer`, `__isNumber`, `__lighten` and `__darken` are called by no mixin at all — they are there for users, and removing them would break stylesheets. Never treat "no internal callers" as a reason to delete a member; the library is the smaller half of its own audience.
+Until 2.0.0 they carried a `__` prefix. It had to go: under `@use`/`@forward` a member whose name starts with `_` is **private to its own file**, so every utility became unreachable, and through `@use ... as *` it failed silently, rendering as literal CSS. Three could not simply drop the prefix — `darken` and `lighten` would shadow the Sass built-ins with different results, and `null` is a keyword — so they are `shade`, `tint` and `fillNulls`. Utilities cluster around three jobs: type guards (`isColor`, `isNumber`, `isTime`), validators that `@warn`/`@error` and return (`validateLength`, `validateBreakpoint`, `validateRatio`, `validateScissors`), and converters (`remify`, `pixelify`, `convertToEm`, `fontSizer`, `tint`, `shade`, `shorthandProperty`).
 
-Mixins validate their input and `@error` with a message that names the accepted values — 27 of the 51 do this as of v1.6.0, 25 inline and 2 (`ratio-box`, `responsive-video`) through `__validateRatio`. Match that style rather than failing silently.
+**A utility that nothing in `scss/` calls is not dead code.** `remify`, `convertToEm`, `fontSizer`, `isNumber`, `tint` and `shade` are called by no mixin at all — they are there for users, and removing them would break stylesheets. Never treat "no internal callers" as a reason to delete a member; the library is the smaller half of its own audience.
+
+Mixins validate their input and `@error` with a message that names the accepted values — 27 of the 51 do this as of v1.6.0, 25 inline and 2 (`ratio-box`, `responsive-video`) through `validateRatio`. Match that style rather than failing silently.
 
 Silent failure is the trap to watch for. A mixin that branches on `type-of` and
 has no `@else` emits nothing at all for an unexpected type, which surfaces as a
@@ -217,7 +219,7 @@ The library still uses `@import` and global built-ins (`map-get`, `str-slice`, `
 
 A migration to `@use`/`@forward` is planned for **2.0.0** and is not on `main`. Two things make it more than a mechanical rewrite, and both were verified:
 
-1. `@forward` does not make members visible to sibling partials. Roughly 40 files reference members from another layer (e.g. `_adaptive.scss` uses `$map-for-breakpoints`, `_font-face.scss` uses `__fontSource`) and each needs its own `@use`. Because of lazy evaluation, the failures only surface when a mixin is actually included.
+1. `@forward` does not make members visible to sibling partials. Roughly 40 files reference members from another layer (e.g. `_adaptive.scss` uses `$map-for-breakpoints`, `_font-face.scss` uses `fontSource`) and each needs its own `@use`. Because of lazy evaluation, the failures only surface when a mixin is actually included.
 2. Adding those `@use` lines breaks the Gulp prefix bundle, per the constraint above. The generator has to hoist and dedupe `@use` rules, or the `gls-` strategy has to be replaced by the module system's own namespacing (`@use "gerillass" as gls`).
 
 ## Test depths

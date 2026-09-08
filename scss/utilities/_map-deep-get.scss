@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-@function __mapDeepGet($map, $keys...) {
+@function mapDeepGet($map, $keys...) {
   @each $key in $keys {
     $map: map-get($map, $key);
   }

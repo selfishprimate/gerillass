@@ -1,6 +1,6 @@
 {
-  "name": "__darken",
-  "summary": "Mixes a colour towards black by a percentage.",
+  "name": "tint",
+  "summary": "Mixes a colour towards white by a percentage.",
   "arguments": [
     {
       "name": "$color",
@@ -16,9 +16,9 @@
     }
   ],
   "examples": [
-    ".a { color: __darken(red, 20%); }"
+    ".a { color: tint(red, 20%); }"
   ],
   "rejects": [
-    ".a { color: __darken(notacolor, 20%); }"
+    ".a { color: tint(notacolor, 20%); }"
   ]
 }

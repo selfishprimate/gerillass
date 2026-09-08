@@ -1,5 +1,5 @@
 {
-  "name": "__isNumber",
+  "name": "isNumber",
   "summary": "Returns the value if it is a number.",
   "arguments": [
     {
@@ -10,7 +10,7 @@
     }
   ],
   "examples": [
-    ".a { z-index: __isNumber(5); }"
+    ".a { z-index: isNumber(5); }"
   ],
   "rejects": []
 }

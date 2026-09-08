@@ -1,5 +1,5 @@
 {
-  "name": "__isColor",
+  "name": "isColor",
   "summary": "Returns the value if every item in it is a colour, and errors otherwise.",
   "arguments": [
     {
@@ -10,9 +10,9 @@
     }
   ],
   "examples": [
-    ".a { color: __isColor(red); }"
+    ".a { color: isColor(red); }"
   ],
   "rejects": [
-    ".a { color: __isColor(nonsense); }"
+    ".a { color: isColor(nonsense); }"
   ]
 }

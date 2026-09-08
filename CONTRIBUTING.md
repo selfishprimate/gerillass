@@ -17,7 +17,7 @@ Please examine the code and match the style with the code you write (**Prettier*
 
 * Use two spaces indentation (no tabs).
 * Use `@charset "UTF-8";` line in every Sass related files to avoid any potential issues with character encoding.
-* Use **camelCase** naming convention for function names only and start with two underscore characters (e.g. `__newFunction {}`).
+* Use **camelCase** naming convention for function names only (e.g. `newFunction {}`). Mixins are kebab-case, so the casing is what tells them apart.
 * Use **kebab-case** naming convention for the rest of the code.
 * Use `map-for-`prefix for the map names (e.g. `$map-for-directions`).
 * Use `list-of-` prefix for the list names (e.g. `$list-of-colors`).
@@ -25,9 +25,11 @@ Please examine the code and match the style with the code you write (**Prettier*
 
 ### Functions
 
-The functions should be placed in the **utilities** folder. The function names start with two underscores and follow **camelCase** naming convention.
+The functions should be placed in the **utilities** folder and follow the **camelCase** naming convention.
 
-    @function __newFunction($parameter) {
+Do not start a member name with `_` or `-`. Sass treats those as private to the file, so the member becomes unreachable from anywhere else — and through `@use ... as *` it fails silently rather than erroring. Avoid the names of Sass built-ins too: a function called `darken` shadows the built-in one and quietly returns a different colour.
+
+    @function newFunction($parameter) {
         // Your code!
     }
 

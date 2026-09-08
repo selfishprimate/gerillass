@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
-@function __darken($color, $percentage) {
-  @if __isColor($color) {
+@function shade($color, $percentage) {
+  @if isColor($color) {
     @return mix(black, $color, $percentage);
   }
 }

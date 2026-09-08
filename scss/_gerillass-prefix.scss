@@ -40,7 +40,7 @@
       @content;
     }   
   } @else if index($list, $pseudo) {
-    $all-buttons: __pseudoSelector($list-of-buttons, $pseudo);
+    $all-buttons: pseudoSelector($list-of-buttons, $pseudo);
     #{$all-buttons} {
       @content;
     }
@@ -57,7 +57,7 @@
       @content;
     }
   } @else if index($list, $pseudo) {
-    $all-text-inputs: __pseudoSelector($list-of-text-inputs, $pseudo);
+    $all-text-inputs: pseudoSelector($list-of-text-inputs, $pseudo);
     #{$all-text-inputs} {
       @content;
     }
@@ -347,7 +347,7 @@
   $list: join($list-of-directions, ("cross-left", "cross-right", "all"));
   @if length($args) == 1 {
     $value: nth($args, 1);
-    border-radius: __null($value, space);
+    border-radius: fillNulls($value, space);
   } @else if length($args) == 2 {
     $corner: nth($args, 1);
     $value: nth($args, 2);
@@ -385,7 +385,7 @@
       @error "Corner value must be one of the followings: #{$list}.";
     }
   } @else if length($args) == 4 {
-    $args: __null($args, space, true);
+    $args: fillNulls($args, space, true);
     border-top-left-radius: nth($args, 1);
     border-top-right-radius: nth($args, 2);
     border-bottom-right-radius: nth($args, 3);
@@ -436,7 +436,7 @@
     @if not index("only" "min" "max" "between", nth($params, 1)) {
       $start: nth($params, 1);
       $end: nth($params, 2);
-      @media (min-width: #{__validateBreakpoint($start)}) and (max-width: #{if(map-has-key($map-for-breakpoints, $end), __validateBreakpoint($end) - 1, $end)}) {
+      @media (min-width: #{validateBreakpoint($start)}) and (max-width: #{if(map-has-key($map-for-breakpoints, $end), validateBreakpoint($end) - 1, $end)}) {
         @content;
       }
     } @else {
@@ -475,7 +475,7 @@
       } @else if $mode == "between" {
         $start: nth($value, 1);
         $end: nth($value, 2);
-        @media (min-width: #{__validateBreakpoint($start)}) and (max-width: #{if(map-has-key($map-for-breakpoints, $end), __validateBreakpoint($end) - 1, $end)}) {
+        @media (min-width: #{validateBreakpoint($start)}) and (max-width: #{if(map-has-key($map-for-breakpoints, $end), validateBreakpoint($end) - 1, $end)}) {
           @content;
         }
       }
@@ -587,7 +587,7 @@
         &:not(:last-child) {
           margin-right: 0;
         }
-      } @else if __isGutter(nth($params, 2)) {
+      } @else if isGutter(nth($params, 2)) {
         $gutter: nth($params, length($params));
         flex-grow: 0;
         flex-shrink: 0;
@@ -785,7 +785,7 @@
         src: url("#{$file-path}.eot");
       }
       @for $i from 1 through length($file-formats) {
-        $list: append($list, __fontSource($font-family, $file-path, nth($file-formats, $i)), comma);
+        $list: append($list, fontSource($font-family, $file-path, nth($file-formats, $i)), comma);
       }
       src: $list;
       font-style: $font-style;
@@ -872,11 +872,11 @@
       animation-delay: 0.2s;
       animation-duration: 0.5s;
     } @else if length($params) == 1 {
-      animation-delay: #{__isTime(nth($params, 1))};
+      animation-delay: #{isTime(nth($params, 1))};
       animation-duration: 0.5s;
     } @else if length($params) == 2 {
-      animation-delay: #{__isTime(nth($params, 1))};
-      animation-duration: #{__isTime(nth($params, 2))};
+      animation-delay: #{isTime(nth($params, 1))};
+      animation-duration: #{isTime(nth($params, 2))};
     } @else if length($params) > 2 {
       @error "You cannot pass more than two arguments.";
     }
@@ -968,7 +968,7 @@
 
 
 @mixin gls-position($position: absolute, $offsets: 0) {
-  $offsets: __shorthandProperty($offsets);
+  $offsets: shorthandProperty($offsets);
   $positioning-offsets: (
     top: nth($offsets, 1),
     right: nth($offsets, 2),
@@ -977,7 +977,7 @@
   );
   position: $position;
   @each $offset, $value in $positioning-offsets {
-    @if __validateLength($value) {
+    @if validateLength($value) {
       #{$offset}: $value;
     }
   }
@@ -1015,7 +1015,7 @@
   &::before {
     content: "";
     display: block;
-    padding-top: __validateRatio($ratio);
+    padding-top: validateRatio($ratio);
   }
   & > * {
     width: 100%;
@@ -1149,7 +1149,7 @@
   &::before {
     content: "";
     display: block;
-    padding-top: __validateRatio($ratio);
+    padding-top: validateRatio($ratio);
   }
   & > * {
     width: 100%;
@@ -1166,7 +1166,7 @@
 
 @mixin gls-scissors($corners) {
   @if length($corners) == 1 {
-    $corners: __validateScissors($corners);
+    $corners: validateScissors($corners);
     clip-path: polygon(
       0 #{nth($corners, 1)},
       #{nth($corners, 1)} 0,
@@ -1178,7 +1178,7 @@
       0 calc(100% - #{nth($corners, 1)})
     );
   } @else if length($corners) == 4 {
-    $corners: __validateScissors($corners);
+    $corners: validateScissors($corners);
     clip-path: polygon(
       0 #{nth($corners, 1)},
       #{nth($corners, 1)} 0,
@@ -1229,15 +1229,15 @@
   @if map-has-key($map-for-smartphones, $device) {
     @if $orientation == portrait or $orientation == null {
       @media only screen 
-      and (device-width: __mapDeepGet($map-for-smartphones, $device, 'width')) 
-      and (device-height: __mapDeepGet($map-for-smartphones, $device, 'height'))
+      and (device-width: mapDeepGet($map-for-smartphones, $device, 'width')) 
+      and (device-height: mapDeepGet($map-for-smartphones, $device, 'height'))
       and (orientation: portrait) {
         @content;
       }
     } @else if $orientation == landscape {
       @media only screen 
-      and (device-width: __mapDeepGet($map-for-smartphones, $device, 'height')) 
-      and (device-height: __mapDeepGet($map-for-smartphones, $device, 'width'))
+      and (device-width: mapDeepGet($map-for-smartphones, $device, 'height')) 
+      and (device-height: mapDeepGet($map-for-smartphones, $device, 'width'))
       and (orientation: landscape) {
         @content;
       }
@@ -1307,15 +1307,15 @@
   @if map-has-key($map-for-tablets, $device) {
     @if $orientation == portrait or $orientation == null {
       @media only screen 
-      and (device-width: __mapDeepGet($map-for-tablets, $device, 'width')) 
-      and (device-height: __mapDeepGet($map-for-tablets, $device, 'height'))
+      and (device-width: mapDeepGet($map-for-tablets, $device, 'width')) 
+      and (device-height: mapDeepGet($map-for-tablets, $device, 'height'))
       and (orientation: portrait) {
         @content;
       }
     } @else if $orientation == landscape {
       @media only screen 
-      and (device-width: __mapDeepGet($map-for-tablets, $device, 'height')) 
-      and (device-height: __mapDeepGet($map-for-tablets, $device, 'width'))
+      and (device-width: mapDeepGet($map-for-tablets, $device, 'height')) 
+      and (device-height: mapDeepGet($map-for-tablets, $device, 'width'))
       and (orientation: landscape) {
         @content;
       }
@@ -1437,8 +1437,8 @@
     // The code below changes the angle of $direction of the shadow based on the predefined values.
     @if $direction == "top" {
       @if $fill == true {
-        // The __clearUnit(); function is used here due to it is not possible to count $size with a unit. First, it clears the unit from the $size argument and then adds it back again in the @for loop.
-        @for $i from 1 through __clearUnit($size) {
+        // The clearUnit(); function is used here due to it is not possible to count $size with a unit. First, it clears the unit from the $size argument and then adds it back again in the @for loop.
+        @for $i from 1 through clearUnit($size) {
           $increase: $i * 1 + $sizeUnit;
           $shadow: 0 -#{$increase} $blur $color;
           $value: append($value, $shadow, comma);
@@ -1449,7 +1449,7 @@
       }
     } @else if $direction == "top-left" {
       @if $fill == true {
-        @for $i from 1 through __clearUnit($size) {
+        @for $i from 1 through clearUnit($size) {
           $increase: $i * 1 + $sizeUnit;
           $shadow: -#{$increase} -#{$increase} $blur $color;
           $value: append($value, $shadow, comma);
@@ -1460,7 +1460,7 @@
       }
     } @else if $direction == "top-right" {
       @if $fill == true {
-        @for $i from 1 through __clearUnit($size) {
+        @for $i from 1 through clearUnit($size) {
           $increase: $i * 1 + $sizeUnit;
           $shadow: #{$increase} -#{$increase} $blur $color;
           $value: append($value, $shadow, comma);
@@ -1471,7 +1471,7 @@
       }
     } @else if $direction == "bottom" {
       @if $fill == true {
-        @for $i from 1 through __clearUnit($size) {
+        @for $i from 1 through clearUnit($size) {
           $increase: $i * 1 + $sizeUnit;
           $shadow: 0 #{$increase} $blur $color;
           $value: append($value, $shadow, comma);
@@ -1482,7 +1482,7 @@
       }
     } @else if $direction == "bottom-left" {
       @if $fill == true {
-        @for $i from 1 through __clearUnit($size) {
+        @for $i from 1 through clearUnit($size) {
           $increase: $i * 1 + $sizeUnit;
           $shadow: -#{$increase} #{$increase} $blur $color;
           $value: append($value, $shadow, comma);
@@ -1493,7 +1493,7 @@
       }
     } @else if $direction == "bottom-right" {
       @if $fill == true {
-        @for $i from 1 through __clearUnit($size) {
+        @for $i from 1 through clearUnit($size) {
           $increase: $i * 1 + $sizeUnit;
           $shadow: #{$increase} #{$increase} $blur $color;
           $value: append($value, $shadow, comma);
@@ -1504,7 +1504,7 @@
       }
     } @else if $direction == "left" {
       @if $fill == true {
-        @for $i from 1 through __clearUnit($size) {
+        @for $i from 1 through clearUnit($size) {
           $increase: $i * 1 + $sizeUnit;
           $shadow: -#{$increase} 0 $blur $color;
           $value: append($value, $shadow, comma);
@@ -1515,7 +1515,7 @@
       }
     } @else if $direction == "right" {
       @if $fill == true {
-        @for $i from 1 through __clearUnit($size) {
+        @for $i from 1 through clearUnit($size) {
           $increase: $i * 1 + $sizeUnit;
           $shadow: #{$increase} 0 $blur $color;
           $value: append($value, $shadow, comma);
@@ -1547,7 +1547,7 @@
 
 @mixin gls-triangle($direction: "bottom", $color: black, $size: 10px 8px) {
   @if index($list-of-directions, $direction) {
-    @if __isColor($color){
+    @if isColor($color){
       content: "";
       height: 0;
       width: 0;

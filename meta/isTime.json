@@ -1,5 +1,5 @@
 {
-  "name": "__isTime",
+  "name": "isTime",
   "summary": "Returns the value if it is a time in s or ms, and errors otherwise.",
   "arguments": [
     {
@@ -10,9 +10,9 @@
     }
   ],
   "examples": [
-    ".a { animation-duration: __isTime(0.4s); }"
+    ".a { animation-duration: isTime(0.4s); }"
   ],
   "rejects": [
-    ".a { animation-duration: __isTime(400px); }"
+    ".a { animation-duration: isTime(400px); }"
   ]
 }

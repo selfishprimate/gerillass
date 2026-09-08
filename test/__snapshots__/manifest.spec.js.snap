@@ -1,143 +1,5 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`Manifest examples __clearUnit: .a { line-height: __clearUnit(24px); } 1`] = `
-".a {
-  line-height: 24;
-}"
-`;
-
-exports[`Manifest examples __clearWhitespace: .a { content: __clearWhitespace("a b c"); } 1`] = `
-".a {
-  content: "abc";
-}"
-`;
-
-exports[`Manifest examples __convertToEm: .a { margin: __convertToEm(24px); } 1`] = `
-".a {
-  margin: 1.5em;
-}"
-`;
-
-exports[`Manifest examples __convertToNumber: .a { z-index: __convertToNumber("42"); } 1`] = `
-".a {
-  z-index: 42;
-}"
-`;
-
-exports[`Manifest examples __darken: .a { color: __darken(red, 20%); } 1`] = `
-".a {
-  color: #cc0000;
-}"
-`;
-
-exports[`Manifest examples __fontSizer: .a { font-size: __fontSizer(16px, 1.5); } 1`] = `
-".a {
-  font-size: 24px;
-}"
-`;
-
-exports[`Manifest examples __fontSource: .a { content: "#{__fontSource("Inter", "/fonts/inter", woff2)}"; } 1`] = `
-".a {
-  content: 'url("/fonts/inter.woff2") format("woff2")';
-}"
-`;
-
-exports[`Manifest examples __isColor: .a { color: __isColor(red); } 1`] = `
-".a {
-  color: red;
-}"
-`;
-
-exports[`Manifest examples __isGutter: .a { --x: #{__isGutter(20px)}; } 1`] = `
-".a {
-  --x: true;
-}"
-`;
-
-exports[`Manifest examples __isGutter: .a { --x: #{__isGutter(var(--gap))}; } 1`] = `
-".a {
-  --x: true;
-}"
-`;
-
-exports[`Manifest examples __isNumber: .a { z-index: __isNumber(5); } 1`] = `
-".a {
-  z-index: 5;
-}"
-`;
-
-exports[`Manifest examples __isTime: .a { animation-duration: __isTime(0.4s); } 1`] = `
-".a {
-  animation-duration: 0.4s;
-}"
-`;
-
-exports[`Manifest examples __lighten: .a { color: __lighten(red, 20%); } 1`] = `
-".a {
-  color: #ff3333;
-}"
-`;
-
-exports[`Manifest examples __mapDeepGet: .a { height: __mapDeepGet($map-for-tablets, "iPadPro", "height"); } 1`] = `
-".a {
-  height: 1366px;
-}"
-`;
-
-exports[`Manifest examples __null: .a { margin: __null(1px null 3px null, space); } 1`] = `
-".a {
-  margin: 1px 0 3px 0;
-}"
-`;
-
-exports[`Manifest examples __pixelify: .a { width: __pixelify(24); } 1`] = `
-".a {
-  width: 24px;
-}"
-`;
-
-exports[`Manifest examples __pseudoSelector: .a { content: "#{__pseudoSelector(("button", "a"), "hover")}"; } 1`] = `
-".a {
-  content: "button:hover, a:hover";
-}"
-`;
-
-exports[`Manifest examples __remify: .a { font-size: __remify(24px); } 1`] = `
-".a {
-  font-size: 1.5rem;
-}"
-`;
-
-exports[`Manifest examples __shorthandProperty: .a { margin: __shorthandProperty(10px 20px); } 1`] = `
-".a {
-  margin: 10px 20px 10px 20px;
-}"
-`;
-
-exports[`Manifest examples __validateBreakpoint: .a { width: __validateBreakpoint("medium"); } 1`] = `
-".a {
-  width: 768px;
-}"
-`;
-
-exports[`Manifest examples __validateLength: .a { width: __validateLength(20px); } 1`] = `
-".a {
-  width: 20px;
-}"
-`;
-
-exports[`Manifest examples __validateRatio: .a { padding-top: __validateRatio("16/9"); } 1`] = `
-".a {
-  padding-top: 56.25%;
-}"
-`;
-
-exports[`Manifest examples __validateScissors: .a { content: "#{__validateScissors(12px)}"; } 1`] = `
-".a {
-  content: "12px";
-}"
-`;
-
 exports[`Manifest examples adaptive: .wrap { @include adaptive(16px); } 1`] = `
 ".wrap {
   margin: 0 auto;
@@ -503,6 +365,18 @@ exports[`Manifest examples circle: .dot { @include circle(24px); } 1`] = `
 }"
 `;
 
+exports[`Manifest examples clearUnit: .a { line-height: clearUnit(24px); } 1`] = `
+".a {
+  line-height: 24;
+}"
+`;
+
+exports[`Manifest examples clearWhitespace: .a { content: clearWhitespace("a b c"); } 1`] = `
+".a {
+  content: "abc";
+}"
+`;
+
 exports[`Manifest examples clearfix: .row { @include clearfix; } 1`] = `
 ".row::after {
   content: "";
@@ -626,6 +500,18 @@ exports[`Manifest examples columnizer: .grid { @include columnizer(var(--cols));
 }"
 `;
 
+exports[`Manifest examples convertToEm: .a { margin: convertToEm(24px); } 1`] = `
+".a {
+  margin: 1.5em;
+}"
+`;
+
+exports[`Manifest examples convertToNumber: .a { z-index: convertToNumber("42"); } 1`] = `
+".a {
+  z-index: 42;
+}"
+`;
+
 exports[`Manifest examples counter: .list { @include counter("(", "decimal", ")"); } 1`] = `
 ".list.counter-start {
   counter-reset: glsCounter;
@@ -702,6 +588,12 @@ exports[`Manifest examples except: .a { @include except(2) { margin: 0; } } 1`] 
 }"
 `;
 
+exports[`Manifest examples fillNulls: .a { margin: fillNulls(1px null 3px null, space); } 1`] = `
+".a {
+  margin: 1px 0 3px 0;
+}"
+`;
+
 exports[`Manifest examples font-face: @include font-face("Inter", "/fonts/inter"); 1`] = `
 "@font-face {
   font-family: "Inter";
@@ -718,6 +610,18 @@ exports[`Manifest examples font-face: @include font-face("Inter", "/fonts/inter"
   src: url("/fonts/inter.woff2") format("woff2"), url("/fonts/inter.woff") format("woff");
   font-style: italic;
   font-weight: 700;
+}"
+`;
+
+exports[`Manifest examples fontSizer: .a { font-size: fontSizer(16px, 1.5); } 1`] = `
+".a {
+  font-size: 24px;
+}"
+`;
+
+exports[`Manifest examples fontSource: .a { content: "#{fontSource("Inter", "/fonts/inter", woff2)}"; } 1`] = `
+".a {
+  content: 'url("/fonts/inter.woff2") format("woff2")';
 }"
 `;
 
@@ -744,6 +648,36 @@ exports[`Manifest examples hide: .a { @include hide; } 1`] = `
   clip: rect(1px, 1px, 1px, 1px);
   clip-path: inset(100%);
   white-space: nowrap;
+}"
+`;
+
+exports[`Manifest examples isColor: .a { color: isColor(red); } 1`] = `
+".a {
+  color: red;
+}"
+`;
+
+exports[`Manifest examples isGutter: .a { --x: #{isGutter(20px)}; } 1`] = `
+".a {
+  --x: true;
+}"
+`;
+
+exports[`Manifest examples isGutter: .a { --x: #{isGutter(var(--gap))}; } 1`] = `
+".a {
+  --x: true;
+}"
+`;
+
+exports[`Manifest examples isNumber: .a { z-index: isNumber(5); } 1`] = `
+".a {
+  z-index: 5;
+}"
+`;
+
+exports[`Manifest examples isTime: .a { animation-duration: isTime(0.4s); } 1`] = `
+".a {
+  animation-duration: 0.4s;
 }"
 `;
 
@@ -803,6 +737,12 @@ exports[`Manifest examples loadify: @include loadify; .a { @include loadify(0.4s
 }"
 `;
 
+exports[`Manifest examples mapDeepGet: .a { height: mapDeepGet($map-for-tablets, "iPadPro", "height"); } 1`] = `
+".a {
+  height: 1366px;
+}"
+`;
+
 exports[`Manifest examples only: .a { @include only("first") { margin: 0; } } 1`] = `
 ".a:first-of-type {
   margin: 0;
@@ -818,6 +758,12 @@ exports[`Manifest examples only: .a { @include only(-1) { margin: 0; } } 1`] = `
 exports[`Manifest examples only: .a { @include only(1, 3) { margin: 0; } } 1`] = `
 ".a:nth-of-type(1), .a:nth-of-type(3) {
   margin: 0;
+}"
+`;
+
+exports[`Manifest examples pixelify: .a { width: pixelify(24); } 1`] = `
+".a {
+  width: 24px;
 }"
 `;
 
@@ -862,6 +808,12 @@ exports[`Manifest examples position: .a { @include position(fixed, 0 10px); } 1`
   right: 10px;
   bottom: 0;
   left: 10px;
+}"
+`;
+
+exports[`Manifest examples pseudoSelector: .a { content: "#{pseudoSelector(("button", "a"), "hover")}"; } 1`] = `
+".a {
+  content: "button:hover, a:hover";
 }"
 `;
 
@@ -928,6 +880,12 @@ exports[`Manifest examples ratio-box: .square { @include ratio-box("1/1"); } 1`]
   right: 0;
   bottom: 0;
   left: 0;
+}"
+`;
+
+exports[`Manifest examples remify: .a { font-size: remify(24px); } 1`] = `
+".a {
+  font-size: 1.5rem;
 }"
 `;
 
@@ -1102,6 +1060,18 @@ exports[`Manifest examples screen-agent: .a { @include screen-agent("2x") { back
 }"
 `;
 
+exports[`Manifest examples shade: .a { color: shade(red, 20%); } 1`] = `
+".a {
+  color: #cc0000;
+}"
+`;
+
+exports[`Manifest examples shorthandProperty: .a { margin: shorthandProperty(10px 20px); } 1`] = `
+".a {
+  margin: 10px 20px 10px 20px;
+}"
+`;
+
 exports[`Manifest examples sizer: .a { @include sizer(40px); } 1`] = `
 ".a {
   width: 40px;
@@ -1257,6 +1227,12 @@ exports[`Manifest examples text-stroke: .a { @include text-stroke; } 1`] = `
 }"
 `;
 
+exports[`Manifest examples tint: .a { color: tint(red, 20%); } 1`] = `
+".a {
+  color: #ff3333;
+}"
+`;
+
 exports[`Manifest examples triangle: .arrow { @include triangle("left", red); } 1`] = `
 ".arrow {
   content: "";
@@ -1278,5 +1254,29 @@ exports[`Manifest examples triangle: .caret { @include triangle("bottom", black,
   border-style: solid;
   border-color: black transparent transparent;
   border-width: 8px 5px 0;
+}"
+`;
+
+exports[`Manifest examples validateBreakpoint: .a { width: validateBreakpoint("medium"); } 1`] = `
+".a {
+  width: 768px;
+}"
+`;
+
+exports[`Manifest examples validateLength: .a { width: validateLength(20px); } 1`] = `
+".a {
+  width: 20px;
+}"
+`;
+
+exports[`Manifest examples validateRatio: .a { padding-top: validateRatio("16/9"); } 1`] = `
+".a {
+  padding-top: 56.25%;
+}"
+`;
+
+exports[`Manifest examples validateScissors: .a { content: "#{validateScissors(12px)}"; } 1`] = `
+".a {
+  content: "12px";
 }"
 `;

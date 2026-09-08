@@ -1,5 +1,5 @@
 {
-  "name": "__convertToEm",
+  "name": "convertToEm",
   "summary": "Converts a pixel length to em, against a 16px base.",
   "arguments": [
     {
@@ -10,7 +10,7 @@
     }
   ],
   "examples": [
-    ".a { margin: __convertToEm(24px); }"
+    ".a { margin: convertToEm(24px); }"
   ],
   "rejects": []
 }

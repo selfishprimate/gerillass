@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-@function __validateLength($value) {
+@function validateLength($value) {
   $keywords: ("auto", "inherit", "initial", "unset", "revert", 0);
 
   @if index($keywords, $value) {

@@ -7,7 +7,7 @@
       @content;
     }
   } @else if index($list, $pseudo) {
-    $all-text-inputs: __pseudoSelector($list-of-text-inputs, $pseudo);
+    $all-text-inputs: pseudoSelector($list-of-text-inputs, $pseudo);
     #{$all-text-inputs} {
       @content;
     }

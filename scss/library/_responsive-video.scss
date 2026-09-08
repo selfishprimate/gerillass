@@ -5,7 +5,7 @@
   &::before {
     content: "";
     display: block;
-    padding-top: __validateRatio($ratio);
+    padding-top: validateRatio($ratio);
   }
   & > * {
     width: 100%;

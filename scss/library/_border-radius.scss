@@ -4,7 +4,7 @@
   $list: join($list-of-directions, ("cross-left", "cross-right", "all"));
   @if length($args) == 1 {
     $value: nth($args, 1);
-    border-radius: __null($value, space);
+    border-radius: fillNulls($value, space);
   } @else if length($args) == 2 {
     $corner: nth($args, 1);
     $value: nth($args, 2);
@@ -42,7 +42,7 @@
       @error "Corner value must be one of the followings: #{$list}.";
     }
   } @else if length($args) == 4 {
-    $args: __null($args, space, true);
+    $args: fillNulls($args, space, true);
     border-top-left-radius: nth($args, 1);
     border-top-right-radius: nth($args, 2);
     border-bottom-right-radius: nth($args, 3);

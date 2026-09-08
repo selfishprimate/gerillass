@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-@function __convertToEm($value) {
+@function convertToEm($value) {
   $base-value: 16px;
   $rem-value: math.div($value, $base-value);
   @return $rem-value + unquote("em");

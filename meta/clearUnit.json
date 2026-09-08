@@ -1,5 +1,5 @@
 {
-  "name": "__clearUnit",
+  "name": "clearUnit",
   "summary": "Strips the unit off a number, returning it unitless.",
   "arguments": [
     {
@@ -10,7 +10,7 @@
     }
   ],
   "examples": [
-    ".a { line-height: __clearUnit(24px); }"
+    ".a { line-height: clearUnit(24px); }"
   ],
   "rejects": []
 }

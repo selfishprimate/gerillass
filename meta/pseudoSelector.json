@@ -1,5 +1,5 @@
 {
-  "name": "__pseudoSelector",
+  "name": "pseudoSelector",
   "summary": "Appends a pseudo-class to every selector in a list.",
   "arguments": [
     {
@@ -16,7 +16,7 @@
     }
   ],
   "examples": [
-    ".a { content: \"#{__pseudoSelector((\"button\", \"a\"), \"hover\")}\"; }"
+    ".a { content: \"#{pseudoSelector((\"button\", \"a\"), \"hover\")}\"; }"
   ],
   "rejects": []
 }
