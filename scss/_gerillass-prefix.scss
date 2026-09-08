@@ -91,6 +91,10 @@
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
+  } @else if not & and $value == "only" {
+    @error "`only` has no meaning at the root of a stylesheet, because there is no selector to limit the effect to. Call `antialias(\"only\")` inside a selector, or pass no argument at all.";
+  } @else {
+    @error "`#{$value}` is not a valid argument for `antialias`. Pass `\"only\"` inside a selector to affect just that element, or pass no argument at all.";
   }
 }
 
@@ -103,6 +107,9 @@
   $diagonal: true,
   $image: null
 ) {
+  @if $diagonal != true and $diagonal != false {
+    @error "`#{$diagonal}` is not a valid $diagonal for `background-dots`. Pass `true` or `false`.";
+  }
   @if not $color {
     $color: rgba(0, 0, 0, 0.1);
     @if $diagonal == true {
@@ -314,6 +321,10 @@
     *::after {
       box-sizing: border-box;
     }
+  } @else if not & and $value == "only" {
+    @error "`only` has no meaning at the root of a stylesheet, because there is no selector to limit the effect to. Call `border-box(\"only\")` inside a selector, or pass no argument at all.";
+  } @else {
+    @error "`#{$value}` is not a valid argument for `border-box`. Pass `\"only\"` inside a selector to affect just that element, or pass no argument at all.";
   }
 }
 
@@ -366,6 +377,8 @@
     border-top-right-radius: nth($args, 2);
     border-bottom-right-radius: nth($args, 3);
     border-bottom-left-radius: nth($args, 4);
+  } @else {
+    @error "`border-radius` takes 1, 2 or 4 arguments; you passed #{length($args)}. Use one radius for every corner, a corner name plus a radius, or four radii in top-left, top-right, bottom-right, bottom-left order.";
   }
 }
 
@@ -495,6 +508,9 @@
 
 
 @mixin gls-center($axis: "both") {
+  @if not index("both" "horizontal" "vertical", $axis) {
+    @error "`#{$axis}` is not a valid $axis for `center`. Pass one of: both, horizontal, vertical.";
+  }
   @if $axis == "both" or $axis == "vertical" {
     top: 50%;
   }
@@ -529,6 +545,9 @@
 
 
 @mixin gls-columnizer($params...) {
+  @if length($params) < 1 or length($params) > 3 {
+    @error "`columnizer` takes 1 to 3 arguments; you passed #{length($params)}. Pass the column count, optionally a gutter length, and optionally a boolean telling the last row whether to fill.";
+  }
   $columns: nth($params, 1);
   $gutter: null;
   $fill: false;
@@ -564,6 +583,8 @@
         &:nth-child(#{$columns}n) {
           margin-right: 0;
         }
+      } @else {
+        @error "`#{nth($params, 2)}` is not a valid second argument for `columnizer`. Pass a gutter length such as `20px`, or a boolean telling the last row whether to fill.";
       }
     } @else if length($params) == 3 {
       $gutter: nth($params, 2);
@@ -686,6 +707,8 @@
           @content;
         }
       }
+    } @else {
+      @error "`#{$value}` is not a valid argument for `except`. Pass a positive or negative number, one of `first`, `last`, `odd`, `even`, or a selector such as `.foo`.";
     }
   } @else if length($params) > 1 {
     $items: "";
@@ -877,6 +900,8 @@
           @content;
         }
       }
+    } @else {
+      @error "`#{$value}` is not a valid argument for `only`. Pass a positive or negative number, one of `first`, `last`, `odd`, `even`, or a selector such as `.foo`.";
     }
   } @else if length($params) > 1 {
     $list: ();
@@ -1005,7 +1030,7 @@
       }
     }
   } @else {
-    @error "Error!";
+    @error "`remove` takes at most 2 arguments; you passed #{length($params)}. Pass nothing to hide the element outright, one breakpoint, `min`/`max` plus a breakpoint, or a start and an end breakpoint.";
   }
 }
 
@@ -1135,6 +1160,8 @@
       #{nth($corners, 4)} 100%,
       0 calc(100% - #{nth($corners, 4)})
     );
+  } @else {
+    @error "`scissors` takes either 1 corner size or 4; you passed #{length($corners)}. Pass one length to cut every corner equally, or four lengths in top-left, top-right, bottom-right, bottom-left order.";
   }
 }
 
@@ -1185,9 +1212,11 @@
       and (orientation: landscape) {
         @content;
       }
+    } @else {
+      @error "`#{$orientation}` is not a valid $orientation for `smartphone`. Pass `portrait`, `landscape`, or no orientation at all.";
     }
   } @else {
-    @warn "#{$device} is a wrong device name! The argument must be one of the followings: #{map-keys($map-for-smartphones)}";
+    @error "`#{$device}` is not a device known to `smartphone`. Pass one of: #{map-keys($map-for-smartphones)}.";
   }
 }
 
@@ -1203,6 +1232,8 @@
         display: inline-block;
         background-image: url($image-url);
         background-repeat: no-repeat;
+      } @else {
+        @error "`#{nth($params, 1)}` is not a valid image path for `sprite`. The path must end in .png, .jpg or .svg.";
       }
     } @else {
       $position: nth($params, 1);
@@ -1215,6 +1246,8 @@
     background-image: url($image-url);
     background-position: $position;
     background-repeat: no-repeat;
+  } @else {
+    @error "`sprite` takes 1 or 2 arguments; you passed #{length($params)}. Pass an image path, a background position, or both in that order.";
   }
   @content;
 }
@@ -1257,9 +1290,11 @@
       and (orientation: landscape) {
         @content;
       }
+    } @else {
+      @error "`#{$orientation}` is not a valid $orientation for `tablet`. Pass `portrait`, `landscape`, or no orientation at all.";
     }
   } @else {
-    @warn "#{$device} is a wrong device name! The argument must be one of the followings: #{map-keys($map-for-tablets)}";
+    @error "`#{$device}` is not a device known to `tablet`. Pass one of: #{map-keys($map-for-tablets)}.";
   }
 }
 
@@ -1318,6 +1353,10 @@
     *::selection {
       @content;
     }
+  } @else if not & and $value == "only" {
+    @error "`only` has no meaning at the root of a stylesheet, because there is no selector to limit the effect to. Call `text-selection(\"only\")` inside a selector, or pass no argument at all.";
+  } @else {
+    @error "`#{$value}` is not a valid argument for `text-selection`. Pass `\"only\"` inside a selector to affect just that element, or pass no argument at all.";
   }
 }
 

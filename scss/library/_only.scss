@@ -38,6 +38,8 @@
           @content;
         }
       }
+    } @else {
+      @error "`#{$value}` is not a valid argument for `only`. Pass a positive or negative number, one of `first`, `last`, `odd`, `even`, or a selector such as `.foo`.";
     }
   } @else if length($params) > 1 {
     $list: ();

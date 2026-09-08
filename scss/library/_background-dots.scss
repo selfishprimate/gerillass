@@ -7,6 +7,9 @@
   $diagonal: true,
   $image: null
 ) {
+  @if $diagonal != true and $diagonal != false {
+    @error "`#{$diagonal}` is not a valid $diagonal for `background-dots`. Pass `true` or `false`.";
+  }
   @if not $color {
     $color: rgba(0, 0, 0, 0.1);
     @if $diagonal == true {

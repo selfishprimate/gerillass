@@ -16,8 +16,10 @@
       and (orientation: landscape) {
         @content;
       }
+    } @else {
+      @error "`#{$orientation}` is not a valid $orientation for `tablet`. Pass `portrait`, `landscape`, or no orientation at all.";
     }
   } @else {
-    @warn "#{$device} is a wrong device name! The argument must be one of the followings: #{map-keys($map-for-tablets)}";
+    @error "`#{$device}` is not a device known to `tablet`. Pass one of: #{map-keys($map-for-tablets)}.";
   }
 }

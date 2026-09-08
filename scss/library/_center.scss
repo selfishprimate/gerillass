@@ -1,6 +1,9 @@
 @charset "UTF-8";
 
 @mixin center($axis: "both") {
+  @if not index("both" "horizontal" "vertical", $axis) {
+    @error "`#{$axis}` is not a valid $axis for `center`. Pass one of: both, horizontal, vertical.";
+  }
   @if $axis == "both" or $axis == "vertical" {
     top: 50%;
   }

@@ -10,6 +10,8 @@
         display: inline-block;
         background-image: url($image-url);
         background-repeat: no-repeat;
+      } @else {
+        @error "`#{nth($params, 1)}` is not a valid image path for `sprite`. The path must end in .png, .jpg or .svg.";
       }
     } @else {
       $position: nth($params, 1);
@@ -22,6 +24,8 @@
     background-image: url($image-url);
     background-position: $position;
     background-repeat: no-repeat;
+  } @else {
+    @error "`sprite` takes 1 or 2 arguments; you passed #{length($params)}. Pass an image path, a background position, or both in that order.";
   }
   @content;
 }

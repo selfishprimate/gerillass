@@ -22,5 +22,9 @@
     *::after {
       box-sizing: border-box;
     }
+  } @else if not & and $value == "only" {
+    @error "`only` has no meaning at the root of a stylesheet, because there is no selector to limit the effect to. Call `border-box(\"only\")` inside a selector, or pass no argument at all.";
+  } @else {
+    @error "`#{$value}` is not a valid argument for `border-box`. Pass `\"only\"` inside a selector to affect just that element, or pass no argument at all.";
   }
 }

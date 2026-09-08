@@ -25,5 +25,7 @@
       #{nth($corners, 4)} 100%,
       0 calc(100% - #{nth($corners, 4)})
     );
+  } @else {
+    @error "`scissors` takes either 1 corner size or 4; you passed #{length($corners)}. Pass one length to cut every corner equally, or four lengths in top-left, top-right, bottom-right, bottom-left order.";
   }
 }

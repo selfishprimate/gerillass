@@ -47,5 +47,7 @@
     border-top-right-radius: nth($args, 2);
     border-bottom-right-radius: nth($args, 3);
     border-bottom-left-radius: nth($args, 4);
+  } @else {
+    @error "`border-radius` takes 1, 2 or 4 arguments; you passed #{length($args)}. Use one radius for every corner, a corner name plus a radius, or four radii in top-left, top-right, bottom-right, bottom-left order.";
   }
 }

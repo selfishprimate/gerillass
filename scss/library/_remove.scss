@@ -29,6 +29,6 @@
       }
     }
   } @else {
-    @error "Error!";
+    @error "`remove` takes at most 2 arguments; you passed #{length($params)}. Pass nothing to hide the element outright, one breakpoint, `min`/`max` plus a breakpoint, or a start and an end breakpoint.";
   }
 }
