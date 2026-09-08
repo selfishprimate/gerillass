@@ -1,0 +1,16 @@
+{
+  "name": "__validateScissors",
+  "summary": "Normalises corner values for the scissors mixin, adding px where missing.",
+  "arguments": [
+    {
+      "name": "$value",
+      "accepts": [
+        "one to four numbers, with or without units"
+      ]
+    }
+  ],
+  "examples": [
+    ".a { content: \"#{__validateScissors(12px)}\"; }"
+  ],
+  "rejects": []
+}

@@ -31,6 +31,13 @@ describe("Manifest", () => {
     });
   });
 
+  it("has a SKILL.md generated from the current manifest", () => {
+    execFileSync("node", [path.join(ROOT, "tools", "build-skill.js"), "--check"], {
+      cwd: ROOT,
+      stdio: "pipe",
+    });
+  });
+
   it("describes every mixin in scss/library", () => {
     const undocumented = mixins.filter((m) => !m.summary).map((m) => m.name);
     expect(undocumented).toEqual([]);

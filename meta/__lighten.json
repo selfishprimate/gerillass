@@ -1,0 +1,24 @@
+{
+  "name": "__lighten",
+  "summary": "Mixes a colour towards white by a percentage.",
+  "arguments": [
+    {
+      "name": "$color",
+      "accepts": [
+        "a colour"
+      ]
+    },
+    {
+      "name": "$percentage",
+      "accepts": [
+        "a percentage"
+      ]
+    }
+  ],
+  "examples": [
+    ".a { color: __lighten(red, 20%); }"
+  ],
+  "rejects": [
+    ".a { color: __lighten(notacolor, 20%); }"
+  ]
+}

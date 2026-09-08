@@ -9,3 +9,4 @@ node_modules
 gerillass.gemspec
 meta
 tools
+!SKILL.md

@@ -47,7 +47,7 @@
     "needs": "^3.0.0"
   },
   "scripts": {
-    "manifest": "node tools/build-manifest.js",
+    "manifest": "node tools/build-manifest.js && node tools/build-skill.js",
     "test": "jest"
   },
   "devDependencies": {

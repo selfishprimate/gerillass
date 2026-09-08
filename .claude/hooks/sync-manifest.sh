@@ -32,4 +32,10 @@ if ! output=$(node tools/build-manifest.js 2>&1); then
   exit 2
 fi
 
-printf '{"systemMessage":"Rebuilt gerillass.json (%s).","suppressOutput":true}\n' "$output"
+# SKILL.md is derived from the manifest, so it has to follow.
+if ! skill=$(node tools/build-skill.js 2>&1); then
+  printf 'Rebuilding SKILL.md failed:\n%s\n' "$skill" >&2
+  exit 2
+fi
+
+printf '{"systemMessage":"Rebuilt gerillass.json and SKILL.md.","suppressOutput":true}\n'

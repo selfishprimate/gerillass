@@ -1,0 +1,22 @@
+{
+  "name": "__fontSizer",
+  "summary": "Multiplies a size by a factor. Handy for a modular scale.",
+  "arguments": [
+    {
+      "name": "$size",
+      "accepts": [
+        "a length"
+      ]
+    },
+    {
+      "name": "$time",
+      "accepts": [
+        "a unitless multiplier"
+      ]
+    }
+  ],
+  "examples": [
+    ".a { font-size: __fontSizer(16px, 1.5); }"
+  ],
+  "rejects": []
+}

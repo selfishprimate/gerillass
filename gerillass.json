@@ -1373,11 +1373,19 @@
       "arguments": [
         {
           "name": "$value",
-          "required": true
+          "required": true,
+          "accepts": [
+            "any number with a unit"
+          ]
         }
       ],
       "file": "scss/utilities/_clear-unit.scss",
-      "signature": "__clearUnit($value)"
+      "signature": "__clearUnit($value)",
+      "summary": "Strips the unit off a number, returning it unitless.",
+      "examples": [
+        ".a { line-height: __clearUnit(24px); }"
+      ],
+      "rejects": []
     },
     {
       "name": "__clearWhitespace",
@@ -1385,11 +1393,19 @@
       "arguments": [
         {
           "name": "$string",
-          "required": true
+          "required": true,
+          "accepts": [
+            "any string"
+          ]
         }
       ],
       "file": "scss/utilities/_clear-whitespace.scss",
-      "signature": "__clearWhitespace($string)"
+      "signature": "__clearWhitespace($string)",
+      "summary": "Removes every space from a string.",
+      "examples": [
+        ".a { content: __clearWhitespace(\"a b c\"); }"
+      ],
+      "rejects": []
     },
     {
       "name": "__convertToEm",
@@ -1397,11 +1413,19 @@
       "arguments": [
         {
           "name": "$value",
-          "required": true
+          "required": true,
+          "accepts": [
+            "a pixel length"
+          ]
         }
       ],
       "file": "scss/utilities/_convert-to-em.scss",
-      "signature": "__convertToEm($value)"
+      "signature": "__convertToEm($value)",
+      "summary": "Converts a pixel length to em, against a 16px base.",
+      "examples": [
+        ".a { margin: __convertToEm(24px); }"
+      ],
+      "rejects": []
     },
     {
       "name": "__convertToNumber",
@@ -1409,11 +1433,19 @@
       "arguments": [
         {
           "name": "$value",
-          "required": true
+          "required": true,
+          "accepts": [
+            "a string containing only digits"
+          ]
         }
       ],
       "file": "scss/utilities/_convert-to-number.scss",
-      "signature": "__convertToNumber($value)"
+      "signature": "__convertToNumber($value)",
+      "summary": "Parses a string of digits into a number.",
+      "examples": [
+        ".a { z-index: __convertToNumber(\"42\"); }"
+      ],
+      "rejects": []
     },
     {
       "name": "__darken",
@@ -1421,15 +1453,28 @@
       "arguments": [
         {
           "name": "$color",
-          "required": true
+          "required": true,
+          "accepts": [
+            "a colour"
+          ]
         },
         {
           "name": "$percentage",
-          "required": true
+          "required": true,
+          "accepts": [
+            "a percentage"
+          ]
         }
       ],
       "file": "scss/utilities/_darken.scss",
-      "signature": "__darken($color, $percentage)"
+      "signature": "__darken($color, $percentage)",
+      "summary": "Mixes a colour towards black by a percentage.",
+      "examples": [
+        ".a { color: __darken(red, 20%); }"
+      ],
+      "rejects": [
+        ".a { color: __darken(notacolor, 20%); }"
+      ]
     },
     {
       "name": "__fontSizer",
@@ -1437,15 +1482,26 @@
       "arguments": [
         {
           "name": "$size",
-          "required": true
+          "required": true,
+          "accepts": [
+            "a length"
+          ]
         },
         {
           "name": "$time",
-          "required": true
+          "required": true,
+          "accepts": [
+            "a unitless multiplier"
+          ]
         }
       ],
       "file": "scss/utilities/_font-sizer.scss",
-      "signature": "__fontSizer($size, $time)"
+      "signature": "__fontSizer($size, $time)",
+      "summary": "Multiplies a size by a factor. Handy for a modular scale.",
+      "examples": [
+        ".a { font-size: __fontSizer(16px, 1.5); }"
+      ],
+      "rejects": []
     },
     {
       "name": "__fontSource",
@@ -1453,19 +1509,33 @@
       "arguments": [
         {
           "name": "$font-family",
-          "required": true
+          "required": true,
+          "accepts": [
+            "the family name"
+          ]
         },
         {
           "name": "$file-path",
-          "required": true
+          "required": true,
+          "accepts": [
+            "path without an extension"
+          ]
         },
         {
           "name": "$file-formats",
-          "required": true
+          "required": true,
+          "accepts": [
+            "one of eot, woff2, woff, ttf, svg"
+          ]
         }
       ],
       "file": "scss/utilities/_font-source.scss",
-      "signature": "__fontSource($font-family, $file-path, $file-formats)"
+      "signature": "__fontSource($font-family, $file-path, $file-formats)",
+      "summary": "Builds one src entry for an @font-face rule.",
+      "examples": [
+        ".a { content: \"#{__fontSource(\"Inter\", \"/fonts/inter\", woff2)}\"; }"
+      ],
+      "rejects": []
     },
     {
       "name": "__isColor",
@@ -1473,11 +1543,21 @@
       "arguments": [
         {
           "name": "$value",
-          "required": true
+          "required": true,
+          "accepts": [
+            "a colour, or a list of colours"
+          ]
         }
       ],
       "file": "scss/utilities/_is-color.scss",
-      "signature": "__isColor($value)"
+      "signature": "__isColor($value)",
+      "summary": "Returns the value if every item in it is a colour, and errors otherwise.",
+      "examples": [
+        ".a { color: __isColor(red); }"
+      ],
+      "rejects": [
+        ".a { color: __isColor(nonsense); }"
+      ]
     },
     {
       "name": "__isNumber",
@@ -1485,11 +1565,19 @@
       "arguments": [
         {
           "name": "$value",
-          "required": true
+          "required": true,
+          "accepts": [
+            "any value"
+          ]
         }
       ],
       "file": "scss/utilities/_is-number.scss",
-      "signature": "__isNumber($value)"
+      "signature": "__isNumber($value)",
+      "summary": "Returns the value if it is a number.",
+      "examples": [
+        ".a { z-index: __isNumber(5); }"
+      ],
+      "rejects": []
     },
     {
       "name": "__isTime",
@@ -1497,11 +1585,21 @@
       "arguments": [
         {
           "name": "$value",
-          "required": true
+          "required": true,
+          "accepts": [
+            "a duration such as 0.2s or 300ms, or 0"
+          ]
         }
       ],
       "file": "scss/utilities/_is-time.scss",
-      "signature": "__isTime($value)"
+      "signature": "__isTime($value)",
+      "summary": "Returns the value if it is a time in s or ms, and errors otherwise.",
+      "examples": [
+        ".a { animation-duration: __isTime(0.4s); }"
+      ],
+      "rejects": [
+        ".a { animation-duration: __isTime(400px); }"
+      ]
     },
     {
       "name": "__lighten",
@@ -1509,15 +1607,28 @@
       "arguments": [
         {
           "name": "$color",
-          "required": true
+          "required": true,
+          "accepts": [
+            "a colour"
+          ]
         },
         {
           "name": "$percentage",
-          "required": true
+          "required": true,
+          "accepts": [
+            "a percentage"
+          ]
         }
       ],
       "file": "scss/utilities/_lighten.scss",
-      "signature": "__lighten($color, $percentage)"
+      "signature": "__lighten($color, $percentage)",
+      "summary": "Mixes a colour towards white by a percentage.",
+      "examples": [
+        ".a { color: __lighten(red, 20%); }"
+      ],
+      "rejects": [
+        ".a { color: __lighten(notacolor, 20%); }"
+      ]
     },
     {
       "name": "__mapDeepGet",
@@ -1525,15 +1636,26 @@
       "arguments": [
         {
           "name": "$map",
-          "required": true
+          "required": true,
+          "accepts": [
+            "a map"
+          ]
         },
         {
           "name": "$keys",
-          "variadic": true
+          "variadic": true,
+          "accepts": [
+            "one key per level of nesting"
+          ]
         }
       ],
       "file": "scss/utilities/_map-deep-get.scss",
-      "signature": "__mapDeepGet($map, $keys...)"
+      "signature": "__mapDeepGet($map, $keys...)",
+      "summary": "Reads a value out of a nested map by following a chain of keys.",
+      "examples": [
+        ".a { height: __mapDeepGet($map-for-tablets, \"iPadPro\", \"height\"); }"
+      ],
+      "rejects": []
     },
     {
       "name": "__null",
@@ -1541,19 +1663,34 @@
       "arguments": [
         {
           "name": "$value",
-          "required": true
+          "required": true,
+          "accepts": [
+            "a list that may contain nulls"
+          ]
         },
         {
           "name": "$seperation",
-          "default": "comma"
+          "default": "comma",
+          "accepts": [
+            "comma",
+            "space"
+          ]
         },
         {
           "name": "$skip",
-          "default": "false"
+          "default": "false",
+          "accepts": [
+            "true to leave nulls in place instead of using 0"
+          ]
         }
       ],
       "file": "scss/utilities/_null.scss",
-      "signature": "__null($value, $seperation: comma, $skip: false)"
+      "signature": "__null($value, $seperation: comma, $skip: false)",
+      "summary": "Replaces null entries in a list with 0, or drops them.",
+      "examples": [
+        ".a { margin: __null(1px null 3px null, space); }"
+      ],
+      "rejects": []
     },
     {
       "name": "__pixelify",
@@ -1561,11 +1698,19 @@
       "arguments": [
         {
           "name": "$value",
-          "required": true
+          "required": true,
+          "accepts": [
+            "a number, with or without a unit"
+          ]
         }
       ],
       "file": "scss/utilities/_pixelify.scss",
-      "signature": "__pixelify($value)"
+      "signature": "__pixelify($value)",
+      "summary": "Returns the value with a px unit, adding one if it is missing.",
+      "examples": [
+        ".a { width: __pixelify(24); }"
+      ],
+      "rejects": []
     },
     {
       "name": "__pseudoSelector",
@@ -1573,15 +1718,26 @@
       "arguments": [
         {
           "name": "$elements",
-          "required": true
+          "required": true,
+          "accepts": [
+            "a list of selectors"
+          ]
         },
         {
           "name": "$pseudo",
-          "default": "null"
+          "default": "null",
+          "accepts": [
+            "a pseudo-class name, without the colon"
+          ]
         }
       ],
       "file": "scss/utilities/_pseudo-selector.scss",
-      "signature": "__pseudoSelector($elements, $pseudo: null)"
+      "signature": "__pseudoSelector($elements, $pseudo: null)",
+      "summary": "Appends a pseudo-class to every selector in a list.",
+      "examples": [
+        ".a { content: \"#{__pseudoSelector((\"button\", \"a\"), \"hover\")}\"; }"
+      ],
+      "rejects": []
     },
     {
       "name": "__remify",
@@ -1589,11 +1745,19 @@
       "arguments": [
         {
           "name": "$value",
-          "required": true
+          "required": true,
+          "accepts": [
+            "a pixel length"
+          ]
         }
       ],
       "file": "scss/utilities/_remify.scss",
-      "signature": "__remify($value)"
+      "signature": "__remify($value)",
+      "summary": "Converts a pixel length to rem, against a 16px root.",
+      "examples": [
+        ".a { font-size: __remify(24px); }"
+      ],
+      "rejects": []
     },
     {
       "name": "__shorthandProperty",
@@ -1601,11 +1765,21 @@
       "arguments": [
         {
           "name": "$value",
-          "required": true
+          "required": true,
+          "accepts": [
+            "one to four values"
+          ]
         }
       ],
       "file": "scss/utilities/_shorthand-property.scss",
-      "signature": "__shorthandProperty($value)"
+      "signature": "__shorthandProperty($value)",
+      "summary": "Expands one to four values into the four-value CSS shorthand order.",
+      "examples": [
+        ".a { margin: __shorthandProperty(10px 20px); }"
+      ],
+      "rejects": [
+        ".a { margin: __shorthandProperty(1px 2px 3px 4px 5px); }"
+      ]
     },
     {
       "name": "__validateBreakpoint",
@@ -1613,11 +1787,19 @@
       "arguments": [
         {
           "name": "$value",
-          "required": true
+          "required": true,
+          "accepts": [
+            "a key from $map-for-breakpoints, or a raw length"
+          ]
         }
       ],
       "file": "scss/utilities/_validate-breakpoint.scss",
-      "signature": "__validateBreakpoint($value)"
+      "signature": "__validateBreakpoint($value)",
+      "summary": "Resolves a breakpoint name to its width, passing other values through.",
+      "examples": [
+        ".a { width: __validateBreakpoint(\"medium\"); }"
+      ],
+      "rejects": []
     },
     {
       "name": "__validateLength",
@@ -1625,11 +1807,19 @@
       "arguments": [
         {
           "name": "$value",
-          "required": true
+          "required": true,
+          "accepts": [
+            "a length with a unit, or auto, inherit, initial, 0"
+          ]
         }
       ],
       "file": "scss/utilities/_validate-length.scss",
-      "signature": "__validateLength($value)"
+      "signature": "__validateLength($value)",
+      "summary": "Returns the value if it is a length or one of auto, inherit, initial, 0.",
+      "examples": [
+        ".a { width: __validateLength(20px); }"
+      ],
+      "rejects": []
     },
     {
       "name": "__validateRatio",
@@ -1637,11 +1827,23 @@
       "arguments": [
         {
           "name": "$ratio",
-          "required": true
+          "required": true,
+          "accepts": [
+            "a string such as \"16/9\" or \"16:9\"",
+            "a unitless number",
+            "null for the 16/9 default"
+          ]
         }
       ],
       "file": "scss/utilities/_validate-ratio.scss",
-      "signature": "__validateRatio($ratio)"
+      "signature": "__validateRatio($ratio)",
+      "summary": "Turns an aspect ratio into the padding-top percentage that holds it.",
+      "examples": [
+        ".a { padding-top: __validateRatio(\"16/9\"); }"
+      ],
+      "rejects": [
+        ".a { padding-top: __validateRatio(16 9); }"
+      ]
     },
     {
       "name": "__validateScissors",
@@ -1649,11 +1851,19 @@
       "arguments": [
         {
           "name": "$value",
-          "required": true
+          "required": true,
+          "accepts": [
+            "one to four numbers, with or without units"
+          ]
         }
       ],
       "file": "scss/utilities/_validate-scissors.scss",
-      "signature": "__validateScissors($value)"
+      "signature": "__validateScissors($value)",
+      "summary": "Normalises corner values for the scissors mixin, adding px where missing.",
+      "examples": [
+        ".a { content: \"#{__validateScissors(12px)}\"; }"
+      ],
+      "rejects": []
     }
   ]
 }

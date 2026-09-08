@@ -1,0 +1,20 @@
+{
+  "name": "__validateRatio",
+  "summary": "Turns an aspect ratio into the padding-top percentage that holds it.",
+  "arguments": [
+    {
+      "name": "$ratio",
+      "accepts": [
+        "a string such as \"16/9\" or \"16:9\"",
+        "a unitless number",
+        "null for the 16/9 default"
+      ]
+    }
+  ],
+  "examples": [
+    ".a { padding-top: __validateRatio(\"16/9\"); }"
+  ],
+  "rejects": [
+    ".a { padding-top: __validateRatio(16 9); }"
+  ]
+}

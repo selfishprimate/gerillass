@@ -1,0 +1,22 @@
+{
+  "name": "__pseudoSelector",
+  "summary": "Appends a pseudo-class to every selector in a list.",
+  "arguments": [
+    {
+      "name": "$elements",
+      "accepts": [
+        "a list of selectors"
+      ]
+    },
+    {
+      "name": "$pseudo",
+      "accepts": [
+        "a pseudo-class name, without the colon"
+      ]
+    }
+  ],
+  "examples": [
+    ".a { content: \"#{__pseudoSelector((\"button\", \"a\"), \"hover\")}\"; }"
+  ],
+  "rejects": []
+}

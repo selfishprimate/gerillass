@@ -1,0 +1,16 @@
+{
+  "name": "__clearWhitespace",
+  "summary": "Removes every space from a string.",
+  "arguments": [
+    {
+      "name": "$string",
+      "accepts": [
+        "any string"
+      ]
+    }
+  ],
+  "examples": [
+    ".a { content: __clearWhitespace(\"a b c\"); }"
+  ],
+  "rejects": []
+}

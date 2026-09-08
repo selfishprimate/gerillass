@@ -1,0 +1,16 @@
+{
+  "name": "__isNumber",
+  "summary": "Returns the value if it is a number.",
+  "arguments": [
+    {
+      "name": "$value",
+      "accepts": [
+        "any value"
+      ]
+    }
+  ],
+  "examples": [
+    ".a { z-index: __isNumber(5); }"
+  ],
+  "rejects": []
+}
