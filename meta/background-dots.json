@@ -41,6 +41,7 @@
     ".a { @include background-dots(red, 1em, 5em, false); }"
   ],
   "rejects": [
-    ".a { @include background-dots(red, 1em, 5em, maybe); }"
+    ".a { @include background-dots(red, 1em, 5em, maybe); }",
+    ".a { @include background-dots(red, 1em, 5em, true, 42); }"
   ]
 }

@@ -19,5 +19,7 @@
   "examples": [
     ".a { @include text-gradient(\"top\", (red, blue)); }"
   ],
-  "rejects": []
+  "rejects": [
+    ".a { @include text-gradient(sideways, (red, blue)); }"
+  ]
 }

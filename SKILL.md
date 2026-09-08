@@ -71,6 +71,7 @@ a dropped declaration rather than an error.
 | `antialias` | `@include antialias(only);` |
 | `background-dots` | `.a { @include background-dots(red, 1em, 5em, maybe); }` |
 | `background-image` | `.a { @include background-image("/img/a.png", (red, blue), sideways); }` |
+| `background-stripes` | `.a { @include background-stripes(red, 2em, nonsense); }` |
 | `before` | `.a { @include before(42) { color: red; } }` |
 | `border-box` | `@include border-box(only);` |
 | `border-radius` | `.a { @include border-radius(1px, 2px, 3px); }` |
@@ -81,8 +82,10 @@ a dropped declaration rather than an error.
 | `except` | `.a { @include except(#ff0000) { margin: 0; } }` |
 | `font-face` | `.a { @include font-face("Inter", "/fonts/inter"); }` |
 | `hide` | `.a { @include hide(nonsense); }` |
+| `linear-gradient` | `.a { @include linear-gradient(sideways, (red, blue)); }` |
 | `loadify` | `@include loadify(nonsense);` |
 | `only` | `.a { @include only(#ff0000) { margin: 0; } }` |
+| `radial-gradient` | `.a { @include radial-gradient(42, "center", (red, blue)); }` |
 | `ratio-box` | `.hero { @include ratio-box(16 9); }` |
 | `remove` | `.a { @include remove(a, b, c); }` |
 | `reset-css` | `.a { @include reset-css; }` |
@@ -92,6 +95,7 @@ a dropped declaration rather than an error.
 | `sprite` | `.icon { @include sprite("/img/sprite.txt"); }` |
 | `stretched-link` | `.card a { @include stretched-link(middle); }` |
 | `tablet` | `.a { @include tablet(Surface) { display: none; } }` |
+| `text-gradient` | `.a { @include text-gradient(sideways, (red, blue)); }` |
 | `text-selection` | `.a { @include text-selection(bogus) { background: yellow; } }` |
 | `text-shadow` | `.a { @include text-shadow(42); }` |
 | `triangle` | `.caret { @include triangle(sideways); }` |

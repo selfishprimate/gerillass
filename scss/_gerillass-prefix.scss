@@ -109,6 +109,9 @@
   $diagonal: true,
   $image: null
 ) {
+  @if $image != null and type-of($image) != "string" {
+    @error "`#{$image}` is not a valid $image for `background-dots`. Pass an image path as a string.";
+  }
   @if $diagonal != true and $diagonal != false {
     @error "`#{$diagonal}` is not a valid $diagonal for `background-dots`. Pass `true` or `false`.";
   }
@@ -235,6 +238,12 @@
   $rotation: -45deg,
   $image: null
 ) {
+  @if type-of($rotation) != "number" {
+    @error "`#{$rotation}` is not a valid $rotation for `background-stripes`. Pass an angle such as `-45deg`, or a unitless number which is treated as degrees.";
+  }
+  @if $image != null and type-of($image) != "string" {
+    @error "`#{$image}` is not a valid $image for `background-stripes`. Pass an image path as a string.";
+  }
   $validate-unit: if(not index("deg", unit($rotation)), $rotation + deg, $rotation);
   $get-image: if($image, unquote(", ") + url(unquote($image)), unquote(""));
   @if not $color {
@@ -742,6 +751,10 @@
 ) {
   @if & {
     @error "You must call the mixin at the root level of your style sheet, not in the `#{&+'{'+'}'}` selector.";
+  } @else if type-of($font-family) != "string" {
+    @error "`#{$font-family}` is not a valid $font-family for `font-face`. Pass the family name as a string, such as `\"Inter\"`.";
+  } @else if type-of($file-path) != "string" {
+    @error "`#{$file-path}` is not a valid $file-path for `font-face`. Pass the path to the font files without an extension, as a string.";
   } @else {
     
     $list: ();
@@ -821,8 +834,8 @@
       $list
     );
   } @else if not map-has-key($map-for-directions, $direction) {
-    @if not index("deg", unit($direction)) {
-      @error "#{$direction} is a wrong value for the $direction parameter. The value must be eighter a number followed by the 'deg' unit or one of the followings: #{map-keys($map-for-directions)}.";
+    @if type-of($direction) != "number" or not index("deg", unit($direction)) {
+      @error "`#{$direction}` is not a valid $direction for `linear-gradient`. Pass an angle such as `45deg`, or one of: #{map-keys($map-for-directions)}.";
     } @else {
       background: linear-gradient($direction, $list);
     }
@@ -973,6 +986,12 @@
 
 
 @mixin gls-radial-gradient($shape, $position, $colors) {
+  @if type-of($shape) != "string" {
+    @error "`#{$shape}` is not a valid $shape for `radial-gradient`. Pass `circle` or `ellipse`.";
+  }
+  @if type-of($position) != "string" {
+    @error "`#{$position}` is not a valid $position for `radial-gradient`. Pass a position name such as `center` or `top-left`, or a raw CSS position as a string.";
+  }
   $list: ();
   $shape: unquote($shape);
   $position: unquote($position);
@@ -1321,8 +1340,8 @@
       $list
     );
   } @else if not map-has-key($map-for-directions, $direction) {
-    @if not index("deg", unit($direction)) {
-      @error "#{$direction} is a wrong value for the $direction parameter. The value must be eighter a number followed by the 'deg' unit or one of the followings: #{map-keys($map-for-directions)}.";
+    @if type-of($direction) != "number" or not index("deg", unit($direction)) {
+      @error "`#{$direction}` is not a valid $direction for `text-gradient`. Pass an angle such as `45deg`, or one of: #{map-keys($map-for-directions)}.";
     } @else {
       background: linear-gradient($direction, $list);
     }

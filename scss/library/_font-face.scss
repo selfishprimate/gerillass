@@ -9,6 +9,10 @@
 ) {
   @if & {
     @error "You must call the mixin at the root level of your style sheet, not in the `#{&+'{'+'}'}` selector.";
+  } @else if type-of($font-family) != "string" {
+    @error "`#{$font-family}` is not a valid $font-family for `font-face`. Pass the family name as a string, such as `\"Inter\"`.";
+  } @else if type-of($file-path) != "string" {
+    @error "`#{$file-path}` is not a valid $file-path for `font-face`. Pass the path to the font files without an extension, as a string.";
   } @else {
     
     $list: ();

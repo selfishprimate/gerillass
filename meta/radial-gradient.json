@@ -25,5 +25,8 @@
   "examples": [
     ".a { @include radial-gradient(circle, \"center\", (red, blue)); }"
   ],
-  "rejects": []
+  "rejects": [
+    ".a { @include radial-gradient(42, \"center\", (red, blue)); }",
+    ".a { @include radial-gradient(circle, 42, (red, blue)); }"
+  ]
 }

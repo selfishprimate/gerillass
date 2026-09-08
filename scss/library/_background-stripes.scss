@@ -6,6 +6,12 @@
   $rotation: -45deg,
   $image: null
 ) {
+  @if type-of($rotation) != "number" {
+    @error "`#{$rotation}` is not a valid $rotation for `background-stripes`. Pass an angle such as `-45deg`, or a unitless number which is treated as degrees.";
+  }
+  @if $image != null and type-of($image) != "string" {
+    @error "`#{$image}` is not a valid $image for `background-stripes`. Pass an image path as a string.";
+  }
   $validate-unit: if(not index("deg", unit($rotation)), $rotation + deg, $rotation);
   $get-image: if($image, unquote(", ") + url(unquote($image)), unquote(""));
   @if not $color {

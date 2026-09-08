@@ -1,13 +1,25 @@
 @charset "UTF-8";
 
 @function __validateLength($value) {
-  $list: ("auto", "inherit", "initial", 0);
-  @if index($list, $value) {
-    @return $value;
-  } @else if type-of($value) == "number" and not unitless($value) {
-    @return $value;
-  } @else {
-    @warn "Please pass some values with unit like `#{$value}px`, `#{$value}em`, or `#{$value}%` etc. or pass one of the following arguments: `auto`, ìnherit`, ìnitial` or `0`.";
+  $keywords: ("auto", "inherit", "initial", "unset", "revert", 0);
+
+  @if index($keywords, $value) {
     @return $value;
   }
+  @if type-of($value) == "number" and not unitless($value) {
+    @return $value;
+  }
+  // calc(), clamp(), min() and max() arrive as Sass calculations; var() and
+  // env() arrive as unquoted strings holding a parenthesis. Both are valid
+  // lengths, and warning about them means warning about correct modern CSS,
+  // which this function used to do.
+  @if type-of($value) == "calculation" {
+    @return $value;
+  }
+  @if type-of($value) == "string" and str-index(quote($value), "(") {
+    @return $value;
+  }
+
+  @warn "`#{$value}` does not look like a length. Pass a number with a unit such as `20px`, a CSS function such as `var(--gap)` or `calc(1rem + 2px)`, or one of: auto, inherit, initial, unset, revert, 0.";
+  @return $value;
 }

@@ -1,6 +1,12 @@
 @charset "UTF-8";
 
 @mixin radial-gradient($shape, $position, $colors) {
+  @if type-of($shape) != "string" {
+    @error "`#{$shape}` is not a valid $shape for `radial-gradient`. Pass `circle` or `ellipse`.";
+  }
+  @if type-of($position) != "string" {
+    @error "`#{$position}` is not a valid $position for `radial-gradient`. Pass a position name such as `center` or `top-left`, or a raw CSS position as a string.";
+  }
   $list: ();
   $shape: unquote($shape);
   $position: unquote($position);

@@ -32,5 +32,8 @@
     ".a { @include background-stripes; }",
     ".a { @include background-stripes(red, 2em, -30deg); }"
   ],
-  "rejects": []
+  "rejects": [
+    ".a { @include background-stripes(red, 2em, nonsense); }",
+    ".a { @include background-stripes(red, 2em, -45deg, 42); }"
+  ]
 }

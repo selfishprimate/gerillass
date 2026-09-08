@@ -20,5 +20,8 @@
     ".a { @include linear-gradient(\"top\", (red, blue)); }",
     ".a { @include linear-gradient(45deg, (red, blue)); }"
   ],
-  "rejects": []
+  "rejects": [
+    ".a { @include linear-gradient(sideways, (red, blue)); }",
+    ".a { @include linear-gradient(true, (red, blue)); }"
+  ]
 }

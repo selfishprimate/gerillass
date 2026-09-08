@@ -7,6 +7,9 @@
   $diagonal: true,
   $image: null
 ) {
+  @if $image != null and type-of($image) != "string" {
+    @error "`#{$image}` is not a valid $image for `background-dots`. Pass an image path as a string.";
+  }
   @if $diagonal != true and $diagonal != false {
     @error "`#{$diagonal}` is not a valid $diagonal for `background-dots`. Pass `true` or `false`.";
   }

@@ -38,6 +38,8 @@
     "@include font-face(\"Inter\", \"/fonts/inter\", italic, 700, woff2 woff);"
   ],
   "rejects": [
-    ".a { @include font-face(\"Inter\", \"/fonts/inter\"); }"
+    ".a { @include font-face(\"Inter\", \"/fonts/inter\"); }",
+    "@include font-face(42, \"/fonts/x\");",
+    "@include font-face(\"Inter\", 42);"
   ]
 }

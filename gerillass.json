@@ -191,7 +191,8 @@
         ".a { @include background-dots(red, 1em, 5em, false); }"
       ],
       "rejects": [
-        ".a { @include background-dots(red, 1em, 5em, maybe); }"
+        ".a { @include background-dots(red, 1em, 5em, maybe); }",
+        ".a { @include background-dots(red, 1em, 5em, true, 42); }"
       ]
     },
     {
@@ -275,7 +276,10 @@
         ".a { @include background-stripes; }",
         ".a { @include background-stripes(red, 2em, -30deg); }"
       ],
-      "rejects": []
+      "rejects": [
+        ".a { @include background-stripes(red, 2em, nonsense); }",
+        ".a { @include background-stripes(red, 2em, -45deg, 42); }"
+      ]
     },
     {
       "name": "before",
@@ -670,7 +674,9 @@
         "@include font-face(\"Inter\", \"/fonts/inter\", italic, 700, woff2 woff);"
       ],
       "rejects": [
-        ".a { @include font-face(\"Inter\", \"/fonts/inter\"); }"
+        ".a { @include font-face(\"Inter\", \"/fonts/inter\"); }",
+        "@include font-face(42, \"/fonts/x\");",
+        "@include font-face(\"Inter\", 42);"
       ]
     },
     {
@@ -724,7 +730,10 @@
         ".a { @include linear-gradient(\"top\", (red, blue)); }",
         ".a { @include linear-gradient(45deg, (red, blue)); }"
       ],
-      "rejects": []
+      "rejects": [
+        ".a { @include linear-gradient(sideways, (red, blue)); }",
+        ".a { @include linear-gradient(true, (red, blue)); }"
+      ]
     },
     {
       "name": "loadify",
@@ -862,7 +871,10 @@
       "examples": [
         ".a { @include radial-gradient(circle, \"center\", (red, blue)); }"
       ],
-      "rejects": []
+      "rejects": [
+        ".a { @include radial-gradient(42, \"center\", (red, blue)); }",
+        ".a { @include radial-gradient(circle, 42, (red, blue)); }"
+      ]
     },
     {
       "name": "ratio-box",
@@ -1224,7 +1236,9 @@
       "examples": [
         ".a { @include text-gradient(\"top\", (red, blue)); }"
       ],
-      "rejects": []
+      "rejects": [
+        ".a { @include text-gradient(sideways, (red, blue)); }"
+      ]
     },
     {
       "name": "text-image",

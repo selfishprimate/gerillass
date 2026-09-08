@@ -11,8 +11,8 @@
       $list
     );
   } @else if not map-has-key($map-for-directions, $direction) {
-    @if not index("deg", unit($direction)) {
-      @error "#{$direction} is a wrong value for the $direction parameter. The value must be eighter a number followed by the 'deg' unit or one of the followings: #{map-keys($map-for-directions)}.";
+    @if type-of($direction) != "number" or not index("deg", unit($direction)) {
+      @error "`#{$direction}` is not a valid $direction for `linear-gradient`. Pass an angle such as `45deg`, or one of: #{map-keys($map-for-directions)}.";
     } @else {
       background: linear-gradient($direction, $list);
     }
