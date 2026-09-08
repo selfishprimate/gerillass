@@ -61,12 +61,19 @@ describe("Manifest", () => {
   });
 });
 
+// Compiling proves a mixin runs. It does not prove the CSS is right: changing
+// circle's border-radius from 100% to 4px leaves every other assertion in this
+// file green. Snapshotting the output turns any change to what a mixin emits
+// into a reviewable diff. A snapshot records what the library does, not what it
+// ought to do -- the sass-true specs under test/library are where correctness
+// is asserted by hand.
 describe("Manifest examples", () => {
   for (const member of manifest.members) {
     for (const example of member.examples || []) {
       it(`${member.name}: ${example.replace(/\s+/g, " ").slice(0, 70)}`, () => {
         const result = compile(example);
         expect(result.css.length).toBeGreaterThan(0);
+        expect(result.css).toMatchSnapshot();
       });
     }
   }

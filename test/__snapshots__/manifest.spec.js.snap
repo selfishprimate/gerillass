@@ -1,0 +1,1225 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Manifest examples __clearUnit: .a { line-height: __clearUnit(24px); } 1`] = `
+".a {
+  line-height: 24;
+}"
+`;
+
+exports[`Manifest examples __clearWhitespace: .a { content: __clearWhitespace("a b c"); } 1`] = `
+".a {
+  content: "abc";
+}"
+`;
+
+exports[`Manifest examples __convertToEm: .a { margin: __convertToEm(24px); } 1`] = `
+".a {
+  margin: 1.5em;
+}"
+`;
+
+exports[`Manifest examples __convertToNumber: .a { z-index: __convertToNumber("42"); } 1`] = `
+".a {
+  z-index: 42;
+}"
+`;
+
+exports[`Manifest examples __darken: .a { color: __darken(red, 20%); } 1`] = `
+".a {
+  color: #cc0000;
+}"
+`;
+
+exports[`Manifest examples __fontSizer: .a { font-size: __fontSizer(16px, 1.5); } 1`] = `
+".a {
+  font-size: 24px;
+}"
+`;
+
+exports[`Manifest examples __fontSource: .a { content: "#{__fontSource("Inter", "/fonts/inter", woff2)}"; } 1`] = `
+".a {
+  content: 'url("/fonts/inter.woff2") format("woff2")';
+}"
+`;
+
+exports[`Manifest examples __isColor: .a { color: __isColor(red); } 1`] = `
+".a {
+  color: red;
+}"
+`;
+
+exports[`Manifest examples __isNumber: .a { z-index: __isNumber(5); } 1`] = `
+".a {
+  z-index: 5;
+}"
+`;
+
+exports[`Manifest examples __isTime: .a { animation-duration: __isTime(0.4s); } 1`] = `
+".a {
+  animation-duration: 0.4s;
+}"
+`;
+
+exports[`Manifest examples __lighten: .a { color: __lighten(red, 20%); } 1`] = `
+".a {
+  color: #ff3333;
+}"
+`;
+
+exports[`Manifest examples __mapDeepGet: .a { height: __mapDeepGet($map-for-tablets, "iPadPro", "height"); } 1`] = `
+".a {
+  height: 1366px;
+}"
+`;
+
+exports[`Manifest examples __null: .a { margin: __null(1px null 3px null, space); } 1`] = `
+".a {
+  margin: 1px 0 3px 0;
+}"
+`;
+
+exports[`Manifest examples __pixelify: .a { width: __pixelify(24); } 1`] = `
+".a {
+  width: 24px;
+}"
+`;
+
+exports[`Manifest examples __pseudoSelector: .a { content: "#{__pseudoSelector(("button", "a"), "hover")}"; } 1`] = `
+".a {
+  content: "button:hover, a:hover";
+}"
+`;
+
+exports[`Manifest examples __remify: .a { font-size: __remify(24px); } 1`] = `
+".a {
+  font-size: 1.5rem;
+}"
+`;
+
+exports[`Manifest examples __shorthandProperty: .a { margin: __shorthandProperty(10px 20px); } 1`] = `
+".a {
+  margin: 10px 20px 10px 20px;
+}"
+`;
+
+exports[`Manifest examples __validateBreakpoint: .a { width: __validateBreakpoint("medium"); } 1`] = `
+".a {
+  width: 768px;
+}"
+`;
+
+exports[`Manifest examples __validateLength: .a { width: __validateLength(20px); } 1`] = `
+".a {
+  width: 20px;
+}"
+`;
+
+exports[`Manifest examples __validateRatio: .a { padding-top: __validateRatio("16/9"); } 1`] = `
+".a {
+  padding-top: 56.25%;
+}"
+`;
+
+exports[`Manifest examples __validateScissors: .a { content: "#{__validateScissors(12px)}"; } 1`] = `
+".a {
+  content: "12px";
+}"
+`;
+
+exports[`Manifest examples adaptive: .wrap { @include adaptive(16px); } 1`] = `
+".wrap {
+  margin: 0 auto;
+}
+@media (min-width: 576px) {
+  .wrap {
+    max-width: calc(576px - 16px * 2);
+  }
+}
+@media (min-width: 768px) {
+  .wrap {
+    max-width: calc(768px - 16px * 2);
+  }
+}
+@media (min-width: 992px) {
+  .wrap {
+    max-width: calc(992px - 16px * 2);
+  }
+}
+@media (min-width: 1200px) {
+  .wrap {
+    max-width: calc(1200px - 16px * 2);
+  }
+}"
+`;
+
+exports[`Manifest examples adaptive: .wrap { @include adaptive; } 1`] = `
+".wrap {
+  margin: 0 auto;
+}
+@media (min-width: 576px) {
+  .wrap {
+    max-width: calc(576px - 30px * 2);
+  }
+}
+@media (min-width: 768px) {
+  .wrap {
+    max-width: calc(768px - 30px * 2);
+  }
+}
+@media (min-width: 992px) {
+  .wrap {
+    max-width: calc(992px - 30px * 2);
+  }
+}
+@media (min-width: 1200px) {
+  .wrap {
+    max-width: calc(1200px - 30px * 2);
+  }
+}"
+`;
+
+exports[`Manifest examples after: .a { @include after { content: "x"; } } 1`] = `
+".a::after {
+  content: "x";
+}"
+`;
+
+exports[`Manifest examples after: .a { @include after("data-label") { color: red; } } 1`] = `
+".a::after {
+  content: attr(data-label);
+  color: red;
+}"
+`;
+
+exports[`Manifest examples after: .a { @include after("→") { color: red; } } 1`] = `
+"@charset "UTF-8";
+.a::after {
+  content: "→";
+  color: red;
+}"
+`;
+
+exports[`Manifest examples all-buttons: @include all-buttons { cursor: pointer; } 1`] = `
+"button, [type=button], [type=reset], [type=submit] {
+  cursor: pointer;
+}"
+`;
+
+exports[`Manifest examples all-buttons: @include all-buttons("hover") { opacity: 0.8; } 1`] = `
+"button:hover, [type=button]:hover, [type=reset]:hover, [type=submit]:hover {
+  opacity: 0.8;
+}"
+`;
+
+exports[`Manifest examples all-text-inputs: @include all-text-inputs { border: 1px solid; } 1`] = `
+"[type=color], [type=date], [type=datetime], [type=datetime-local], [type=email], [type=month], [type=number], [type=password], [type=search], [type=tel], [type=text], [type=time], [type=url], [type=week], input:not([type]), textarea {
+  border: 1px solid;
+}"
+`;
+
+exports[`Manifest examples all-text-inputs: @include all-text-inputs("focus") { outline: 2px solid; } 1`] = `
+"[type=color]:focus, [type=date]:focus, [type=datetime]:focus, [type=datetime-local]:focus, [type=email]:focus, [type=month]:focus, [type=number]:focus, [type=password]:focus, [type=search]:focus, [type=tel]:focus, [type=text]:focus, [type=time]:focus, [type=url]:focus, [type=week]:focus, input:not([type]):focus, textarea:focus {
+  outline: 2px solid;
+}"
+`;
+
+exports[`Manifest examples antialias: .a { @include antialias("only"); } 1`] = `
+".a, .a::before, .a::after {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}"
+`;
+
+exports[`Manifest examples antialias: @include antialias; 1`] = `
+"*,
+*::before,
+*::after {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}"
+`;
+
+exports[`Manifest examples background-dots: .a { @include background-dots(red); } 1`] = `
+".a {
+  background-image: radial-gradient(red 1em, transparent 0), radial-gradient(red 1em, transparent 0);
+  background-position: 2.5em 2.5em, 10em 10em;
+  background-size: 5em 5em;
+  background-repeat: repeat;
+}"
+`;
+
+exports[`Manifest examples background-dots: .a { @include background-dots(red, 1em, 5em, false); } 1`] = `
+".a {
+  background-image: radial-gradient(red 1em, transparent 0);
+  background-position: 2.5em 2.5em;
+  background-size: 5em 5em;
+  background-repeat: repeat;
+}"
+`;
+
+exports[`Manifest examples background-dots: .a { @include background-dots; } 1`] = `
+".a {
+  background-image: radial-gradient(rgba(0, 0, 0, 0.1) 1em, transparent 0), radial-gradient(rgba(0, 0, 0, 0.1) 1em, transparent 0);
+  background-position: 2.5em 2.5em, 10em 10em;
+  background-size: 5em 5em;
+  background-repeat: repeat;
+}"
+`;
+
+exports[`Manifest examples background-image: .a { @include background-image("/img/a.png"); } 1`] = `
+".a {
+  background-image: url("/img/a.png");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}"
+`;
+
+exports[`Manifest examples background-image: .a { @include background-image("/img/a.png", (red, blue), "top"); } 1`] = `
+".a {
+  background-image: linear-gradient(to top, red, blue), url("/img/a.png");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}"
+`;
+
+exports[`Manifest examples background-image: .a { @include background-image("/img/a.png", rgba(0,0,0,0.5)); } 1`] = `
+".a {
+  background-image: linear-gradient(to top, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("/img/a.png");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}"
+`;
+
+exports[`Manifest examples background-stripes: .a { @include background-stripes(red, 2em, -30deg); } 1`] = `
+".a {
+  background-image: repeating-linear-gradient(-30deg, red 0, red 2em, transparent 2em, transparent 4em);
+}"
+`;
+
+exports[`Manifest examples background-stripes: .a { @include background-stripes; } 1`] = `
+".a {
+  background-image: repeating-linear-gradient(-45deg, rgba(0, 0, 0, 0.1) 0, rgba(0, 0, 0, 0.1) 1em, transparent 1em, transparent 2em);
+}"
+`;
+
+exports[`Manifest examples before: .a { @include before("data-label") { color: red; } } 1`] = `
+".a::before {
+  content: attr(data-label);
+  color: red;
+}"
+`;
+
+exports[`Manifest examples before: .a { @include before("→") { color: red; } } 1`] = `
+"@charset "UTF-8";
+.a::before {
+  content: "→";
+  color: red;
+}"
+`;
+
+exports[`Manifest examples border-box: .a { @include border-box("only"); } 1`] = `
+".a, .a::before, .a::after {
+  box-sizing: border-box;
+}"
+`;
+
+exports[`Manifest examples border-box: @include border-box; 1`] = `
+"*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}"
+`;
+
+exports[`Manifest examples border-radius: .a { @include border-radius("top", 8px); } 1`] = `
+".a {
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}"
+`;
+
+exports[`Manifest examples border-radius: .a { @include border-radius(1px, 2px, 3px, 4px); } 1`] = `
+".a {
+  border-top-left-radius: 1px;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 4px;
+}"
+`;
+
+exports[`Manifest examples border-radius: .a { @include border-radius(8px); } 1`] = `
+".a {
+  border-radius: 8px;
+}"
+`;
+
+exports[`Manifest examples brand-logo: .logo { @include brand-logo(120px, 40px, "/img/logo.svg"); } 1`] = `
+".logo {
+  display: inline-block;
+  position: relative;
+  width: 120px;
+  height: 40px;
+  background-image: url("/img/logo.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100%;
+}
+.logo a {
+  display: block;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  text-indent: 100%;
+}
+.logo a::after {
+  content: "";
+  position: absolute;
+  pointer-events: auto;
+  background-color: rgba(0, 0, 0, 0);
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+}"
+`;
+
+exports[`Manifest examples breakpoint: .a { @include breakpoint("between", "medium" "large") { color: red; }  1`] = `
+"@media (min-width: 768px) and (max-width: 991px) {
+  .a {
+    color: red;
+  }
+}"
+`;
+
+exports[`Manifest examples breakpoint: .a { @include breakpoint("medium") { color: red; } } 1`] = `
+"@media (width: 768px) {
+  .a {
+    color: red;
+  }
+}"
+`;
+
+exports[`Manifest examples breakpoint: .a { @include breakpoint("min", "medium") { color: red; } } 1`] = `
+"@media (min-width: 768px) {
+  .a {
+    color: red;
+  }
+}"
+`;
+
+exports[`Manifest examples breakpointer: .a { @include breakpointer; } 1`] = `
+"@media (min-width: 0) {
+  .a::before {
+    content: "xsmall";
+  }
+}
+@media (min-width: 576px) {
+  .a::before {
+    content: "small";
+  }
+}
+@media (min-width: 768px) {
+  .a::before {
+    content: "medium";
+  }
+}
+@media (min-width: 992px) {
+  .a::before {
+    content: "large";
+  }
+}
+@media (min-width: 1200px) {
+  .a::before {
+    content: "xlarge";
+  }
+}"
+`;
+
+exports[`Manifest examples breakpointer: @include breakpointer; 1`] = `
+"@media (min-width: 0) {
+  body::before {
+    content: "xsmall";
+  }
+}
+@media (min-width: 576px) {
+  body::before {
+    content: "small";
+  }
+}
+@media (min-width: 768px) {
+  body::before {
+    content: "medium";
+  }
+}
+@media (min-width: 992px) {
+  body::before {
+    content: "large";
+  }
+}
+@media (min-width: 1200px) {
+  body::before {
+    content: "xlarge";
+  }
+}"
+`;
+
+exports[`Manifest examples center: .bar { @include center("horizontal"); } 1`] = `
+".bar {
+  left: 50%;
+  transform: translateX(-50%);
+}"
+`;
+
+exports[`Manifest examples center: .modal { @include center; } 1`] = `
+".modal {
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+}"
+`;
+
+exports[`Manifest examples circle: .dot { @include circle(24px); } 1`] = `
+".dot {
+  width: 24px;
+  height: 24px;
+  display: inline-block;
+  border-radius: 100%;
+}"
+`;
+
+exports[`Manifest examples clearfix: .row { @include clearfix; } 1`] = `
+".row::after {
+  content: "";
+  display: block;
+  clear: both;
+}"
+`;
+
+exports[`Manifest examples columnizer: .grid { @include columnizer(3); } 1`] = `
+".grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+.grid, .grid::before, .grid::after,
+.grid *,
+.grid *::before,
+.grid *::after {
+  box-sizing: border-box;
+}
+.grid > * {
+  flex: 0 0 calc(100% / 3);
+  margin-bottom: 0;
+}
+.grid > *:not(:last-child) {
+  margin-right: 0;
+}"
+`;
+
+exports[`Manifest examples columnizer: .grid { @include columnizer(3, 20px); } 1`] = `
+".grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+.grid, .grid::before, .grid::after,
+.grid *,
+.grid *::before,
+.grid *::after {
+  box-sizing: border-box;
+}
+.grid > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: calc((100% - (3 - 1) * 20px) / 3);
+  margin-bottom: 20px;
+}
+.grid > *:not(:last-child) {
+  margin-right: 20px;
+}
+.grid > *:nth-child(3n) {
+  margin-right: 0;
+}"
+`;
+
+exports[`Manifest examples columnizer: .grid { @include columnizer(3, 20px, true); } 1`] = `
+".grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+.grid, .grid::before, .grid::after,
+.grid *,
+.grid *::before,
+.grid *::after {
+  box-sizing: border-box;
+}
+.grid > * {
+  flex-grow: 1;
+  flex-shrink: 0;
+  flex-basis: calc((100% - (3 - 1) * 20px) / 3);
+  margin-bottom: 20px;
+}
+.grid > *:not(:last-child) {
+  margin-right: 20px;
+}
+.grid > *:nth-child(3n) {
+  margin-right: 0;
+}"
+`;
+
+exports[`Manifest examples counter: .list { @include counter("(", "decimal", ")"); } 1`] = `
+".list.counter-start {
+  counter-reset: glsCounter;
+}
+.list.counter-start .counter-item::before, .list.counter-continue .counter-item::before {
+  content: "(" counter(glsCounter, decimal)  ")";
+  counter-increment: glsCounter;
+}"
+`;
+
+exports[`Manifest examples counter: .list { @include counter("."); } 1`] = `
+".list.counter-start {
+  counter-reset: glsCounter;
+}
+.list.counter-start .counter-item::before, .list.counter-continue .counter-item::before {
+  content: counter(glsCounter)  ".";
+  counter-increment: glsCounter;
+}"
+`;
+
+exports[`Manifest examples counter: .list { @include counter("decimal"); } 1`] = `
+".list.counter-start {
+  counter-reset: glsCounter;
+}
+.list.counter-start .counter-item::before, .list.counter-continue .counter-item::before {
+  content: counter(glsCounter, decimal);
+  counter-increment: glsCounter;
+}"
+`;
+
+exports[`Manifest examples ellipsis: .a { @include ellipsis(200px); } 1`] = `
+".a {
+  display: inline-block;
+  max-width: 200px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  word-wrap: normal;
+}"
+`;
+
+exports[`Manifest examples ellipsis: .a { @include ellipsis; } 1`] = `
+".a {
+  display: inline-block;
+  max-width: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  word-wrap: normal;
+}"
+`;
+
+exports[`Manifest examples escape-to-parent: .a { @include escape-to-parent(".theme-dark") { color: white; } } 1`] = `
+".theme-dark.a {
+  color: white;
+}"
+`;
+
+exports[`Manifest examples except: .a { @include except("first") { margin: 0; } } 1`] = `
+".a:not(:first-of-type) {
+  margin: 0;
+}"
+`;
+
+exports[`Manifest examples except: .a { @include except(1, 3) { margin: 0; } } 1`] = `
+".a:not(:nth-of-type(1)):not(:nth-of-type(3)) {
+  margin: 0;
+}"
+`;
+
+exports[`Manifest examples except: .a { @include except(2) { margin: 0; } } 1`] = `
+".a:not(:nth-of-type(2)) {
+  margin: 0;
+}"
+`;
+
+exports[`Manifest examples font-face: @include font-face("Inter", "/fonts/inter"); 1`] = `
+"@font-face {
+  font-family: "Inter";
+  src: url("/fonts/inter.eot");
+  src: url("/fonts/inter.eot?#iefix") format("embedded-opentype"), url("/fonts/inter.woff2") format("woff2"), url("/fonts/inter.woff") format("woff"), url("/fonts/inter.ttf") format("truetype"), url("/fonts/inter.svg#Inter") format("svg");
+  font-style: normal;
+  font-weight: 400;
+}"
+`;
+
+exports[`Manifest examples font-face: @include font-face("Inter", "/fonts/inter", italic, 700, woff2 woff); 1`] = `
+"@font-face {
+  font-family: "Inter";
+  src: url("/fonts/inter.woff2") format("woff2"), url("/fonts/inter.woff") format("woff");
+  font-style: italic;
+  font-weight: 700;
+}"
+`;
+
+exports[`Manifest examples hide: .a { @include hide("unhide"); } 1`] = `
+".a {
+  position: static;
+  width: auto;
+  height: auto;
+  overflow: visible;
+  clip: auto;
+  clip-path: none;
+  white-space: inherit;
+}"
+`;
+
+exports[`Manifest examples hide: .a { @include hide; } 1`] = `
+".a {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(100%);
+  white-space: nowrap;
+}"
+`;
+
+exports[`Manifest examples linear-gradient: .a { @include linear-gradient("top", (red, blue)); } 1`] = `
+".a {
+  background: linear-gradient(to top, red, blue);
+}"
+`;
+
+exports[`Manifest examples linear-gradient: .a { @include linear-gradient(45deg, (red, blue)); } 1`] = `
+".a {
+  background: linear-gradient(45deg, red, blue);
+}"
+`;
+
+exports[`Manifest examples loadify: @include loadify(init); .a { @include loadify; } 1`] = `
+"@keyframes loadify {
+  to {
+    opacity: 1;
+    visibility: visible;
+    backface-visibility: visible;
+  }
+}
+.a {
+  opacity: 0;
+  visibility: hidden;
+  backface-visibility: hidden;
+  animation-name: loadify;
+  animation-fill-mode: forwards;
+}
+
+.a {
+  animation-delay: 0.2s;
+  animation-duration: 0.5s;
+}"
+`;
+
+exports[`Manifest examples loadify: @include loadify; .a { @include loadify(0.4s, 1s); } 1`] = `
+"@keyframes loadify {
+  to {
+    opacity: 1;
+    visibility: visible;
+    backface-visibility: visible;
+  }
+}
+.a {
+  opacity: 0;
+  visibility: hidden;
+  backface-visibility: hidden;
+  animation-name: loadify;
+  animation-fill-mode: forwards;
+}
+
+.a {
+  animation-delay: 0.4s;
+  animation-duration: 1s;
+}"
+`;
+
+exports[`Manifest examples only: .a { @include only("first") { margin: 0; } } 1`] = `
+".a:first-of-type {
+  margin: 0;
+}"
+`;
+
+exports[`Manifest examples only: .a { @include only(-1) { margin: 0; } } 1`] = `
+".a:nth-last-of-type(1) {
+  margin: 0;
+}"
+`;
+
+exports[`Manifest examples only: .a { @include only(1, 3) { margin: 0; } } 1`] = `
+".a:nth-of-type(1), .a:nth-of-type(3) {
+  margin: 0;
+}"
+`;
+
+exports[`Manifest examples placeholder: .field { @include placeholder { color: gray; } } 1`] = `
+".field::-webkit-input-placeholder {
+  color: gray;
+}
+.field::-moz-placeholder {
+  color: gray;
+}
+.field:-ms-input-placeholder {
+  color: gray;
+}
+.field:-moz-placeholder {
+  color: gray;
+}
+.field::placeholder {
+  color: gray;
+}"
+`;
+
+exports[`Manifest examples placeholder-shown: .field { @include placeholder-shown { border-color: gray; } } 1`] = `
+".field:placeholder-shown {
+  border-color: gray;
+}"
+`;
+
+exports[`Manifest examples position: .a { @include position(absolute, 0); } 1`] = `
+".a {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}"
+`;
+
+exports[`Manifest examples position: .a { @include position(fixed, 0 10px); } 1`] = `
+".a {
+  position: fixed;
+  top: 0;
+  right: 10px;
+  bottom: 0;
+  left: 10px;
+}"
+`;
+
+exports[`Manifest examples radial-gradient: .a { @include radial-gradient(circle, "center", (red, blue)); } 1`] = `
+".a {
+  background: radial-gradient(circle at center, red, blue);
+}"
+`;
+
+exports[`Manifest examples ratio-box: .default { @include ratio-box; } 1`] = `
+".default {
+  position: relative;
+}
+.default::before {
+  content: "";
+  display: block;
+  padding-top: 56.25%;
+}
+.default > * {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}"
+`;
+
+exports[`Manifest examples ratio-box: .hero { @include ratio-box("16/9"); } 1`] = `
+".hero {
+  position: relative;
+}
+.hero::before {
+  content: "";
+  display: block;
+  padding-top: 56.25%;
+}
+.hero > * {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}"
+`;
+
+exports[`Manifest examples ratio-box: .square { @include ratio-box("1/1"); } 1`] = `
+".square {
+  position: relative;
+}
+.square::before {
+  content: "";
+  display: block;
+  padding-top: 100%;
+}
+.square > * {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}"
+`;
+
+exports[`Manifest examples remove: .a { @include remove("medium"); } 1`] = `
+"@media (width: 768px) {
+  .a {
+    display: none;
+  }
+}"
+`;
+
+exports[`Manifest examples remove: .a { @include remove("min", "medium"); } 1`] = `
+"@media (min-width: 768px) {
+  .a {
+    display: none;
+  }
+}"
+`;
+
+exports[`Manifest examples remove: .a { @include remove; } 1`] = `
+".a {
+  display: none;
+}"
+`;
+
+exports[`Manifest examples reset-css: @include reset-css; 1`] = `
+"/* http://meyerweb.com/eric/tools/css/reset/ 
+v2.0 | 20110126
+License: none (public domain)
+*/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, main, nav, section {
+  display: block;
+}
+
+body {
+  line-height: 1;
+}
+
+ol, ul {
+  list-style: none;
+}
+
+blockquote, q {
+  quotes: none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: "";
+  content: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}"
+`;
+
+exports[`Manifest examples reset-figure: figure { @include reset-figure; } 1`] = `
+"figure {
+  margin: 0;
+}
+figure img {
+  display: block;
+  width: 100%;
+}"
+`;
+
+exports[`Manifest examples resizable: .a { @include resizable(vertical, scroll); } 1`] = `
+".a {
+  resize: vertical;
+  overflow: scroll;
+  max-width: 100%;
+}"
+`;
+
+exports[`Manifest examples resizable: .a { @include resizable; } 1`] = `
+".a {
+  resize: both;
+  overflow: auto;
+  max-width: 100%;
+}"
+`;
+
+exports[`Manifest examples responsive-image: img { @include responsive-image; } 1`] = `
+"img {
+  display: block;
+  width: 100%;
+}"
+`;
+
+exports[`Manifest examples responsive-video: .video { @include responsive-video("16/9"); } 1`] = `
+".video {
+  position: relative;
+}
+.video::before {
+  content: "";
+  display: block;
+  padding-top: 56.25%;
+}
+.video > * {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}"
+`;
+
+exports[`Manifest examples responsive-video: .video { @include responsive-video; } 1`] = `
+".video {
+  position: relative;
+}
+.video::before {
+  content: "";
+  display: block;
+  padding-top: 56.25%;
+}
+.video > * {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}"
+`;
+
+exports[`Manifest examples scissors: .a { @include scissors(4px 8px 12px 16px); } 1`] = `
+".a {
+  clip-path: polygon(0 4px, 4px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 16px 100%, 0 calc(100% - 16px));
+}"
+`;
+
+exports[`Manifest examples scissors: .a { @include scissors(12px); } 1`] = `
+".a {
+  clip-path: polygon(0 12px, 12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px));
+}"
+`;
+
+exports[`Manifest examples screen-agent: .a { @include screen-agent("2x") { background-image: url("/img/a@2x.pn 1`] = `
+"@media (min-resolution: 192dpi) {
+  .a {
+    background-image: url("/img/a@2x.png");
+  }
+}"
+`;
+
+exports[`Manifest examples sizer: .a { @include sizer(40px); } 1`] = `
+".a {
+  width: 40px;
+  height: 40px;
+}"
+`;
+
+exports[`Manifest examples sizer: .a { @include sizer(120px, 40px); } 1`] = `
+".a {
+  width: 120px;
+  height: 40px;
+}"
+`;
+
+exports[`Manifest examples smartphone: .a { @include smartphone("iPhone11") { display: none; } } 1`] = `
+"@media only screen and (device-width: 414px) and (device-height: 896px) and (orientation: portrait) {
+  .a {
+    display: none;
+  }
+}"
+`;
+
+exports[`Manifest examples smartphone: .a { @include smartphone("iPhone11", landscape) { display: none; } } 1`] = `
+"@media only screen and (device-width: 896px) and (device-height: 414px) and (orientation: landscape) {
+  .a {
+    display: none;
+  }
+}"
+`;
+
+exports[`Manifest examples sprite: .icon { @include sprite("/img/sprite.png"); } 1`] = `
+".icon {
+  display: inline-block;
+  background-image: url("/img/sprite.png");
+  background-repeat: no-repeat;
+}"
+`;
+
+exports[`Manifest examples sprite: .icon { @include sprite("/img/sprite.png", 0 -40px); } 1`] = `
+".icon {
+  display: inline-block;
+  background-image: url("/img/sprite.png");
+  background-position: 0 -40px;
+  background-repeat: no-repeat;
+}"
+`;
+
+exports[`Manifest examples sprite: .icon { @include sprite(0 -40px); } 1`] = `
+".icon {
+  background-position: 0 -40px;
+}"
+`;
+
+exports[`Manifest examples stretched-link: .card a { @include stretched-link("after"); } 1`] = `
+".card a::after {
+  content: "";
+  position: absolute;
+  pointer-events: auto;
+  background-color: rgba(0, 0, 0, 0);
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+}"
+`;
+
+exports[`Manifest examples stretched-link: .card a { @include stretched-link; } 1`] = `
+".card a::before {
+  content: "";
+  position: absolute;
+  pointer-events: auto;
+  background-color: rgba(0, 0, 0, 0);
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+}"
+`;
+
+exports[`Manifest examples tablet: .a { @include tablet("iPad", landscape) { display: none; } } 1`] = `
+"@media only screen and (device-width: 1080px) and (device-height: 810px) and (orientation: landscape) {
+  .a {
+    display: none;
+  }
+}"
+`;
+
+exports[`Manifest examples tablet: .a { @include tablet("iPadPro") { display: none; } } 1`] = `
+"@media only screen and (device-width: 1024px) and (device-height: 1366px) and (orientation: portrait) {
+  .a {
+    display: none;
+  }
+}"
+`;
+
+exports[`Manifest examples text-gradient: .a { @include text-gradient("top", (red, blue)); } 1`] = `
+".a {
+  background: linear-gradient(to top, red, blue);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}"
+`;
+
+exports[`Manifest examples text-image: .a { @include text-image("/img/t.png"); } 1`] = `
+".a {
+  background-image: url("/img/t.png");
+  background-size: cover;
+  background-position: center;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}"
+`;
+
+exports[`Manifest examples text-selection: .a { @include text-selection("only") { background: yellow; } } 1`] = `
+".a::selection {
+  background: yellow;
+}"
+`;
+
+exports[`Manifest examples text-selection: @include text-selection { background: yellow; } 1`] = `
+"::selection {
+  background: yellow;
+}"
+`;
+
+exports[`Manifest examples text-shadow: .a { @include text-shadow(bottom-right red 5px); } 1`] = `
+".a {
+  text-shadow: 5px 5px red;
+}"
+`;
+
+exports[`Manifest examples text-stroke: .a { @include text-stroke(black, transparent, red, 2px); } 1`] = `
+".a {
+  color: black;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke-color: red;
+  -webkit-text-stroke-width: 2px;
+}"
+`;
+
+exports[`Manifest examples text-stroke: .a { @include text-stroke; } 1`] = `
+".a {
+  color: black;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke-color: black;
+  -webkit-text-stroke-width: 1px;
+}"
+`;
+
+exports[`Manifest examples triangle: .arrow { @include triangle("left", red); } 1`] = `
+".arrow {
+  content: "";
+  height: 0;
+  width: 0;
+  display: inline-block;
+  border-style: solid;
+  border-color: transparent red transparent transparent;
+  border-width: 4px 10px 4px 0;
+}"
+`;
+
+exports[`Manifest examples triangle: .caret { @include triangle("bottom", black, 10px 8px); } 1`] = `
+".caret {
+  content: "";
+  height: 0;
+  width: 0;
+  display: inline-block;
+  border-style: solid;
+  border-color: black transparent transparent;
+  border-width: 8px 5px 0;
+}"
+`;
