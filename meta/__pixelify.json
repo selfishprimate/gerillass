@@ -12,5 +12,7 @@
   "examples": [
     ".a { width: __pixelify(24); }"
   ],
-  "rejects": []
+  "rejects": [
+    ".a { --x: #{__pixelify(nonsense)}; }"
+  ]
 }

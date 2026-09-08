@@ -12,5 +12,7 @@
   "examples": [
     ".a { content: __clearWhitespace(\"a b c\"); }"
   ],
-  "rejects": []
+  "rejects": [
+    ".a { --x: #{__clearWhitespace(42)}; }"
+  ]
 }

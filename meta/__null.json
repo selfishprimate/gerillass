@@ -25,5 +25,7 @@
   "examples": [
     ".a { margin: __null(1px null 3px null, space); }"
   ],
-  "rejects": []
+  "rejects": [
+    ".a { --x: #{__null(1px null, nonsense)}; }"
+  ]
 }

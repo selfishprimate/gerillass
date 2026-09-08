@@ -12,5 +12,7 @@
   "examples": [
     ".a { z-index: __convertToNumber(\"42\"); }"
   ],
-  "rejects": []
+  "rejects": [
+    ".a { --x: #{__convertToNumber(42)}; }"
+  ]
 }

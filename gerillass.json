@@ -1432,7 +1432,9 @@
       "examples": [
         ".a { content: __clearWhitespace(\"a b c\"); }"
       ],
-      "rejects": []
+      "rejects": [
+        ".a { --x: #{__clearWhitespace(42)}; }"
+      ]
     },
     {
       "name": "__convertToEm",
@@ -1472,7 +1474,9 @@
       "examples": [
         ".a { z-index: __convertToNumber(\"42\"); }"
       ],
-      "rejects": []
+      "rejects": [
+        ".a { --x: #{__convertToNumber(42)}; }"
+      ]
     },
     {
       "name": "__darken",
@@ -1717,7 +1721,9 @@
       "examples": [
         ".a { margin: __null(1px null 3px null, space); }"
       ],
-      "rejects": []
+      "rejects": [
+        ".a { --x: #{__null(1px null, nonsense)}; }"
+      ]
     },
     {
       "name": "__pixelify",
@@ -1737,7 +1743,9 @@
       "examples": [
         ".a { width: __pixelify(24); }"
       ],
-      "rejects": []
+      "rejects": [
+        ".a { --x: #{__pixelify(nonsense)}; }"
+      ]
     },
     {
       "name": "__pseudoSelector",

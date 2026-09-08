@@ -57,14 +57,12 @@ function run(snippet) {
 const INTERNAL = /is not a string|Invalid index|\$number: .* is not a number|no element|Undefined (variable|mixin)|expected (a |an )?["'a-z]/i;
 
 const only = process.argv.slice(2);
-const mixins = manifest.members
-  .filter((m) => m.kind === "mixin")
-  .filter((m) => !only.length || only.includes(m.name));
+const members = manifest.members.filter((m) => !only.length || only.includes(m.name));
 
 const findings = { silent: [], internal: [], warned: [], passthrough: [] };
 
-for (const m of mixins) {
-  // Mixins that take no arguments have nothing to probe.
+for (const m of members) {
+  // A member that takes no arguments has nothing to probe.
   if (!m.arguments.length) continue;
 
   // Reuse the documented example's context so root-only mixins are called at
@@ -131,10 +129,16 @@ for (const m of mixins) {
       }
       const label = m.arguments[pos] ? `${m.name} ${m.arguments[pos].name}=${probe}` : `${m.name}(${probe})`;
 
-      const call = takesContent
-        ? `@include ${m.name}(${args}) { color: red; }`
-        : `@include ${m.name}(${args});`;
-      const snippet = atRoot ? call : `.probe { ${call} }`;
+      let snippet;
+      if (m.kind === "function") {
+        // A function is only reachable from a value position, so give it one.
+        snippet = `.probe { --probe: #{${m.name}(${args})}; }`;
+      } else {
+        const call = takesContent
+          ? `@include ${m.name}(${args}) { color: red; }`
+          : `@include ${m.name}(${args});`;
+        snippet = atRoot ? call : `.probe { ${call} }`;
+      }
       const result = run(snippet);
 
       if (!result.ok) {
@@ -152,7 +156,9 @@ for (const m of mixins) {
 
 const line = (s) => console.log(s);
 
-line(`Probed ${mixins.length} mixins, every argument position, ${PROBES.length} bad values each.\n`);
+const nMixins = members.filter((m) => m.kind === "mixin").length;
+const nFns = members.filter((m) => m.kind === "function").length;
+line(`Probed ${nMixins} mixins and ${nFns} functions, every argument position, ${PROBES.length} bad values each.\n`);
 
 line(`SILENT — produced no CSS and no error (${findings.silent.length})`);
 if (!findings.silent.length) line("  none");
