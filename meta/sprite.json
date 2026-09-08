@@ -1,0 +1,22 @@
+{
+  "name": "sprite",
+  "summary": "Sets up an element as a sprite tile: an image, a background position, or both.",
+  "arguments": [
+    {
+      "name": "$params",
+      "accepts": [
+        "an image path ending in .png, .jpg or .svg",
+        "a background position",
+        "both, image first"
+      ]
+    }
+  ],
+  "examples": [
+    ".icon { @include sprite(\"/img/sprite.png\"); }",
+    ".icon { @include sprite(\"/img/sprite.png\", 0 -40px); }",
+    ".icon { @include sprite(0 -40px); }"
+  ],
+  "rejects": [
+    ".icon { @include sprite(\"/img/sprite.txt\"); }"
+  ]
+}

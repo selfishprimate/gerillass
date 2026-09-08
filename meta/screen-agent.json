@@ -1,0 +1,17 @@
+{
+  "name": "screen-agent",
+  "summary": "Media query targeting a screen pixel density.",
+  "arguments": [
+    {
+      "name": "$resolution",
+      "accepts": [
+        "1x, 2x or 3x",
+        "a raw resolution such as 120dpi"
+      ]
+    }
+  ],
+  "examples": [
+    ".a { @include screen-agent(\"2x\") { background-image: url(\"/img/a@2x.png\"); } }"
+  ],
+  "rejects": []
+}

@@ -1,0 +1,23 @@
+{
+  "name": "resizable",
+  "summary": "Makes an element user-resizable.",
+  "arguments": [
+    {
+      "name": "$direction",
+      "accepts": [
+        "a CSS resize value such as both, horizontal, vertical or none"
+      ]
+    },
+    {
+      "name": "$overflow",
+      "accepts": [
+        "a CSS overflow value"
+      ]
+    }
+  ],
+  "examples": [
+    ".a { @include resizable; }",
+    ".a { @include resizable(vertical, scroll); }"
+  ],
+  "rejects": []
+}

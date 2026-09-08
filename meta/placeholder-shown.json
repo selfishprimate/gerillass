@@ -1,0 +1,9 @@
+{
+  "name": "placeholder-shown",
+  "summary": "Styles an input while its placeholder is visible.",
+  "arguments": [],
+  "examples": [
+    ".field { @include placeholder-shown { border-color: gray; } }"
+  ],
+  "rejects": []
+}

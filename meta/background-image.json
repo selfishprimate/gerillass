@@ -1,0 +1,34 @@
+{
+  "name": "background-image",
+  "summary": "Background image with an optional colour or gradient filter laid over it.",
+  "arguments": [
+    {
+      "name": "$image-url",
+      "accepts": [
+        "an image path",
+        "null to filter the element itself instead"
+      ]
+    },
+    {
+      "name": "$filter-color",
+      "accepts": [
+        "one colour, or several for a gradient"
+      ]
+    },
+    {
+      "name": "$filter-direction",
+      "accepts": [
+        "an angle such as 45deg",
+        "a direction name such as top or bottom-left"
+      ]
+    }
+  ],
+  "examples": [
+    ".a { @include background-image(\"/img/a.png\"); }",
+    ".a { @include background-image(\"/img/a.png\", rgba(0,0,0,0.5)); }",
+    ".a { @include background-image(\"/img/a.png\", (red, blue), \"top\"); }"
+  ],
+  "rejects": [
+    ".a { @include background-image(\"/img/a.png\", (red, blue), sideways); }"
+  ]
+}

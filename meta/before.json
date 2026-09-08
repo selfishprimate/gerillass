@@ -1,0 +1,19 @@
+{
+  "name": "before",
+  "summary": "Styles the ::before pseudo-element. A `data-` argument becomes an attr() content value.",
+  "arguments": [
+    {
+      "name": "$content",
+      "accepts": [
+        "a string used as the content value",
+        "a data- attribute name, rendered as attr()",
+        "null to write content yourself"
+      ]
+    }
+  ],
+  "examples": [
+    ".a { @include before(\"→\") { color: red; } }",
+    ".a { @include before(\"data-label\") { color: red; } }"
+  ],
+  "rejects": []
+}

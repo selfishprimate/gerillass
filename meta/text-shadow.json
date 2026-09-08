@@ -1,0 +1,16 @@
+{
+  "name": "text-shadow",
+  "summary": "Layered text shadows built from a direction, a colour and an offset.",
+  "arguments": [
+    {
+      "name": "$params",
+      "accepts": [
+        "one or more groups of direction, colour and size"
+      ]
+    }
+  ],
+  "examples": [
+    ".a { @include text-shadow(bottom-right red 5px); }"
+  ],
+  "rejects": []
+}

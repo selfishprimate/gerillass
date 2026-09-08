@@ -1,0 +1,23 @@
+{
+  "name": "remove",
+  "summary": "Hides an element outright, or only within a breakpoint range.",
+  "arguments": [
+    {
+      "name": "$params",
+      "accepts": [
+        "nothing, to hide it always",
+        "one breakpoint",
+        "min or max plus a breakpoint",
+        "a start and an end breakpoint"
+      ]
+    }
+  ],
+  "examples": [
+    ".a { @include remove; }",
+    ".a { @include remove(\"medium\"); }",
+    ".a { @include remove(\"min\", \"medium\"); }"
+  ],
+  "rejects": [
+    ".a { @include remove(a, b, c); }"
+  ]
+}

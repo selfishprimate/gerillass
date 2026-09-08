@@ -1,0 +1,9 @@
+{
+  "name": "responsive-image",
+  "summary": "Makes an image fill its container width.",
+  "arguments": [],
+  "examples": [
+    "img { @include responsive-image; }"
+  ],
+  "rejects": []
+}

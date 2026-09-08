@@ -1,0 +1,9 @@
+{
+  "name": "reset-figure",
+  "summary": "Removes default figure margins and makes the image inside responsive.",
+  "arguments": [],
+  "examples": [
+    "figure { @include reset-figure; }"
+  ],
+  "rejects": []
+}

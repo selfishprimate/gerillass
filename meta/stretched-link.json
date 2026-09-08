@@ -1,0 +1,20 @@
+{
+  "name": "stretched-link",
+  "summary": "Expands a link to cover its positioned parent, so the whole card is clickable.",
+  "arguments": [
+    {
+      "name": "$value",
+      "accepts": [
+        "before",
+        "after"
+      ]
+    }
+  ],
+  "examples": [
+    ".card a { @include stretched-link; }",
+    ".card a { @include stretched-link(\"after\"); }"
+  ],
+  "rejects": [
+    ".card a { @include stretched-link(middle); }"
+  ]
+}

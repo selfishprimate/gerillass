@@ -7,3 +7,5 @@ assets
 gulpfile.js
 node_modules
 gerillass.gemspec
+meta
+tools

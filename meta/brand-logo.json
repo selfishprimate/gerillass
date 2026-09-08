@@ -1,0 +1,28 @@
+{
+  "name": "brand-logo",
+  "summary": "Logo box with an image and an accessible stretched link over it.",
+  "arguments": [
+    {
+      "name": "$width",
+      "accepts": [
+        "a length"
+      ]
+    },
+    {
+      "name": "$height",
+      "accepts": [
+        "a length"
+      ]
+    },
+    {
+      "name": "$image-url",
+      "accepts": [
+        "an image path"
+      ]
+    }
+  ],
+  "examples": [
+    ".logo { @include brand-logo(120px, 40px, \"/img/logo.svg\"); }"
+  ],
+  "rejects": []
+}

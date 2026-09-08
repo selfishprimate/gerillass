@@ -1,0 +1,21 @@
+{
+  "name": "border-box",
+  "summary": "Applies box-sizing: border-box.",
+  "arguments": [
+    {
+      "name": "$value",
+      "accepts": [
+        "\"only\" inside a selector to affect just that element",
+        "null for the element and its descendants"
+      ]
+    }
+  ],
+  "examples": [
+    "@include border-box;",
+    ".a { @include border-box(\"only\"); }"
+  ],
+  "rejects": [
+    "@include border-box(only);",
+    ".a { @include border-box(bogus); }"
+  ]
+}

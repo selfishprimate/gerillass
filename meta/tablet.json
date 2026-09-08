@@ -1,0 +1,27 @@
+{
+  "name": "tablet",
+  "summary": "Media query targeting a known tablet by device dimensions.",
+  "arguments": [
+    {
+      "name": "$device",
+      "accepts": [
+        "a key from $map-for-tablets, such as iPadPro"
+      ]
+    },
+    {
+      "name": "$orientation",
+      "accepts": [
+        "portrait",
+        "landscape",
+        "null for portrait"
+      ]
+    }
+  ],
+  "examples": [
+    ".a { @include tablet(\"iPadPro\") { display: none; } }",
+    ".a { @include tablet(\"iPad\", landscape) { display: none; } }"
+  ],
+  "rejects": [
+    ".a { @include tablet(Surface) { display: none; } }"
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "name": "hide",
+  "summary": "Visually hides an element while keeping it available to screen readers, or reverses that.",
+  "arguments": [
+    {
+      "name": "$toggle",
+      "accepts": [
+        "hide",
+        "unhide"
+      ]
+    }
+  ],
+  "examples": [
+    ".a { @include hide; }",
+    ".a { @include hide(\"unhide\"); }"
+  ],
+  "rejects": [
+    ".a { @include hide(nonsense); }"
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "name": "smartphone",
+  "summary": "Media query targeting a known smartphone by device dimensions.",
+  "arguments": [
+    {
+      "name": "$device",
+      "accepts": [
+        "a key from $map-for-smartphones, such as iPhone11"
+      ]
+    },
+    {
+      "name": "$orientation",
+      "accepts": [
+        "portrait",
+        "landscape",
+        "null for portrait"
+      ]
+    }
+  ],
+  "examples": [
+    ".a { @include smartphone(\"iPhone11\") { display: none; } }",
+    ".a { @include smartphone(\"iPhone11\", landscape) { display: none; } }"
+  ],
+  "rejects": [
+    ".a { @include smartphone(Nokia3310) { display: none; } }",
+    ".a { @include smartphone(\"iPhone11\", sideways) { display: none; } }"
+  ]
+}

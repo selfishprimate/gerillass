@@ -1,0 +1,21 @@
+{
+  "name": "center",
+  "summary": "Absolutely centres an element inside its positioned parent.",
+  "arguments": [
+    {
+      "name": "$axis",
+      "accepts": [
+        "both",
+        "horizontal",
+        "vertical"
+      ]
+    }
+  ],
+  "examples": [
+    ".modal { @include center; }",
+    ".bar { @include center(\"horizontal\"); }"
+  ],
+  "rejects": [
+    ".modal { @include center(diagonal); }"
+  ]
+}

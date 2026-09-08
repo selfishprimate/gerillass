@@ -1,0 +1,29 @@
+{
+  "name": "radial-gradient",
+  "summary": "Radial gradient background from a shape and a position.",
+  "arguments": [
+    {
+      "name": "$shape",
+      "accepts": [
+        "circle or ellipse"
+      ]
+    },
+    {
+      "name": "$position",
+      "accepts": [
+        "a position name such as center or top-left",
+        "a raw CSS position"
+      ]
+    },
+    {
+      "name": "$colors",
+      "accepts": [
+        "two or more colours"
+      ]
+    }
+  ],
+  "examples": [
+    ".a { @include radial-gradient(circle, \"center\", (red, blue)); }"
+  ],
+  "rejects": []
+}

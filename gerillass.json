@@ -1,0 +1,1659 @@
+{
+  "name": "gerillass",
+  "version": "1.5.0",
+  "description": "Gerillass is an open-source toolkit that contains a set of Sass mixins to help designers and developers to create better, faster and consistent user interfaces.",
+  "homepage": "https://gerillass.com",
+  "documentation": "https://docs.gerillass.com",
+  "prefix": "gls-",
+  "load": {
+    "packageImporter": "@use \"pkg:gerillass\" as *;",
+    "bundler": "@use \"gerillass\" as *;",
+    "loadPath": "@use \"gerillass\" as *;  // with loadPaths: [\"node_modules/gerillass/scss\"]"
+  },
+  "members": [
+    {
+      "name": "adaptive",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$gutter",
+          "default": "30px",
+          "accepts": [
+            "a length subtracted from each side at every breakpoint"
+          ]
+        }
+      ],
+      "file": "scss/library/_adaptive.scss",
+      "signature": "adaptive($gutter: 30px)",
+      "summary": "Centred container whose max-width steps up at every breakpoint.",
+      "examples": [
+        ".wrap { @include adaptive; }",
+        ".wrap { @include adaptive(16px); }"
+      ],
+      "rejects": []
+    },
+    {
+      "name": "after",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$content",
+          "default": "null",
+          "accepts": [
+            "a string used as the content value",
+            "a data- attribute name, rendered as attr()",
+            "null to write content yourself"
+          ]
+        }
+      ],
+      "file": "scss/library/_after.scss",
+      "signature": "after($content: null)",
+      "summary": "Styles the ::after pseudo-element. A `data-` argument becomes an attr() content value.",
+      "examples": [
+        ".a { @include after(\"→\") { color: red; } }",
+        ".a { @include after(\"data-label\") { color: red; } }",
+        ".a { @include after { content: \"x\"; } }"
+      ],
+      "rejects": []
+    },
+    {
+      "name": "all-buttons",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$pseudo",
+          "default": "null",
+          "accepts": [
+            "hover",
+            "focus",
+            "active",
+            "disabled",
+            "null for the plain state"
+          ]
+        }
+      ],
+      "file": "scss/library/_all-buttons.scss",
+      "signature": "all-buttons($pseudo: null)",
+      "summary": "Targets every button-like element at once, optionally in one pseudo-class state.",
+      "examples": [
+        "@include all-buttons { cursor: pointer; }",
+        "@include all-buttons(\"hover\") { opacity: 0.8; }"
+      ],
+      "rejects": [
+        "@include all-buttons(nonsense) { color: red; }"
+      ]
+    },
+    {
+      "name": "all-text-inputs",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$pseudo",
+          "default": "null",
+          "accepts": [
+            "hover",
+            "focus",
+            "active",
+            "invalid",
+            "required",
+            "disabled",
+            "null for the plain state"
+          ]
+        }
+      ],
+      "file": "scss/library/_all-text-inputs.scss",
+      "signature": "all-text-inputs($pseudo: null)",
+      "summary": "Targets every text-like input at once, optionally in one pseudo-class state.",
+      "examples": [
+        "@include all-text-inputs { border: 1px solid; }",
+        "@include all-text-inputs(\"focus\") { outline: 2px solid; }"
+      ],
+      "rejects": [
+        "@include all-text-inputs(nonsense) { color: red; }"
+      ]
+    },
+    {
+      "name": "antialias",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$value",
+          "default": "null",
+          "accepts": [
+            "\"only\" inside a selector to affect just that element",
+            "null for the element and its descendants"
+          ]
+        }
+      ],
+      "file": "scss/library/_antialias.scss",
+      "signature": "antialias($value: null)",
+      "summary": "Turns on subpixel-antialiased text smoothing.",
+      "examples": [
+        "@include antialias;",
+        ".a { @include antialias(\"only\"); }"
+      ],
+      "rejects": [
+        "@include antialias(only);",
+        ".a { @include antialias(bogus); }"
+      ]
+    },
+    {
+      "name": "background-dots",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$color",
+          "default": "null",
+          "accepts": [
+            "one colour, or two for the diagonal variant",
+            "null for a translucent black"
+          ]
+        },
+        {
+          "name": "$size",
+          "default": "1em",
+          "accepts": [
+            "dot radius"
+          ]
+        },
+        {
+          "name": "$gutter",
+          "default": "$size * 5",
+          "accepts": [
+            "spacing between dots"
+          ]
+        },
+        {
+          "name": "$diagonal",
+          "default": "true",
+          "accepts": [
+            "true",
+            "false"
+          ]
+        },
+        {
+          "name": "$image",
+          "default": "null",
+          "accepts": [
+            "an image path to sit behind the dots"
+          ]
+        }
+      ],
+      "file": "scss/library/_background-dots.scss",
+      "signature": "background-dots($color: null, $size: 1em, $gutter: $size * 5, $diagonal: true, $image: null)",
+      "summary": "Repeating dot pattern as a background, optionally over an image.",
+      "examples": [
+        ".a { @include background-dots; }",
+        ".a { @include background-dots(red); }",
+        ".a { @include background-dots(red, 1em, 5em, false); }"
+      ],
+      "rejects": [
+        ".a { @include background-dots(red, 1em, 5em, maybe); }"
+      ]
+    },
+    {
+      "name": "background-image",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$image-url",
+          "default": "null",
+          "accepts": [
+            "an image path",
+            "null to filter the element itself instead"
+          ]
+        },
+        {
+          "name": "$filter-color",
+          "default": "null",
+          "accepts": [
+            "one colour, or several for a gradient"
+          ]
+        },
+        {
+          "name": "$filter-direction",
+          "default": "null",
+          "accepts": [
+            "an angle such as 45deg",
+            "a direction name such as top or bottom-left"
+          ]
+        }
+      ],
+      "file": "scss/library/_background-image.scss",
+      "signature": "background-image($image-url: null, $filter-color: null, $filter-direction: null)",
+      "summary": "Background image with an optional colour or gradient filter laid over it.",
+      "examples": [
+        ".a { @include background-image(\"/img/a.png\"); }",
+        ".a { @include background-image(\"/img/a.png\", rgba(0,0,0,0.5)); }",
+        ".a { @include background-image(\"/img/a.png\", (red, blue), \"top\"); }"
+      ],
+      "rejects": [
+        ".a { @include background-image(\"/img/a.png\", (red, blue), sideways); }"
+      ]
+    },
+    {
+      "name": "background-stripes",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$color",
+          "default": "null",
+          "accepts": [
+            "one colour, or several for a multi-stripe pattern",
+            "null for a translucent black"
+          ]
+        },
+        {
+          "name": "$thickness",
+          "default": "1em",
+          "accepts": [
+            "stripe thickness"
+          ]
+        },
+        {
+          "name": "$rotation",
+          "default": "-45deg",
+          "accepts": [
+            "an angle; a unitless number is treated as degrees"
+          ]
+        },
+        {
+          "name": "$image",
+          "default": "null",
+          "accepts": [
+            "an image path to sit behind the stripes"
+          ]
+        }
+      ],
+      "file": "scss/library/_background-stripes.scss",
+      "signature": "background-stripes($color: null, $thickness: 1em, $rotation: -45deg, $image: null)",
+      "summary": "Repeating stripe pattern as a background, optionally over an image.",
+      "examples": [
+        ".a { @include background-stripes; }",
+        ".a { @include background-stripes(red, 2em, -30deg); }"
+      ],
+      "rejects": []
+    },
+    {
+      "name": "before",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$content",
+          "default": "null",
+          "accepts": [
+            "a string used as the content value",
+            "a data- attribute name, rendered as attr()",
+            "null to write content yourself"
+          ]
+        }
+      ],
+      "file": "scss/library/_before.scss",
+      "signature": "before($content: null)",
+      "summary": "Styles the ::before pseudo-element. A `data-` argument becomes an attr() content value.",
+      "examples": [
+        ".a { @include before(\"→\") { color: red; } }",
+        ".a { @include before(\"data-label\") { color: red; } }"
+      ],
+      "rejects": []
+    },
+    {
+      "name": "border-box",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$value",
+          "default": "null",
+          "accepts": [
+            "\"only\" inside a selector to affect just that element",
+            "null for the element and its descendants"
+          ]
+        }
+      ],
+      "file": "scss/library/_border-box.scss",
+      "signature": "border-box($value: null)",
+      "summary": "Applies box-sizing: border-box.",
+      "examples": [
+        "@include border-box;",
+        ".a { @include border-box(\"only\"); }"
+      ],
+      "rejects": [
+        "@include border-box(only);",
+        ".a { @include border-box(bogus); }"
+      ]
+    },
+    {
+      "name": "border-radius",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$args",
+          "variadic": true,
+          "accepts": [
+            "one length for every corner",
+            "a corner name plus a length",
+            "four lengths: top-left, top-right, bottom-right, bottom-left"
+          ]
+        }
+      ],
+      "file": "scss/library/_border-radius.scss",
+      "signature": "border-radius($args...)",
+      "summary": "Rounds corners, either all of them, one named corner, or all four individually.",
+      "examples": [
+        ".a { @include border-radius(8px); }",
+        ".a { @include border-radius(\"top\", 8px); }",
+        ".a { @include border-radius(1px, 2px, 3px, 4px); }"
+      ],
+      "rejects": [
+        ".a { @include border-radius(1px, 2px, 3px); }",
+        ".a { @include border-radius(nonsense, 5px); }"
+      ]
+    },
+    {
+      "name": "brand-logo",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$width",
+          "required": true,
+          "accepts": [
+            "a length"
+          ]
+        },
+        {
+          "name": "$height",
+          "required": true,
+          "accepts": [
+            "a length"
+          ]
+        },
+        {
+          "name": "$image-url",
+          "default": "null",
+          "accepts": [
+            "an image path"
+          ]
+        }
+      ],
+      "file": "scss/library/_brand-logo.scss",
+      "signature": "brand-logo($width, $height, $image-url: null)",
+      "summary": "Logo box with an image and an accessible stretched link over it.",
+      "examples": [
+        ".logo { @include brand-logo(120px, 40px, \"/img/logo.svg\"); }"
+      ],
+      "rejects": []
+    },
+    {
+      "name": "breakpoint",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$params",
+          "variadic": true,
+          "accepts": [
+            "one breakpoint name, for exactly that width",
+            "min or max plus a breakpoint",
+            "between plus two breakpoints",
+            "a start and an end value"
+          ]
+        }
+      ],
+      "file": "scss/library/_breakpoint.scss",
+      "signature": "breakpoint($params...)",
+      "summary": "Media query built from the breakpoint map, or from raw lengths.",
+      "examples": [
+        ".a { @include breakpoint(\"medium\") { color: red; } }",
+        ".a { @include breakpoint(\"min\", \"medium\") { color: red; } }",
+        ".a { @include breakpoint(\"between\", \"medium\" \"large\") { color: red; } }"
+      ],
+      "rejects": []
+    },
+    {
+      "name": "breakpointer",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$selector",
+          "default": "null",
+          "accepts": [
+            "a selector to attach to when called at root",
+            "null for body"
+          ]
+        }
+      ],
+      "file": "scss/library/_breakpointer.scss",
+      "signature": "breakpointer($selector: null)",
+      "summary": "Debug helper that prints the active breakpoint name into a pseudo-element.",
+      "examples": [
+        "@include breakpointer;",
+        ".a { @include breakpointer; }"
+      ],
+      "rejects": []
+    },
+    {
+      "name": "center",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$axis",
+          "default": "\"both\"",
+          "accepts": [
+            "both",
+            "horizontal",
+            "vertical"
+          ]
+        }
+      ],
+      "file": "scss/library/_center.scss",
+      "signature": "center($axis: \"both\")",
+      "summary": "Absolutely centres an element inside its positioned parent.",
+      "examples": [
+        ".modal { @include center; }",
+        ".bar { @include center(\"horizontal\"); }"
+      ],
+      "rejects": [
+        ".modal { @include center(diagonal); }"
+      ]
+    },
+    {
+      "name": "circle",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$size",
+          "required": true,
+          "accepts": [
+            "a length used for both width and height"
+          ]
+        }
+      ],
+      "file": "scss/library/_circle.scss",
+      "signature": "circle($size)",
+      "summary": "Square element with a fully rounded border, i.e. a circle.",
+      "examples": [
+        ".dot { @include circle(24px); }"
+      ],
+      "rejects": []
+    },
+    {
+      "name": "clearfix",
+      "kind": "mixin",
+      "arguments": [],
+      "file": "scss/library/_clearfix.scss",
+      "signature": "clearfix",
+      "summary": "Clears floated children using an ::after pseudo-element.",
+      "examples": [
+        ".row { @include clearfix; }"
+      ],
+      "rejects": []
+    },
+    {
+      "name": "columnizer",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$params",
+          "variadic": true,
+          "accepts": [
+            "a column count",
+            "a column count plus a gutter length",
+            "a column count plus a boolean fill flag",
+            "a column count, a gutter and a fill flag"
+          ]
+        }
+      ],
+      "file": "scss/library/_columnizer.scss",
+      "signature": "columnizer($params...)",
+      "summary": "Flexbox grid of equal columns, with an optional gutter and fill behaviour.",
+      "examples": [
+        ".grid { @include columnizer(3); }",
+        ".grid { @include columnizer(3, 20px); }",
+        ".grid { @include columnizer(3, 20px, true); }"
+      ],
+      "rejects": [
+        ".grid { @include columnizer(3, 20px, true, 9); }"
+      ]
+    },
+    {
+      "name": "counter",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$params",
+          "variadic": true,
+          "accepts": [
+            "a counter style name",
+            "a prefix and/or suffix string",
+            "a prefix, a counter style and a suffix"
+          ]
+        }
+      ],
+      "file": "scss/library/_counter.scss",
+      "signature": "counter($params...)",
+      "summary": "CSS counter for a list, with optional text before and after the number.",
+      "examples": [
+        ".list { @include counter(\"decimal\"); }",
+        ".list { @include counter(\".\"); }",
+        ".list { @include counter(\"(\", \"decimal\", \")\"); }"
+      ],
+      "rejects": []
+    },
+    {
+      "name": "ellipsis",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$width",
+          "default": "100%",
+          "accepts": [
+            "a max-width"
+          ]
+        },
+        {
+          "name": "$display",
+          "default": "inline-block",
+          "accepts": [
+            "a display value"
+          ]
+        }
+      ],
+      "file": "scss/library/_ellipsis.scss",
+      "signature": "ellipsis($width: 100%, $display: inline-block)",
+      "summary": "Truncates a single line of text with an ellipsis.",
+      "examples": [
+        ".a { @include ellipsis; }",
+        ".a { @include ellipsis(200px); }"
+      ],
+      "rejects": []
+    },
+    {
+      "name": "escape-to-parent",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$selector",
+          "default": "null",
+          "accepts": [
+            "a selector to prepend"
+          ]
+        }
+      ],
+      "file": "scss/library/_escape-to-parent.scss",
+      "signature": "escape-to-parent($selector: null)",
+      "summary": "Re-roots the current selector under another one using @at-root.",
+      "examples": [
+        ".a { @include escape-to-parent(\".theme-dark\") { color: white; } }"
+      ],
+      "rejects": []
+    },
+    {
+      "name": "except",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$params",
+          "variadic": true,
+          "accepts": [
+            "a positive or negative index",
+            "first, last, odd or even",
+            "a selector such as .foo",
+            "several indexes"
+          ]
+        }
+      ],
+      "file": "scss/library/_except.scss",
+      "signature": "except($params...)",
+      "summary": "Selects every sibling except the ones named.",
+      "examples": [
+        ".a { @include except(\"first\") { margin: 0; } }",
+        ".a { @include except(2) { margin: 0; } }",
+        ".a { @include except(1, 3) { margin: 0; } }"
+      ],
+      "rejects": [
+        ".a { @include except(#ff0000) { margin: 0; } }"
+      ]
+    },
+    {
+      "name": "font-face",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$font-family",
+          "required": true,
+          "accepts": [
+            "the family name"
+          ]
+        },
+        {
+          "name": "$file-path",
+          "required": true,
+          "accepts": [
+            "path to the files, without an extension"
+          ]
+        },
+        {
+          "name": "$font-style",
+          "default": "normal",
+          "accepts": [
+            "normal, italic or oblique, or a weight number"
+          ]
+        },
+        {
+          "name": "$font-weight",
+          "default": "400",
+          "accepts": [
+            "a weight"
+          ]
+        },
+        {
+          "name": "$file-formats",
+          "default": "eot woff2 woff ttf svg",
+          "accepts": [
+            "any of eot, woff2, woff, ttf, svg"
+          ]
+        }
+      ],
+      "file": "scss/library/_font-face.scss",
+      "signature": "font-face($font-family, $file-path, $font-style: normal, $font-weight: 400, $file-formats: eot woff2 woff ttf svg)",
+      "summary": "Emits an @font-face rule for one family across several file formats. Must be called at the root.",
+      "examples": [
+        "@include font-face(\"Inter\", \"/fonts/inter\");",
+        "@include font-face(\"Inter\", \"/fonts/inter\", italic, 700, woff2 woff);"
+      ],
+      "rejects": [
+        ".a { @include font-face(\"Inter\", \"/fonts/inter\"); }"
+      ]
+    },
+    {
+      "name": "hide",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$toggle",
+          "default": "\"hide\"",
+          "accepts": [
+            "hide",
+            "unhide"
+          ]
+        }
+      ],
+      "file": "scss/library/_hide.scss",
+      "signature": "hide($toggle: \"hide\")",
+      "summary": "Visually hides an element while keeping it available to screen readers, or reverses that.",
+      "examples": [
+        ".a { @include hide; }",
+        ".a { @include hide(\"unhide\"); }"
+      ],
+      "rejects": [
+        ".a { @include hide(nonsense); }"
+      ]
+    },
+    {
+      "name": "linear-gradient",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$direction",
+          "required": true,
+          "accepts": [
+            "a direction name such as top or bottom-left",
+            "an angle such as 45deg"
+          ]
+        },
+        {
+          "name": "$colors",
+          "required": true,
+          "accepts": [
+            "two or more colours"
+          ]
+        }
+      ],
+      "file": "scss/library/_linear-gradient.scss",
+      "signature": "linear-gradient($direction, $colors)",
+      "summary": "Linear gradient background from a direction name or an angle.",
+      "examples": [
+        ".a { @include linear-gradient(\"top\", (red, blue)); }",
+        ".a { @include linear-gradient(45deg, (red, blue)); }"
+      ],
+      "rejects": []
+    },
+    {
+      "name": "loadify",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$params",
+          "variadic": true,
+          "accepts": [
+            "init at the root, or nothing",
+            "a delay, and optionally a duration, on an element"
+          ]
+        }
+      ],
+      "file": "scss/library/_loadify.scss",
+      "signature": "loadify($params...)",
+      "summary": "Fades elements in on page load. Call once at the root to set up, then on each element.",
+      "examples": [
+        "@include loadify(init);\n.a { @include loadify; }",
+        "@include loadify;\n.a { @include loadify(0.4s, 1s); }"
+      ],
+      "rejects": [
+        "@include loadify(nonsense);"
+      ]
+    },
+    {
+      "name": "only",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$params",
+          "variadic": true,
+          "accepts": [
+            "a positive or negative index",
+            "first, last, odd or even",
+            "a selector such as .foo",
+            "several indexes"
+          ]
+        }
+      ],
+      "file": "scss/library/_only.scss",
+      "signature": "only($params...)",
+      "summary": "Selects only the siblings named.",
+      "examples": [
+        ".a { @include only(\"first\") { margin: 0; } }",
+        ".a { @include only(-1) { margin: 0; } }",
+        ".a { @include only(1, 3) { margin: 0; } }"
+      ],
+      "rejects": [
+        ".a { @include only(#ff0000) { margin: 0; } }"
+      ]
+    },
+    {
+      "name": "placeholder-shown",
+      "kind": "mixin",
+      "arguments": [],
+      "file": "scss/library/_placeholder-shown.scss",
+      "signature": "placeholder-shown",
+      "summary": "Styles an input while its placeholder is visible.",
+      "examples": [
+        ".field { @include placeholder-shown { border-color: gray; } }"
+      ],
+      "rejects": []
+    },
+    {
+      "name": "placeholder",
+      "kind": "mixin",
+      "arguments": [],
+      "file": "scss/library/_placeholder.scss",
+      "signature": "placeholder",
+      "summary": "Styles the placeholder text of an input across vendor prefixes.",
+      "examples": [
+        ".field { @include placeholder { color: gray; } }"
+      ],
+      "rejects": []
+    },
+    {
+      "name": "position",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$position",
+          "default": "absolute",
+          "accepts": [
+            "any CSS position value"
+          ]
+        },
+        {
+          "name": "$offsets",
+          "default": "0",
+          "accepts": [
+            "one to four lengths in shorthand order, or auto/inherit/initial/0"
+          ]
+        }
+      ],
+      "file": "scss/library/_position.scss",
+      "signature": "position($position: absolute, $offsets: 0)",
+      "summary": "Sets position and offsets in one call, using shorthand order.",
+      "examples": [
+        ".a { @include position(absolute, 0); }",
+        ".a { @include position(fixed, 0 10px); }"
+      ],
+      "rejects": []
+    },
+    {
+      "name": "radial-gradient",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$shape",
+          "required": true,
+          "accepts": [
+            "circle or ellipse"
+          ]
+        },
+        {
+          "name": "$position",
+          "required": true,
+          "accepts": [
+            "a position name such as center or top-left",
+            "a raw CSS position"
+          ]
+        },
+        {
+          "name": "$colors",
+          "required": true,
+          "accepts": [
+            "two or more colours"
+          ]
+        }
+      ],
+      "file": "scss/library/_radial-gradient.scss",
+      "signature": "radial-gradient($shape, $position, $colors)",
+      "summary": "Radial gradient background from a shape and a position.",
+      "examples": [
+        ".a { @include radial-gradient(circle, \"center\", (red, blue)); }"
+      ],
+      "rejects": []
+    },
+    {
+      "name": "ratio-box",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$ratio",
+          "default": "null",
+          "accepts": [
+            "a string such as \"16/9\" or \"16:9\"",
+            "a unitless number such as 1.77",
+            "null for the 16/9 default"
+          ]
+        }
+      ],
+      "file": "scss/library/_ratio-box.scss",
+      "signature": "ratio-box($ratio: null)",
+      "summary": "Container that holds a fixed aspect ratio. Its single direct child is stretched to fill it.",
+      "examples": [
+        ".hero { @include ratio-box(\"16/9\"); }",
+        ".square { @include ratio-box(\"1/1\"); }",
+        ".default { @include ratio-box; }"
+      ],
+      "rejects": [
+        ".hero { @include ratio-box(16 9); }",
+        ".hero { @include ratio-box(16px); }"
+      ]
+    },
+    {
+      "name": "remove",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$params",
+          "variadic": true,
+          "accepts": [
+            "nothing, to hide it always",
+            "one breakpoint",
+            "min or max plus a breakpoint",
+            "a start and an end breakpoint"
+          ]
+        }
+      ],
+      "file": "scss/library/_remove.scss",
+      "signature": "remove($params...)",
+      "summary": "Hides an element outright, or only within a breakpoint range.",
+      "examples": [
+        ".a { @include remove; }",
+        ".a { @include remove(\"medium\"); }",
+        ".a { @include remove(\"min\", \"medium\"); }"
+      ],
+      "rejects": [
+        ".a { @include remove(a, b, c); }"
+      ]
+    },
+    {
+      "name": "reset-css",
+      "kind": "mixin",
+      "arguments": [],
+      "file": "scss/library/_reset-css.scss",
+      "signature": "reset-css",
+      "summary": "Meyer reset. Must be called at the root of the stylesheet.",
+      "examples": [
+        "@include reset-css;"
+      ],
+      "rejects": [
+        ".a { @include reset-css; }"
+      ]
+    },
+    {
+      "name": "reset-figure",
+      "kind": "mixin",
+      "arguments": [],
+      "file": "scss/library/_reset-figure.scss",
+      "signature": "reset-figure",
+      "summary": "Removes default figure margins and makes the image inside responsive.",
+      "examples": [
+        "figure { @include reset-figure; }"
+      ],
+      "rejects": []
+    },
+    {
+      "name": "resizable",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$direction",
+          "default": "both",
+          "accepts": [
+            "a CSS resize value such as both, horizontal, vertical or none"
+          ]
+        },
+        {
+          "name": "$overflow",
+          "default": "auto",
+          "accepts": [
+            "a CSS overflow value"
+          ]
+        }
+      ],
+      "file": "scss/library/_resizable.scss",
+      "signature": "resizable($direction: both, $overflow: auto)",
+      "summary": "Makes an element user-resizable.",
+      "examples": [
+        ".a { @include resizable; }",
+        ".a { @include resizable(vertical, scroll); }"
+      ],
+      "rejects": []
+    },
+    {
+      "name": "responsive-image",
+      "kind": "mixin",
+      "arguments": [],
+      "file": "scss/library/_responsive-image.scss",
+      "signature": "responsive-image",
+      "summary": "Makes an image fill its container width.",
+      "examples": [
+        "img { @include responsive-image; }"
+      ],
+      "rejects": []
+    },
+    {
+      "name": "responsive-video",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$ratio",
+          "default": "null",
+          "accepts": [
+            "a string such as \"16/9\" or \"16:9\"",
+            "a unitless number",
+            "null for the 16/9 default"
+          ]
+        }
+      ],
+      "file": "scss/library/_responsive-video.scss",
+      "signature": "responsive-video($ratio: null)",
+      "summary": "Wrapper that keeps an embedded video at a fixed aspect ratio.",
+      "examples": [
+        ".video { @include responsive-video(\"16/9\"); }",
+        ".video { @include responsive-video; }"
+      ],
+      "rejects": [
+        ".video { @include responsive-video(16 9); }"
+      ]
+    },
+    {
+      "name": "scissors",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$corners",
+          "required": true,
+          "accepts": [
+            "one length for every corner",
+            "four lengths: top-left, top-right, bottom-right, bottom-left"
+          ]
+        }
+      ],
+      "file": "scss/library/_scissors.scss",
+      "signature": "scissors($corners)",
+      "summary": "Cuts the corners off an element with clip-path.",
+      "examples": [
+        ".a { @include scissors(12px); }",
+        ".a { @include scissors(4px 8px 12px 16px); }"
+      ],
+      "rejects": [
+        ".a { @include scissors(5px 10px); }"
+      ]
+    },
+    {
+      "name": "screen-agent",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$resolution",
+          "required": true,
+          "accepts": [
+            "1x, 2x or 3x",
+            "a raw resolution such as 120dpi"
+          ]
+        }
+      ],
+      "file": "scss/library/_screen-agent.scss",
+      "signature": "screen-agent($resolution)",
+      "summary": "Media query targeting a screen pixel density.",
+      "examples": [
+        ".a { @include screen-agent(\"2x\") { background-image: url(\"/img/a@2x.png\"); } }"
+      ],
+      "rejects": []
+    },
+    {
+      "name": "sizer",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$width",
+          "required": true,
+          "accepts": [
+            "a length"
+          ]
+        },
+        {
+          "name": "$height",
+          "default": "$width",
+          "accepts": [
+            "a length; defaults to the width"
+          ]
+        }
+      ],
+      "file": "scss/library/_sizer.scss",
+      "signature": "sizer($width, $height: $width)",
+      "summary": "Sets width and height together; one argument makes a square.",
+      "examples": [
+        ".a { @include sizer(40px); }",
+        ".a { @include sizer(120px, 40px); }"
+      ],
+      "rejects": []
+    },
+    {
+      "name": "smartphone",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$device",
+          "required": true,
+          "accepts": [
+            "a key from $map-for-smartphones, such as iPhone11"
+          ]
+        },
+        {
+          "name": "$orientation",
+          "default": "null",
+          "accepts": [
+            "portrait",
+            "landscape",
+            "null for portrait"
+          ]
+        }
+      ],
+      "file": "scss/library/_smartphone.scss",
+      "signature": "smartphone($device, $orientation: null)",
+      "summary": "Media query targeting a known smartphone by device dimensions.",
+      "examples": [
+        ".a { @include smartphone(\"iPhone11\") { display: none; } }",
+        ".a { @include smartphone(\"iPhone11\", landscape) { display: none; } }"
+      ],
+      "rejects": [
+        ".a { @include smartphone(Nokia3310) { display: none; } }",
+        ".a { @include smartphone(\"iPhone11\", sideways) { display: none; } }"
+      ]
+    },
+    {
+      "name": "sprite",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$params",
+          "variadic": true,
+          "accepts": [
+            "an image path ending in .png, .jpg or .svg",
+            "a background position",
+            "both, image first"
+          ]
+        }
+      ],
+      "file": "scss/library/_sprite.scss",
+      "signature": "sprite($params...)",
+      "summary": "Sets up an element as a sprite tile: an image, a background position, or both.",
+      "examples": [
+        ".icon { @include sprite(\"/img/sprite.png\"); }",
+        ".icon { @include sprite(\"/img/sprite.png\", 0 -40px); }",
+        ".icon { @include sprite(0 -40px); }"
+      ],
+      "rejects": [
+        ".icon { @include sprite(\"/img/sprite.txt\"); }"
+      ]
+    },
+    {
+      "name": "stretched-link",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$value",
+          "default": "\"before\"",
+          "accepts": [
+            "before",
+            "after"
+          ]
+        }
+      ],
+      "file": "scss/library/_stretched-link.scss",
+      "signature": "stretched-link($value: \"before\")",
+      "summary": "Expands a link to cover its positioned parent, so the whole card is clickable.",
+      "examples": [
+        ".card a { @include stretched-link; }",
+        ".card a { @include stretched-link(\"after\"); }"
+      ],
+      "rejects": [
+        ".card a { @include stretched-link(middle); }"
+      ]
+    },
+    {
+      "name": "tablet",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$device",
+          "required": true,
+          "accepts": [
+            "a key from $map-for-tablets, such as iPadPro"
+          ]
+        },
+        {
+          "name": "$orientation",
+          "default": "null",
+          "accepts": [
+            "portrait",
+            "landscape",
+            "null for portrait"
+          ]
+        }
+      ],
+      "file": "scss/library/_tablet.scss",
+      "signature": "tablet($device, $orientation: null)",
+      "summary": "Media query targeting a known tablet by device dimensions.",
+      "examples": [
+        ".a { @include tablet(\"iPadPro\") { display: none; } }",
+        ".a { @include tablet(\"iPad\", landscape) { display: none; } }"
+      ],
+      "rejects": [
+        ".a { @include tablet(Surface) { display: none; } }"
+      ]
+    },
+    {
+      "name": "text-gradient",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$direction",
+          "required": true,
+          "accepts": [
+            "a direction name such as top or bottom-left",
+            "an angle such as 45deg"
+          ]
+        },
+        {
+          "name": "$colors",
+          "required": true,
+          "accepts": [
+            "two or more colours"
+          ]
+        }
+      ],
+      "file": "scss/library/_text-gradient.scss",
+      "signature": "text-gradient($direction, $colors)",
+      "summary": "Applies a linear gradient to the text itself via background-clip.",
+      "examples": [
+        ".a { @include text-gradient(\"top\", (red, blue)); }"
+      ],
+      "rejects": []
+    },
+    {
+      "name": "text-image",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$image",
+          "default": "null",
+          "accepts": [
+            "an image path"
+          ]
+        }
+      ],
+      "file": "scss/library/_text-image.scss",
+      "signature": "text-image($image: null)",
+      "summary": "Fills the text with an image via background-clip.",
+      "examples": [
+        ".a { @include text-image(\"/img/t.png\"); }"
+      ],
+      "rejects": []
+    },
+    {
+      "name": "text-selection",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$value",
+          "default": "null",
+          "accepts": [
+            "\"only\" inside a selector to affect just that element",
+            "null for the element and its descendants"
+          ]
+        }
+      ],
+      "file": "scss/library/_text-selection.scss",
+      "signature": "text-selection($value: null)",
+      "summary": "Styles the ::selection pseudo-element.",
+      "examples": [
+        "@include text-selection { background: yellow; }",
+        ".a { @include text-selection(\"only\") { background: yellow; } }"
+      ],
+      "rejects": [
+        ".a { @include text-selection(bogus) { background: yellow; } }"
+      ]
+    },
+    {
+      "name": "text-shadow",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$params",
+          "variadic": true,
+          "accepts": [
+            "one or more groups of direction, colour and size"
+          ]
+        }
+      ],
+      "file": "scss/library/_text-shadow.scss",
+      "signature": "text-shadow($params...)",
+      "summary": "Layered text shadows built from a direction, a colour and an offset.",
+      "examples": [
+        ".a { @include text-shadow(bottom-right red 5px); }"
+      ],
+      "rejects": []
+    },
+    {
+      "name": "text-stroke",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$fallback-color",
+          "default": "black",
+          "accepts": [
+            "a colour for browsers without text-stroke"
+          ]
+        },
+        {
+          "name": "$color",
+          "default": "transparent",
+          "accepts": [
+            "the text fill colour"
+          ]
+        },
+        {
+          "name": "$stroke-color",
+          "default": "black",
+          "accepts": [
+            "the outline colour"
+          ]
+        },
+        {
+          "name": "$stroke-width",
+          "default": "1px",
+          "accepts": [
+            "a length"
+          ]
+        }
+      ],
+      "file": "scss/library/_text-stroke.scss",
+      "signature": "text-stroke($fallback-color: black, $color: transparent, $stroke-color: black, $stroke-width: 1px)",
+      "summary": "Outlines text using the webkit text-stroke properties.",
+      "examples": [
+        ".a { @include text-stroke; }",
+        ".a { @include text-stroke(black, transparent, red, 2px); }"
+      ],
+      "rejects": []
+    },
+    {
+      "name": "triangle",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$direction",
+          "default": "\"bottom\"",
+          "accepts": [
+            "top",
+            "top-right",
+            "right",
+            "bottom-right",
+            "bottom",
+            "bottom-left",
+            "left",
+            "top-left"
+          ]
+        },
+        {
+          "name": "$color",
+          "default": "black",
+          "accepts": [
+            "any colour value"
+          ]
+        },
+        {
+          "name": "$size",
+          "default": "10px 8px",
+          "accepts": [
+            "one length, or two lengths as width then height"
+          ]
+        }
+      ],
+      "file": "scss/library/_triangle.scss",
+      "signature": "triangle($direction: \"bottom\", $color: black, $size: 10px 8px)",
+      "summary": "Draws a CSS triangle out of borders, pointing in a given direction.",
+      "examples": [
+        ".caret { @include triangle(\"bottom\", black, 10px 8px); }",
+        ".arrow { @include triangle(\"left\", red); }"
+      ],
+      "rejects": [
+        ".caret { @include triangle(sideways); }",
+        ".caret { @include triangle(\"top\", notacolor); }"
+      ]
+    },
+    {
+      "name": "__clearUnit",
+      "kind": "function",
+      "arguments": [
+        {
+          "name": "$value",
+          "required": true
+        }
+      ],
+      "file": "scss/utilities/_clear-unit.scss",
+      "signature": "__clearUnit($value)"
+    },
+    {
+      "name": "__clearWhitespace",
+      "kind": "function",
+      "arguments": [
+        {
+          "name": "$string",
+          "required": true
+        }
+      ],
+      "file": "scss/utilities/_clear-whitespace.scss",
+      "signature": "__clearWhitespace($string)"
+    },
+    {
+      "name": "__convertToEm",
+      "kind": "function",
+      "arguments": [
+        {
+          "name": "$value",
+          "required": true
+        }
+      ],
+      "file": "scss/utilities/_convert-to-em.scss",
+      "signature": "__convertToEm($value)"
+    },
+    {
+      "name": "__convertToNumber",
+      "kind": "function",
+      "arguments": [
+        {
+          "name": "$value",
+          "required": true
+        }
+      ],
+      "file": "scss/utilities/_convert-to-number.scss",
+      "signature": "__convertToNumber($value)"
+    },
+    {
+      "name": "__darken",
+      "kind": "function",
+      "arguments": [
+        {
+          "name": "$color",
+          "required": true
+        },
+        {
+          "name": "$percentage",
+          "required": true
+        }
+      ],
+      "file": "scss/utilities/_darken.scss",
+      "signature": "__darken($color, $percentage)"
+    },
+    {
+      "name": "__fontSizer",
+      "kind": "function",
+      "arguments": [
+        {
+          "name": "$size",
+          "required": true
+        },
+        {
+          "name": "$time",
+          "required": true
+        }
+      ],
+      "file": "scss/utilities/_font-sizer.scss",
+      "signature": "__fontSizer($size, $time)"
+    },
+    {
+      "name": "__fontSource",
+      "kind": "function",
+      "arguments": [
+        {
+          "name": "$font-family",
+          "required": true
+        },
+        {
+          "name": "$file-path",
+          "required": true
+        },
+        {
+          "name": "$file-formats",
+          "required": true
+        }
+      ],
+      "file": "scss/utilities/_font-source.scss",
+      "signature": "__fontSource($font-family, $file-path, $file-formats)"
+    },
+    {
+      "name": "__isColor",
+      "kind": "function",
+      "arguments": [
+        {
+          "name": "$value",
+          "required": true
+        }
+      ],
+      "file": "scss/utilities/_is-color.scss",
+      "signature": "__isColor($value)"
+    },
+    {
+      "name": "__isNumber",
+      "kind": "function",
+      "arguments": [
+        {
+          "name": "$value",
+          "required": true
+        }
+      ],
+      "file": "scss/utilities/_is-number.scss",
+      "signature": "__isNumber($value)"
+    },
+    {
+      "name": "__isTime",
+      "kind": "function",
+      "arguments": [
+        {
+          "name": "$value",
+          "required": true
+        }
+      ],
+      "file": "scss/utilities/_is-time.scss",
+      "signature": "__isTime($value)"
+    },
+    {
+      "name": "__lighten",
+      "kind": "function",
+      "arguments": [
+        {
+          "name": "$color",
+          "required": true
+        },
+        {
+          "name": "$percentage",
+          "required": true
+        }
+      ],
+      "file": "scss/utilities/_lighten.scss",
+      "signature": "__lighten($color, $percentage)"
+    },
+    {
+      "name": "__mapDeepGet",
+      "kind": "function",
+      "arguments": [
+        {
+          "name": "$map",
+          "required": true
+        },
+        {
+          "name": "$keys",
+          "variadic": true
+        }
+      ],
+      "file": "scss/utilities/_map-deep-get.scss",
+      "signature": "__mapDeepGet($map, $keys...)"
+    },
+    {
+      "name": "__null",
+      "kind": "function",
+      "arguments": [
+        {
+          "name": "$value",
+          "required": true
+        },
+        {
+          "name": "$seperation",
+          "default": "comma"
+        },
+        {
+          "name": "$skip",
+          "default": "false"
+        }
+      ],
+      "file": "scss/utilities/_null.scss",
+      "signature": "__null($value, $seperation: comma, $skip: false)"
+    },
+    {
+      "name": "__pixelify",
+      "kind": "function",
+      "arguments": [
+        {
+          "name": "$value",
+          "required": true
+        }
+      ],
+      "file": "scss/utilities/_pixelify.scss",
+      "signature": "__pixelify($value)"
+    },
+    {
+      "name": "__pseudoSelector",
+      "kind": "function",
+      "arguments": [
+        {
+          "name": "$elements",
+          "required": true
+        },
+        {
+          "name": "$pseudo",
+          "default": "null"
+        }
+      ],
+      "file": "scss/utilities/_pseudo-selector.scss",
+      "signature": "__pseudoSelector($elements, $pseudo: null)"
+    },
+    {
+      "name": "__remify",
+      "kind": "function",
+      "arguments": [
+        {
+          "name": "$value",
+          "required": true
+        }
+      ],
+      "file": "scss/utilities/_remify.scss",
+      "signature": "__remify($value)"
+    },
+    {
+      "name": "__shorthandProperty",
+      "kind": "function",
+      "arguments": [
+        {
+          "name": "$value",
+          "required": true
+        }
+      ],
+      "file": "scss/utilities/_shorthand-property.scss",
+      "signature": "__shorthandProperty($value)"
+    },
+    {
+      "name": "__validateBreakpoint",
+      "kind": "function",
+      "arguments": [
+        {
+          "name": "$value",
+          "required": true
+        }
+      ],
+      "file": "scss/utilities/_validate-breakpoint.scss",
+      "signature": "__validateBreakpoint($value)"
+    },
+    {
+      "name": "__validateLength",
+      "kind": "function",
+      "arguments": [
+        {
+          "name": "$value",
+          "required": true
+        }
+      ],
+      "file": "scss/utilities/_validate-length.scss",
+      "signature": "__validateLength($value)"
+    },
+    {
+      "name": "__validateRatio",
+      "kind": "function",
+      "arguments": [
+        {
+          "name": "$ratio",
+          "required": true
+        }
+      ],
+      "file": "scss/utilities/_validate-ratio.scss",
+      "signature": "__validateRatio($ratio)"
+    },
+    {
+      "name": "__validateScissors",
+      "kind": "function",
+      "arguments": [
+        {
+          "name": "$value",
+          "required": true
+        }
+      ],
+      "file": "scss/utilities/_validate-scissors.scss",
+      "signature": "__validateScissors($value)"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "name": "columnizer",
+  "summary": "Flexbox grid of equal columns, with an optional gutter and fill behaviour.",
+  "arguments": [
+    {
+      "name": "$params",
+      "accepts": [
+        "a column count",
+        "a column count plus a gutter length",
+        "a column count plus a boolean fill flag",
+        "a column count, a gutter and a fill flag"
+      ]
+    }
+  ],
+  "examples": [
+    ".grid { @include columnizer(3); }",
+    ".grid { @include columnizer(3, 20px); }",
+    ".grid { @include columnizer(3, 20px, true); }"
+  ],
+  "rejects": [
+    ".grid { @include columnizer(3, 20px, true, 9); }"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "adaptive",
+  "summary": "Centred container whose max-width steps up at every breakpoint.",
+  "arguments": [
+    {
+      "name": "$gutter",
+      "accepts": [
+        "a length subtracted from each side at every breakpoint"
+      ]
+    }
+  ],
+  "examples": [
+    ".wrap { @include adaptive; }",
+    ".wrap { @include adaptive(16px); }"
+  ],
+  "rejects": []
+}

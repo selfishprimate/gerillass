@@ -1,0 +1,23 @@
+{
+  "name": "sizer",
+  "summary": "Sets width and height together; one argument makes a square.",
+  "arguments": [
+    {
+      "name": "$width",
+      "accepts": [
+        "a length"
+      ]
+    },
+    {
+      "name": "$height",
+      "accepts": [
+        "a length; defaults to the width"
+      ]
+    }
+  ],
+  "examples": [
+    ".a { @include sizer(40px); }",
+    ".a { @include sizer(120px, 40px); }"
+  ],
+  "rejects": []
+}

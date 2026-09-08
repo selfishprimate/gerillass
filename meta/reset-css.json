@@ -1,0 +1,11 @@
+{
+  "name": "reset-css",
+  "summary": "Meyer reset. Must be called at the root of the stylesheet.",
+  "arguments": [],
+  "examples": [
+    "@include reset-css;"
+  ],
+  "rejects": [
+    ".a { @include reset-css; }"
+  ]
+}

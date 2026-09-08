@@ -1,0 +1,23 @@
+{
+  "name": "all-buttons",
+  "summary": "Targets every button-like element at once, optionally in one pseudo-class state.",
+  "arguments": [
+    {
+      "name": "$pseudo",
+      "accepts": [
+        "hover",
+        "focus",
+        "active",
+        "disabled",
+        "null for the plain state"
+      ]
+    }
+  ],
+  "examples": [
+    "@include all-buttons { cursor: pointer; }",
+    "@include all-buttons(\"hover\") { opacity: 0.8; }"
+  ],
+  "rejects": [
+    "@include all-buttons(nonsense) { color: red; }"
+  ]
+}

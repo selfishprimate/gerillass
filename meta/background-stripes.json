@@ -1,0 +1,36 @@
+{
+  "name": "background-stripes",
+  "summary": "Repeating stripe pattern as a background, optionally over an image.",
+  "arguments": [
+    {
+      "name": "$color",
+      "accepts": [
+        "one colour, or several for a multi-stripe pattern",
+        "null for a translucent black"
+      ]
+    },
+    {
+      "name": "$thickness",
+      "accepts": [
+        "stripe thickness"
+      ]
+    },
+    {
+      "name": "$rotation",
+      "accepts": [
+        "an angle; a unitless number is treated as degrees"
+      ]
+    },
+    {
+      "name": "$image",
+      "accepts": [
+        "an image path to sit behind the stripes"
+      ]
+    }
+  ],
+  "examples": [
+    ".a { @include background-stripes; }",
+    ".a { @include background-stripes(red, 2em, -30deg); }"
+  ],
+  "rejects": []
+}

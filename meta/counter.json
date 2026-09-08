@@ -1,0 +1,20 @@
+{
+  "name": "counter",
+  "summary": "CSS counter for a list, with optional text before and after the number.",
+  "arguments": [
+    {
+      "name": "$params",
+      "accepts": [
+        "a counter style name",
+        "a prefix and/or suffix string",
+        "a prefix, a counter style and a suffix"
+      ]
+    }
+  ],
+  "examples": [
+    ".list { @include counter(\"decimal\"); }",
+    ".list { @include counter(\".\"); }",
+    ".list { @include counter(\"(\", \"decimal\", \")\"); }"
+  ],
+  "rejects": []
+}

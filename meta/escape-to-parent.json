@@ -1,0 +1,16 @@
+{
+  "name": "escape-to-parent",
+  "summary": "Re-roots the current selector under another one using @at-root.",
+  "arguments": [
+    {
+      "name": "$selector",
+      "accepts": [
+        "a selector to prepend"
+      ]
+    }
+  ],
+  "examples": [
+    ".a { @include escape-to-parent(\".theme-dark\") { color: white; } }"
+  ],
+  "rejects": []
+}

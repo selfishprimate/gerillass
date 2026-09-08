@@ -1,0 +1,23 @@
+{
+  "name": "ratio-box",
+  "summary": "Container that holds a fixed aspect ratio. Its single direct child is stretched to fill it.",
+  "arguments": [
+    {
+      "name": "$ratio",
+      "accepts": [
+        "a string such as \"16/9\" or \"16:9\"",
+        "a unitless number such as 1.77",
+        "null for the 16/9 default"
+      ]
+    }
+  ],
+  "examples": [
+    ".hero { @include ratio-box(\"16/9\"); }",
+    ".square { @include ratio-box(\"1/1\"); }",
+    ".default { @include ratio-box; }"
+  ],
+  "rejects": [
+    ".hero { @include ratio-box(16 9); }",
+    ".hero { @include ratio-box(16px); }"
+  ]
+}

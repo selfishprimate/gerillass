@@ -1,0 +1,23 @@
+{
+  "name": "border-radius",
+  "summary": "Rounds corners, either all of them, one named corner, or all four individually.",
+  "arguments": [
+    {
+      "name": "$args",
+      "accepts": [
+        "one length for every corner",
+        "a corner name plus a length",
+        "four lengths: top-left, top-right, bottom-right, bottom-left"
+      ]
+    }
+  ],
+  "examples": [
+    ".a { @include border-radius(8px); }",
+    ".a { @include border-radius(\"top\", 8px); }",
+    ".a { @include border-radius(1px, 2px, 3px, 4px); }"
+  ],
+  "rejects": [
+    ".a { @include border-radius(1px, 2px, 3px); }",
+    ".a { @include border-radius(nonsense, 5px); }"
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "name": "linear-gradient",
+  "summary": "Linear gradient background from a direction name or an angle.",
+  "arguments": [
+    {
+      "name": "$direction",
+      "accepts": [
+        "a direction name such as top or bottom-left",
+        "an angle such as 45deg"
+      ]
+    },
+    {
+      "name": "$colors",
+      "accepts": [
+        "two or more colours"
+      ]
+    }
+  ],
+  "examples": [
+    ".a { @include linear-gradient(\"top\", (red, blue)); }",
+    ".a { @include linear-gradient(45deg, (red, blue)); }"
+  ],
+  "rejects": []
+}

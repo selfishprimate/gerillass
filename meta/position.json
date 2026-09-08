@@ -1,0 +1,23 @@
+{
+  "name": "position",
+  "summary": "Sets position and offsets in one call, using shorthand order.",
+  "arguments": [
+    {
+      "name": "$position",
+      "accepts": [
+        "any CSS position value"
+      ]
+    },
+    {
+      "name": "$offsets",
+      "accepts": [
+        "one to four lengths in shorthand order, or auto/inherit/initial/0"
+      ]
+    }
+  ],
+  "examples": [
+    ".a { @include position(absolute, 0); }",
+    ".a { @include position(fixed, 0 10px); }"
+  ],
+  "rejects": []
+}

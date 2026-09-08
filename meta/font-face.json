@@ -1,0 +1,43 @@
+{
+  "name": "font-face",
+  "summary": "Emits an @font-face rule for one family across several file formats. Must be called at the root.",
+  "arguments": [
+    {
+      "name": "$font-family",
+      "accepts": [
+        "the family name"
+      ]
+    },
+    {
+      "name": "$file-path",
+      "accepts": [
+        "path to the files, without an extension"
+      ]
+    },
+    {
+      "name": "$font-style",
+      "accepts": [
+        "normal, italic or oblique, or a weight number"
+      ]
+    },
+    {
+      "name": "$font-weight",
+      "accepts": [
+        "a weight"
+      ]
+    },
+    {
+      "name": "$file-formats",
+      "accepts": [
+        "any of eot, woff2, woff, ttf, svg"
+      ]
+    }
+  ],
+  "examples": [
+    "@include font-face(\"Inter\", \"/fonts/inter\");",
+    "@include font-face(\"Inter\", \"/fonts/inter\", italic, 700, woff2 woff);"
+  ],
+  "rejects": [
+    ".a { @include font-face(\"Inter\", \"/fonts/inter\"); }"
+  ]
+}

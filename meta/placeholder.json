@@ -1,0 +1,9 @@
+{
+  "name": "placeholder",
+  "summary": "Styles the placeholder text of an input across vendor prefixes.",
+  "arguments": [],
+  "examples": [
+    ".field { @include placeholder { color: gray; } }"
+  ],
+  "rejects": []
+}

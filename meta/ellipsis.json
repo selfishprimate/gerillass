@@ -1,0 +1,23 @@
+{
+  "name": "ellipsis",
+  "summary": "Truncates a single line of text with an ellipsis.",
+  "arguments": [
+    {
+      "name": "$width",
+      "accepts": [
+        "a max-width"
+      ]
+    },
+    {
+      "name": "$display",
+      "accepts": [
+        "a display value"
+      ]
+    }
+  ],
+  "examples": [
+    ".a { @include ellipsis; }",
+    ".a { @include ellipsis(200px); }"
+  ],
+  "rejects": []
+}

@@ -1,0 +1,23 @@
+{
+  "name": "only",
+  "summary": "Selects only the siblings named.",
+  "arguments": [
+    {
+      "name": "$params",
+      "accepts": [
+        "a positive or negative index",
+        "first, last, odd or even",
+        "a selector such as .foo",
+        "several indexes"
+      ]
+    }
+  ],
+  "examples": [
+    ".a { @include only(\"first\") { margin: 0; } }",
+    ".a { @include only(-1) { margin: 0; } }",
+    ".a { @include only(1, 3) { margin: 0; } }"
+  ],
+  "rejects": [
+    ".a { @include only(#ff0000) { margin: 0; } }"
+  ]
+}

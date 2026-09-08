@@ -1,0 +1,16 @@
+{
+  "name": "text-image",
+  "summary": "Fills the text with an image via background-clip.",
+  "arguments": [
+    {
+      "name": "$image",
+      "accepts": [
+        "an image path"
+      ]
+    }
+  ],
+  "examples": [
+    ".a { @include text-image(\"/img/t.png\"); }"
+  ],
+  "rejects": []
+}

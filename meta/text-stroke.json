@@ -1,0 +1,35 @@
+{
+  "name": "text-stroke",
+  "summary": "Outlines text using the webkit text-stroke properties.",
+  "arguments": [
+    {
+      "name": "$fallback-color",
+      "accepts": [
+        "a colour for browsers without text-stroke"
+      ]
+    },
+    {
+      "name": "$color",
+      "accepts": [
+        "the text fill colour"
+      ]
+    },
+    {
+      "name": "$stroke-color",
+      "accepts": [
+        "the outline colour"
+      ]
+    },
+    {
+      "name": "$stroke-width",
+      "accepts": [
+        "a length"
+      ]
+    }
+  ],
+  "examples": [
+    ".a { @include text-stroke; }",
+    ".a { @include text-stroke(black, transparent, red, 2px); }"
+  ],
+  "rejects": []
+}

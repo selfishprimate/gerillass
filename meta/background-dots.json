@@ -1,0 +1,46 @@
+{
+  "name": "background-dots",
+  "summary": "Repeating dot pattern as a background, optionally over an image.",
+  "arguments": [
+    {
+      "name": "$color",
+      "accepts": [
+        "one colour, or two for the diagonal variant",
+        "null for a translucent black"
+      ]
+    },
+    {
+      "name": "$size",
+      "accepts": [
+        "dot radius"
+      ]
+    },
+    {
+      "name": "$gutter",
+      "accepts": [
+        "spacing between dots"
+      ]
+    },
+    {
+      "name": "$diagonal",
+      "accepts": [
+        "true",
+        "false"
+      ]
+    },
+    {
+      "name": "$image",
+      "accepts": [
+        "an image path to sit behind the dots"
+      ]
+    }
+  ],
+  "examples": [
+    ".a { @include background-dots; }",
+    ".a { @include background-dots(red); }",
+    ".a { @include background-dots(red, 1em, 5em, false); }"
+  ],
+  "rejects": [
+    ".a { @include background-dots(red, 1em, 5em, maybe); }"
+  ]
+}

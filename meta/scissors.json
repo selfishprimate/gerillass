@@ -1,0 +1,20 @@
+{
+  "name": "scissors",
+  "summary": "Cuts the corners off an element with clip-path.",
+  "arguments": [
+    {
+      "name": "$corners",
+      "accepts": [
+        "one length for every corner",
+        "four lengths: top-left, top-right, bottom-right, bottom-left"
+      ]
+    }
+  ],
+  "examples": [
+    ".a { @include scissors(12px); }",
+    ".a { @include scissors(4px 8px 12px 16px); }"
+  ],
+  "rejects": [
+    ".a { @include scissors(5px 10px); }"
+  ]
+}

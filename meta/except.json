@@ -1,0 +1,23 @@
+{
+  "name": "except",
+  "summary": "Selects every sibling except the ones named.",
+  "arguments": [
+    {
+      "name": "$params",
+      "accepts": [
+        "a positive or negative index",
+        "first, last, odd or even",
+        "a selector such as .foo",
+        "several indexes"
+      ]
+    }
+  ],
+  "examples": [
+    ".a { @include except(\"first\") { margin: 0; } }",
+    ".a { @include except(2) { margin: 0; } }",
+    ".a { @include except(1, 3) { margin: 0; } }"
+  ],
+  "rejects": [
+    ".a { @include except(#ff0000) { margin: 0; } }"
+  ]
+}

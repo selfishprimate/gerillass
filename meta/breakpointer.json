@@ -1,0 +1,18 @@
+{
+  "name": "breakpointer",
+  "summary": "Debug helper that prints the active breakpoint name into a pseudo-element.",
+  "arguments": [
+    {
+      "name": "$selector",
+      "accepts": [
+        "a selector to attach to when called at root",
+        "null for body"
+      ]
+    }
+  ],
+  "examples": [
+    "@include breakpointer;",
+    ".a { @include breakpointer; }"
+  ],
+  "rejects": []
+}

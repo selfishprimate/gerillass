@@ -1,0 +1,21 @@
+{
+  "name": "breakpoint",
+  "summary": "Media query built from the breakpoint map, or from raw lengths.",
+  "arguments": [
+    {
+      "name": "$params",
+      "accepts": [
+        "one breakpoint name, for exactly that width",
+        "min or max plus a breakpoint",
+        "between plus two breakpoints",
+        "a start and an end value"
+      ]
+    }
+  ],
+  "examples": [
+    ".a { @include breakpoint(\"medium\") { color: red; } }",
+    ".a { @include breakpoint(\"min\", \"medium\") { color: red; } }",
+    ".a { @include breakpoint(\"between\", \"medium\" \"large\") { color: red; } }"
+  ],
+  "rejects": []
+}

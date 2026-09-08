@@ -1,0 +1,21 @@
+{
+  "name": "antialias",
+  "summary": "Turns on subpixel-antialiased text smoothing.",
+  "arguments": [
+    {
+      "name": "$value",
+      "accepts": [
+        "\"only\" inside a selector to affect just that element",
+        "null for the element and its descendants"
+      ]
+    }
+  ],
+  "examples": [
+    "@include antialias;",
+    ".a { @include antialias(\"only\"); }"
+  ],
+  "rejects": [
+    "@include antialias(only);",
+    ".a { @include antialias(bogus); }"
+  ]
+}

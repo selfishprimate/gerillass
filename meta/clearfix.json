@@ -1,0 +1,9 @@
+{
+  "name": "clearfix",
+  "summary": "Clears floated children using an ::after pseudo-element.",
+  "arguments": [],
+  "examples": [
+    ".row { @include clearfix; }"
+  ],
+  "rejects": []
+}

@@ -1,0 +1,16 @@
+{
+  "name": "circle",
+  "summary": "Square element with a fully rounded border, i.e. a circle.",
+  "arguments": [
+    {
+      "name": "$size",
+      "accepts": [
+        "a length used for both width and height"
+      ]
+    }
+  ],
+  "examples": [
+    ".dot { @include circle(24px); }"
+  ],
+  "rejects": []
+}

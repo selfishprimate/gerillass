@@ -1,0 +1,20 @@
+{
+  "name": "after",
+  "summary": "Styles the ::after pseudo-element. A `data-` argument becomes an attr() content value.",
+  "arguments": [
+    {
+      "name": "$content",
+      "accepts": [
+        "a string used as the content value",
+        "a data- attribute name, rendered as attr()",
+        "null to write content yourself"
+      ]
+    }
+  ],
+  "examples": [
+    ".a { @include after(\"→\") { color: red; } }",
+    ".a { @include after(\"data-label\") { color: red; } }",
+    ".a { @include after { content: \"x\"; } }"
+  ],
+  "rejects": []
+}

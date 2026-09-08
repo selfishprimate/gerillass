@@ -1,0 +1,23 @@
+{
+  "name": "text-gradient",
+  "summary": "Applies a linear gradient to the text itself via background-clip.",
+  "arguments": [
+    {
+      "name": "$direction",
+      "accepts": [
+        "a direction name such as top or bottom-left",
+        "an angle such as 45deg"
+      ]
+    },
+    {
+      "name": "$colors",
+      "accepts": [
+        "two or more colours"
+      ]
+    }
+  ],
+  "examples": [
+    ".a { @include text-gradient(\"top\", (red, blue)); }"
+  ],
+  "rejects": []
+}

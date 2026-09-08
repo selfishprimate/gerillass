@@ -1,0 +1,25 @@
+{
+  "name": "all-text-inputs",
+  "summary": "Targets every text-like input at once, optionally in one pseudo-class state.",
+  "arguments": [
+    {
+      "name": "$pseudo",
+      "accepts": [
+        "hover",
+        "focus",
+        "active",
+        "invalid",
+        "required",
+        "disabled",
+        "null for the plain state"
+      ]
+    }
+  ],
+  "examples": [
+    "@include all-text-inputs { border: 1px solid; }",
+    "@include all-text-inputs(\"focus\") { outline: 2px solid; }"
+  ],
+  "rejects": [
+    "@include all-text-inputs(nonsense) { color: red; }"
+  ]
+}

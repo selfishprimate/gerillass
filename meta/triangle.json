@@ -1,0 +1,39 @@
+{
+  "name": "triangle",
+  "summary": "Draws a CSS triangle out of borders, pointing in a given direction.",
+  "arguments": [
+    {
+      "name": "$direction",
+      "accepts": [
+        "top",
+        "top-right",
+        "right",
+        "bottom-right",
+        "bottom",
+        "bottom-left",
+        "left",
+        "top-left"
+      ]
+    },
+    {
+      "name": "$color",
+      "accepts": [
+        "any colour value"
+      ]
+    },
+    {
+      "name": "$size",
+      "accepts": [
+        "one length, or two lengths as width then height"
+      ]
+    }
+  ],
+  "examples": [
+    ".caret { @include triangle(\"bottom\", black, 10px 8px); }",
+    ".arrow { @include triangle(\"left\", red); }"
+  ],
+  "rejects": [
+    ".caret { @include triangle(sideways); }",
+    ".caret { @include triangle(\"top\", notacolor); }"
+  ]
+}

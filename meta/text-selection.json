@@ -1,0 +1,20 @@
+{
+  "name": "text-selection",
+  "summary": "Styles the ::selection pseudo-element.",
+  "arguments": [
+    {
+      "name": "$value",
+      "accepts": [
+        "\"only\" inside a selector to affect just that element",
+        "null for the element and its descendants"
+      ]
+    }
+  ],
+  "examples": [
+    "@include text-selection { background: yellow; }",
+    ".a { @include text-selection(\"only\") { background: yellow; } }"
+  ],
+  "rejects": [
+    ".a { @include text-selection(bogus) { background: yellow; } }"
+  ]
+}
