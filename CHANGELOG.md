@@ -1,6 +1,12 @@
 # Change Log
 _Change is the essence._
 
+## 1.6.2
+
+- **Fixed:** The `bugs` URL in `package.json` pointed at `github.com/selfihsprimate/gerillass/issues`, one transposition away from the real account, so the Issues link on the npm page led to a 404.
+- **Fixed:** `columnizer` rejected a gutter expressed as a CSS function. `columnizer(3, var(--gap))` now works, as does a `calc()` gutter; `calc((100% - (3 - 1) * var(--gap)) / 3)` is valid CSS and there was no reason to refuse it. Anything that is neither a length, a calculation nor a CSS function is still refused.
+- **Added:** A README section on using Gerillass with an AI coding agent, covering the `gerillass.json` manifest and the `SKILL.md` guide that have shipped in the package since 1.6.0 without anything pointing at them.
+
 ## 1.6.1
 
 - **Fixed:** `__validateLength` warned about `var()`, `calc()`, `clamp()`, `min()`, `max()` and `env()`, which are all valid CSS lengths. Anyone using a custom property or a calculation with `position` was being told their correct code looked wrong. It now accepts Sass calculations and CSS functions, along with `unset` and `revert`.
