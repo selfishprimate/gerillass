@@ -5,7 +5,7 @@ description: Use the Gerillass Sass mixin library — loading it, the mixin cata
 
 # Gerillass
 
-A Sass mixin library: 51 mixins and 21 functions that emit CSS from
+A Sass mixin library: 51 mixins and 22 functions that emit CSS from
 semantic declarations. It is Sass source only — there is no runtime and no
 utility classes, so styles live in your stylesheet and your markup stays clean.
 
@@ -171,6 +171,7 @@ functions rather than mixins; they are public API.
 | `__fontSizer($size, $time)` | Multiplies a size by a factor. Handy for a modular scale. |
 | `__fontSource($font-family, $file-path, $file-formats)` | Builds one src entry for an @font-face rule. |
 | `__isColor($value)` | Returns the value if every item in it is a colour, and errors otherwise. |
+| `__isGutter($value)` | True for anything that can sit where a CSS length is expected: a number, a calculation, or a CSS function such as var(). |
 | `__isNumber($value)` | Returns the value if it is a number. |
 | `__isTime($value)` | Returns the value if it is a time in s or ms, and errors otherwise. |
 | `__lighten($color, $percentage)` | Mixes a colour towards white by a percentage. |

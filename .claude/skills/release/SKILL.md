@@ -54,7 +54,7 @@ Write what changed for a **user of the library**, not what changed in the repo.
 npm pack --dry-run
 ```
 
-Expect 91 files / ~37 kB as of v1.6.0: everything under `scss/`, the generated
+Expect 92 files / ~38 kB as of v1.6.2: everything under `scss/`, the generated
 `gerillass.json` and `SKILL.md`, plus `README.md`, `LICENSE.md` and
 `package.json`. If `test/`, `meta/`, `tools/`, `gulpfile.js`, `yarn.lock` or
 `node_modules` appear, `.npmignore` is broken — stop and fix it.

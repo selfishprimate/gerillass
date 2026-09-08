@@ -9,7 +9,7 @@ Gerillass is a **pure Sass library** — a toolkit of mixins and functions, in t
 Two consequences follow from this and drive most decisions in the repo:
 
 1. **`package.json` must have no `dependencies`.** Everything (`jest`, `sass`, `sass-true`, `glob`, `gulp*`) belongs in `devDependencies`. Consumers get only `.scss` files, so a runtime dependency here forces the entire test toolchain onto every downstream project. This was the cause of 24 Dependabot alerts fixed in v1.3.3 — do not reintroduce it.
-2. **Only `scss/` ships.** `.npmignore` excludes `test`, `assets`, `gulpfile.js`, dotfiles and `*.md`; npm always adds `README.md`, `LICENSE.md` and `package.json` back. Verify with `npm pack --dry-run` before any release (91 files / ~37 kB as of v1.6.0).
+2. **Only `scss/` ships.** `.npmignore` excludes `test`, `assets`, `gulpfile.js`, dotfiles and `*.md`; npm always adds `README.md`, `LICENSE.md` and `package.json` back. Verify with `npm pack --dry-run` before any release (92 files / ~38 kB as of v1.6.2).
 
 Dart Sass only. LibSass/node-sass has been unsupported since v1.3.0.
 
@@ -172,7 +172,7 @@ Four layers, loaded in dependency order by `scss/_gerillass.scss`. The order is 
 |---|---|---|---|
 | 1 | `scss/lists/` | flat value lists (`$list-of-buttons`) | `list-of-` prefix, `!default` |
 | 2 | `scss/maps/` | keyed config (`$map-for-breakpoints`) | `map-for-` prefix, `!default` |
-| 3 | `scss/utilities/` | 21 helper **functions** | `__camelCase`, two leading underscores |
+| 3 | `scss/utilities/` | 22 helper **functions** | `__camelCase`, two leading underscores |
 | 4 | `scss/library/` | 51 **mixins** — the bulk of the API | `kebab-case` |
 
 `_gerillass.scss` lists every partial explicitly. **A new file is invisible until you add its `@import` line there**, in the correct layer block.
@@ -227,9 +227,9 @@ Four levels, and knowing which one covers a member tells you what you can trust:
 | Level | Proves | Coverage |
 |---|---|---|
 | `test/smoke.scss` | the mixin evaluates at all | 51/51 mixins |
-| snapshot of `meta/` examples | the output cannot change unnoticed | 72/72 members |
-| `meta/` rejects | bad input is refused with a real message | 44/72 |
-| sass-true spec in `test/` | the CSS is **correct** | 11/72 |
+| snapshot of `meta/` examples | the output cannot change unnoticed | 73/73 members |
+| `meta/` rejects | bad input is refused with a real message | 44/73 |
+| sass-true spec in `test/` | the CSS is **correct** | 11/73 |
 
 Only the last one catches an output that was wrong from the start; a snapshot
 records a wrong value as correct. Hand-written specs are therefore reserved for
@@ -272,11 +272,11 @@ Verified as of v1.6.0.
 - **`bugs` URL is misspelled.** `package.json` points at
   `github.com/selfihsprimate/gerillass/issues` — note `selfihsprimate`. A
   one-character fix that currently sends every bug reporter to a dead page.
-- **`columnizer` interpolates its `calc()` instead of evaluating it**, so
-  `calc(100% / 4)` reaches the stylesheet where `25%` would do, and
-  `(3 - 1) * 20px` survives instead of `40px`. Both are valid and compute the
-  same; simplifying is a cosmetic decision, and `test/library/columnizer.spec.scss`
-  records the current output with a note.
+- ~~`columnizer` interpolates its `calc()`~~ — **do not "fix" this.** The
+  interpolation is load-bearing: it is what lets `columnizer(var(--cols))` and
+  a `var()` gutter work at all. Evaluating the expression would simplify
+  `calc(100% / 4)` to `25%` and shorten the output, and would break every call
+  whose column count or gutter is a custom property. Verified both ways.
 - **Ten mixins take arguments and validate none of them** — `adaptive`,
   `brand-logo`, `circle`, `counter`, `ellipsis`, `resizable`, `screen-agent`,
   `sizer`, `text-image`, `text-stroke`. This is mostly deliberate: they pass

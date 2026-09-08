@@ -587,7 +587,7 @@
         &:not(:last-child) {
           margin-right: 0;
         }
-      } @else if type-of(nth($params, 2)) == number {
+      } @else if __isGutter(nth($params, 2)) {
         $gutter: nth($params, length($params));
         flex-grow: 0;
         flex-shrink: 0;
@@ -600,7 +600,7 @@
           margin-right: 0;
         }
       } @else {
-        @error "`#{nth($params, 2)}` is not a valid second argument for `columnizer`. Pass a gutter length such as `20px`, or a boolean telling the last row whether to fill.";
+        @error "`#{nth($params, 2)}` is not a valid second argument for `columnizer`. Pass a gutter length such as `20px` or `var(--gap)`, or a boolean telling the last row whether to fill.";
       }
     } @else if length($params) == 3 {
       $gutter: nth($params, 2);

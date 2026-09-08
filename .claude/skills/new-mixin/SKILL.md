@@ -20,7 +20,7 @@ silently, which is worse. Do all of them.
 
 One member per file, and **the filename must match the member name** —
 `_border-radius.scss` holds `@mixin border-radius`. This holds for all 51
-existing mixins and 21 utilities; do not be the exception.
+existing mixins and 22 utilities; do not be the exception.
 
 ## 2. Write the file
 

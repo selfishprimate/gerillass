@@ -6,7 +6,7 @@ description: Sweep every mixin and function in Gerillass and report where it mis
 # Audit the library
 
 `npm test` only checks inputs somebody already thought of. This audit throws
-arguments nobody wrote a test for at all 51 mixins **and all 21 functions**, at
+arguments nobody wrote a test for at all 51 mixins **and all 22 functions**, at
 every argument position, and reports what the library does with them. Run it
 before a release and after any change that touches more than a couple of
 members.
@@ -103,7 +103,7 @@ The suite works at four depths: the smoke test proves every mixin evaluates,
 the manifest snapshots every documented example, the recorded rejections prove
 bad input is refused, and a sass-true spec proves the CSS is right. Only the
 last one can tell you an output was wrong from the beginning, and it covers 11
-of 72 members.
+of 73 members.
 
 List which members have one:
 
@@ -137,7 +137,7 @@ their own but reject bad input through `__validateRatio`, so a plain grep for
 npm pack --dry-run
 ```
 
-Expect 91 files. `meta/` and `tools/` must not appear; `gerillass.json` and
+Expect 92 files. `meta/` and `tools/` must not appear; `gerillass.json` and
 `SKILL.md` must. For a release-grade audit, install the tarball somewhere else
 and compile against it — `.npmignore` and the `exports` map mean the working
 tree and the published package are not the same thing.

@@ -84,6 +84,8 @@ const CLAIMS = [
   { re: /(\d+) of the (\d+) mixins that take arguments/g, key: "validating", what: "validating mixins" },
   { re: /Expect (\d+) files/g, key: "packFiles", what: "published file count" },
   { re: /\((\d+) files \//g, key: "packFiles", what: "published file count" },
+  // Coverage tables write a bare ratio with no noun, e.g. "| 44/73 |".
+  { re: /\|\s*\d+\s*\/\s*(\d+)\s*\|/g, key: "members", what: "member total in a coverage table" },
 ];
 
 const problems = [];

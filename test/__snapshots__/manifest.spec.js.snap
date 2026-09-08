@@ -48,6 +48,18 @@ exports[`Manifest examples __isColor: .a { color: __isColor(red); } 1`] = `
 }"
 `;
 
+exports[`Manifest examples __isGutter: .a { --x: #{__isGutter(20px)}; } 1`] = `
+".a {
+  --x: true;
+}"
+`;
+
+exports[`Manifest examples __isGutter: .a { --x: #{__isGutter(var(--gap))}; } 1`] = `
+".a {
+  --x: true;
+}"
+`;
+
 exports[`Manifest examples __isNumber: .a { z-index: __isNumber(5); } 1`] = `
 ".a {
   z-index: 5;
@@ -565,6 +577,51 @@ exports[`Manifest examples columnizer: .grid { @include columnizer(3, 20px, true
   margin-right: 20px;
 }
 .grid > *:nth-child(3n) {
+  margin-right: 0;
+}"
+`;
+
+exports[`Manifest examples columnizer: .grid { @include columnizer(3, var(--gap)); } 1`] = `
+".grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+.grid, .grid::before, .grid::after,
+.grid *,
+.grid *::before,
+.grid *::after {
+  box-sizing: border-box;
+}
+.grid > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: calc((100% - (3 - 1) * var(--gap)) / 3);
+  margin-bottom: var(--gap);
+}
+.grid > *:not(:last-child) {
+  margin-right: var(--gap);
+}
+.grid > *:nth-child(3n) {
+  margin-right: 0;
+}"
+`;
+
+exports[`Manifest examples columnizer: .grid { @include columnizer(var(--cols)); } 1`] = `
+".grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+.grid, .grid::before, .grid::after,
+.grid *,
+.grid *::before,
+.grid *::after {
+  box-sizing: border-box;
+}
+.grid > * {
+  flex: 0 0 calc(100% / var(--cols));
+  margin-bottom: 0;
+}
+.grid > *:not(:last-child) {
   margin-right: 0;
 }"
 `;

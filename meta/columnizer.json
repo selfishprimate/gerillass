@@ -5,8 +5,8 @@
     {
       "name": "$params",
       "accepts": [
-        "a column count",
-        "a column count plus a gutter length",
+        "a column count, which may be a CSS function such as var(--cols)",
+        "a column count plus a gutter length, which may also be a CSS function",
         "a column count plus a boolean fill flag",
         "a column count, a gutter and a fill flag"
       ]
@@ -15,9 +15,12 @@
   "examples": [
     ".grid { @include columnizer(3); }",
     ".grid { @include columnizer(3, 20px); }",
-    ".grid { @include columnizer(3, 20px, true); }"
+    ".grid { @include columnizer(3, 20px, true); }",
+    ".grid { @include columnizer(3, var(--gap)); }",
+    ".grid { @include columnizer(var(--cols)); }"
   ],
   "rejects": [
-    ".grid { @include columnizer(3, 20px, true, 9); }"
+    ".grid { @include columnizer(3, 20px, true, 9); }",
+    ".grid { @include columnizer(3, nonsense); }"
   ]
 }
