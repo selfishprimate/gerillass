@@ -6,6 +6,9 @@ _Change is the essence._
 Gerillass now uses the Sass module system. Two things break; everything else is
 a drop-in upgrade, including every `gls-` call site.
 
+Upgrading a project that documents or uses Gerillass? [MIGRATION.md](MIGRATION.md)
+covers both breaks, what to leave alone, and how to verify the result.
+
 ### Breaking
 
 - **Removed:** The `__` prefix on all 22 utility functions. `__remify(24px)` is
