@@ -1,6 +1,69 @@
 # Change Log
 _Change is the essence._
 
+## 2.0.0
+
+Gerillass now uses the Sass module system. Two things break; everything else is
+a drop-in upgrade, including every `gls-` call site.
+
+### Breaking
+
+- **Removed:** The `__` prefix on all 22 utility functions. `__remify(24px)` is
+  now `remify(24px)`, `__isColor` is `isColor`, `__validateRatio` is
+  `validateRatio`, and so on. This was not a style change: under `@use`, a
+  member whose name starts with `_` is private to its own file, so the prefixed
+  names could not survive the migration. With `@use "gerillass" as *` they did
+  not even fail loudly, they compiled to literal CSS. A find and replace of
+  `__` covers 19 of the 22. Three needed a new name:
+
+  | Was | Now | Why |
+  |---|---|---|
+  | `__darken` | `shade` | `darken` is a Sass built-in and shadowing it is silent |
+  | `__lighten` | `tint` | same, for `lighten` |
+  | `__null` | `fillNulls` | `null` is a Sass keyword |
+
+- **Removed:** `ratio-box` and `responsive-video`. CSS `aspect-ratio` is
+  Baseline Widely Available and does their job in one declaration. Replace a
+  ratio box with `aspect-ratio` on the element itself, and a video embed with
+  `aspect-ratio` on the iframe, which needs no wrapper:
+
+  ```scss
+  .video iframe { width: 100%; aspect-ratio: 16 / 9; border: 0; }
+  ```
+
+  Note that `aspect-ratio` on a *wrapper* does not reproduce the old mixin: an
+  `<iframe>` inside keeps its intrinsic 300x150. Put it on the iframe.
+  `validateRatio` stays, so `aspect-ratio: validateRatio("16:9")` still parses
+  the colon form CSS will not.
+
+### Not breaking
+
+- **Updated:** The library loads through `@use`/`@forward` instead of `@import`,
+  and calls namespaced built-ins (`map.get`, `list.nth`, `string.slice`) instead
+  of the deprecated global ones. Dart Sass removes `@import` and the globals in
+  3.0.0; this gets in front of that.
+- **Note:** One deprecation is left, and it is not the module system. Sass has
+  begun deprecating its own `if()` function, which Gerillass calls in 21 places,
+  so a very recent Dart Sass prints `if-function` warnings when it compiles the
+  library. Nothing is broken and older Sass versions say nothing. It is not
+  fixed here because the obvious fixes are both wrong: the replacement syntax
+  needs a Dart Sass released weeks ago, and a hand-written helper function
+  cannot substitute for `if()`, which only evaluates the branch it takes.
+  `triangle` relies on that, so a helper would turn `triangle(top, red, 10px)`
+  into an error. Each of the 21 sites needs reading, so it gets its own release.
+- **Removed:** `scss/_gerillass-prefix.scss` and the Gulp task that generated
+  it, along with `gulp`, `gulp-concat` and `gulp-replace`. The prefixed half of
+  the API is now one line, `@forward "library" as gls-*`, so **every `gls-*`
+  name keeps working exactly as before**. You can also namespace instead:
+  `@use "gerillass" as gls;` then `gls.circle(50px)`.
+- **Removed:** The `eyeglass` block and the `eyeglass-module` keyword from
+  `package.json`. eyeglass rides the legacy JS API that Dart Sass removes in
+  2.0.0, and its importer already fails on any `@import` with current Dart Sass,
+  with or without Gerillass.
+- **Note:** Apart from the two removals above, no valid call changed its output.
+  Verified by snapshotting the CSS of every documented invocation before and
+  after each step of the migration.
+
 ## 1.6.2
 
 - **Fixed:** The `bugs` URL in `package.json` pointed at `github.com/selfihsprimate/gerillass/issues`, one transposition away from the real account, so the Issues link on the npm page led to a 404.

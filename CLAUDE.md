@@ -317,6 +317,26 @@ Verified as of v1.6.1.
 
 ### Modernisation
 
+- **Sass is deprecating its own `if()`, and the library calls it 21 times.**
+  Dart Sass 1.104 prints 25 `if-function` warnings compiling Gerillass (5 shown,
+  20 omitted); 1.91 prints none. Two fixes look obvious and both are wrong,
+  verified:
+
+  1. The replacement syntax is `if(sass($cond): $a; else: $b)`. It compiles on
+     1.104 and is a parse error on 1.91, so adopting it raises the minimum Dart
+     Sass to a version released weeks ago.
+  2. A helper `@function iff($c, $a, $b)` evaluates **both** branches, while
+     `if()` evaluates only the one it takes. `_triangle.scss` depends on this:
+     it calls `list.nth($size, 2)` in the untaken branch, and
+     `triangle(top, red, 10px)` passes a single-value `$size`. Swapping in a
+     helper turns a working call into `Invalid index 2 for a list with 1
+     elements`.
+
+  So all 21 sites need reading individually, and the ones inside interpolation
+  need restructuring rather than substitution. Removal is not until Sass 3.0.0,
+  so this is not urgent, but it is the last thing between the library and a
+  clean compile.
+
 - **Agent-facing work beyond the manifest.** An MCP server exposing
   `gerillass.json` and an `llms.txt` on the docs site were scoped out of the
   v1.6.0 work. Neither is worth doing until the manifest has users.
