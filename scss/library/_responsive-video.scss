@@ -1,5 +1,7 @@
 @charset "UTF-8";
 
+@use "../utilities/validate-ratio" as *;
+
 @mixin responsive-video($ratio: null) {
   position: relative;
   &::before {

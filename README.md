@@ -79,7 +79,6 @@ Pointing straight at the file always works too:
 
 The per-tool recipes below were each verified against a real build of Gerillass v1.5.0. The versions used are listed at the end of this section.
 
-> **A note on eyeglass.** Gerillass still ships eyeglass module metadata, but eyeglass has not been released since June 2022 and its importer is broken with current Dart Sass — any `@import` fails with `doneImporting is not a function`, whether Gerillass is involved or not. It also relies on the legacy JS API, which Dart Sass removes in 2.0.0. Use the `pkg:` importer above instead; it is the built-in equivalent.
 
 ### Using with Vite
 

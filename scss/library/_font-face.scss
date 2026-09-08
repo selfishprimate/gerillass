@@ -1,5 +1,10 @@
 @charset "UTF-8";
 
+@use "sass:list";
+@use "sass:meta";
+@use "sass:string";
+@use "../utilities/font-source" as *;
+
 @mixin font-face(
   $font-family,
   $file-path,
@@ -9,28 +14,28 @@
 ) {
   @if & {
     @error "You must call the mixin at the root level of your style sheet, not in the `#{&+'{'+'}'}` selector.";
-  } @else if type-of($font-family) != "string" {
+  } @else if meta.type-of($font-family) != "string" {
     @error "`#{$font-family}` is not a valid $font-family for `font-face`. Pass the family name as a string, such as `\"Inter\"`.";
-  } @else if type-of($file-path) != "string" {
+  } @else if meta.type-of($file-path) != "string" {
     @error "`#{$file-path}` is not a valid $file-path for `font-face`. Pass the path to the font files without an extension, as a string.";
   } @else {
     
     $list: ();
 
-    @if index(100 200 300 400 500 600 700 800 900, $font-style) {
+    @if list.index(100 200 300 400 500 600 700 800 900, $font-style) {
       $font-weight: $font-style;
       $font-style: normal;
     } @else if not
-      index("normal" "italic" "oblique", $font-style) and
-      type-of($font-style) !=
+      list.index("normal" "italic" "oblique", $font-style) and
+      meta.type-of($font-style) !=
       "number"
     {
       $font-style-list: ();
-      @for $i from 1 through length($font-style) {
-        $font-style-list: append($font-style-list, nth($font-style, $i), comma);
+      @for $i from 1 through list.length($font-style) {
+        $font-style-list: list.append($font-style-list, list.nth($font-style, $i), comma);
       }
-      @for $i from 1 through length($font-style-list) {
-        @if index("eot" "woff2" "woff" "ttf" "svg", nth($font-style-list, $i)) {
+      @for $i from 1 through list.length($font-style-list) {
+        @if list.index("eot" "woff2" "woff" "ttf" "svg", list.nth($font-style-list, $i)) {
           $file-formats: $font-style-list;
           $font-style: normal;
         }
@@ -39,11 +44,11 @@
 
     @font-face {
       font-family: $font-family;
-      @if index($file-formats, eot) {
+      @if list.index($file-formats, eot) {
         src: url("#{$file-path}.eot");
       }
-      @for $i from 1 through length($file-formats) {
-        $list: append($list, fontSource($font-family, $file-path, nth($file-formats, $i)), comma);
+      @for $i from 1 through list.length($file-formats) {
+        $list: list.append($list, fontSource($font-family, $file-path, list.nth($file-formats, $i)), comma);
       }
       src: $list;
       font-style: $font-style;

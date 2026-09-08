@@ -2,6 +2,7 @@
 
 @use "sass:list";
 @use "sass:map";
+@use "../maps/map-for-breakpoints" as *;
 
 @function validateBreakpoint($value) {
   @for $i from 1 through list.length($value) {

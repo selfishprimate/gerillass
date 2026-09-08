@@ -1,7 +1,11 @@
 @charset "UTF-8";
 
+@use "sass:map";
+@use "../maps/map-for-smartphones" as *;
+@use "../utilities/map-deep-get" as *;
+
 @mixin smartphone($device, $orientation: null) {
-  @if map-has-key($map-for-smartphones, $device) {
+  @if map.has-key($map-for-smartphones, $device) {
     @if $orientation == portrait or $orientation == null {
       @media only screen 
       and (device-width: mapDeepGet($map-for-smartphones, $device, 'width')) 
@@ -20,6 +24,6 @@
       @error "`#{$orientation}` is not a valid $orientation for `smartphone`. Pass `portrait`, `landscape`, or no orientation at all.";
     }
   } @else {
-    @error "`#{$device}` is not a device known to `smartphone`. Pass one of: #{map-keys($map-for-smartphones)}.";
+    @error "`#{$device}` is not a device known to `smartphone`. Pass one of: #{map.keys($map-for-smartphones)}.";
   }
 }

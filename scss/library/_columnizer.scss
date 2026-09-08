@@ -1,25 +1,30 @@
 @charset "UTF-8";
 
+@use "sass:list";
+@use "sass:meta";
+@use "../library/border-box" as *;
+@use "../utilities/is-gutter" as *;
+
 @mixin columnizer($params...) {
-  @if length($params) < 1 or length($params) > 3 {
-    @error "`columnizer` takes 1 to 3 arguments; you passed #{length($params)}. Pass the column count, optionally a gutter length, and optionally a boolean telling the last row whether to fill.";
+  @if list.length($params) < 1 or list.length($params) > 3 {
+    @error "`columnizer` takes 1 to 3 arguments; you passed #{list.length($params)}. Pass the column count, optionally a gutter length, and optionally a boolean telling the last row whether to fill.";
   }
-  $columns: nth($params, 1);
+  $columns: list.nth($params, 1);
   $gutter: null;
   $fill: false;
   display: flex;
   flex-wrap: wrap;
   @include border-box;
   > * {
-    @if length($params) == 1 {
+    @if list.length($params) == 1 {
       flex: 0 0 calc(100% / #{$columns});
       margin-bottom: 0;
       &:not(:last-child) {
         margin-right: 0;
       }
-    } @else if length($params) == 2 {
-      @if type-of(nth($params, 2)) == bool {
-        $fill: nth($params, length($params));
+    } @else if list.length($params) == 2 {
+      @if meta.type-of(list.nth($params, 2)) == bool {
+        $fill: list.nth($params, list.length($params));
         flex-grow: #{if($fill == true, 1, 0)};
         flex-shrink: 0;
         flex-basis: calc(100% / #{$columns});
@@ -27,8 +32,8 @@
         &:not(:last-child) {
           margin-right: 0;
         }
-      } @else if isGutter(nth($params, 2)) {
-        $gutter: nth($params, length($params));
+      } @else if isGutter(list.nth($params, 2)) {
+        $gutter: list.nth($params, list.length($params));
         flex-grow: 0;
         flex-shrink: 0;
         flex-basis: calc((100% - (#{$columns} - 1) * #{$gutter}) / #{$columns});
@@ -40,11 +45,11 @@
           margin-right: 0;
         }
       } @else {
-        @error "`#{nth($params, 2)}` is not a valid second argument for `columnizer`. Pass a gutter length such as `20px` or `var(--gap)`, or a boolean telling the last row whether to fill.";
+        @error "`#{list.nth($params, 2)}` is not a valid second argument for `columnizer`. Pass a gutter length such as `20px` or `var(--gap)`, or a boolean telling the last row whether to fill.";
       }
-    } @else if length($params) == 3 {
-      $gutter: nth($params, 2);
-      $fill: nth($params, length($params));
+    } @else if list.length($params) == 3 {
+      $gutter: list.nth($params, 2);
+      $fill: list.nth($params, list.length($params));
       flex-grow: if($fill == true, 1, 0);
       flex-shrink: 0;
       flex-basis: calc((100% - (#{$columns} - 1) * #{$gutter}) / #{$columns});

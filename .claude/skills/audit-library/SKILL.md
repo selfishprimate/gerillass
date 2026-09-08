@@ -91,11 +91,9 @@ npm run manifest && git diff --stat
 A non-empty diff means `gerillass.json` or `SKILL.md` was committed stale. The
 suite catches this too, but check it here so the audit report is complete.
 
-```bash
-npx gulp start && git diff --stat scss/_gerillass-prefix.scss
-```
-
-Same for the `gls-` bundle.
+The `gls-` half needs no regeneration since 2.0.0 — it comes from
+`@forward "library" as gls-*` — but the suite still compares both names, so a
+partial missing from `scss/library/_index.scss` shows up there.
 
 ## 4. What the tests do not assert
 
@@ -137,7 +135,7 @@ their own but reject bad input through `validateRatio`, so a plain grep for
 npm pack --dry-run
 ```
 
-Expect 92 files. `meta/` and `tools/` must not appear; `gerillass.json` and
+Expect 95 files. `meta/` and `tools/` must not appear; `gerillass.json` and
 `SKILL.md` must. For a release-grade audit, install the tarball somewhere else
 and compile against it — `.npmignore` and the `exports` map mean the working
 tree and the published package are not the same thing.

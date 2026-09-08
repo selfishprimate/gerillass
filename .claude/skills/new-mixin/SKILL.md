@@ -1,6 +1,6 @@
 ---
 name: new-mixin
-description: Scaffold a new Gerillass mixin or utility function with the project's conventions, wire it into the import chain, regenerate the gls- bundle, and stub its test. Use when adding a new mixin, helper function, list or map to the library.
+description: Scaffold a new Gerillass mixin or utility function with the project's conventions, wire it into the folder index, describe it in meta/, and test it. Use when adding a new mixin, helper function, list or map to the library.
 ---
 
 # Add a member to the Gerillass library
@@ -69,30 +69,37 @@ Reuse the existing utilities rather than reimplementing them — `isColor`,
 `remify`, `pixelify`, `convertToEm`, `shorthandProperty` for
 conversion.
 
-## 3. Wire it into `_gerillass.scss`
+## 3. Wire it into the folder index
 
-**A new file is invisible until it is listed there.** Add an `@import` line in
-the correct layer block, keeping the block alphabetical:
+**A new file is invisible until it is listed there.** Add a `@forward` line to
+its folder's `_index.scss`, keeping the list alphabetical:
 
 ```scss
-@import "library/your-mixin";
+@forward "your-mixin";
 ```
 
-The layer order — lists, maps, utilities, library — is a real dependency order,
-not decoration.
+`_gerillass.scss` forwards the four folders, so nothing else needs touching —
+and the `gls-` copy comes along automatically.
 
-## 4. Regenerate the prefixed bundle
+## 4. Declare what it uses
 
-```bash
-npx gulp start
+`@forward` does not reach sibling partials, so a mixin that reads a map or calls
+a function needs its own `@use` at the top of the file:
+
+```scss
+@charset "UTF-8";
+
+@use "sass:math";
+@use "../maps/map-for-breakpoints" as *;
+@use "../utilities/validate-length" as *;
 ```
 
-This rebuilds `scss/_gerillass-prefix.scss`, which is committed build output —
-never edit it by hand. Skipping this leaves the entire `gls-` half of the public
-API without your mixin. Commit the regenerated file alongside the source.
+`as *` keeps call sites unprefixed, which is the convention here. Miss one and
+the mixin still compiles — Sass evaluates lazily — until something calls it,
+which is what `test/smoke.scss` is for.
 
-(A PostToolUse hook runs this automatically after edits under `scss/library/`.
-Run it manually anyway if you are unsure it fired.)
+The `gls-` prefixed copy needs nothing: `_gerillass.scss` produces it with
+`@forward "library" as gls-*`.
 
 ## 5. Describe it in `meta/`
 

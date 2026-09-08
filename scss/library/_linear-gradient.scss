@@ -1,18 +1,24 @@
 @charset "UTF-8";
 
+@use "sass:list";
+@use "sass:map";
+@use "sass:math";
+@use "sass:meta";
+@use "../maps/map-for-directions" as *;
+
 @mixin linear-gradient($direction, $colors) {
   $list: ();
-  @for $i from 1 through length($colors) {
-    $list: append($list, nth($colors, $i), comma);
+  @for $i from 1 through list.length($colors) {
+    $list: list.append($list, list.nth($colors, $i), comma);
   }
-  @if map-has-key($map-for-directions, $direction) {
+  @if map.has-key($map-for-directions, $direction) {
     background: linear-gradient(
-      map-get($map-for-directions, $direction),
+      map.get($map-for-directions, $direction),
       $list
     );
-  } @else if not map-has-key($map-for-directions, $direction) {
-    @if type-of($direction) != "number" or not index("deg", unit($direction)) {
-      @error "`#{$direction}` is not a valid $direction for `linear-gradient`. Pass an angle such as `45deg`, or one of: #{map-keys($map-for-directions)}.";
+  } @else if not map.has-key($map-for-directions, $direction) {
+    @if meta.type-of($direction) != "number" or not list.index("deg", math.unit($direction)) {
+      @error "`#{$direction}` is not a valid $direction for `linear-gradient`. Pass an angle such as `45deg`, or one of: #{map.keys($map-for-directions)}.";
     } @else {
       background: linear-gradient($direction, $list);
     }

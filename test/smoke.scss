@@ -10,7 +10,7 @@
 //
 // Add a line here whenever you add a mixin to scss/library/.
 
-@import "gerillass";
+@use "gerillass" as *;
 
 // --- Root-level mixins -------------------------------------------------------
 

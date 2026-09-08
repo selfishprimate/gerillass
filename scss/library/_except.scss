@@ -1,11 +1,15 @@
 @charset "UTF-8";
 
+@use "sass:list";
+@use "sass:meta";
+@use "sass:string";
+
 @mixin except($params...) {
-  @if length($params) == 0 {
+  @if list.length($params) == 0 {
     @error "Please pass an argument. The argument must be either a negative or positive number or list of numbers. Or pass one of the following predefined string values: 'first', 'last', 'odd', 'even'.";
-  } @else if length($params) == 1 {
-    $value: nth($params, 1);
-    @if type-of($value) == "number" {
+  } @else if list.length($params) == 1 {
+    $value: list.nth($params, 1);
+    @if meta.type-of($value) == "number" {
       @if $value < 0 {
         &:not(:nth-last-of-type(#{$value * -1})) {
           @content;
@@ -15,7 +19,7 @@
           @content;
         }
       }
-    } @else if type-of($value) == "string" {
+    } @else if meta.type-of($value) == "string" {
       @if $value == "odd" {
         &:not(:nth-of-type(odd)) {
           @content;
@@ -40,10 +44,10 @@
     } @else {
       @error "`#{$value}` is not a valid argument for `except`. Pass a positive or negative number, one of `first`, `last`, `odd`, `even`, or a selector such as `.foo`.";
     }
-  } @else if length($params) > 1 {
+  } @else if list.length($params) > 1 {
     $items: "";
-    @for $i from 1 through length($params) {
-      $items: $items + if(nth($params, $i) < 0, unquote(":not(:nth-last-of-type(#{nth($params, $i) * -1}))"), unquote(":not(:nth-of-type(#{nth($params, $i)}))"));
+    @for $i from 1 through list.length($params) {
+      $items: $items + if(list.nth($params, $i) < 0, string.unquote(":not(:nth-last-of-type(#{list.nth($params, $i) * -1}))"), string.unquote(":not(:nth-of-type(#{list.nth($params, $i)}))"));
     }
     &#{$items} {
       @content;

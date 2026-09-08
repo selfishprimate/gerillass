@@ -1,8 +1,10 @@
 @charset "UTF-8";
 
+@use "../library/responsive-image" as *;
+
 @mixin reset-figure {
   margin: 0;
   img {
-    @include gls-responsive-image;
+    @include responsive-image;
   }
 }

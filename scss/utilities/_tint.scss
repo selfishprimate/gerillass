@@ -1,6 +1,7 @@
 @charset "UTF-8";
 
 @use "sass:color";
+@use "../utilities/is-color" as *;
 
 @function tint($color, $percentage) {
   @if isColor($color) {

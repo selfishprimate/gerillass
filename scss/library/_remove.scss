@@ -1,34 +1,37 @@
 @charset "UTF-8";
 
+@use "sass:list";
+@use "../library/breakpoint" as *;
+
 @mixin remove($params...) {
-  @if length($params) == 0 {
+  @if list.length($params) == 0 {
     display: none;
-  } @else if length($params) == 1 {
-    $value: nth($params, 1);
-    @include gls-breakpoint($value) {
+  } @else if list.length($params) == 1 {
+    $value: list.nth($params, 1);
+    @include breakpoint($value) {
       display: none;
     }
-  } @else if length($params) == 2 {
-    @if index("min" "max", nth($params, 1)) {
-      $mode: nth($params, 1);
-      $value: nth($params, 2);
+  } @else if list.length($params) == 2 {
+    @if list.index("min" "max", list.nth($params, 1)) {
+      $mode: list.nth($params, 1);
+      $value: list.nth($params, 2);
       @if $mode == "min" {
-        @include gls-breakpoint(min, $value) {
+        @include breakpoint(min, $value) {
           display: none;
         }
       } @else if $mode == "max" {
-        @include gls-breakpoint(max, $value) {
+        @include breakpoint(max, $value) {
           display: none;
         }
       }
     } @else {
-      $start: nth($params, 1);
-      $end: nth($params, 2);
-      @include gls-breakpoint($start, $end) {
+      $start: list.nth($params, 1);
+      $end: list.nth($params, 2);
+      @include breakpoint($start, $end) {
         display: none;
       }
     }
   } @else {
-    @error "`remove` takes at most 2 arguments; you passed #{length($params)}. Pass nothing to hide the element outright, one breakpoint, `min`/`max` plus a breakpoint, or a start and an end breakpoint.";
+    @error "`remove` takes at most 2 arguments; you passed #{list.length($params)}. Pass nothing to hide the element outright, one breakpoint, `min`/`max` plus a breakpoint, or a start and an end breakpoint.";
   }
 }

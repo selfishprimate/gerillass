@@ -37,7 +37,7 @@ describe("Smoke", () => {
     );
     const defined = fs
       .readdirSync(LOAD_PATH + "/library")
-      .filter((f) => f.endsWith(".scss"))
+      .filter((f) => f.endsWith(".scss") && f !== "_index.scss")
       .map((f) => f.replace(/^_/, "").replace(/\.scss$/, ""));
 
     const missing = defined.filter((name) => !called.has(name));

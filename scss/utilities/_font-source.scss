@@ -2,6 +2,8 @@
 
 @use "sass:list";
 @use "sass:map";
+@use "../maps/map-for-font-formats" as *;
+@use "../utilities/clear-whitespace" as *;
 
 @function fontSource($font-family, $file-path, $file-formats) {
   $list: ();

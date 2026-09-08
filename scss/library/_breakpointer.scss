@@ -1,7 +1,10 @@
 @charset "UTF-8";
 
+@use "sass:meta";
+@use "../maps/map-for-breakpoints" as *;
+
 @mixin breakpointer($selector: null) {
-  @if $selector != null and type-of($selector) != "string" {
+  @if $selector != null and meta.type-of($selector) != "string" {
     @error "`#{$selector}` is not a valid $selector for `breakpointer`. Pass a selector as a string, such as `\".debug\"`, or no argument at all to attach it to body.";
   }
   @if & {

@@ -1,7 +1,10 @@
 @charset "UTF-8";
 
+@use "sass:map";
+@use "../maps/map-for-breakpoints" as *;
+
 @mixin adaptive($gutter: 30px) {
-  $actual-breakpoints: map-remove($map-for-breakpoints, "xsmall");
+  $actual-breakpoints: map.remove($map-for-breakpoints, "xsmall");
   margin: 0 auto;
   @each $item, $value in $actual-breakpoints {
     @media (min-width: #{$value}) {

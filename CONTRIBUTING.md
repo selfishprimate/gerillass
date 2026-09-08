@@ -52,11 +52,14 @@ A mixin that silently emits nothing for a bad argument is the worst outcome — 
 
 Do **not** validate a value you pass straight through to CSS. `var()`, `calc()`, `clamp()` and whatever ships next are all valid, and a strict check rejects correct code.
 
-After writing the mixin, regenerate the prefixed version:
+Add it to `scss/library/_index.scss` so it is forwarded, and declare whatever it uses at the top of the file:
 
-    npx gulp start
+    @charset "UTF-8";
 
-This rebuilds `scss/_gerillass-prefix.scss`, which is committed build output. Never edit it by hand.
+    @use "sass:math";
+    @use "../utilities/validate-length" as *;
+
+`@forward` does not reach sibling partials, so a mixin that reads a map or calls a function needs its own `@use` line. The `gls-` prefixed copy is produced automatically by `_gerillass.scss`; there is nothing to regenerate.
 
 ### Lists
 
@@ -143,7 +146,7 @@ Four commands are available as slash commands:
 | `/audit-library` | sweeping the whole library before a release |
 | `/release` | version, changelog, tag, GitHub release, npm publish |
 
-**What runs automatically.** Four hooks fire after a file is edited: they refuse a `package.json` that declares runtime dependencies, regenerate the `gls-` bundle, rebuild `gerillass.json` and `SKILL.md`, and check that the counts quoted in the documentation still match the repository. They only fire for edits made through the editor — if you change files with a shell command, run `npx gulp start` and `npm run manifest` yourself.
+**What runs automatically.** Three hooks fire after a file is edited: they refuse a `package.json` that declares runtime dependencies, rebuild `gerillass.json` and `SKILL.md`, and check that the counts quoted in the documentation still match the repository. They only fire for edits made through the editor — if you change files with a shell command, run `npm run manifest` yourself.
 
 **One rule if you use an agent.** Do not let it claim something it has not run. This library is published and has real users; a wrong claim either ships a defect or deletes something someone depends on. `CLAUDE.md` has a section on this with the mistakes that have actually been made here.
 

@@ -1,99 +1,15 @@
 @charset "UTF-8";
-@use "sass:math";
 
 // https://www.gerillass.com/
 // Copyright 2020 by Halil İbrahim Çakıroğlu
 // Apache License 2.0
 
-@import "lists/list-of-anchor-pseudo-classes";
-@import "lists/list-of-buttons";
-@import "lists/list-of-counter-styles";
-@import "lists/list-of-directions";
-@import "lists/list-of-length-units";
-@import "lists/list-of-text-inputs";
+@forward "lists";
+@forward "maps";
+@forward "utilities";
+@forward "library";
 
-@import "maps/map-for-breakpoints";
-@import "maps/map-for-directions";
-@import "maps/map-for-font-formats";
-@import "maps/map-for-positions";
-@import "maps/map-for-smartphones";
-@import "maps/map-for-tablets";
-
-@import "utilities/clear-unit";
-@import "utilities/clear-whitespace";
-@import "utilities/convert-to-em";
-@import "utilities/convert-to-number";
-@import "utilities/fill-nulls";
-@import "utilities/font-sizer";
-@import "utilities/font-source";
-@import "utilities/is-color";
-@import "utilities/is-gutter";
-@import "utilities/is-number";
-@import "utilities/is-time";
-@import "utilities/map-deep-get";
-@import "utilities/pixelify";
-@import "utilities/pseudo-selector";
-@import "utilities/remify";
-@import "utilities/shade";
-@import "utilities/shorthand-property";
-@import "utilities/tint";
-@import "utilities/validate-breakpoint";
-@import "utilities/validate-length";
-@import "utilities/validate-ratio";
-@import "utilities/validate-scissors";
-
-@import "library/adaptive";
-@import "library/after";
-@import "library/all-buttons";
-@import "library/all-text-inputs";
-@import "library/antialias";
-@import "library/background-dots";
-@import "library/background-image";
-@import "library/background-stripes";
-@import "library/before";
-@import "library/border-box";
-@import "library/border-radius";
-@import "library/brand-logo";
-@import "library/breakpoint";
-@import "library/breakpointer";
-@import "library/center";
-@import "library/circle";
-@import "library/clearfix";
-@import "library/columnizer";
-@import "library/counter";
-@import "library/ellipsis";
-@import "library/escape-to-parent";
-@import "library/except";
-@import "library/font-face";
-@import "library/hide";
-@import "library/linear-gradient";
-@import "library/loadify";
-@import "library/only";
-@import "library/placeholder-shown";
-@import "library/placeholder";
-@import "library/position";
-@import "library/radial-gradient";
-@import "library/ratio-box";
-@import "library/remove";
-@import "library/reset-css";
-@import "library/reset-figure";
-@import "library/resizable";
-@import "library/responsive-image";
-@import "library/responsive-video";
-@import "library/scissors";
-@import "library/screen-agent";
-@import "library/sizer";
-@import "library/smartphone";
-@import "library/sprite";
-@import "library/stretched-link";
-@import "library/tablet";
-@import "library/text-gradient";
-@import "library/text-image";
-@import "library/text-selection";
-@import "library/text-shadow";
-@import "library/text-stroke";
-@import "library/triangle";
-
-// Import prefixed version of Gerillass
-@import "gerillass-prefix";
-
+// The gls- prefixed half of the API. Until 2.0.0 this was a generated file:
+// gulpfile.js concatenated scss/library and rewrote "@mixin " to "@mixin gls-".
+// The module system does the same thing in one line, so the generator is gone.
+@forward "library" as gls-*;

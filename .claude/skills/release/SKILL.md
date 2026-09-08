@@ -24,7 +24,15 @@ confirm before touching anything:
 npm test                    # must pass: specs, smoke test and the manifest suite
 yarn audit                  # must be zero across all severities
 node tools/audit.js         # the SILENT bucket must be empty
+node tools/check-docs.js    # the docs must not claim a count the repo lacks
 git status --short          # know exactly what is going out
+```
+
+The library must also compile with no deprecation warnings, which is what the
+module migration bought:
+
+```bash
+sass --load-path=scss test/smoke.scss 2>&1 >/dev/null | grep DEPRECATION
 ```
 
 If `dependencies` in `package.json` is non-empty, stop and fix that first — it is
@@ -54,9 +62,9 @@ Write what changed for a **user of the library**, not what changed in the repo.
 npm pack --dry-run
 ```
 
-Expect 92 files / ~38 kB as of v1.6.2: everything under `scss/`, the generated
+Expect 95 files / ~38 kB as of v2.0.0: everything under `scss/`, the generated
 `gerillass.json` and `SKILL.md`, plus `README.md`, `LICENSE.md` and
-`package.json`. If `test/`, `meta/`, `tools/`, `gulpfile.js`, `yarn.lock` or
+`package.json`. If `test/`, `meta/`, `tools/`, `yarn.lock` or
 `node_modules` appear, `.npmignore` is broken — stop and fix it.
 
 ## 4. Commit, tag, push

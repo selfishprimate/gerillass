@@ -1,19 +1,24 @@
 @charset "UTF-8";
 
+@use "sass:list";
+@use "sass:math";
+@use "sass:meta";
+@use "sass:string";
+
 @mixin background-stripes(
   $color: null,
   $thickness: 1em,
   $rotation: -45deg,
   $image: null
 ) {
-  @if type-of($rotation) != "number" {
+  @if meta.type-of($rotation) != "number" {
     @error "`#{$rotation}` is not a valid $rotation for `background-stripes`. Pass an angle such as `-45deg`, or a unitless number which is treated as degrees.";
   }
-  @if $image != null and type-of($image) != "string" {
+  @if $image != null and meta.type-of($image) != "string" {
     @error "`#{$image}` is not a valid $image for `background-stripes`. Pass an image path as a string.";
   }
-  $validate-unit: if(not index("deg", unit($rotation)), $rotation + deg, $rotation);
-  $get-image: if($image, unquote(", ") + url(unquote($image)), unquote(""));
+  $validate-unit: if(not list.index("deg", math.unit($rotation)), $rotation + deg, $rotation);
+  $get-image: if($image, string.unquote(", ") + url(string.unquote($image)), string.unquote(""));
   @if not $color {
     $color: rgba(0, 0, 0, 0.1);
     background-image: repeating-linear-gradient(
@@ -28,7 +33,7 @@
       background-repeat: no-repeat;
       background-size: cover;
     }
-  } @else if length($color) == 1 {
+  } @else if list.length($color) == 1 {
     background-image: repeating-linear-gradient(
         $validate-unit,
         $color 0,
@@ -41,12 +46,12 @@
       background-repeat: no-repeat;
       background-size: cover;
     }
-  } @else if length($color) > 1 {
+  } @else if list.length($color) > 1 {
     $list: ();
-    @for $i from 1 through length($color) {
-      $index-color: nth($color, $i);
+    @for $i from 1 through list.length($color) {
+      $index-color: list.nth($color, $i);
       $style-rule: $index-color ($thickness * $i) - $thickness, $index-color $thickness * $i;
-      $list: append($list, $style-rule, comma);
+      $list: list.append($list, $style-rule, comma);
     }
     background-image: repeating-linear-gradient($validate-unit, $list) + $get-image;
     @if $image {

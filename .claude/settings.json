@@ -13,12 +13,6 @@
           },
           {
             "type": "command",
-            "command": "\"${CLAUDE_PROJECT_DIR:-.}/.claude/hooks/sync-prefix.sh\"",
-            "timeout": 120,
-            "statusMessage": "Regenerating gls- prefix bundle"
-          },
-          {
-            "type": "command",
             "command": "\"${CLAUDE_PROJECT_DIR:-.}/.claude/hooks/sync-manifest.sh\"",
             "timeout": 60,
             "statusMessage": "Rebuilding gerillass.json"

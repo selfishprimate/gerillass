@@ -1,12 +1,16 @@
 @charset "UTF-8";
 
+@use "sass:list";
+@use "../lists/list-of-text-inputs" as *;
+@use "../utilities/pseudo-selector" as *;
+
 @mixin all-text-inputs($pseudo: null) {
   $list: "hover", "focus", "active", "invalid", "required", "disabled";
   @if not $pseudo {
     #{$list-of-text-inputs} {
       @content;
     }
-  } @else if index($list, $pseudo) {
+  } @else if list.index($list, $pseudo) {
     $all-text-inputs: pseudoSelector($list-of-text-inputs, $pseudo);
     #{$all-text-inputs} {
       @content;
