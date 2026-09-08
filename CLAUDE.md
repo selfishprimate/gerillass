@@ -45,6 +45,7 @@ hypothetical old-toolchain user, so it is queued for 2.0.0 rather than done now.
 npm test                          # Jest: sass-true specs, the smoke test, and the manifest suite
 npx jest -t "__mapDeepGet()"      # single test, filtered by the describe/it name
 npm run manifest                  # regenerate gerillass.json and SKILL.md (see below)
+node tools/audit.js               # adversarial sweep: bad arguments at every mixin
 npx gulp start                    # regenerate scss/_gerillass-prefix.scss (see below)
 npm pack --dry-run                # inspect exactly what would be published
 yarn audit                        # must stay at zero across all severities
@@ -117,8 +118,9 @@ made, plus the workflows that are easy to half-finish:
   `scss/library/`, so the `gls-` bundle cannot go stale.
 - **`hooks/sync-manifest.sh`** — rebuilds `gerillass.json` and `SKILL.md` after
   any edit under `scss/library/`, `scss/utilities/` or `meta/`.
-- **`/release`, `/new-mixin`, `/sass-test`** — the release checklist, the
-  add-a-member checklist, and the sass-true conventions.
+- **`/release`, `/new-mixin`, `/sass-test`, `/audit-library`** — the release
+  checklist, the add-a-member checklist, the sass-true conventions, and the
+  adversarial sweep over every mixin (`tools/audit.js`).
 
 All three hooks are `PostToolUse` on `Write|Edit` and exit 2 (blocking) on failure.
 
