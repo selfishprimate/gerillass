@@ -1,0 +1,41 @@
+// Two offset radial gradients make a diagonal dot grid. The tile is one gutter
+// square; the first layer sits at half a gutter in both axes, the second at
+// twice the gutter, which lands it on the opposite diagonal of the next tile.
+// With the default 1em size the gutter is five times that, so 5em.
+@import 'true';
+@import '../../scss/gerillass';
+
+@include describe('background-dots()') {
+  @include it('The default is a diagonal grid on a 5em tile.') {
+    @include assert {
+      @include output {
+        .paper { @include background-dots; }
+      }
+      @include expect {
+        .paper {
+          background-image: radial-gradient(rgba(0, 0, 0, 0.1) 1em, transparent 0),
+            radial-gradient(rgba(0, 0, 0, 0.1) 1em, transparent 0);
+          // half a gutter, then two gutters
+          background-position: 2.5em 2.5em, 10em 10em;
+          background-size: 5em 5em;
+          background-repeat: repeat;
+        }
+      }
+    }
+  }
+  @include it('Turning the diagonal off leaves a single layer.') {
+    @include assert {
+      @include output {
+        .paper { @include background-dots(red, 1em, 4em, false); }
+      }
+      @include expect {
+        .paper {
+          background-image: radial-gradient(red 1em, transparent 0);
+          background-position: 2em 2em;
+          background-size: 4em 4em;
+          background-repeat: repeat;
+        }
+      }
+    }
+  }
+}

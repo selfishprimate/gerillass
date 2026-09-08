@@ -1,0 +1,110 @@
+// n columns separated by a gutter leave n-1 gutters across the row, so each
+// column is (100% - (n-1) * gutter) / n wide. The gutter is applied as a right
+// margin on every child except the last, and removed again on every nth child
+// so it never pushes a row out of alignment. The widths below are that formula
+// worked out for 3 columns and a 20px gutter.
+@import 'true';
+@import '../../scss/gerillass';
+
+@include describe('columnizer()') {
+  @include it('Without a gutter the columns split the width evenly.') {
+    @include assert {
+      @include output {
+        .grid {
+          @include columnizer(4);
+        }
+      }
+      @include expect {
+        .grid {
+          display: flex;
+          flex-wrap: wrap;
+        }
+        .grid, .grid::before, .grid::after,
+        .grid *,
+        .grid *::before,
+        .grid *::after {
+          box-sizing: border-box;
+        }
+        .grid > * {
+          // the mixin interpolates the calc, so it reaches CSS unsimplified
+          flex: 0 0 unquote("calc(100% / 4)");
+          margin-bottom: 0;
+        }
+        .grid > *:not(:last-child) {
+          margin-right: 0;
+        }
+      }
+    }
+  }
+
+  @include it('With a gutter each column loses its share of the n-1 gutters.') {
+    @include assert {
+      @include output {
+        .grid {
+          @include columnizer(3, 20px);
+        }
+      }
+      @include expect {
+        .grid {
+          display: flex;
+          flex-wrap: wrap;
+        }
+        .grid, .grid::before, .grid::after,
+        .grid *,
+        .grid *::before,
+        .grid *::after {
+          box-sizing: border-box;
+        }
+        .grid > * {
+          flex-grow: 0;
+          flex-shrink: 0;
+          // three columns, two gutters between them; the mixin interpolates
+          // rather than evaluating, so (3 - 1) * 20px survives into the output
+          flex-basis: unquote("calc((100% - (3 - 1) * 20px) / 3)");
+          margin-bottom: 20px;
+        }
+        .grid > *:not(:last-child) {
+          margin-right: 20px;
+        }
+        // the last item of every row must not carry the gutter
+        .grid > *:nth-child(3n) {
+          margin-right: 0;
+        }
+      }
+    }
+  }
+
+  @include it('The fill flag lets the last row stretch.') {
+    @include assert {
+      @include output {
+        .grid {
+          @include columnizer(3, 20px, true);
+        }
+      }
+      @include expect {
+        .grid {
+          display: flex;
+          flex-wrap: wrap;
+        }
+        .grid, .grid::before, .grid::after,
+        .grid *,
+        .grid *::before,
+        .grid *::after {
+          box-sizing: border-box;
+        }
+        .grid > * {
+          flex-grow: 1;
+          flex-shrink: 0;
+          flex-basis: unquote("calc((100% - (3 - 1) * 20px) / 3)");
+          margin-bottom: 20px;
+        }
+        .grid > *:not(:last-child) {
+          margin-right: 20px;
+        }
+        .grid > *:nth-child(3n) {
+          margin-right: 0;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,103 @@
+// The offsets follow CSS shorthand order: one value applies to all four sides,
+// two are vertical then horizontal, three are top / horizontal / bottom, and
+// four are top, right, bottom, left. The expectations below apply those rules
+// by hand rather than reading them back out of the mixin.
+@import 'true';
+@import '../../scss/gerillass';
+
+@include describe('position()') {
+  @include it('One offset applies to all four sides.') {
+    @include assert {
+      @include output {
+        .badge {
+          @include position(absolute, 0);
+        }
+      }
+      @include expect {
+        .badge {
+          position: absolute;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          left: 0;
+        }
+      }
+    }
+  }
+
+  @include it('Two offsets are vertical then horizontal.') {
+    @include assert {
+      @include output {
+        .badge {
+          @include position(fixed, 4px 8px);
+        }
+      }
+      @include expect {
+        .badge {
+          position: fixed;
+          top: 4px;
+          right: 8px;
+          bottom: 4px;
+          left: 8px;
+        }
+      }
+    }
+  }
+
+  @include it('Three offsets are top, horizontal, bottom.') {
+    @include assert {
+      @include output {
+        .badge {
+          @include position(absolute, 4px 8px 12px);
+        }
+      }
+      @include expect {
+        .badge {
+          position: absolute;
+          top: 4px;
+          right: 8px;
+          bottom: 12px;
+          left: 8px;
+        }
+      }
+    }
+  }
+
+  @include it('Four offsets are top, right, bottom, left.') {
+    @include assert {
+      @include output {
+        .badge {
+          @include position(absolute, 1px 2px 3px 4px);
+        }
+      }
+      @include expect {
+        .badge {
+          position: absolute;
+          top: 1px;
+          right: 2px;
+          bottom: 3px;
+          left: 4px;
+        }
+      }
+    }
+  }
+
+  @include it('A CSS function is passed through untouched.') {
+    @include assert {
+      @include output {
+        .badge {
+          @include position(sticky, var(--gap));
+        }
+      }
+      @include expect {
+        .badge {
+          position: sticky;
+          top: var(--gap);
+          right: var(--gap);
+          bottom: var(--gap);
+          left: var(--gap);
+        }
+      }
+    }
+  }
+}

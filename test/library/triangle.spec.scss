@@ -1,0 +1,95 @@
+// A CSS triangle is a box with zero size and one coloured border. For a
+// triangle pointing down, the top border carries the colour and provides the
+// height, the left and right borders are transparent and each take half the
+// width, and the bottom border is zero. The expectations below are worked out
+// from that, not copied from the output.
+@import 'true';
+@import '../../scss/gerillass';
+
+@include describe('triangle()') {
+  @include it('Point down: the top border is coloured, the sides are half the width each.') {
+    @include assert {
+      @include output {
+        .caret {
+          // 10px wide, 8px tall
+          @include triangle("bottom", black, 10px 8px);
+        }
+      }
+      @include expect {
+        .caret {
+          content: "";
+          height: 0;
+          width: 0;
+          display: inline-block;
+          border-style: solid;
+          border-color: black transparent transparent;
+          border-width: 8px 5px 0;
+        }
+      }
+    }
+  }
+
+  @include it('Point up: the same triangle with the colour on the bottom border.') {
+    @include assert {
+      @include output {
+        .caret {
+          @include triangle("top", red, 10px 8px);
+        }
+      }
+      @include expect {
+        .caret {
+          content: "";
+          height: 0;
+          width: 0;
+          display: inline-block;
+          border-style: solid;
+          border-color: transparent transparent red;
+          border-width: 0 5px 8px;
+        }
+      }
+    }
+  }
+
+  @include it('A single size is used for both width and height.') {
+    @include assert {
+      @include output {
+        .caret {
+          @include triangle("bottom", black, 10px);
+        }
+      }
+      @include expect {
+        .caret {
+          content: "";
+          height: 0;
+          width: 0;
+          display: inline-block;
+          border-style: solid;
+          border-color: black transparent transparent;
+          // height falls back to the width, so 10px tall and 5px each side
+          border-width: 10px 5px 0;
+        }
+      }
+    }
+  }
+
+  @include it('A corner direction uses full-width borders on two sides.') {
+    @include assert {
+      @include output {
+        .caret {
+          @include triangle("top-right", blue, 10px);
+        }
+      }
+      @include expect {
+        .caret {
+          content: "";
+          height: 0;
+          width: 0;
+          display: inline-block;
+          border-style: solid;
+          border-color: transparent blue transparent transparent;
+          border-width: 0 10px 10px 0;
+        }
+      }
+    }
+  }
+}

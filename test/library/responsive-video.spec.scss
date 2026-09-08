@@ -1,0 +1,56 @@
+// The padding-top hack holds a ratio by giving the ::before pseudo-element a
+// top padding equal to height/width as a percentage of the width. 9/16 is
+// 56.25%, 3/4 is 75%. The single child is then stretched over that box.
+@import 'true';
+@import '../../scss/gerillass';
+
+@include describe('responsive-video()') {
+  @include it('16/9 becomes a 56.25% padding box.') {
+    @include assert {
+      @include output {
+        .video { @include responsive-video("16/9"); }
+      }
+      @include expect {
+        .video { position: relative; }
+        .video::before {
+          content: "";
+          display: block;
+          padding-top: 56.25%;
+        }
+        .video > * {
+          width: 100%;
+          height: 100%;
+          position: absolute;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          left: 0;
+        }
+      }
+    }
+  }
+  @include it('4/3 becomes a 75% padding box.') {
+    @include assert {
+      @include output {
+        .video { @include responsive-video("4:3"); }
+      }
+      @include expect {
+        .video { position: relative; }
+        .video::before {
+          content: "";
+          display: block;
+          padding-top: 75%;
+        }
+        .video > * {
+          width: 100%;
+          height: 100%;
+          position: absolute;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          left: 0;
+        }
+      }
+    }
+  }
+}

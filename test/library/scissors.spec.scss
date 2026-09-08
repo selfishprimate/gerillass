@@ -1,0 +1,80 @@
+// Cutting every corner of a rectangle by n turns it into an octagon. Walking
+// clockwise from the top-left cut, the eight points are: (0, n), (n, 0),
+// (100%-n, 0), (100%, n), (100%, 100%-n), (100%-n, 100%), (n, 100%),
+// (0, 100%-n). The expectations are that walk, not a copy of the output.
+@import 'true';
+@import '../../scss/gerillass';
+
+@include describe('scissors()') {
+  @include it('One size cuts all four corners equally.') {
+    @include assert {
+      @include output {
+        .card {
+          @include scissors(12px);
+        }
+      }
+      @include expect {
+        .card {
+          clip-path: polygon(
+            0 12px,
+            12px 0,
+            calc(100% - 12px) 0,
+            100% 12px,
+            100% calc(100% - 12px),
+            calc(100% - 12px) 100%,
+            12px 100%,
+            0 calc(100% - 12px)
+          );
+        }
+      }
+    }
+  }
+
+  @include it('A unitless number is treated as pixels.') {
+    @include assert {
+      @include output {
+        .card {
+          @include scissors(12);
+        }
+      }
+      @include expect {
+        .card {
+          clip-path: polygon(
+            0 12px,
+            12px 0,
+            calc(100% - 12px) 0,
+            100% 12px,
+            100% calc(100% - 12px),
+            calc(100% - 12px) 100%,
+            12px 100%,
+            0 calc(100% - 12px)
+          );
+        }
+      }
+    }
+  }
+
+  @include it('Four sizes cut the corners clockwise from the top left.') {
+    @include assert {
+      @include output {
+        .card {
+          @include scissors(4px 8px 12px 16px);
+        }
+      }
+      @include expect {
+        .card {
+          clip-path: polygon(
+            0 4px,
+            4px 0,
+            calc(100% - 8px) 0,
+            100% 8px,
+            100% calc(100% - 12px),
+            calc(100% - 12px) 100%,
+            16px 100%,
+            0 calc(100% - 16px)
+          );
+        }
+      }
+    }
+  }
+}
