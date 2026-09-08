@@ -1,6 +1,17 @@
 # Change Log
 _Change is the essence._
 
+## 1.6.0
+
+- **Fixed:** Thirteen mixins silently emitted nothing when given an argument that matched none of their branches. `antialias`, `border-box`, `text-selection`, `center`, `border-radius` with three arguments, `scissors` with two corners, `sprite` with a path that is not an image, and `only`/`except` given a colour all produced a completely empty rule, with no error to explain it. They now `@error` with a message naming what they accept.
+- **Fixed:** `smartphone` and `tablet` used `@warn` for an unknown device, so the build passed with a warning most pipelines never surface while the media query vanished. Both now `@error`, and both also reject an orientation other than `portrait` or `landscape`.
+- **Fixed:** `triangle`, `all-buttons`, `all-text-inputs`, `border-radius` and `background-image` each interpolated a list into their `@error` via `quote()`, which throws on a list. Their messages never rendered; callers saw a cryptic Sass internal error instead. The messages now appear as written.
+- **Fixed:** `columnizer` rejects an unsupported argument count and a second argument that is neither a gutter nor a boolean; `background-dots` rejects a non-boolean `$diagonal`; `remove` replaces `@error "Error!"` with a message that names the argument shapes it accepts.
+- **Added:** `gerillass.json`, a machine-readable description of every mixin and function — signature, accepted argument values, worked examples, and inputs that are rejected. Ships in the package and resolves through the `exports` map.
+- **Added:** `SKILL.md`, generated from that manifest, so coding agents can load how to use the library instead of guessing at it.
+- **Note:** Output for every documented valid call is unchanged; only previously silent failures now error. Verified by diffing 56 invocations before and after.
+- **Note:** The manifest and the skill are generated and cannot drift: the test suite compiles every example, asserts every recorded rejection actually fails, and fails the build if either file is out of date. Test count went from 14 to 177.
+
 ## 1.5.0
 
 - **Added:** An `exports` map in `package.json` with a `sass` condition, so Dart Sass's built-in package importer can resolve the library by name. `@use "pkg:gerillass"` now works with `NodePackageImporter` or `sass --pkg-importer=node`; it failed before. `@use "gerillass"` now also works under Vite, which does not read the `main` field.

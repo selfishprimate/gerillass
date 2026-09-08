@@ -9,7 +9,7 @@ Gerillass is a **pure Sass library** — a toolkit of mixins and functions, in t
 Two consequences follow from this and drive most decisions in the repo:
 
 1. **`package.json` must have no `dependencies`.** Everything (`jest`, `sass`, `sass-true`, `glob`, `gulp*`) belongs in `devDependencies`. Consumers get only `.scss` files, so a runtime dependency here forces the entire test toolchain onto every downstream project. This was the cause of 24 Dependabot alerts fixed in v1.3.3 — do not reintroduce it.
-2. **Only `scss/` ships.** `.npmignore` excludes `test`, `assets`, `gulpfile.js`, dotfiles and `*.md`; npm always adds `README.md`, `LICENSE.md` and `package.json` back. Verify with `npm pack --dry-run` before any release (89 files / ~24 kB as of v1.5.0).
+2. **Only `scss/` ships.** `.npmignore` excludes `test`, `assets`, `gulpfile.js`, dotfiles and `*.md`; npm always adds `README.md`, `LICENSE.md` and `package.json` back. Verify with `npm pack --dry-run` before any release (91 files / ~37 kB as of v1.6.0).
 
 Dart Sass only. LibSass/node-sass has been unsupported since v1.3.0.
 
@@ -42,8 +42,9 @@ hypothetical old-toolchain user, so it is queued for 2.0.0 rather than done now.
 ## Commands
 
 ```bash
-npm test                          # Jest -> sass-true, runs every test/**/*.spec.scss
+npm test                          # Jest: sass-true specs, the smoke test, and the manifest suite
 npx jest -t "__mapDeepGet()"      # single test, filtered by the describe/it name
+npm run manifest                  # regenerate gerillass.json and SKILL.md (see below)
 npx gulp start                    # regenerate scss/_gerillass-prefix.scss (see below)
 npm pack --dry-run                # inspect exactly what would be published
 yarn audit                        # must stay at zero across all severities
@@ -114,10 +115,39 @@ made, plus the workflows that are easy to half-finish:
   non-empty in the root `package.json`.
 - **`hooks/sync-prefix.sh`** — runs `npx gulp start` after any edit under
   `scss/library/`, so the `gls-` bundle cannot go stale.
+- **`hooks/sync-manifest.sh`** — rebuilds `gerillass.json` and `SKILL.md` after
+  any edit under `scss/library/`, `scss/utilities/` or `meta/`.
 - **`/release`, `/new-mixin`, `/sass-test`** — the release checklist, the
   add-a-member checklist, and the sass-true conventions.
 
-Both hooks are `PostToolUse` on `Write|Edit` and exit 2 (blocking) on failure.
+All three hooks are `PostToolUse` on `Write|Edit` and exit 2 (blocking) on failure.
+
+## The manifest and the skill
+
+`gerillass.json` and `SKILL.md` describe the API for coding agents, which have
+no training data for a library this size. Both are **generated and committed**;
+never hand-edit either.
+
+| File | Built by | From |
+|---|---|---|
+| `gerillass.json` | `tools/build-manifest.js` | signatures parsed from `scss/`, semantics from `meta/*.json` |
+| `SKILL.md` | `tools/build-skill.js` | `gerillass.json` |
+
+Run both with `npm run manifest`. Only the two generated files ship; `meta/` and
+`tools/` are excluded in `.npmignore`, and `SKILL.md` is re-included there
+because the `*.md` rule would otherwise drop it.
+
+**What keeps them honest is `test/manifest.spec.js`**, and this is the whole
+point of the design:
+
+- every `examples` entry in `meta/` is compiled
+- every `rejects` entry must actually `@error`, and must fail with the library's
+  own message rather than a Sass internal error
+- both generated files must match a fresh build, so a stale commit fails CI
+
+So the manifest cannot claim behaviour the library does not have. When you add
+or change a mixin, write its `meta/` entry in the same commit: the `rejects`
+list is where the mixin's validation gets its test coverage.
 
 ## Architecture
 
@@ -136,7 +166,7 @@ Per `CONTRIBUTING.md`, the `__` prefix and camelCase exist for one reason: to ma
 
 **A utility that nothing in `scss/` calls is not dead code.** `__remify`, `__convertToEm`, `__fontSizer`, `__isNumber`, `__lighten` and `__darken` are called by no mixin at all — they are there for users, and removing them would break stylesheets. Never treat "no internal callers" as a reason to delete a member; the library is the smaller half of its own audience.
 
-Mixins validate their input and `@error` with a message that names the accepted values — 18 of the 51 do this, 16 inline and 2 (`ratio-box`, `responsive-video`) through `__validateRatio`. Match that style rather than failing silently.
+Mixins validate their input and `@error` with a message that names the accepted values — 27 of the 51 do this as of v1.6.0, 25 inline and 2 (`ratio-box`, `responsive-video`) through `__validateRatio`. Match that style rather than failing silently.
 
 Silent failure is the trap to watch for. A mixin that branches on `type-of` and
 has no `@else` emits nothing at all for an unexpected type, which surfaces as a
