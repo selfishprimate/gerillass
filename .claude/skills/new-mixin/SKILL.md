@@ -5,8 +5,9 @@ description: Scaffold a new Gerillass mixin or utility function with the project
 
 # Add a member to the Gerillass library
 
-Four steps are easy to forget, and each one fails silently rather than loudly.
-Do all of them.
+Six steps. Two of them fail loudly if you skip them — the manifest suite checks
+that a new mixin has metadata and a smoke-test call. The other four fail
+silently, which is worse. Do all of them.
 
 ## 1. Pick the layer
 
@@ -40,8 +41,8 @@ rejects the whole thing (`@use rules must be written before any other rules`).
 Library partials rely on the global namespace `_gerillass.scss` builds; that is
 deliberate until the 2.0.0 module migration.
 
-Validate arguments and fail loudly. 16 of the 51 mixins do this, and the message
-should name what is acceptable:
+Validate arguments and fail loudly. 35 of the 45 mixins that take arguments do
+this, and the message should name what is acceptable:
 
 ```scss
 @error "The argument must be one of the following: #{$list}.";
@@ -51,10 +52,22 @@ If you interpolate a list into an error message, do not wrap it in `quote()` —
 `quote()` takes a string and throws on a list, which replaces your helpful
 message with a confusing internal Sass error.
 
+Check the type before calling anything that throws on the wrong one —
+`str-slice`, `nth`, `unit`, `unquote`. Otherwise the caller gets Sass's message
+about its own parameter (`$n: Invalid index 2 for a list with 1 elements`)
+instead of yours.
+
+Do **not** validate a value that is passed straight through to CSS. CSS accepts
+an open-ended set there: `var()`, `calc()`, `clamp()`, `env()`, `unset` and
+whatever ships next. A strict check rejects correct code — `__validateLength`
+used to warn about `var(--gap)` for exactly this reason. Validate the shape of
+the call (arity, which keyword, which type) and leave the values alone.
+
 Reuse the existing utilities rather than reimplementing them — `__isColor`,
 `__isNumber`, `__isTime` for type guards; `__validateLength`,
-`__validateBreakpoint` for validation; `__remify`, `__pixelify`,
-`__convertToEm`, `__shorthandProperty` for conversion.
+`__validateBreakpoint`, `__validateRatio`, `__validateScissors` for validation;
+`__remify`, `__pixelify`, `__convertToEm`, `__shorthandProperty` for
+conversion.
 
 ## 3. Wire it into `_gerillass.scss`
 
@@ -81,16 +94,54 @@ API without your mixin. Commit the regenerated file alongside the source.
 (A PostToolUse hook runs this automatically after edits under `scss/library/`.
 Run it manually anyway if you are unsure it fired.)
 
-## 5. Cover it with tests
+## 5. Describe it in `meta/`
+
+**The build fails without this.** `test/manifest.spec.js` asserts that every
+mixin in `scss/library/` has a `meta/` entry with a summary and at least one
+example, so a new mixin with no metadata turns the suite red.
+
+Create `meta/your-mixin.json`:
+
+```json
+{
+  "name": "your-mixin",
+  "summary": "One line, saying what it emits.",
+  "arguments": [{ "name": "$size", "accepts": ["a length", "auto"] }],
+  "examples": [".element { @include your-mixin(10px); }"],
+  "rejects": [".element { @include your-mixin(nonsense); }"]
+}
+```
+
+Signatures are parsed from the source, so do not repeat them here. What goes in
+is what a parser cannot know.
+
+`examples` are compiled by the suite and snapshotted; `rejects` must actually
+`@error`, and must fail with your message rather than a Sass internal one. That
+is how the validation you wrote in step 2 gets its test coverage — so write a
+`rejects` entry for each branch you added.
+
+Then regenerate:
+
+```bash
+npm run manifest
+```
+
+This rebuilds `gerillass.json` and `SKILL.md` and must be committed with the
+rest. A hook does it automatically after an edit under `scss/` or `meta/`, but
+only for edits made through the editor — a change made by a shell command does
+not trigger it.
+
+## 6. Cover it with tests
 
 Add a line to `test/smoke.scss` calling your mixin with valid arguments —
-`test/smoke.spec.js` fails if a mixin in `scss/library/` has no call there, so
-this is not optional.
+`test/smoke.spec.js` fails if a mixin in `scss/library/` has no call there.
 
-Then write a real assertion with the `/sass-test` skill, which covers the
-sass-true conventions.
+The `meta/` examples give you a snapshot, which catches later changes to the
+output. It does not say the output was right to begin with. If your mixin
+computes anything — arithmetic, a percentage, a polygon, a shorthand order —
+write a real assertion with `/sass-test` as well.
 
-## 6. Confirm
+## 7. Confirm
 
 ```bash
 npm test

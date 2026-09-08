@@ -5,9 +5,46 @@ description: Write or debug sass-true unit tests for Gerillass mixins and utilit
 
 # Write a sass-true test
 
-Coverage is the weakest part of this repository: `test/smoke.scss` proves all 51
-mixins still evaluate, but only a few assert what they actually produce. Adding
-a real spec is almost always worth it.
+## Where a hand-written spec fits
+
+The suite tests every member at four depths. Know which one you are adding to:
+
+| Level | Proves | Coverage |
+|---|---|---|
+| smoke (`test/smoke.scss`) | the mixin evaluates | 51/51 mixins |
+| snapshot (`meta/` examples) | its output cannot change unnoticed | 72/72 members |
+| rejection (`meta/` rejects) | bad input is refused, with the library's own message | 44/72 |
+| **sass-true spec** | **the CSS is correct** | **11/72** |
+
+The first three come free from a `meta/` entry. A sass-true spec is the only one
+that says the output was right in the first place — a snapshot of a wrong value
+records it as correct.
+
+So it is worth writing when the mixin **computes** something: arithmetic, a
+percentage, a polygon, a shorthand order, gradient positions. It is usually not
+worth it for a mixin that emits a few fixed declarations, where the snapshot
+already covers everything and the assertion would just be maintenance.
+
+Existing examples to copy from: `triangle`, `scissors`, `columnizer`,
+`position`, `background-dots`, `ratio-box`, `responsive-video`, `remove`.
+
+## Derive the expectation, do not paste it
+
+Write what the CSS *should* be from the technique, then run it. Pasting the
+compiled output turns the spec into a second snapshot and it can only ever
+agree with the code.
+
+This is not theoretical: deriving `columnizer`'s widths independently is what
+revealed it interpolates its `calc()` instead of evaluating it, so
+`calc(100% / 4)` reaches the stylesheet where `25%` would do. A pasted
+expectation would have matched and said nothing.
+
+When the mixin interpolates a value, Sass will evaluate the same expression in
+your `expect` block and the two will not match. Force the literal:
+
+```scss
+flex: 0 0 unquote("calc(100% / 4)");
+```
 
 ## How the suite is wired
 
@@ -96,19 +133,25 @@ matter but selectors and property order do.
 }
 ```
 
-## Assert the failure cases too
+## Failure cases belong in `meta/`, not here
 
-Several mixins `@error` on bad input, and that behaviour is worth locking in —
-but sass-true cannot catch an `@error`, since it aborts the whole compilation.
-Verify those by hand instead:
+sass-true cannot catch an `@error` — it aborts the whole compilation. Do not try
+to assert rejections in a spec. Add them to the mixin's `meta/` entry instead:
 
-```bash
-printf '@import "gerillass";\n.a { @include your-mixin(nonsense); }\n' > /tmp/t.scss
-sass --load-path=scss /tmp/t.scss
+```json
+"rejects": [".element { @include your-mixin(nonsense); }"]
 ```
 
-Check that the message names the accepted values. A mixin that silently emits
-nothing for bad input is a bug — `ratio-box` did exactly that before v1.4.0.
+The manifest suite compiles each one, requires it to fail, and requires the
+failure to carry the library's own message rather than a Sass internal error.
+That last check is what stops a regression back to `$n: Invalid index 2 for a
+list with 1 elements`.
+
+To read a message while writing it:
+
+```bash
+printf '@import "gerillass";\n.a { @include your-mixin(nonsense); }\n' | sass --stdin --load-path=scss
+```
 
 ## Running
 
@@ -122,13 +165,16 @@ and tracked for 2.0.0 — they are noise, not failures. Read the `Tests:` line.
 
 ## When a spec fails
 
-Compare the two blocks in the reported diff before touching the mixin. A failure
-usually means the expectation was written from intent rather than from what the
-mixin emits — check the real output first:
+A red spec means the mixin and your expectation disagree. Decide which one is
+wrong before touching either — that decision is the whole value of the spec, and
+pasting the received output to make it green throws it away.
+
+Work out on paper what the CSS ought to be. If the mixin does not match it, you
+have found a bug. If your expectation was wrong, fix the expectation and say why
+in a comment, as the `columnizer` spec does for its unevaluated calc.
+
+To see what it currently emits:
 
 ```bash
-printf '@import "gerillass";\n.element { @include your-mixin(10px); }\n' > /tmp/t.scss
-sass --load-path=scss /tmp/t.scss
+printf '@import "gerillass";\n.element { @include your-mixin(10px); }\n' | sass --stdin --load-path=scss
 ```
-
-Only change the mixin once you are sure the expected CSS is the correct one.

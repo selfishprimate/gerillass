@@ -142,10 +142,14 @@ because the `*.md` rule would otherwise drop it.
 **What keeps them honest is `test/manifest.spec.js`**, and this is the whole
 point of the design:
 
-- every `examples` entry in `meta/` is compiled
+- every `examples` entry in `meta/` is compiled **and snapshotted**
 - every `rejects` entry must actually `@error`, and must fail with the library's
   own message rather than a Sass internal error
+- every example runs again under its `gls-` name and must produce byte-identical
+  CSS, which is the only thing checking the generated bundle
 - both generated files must match a fresh build, so a stale commit fails CI
+
+A mixin with no `meta/` entry fails the suite, so metadata is not optional.
 
 So the manifest cannot claim behaviour the library does not have. When you add
 or change a mixin, write its `meta/` entry in the same commit: the `rejects`
@@ -207,6 +211,26 @@ A migration to `@use`/`@forward` is planned for **2.0.0** and is not on `main`. 
 1. `@forward` does not make members visible to sibling partials. Roughly 40 files reference members from another layer (e.g. `_adaptive.scss` uses `$map-for-breakpoints`, `_font-face.scss` uses `__fontSource`) and each needs its own `@use`. Because of lazy evaluation, the failures only surface when a mixin is actually included.
 2. Adding those `@use` lines breaks the Gulp prefix bundle, per the constraint above. The generator has to hoist and dedupe `@use` rules, or the `gls-` strategy has to be replaced by the module system's own namespacing (`@use "gerillass" as gls`).
 
+## Test depths
+
+Four levels, and knowing which one covers a member tells you what you can trust:
+
+| Level | Proves | Coverage |
+|---|---|---|
+| `test/smoke.scss` | the mixin evaluates at all | 51/51 mixins |
+| snapshot of `meta/` examples | the output cannot change unnoticed | 72/72 members |
+| `meta/` rejects | bad input is refused with a real message | 44/72 |
+| sass-true spec in `test/` | the CSS is **correct** | 11/72 |
+
+Only the last one catches an output that was wrong from the start; a snapshot
+records a wrong value as correct. Hand-written specs are therefore reserved for
+members that compute something — `triangle`, `scissors`, `columnizer`,
+`position`, `background-dots`, `ratio-box`, `responsive-video`. Use `/sass-test`.
+
+`node tools/audit.js` is the fourth thing the suite cannot do: it throws
+arguments nobody wrote a test for at every member and every argument position.
+Its SILENT and UNHELPFUL buckets must stay empty.
+
 ## Conventions
 
 From `CONTRIBUTING.md`, which is the authority here:
@@ -232,41 +256,38 @@ Default branch is `main` (renamed from `master` in v1.3.3). A repository ruleset
 ## Pending work
 
 Known and deliberately deferred, roughly in the order it makes sense to pick up.
-Each of these was verified to still be true as of v1.5.0.
+Verified as of v1.6.0.
 
 ### Small, non-breaking
 
 - **`bugs` URL is misspelled.** `package.json` points at
   `github.com/selfihsprimate/gerillass/issues` — note `selfihsprimate`. A
   one-character fix that currently sends every bug reporter to a dead page.
-- **Five `@error` messages throw instead of printing.** `quote()` takes a
-  string and throws on a list, so every `@error` that interpolates
-  `quote($some-list)` replaces its own helpful message with
-  `$string: (...) is not a string`. Interpolation alone (`#{$list}`) handles
-  lists fine, so dropping `quote()` is the fix. Confirmed by triggering each:
-
-  | File | Line |
-  |---|---|
-  | `_triangle.scss` | 39 |
-  | `_all-buttons.scss` | 15 |
-  | `_all-text-inputs.scss` | 15 |
-  | `_border-radius.scss` | 42 |
-  | `_background-image.scss` | 30 — `quote(map-keys(…))`, same shape, but no input was found that reaches this branch |
-
-  These are the mixins whose validation the library advertises, so the failure
-  mode is worse than no message at all.
-- **Test coverage is thin.** `test/smoke.scss` includes all 51 mixins, but only
-  five members have real assertions (`after`, `remove`, `ratio-box`,
-  `__mapDeepGet`, `__validateRatio`). The smoke test proves a mixin evaluates,
-  never that its output is correct — it happily passed a `ratio-box` call that
-  emitted no ratio at all. Use the `/sass-test` skill.
+- **`columnizer` interpolates its `calc()` instead of evaluating it**, so
+  `calc(100% / 4)` reaches the stylesheet where `25%` would do, and
+  `(3 - 1) * 20px` survives instead of `40px`. Both are valid and compute the
+  same; simplifying is a cosmetic decision, and `test/library/columnizer.spec.scss`
+  records the current output with a note.
+- **Ten mixins take arguments and validate none of them** — `adaptive`,
+  `brand-logo`, `circle`, `counter`, `ellipsis`, `resizable`, `screen-agent`,
+  `sizer`, `text-image`, `text-stroke`. This is mostly deliberate: they pass
+  their arguments straight to CSS, which accepts `var()`, `calc()`, `clamp()`
+  and whatever ships next, so a strict check would reject correct code. Revisit
+  only where the shape of the call can be checked without touching the value.
+- **`position` warns rather than errors** on a value that is not a length, six
+  cases in `node tools/audit.js`. Left as a warning on purpose — see the note
+  in `scss/utilities/_validate-length.scss`.
 
 ### Modernisation
 
 - **`ratio-box` and `responsive-video` still use the padding-top hack.**
   `aspect-ratio` is Baseline Widely Available, so both could emit it directly.
   This is a behaviour change in generated CSS, so it wants a minor version and
-  a decision about whether to keep a fallback.
+  a decision about whether to keep a fallback. Both now have hand-written specs,
+  so the change would be visible rather than silent.
+- **Agent-facing work beyond the manifest.** An MCP server exposing
+  `gerillass.json` and an `llms.txt` on the docs site were scoped out of the
+  v1.6.0 work. Neither is worth doing until the manifest has users.
 
 ### Reserved for 2.0.0
 
