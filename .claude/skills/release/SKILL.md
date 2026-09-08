@@ -28,12 +28,17 @@ node tools/check-docs.js    # the docs must not claim a count the repo lacks
 git status --short          # know exactly what is going out
 ```
 
-The library must also compile with no deprecation warnings, which is what the
-module migration bought:
+The library must no longer trip the two deprecations the module migration was
+about. This must print nothing:
 
 ```bash
-sass --load-path=scss test/smoke.scss 2>&1 >/dev/null | grep DEPRECATION
+npx sass --load-path=scss test/smoke.scss 2>&1 >/dev/null | grep -E 'DEPRECATION.*(import|global-builtin)'
 ```
+
+A plain `grep DEPRECATION` will still find something, and that is expected: Sass
+is deprecating its own `if()`, which the library calls in 21 places. Use `npx`,
+not a system `sass` — an older one has nothing to say about `if()` and will make
+a stale tree look clean.
 
 If `dependencies` in `package.json` is non-empty, stop and fix that first — it is
 the single most consequential defect this package can ship. See CLAUDE.md.
