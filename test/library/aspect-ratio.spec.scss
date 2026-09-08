@@ -1,0 +1,84 @@
+// A snapshot would record whatever the mixin emits as correct, so the values
+// here are written out by hand. Sass reads `4 / 3` in a declaration as
+// division and would render it as 1.3333, which is why the expected ratio is
+// built with list.slash.
+@use 'sass:list';
+@use 'true' as *;
+@use '../../scss/gerillass' as *;
+
+@include describe('aspect-ratio()') {
+  @include it('Converts a colon separated ratio and crops by default.') {
+    @include assert {
+      @include output {
+        .thumb {
+          @include aspect-ratio("4:3");
+        }
+      }
+      @include expect {
+        .thumb {
+          display: block;
+          width: 100%;
+          aspect-ratio: list.slash(4, 3);
+          border: 0;
+          object-fit: cover;
+        }
+      }
+    }
+  }
+
+  @include it('Defaults to 16/9 when no ratio is given.') {
+    @include assert {
+      @include output {
+        .default {
+          @include aspect-ratio;
+        }
+      }
+      @include expect {
+        .default {
+          display: block;
+          width: 100%;
+          aspect-ratio: list.slash(16, 9);
+          border: 0;
+          object-fit: cover;
+        }
+      }
+    }
+  }
+
+  @include it('Takes a bare number as a ratio against 1.') {
+    @include assert {
+      @include output {
+        .wide {
+          @include aspect-ratio(1.5);
+        }
+      }
+      @include expect {
+        .wide {
+          display: block;
+          width: 100%;
+          aspect-ratio: 1.5;
+          border: 0;
+          object-fit: cover;
+        }
+      }
+    }
+  }
+
+  @include it('Omits object-fit entirely when $fit is null.') {
+    @include assert {
+      @include output {
+        .plain {
+          @include aspect-ratio("16:9", null);
+        }
+      }
+      @include expect {
+        .plain {
+          display: block;
+          width: 100%;
+          aspect-ratio: list.slash(16, 9);
+          border: 0;
+        }
+      }
+    }
+  }
+}

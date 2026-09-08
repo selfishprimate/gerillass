@@ -20,8 +20,8 @@ first thing to fix.
 | | |
 |---|---|
 | All 22 utility **functions** were renamed | breaking, and **silent** |
-| `ratio-box` and `responsive-video` were removed | breaking, loud |
-| All 49 mixin names | unchanged |
+| `ratio-box` and `responsive-video` became `aspect-ratio` | breaking, loud |
+| The other 49 mixin names | unchanged |
 | The `gls-` prefix | unchanged, still works |
 | `@import "gerillass"` | still compiles |
 
@@ -99,45 +99,68 @@ grep -rn '__[a-zA-Z]' --include='*.md' --include='*.mdx' --include='*.html' \
 
 ---
 
-## Break 2 — `ratio-box` and `responsive-video` were removed
+## Break 2 — `ratio-box` and `responsive-video` became `aspect-ratio`
 
-Both are gone. CSS `aspect-ratio` is Baseline Widely Available and does the job
-directly, so the mixins had collapsed to wrapping a single declaration.
+Both mixins are gone and a single new mixin, `aspect-ratio`, replaces them. They
+held a ratio with a padding-top hack, a pseudo-element and an absolutely
+positioned child; CSS `aspect-ratio` is Baseline Widely Available and made all
+of that unnecessary, which left the two mixins byte-identical to each other.
 
-Delete their pages, remove them from navigation and from any "all mixins" list,
-and add a redirect that lands on a replacement snippet.
+The rename is mechanical. **What is not mechanical is where the mixin goes:**
+the old ones were applied to a wrapping element, the new one goes on the
+element itself.
 
-### The replacement, and the trap in it
+```scss
+.hero  { @include ratio-box("16/9"); }            // before, on a wrapper
+.hero  { @include aspect-ratio("16/9"); }         // after, on the element
 
-The obvious substitution is wrong, so do not write it. Putting `aspect-ratio`
-on a **wrapper** does *not* reproduce `responsive-video`: an `<iframe>` inside
-keeps its intrinsic 300×150 and does not fill the box. Measured in a browser,
-640px-wide container:
+.video { @include responsive-video("16/9"); }     // before, on a wrapper
+.video iframe { @include aspect-ratio("16/9"); }  // after, on the iframe
+```
+
+This matters and is easy to get wrong. `aspect-ratio` on a **wrapper** does not
+size an `<iframe>` inside it — the iframe keeps its intrinsic 300×150. Measured
+in a browser, 640px-wide container:
 
 | | wrapper | iframe inside |
 |---|---|---|
-| `aspect-ratio` on the wrapper only | 640×360 ✅ | **304×154** ❌ |
-| `aspect-ratio` on the iframe itself | no wrapper needed | 644×364 ✅ |
+| ratio on the wrapper only | 640×360 ✅ | **304×154** ❌ |
+| ratio on the iframe itself | no wrapper needed | 640×360 ✅ |
 
-So the correct replacement puts the property on the element itself, and needs
-no wrapper at all:
+Any page that shows a wrapper `<div>` around a video embed should lose the
+wrapper along with the mixin.
+
+### What the new mixin emits
 
 ```scss
-// Was: .video { @include responsive-video("16/9"); }
-.video iframe {
+.thumb { @include aspect-ratio("16:9"); }
+```
+```css
+.thumb {
+  display: block;
   width: 100%;
   aspect-ratio: 16 / 9;
-  border: 0;   // iframes carry a 2px default border; without this it overflows by 4px
-}
-
-// Was: .hero { @include ratio-box("16/9"); }
-.hero {
-  aspect-ratio: 16 / 9;
+  border: 0;
+  object-fit: cover;
 }
 ```
 
-`validateRatio` was **kept**, so the colon form CSS will not parse is still
-available:
+It is deliberately opinionated, and each of the extra declarations answers a
+measured failure: without `object-fit` an `<img>` given a ratio is **stretched**
+rather than cropped, and without `border: 0` an `<iframe>` overflows its
+container by 4px because of its 2px default border.
+
+Arguments: `"16:9"`, `"16/9"` or a bare number, defaulting to 16/9; anything
+else is refused. The second argument sets `object-fit` — `cover` by default,
+and `null` leaves the property out entirely:
+
+```scss
+.tile  { @include aspect-ratio("1:1", contain); }
+.plain { @include aspect-ratio(1.5, null); }   // just the ratio
+```
+
+`validateRatio` was also kept, for a ratio you want without the rest of the
+mixin:
 
 ```scss
 .hero { aspect-ratio: validateRatio("16:9"); }   // → aspect-ratio: 16 / 9
@@ -149,8 +172,8 @@ available:
 
 Do not rewrite these. Over-editing is the main risk in this migration.
 
-- **All 49 mixin names.** `circle`, `columnizer`, `triangle`, `breakpoint`,
-  `position` and the rest are untouched, as are their arguments and their
+- **Every mixin name except the two above.** `circle`, `columnizer`,
+  `triangle`, `breakpoint`, `position` and the other 47 are untouched, as are their arguments and their
   output. Every documented example was snapshotted before and after the
   migration and had to stay byte-identical.
 - **The `gls-` prefix.** `gls-circle(50px)` works exactly as before. Its

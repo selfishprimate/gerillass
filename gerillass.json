@@ -141,6 +141,49 @@
       ]
     },
     {
+      "name": "aspect-ratio",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$ratio",
+          "default": "null",
+          "accepts": [
+            "a slash separated string, such as \"16/9\"",
+            "a colon separated string, such as \"16:9\"",
+            "a number, where 1.5 means 1.5 / 1",
+            "null for the 16/9 default"
+          ]
+        },
+        {
+          "name": "$fit",
+          "default": "cover",
+          "accepts": [
+            "fill",
+            "contain",
+            "cover",
+            "none",
+            "scale-down",
+            "null to leave object-fit alone"
+          ]
+        }
+      ],
+      "file": "scss/library/_aspect-ratio.scss",
+      "signature": "aspect-ratio($ratio: null, $fit: cover)",
+      "summary": "Holds an element to a ratio and adds what CSS aspect-ratio alone leaves out: object-fit so an image is cropped rather than stretched, and border: 0 so an iframe does not overflow its container by 4px. Apply it to the element itself, not to a wrapper.",
+      "examples": [
+        ".thumb { @include aspect-ratio(\"16:9\"); }",
+        ".video { @include aspect-ratio(\"16/9\"); }",
+        ".tile { @include aspect-ratio(\"1:1\", contain); }",
+        ".plain { @include aspect-ratio(1.5, null); }",
+        ".default { @include aspect-ratio; }"
+      ],
+      "rejects": [
+        ".thumb { @include aspect-ratio(\"16:9\", nonsense); }",
+        ".thumb { @include aspect-ratio(16 9); }",
+        ".thumb { @include aspect-ratio(\"sixteen/nine\"); }"
+      ]
+    },
+    {
       "name": "background-dots",
       "kind": "mixin",
       "arguments": [

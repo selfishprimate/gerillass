@@ -5,7 +5,7 @@ description: Use the Gerillass Sass mixin library — loading it, the mixin cata
 
 # Gerillass
 
-A Sass mixin library: 49 mixins and 22 functions that emit CSS from
+A Sass mixin library: 50 mixins and 22 functions that emit CSS from
 semantic declarations. It is Sass source only — there is no runtime and no
 utility classes, so styles live in your stylesheet and your markup stays clean.
 
@@ -69,6 +69,7 @@ a dropped declaration rather than an error.
 | `all-buttons` | `@include all-buttons(nonsense) { color: red; }` |
 | `all-text-inputs` | `@include all-text-inputs(nonsense) { color: red; }` |
 | `antialias` | `@include antialias(only);` |
+| `aspect-ratio` | `.thumb { @include aspect-ratio("16:9", nonsense); }` |
 | `background-dots` | `.a { @include background-dots(red, 1em, 5em, maybe); }` |
 | `background-image` | `.a { @include background-image("/img/a.png", (red, blue), sideways); }` |
 | `background-stripes` | `.a { @include background-stripes(red, 2em, nonsense); }` |
@@ -107,6 +108,7 @@ a dropped declaration rather than an error.
 | `all-buttons($pseudo: null)` | Targets every button-like element at once, optionally in one pseudo-class state. |
 | `all-text-inputs($pseudo: null)` | Targets every text-like input at once, optionally in one pseudo-class state. |
 | `antialias($value: null)` | Turns on subpixel-antialiased text smoothing. |
+| `aspect-ratio($ratio: null, $fit: cover)` | Holds an element to a ratio and adds what CSS aspect-ratio alone leaves out: object-fit so an image is cropped rather than stretched, and border: 0 so an iframe does not overflow its container by 4px. Apply it to the element itself, not to a wrapper. |
 | `background-dots($color: null, $size: 1em, $gutter: $size * 5, $diagonal: true, $image: null)` | Repeating dot pattern as a background, optionally over an image. |
 | `background-image($image-url: null, $filter-color: null, $filter-direction: null)` | Background image with an optional colour or gradient filter laid over it. |
 | `background-stripes($color: null, $thickness: 1em, $rotation: -45deg, $image: null)` | Repeating stripe pattern as a background, optionally over an image. |

@@ -25,19 +25,44 @@ covers both breaks, what to leave alone, and how to verify the result.
   | `__lighten` | `tint` | same, for `lighten` |
   | `__null` | `fillNulls` | `null` is a Sass keyword |
 
-- **Removed:** `ratio-box` and `responsive-video`. CSS `aspect-ratio` is
-  Baseline Widely Available and does their job in one declaration. Replace a
-  ratio box with `aspect-ratio` on the element itself, and a video embed with
-  `aspect-ratio` on the iframe, which needs no wrapper:
+- **Removed:** `ratio-box` and `responsive-video`, replaced by a single
+  `aspect-ratio` mixin. Both old mixins held a ratio with a padding-top hack, a
+  pseudo-element and an absolutely positioned child. CSS `aspect-ratio` is
+  Baseline Widely Available, which left the two of them byte-identical to each
+  other and wrapping barely more than one declaration.
+
+  The one thing that changes in your markup: **apply it to the element itself,
+  not to a wrapper.** The old mixins went on a wrapping `<div>`. `aspect-ratio`
+  on a wrapper does nothing for an `<iframe>` inside it, which keeps its
+  intrinsic 300x150.
 
   ```scss
-  .video iframe { width: 100%; aspect-ratio: 16 / 9; border: 0; }
+  .hero  { @include ratio-box("16/9"); }         // before, on a wrapper
+  .hero  { @include aspect-ratio("16/9"); }      // after, on the element
+
+  .video { @include responsive-video("16/9"); }  // before, on a wrapper
+  .video iframe { @include aspect-ratio("16/9"); }
   ```
 
-  Note that `aspect-ratio` on a *wrapper* does not reproduce the old mixin: an
-  `<iframe>` inside keeps its intrinsic 300x150. Put it on the iframe.
-  `validateRatio` stays, so `aspect-ratio: validateRatio("16:9")` still parses
-  the colon form CSS will not.
+- **Added:** `aspect-ratio`. It holds an element to a ratio and closes the three
+  gaps the bare CSS property leaves open, each of which was measured in a
+  browser rather than assumed:
+
+  - an `<img>` with a ratio and no `object-fit` is **stretched**, not cropped;
+  - an `<iframe>` carries a 2px default border, so `width: 100%` overflows its
+    container by 4px;
+  - the ratio has to be on the element, not on a wrapper.
+
+  ```scss
+  .thumb { @include aspect-ratio("16:9"); }
+  ```
+  ```css
+  .thumb { display: block; width: 100%; aspect-ratio: 16 / 9; border: 0; object-fit: cover; }
+  ```
+
+  It takes `"16:9"`, `"16/9"` or a bare number, defaults to 16/9, and refuses
+  anything else. The second argument sets `object-fit`; pass `null` to leave
+  the property out entirely.
 
 ### Not breaking
 

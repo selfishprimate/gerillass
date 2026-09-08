@@ -9,7 +9,7 @@ Gerillass is a **pure Sass library** — a toolkit of mixins and functions, in t
 Two consequences follow from this and drive most decisions in the repo:
 
 1. **`package.json` must have no `dependencies`.** Everything (`jest`, `sass`, `sass-true`, `glob`) belongs in `devDependencies`. Consumers get only `.scss` files, so a runtime dependency here forces the entire test toolchain onto every downstream project. This was the cause of 24 Dependabot alerts fixed in v1.3.3 — do not reintroduce it.
-2. **Only `scss/` ships.** `.npmignore` excludes `test`, `assets`, `meta`, `tools`, dotfiles and `*.md`; npm always adds `README.md`, `LICENSE.md` and `package.json` back. Verify with `npm pack --dry-run` before any release (93 files / ~38 kB as of v2.0.0).
+2. **Only `scss/` ships.** `.npmignore` excludes `test`, `assets`, `meta`, `tools`, dotfiles and `*.md`; npm always adds `README.md`, `LICENSE.md` and `package.json` back. Verify with `npm pack --dry-run` before any release (94 files / ~38 kB as of v2.0.0).
 
 Dart Sass only. LibSass/node-sass has been unsupported since v1.3.0.
 
@@ -169,7 +169,7 @@ Four layers, loaded in dependency order by `scss/_gerillass.scss`. The order is 
 | 1 | `scss/lists/` | flat value lists (`$list-of-buttons`) | `list-of-` prefix, `!default` |
 | 2 | `scss/maps/` | keyed config (`$map-for-breakpoints`) | `map-for-` prefix, `!default` |
 | 3 | `scss/utilities/` | 22 helper **functions** | `camelCase` |
-| 4 | `scss/library/` | 51 **mixins** — the bulk of the API | `kebab-case` |
+| 4 | `scss/library/` | 50 **mixins** — the bulk of the API | `kebab-case` |
 
 `_gerillass.scss` lists every partial explicitly. **A new file is invisible until you add its `@import` line there**, in the correct layer block.
 
@@ -179,7 +179,7 @@ Until 2.0.0 they carried a `__` prefix. It had to go: under `@use`/`@forward` a 
 
 **A utility that nothing in `scss/` calls is not dead code.** `remify`, `convertToEm`, `fontSizer`, `isNumber`, `tint` and `shade` are called by no mixin at all — they are there for users, and removing them would break stylesheets. Never treat "no internal callers" as a reason to delete a member; the library is the smaller half of its own audience.
 
-Mixins validate their input and `@error` with a message that names the accepted values — 33 of the 43 that take arguments do this, mostly inline. Match that style rather than failing silently.
+Mixins validate their input and `@error` with a message that names the accepted values — 34 of the 44 that take arguments do this, mostly inline. Match that style rather than failing silently.
 
 Silent failure is the trap to watch for. A mixin that branches on `type-of` and
 has no `@else` emits nothing at all for an unexpected type, which surfaces as a
@@ -257,15 +257,15 @@ Four levels, and knowing which one covers a member tells you what you can trust:
 
 | Level | Proves | Coverage |
 |---|---|---|
-| `test/smoke.scss` | the mixin evaluates at all | 49/49 mixins |
-| snapshot of `meta/` examples | the output cannot change unnoticed | 71/71 members |
-| `meta/` rejects | bad input is refused with a real message | 42/71 |
-| sass-true spec in `test/` | the CSS is **correct** | 9/71 |
+| `test/smoke.scss` | the mixin evaluates at all | 50/50 mixins |
+| snapshot of `meta/` examples | the output cannot change unnoticed | 72/72 members |
+| `meta/` rejects | bad input is refused with a real message | 43/72 |
+| sass-true spec in `test/` | the CSS is **correct** | 10/72 |
 
 Only the last one catches an output that was wrong from the start; a snapshot
 records a wrong value as correct. Hand-written specs are therefore reserved for
 members that compute something — `triangle`, `scissors`, `columnizer`,
-`position`, `background-dots`. Use `/sass-test`.
+`position`, `background-dots`, `aspect-ratio`. Use `/sass-test`.
 
 `node tools/audit.js` is the fourth thing the suite cannot do: it throws
 arguments nobody wrote a test for at every member and every argument position.
@@ -347,12 +347,21 @@ The module migration, the eyeglass removal and the retirement of the generated
 `gls-` bundle all landed together, because each one blocked the others. The
 `git stash` holding a half-finished attempt is obsolete and can be dropped.
 
-`ratio-box` and `responsive-video` were **removed**, not ported. They first
-moved to `aspect-ratio`, which left both mixins byte-identical to each other and
-emitting little more than one CSS property, so they no longer earned their
-place. Measured before deciding, in a browser: `aspect-ratio` on a wrapper does
-*not* reproduce `responsive-video` — an `<iframe>` inside stays at its intrinsic
-300×150 — but `aspect-ratio` on the iframe itself does, with no wrapper at all.
-The mixins also never set `border: 0` or `box-sizing`, so their own output
-overflowed the wrapper by 4px. `validateRatio` stays: it parses `"16:9"`, which
-CSS will not.
+`ratio-box` and `responsive-video` were replaced by one `aspect-ratio` mixin.
+Porting them to the CSS property left the two byte-identical to each other and
+wrapping barely more than one declaration, so neither earned its place; but a
+bare `aspect-ratio` declaration does not replace them either. Three things were
+measured in a browser before the replacement was designed, and each is why the
+new mixin emits what it does:
+
+| Written by hand | What happens | What the mixin adds |
+|---|---|---|
+| `aspect-ratio` on an `<img>` | the image is stretched, not cropped | `object-fit: cover` |
+| `aspect-ratio` on an `<iframe>` | overflows its container by 4px, from the 2px default border | `border: 0` |
+| `aspect-ratio` on a **wrapper** | does nothing for an `<iframe>` inside, which keeps its intrinsic 300×150 | applied to the element itself |
+
+That last row is the migration hazard and is called out in `MIGRATION.md`: the
+old mixins went on a wrapping `<div>`, the new one goes on the element.
+
+`validateRatio` stays, for a ratio without the rest of the mixin: it parses
+`"16:9"`, which CSS will not.

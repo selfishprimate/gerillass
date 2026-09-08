@@ -19,7 +19,7 @@ silently, which is worse. Do all of them.
 | keyed config | `scss/maps/` | `$map-for-…`, with `!default` |
 
 One member per file, and **the filename must match the member name** —
-`_border-radius.scss` holds `@mixin border-radius`. This holds for all 51
+`_border-radius.scss` holds `@mixin border-radius`. This holds for all 50
 existing mixins and 22 utilities; do not be the exception.
 
 ## 2. Write the file
@@ -35,13 +35,12 @@ double quotes.
 }
 ```
 
-**Do not add `@use` rules to anything in `scss/library/`.** The Gulp task
-concatenates those files into one bundle, so a `@use` lands mid-file and Sass
-rejects the whole thing (`@use rules must be written before any other rules`).
-Library partials rely on the global namespace `_gerillass.scss` builds; that is
-deliberate until the 2.0.0 module migration.
+Declare what the file uses, right after the `@charset` line — see step 4. This
+reversed in 2.0.0: library partials used to be forbidden from carrying a `@use`
+rule, because a Gulp task concatenated them into one bundle and a `@use` landing
+mid-file made Sass reject the whole thing. That generator is gone.
 
-Validate arguments and fail loudly. 33 of the 43 mixins that take arguments do
+Validate arguments and fail loudly. 34 of the 44 mixins that take arguments do
 this, and the message should name what is acceptable:
 
 ```scss

@@ -1,0 +1,27 @@
+@charset "UTF-8";
+
+@use "sass:list";
+@use "../utilities/validate-ratio" as *;
+
+// Holds an element to a ratio, and closes the three gaps CSS leaves open when
+// you set `aspect-ratio` by hand. All three were measured in a browser:
+//
+//   * an <img> with a ratio but no `object-fit` is stretched, not cropped;
+//   * an <iframe> carries a 2px default border, so `width: 100%` overflows its
+//     container by 4px;
+//   * the ratio belongs on the element itself. On a wrapper it does nothing for
+//     an <iframe> inside, which keeps its intrinsic 300x150.
+//
+// Pass `null` as $fit to leave `object-fit` alone.
+@mixin aspect-ratio($ratio: null, $fit: cover) {
+  @if $fit and not list.index("fill" "contain" "cover" "none" "scale-down", $fit) {
+    @error "`#{$fit}` is not a valid $fit for `aspect-ratio`. Pass one of: fill, contain, cover, none, scale-down, or null to leave object-fit alone.";
+  }
+  display: block;
+  width: 100%;
+  aspect-ratio: validateRatio($ratio);
+  border: 0;
+  @if $fit {
+    object-fit: $fit;
+  }
+}

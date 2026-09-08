@@ -113,6 +113,55 @@ exports[`Manifest examples antialias: @include antialias; 1`] = `
 }"
 `;
 
+exports[`Manifest examples aspect-ratio: .default { @include aspect-ratio; } 1`] = `
+".default {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 0;
+  object-fit: cover;
+}"
+`;
+
+exports[`Manifest examples aspect-ratio: .plain { @include aspect-ratio(1.5, null); } 1`] = `
+".plain {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1.5;
+  border: 0;
+}"
+`;
+
+exports[`Manifest examples aspect-ratio: .thumb { @include aspect-ratio("16:9"); } 1`] = `
+".thumb {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 0;
+  object-fit: cover;
+}"
+`;
+
+exports[`Manifest examples aspect-ratio: .tile { @include aspect-ratio("1:1", contain); } 1`] = `
+".tile {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border: 0;
+  object-fit: contain;
+}"
+`;
+
+exports[`Manifest examples aspect-ratio: .video { @include aspect-ratio("16/9"); } 1`] = `
+".video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 0;
+  object-fit: cover;
+}"
+`;
+
 exports[`Manifest examples background-dots: .a { @include background-dots(red); } 1`] = `
 ".a {
   background-image: radial-gradient(red 1em, transparent 0), radial-gradient(red 1em, transparent 0);
