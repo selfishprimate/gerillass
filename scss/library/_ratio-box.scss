@@ -3,19 +3,13 @@
 @use "../utilities/validate-ratio" as *;
 
 @mixin ratio-box($ratio: null) {
+  // position: relative is kept from the pre-2.0.0 padding-hack version. The
+  // ratio no longer needs it, but anything a user absolutely positioned inside
+  // the box does, so removing it would move their markup for no gain.
   position: relative;
-  &::before {
-    content: "";
-    display: block;
-    padding-top: validateRatio($ratio);
-  }
+  aspect-ratio: validateRatio($ratio);
   & > * {
     width: 100%;
     height: 100%;
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
   }
 }

@@ -1,14 +1,20 @@
 @charset "UTF-8";
 
+@use "sass:list";
 @use "sass:math";
 @use "sass:meta";
 @use "sass:string";
 @use "../utilities/convert-to-number" as *;
 
+// Returns a value for the CSS aspect-ratio property.
+//
+// Before 2.0.0 this returned the padding-top percentage the old ratio hack
+// needed -- 56.25% for 16/9. aspect-ratio is Baseline Widely Available, so the
+// hack is gone and this returns the ratio itself: `16 / 9`.
 @function validateRatio($ratio) {
   // No argument at all keeps the 16/9 default.
   @if $ratio == null {
-    @return 56.25%;
+    @return list.slash(16, 9);
   }
 
   @if meta.type-of($ratio) == "number" {
@@ -18,7 +24,8 @@
     @if $ratio <= 0 {
       @error "`#{$ratio}` is not a valid ratio. A numeric ratio must be greater than zero.";
     }
-    @return math.div(1, $ratio) * 100%;
+    // aspect-ratio takes a bare number, where 1.77 means 1.77 / 1.
+    @return $ratio;
   }
 
   @if meta.type-of($ratio) == "string" {
@@ -37,11 +44,11 @@
     @if $width == 0 {
       @error "`#{$ratio}` is not a valid ratio. The width must be greater than zero.";
     }
-    @return math.div($height, $width) * 100%;
+    @return list.slash($width, $height);
   }
 
   // Anything else -- most commonly a list, which is what `16/9` becomes once
   // Dart Sass 2.0.0 removes slash division. Without this the mixin would emit
-  // no padding-top at all and silently produce a ratio box with no ratio.
+  // no aspect-ratio at all and silently produce a box with no ratio.
   @error "`#{$ratio}` is not a valid ratio. Pass a string like `\"16/9\"` or `\"16:9\"`, a unitless number like `1.77`, or no argument at all for the 16/9 default. You passed a #{meta.type-of($ratio)}.";
 }

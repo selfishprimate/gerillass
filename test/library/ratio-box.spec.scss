@@ -1,5 +1,10 @@
-@import 'true';
-@import '../../scss/gerillass';
+// Since 2.0.0 the ratio is held by the aspect-ratio property rather than the
+// padding-top hack, so the expectation is the ratio itself. position: relative
+// stays: the ratio no longer needs it, but markup positioned inside the box
+// does.
+@use 'sass:list';
+@use 'true' as *;
+@use '../../scss/gerillass' as *;
 
 @include describe('ratio-box()') {
   @include it('Return a ratio box for a slash separated string.') {
@@ -12,20 +17,11 @@
       @include expect {
         .element {
           position: relative;
-        }
-        .element::before {
-          content: "";
-          display: block;
-          padding-top: 75%;
+          aspect-ratio: list.slash(4, 3);
         }
         .element > * {
           width: 100%;
           height: 100%;
-          position: absolute;
-          top: 0;
-          right: 0;
-          bottom: 0;
-          left: 0;
         }
       }
     }
@@ -40,20 +36,30 @@
       @include expect {
         .element {
           position: relative;
-        }
-        .element::before {
-          content: "";
-          display: block;
-          padding-top: 56.25%;
+          aspect-ratio: list.slash(16, 9);
         }
         .element > * {
           width: 100%;
           height: 100%;
-          position: absolute;
-          top: 0;
-          right: 0;
-          bottom: 0;
-          left: 0;
+        }
+      }
+    }
+  }
+  @include it('A bare number is a ratio against 1.') {
+    @include assert {
+      @include output {
+        .element {
+          @include ratio-box(2);
+        }
+      }
+      @include expect {
+        .element {
+          position: relative;
+          aspect-ratio: 2;
+        }
+        .element > * {
+          width: 100%;
+          height: 100%;
         }
       }
     }

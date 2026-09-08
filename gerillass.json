@@ -1896,12 +1896,13 @@
       ],
       "file": "scss/utilities/_validate-ratio.scss",
       "signature": "validateRatio($ratio)",
-      "summary": "Turns an aspect ratio into the padding-top percentage that holds it.",
+      "summary": "Turns an aspect ratio into a value for the CSS aspect-ratio property.",
       "examples": [
-        ".a { padding-top: validateRatio(\"16/9\"); }"
+        ".a { aspect-ratio: validateRatio(\"16/9\"); }",
+        ".a { aspect-ratio: validateRatio(1.5); }"
       ],
       "rejects": [
-        ".a { padding-top: validateRatio(16 9); }"
+        ".a { aspect-ratio: validateRatio(16 9); }"
       ]
     },
     {

@@ -321,19 +321,14 @@ Verified as of v1.6.1.
   `gerillass.json` and an `llms.txt` on the docs site were scoped out of the
   v1.6.0 work. Neither is worth doing until the manifest has users.
 
-### Still open in 2.0.0
-
-- **Move `ratio-box` and `responsive-video` to `aspect-ratio`.** The property is
-  Baseline Widely Available, so the padding-top hack is no longer necessary. It
-  is not a CSS simplification: `aspect-ratio` removes the `position: relative`
-  on the container and the absolutely positioned child, so any markup that
-  relied on that positioning context — anything else placed inside the box, or a
-  child positioned against it — moves. Both mixins have hand-written specs, so
-  the change will be visible in the diff rather than silent, and it needs a
-  migration note.
-
 ### Done in 2.0.0
 
 The module migration, the eyeglass removal and the retirement of the generated
 `gls-` bundle all landed together, because each one blocked the others. The
 `git stash` holding a half-finished attempt is obsolete and can be dropped.
+
+`ratio-box` and `responsive-video` moved to `aspect-ratio`. `position: relative`
+was kept deliberately: the ratio no longer needs it, but anything a user
+absolutely positioned inside the box does, so dropping it would have moved their
+markup for no gain. The `::before` pseudo-element and the absolutely positioned
+child are gone, which is the part users have to know about.
