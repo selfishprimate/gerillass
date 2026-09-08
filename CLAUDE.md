@@ -289,16 +289,21 @@ Verified as of v1.6.0.
 
 ### Modernisation
 
-- **`ratio-box` and `responsive-video` still use the padding-top hack.**
-  `aspect-ratio` is Baseline Widely Available, so both could emit it directly.
-  This is a behaviour change in generated CSS, so it wants a minor version and
-  a decision about whether to keep a fallback. Both now have hand-written specs,
-  so the change would be visible rather than silent.
 - **Agent-facing work beyond the manifest.** An MCP server exposing
   `gerillass.json` and an `llms.txt` on the docs site were scoped out of the
   v1.6.0 work. Neither is worth doing until the manifest has users.
 
 ### Reserved for 2.0.0
+
+- **Move `ratio-box` and `responsive-video` to `aspect-ratio`.** The property is
+  Baseline Widely Available, so the padding-top hack is no longer necessary.
+  **Decided in September 2026 that this is a 2.0.0 change, not a minor one.**
+  It is not a CSS simplification: `aspect-ratio` removes the `position: relative`
+  on the container and the absolutely positioned child, so any markup that
+  relied on that positioning context — anything else placed inside the box, or a
+  child positioned against it — moves. Both mixins have hand-written specs, so
+  the change will be visible in the diff rather than silent, and it needs a
+  migration note.
 
 - **The `@use`/`@forward` module migration.** See "Module-system status" above
   for the two verified blockers. A half-finished attempt is parked in
