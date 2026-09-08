@@ -36,6 +36,6 @@
       @content;
     }
   } @else {
-    @error "The argument for direction must be one of the followings: #{quote($list-of-directions)}";
+    @error "The argument for direction must be one of the followings: #{$list-of-directions}";
   }
 }

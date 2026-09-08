@@ -12,6 +12,6 @@
       @content;
     }
   } @else {
-    @error "The argument must be `null` or one of the followings: #{quote($list)}";
+    @error "The argument must be `null` or one of the followings: #{$list}";
   }
 }

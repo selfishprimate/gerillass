@@ -39,7 +39,7 @@
         border-bottom-left-radius: $value;
       }
     } @else {
-      @error "Corner value must be one of the followings: #{quote($list)}.";
+      @error "Corner value must be one of the followings: #{$list}.";
     }
   } @else if length($args) == 4 {
     $args: __null($args, space, true);

@@ -23,11 +23,11 @@
               ),
               url($image-url);
           } @else {
-            @if index("deg", unit($filter-direction)) {
+            @if type-of($filter-direction) == "number" and index("deg", unit($filter-direction)) {
               background-image: linear-gradient($filter-direction, $color-list),
                 url($image-url);
             } @else {
-              @error "#{$filter-direction} is a wrong value for the $filter-direction parameter. The value must be either a number followed by the 'deg' unit or one of the following pre-defined values: #{quote(map-keys($map-for-directions))}.";
+              @error "`#{$filter-direction}` is not a valid $filter-direction. Pass an angle such as `45deg`, or one of: #{map-keys($map-for-directions)}.";
             }
           }
         } @else {
