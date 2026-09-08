@@ -1,5 +1,7 @@
 @charset "UTF-8";
 
+@use "../library/stretched-link" as *;
+
 @mixin brand-logo($width, $height, $image-url: null) {
   display: inline-block;
   position: relative;
@@ -17,6 +19,6 @@
     height: 1px;
     overflow: hidden;
     text-indent: 100%;
-    @include gls-stretched-link(after);
+    @include stretched-link(after);
   }
 }

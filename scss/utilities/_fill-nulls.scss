@@ -1,0 +1,18 @@
+@charset "UTF-8";
+
+@use "sass:list";
+
+@function fillNulls($value, $seperation: comma, $skip: false) {
+  @if not list.index("comma" "space" "slash", $seperation) {
+    @error "`#{$seperation}` is not a valid $seperation for `fillNulls`. Pass `comma`, `space` or `slash`.";
+  }
+  $list: ();
+  @for $i from 1 through list.length($value) {
+    @if list.nth($value, $i) == null {
+      $list: list.append($list, if($skip, null, 0), $seperation);
+    } @else {
+      $list: list.append($list, list.nth($value, $i), $seperation);
+    }
+  }
+  @return $list;
+}

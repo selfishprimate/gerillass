@@ -1,42 +1,54 @@
 @charset "UTF-8";
 
-@function __validateRatio($ratio) {
+@use "sass:list";
+@use "sass:math";
+@use "sass:meta";
+@use "sass:string";
+@use "../utilities/convert-to-number" as *;
+
+// Returns a value for the CSS aspect-ratio property.
+//
+// Before 2.0.0 this returned the padding-top percentage the old ratio hack
+// needed -- 56.25% for 16/9. aspect-ratio is Baseline Widely Available, so the
+// hack is gone and this returns the ratio itself: `16 / 9`.
+@function validateRatio($ratio) {
   // No argument at all keeps the 16/9 default.
   @if $ratio == null {
-    @return 56.25%;
+    @return list.slash(16, 9);
   }
 
-  @if type-of($ratio) == "number" {
-    @if not unitless($ratio) {
+  @if meta.type-of($ratio) == "number" {
+    @if not math.is-unitless($ratio) {
       @error "`#{$ratio}` is not a valid ratio. A numeric ratio must be unitless, like `1.77`.";
     }
     @if $ratio <= 0 {
       @error "`#{$ratio}` is not a valid ratio. A numeric ratio must be greater than zero.";
     }
-    @return math.div(1, $ratio) * 100%;
+    // aspect-ratio takes a bare number, where 1.77 means 1.77 / 1.
+    @return $ratio;
   }
 
-  @if type-of($ratio) == "string" {
+  @if meta.type-of($ratio) == "string" {
     $separator: null;
-    @if str-index($ratio, "/") {
-      $separator: str-index($ratio, "/");
-    } @else if str-index($ratio, ":") {
-      $separator: str-index($ratio, ":");
+    @if string.index($ratio, "/") {
+      $separator: string.index($ratio, "/");
+    } @else if string.index($ratio, ":") {
+      $separator: string.index($ratio, ":");
     } @else {
       @error "`#{$ratio}` is not a valid ratio. A string ratio must separate width and height with `/` or `:`, like `\"16/9\"` or `\"16:9\"`.";
     }
 
-    $width: __convertToNumber(str-slice($ratio, 1, $separator - 1));
-    $height: __convertToNumber(str-slice($ratio, $separator + 1));
+    $width: convertToNumber(string.slice($ratio, 1, $separator - 1));
+    $height: convertToNumber(string.slice($ratio, $separator + 1));
 
     @if $width == 0 {
       @error "`#{$ratio}` is not a valid ratio. The width must be greater than zero.";
     }
-    @return math.div($height, $width) * 100%;
+    @return list.slash($width, $height);
   }
 
   // Anything else -- most commonly a list, which is what `16/9` becomes once
   // Dart Sass 2.0.0 removes slash division. Without this the mixin would emit
-  // no padding-top at all and silently produce a ratio box with no ratio.
-  @error "`#{$ratio}` is not a valid ratio. Pass a string like `\"16/9\"` or `\"16:9\"`, a unitless number like `1.77`, or no argument at all for the 16/9 default. You passed a #{type-of($ratio)}.";
+  // no aspect-ratio at all and silently produce a box with no ratio.
+  @error "`#{$ratio}` is not a valid ratio. Pass a string like `\"16/9\"` or `\"16:9\"`, a unitless number like `1.77`, or no argument at all for the 16/9 default. You passed a #{meta.type-of($ratio)}.";
 }

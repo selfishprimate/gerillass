@@ -1,0 +1,21 @@
+{
+  "name": "validateRatio",
+  "summary": "Turns an aspect ratio into a value for the CSS aspect-ratio property.",
+  "arguments": [
+    {
+      "name": "$ratio",
+      "accepts": [
+        "a string such as \"16/9\" or \"16:9\"",
+        "a unitless number",
+        "null for the 16/9 default"
+      ]
+    }
+  ],
+  "examples": [
+    ".a { aspect-ratio: validateRatio(\"16/9\"); }",
+    ".a { aspect-ratio: validateRatio(1.5); }"
+  ],
+  "rejects": [
+    ".a { aspect-ratio: validateRatio(16 9); }"
+  ]
+}

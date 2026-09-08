@@ -8,8 +8,8 @@ Gerillass is a **pure Sass library** — a toolkit of mixins and functions, in t
 
 Two consequences follow from this and drive most decisions in the repo:
 
-1. **`package.json` must have no `dependencies`.** Everything (`jest`, `sass`, `sass-true`, `glob`, `gulp*`) belongs in `devDependencies`. Consumers get only `.scss` files, so a runtime dependency here forces the entire test toolchain onto every downstream project. This was the cause of 24 Dependabot alerts fixed in v1.3.3 — do not reintroduce it.
-2. **Only `scss/` ships.** `.npmignore` excludes `test`, `assets`, `gulpfile.js`, dotfiles and `*.md`; npm always adds `README.md`, `LICENSE.md` and `package.json` back. Verify with `npm pack --dry-run` before any release (92 files / ~38 kB as of v1.6.2).
+1. **`package.json` must have no `dependencies`.** Everything (`jest`, `sass`, `sass-true`, `glob`) belongs in `devDependencies`. Consumers get only `.scss` files, so a runtime dependency here forces the entire test toolchain onto every downstream project. This was the cause of 24 Dependabot alerts fixed in v1.3.3 — do not reintroduce it.
+2. **Only `scss/` ships.** `.npmignore` excludes `test`, `assets`, `meta`, `tools`, dotfiles and `*.md`; npm always adds `README.md`, `LICENSE.md` and `package.json` back. Verify with `npm pack --dry-run` before any release (94 files / ~38 kB as of v2.0.0).
 
 Dart Sass only. LibSass/node-sass has been unsupported since v1.3.0.
 
@@ -43,10 +43,9 @@ hypothetical old-toolchain user, so it is queued for 2.0.0 rather than done now.
 
 ```bash
 npm test                          # Jest: sass-true specs, the smoke test, and the manifest suite
-npx jest -t "__mapDeepGet()"      # single test, filtered by the describe/it name
+npx jest -t "mapDeepGet()"      # single test, filtered by the describe/it name
 npm run manifest                  # regenerate gerillass.json and SKILL.md (see below)
 node tools/audit.js               # adversarial sweep: bad arguments at every mixin
-npx gulp start                    # regenerate scss/_gerillass-prefix.scss (see below)
 npm pack --dry-run                # inspect exactly what would be published
 yarn audit                        # must stay at zero across all severities
 ```
@@ -79,7 +78,7 @@ timestamp, a reading of the source — and every one was wrong:
 
 | Signal | Conclusion drawn | What was actually true |
 |---|---|---|
-| no mixin calls these six utilities | dead code, delete them | documented public API; `__remify` has its own docs page |
+| no mixin calls these six utilities | dead code, delete them | documented public API; `remify` has its own docs page |
 | eyeglass unpublished since June 2022 | dead package, drop the config | ~6800 downloads/month; the real fault was its importer breaking on any `@import` |
 | `ratio-box` branches on `type-of == string` | a string is the correct argument | a list was accepted too, and silently produced a ratio box with no ratio |
 
@@ -114,8 +113,6 @@ made, plus the workflows that are easy to half-finish:
 
 - **`hooks/guard-dependencies.sh`** — blocks any edit that leaves `dependencies`
   non-empty in the root `package.json`.
-- **`hooks/sync-prefix.sh`** — runs `npx gulp start` after any edit under
-  `scss/library/`, so the `gls-` bundle cannot go stale.
 - **`hooks/sync-manifest.sh`** — rebuilds `gerillass.json` and `SKILL.md` after
   any edit under `scss/library/`, `scss/utilities/` or `meta/`.
 - **`hooks/check-docs.sh`** — runs `tools/check-docs.js`, which compares the
@@ -127,11 +124,10 @@ made, plus the workflows that are easy to half-finish:
   checklist, the add-a-member checklist, the sass-true conventions, and the
   adversarial sweep over every mixin (`tools/audit.js`).
 
-All four hooks are `PostToolUse` on `Write|Edit` and exit 2 (blocking) on
+All three hooks are `PostToolUse` on `Write|Edit` and exit 2 (blocking) on
 failure. **They only fire for edits made through the editor** — a file changed
-by a shell command does not trigger them, which is how the `gls-` bundle went
-stale mid-session once. Run `npx gulp start` and `npm run manifest` by hand
-after scripted edits.
+by a shell command does not trigger them. Run `npm run manifest` by hand after
+scripted edits.
 
 ## The manifest and the skill
 
@@ -172,16 +168,18 @@ Four layers, loaded in dependency order by `scss/_gerillass.scss`. The order is 
 |---|---|---|---|
 | 1 | `scss/lists/` | flat value lists (`$list-of-buttons`) | `list-of-` prefix, `!default` |
 | 2 | `scss/maps/` | keyed config (`$map-for-breakpoints`) | `map-for-` prefix, `!default` |
-| 3 | `scss/utilities/` | 22 helper **functions** | `__camelCase`, two leading underscores |
-| 4 | `scss/library/` | 51 **mixins** — the bulk of the API | `kebab-case` |
+| 3 | `scss/utilities/` | 22 helper **functions** | `camelCase` |
+| 4 | `scss/library/` | 50 **mixins** — the bulk of the API | `kebab-case` |
 
 `_gerillass.scss` lists every partial explicitly. **A new file is invisible until you add its `@import` line there**, in the correct layer block.
 
-Per `CONTRIBUTING.md`, the `__` prefix and camelCase exist for one reason: to make functions impossible to confuse with mixins at a call site. **They do not mean "private".** Utilities are part of the public API and users call them directly — `__remify` has its own page in the docs. Utilities cluster around three jobs: type guards (`__isColor`, `__isNumber`, `__isTime`), validators that `@warn`/`@error` and return (`__validateLength`, `__validateBreakpoint`, `__validateRatio`, `__validateScissors`), and converters (`__remify`, `__pixelify`, `__convertToEm`, `__fontSizer`, `__lighten`, `__darken`, `__shorthandProperty`).
+Functions are `camelCase`, mixins are `kebab-case`, and that is what keeps them apart at a call site — together with `@include`, which a mixin always needs and a function never has. Utilities are public API and users call them directly; `remify` has its own page in the docs.
 
-**A utility that nothing in `scss/` calls is not dead code.** `__remify`, `__convertToEm`, `__fontSizer`, `__isNumber`, `__lighten` and `__darken` are called by no mixin at all — they are there for users, and removing them would break stylesheets. Never treat "no internal callers" as a reason to delete a member; the library is the smaller half of its own audience.
+Until 2.0.0 they carried a `__` prefix. It had to go: under `@use`/`@forward` a member whose name starts with `_` is **private to its own file**, so every utility became unreachable, and through `@use ... as *` it failed silently, rendering as literal CSS. Three could not simply drop the prefix — `darken` and `lighten` would shadow the Sass built-ins with different results, and `null` is a keyword — so they are `shade`, `tint` and `fillNulls`. Utilities cluster around three jobs: type guards (`isColor`, `isNumber`, `isTime`), validators that `@warn`/`@error` and return (`validateLength`, `validateBreakpoint`, `validateRatio`, `validateScissors`), and converters (`remify`, `pixelify`, `convertToEm`, `fontSizer`, `tint`, `shade`, `shorthandProperty`).
 
-Mixins validate their input and `@error` with a message that names the accepted values — 27 of the 51 do this as of v1.6.0, 25 inline and 2 (`ratio-box`, `responsive-video`) through `__validateRatio`. Match that style rather than failing silently.
+**A utility that nothing in `scss/` calls is not dead code.** `remify`, `convertToEm`, `fontSizer`, `isNumber`, `tint` and `shade` are called by no mixin at all — they are there for users, and removing them would break stylesheets. Never treat "no internal callers" as a reason to delete a member; the library is the smaller half of its own audience.
+
+Mixins validate their input and `@error` with a message that names the accepted values — 34 of the 44 that take arguments do this, mostly inline. Match that style rather than failing silently.
 
 Silent failure is the trap to watch for. A mixin that branches on `type-of` and
 has no `@else` emits nothing at all for an unexpected type, which surfaces as a
@@ -189,36 +187,69 @@ missing declaration rather than an error. `ratio-box` had this until v1.4.0: a
 list argument produced a ratio box with no ratio, and the smoke test still
 passed because it only asserts that mixins evaluate.
 
-### The dual API and the generated prefix bundle
+### The dual API
 
-Every mixin is exposed twice: unprefixed (`adaptive`) and prefixed (`gls-adaptive`), so users can avoid collisions with Bootstrap and friends. The prefixed half is **generated, not written**:
+Every mixin is exposed twice: unprefixed (`adaptive`) and prefixed
+(`gls-adaptive`), so users can avoid collisions with Bootstrap and friends.
+Since 2.0.0 both come from `_gerillass.scss`, one line each:
 
-`gulpfile.js` concatenates `scss/library/**/*.scss` into `scss/_gerillass-prefix.scss`, strips the per-file `@charset`, re-adds one `@charset` + `@use "sass:math"` at the top, then does a blind string replace of `@mixin ` → `@mixin gls-`.
+```scss
+@forward "library";
+@forward "library" as gls-*;
+```
 
-- **Never hand-edit `scss/_gerillass-prefix.scss`.** It is committed, but it is build output.
-- After adding or changing any mixin, run `npx gulp start` and commit the regenerated file. Its committed state should be byte-identical to a fresh run.
-- Only `library/` is prefixed. Utilities, lists and maps are shared by both halves and are not duplicated.
-- Because the generator is a dumb concatenation, **any `@use` rule inside a `library/` partial ends up in the middle of the bundle**, which Sass rejects (`@use rules must be written before any other rules`). This is the single biggest constraint on the file layout.
+Before that the prefixed half was a **generated file**: `gulpfile.js`
+concatenated `scss/library/**/*.scss` into `scss/_gerillass-prefix.scss` and
+rewrote `@mixin ` to `@mixin gls-`. That generator is gone, and with it 1586
+lines of committed build output, three Gulp devDependencies and a hook. It also
+lifted the constraint that no `library/` partial could carry a `@use` rule,
+which was the thing blocking the module migration.
 
-**The bundle is not optional.** Five partials in `library/` call the *prefixed* mixins, so the unprefixed API depends on the generated bundle being loaded:
+`test/manifest.spec.js` runs every documented example under both names and
+requires byte-identical CSS, so a member missing from `scss/library/_index.scss`
+fails the suite rather than silently disappearing from one half of the API.
 
-| Caller | Calls |
-|---|---|
-| `_remove.scss` | `gls-breakpoint` (×4) |
-| `_reset-figure.scss` | `gls-responsive-image` |
-| `_brand-logo.scss` | `gls-stretched-link` |
-| `_background-image.scss` | `gls-linear-gradient` |
+### The module system
 
-Dropping `@import "gerillass-prefix"` from `_gerillass.scss` therefore breaks `remove`, `reset-figure`, `brand-logo` and `background-image` with `Error: Undefined mixin` — verified, and only at include time. Any restructuring of the prefix strategy must rewrite these call sites first.
+Since 2.0.0 the library is `@use`/`@forward` throughout and calls no global
+built-ins. **It compiles with zero deprecation warnings**, which is checkable
+and worth keeping that way:
 
-### Module-system status
+```bash
+sass --load-path=scss test/smoke.scss 2>&1 >/dev/null | grep DEPRECATION
+```
 
-The library still uses `@import` and global built-ins (`map-get`, `str-slice`, `nth`, …), which Dart Sass has deprecated. Running the tests prints deprecation warnings; that is expected on `main`, not a regression.
+Each folder has an `_index.scss` that forwards its own partials, and
+`_gerillass.scss` forwards the four folders. Every partial declares what it
+uses:
 
-A migration to `@use`/`@forward` is planned for **2.0.0** and is not on `main`. Two things make it more than a mechanical rewrite, and both were verified:
+```scss
+@charset "UTF-8";
 
-1. `@forward` does not make members visible to sibling partials. Roughly 40 files reference members from another layer (e.g. `_adaptive.scss` uses `$map-for-breakpoints`, `_font-face.scss` uses `__fontSource`) and each needs its own `@use`. Because of lazy evaluation, the failures only surface when a mixin is actually included.
-2. Adding those `@use` lines breaks the Gulp prefix bundle, per the constraint above. The generator has to hoist and dedupe `@use` rules, or the `gls-` strategy has to be replaced by the module system's own namespacing (`@use "gerillass" as gls`).
+@use "sass:math";
+@use "../lists/list-of-directions" as *;
+@use "../utilities/is-color" as *;
+```
+
+`as *` rather than a namespace, deliberately: member names are unique across
+the library, so this keeps call sites unchanged and made the migration a
+verifiable no-op on the emitted CSS.
+
+Two things that cost time, recorded so they do not have to be rediscovered:
+
+1. **`@forward` does not reach sibling partials.** 32 files reference a member
+   from another folder and each needs its own `@use`. Lazy evaluation hides the
+   failure until the mixin is actually included, so `test/smoke.scss` is what
+   catches it.
+2. **A member whose name starts with `_` or `-` is private to its file.** This
+   is why the utilities lost their `__` prefix in 2.0.0 — see the naming note
+   under Architecture. Through `@use ... as *` a private member does not error,
+   it renders as literal CSS.
+
+`sass-migrator module` does most of the mechanical work but needs supervision:
+it puts `@use` above `@charset`, it strips `__` prefixes and turns `__null` into
+the invalid `null.null(...)`, and it rewrites generated files it should leave
+alone.
 
 ## Test depths
 
@@ -226,15 +257,15 @@ Four levels, and knowing which one covers a member tells you what you can trust:
 
 | Level | Proves | Coverage |
 |---|---|---|
-| `test/smoke.scss` | the mixin evaluates at all | 51/51 mixins |
-| snapshot of `meta/` examples | the output cannot change unnoticed | 73/73 members |
-| `meta/` rejects | bad input is refused with a real message | 44/73 |
-| sass-true spec in `test/` | the CSS is **correct** | 11/73 |
+| `test/smoke.scss` | the mixin evaluates at all | 50/50 mixins |
+| snapshot of `meta/` examples | the output cannot change unnoticed | 72/72 members |
+| `meta/` rejects | bad input is refused with a real message | 43/72 |
+| sass-true spec in `test/` | the CSS is **correct** | 10/72 |
 
 Only the last one catches an output that was wrong from the start; a snapshot
 records a wrong value as correct. Hand-written specs are therefore reserved for
 members that compute something — `triangle`, `scissors`, `columnizer`,
-`position`, `background-dots`, `ratio-box`, `responsive-video`. Use `/sass-test`.
+`position`, `background-dots`, `aspect-ratio`. Use `/sass-test`.
 
 `node tools/audit.js` is the fourth thing the suite cannot do: it throws
 arguments nobody wrote a test for at every member and every argument position.
@@ -286,39 +317,51 @@ Verified as of v1.6.1.
 
 ### Modernisation
 
+- **Sass is deprecating its own `if()`, and the library calls it 21 times.**
+  Dart Sass 1.104 prints 25 `if-function` warnings compiling Gerillass (5 shown,
+  20 omitted); 1.91 prints none. Two fixes look obvious and both are wrong,
+  verified:
+
+  1. The replacement syntax is `if(sass($cond): $a; else: $b)`. It compiles on
+     1.104 and is a parse error on 1.91, so adopting it raises the minimum Dart
+     Sass to a version released weeks ago.
+  2. A helper `@function iff($c, $a, $b)` evaluates **both** branches, while
+     `if()` evaluates only the one it takes. `_triangle.scss` depends on this:
+     it calls `list.nth($size, 2)` in the untaken branch, and
+     `triangle(top, red, 10px)` passes a single-value `$size`. Swapping in a
+     helper turns a working call into `Invalid index 2 for a list with 1
+     elements`.
+
+  So all 21 sites need reading individually, and the ones inside interpolation
+  need restructuring rather than substitution. Removal is not until Sass 3.0.0,
+  so this is not urgent, but it is the last thing between the library and a
+  clean compile.
+
 - **Agent-facing work beyond the manifest.** An MCP server exposing
   `gerillass.json` and an `llms.txt` on the docs site were scoped out of the
   v1.6.0 work. Neither is worth doing until the manifest has users.
 
-### Reserved for 2.0.0
+### Done in 2.0.0
 
-- **Move `ratio-box` and `responsive-video` to `aspect-ratio`.** The property is
-  Baseline Widely Available, so the padding-top hack is no longer necessary.
-  **Decided in September 2026 that this is a 2.0.0 change, not a minor one.**
-  It is not a CSS simplification: `aspect-ratio` removes the `position: relative`
-  on the container and the absolutely positioned child, so any markup that
-  relied on that positioning context — anything else placed inside the box, or a
-  child positioned against it — moves. Both mixins have hand-written specs, so
-  the change will be visible in the diff rather than silent, and it needs a
-  migration note.
+The module migration, the eyeglass removal and the retirement of the generated
+`gls-` bundle all landed together, because each one blocked the others. The
+`git stash` holding a half-finished attempt is obsolete and can be dropped.
 
-- **The `@use`/`@forward` module migration.** See "Module-system status" above
-  for the two verified blockers. A half-finished attempt is parked in
-  `git stash` on this machine as `WIP: @use/@forward module migration (v2.0.0)
-  - parked`. **It exists only locally and only in the stash** — it was never
-  committed or pushed, so a fresh clone does not have it and any stash-dropping
-  operation loses it. If it is still wanted, promote it to a real branch.
-  `sass-migrator module --migrate-deps` reproduces most of it anyway, and
-  handles the sibling `@use` blocker automatically; it does mangle
-  `_gerillass-prefix.scss`, which must be excluded and regenerated.
-- **Remove the eyeglass metadata.** The `eyeglass` block and the
-  `eyeglass-module` keyword. Deferred rather than done because dropping them is
-  breaking for a hypothetical user on an old toolchain, even though eyeglass
-  itself is broken with current Dart Sass. See "How consumers load it" above.
-- **Retire the `gls-` prefix bundle.** `@use "gerillass" as gls` already gives
-  native namespacing, which is the whole point of the generated bundle. Dropping
-  it removes ~1600 lines of build output, three Gulp devDependencies,
-  `gulpfile.js`, and one of the two hooks. It also breaks every existing
-  `gls-*` call site, so it belongs with the module migration and needs a
-  migration note for users. `sass-migrator --remove-prefix` can generate
-  backward-compatible forwarding.
+`ratio-box` and `responsive-video` were replaced by one `aspect-ratio` mixin.
+Porting them to the CSS property left the two byte-identical to each other and
+wrapping barely more than one declaration, so neither earned its place; but a
+bare `aspect-ratio` declaration does not replace them either. Three things were
+measured in a browser before the replacement was designed, and each is why the
+new mixin emits what it does:
+
+| Written by hand | What happens | What the mixin adds |
+|---|---|---|
+| `aspect-ratio` on an `<img>` | the image is stretched, not cropped | `object-fit: cover` |
+| `aspect-ratio` on an `<iframe>` | overflows its container by 4px, from the 2px default border | `border: 0` |
+| `aspect-ratio` on a **wrapper** | does nothing for an `<iframe>` inside, which keeps its intrinsic 300×150 | applied to the element itself |
+
+That last row is the migration hazard and is called out in `MIGRATION.md`: the
+old mixins went on a wrapping `<div>`, the new one goes on the element.
+
+`validateRatio` stays, for a ratio without the rest of the mixin: it parses
+`"16:9"`, which CSS will not.

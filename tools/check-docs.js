@@ -29,7 +29,7 @@ const libFiles = list("scss/library", /^@mixin/m);
 const utilFiles = list("scss/utilities", /^@function/m);
 
 const withArgs = libFiles.filter((f) => /^@mixin\s+[\w-]+\s*\(/m.test(read(`scss/library/${f}`)));
-const validating = withArgs.filter((f) => /@error|__validate|__is[A-Z]/.test(read(`scss/library/${f}`)));
+const validating = withArgs.filter((f) => /@error|\bvalidate[A-Z]|\bis[A-Z][a-z]/.test(read(`scss/library/${f}`)));
 
 const specs = [
   ...fs.readdirSync(path.join(ROOT, "test/library")),

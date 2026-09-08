@@ -1,32 +1,35 @@
 @charset "UTF-8";
 
+@use "sass:list";
+@use "../lists/list-of-counter-styles" as *;
+
 @mixin counter($params...) {
   $counter: null;
   $counter-before: null;
   $counter-after: null;
 
-  @if length($params) == 1 {
-    @if index($list-of-counter-styles, nth($params, 1)) {
-      $counter: nth($params, 1);
+  @if list.length($params) == 1 {
+    @if list.index($list-of-counter-styles, list.nth($params, 1)) {
+      $counter: list.nth($params, 1);
     } @else {
-      $counter-after: nth($params, 1);
+      $counter-after: list.nth($params, 1);
     }
-  } @else if length($params) == 2 {
-    @if index($list-of-counter-styles, nth($params, 1)) {
-      $counter: nth($params, 1);
-      $counter-after: nth($params, 2);
-    } @else if index($list-of-counter-styles, nth($params, 2)) {
-      $counter-before: nth($params, 1);
-      $counter: nth($params, 2);
+  } @else if list.length($params) == 2 {
+    @if list.index($list-of-counter-styles, list.nth($params, 1)) {
+      $counter: list.nth($params, 1);
+      $counter-after: list.nth($params, 2);
+    } @else if list.index($list-of-counter-styles, list.nth($params, 2)) {
+      $counter-before: list.nth($params, 1);
+      $counter: list.nth($params, 2);
     } @else {
-      $counter-before: nth($params, 1);
-      $counter-after: nth($params, 2);
+      $counter-before: list.nth($params, 1);
+      $counter-after: list.nth($params, 2);
     }
-  } @else if length($params) == 3 {
-    @if index($list-of-counter-styles, nth($params, 2)) {
-      $counter-before: nth($params, 1);
-      $counter: nth($params, 2);
-      $counter-after: nth($params, 3);
+  } @else if list.length($params) == 3 {
+    @if list.index($list-of-counter-styles, list.nth($params, 2)) {
+      $counter-before: list.nth($params, 1);
+      $counter: list.nth($params, 2);
+      $counter-after: list.nth($params, 3);
     }
   }
 

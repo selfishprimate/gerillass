@@ -1,0 +1,18 @@
+{
+  "name": "convertToNumber",
+  "summary": "Parses a string of digits into a number.",
+  "arguments": [
+    {
+      "name": "$value",
+      "accepts": [
+        "a string containing only digits"
+      ]
+    }
+  ],
+  "examples": [
+    ".a { z-index: convertToNumber(\"42\"); }"
+  ],
+  "rejects": [
+    ".a { --x: #{convertToNumber(42)}; }"
+  ]
+}

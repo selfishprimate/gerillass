@@ -1,13 +1,16 @@
 @charset "UTF-8";
 
+@use "sass:meta";
+@use "sass:string";
+
 @mixin before($content: null) {
   &::before {
     @if $content == null {
       @content;
-    } @else if type-of($content) != "string" {
+    } @else if meta.type-of($content) != "string" {
       @error "`#{$content}` is not a valid $content for `before`. Pass a string to use as the content value, a data- attribute name such as `\"data-label\"` to render it with attr(), or no argument at all and write the content yourself.";
     } @else {
-      $data: str-slice($content, 1, 5);
+      $data: string.slice($content, 1, 5);
       @if $data == "data-" {
         content: attr(#{$content});
         @content;

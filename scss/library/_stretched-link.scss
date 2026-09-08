@@ -1,7 +1,9 @@
 @charset "UTF-8";
 
+@use "sass:list";
+
 @mixin stretched-link($value: "before") {
-  @if index("before" "after", $value) {
+  @if list.index("before" "after", $value) {
     &#{"::" + $value} {
       content: "";
       position: absolute;

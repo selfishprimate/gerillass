@@ -1,10 +1,15 @@
 @charset "UTF-8";
 
+@use "sass:list";
+@use "sass:map";
+@use "../maps/map-for-breakpoints" as *;
+@use "../utilities/validate-breakpoint" as *;
+
 @mixin breakpoint($params...) {
-  @if length($params) == 1 {
-    $value: nth($params, 1);
-    @if map-has-key($map-for-breakpoints, $value) {
-      @media (width: map-get($map-for-breakpoints, $value)) {
+  @if list.length($params) == 1 {
+    $value: list.nth($params, 1);
+    @if map.has-key($map-for-breakpoints, $value) {
+      @media (width: map.get($map-for-breakpoints, $value)) {
         @content;
       }
     } @else {
@@ -12,19 +17,19 @@
         @content;
       }
     }
-  } @else if length($params) == 2 {
-    @if not index("only" "min" "max" "between", nth($params, 1)) {
-      $start: nth($params, 1);
-      $end: nth($params, 2);
-      @media (min-width: #{__validateBreakpoint($start)}) and (max-width: #{if(map-has-key($map-for-breakpoints, $end), __validateBreakpoint($end) - 1, $end)}) {
+  } @else if list.length($params) == 2 {
+    @if not list.index("only" "min" "max" "between", list.nth($params, 1)) {
+      $start: list.nth($params, 1);
+      $end: list.nth($params, 2);
+      @media (min-width: #{validateBreakpoint($start)}) and (max-width: #{if(map.has-key($map-for-breakpoints, $end), validateBreakpoint($end) - 1, $end)}) {
         @content;
       }
     } @else {
-      $mode: nth($params, 1);
-      $value: nth($params, 2);
+      $mode: list.nth($params, 1);
+      $value: list.nth($params, 2);
       @if $mode == "only" {
-        @if map-has-key($map-for-breakpoints, $value) {
-          @media (width: map-get($map-for-breakpoints, $value)) {
+        @if map.has-key($map-for-breakpoints, $value) {
+          @media (width: map.get($map-for-breakpoints, $value)) {
             @content;
           }
         } @else {
@@ -33,8 +38,8 @@
           }
         }
       } @else if $mode == "min" {
-        @if map-has-key($map-for-breakpoints, $value) {
-          @media (min-width: map-get($map-for-breakpoints, $value)) {
+        @if map.has-key($map-for-breakpoints, $value) {
+          @media (min-width: map.get($map-for-breakpoints, $value)) {
             @content;
           }
         } @else {
@@ -43,8 +48,8 @@
           }
         }
       } @else if $mode == "max" {
-        @if map-has-key($map-for-breakpoints, $value) {
-          @media (max-width: map-get($map-for-breakpoints, $value)) {
+        @if map.has-key($map-for-breakpoints, $value) {
+          @media (max-width: map.get($map-for-breakpoints, $value)) {
             @content;
           }
         } @else {
@@ -53,9 +58,9 @@
           }
         }
       } @else if $mode == "between" {
-        $start: nth($value, 1);
-        $end: nth($value, 2);
-        @media (min-width: #{__validateBreakpoint($start)}) and (max-width: #{if(map-has-key($map-for-breakpoints, $end), __validateBreakpoint($end) - 1, $end)}) {
+        $start: list.nth($value, 1);
+        $end: list.nth($value, 2);
+        @media (min-width: #{validateBreakpoint($start)}) and (max-width: #{if(map.has-key($map-for-breakpoints, $end), validateBreakpoint($end) - 1, $end)}) {
           @content;
         }
       }

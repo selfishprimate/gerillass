@@ -1,14 +1,18 @@
 @charset "UTF-8";
 
+@use "sass:list";
+@use "../lists/list-of-directions" as *;
+@use "../utilities/fill-nulls" as *;
+
 @mixin border-radius($args...) {
-  $list: join($list-of-directions, ("cross-left", "cross-right", "all"));
-  @if length($args) == 1 {
-    $value: nth($args, 1);
-    border-radius: __null($value, space);
-  } @else if length($args) == 2 {
-    $corner: nth($args, 1);
-    $value: nth($args, 2);
-    @if index($list, $corner) {
+  $list: list.join($list-of-directions, ("cross-left", "cross-right", "all"));
+  @if list.length($args) == 1 {
+    $value: list.nth($args, 1);
+    border-radius: fillNulls($value, space);
+  } @else if list.length($args) == 2 {
+    $corner: list.nth($args, 1);
+    $value: list.nth($args, 2);
+    @if list.index($list, $corner) {
       @if $corner == "top" {
         border-top-left-radius: $value;
         border-top-right-radius: $value;
@@ -41,13 +45,13 @@
     } @else {
       @error "Corner value must be one of the followings: #{$list}.";
     }
-  } @else if length($args) == 4 {
-    $args: __null($args, space, true);
-    border-top-left-radius: nth($args, 1);
-    border-top-right-radius: nth($args, 2);
-    border-bottom-right-radius: nth($args, 3);
-    border-bottom-left-radius: nth($args, 4);
+  } @else if list.length($args) == 4 {
+    $args: fillNulls($args, space, true);
+    border-top-left-radius: list.nth($args, 1);
+    border-top-right-radius: list.nth($args, 2);
+    border-bottom-right-radius: list.nth($args, 3);
+    border-bottom-left-radius: list.nth($args, 4);
   } @else {
-    @error "`border-radius` takes 1, 2 or 4 arguments; you passed #{length($args)}. Use one radius for every corner, a corner name plus a radius, or four radii in top-left, top-right, bottom-right, bottom-left order.";
+    @error "`border-radius` takes 1, 2 or 4 arguments; you passed #{list.length($args)}. Use one radius for every corner, a corner name plus a radius, or four radii in top-left, top-right, bottom-right, bottom-left order.";
   }
 }

@@ -1,6 +1,8 @@
 @charset "UTF-8";
 
-@function __remify($value) {
+@use "sass:math";
+
+@function remify($value) {
   $base-value: 16px;
   $rem-value: math.div($value, $base-value);
   @return $rem-value * 1rem;

@@ -1,16 +1,20 @@
 @charset "UTF-8";
 
+@use "sass:list";
+@use "../utilities/shorthand-property" as *;
+@use "../utilities/validate-length" as *;
+
 @mixin position($position: absolute, $offsets: 0) {
-  $offsets: __shorthandProperty($offsets);
+  $offsets: shorthandProperty($offsets);
   $positioning-offsets: (
-    top: nth($offsets, 1),
-    right: nth($offsets, 2),
-    bottom: nth($offsets, 3),
-    left: nth($offsets, 4),
+    top: list.nth($offsets, 1),
+    right: list.nth($offsets, 2),
+    bottom: list.nth($offsets, 3),
+    left: list.nth($offsets, 4),
   );
   position: $position;
   @each $offset, $value in $positioning-offsets {
-    @if __validateLength($value) {
+    @if validateLength($value) {
       #{$offset}: $value;
     }
   }

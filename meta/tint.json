@@ -1,0 +1,24 @@
+{
+  "name": "tint",
+  "summary": "Mixes a colour towards white by a percentage.",
+  "arguments": [
+    {
+      "name": "$color",
+      "accepts": [
+        "a colour"
+      ]
+    },
+    {
+      "name": "$percentage",
+      "accepts": [
+        "a percentage"
+      ]
+    }
+  ],
+  "examples": [
+    ".a { color: tint(red, 20%); }"
+  ],
+  "rejects": [
+    ".a { color: tint(notacolor, 20%); }"
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "name": "shade",
+  "summary": "Mixes a colour towards black by a percentage.",
+  "arguments": [
+    {
+      "name": "$color",
+      "accepts": [
+        "a colour"
+      ]
+    },
+    {
+      "name": "$percentage",
+      "accepts": [
+        "a percentage"
+      ]
+    }
+  ],
+  "examples": [
+    ".a { color: shade(red, 20%); }"
+  ],
+  "rejects": [
+    ".a { color: shade(notacolor, 20%); }"
+  ]
+}

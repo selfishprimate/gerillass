@@ -1,22 +1,18 @@
-// Imports the whole library rather than the single partial, because
-// __validateRatio calls __convertToNumber and math.div.
-@import 'true';
-@import '../../scss/gerillass';
+@use 'sass:list';
+@use 'true' as *;
+@use '../../scss/gerillass' as *;
 
-@include describe('__validateRatio()') {
+@include describe('validateRatio()') {
   @include it('Return the 16/9 default when no ratio is given.') {
-    @include assert-equal(__validateRatio(null), 56.25%);
+    @include assert-equal(validateRatio(null), list.slash(16, 9));
   }
-  @include it('Return the padding for a slash separated string.') {
-    @include assert-equal(__validateRatio("16/9"), 56.25%);
+  @include it('Return the ratio for a slash separated string.') {
+    @include assert-equal(validateRatio("16/9"), list.slash(16, 9));
   }
-  @include it('Return the padding for a colon separated string.') {
-    @include assert-equal(__validateRatio("16:9"), 56.25%);
+  @include it('Return the ratio for a colon separated string.') {
+    @include assert-equal(validateRatio("4:3"), list.slash(4, 3));
   }
-  @include it('Return the padding for a ratio other than 16/9.') {
-    @include assert-equal(__validateRatio("4/3"), 75%);
-  }
-  @include it('Return the padding for a unitless number.') {
-    @include assert-equal(__validateRatio(2), 50%);
+  @include it('Return a bare number untouched.') {
+    @include assert-equal(validateRatio(1.5), 1.5);
   }
 }

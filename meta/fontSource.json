@@ -1,0 +1,28 @@
+{
+  "name": "fontSource",
+  "summary": "Builds one src entry for an @font-face rule.",
+  "arguments": [
+    {
+      "name": "$font-family",
+      "accepts": [
+        "the family name"
+      ]
+    },
+    {
+      "name": "$file-path",
+      "accepts": [
+        "path without an extension"
+      ]
+    },
+    {
+      "name": "$file-formats",
+      "accepts": [
+        "one of eot, woff2, woff, ttf, svg"
+      ]
+    }
+  ],
+  "examples": [
+    ".a { content: \"#{fontSource(\"Inter\", \"/fonts/inter\", woff2)}\"; }"
+  ],
+  "rejects": []
+}

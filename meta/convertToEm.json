@@ -1,0 +1,16 @@
+{
+  "name": "convertToEm",
+  "summary": "Converts a pixel length to em, against a 16px base.",
+  "arguments": [
+    {
+      "name": "$value",
+      "accepts": [
+        "a pixel length"
+      ]
+    }
+  ],
+  "examples": [
+    ".a { margin: convertToEm(24px); }"
+  ],
+  "rejects": []
+}

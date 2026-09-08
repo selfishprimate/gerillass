@@ -1,0 +1,16 @@
+{
+  "name": "remify",
+  "summary": "Converts a pixel length to rem, against a 16px root.",
+  "arguments": [
+    {
+      "name": "$value",
+      "accepts": [
+        "a pixel length"
+      ]
+    }
+  ],
+  "examples": [
+    ".a { font-size: remify(24px); }"
+  ],
+  "rejects": []
+}

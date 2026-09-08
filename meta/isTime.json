@@ -1,0 +1,18 @@
+{
+  "name": "isTime",
+  "summary": "Returns the value if it is a time in s or ms, and errors otherwise.",
+  "arguments": [
+    {
+      "name": "$value",
+      "accepts": [
+        "a duration such as 0.2s or 300ms, or 0"
+      ]
+    }
+  ],
+  "examples": [
+    ".a { animation-duration: isTime(0.4s); }"
+  ],
+  "rejects": [
+    ".a { animation-duration: isTime(400px); }"
+  ]
+}

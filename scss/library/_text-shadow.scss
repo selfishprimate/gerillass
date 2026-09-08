@@ -1,31 +1,37 @@
 @charset "UTF-8";
 
+@use "sass:color";
+@use "sass:list";
+@use "sass:math";
+@use "sass:meta";
+@use "../utilities/clear-unit" as *;
+
 @mixin text-shadow($params...) {
   $value: ();
 
-  @for $i from 1 through length($params) {
+  @for $i from 1 through list.length($params) {
     // Takes each items come from $params.
-    $item: nth($params, $i);
+    $item: list.nth($params, $i);
 
     // Each group must carry at least a direction, a colour and a size. Without
-    // this the nth() calls below fail with "Invalid index", which says nothing
+    // this the list.nth() calls below fail with "Invalid index", which says nothing
     // about what the mixin wanted.
-    @if length($item) < 3 {
+    @if list.length($item) < 3 {
       @error "`#{$item}` is not a valid shadow for `text-shadow`. Each group needs a direction, a colour and a size, such as `bottom-right red 5px`. An optional blur and a fill flag may follow.";
     }
 
     // The first value comes from the $item is direction.
     // This will be used in the @if, @else statements with $size to control the offset of the shadows.
-    $direction: nth($item, 1);
+    $direction: list.nth($item, 1);
 
     // Second value is the color.
-    $color: nth($item, 2);
+    $color: list.nth($item, 2);
 
     // The third value is the actual offset value of the shadows.
-    $size: nth($item, 3);
+    $size: list.nth($item, 3);
 
     // Takes the unit of the $size value to use it later to increment the amount of shadow based on the unit.
-    $sizeUnit: unit($size);
+    $sizeUnit: math.unit($size);
 
     // The $blur argument is optional. It controls the size of the blur.
     $blur: null;
@@ -34,104 +40,104 @@
     $fill: null;
 
     // Assigns the optional sub-arguments to the actual argument.
-    @if length($item) == 4 and type-of(nth($item, 4)) == number {
-      $blur: nth($item, length($item));
-    } @else if length($item) == 4 and type-of(nth($item, 4)) == bool {
-      $fill: nth($item, length($item));
-    } @else if length($item) == 5 {
-      $blur: nth($item, 4);
-      $fill: nth($item, length($item));
+    @if list.length($item) == 4 and meta.type-of(list.nth($item, 4)) == number {
+      $blur: list.nth($item, list.length($item));
+    } @else if list.length($item) == 4 and meta.type-of(list.nth($item, 4)) == bool {
+      $fill: list.nth($item, list.length($item));
+    } @else if list.length($item) == 5 {
+      $blur: list.nth($item, 4);
+      $fill: list.nth($item, list.length($item));
     }
 
     // The code below changes the angle of $direction of the shadow based on the predefined values.
     @if $direction == "top" {
       @if $fill == true {
-        // The __clearUnit(); function is used here due to it is not possible to count $size with a unit. First, it clears the unit from the $size argument and then adds it back again in the @for loop.
-        @for $i from 1 through __clearUnit($size) {
+        // The clearUnit(); function is used here due to it is not possible to count $size with a unit. First, it clears the unit from the $size argument and then adds it back again in the @for loop.
+        @for $i from 1 through clearUnit($size) {
           $increase: $i * 1 + $sizeUnit;
           $shadow: 0 -#{$increase} $blur $color;
-          $value: append($value, $shadow, comma);
+          $value: list.append($value, $shadow, comma);
         }
       } @else {
         $shadow: 0 -#{$size} $blur $color;
-        $value: append($value, $shadow, comma);
+        $value: list.append($value, $shadow, comma);
       }
     } @else if $direction == "top-left" {
       @if $fill == true {
-        @for $i from 1 through __clearUnit($size) {
+        @for $i from 1 through clearUnit($size) {
           $increase: $i * 1 + $sizeUnit;
           $shadow: -#{$increase} -#{$increase} $blur $color;
-          $value: append($value, $shadow, comma);
+          $value: list.append($value, $shadow, comma);
         }
       } @else {
         $shadow: -#{$size} -#{$size} $blur $color;
-        $value: append($value, $shadow, comma);
+        $value: list.append($value, $shadow, comma);
       }
     } @else if $direction == "top-right" {
       @if $fill == true {
-        @for $i from 1 through __clearUnit($size) {
+        @for $i from 1 through clearUnit($size) {
           $increase: $i * 1 + $sizeUnit;
           $shadow: #{$increase} -#{$increase} $blur $color;
-          $value: append($value, $shadow, comma);
+          $value: list.append($value, $shadow, comma);
         }
       } @else {
         $shadow: #{$size} -#{$size} $blur $color;
-        $value: append($value, $shadow, comma);
+        $value: list.append($value, $shadow, comma);
       }
     } @else if $direction == "bottom" {
       @if $fill == true {
-        @for $i from 1 through __clearUnit($size) {
+        @for $i from 1 through clearUnit($size) {
           $increase: $i * 1 + $sizeUnit;
           $shadow: 0 #{$increase} $blur $color;
-          $value: append($value, $shadow, comma);
+          $value: list.append($value, $shadow, comma);
         }
       } @else {
         $shadow: 0 #{$size} $blur $color;
-        $value: append($value, $shadow, comma);
+        $value: list.append($value, $shadow, comma);
       }
     } @else if $direction == "bottom-left" {
       @if $fill == true {
-        @for $i from 1 through __clearUnit($size) {
+        @for $i from 1 through clearUnit($size) {
           $increase: $i * 1 + $sizeUnit;
           $shadow: -#{$increase} #{$increase} $blur $color;
-          $value: append($value, $shadow, comma);
+          $value: list.append($value, $shadow, comma);
         }
       } @else {
         $shadow: -#{$size} #{$size} $blur $color;
-        $value: append($value, $shadow, comma);
+        $value: list.append($value, $shadow, comma);
       }
     } @else if $direction == "bottom-right" {
       @if $fill == true {
-        @for $i from 1 through __clearUnit($size) {
+        @for $i from 1 through clearUnit($size) {
           $increase: $i * 1 + $sizeUnit;
           $shadow: #{$increase} #{$increase} $blur $color;
-          $value: append($value, $shadow, comma);
+          $value: list.append($value, $shadow, comma);
         }
       } @else {
         $shadow: #{$size} #{$size} $blur $color;
-        $value: append($value, $shadow, comma);
+        $value: list.append($value, $shadow, comma);
       }
     } @else if $direction == "left" {
       @if $fill == true {
-        @for $i from 1 through __clearUnit($size) {
+        @for $i from 1 through clearUnit($size) {
           $increase: $i * 1 + $sizeUnit;
           $shadow: -#{$increase} 0 $blur $color;
-          $value: append($value, $shadow, comma);
+          $value: list.append($value, $shadow, comma);
         }
       } @else {
         $shadow: -#{$size} 0 $blur $color;
-        $value: append($value, $shadow, comma);
+        $value: list.append($value, $shadow, comma);
       }
     } @else if $direction == "right" {
       @if $fill == true {
-        @for $i from 1 through __clearUnit($size) {
+        @for $i from 1 through clearUnit($size) {
           $increase: $i * 1 + $sizeUnit;
           $shadow: #{$increase} 0 $blur $color;
-          $value: append($value, $shadow, comma);
+          $value: list.append($value, $shadow, comma);
         }
       } @else {
         $shadow: #{$size} 0 $blur $color;
-        $value: append($value, $shadow, comma);
+        $value: list.append($value, $shadow, comma);
       }
     }
   }

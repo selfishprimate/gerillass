@@ -1,31 +1,35 @@
 @charset "UTF-8";
 
+@use "sass:list";
+@use "sass:meta";
+@use "sass:string";
+
 @mixin sprite($params...) {
-  @if length($params) == 1 {
-    @if type-of(nth($params, 1)) == "string" {
-      $str-length: str-length(nth($params, 1));
-      $str-end: str-slice(nth($params, 1), $str-length - 3);
-      @if index(".png" ".jpg" ".svg", $str-end) {
-        $image-url: nth($params, 1);
+  @if list.length($params) == 1 {
+    @if meta.type-of(list.nth($params, 1)) == "string" {
+      $str-length: string.length(list.nth($params, 1));
+      $str-end: string.slice(list.nth($params, 1), $str-length - 3);
+      @if list.index(".png" ".jpg" ".svg", $str-end) {
+        $image-url: list.nth($params, 1);
         display: inline-block;
         background-image: url($image-url);
         background-repeat: no-repeat;
       } @else {
-        @error "`#{nth($params, 1)}` is not a valid image path for `sprite`. The path must end in .png, .jpg or .svg.";
+        @error "`#{list.nth($params, 1)}` is not a valid image path for `sprite`. The path must end in .png, .jpg or .svg.";
       }
     } @else {
-      $position: nth($params, 1);
+      $position: list.nth($params, 1);
       background-position: $position;
     }
-  } @else if length($params) == 2 {
-    $image-url: nth($params, 1);
-    $position: nth($params, 2);
+  } @else if list.length($params) == 2 {
+    $image-url: list.nth($params, 1);
+    $position: list.nth($params, 2);
     display: inline-block;
     background-image: url($image-url);
     background-position: $position;
     background-repeat: no-repeat;
   } @else {
-    @error "`sprite` takes 1 or 2 arguments; you passed #{length($params)}. Pass an image path, a background position, or both in that order.";
+    @error "`sprite` takes 1 or 2 arguments; you passed #{list.length($params)}. Pass an image path, a background position, or both in that order.";
   }
   @content;
 }

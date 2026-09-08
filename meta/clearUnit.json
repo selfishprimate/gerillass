@@ -1,0 +1,16 @@
+{
+  "name": "clearUnit",
+  "summary": "Strips the unit off a number, returning it unitless.",
+  "arguments": [
+    {
+      "name": "$value",
+      "accepts": [
+        "any number with a unit"
+      ]
+    }
+  ],
+  "examples": [
+    ".a { line-height: clearUnit(24px); }"
+  ],
+  "rejects": []
+}

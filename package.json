@@ -16,7 +16,7 @@
     }
   },
   "license": "Apache-2.0",
-  "version": "1.6.2",
+  "version": "2.0.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/selfishprimate/gerillass.git"
@@ -37,24 +37,14 @@
     "sass-toolkit",
     "sass-library",
     "sass-framework",
-    "sass-tool-set",
-    "eyeglass-module"
+    "sass-tool-set"
   ],
-  "eyeglass": {
-    "sassDir": "scss",
-    "exports": false,
-    "name": "gerillass",
-    "needs": "^3.0.0"
-  },
   "scripts": {
     "manifest": "node tools/build-manifest.js && node tools/build-skill.js",
     "test": "jest"
   },
   "devDependencies": {
     "glob": "^11.0.0",
-    "gulp": "^5.0.1",
-    "gulp-concat": "^2.6.1",
-    "gulp-replace": "^1.1.4",
     "jest": "^30.0.5",
     "sass": "^1.90.0",
     "sass-true": "^9.0.0"

@@ -1,5 +1,10 @@
 @charset "UTF-8";
 
+@use "sass:list";
+@use "sass:math";
+@use "sass:meta";
+@use "sass:string";
+
 @mixin background-dots(
   $color: null,
   $size: 1em,
@@ -7,7 +12,7 @@
   $diagonal: true,
   $image: null
 ) {
-  @if $image != null and type-of($image) != "string" {
+  @if $image != null and meta.type-of($image) != "string" {
     @error "`#{$image}` is not a valid $image for `background-dots`. Pass an image path as a string.";
   }
   @if $diagonal != true and $diagonal != false {
@@ -26,15 +31,15 @@
     }
   } @else if $color {
     @if $diagonal == true {
-      background-image: radial-gradient(nth($color, 1) $size, transparent 0),
-        radial-gradient(nth($color, length($color)) $size, transparent 0);
+      background-image: radial-gradient(list.nth($color, 1) $size, transparent 0),
+        radial-gradient(list.nth($color, list.length($color)) $size, transparent 0);
       background-position: math.div($gutter, 2) math.div($gutter, 2),
         ($gutter * 2) ($gutter * 2);
     } @else if $diagonal == false {
-      background-image: radial-gradient(nth($color, 1) $size, transparent 0);
+      background-image: radial-gradient(list.nth($color, 1) $size, transparent 0);
       background-position: math.div($gutter, 2) math.div($gutter, 2);
-      @if length($color) > 1 {
-        @error "Please do not pass more than one argument when you disable 'diagonal' property! Simply remove the argument(s) after '#{nth($color, 1)}' to resolve the problem.";
+      @if list.length($color) > 1 {
+        @error "Please do not pass more than one argument when you disable 'diagonal' property! Simply remove the argument(s) after '#{list.nth($color, 1)}' to resolve the problem.";
       }
     }
   }
@@ -50,7 +55,7 @@
       height: 100%;
       top: 0;
       left: 0;
-      background-image: url(unquote($image));
+      background-image: url(string.unquote($image));
       background-repeat: no-repeat;
       background-position: center;
       background-size: cover;

@@ -1,0 +1,16 @@
+{
+  "name": "validateLength",
+  "summary": "Returns the value if it is a length or one of auto, inherit, initial, 0.",
+  "arguments": [
+    {
+      "name": "$value",
+      "accepts": [
+        "a length with a unit, or auto, inherit, initial, 0"
+      ]
+    }
+  ],
+  "examples": [
+    ".a { width: validateLength(20px); }"
+  ],
+  "rejects": []
+}

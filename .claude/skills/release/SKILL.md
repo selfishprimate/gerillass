@@ -24,8 +24,21 @@ confirm before touching anything:
 npm test                    # must pass: specs, smoke test and the manifest suite
 yarn audit                  # must be zero across all severities
 node tools/audit.js         # the SILENT bucket must be empty
+node tools/check-docs.js    # the docs must not claim a count the repo lacks
 git status --short          # know exactly what is going out
 ```
+
+The library must no longer trip the two deprecations the module migration was
+about. This must print nothing:
+
+```bash
+npx sass --load-path=scss test/smoke.scss 2>&1 >/dev/null | grep -E 'DEPRECATION.*(import|global-builtin)'
+```
+
+A plain `grep DEPRECATION` will still find something, and that is expected: Sass
+is deprecating its own `if()`, which the library calls in 21 places. Use `npx`,
+not a system `sass` — an older one has nothing to say about `if()` and will make
+a stale tree look clean.
 
 If `dependencies` in `package.json` is non-empty, stop and fix that first — it is
 the single most consequential defect this package can ship. See CLAUDE.md.
@@ -54,9 +67,9 @@ Write what changed for a **user of the library**, not what changed in the repo.
 npm pack --dry-run
 ```
 
-Expect 92 files / ~38 kB as of v1.6.2: everything under `scss/`, the generated
+Expect 94 files / ~38 kB as of v2.0.0: everything under `scss/`, the generated
 `gerillass.json` and `SKILL.md`, plus `README.md`, `LICENSE.md` and
-`package.json`. If `test/`, `meta/`, `tools/`, `gulpfile.js`, `yarn.lock` or
+`package.json`. If `test/`, `meta/`, `tools/`, `yarn.lock` or
 `node_modules` appear, `.npmignore` is broken — stop and fix it.
 
 ## 4. Commit, tag, push

@@ -1,6 +1,6 @@
 ---
 name: new-mixin
-description: Scaffold a new Gerillass mixin or utility function with the project's conventions, wire it into the import chain, regenerate the gls- bundle, and stub its test. Use when adding a new mixin, helper function, list or map to the library.
+description: Scaffold a new Gerillass mixin or utility function with the project's conventions, wire it into the folder index, describe it in meta/, and test it. Use when adding a new mixin, helper function, list or map to the library.
 ---
 
 # Add a member to the Gerillass library
@@ -14,12 +14,12 @@ silently, which is worse. Do all of them.
 | Adding | Folder | Naming |
 |---|---|---|
 | public mixin | `scss/library/` | `kebab-case` |
-| helper function | `scss/utilities/` | `__camelCase`, two leading underscores |
+| helper function | `scss/utilities/` | `camelCase` |
 | value list | `scss/lists/` | `$list-of-…`, with `!default` |
 | keyed config | `scss/maps/` | `$map-for-…`, with `!default` |
 
 One member per file, and **the filename must match the member name** —
-`_border-radius.scss` holds `@mixin border-radius`. This holds for all 51
+`_border-radius.scss` holds `@mixin border-radius`. This holds for all 50
 existing mixins and 22 utilities; do not be the exception.
 
 ## 2. Write the file
@@ -35,13 +35,12 @@ double quotes.
 }
 ```
 
-**Do not add `@use` rules to anything in `scss/library/`.** The Gulp task
-concatenates those files into one bundle, so a `@use` lands mid-file and Sass
-rejects the whole thing (`@use rules must be written before any other rules`).
-Library partials rely on the global namespace `_gerillass.scss` builds; that is
-deliberate until the 2.0.0 module migration.
+Declare what the file uses, right after the `@charset` line — see step 4. This
+reversed in 2.0.0: library partials used to be forbidden from carrying a `@use`
+rule, because a Gulp task concatenated them into one bundle and a `@use` landing
+mid-file made Sass reject the whole thing. That generator is gone.
 
-Validate arguments and fail loudly. 35 of the 45 mixins that take arguments do
+Validate arguments and fail loudly. 34 of the 44 mixins that take arguments do
 this, and the message should name what is acceptable:
 
 ```scss
@@ -59,40 +58,47 @@ instead of yours.
 
 Do **not** validate a value that is passed straight through to CSS. CSS accepts
 an open-ended set there: `var()`, `calc()`, `clamp()`, `env()`, `unset` and
-whatever ships next. A strict check rejects correct code — `__validateLength`
+whatever ships next. A strict check rejects correct code — `validateLength`
 used to warn about `var(--gap)` for exactly this reason. Validate the shape of
 the call (arity, which keyword, which type) and leave the values alone.
 
-Reuse the existing utilities rather than reimplementing them — `__isColor`,
-`__isNumber`, `__isTime` for type guards; `__validateLength`,
-`__validateBreakpoint`, `__validateRatio`, `__validateScissors` for validation;
-`__remify`, `__pixelify`, `__convertToEm`, `__shorthandProperty` for
+Reuse the existing utilities rather than reimplementing them — `isColor`,
+`isNumber`, `isTime` for type guards; `validateLength`,
+`validateBreakpoint`, `validateRatio`, `validateScissors` for validation;
+`remify`, `pixelify`, `convertToEm`, `shorthandProperty` for
 conversion.
 
-## 3. Wire it into `_gerillass.scss`
+## 3. Wire it into the folder index
 
-**A new file is invisible until it is listed there.** Add an `@import` line in
-the correct layer block, keeping the block alphabetical:
+**A new file is invisible until it is listed there.** Add a `@forward` line to
+its folder's `_index.scss`, keeping the list alphabetical:
 
 ```scss
-@import "library/your-mixin";
+@forward "your-mixin";
 ```
 
-The layer order — lists, maps, utilities, library — is a real dependency order,
-not decoration.
+`_gerillass.scss` forwards the four folders, so nothing else needs touching —
+and the `gls-` copy comes along automatically.
 
-## 4. Regenerate the prefixed bundle
+## 4. Declare what it uses
 
-```bash
-npx gulp start
+`@forward` does not reach sibling partials, so a mixin that reads a map or calls
+a function needs its own `@use` at the top of the file:
+
+```scss
+@charset "UTF-8";
+
+@use "sass:math";
+@use "../maps/map-for-breakpoints" as *;
+@use "../utilities/validate-length" as *;
 ```
 
-This rebuilds `scss/_gerillass-prefix.scss`, which is committed build output —
-never edit it by hand. Skipping this leaves the entire `gls-` half of the public
-API without your mixin. Commit the regenerated file alongside the source.
+`as *` keeps call sites unprefixed, which is the convention here. Miss one and
+the mixin still compiles — Sass evaluates lazily — until something calls it,
+which is what `test/smoke.scss` is for.
 
-(A PostToolUse hook runs this automatically after edits under `scss/library/`.
-Run it manually anyway if you are unsure it fired.)
+The `gls-` prefixed copy needs nothing: `_gerillass.scss` produces it with
+`@forward "library" as gls-*`.
 
 ## 5. Describe it in `meta/`
 

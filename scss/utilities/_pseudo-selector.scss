@@ -1,10 +1,12 @@
 @charset "UTF-8";
 
-@function __pseudoSelector($elements, $pseudo: null) {
+@use "sass:list";
+
+@function pseudoSelector($elements, $pseudo: null) {
   $list: ();
   @each $element in $elements {
     $element: if($pseudo, $element + ":" + $pseudo, $element);
-    $list: append($list, $element, comma);
+    $list: list.append($list, $element, comma);
   }
   @return $list;
 }

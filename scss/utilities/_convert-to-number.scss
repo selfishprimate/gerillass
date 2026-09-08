@@ -1,20 +1,24 @@
 @charset "UTF-8";
 
-@function __convertToNumber($value) {
+@use "sass:list";
+@use "sass:meta";
+@use "sass:string";
 
-  @if type-of($value) != "string" {
-    @error "`#{$value}` is not a valid $value for `__convertToNumber`. Pass a string made only of digits, such as `\"42\"`.";
+@function convertToNumber($value) {
+
+  @if meta.type-of($value) != "string" {
+    @error "`#{$value}` is not a valid $value for `convertToNumber`. Pass a string made only of digits, such as `\"42\"`.";
   }
 
   $string-numerals: "0" "1" "2" "3" "4" "5" "6" "7" "8" "9";
   $calc: 0;
 
-  @for $i from 1 through str-length($value) {
+  @for $i from 1 through string.length($value) {
     //Takes every digits in the $value
-    $digit: str-slice($value, $i, $i);
+    $digit: string.slice($value, $i, $i);
 
     //Finds the index position of $digit in the $value
-    $index-of-digit: index($string-numerals, $digit);
+    $index-of-digit: list.index($string-numerals, $digit);
 
     // That is because SASS strings are not "0" based but "1", the index position of every digits will be more by one. Here is the simple calculation to find the actual number.
     $actual-digit: $index-of-digit - 1;

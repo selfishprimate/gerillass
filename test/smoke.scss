@@ -10,7 +10,7 @@
 //
 // Add a line here whenever you add a mixin to scss/library/.
 
-@import "gerillass";
+@use "gerillass" as *;
 
 // --- Root-level mixins -------------------------------------------------------
 
@@ -28,6 +28,7 @@
 .all-buttons { @include all-buttons { color: red; } }
 .all-text-inputs { @include all-text-inputs { color: red; } }
 .antialias { @include antialias; }
+.aspect-ratio { @include aspect-ratio("16:9"); }
 .background-dots { @include background-dots; }
 .background-image { @include background-image("/img/a.png"); }
 .background-image-filtered { @include background-image("/img/a.png", rgba(0, 0, 0, 0.5)); }
@@ -56,12 +57,10 @@
 .placeholder-shown { @include placeholder-shown { color: gray; } }
 .position { @include position(absolute, 0 10px); }
 .radial-gradient { @include radial-gradient(circle, "center", red blue); }
-.ratio-box { @include ratio-box("16/9"); }
 .remove { @include remove("medium"); }
 .reset-figure { @include reset-figure; }
 .resizable { @include resizable; }
 .responsive-image { @include responsive-image; }
-.responsive-video { @include responsive-video("16/9"); }
 .scissors { @include scissors(10px); }
 .screen-agent { @include screen-agent("2x") { color: red; } }
 .sizer { @include sizer(100px); }

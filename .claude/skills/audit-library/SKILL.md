@@ -6,7 +6,7 @@ description: Sweep every mixin and function in Gerillass and report where it mis
 # Audit the library
 
 `npm test` only checks inputs somebody already thought of. This audit throws
-arguments nobody wrote a test for at all 51 mixins **and all 22 functions**, at
+arguments nobody wrote a test for at all 50 mixins **and all 22 functions**, at
 every argument position, and reports what the library does with them. Run it
 before a release and after any change that touches more than a couple of
 members.
@@ -49,7 +49,7 @@ reaching for `str-slice`, `nth` or `unit`. Sass's own `Missing argument $name` i
 not in this bucket: it names the argument, which is enough.
 
 **WARNED ONLY — the build succeeded with a warning.** A warning most pipelines
-never surface. Today all of these are `__validateLength` on a value that is not
+never surface. Today all of these are `validateLength` on a value that is not
 a length, six of them reached through `position`, and they stay warnings on
 purpose: that function cannot be certain, and making it strict is what used to
 reject `var(--gap)`.
@@ -91,11 +91,9 @@ npm run manifest && git diff --stat
 A non-empty diff means `gerillass.json` or `SKILL.md` was committed stale. The
 suite catches this too, but check it here so the audit report is complete.
 
-```bash
-npx gulp start && git diff --stat scss/_gerillass-prefix.scss
-```
-
-Same for the `gls-` bundle.
+The `gls-` half needs no regeneration since 2.0.0 — it comes from
+`@forward "library" as gls-*` — but the suite still compares both names, so a
+partial missing from `scss/library/_index.scss` shows up there.
 
 ## 4. What the tests do not assert
 
@@ -122,13 +120,13 @@ Also report mixins that take arguments and still validate none of them:
 for f in scss/library/_*.scss; do
   grep -q '^@mixin [a-z-]*(' "$f" || continue          # takes no arguments
   grep -q '@error' "$f" && continue                    # validates inline
-  grep -q '__validate\|__is[A-Z]' "$f" && continue     # validates through a utility
+  grep -qE 'validate[A-Z]|is[A-Z][a-z]' "$f" && continue  # validates through a utility
   basename "$f" .scss | sed 's/^_//'
 done
 ```
 
 The last filter matters: `ratio-box` and `responsive-video` carry no `@error` of
-their own but reject bad input through `__validateRatio`, so a plain grep for
+their own but reject bad input through `validateRatio`, so a plain grep for
 `@error` reports them as unvalidated and is wrong.
 
 ## 5. The packed artifact
@@ -137,7 +135,7 @@ their own but reject bad input through `__validateRatio`, so a plain grep for
 npm pack --dry-run
 ```
 
-Expect 92 files. `meta/` and `tools/` must not appear; `gerillass.json` and
+Expect 94 files. `meta/` and `tools/` must not appear; `gerillass.json` and
 `SKILL.md` must. For a release-grade audit, install the tarball somewhere else
 and compile against it — `.npmignore` and the `exports` map mean the working
 tree and the published package are not the same thing.
