@@ -325,6 +325,57 @@ Verified as of v1.6.1.
   cases in `node tools/audit.js`. Left as a warning on purpose — see the note
   in `scss/utilities/_validate-length.scss`.
 
+### New members worth adding
+
+Researched after 2.0.1, against the bar this repo now holds itself to: a mixin
+earns its place when it encodes something a user gets wrong, across more than
+one declaration. `ratio-box` was deleted for failing that test and
+`aspect-ratio` was written to pass it.
+
+Sixteen areas of modern CSS were checked against the 50 mixins and **every one
+had zero coverage**: `prefers-reduced-motion`, `focus-visible`, `line-clamp`,
+`@container`, `@starting-style`, `light-dark()`, `color-scheme`, safe-area
+insets, `auto-fit` grids, anchor positioning, `@scope`, view transitions and
+scrollbar styling. The `clamp(` and `anchor` matches in `scss/` are a comment
+and the `<a>` pseudo-class list, not the features.
+
+Ranked, with the trap each one closes:
+
+1. **Container queries.** The largest hole in the library's own story: the
+   whole responsive API is `breakpoint`, which is media queries, and
+   component-level responsiveness has nothing. Verified in a browser: an
+   element with `container-type` on itself **cannot be matched by a
+   `@container` rule targeting it** (the query silently does not apply); the
+   container has to be an ancestor of what the query styles.
+2. **Fluid type and space.** The `clamp()` slope and intercept is real
+   arithmetic, and mixing `vw` with `rem` is what keeps browser zoom working
+   for WCAG 1.4.4. A `vw`-only value breaks zoom. This is what a preprocessor
+   is for, and `remify`/`fontSizer` already set the house style.
+3. **`line-clamp`.** `ellipsis` truncates one line and nothing truncates
+   several. Multi-line needs four coordinated declarations, one of them the
+   legacy `display: -webkit-box`.
+4. **`prefers-reduced-motion`, and a defect it exposes.** `loadify` animates
+   elements on page load and respects nothing. That is an accessibility bug in
+   a shipped mixin, not a missing feature. A guard mixin plus the fix.
+5. **`focus-ring`.** `:focus-visible` with an offset and a forced-colors
+   fallback. Commonly done wrong by removing the outline altogether.
+6. **`auto-grid`.** Verified in a browser: in a 250px container,
+   `repeat(auto-fit, minmax(20rem, 1fr))` lays out a 320px column and overflows
+   by 70px, while `minmax(min(100%, 20rem), 1fr)` fits at 250px. Forgetting the
+   `min()` is what produces horizontal scrolling on phones. Different enough
+   from `columnizer`, which is flexbox and wants a column count.
+7. **Decorative, in the spirit of `background-dots` and `scissors`:** `glass`
+   (`backdrop-filter` with a `@supports` fallback, which is unreadable without
+   it), `edge-fade` (`mask-image` on a scroll container), `theme`
+   (`color-scheme` plus `light-dark()`, where forgetting the first makes the
+   second silently pick light).
+
+Declined, for failing the bar: `text-wrap: balance`, `subgrid`, `:has()` and
+scrollbar colouring are one or two properties with no trap. Anchor positioning
+and `@starting-style` are strong candidates held back only because they reached
+Baseline between October 2025 and April 2026, which is too new for a library
+that still supports older toolchains.
+
 ### Modernisation
 
 - **Sass is deprecating its own `if()`, and the library calls it 21 times.**
