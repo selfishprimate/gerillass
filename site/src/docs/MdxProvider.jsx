@@ -6,6 +6,7 @@ import Example from "./Example";
 import Member from "./Member";
 import Arguments, { Argument } from "./Arguments";
 import Hint from "./Hint";
+import DocLink from "./DocLink";
 
 /*
   The components an .mdx page can use without importing them, and what the
@@ -64,6 +65,8 @@ const components = {
   // A fenced block. Mapping `pre` rather than `code` keeps inline code alone,
   // which is a different thing and styled as one.
   pre: CodeBlock,
+
+  a: DocLink,
 };
 
 function DocsMdx({ children }) {

@@ -199,8 +199,23 @@ function convert(slug, source) {
     i += 1;
   }
 
+  /*
+    Two things the upstream pages were inconsistent about, normalised here so a
+    re-run does not put them back.
+
+    The section of outbound links was written three ways across sixteen pages,
+    "Related Links", "Related Articles" and "Related links", for the same
+    mixture of references, articles and links to other pages here.
+
+    And an internal link written with a trailing slash is answered with a 301,
+    because these pages are served from files: /docs/container/ redirects to
+    /docs/container. Hugo's URLs really were directories, so every one of them
+    carried the slash.
+  */
   const closed = out
     .join("\n")
+    .replace(/^## Related (?:Articles|links)\s*$/gm, "## Related Links")
+    .replace(/\]\((\/docs\/[a-z0-9-]+)\/\)/g, "]($1)")
     .replace(/^\s*\{\{<\s*\/\s*(mixin|function)\s*>\}\}\s*$/gm, "\n</Member>")
     .replace(/^\s*\{\{<\s*\/\s*hint\s*>\}\}\s*$/gm, "\n</Hint>")
     .replace(/^\s*\{\{<\s*\/\s*arguments\/table\s*>\}\}\s*$/gm, "</Arguments>");

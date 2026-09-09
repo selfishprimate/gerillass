@@ -187,6 +187,11 @@ are load-bearing:
 - **A fenced block renders through `components/CodeBlock`**, the same component
   the landing page uses. Before this a fence was unstyled text, which is what
   made a listing of demo markup look like output that had failed to render.
+- **A Markdown link goes through the router** when it points inside the site,
+  via `src/docs/DocLink.jsx`. Every one of them was a plain `<a>`, so moving
+  from one page to the next reloaded the whole application to reach a page the
+  router already had. An outbound link keeps `target` and `rel`; a bare
+  fragment stays an anchor.
 
 `CodeBlock` carries almost no styling of its own, deliberately. The landing
 page frames a block as a large tinted panel and the documentation as a listing
@@ -326,9 +331,26 @@ serves these from files and normalises the slash away. That means:
 The old site's URLs are the same shape, `docs.gerillass.com/docs/<slug>/`, so
 the domain move is a host swap rather than a path rewrite.
 
+### Editorial consistency
+
+Two things the upstream pages disagreed with themselves about, normalised in
+`tools/port-docs.js` rather than only in the files, so a re-run keeps them:
+
+- the section of outbound links was written three ways across sixteen pages,
+  **Related Links**, *Related Articles* and *Related links*, for the same
+  mixture of references, articles and links to other pages here. It is
+  `## Related Links` everywhere now
+- an internal link written with a trailing slash is answered with a 301, since
+  these pages are served from files. Seven of them carried one, inherited from
+  Hugo where the URLs really were directories
+
+A page's list marker is still `*` on the converted pages and `-` on the two
+written here. It is invisible to a reader, so it was left rather than churned.
+
 ### Not done yet
 
-No page has been read end to end for prose quality since the port. And whether
+No page has been read end to end for prose quality since the port; what has
+been done is a sweep for the things a scan can find. And whether
 Netlify resolves `/docs` to `dist/docs.html` ahead of the `/*` fallback has not
 been seen in production; it is the same convention `/about` already ships
 under, so it should hold, but it has not been watched.
