@@ -6,7 +6,6 @@ import About from "pages/About";
 import NotFound from "components/NotFound";
 import DocPage from "pages/Docs";
 import { pages } from "docs/pages";
-import DocsIndex from "pages/DocsIndex";
 
 /*
   The routes as data rather than JSX, which is what vite-react-ssg needs in
@@ -24,11 +23,11 @@ import DocsIndex from "pages/DocsIndex";
   stay mounted. Routing them separately built a second copy of it and coming
   back looked like a reload.
 */
-const docsRoutes = pages.map(({ slug, load }) => ({
-  path: `docs/${slug}`,
+const docsRoutes = pages.map(({ path, load }) => ({
+  path,
   lazy: async () => {
     const { default: Page, frontmatter } = await load();
-    return { element: <DocPage Page={Page} frontmatter={frontmatter} slug={slug} /> };
+    return { element: <DocPage Page={Page} frontmatter={frontmatter} path={path} /> };
   },
 }));
 
@@ -40,7 +39,6 @@ export const routes = [
       { index: true, element: <Home /> },
       { path: "playground", element: <Home /> },
       { path: "about", element: <About /> },
-      { path: "docs", element: <DocsIndex /> },
       ...docsRoutes,
       { path: "*", element: <NotFound /> },
     ],

@@ -3,9 +3,11 @@ import react from "@vitejs/plugin-react";
 import svgr from "vite-plugin-svgr";
 import sassExample from "./plugins/sass-example.js";
 import docsIndex from "./plugins/docs-index.js";
+import docsRedirects from "./plugins/docs-redirects.js";
 import docsHead from "./plugins/docs-head.js";
 import mdx from "@mdx-js/rollup";
 import remarkFrontmatter from "remark-frontmatter";
+import remarkGfm from "remark-gfm";
 import remarkMdxFrontmatter from "remark-mdx-frontmatter";
 import remarkCompileExamples from "./plugins/remark-compile-examples.js";
 import { fileURLToPath, URL } from "node:url";
@@ -42,6 +44,9 @@ export default defineConfig({
         providerImportSource: "@mdx-js/react",
         remarkPlugins: [
           remarkFrontmatter,
+          // Tables. The installation page and line-clamp both use them, and
+          // MDX does not read them without this.
+          remarkGfm,
           // Front matter becomes an exported `frontmatter` object, which is
           // where a page's title, description and preview image come from.
           [remarkMdxFrontmatter, { name: "frontmatter" }],
@@ -53,6 +58,7 @@ export default defineConfig({
     svgr(),
     sassExample(),
     docsIndex(),
+    docsRedirects(),
   ],
   // create-react-app let the source import from the top of src/ without a
   // relative path -- `components/Header`, `release` -- because jsconfig.json set

@@ -1,0 +1,350 @@
+---
+title: "Installation"
+guide: true
+page_title: "Installing Gerillass"
+page_description: "How to install Gerillass and load it in Vite, webpack, Next.js, Angular, Gulp, Grunt or Dart Sass on its own, plus the three ways to call a mixin and what an AI coding agent needs to use the library correctly."
+page_keywords: "Install Gerillass, Sass library installation, Sass mixins library, use Sass with Vite, sass-loader, Next.js sassOptions, Dart Sass pkg importer, npm install gerillass"
+---
+
+# Installation
+
+**Gerillass** is a toolkit of Sass mixins and functions. It is pure Sass: the
+`.scss` files are the whole library, there is nothing to compile before you use
+it, and installing it adds no runtime dependency to your project.
+
+Many of these utilities started as answers to problems that came up in real
+frontend work, and were shaped along the way by Bourbon, Susy, Scut and
+Bootstrap.
+
+This page covers getting the library loaded. Everything else, one page per
+mixin and function, is in the list beside it.
+
+<Hint kind="info">
+
+**Dart Sass only.** LibSass and the packages built on it, including Node Sass,
+have been unsupported since Gerillass 1.3.0. If you are still on LibSass, stay
+on an earlier version of the library until you can move.
+
+</Hint>
+
+## Install it
+
+```bash
+npm install gerillass --save-dev
+```
+
+Or with Yarn:
+
+```bash
+yarn add gerillass --dev
+```
+
+It is a development dependency because nothing of it survives into your build
+except the CSS your own Sass produces.
+
+## Load it
+
+If your setup resolves packages from `node_modules`, which Vite, webpack,
+Next.js and most modern bundlers do, this is all you need:
+
+```scss
+@use "gerillass" as *;
+```
+
+### Using the pkg: importer
+
+If you call Dart Sass yourself rather than through a bundler, turn on its
+package importer and use a `pkg:` URL.
+
+```scss
+@use "pkg:gerillass" as *;
+```
+
+In your build script:
+
+```js
+// Dart Sass 1.71.0 or later
+import * as sass from "sass";
+import { NodePackageImporter } from "sass";
+
+sass.compile("style.scss", { importers: [new NodePackageImporter()] });
+```
+
+Or from the command line:
+
+```bash
+sass --pkg-importer=node style.scss style.css
+```
+
+Pointing straight at the file always works too, and needs nothing turned on:
+
+```scss
+@use "{node_modules_path}/gerillass/scss/gerillass" as *;
+```
+
+## Per tool
+
+Each of these was verified against a real build. The versions are listed at the
+[end of this section](#versions-these-recipes-were-tested-with).
+
+### Vite
+
+Vite resolves the package by name, so there is nothing to configure. This
+covers anything built on Vite, including React, Vue, Svelte, SvelteKit and
+Astro.
+
+```scss
+@use "gerillass" as *;
+```
+
+### webpack
+
+`sass-loader` also resolves the package by name, with no extra options.
+
+```scss
+@use "gerillass" as *;
+```
+
+### Next.js
+
+Next.js needs to be told where the library lives. In `next.config.mjs`:
+
+```js
+export default {
+  sassOptions: {
+    loadPaths: ["node_modules/gerillass/scss"],
+  },
+};
+```
+
+Then, in any `.scss` file:
+
+```scss
+@use "gerillass" as *;
+```
+
+### Angular
+
+Add the library folder to the build target's options in `angular.json`. Angular
+calls this option `includePaths`, not `loadPaths`.
+
+```json
+"stylePreprocessorOptions": {
+  "includePaths": ["node_modules/gerillass/scss"]
+}
+```
+
+Then, in `src/styles.scss`:
+
+```scss
+@use "gerillass" as *;
+```
+
+### Gulp
+
+<Hint kind="info">
+
+`gulp-sass` hands its options straight to Dart Sass, so the option is
+**`loadPaths`**. The old `includePaths` name came from Node Sass and no longer
+resolves.
+
+</Hint>
+
+```js
+const { src, dest } = require("gulp");
+const sass = require("gulp-sass")(require("sass"));
+
+function styles() {
+  return src("assets/sass/**/*.scss")
+    .pipe(sass({ loadPaths: ["node_modules/gerillass/scss"] }).on("error", sass.logError))
+    .pipe(dest("assets/css"));
+}
+
+exports.styles = styles;
+```
+
+### Grunt
+
+<Hint kind="info">
+
+Use `grunt-sass` with Dart Sass as the implementation. The option here is
+**`loadPaths`** as well, not `loadPath` and not `includePaths`.
+
+</Hint>
+
+```js
+module.exports = function (grunt) {
+  grunt.loadNpmTasks("grunt-sass");
+  grunt.initConfig({
+    sass: {
+      dist: {
+        options: {
+          implementation: require("sass"),
+          loadPaths: ["node_modules/gerillass/scss"],
+        },
+        files: { "css/main.css": "src/main.scss" },
+      },
+    },
+  });
+};
+```
+
+### Cloning the repository
+
+You can also take the Sass sources directly, without npm.
+
+```bash
+git clone https://github.com/selfishprimate/gerillass.git
+```
+
+Copy the `scss` folder into your project and load it by path:
+
+```scss
+@use "gerillass/scss/gerillass" as *;
+```
+
+### Versions these recipes were tested with
+
+| Tool | Version |
+|---|---|
+| Dart Sass | 1.103.1 |
+| Vite | 8.2.2 |
+| webpack / sass-loader | 5.110.3 / 17.0.1 |
+| Next.js | 16.3.4 |
+| Angular CLI | 20.3.36 |
+| Gulp / gulp-sass | 5.0.1 / 6.0.1 |
+| Grunt / grunt-sass | 1.6.3 / 4.1.0 |
+
+## Three ways to call the same mixin
+
+None of them is required. Pick whichever reads best in your project, and stay
+with it in a given file.
+
+**Bare.** The shortest, and fine unless another library defines the same name.
+
+```scss
+@use "gerillass" as *;
+
+.avatar {
+  @include circle(50px);
+}
+```
+
+**With the `gls-` prefix.** Every mixin also answers to a prefixed name, which
+avoids collisions with Bootstrap and friends.
+
+```scss
+@use "gerillass" as *;
+
+.avatar {
+  @include gls-circle(50px);
+}
+```
+
+**Through a namespace.** Sass's own mechanism, and the tidiest of the three:
+nothing enters your global scope at all, so a collision is impossible. The name
+after `as` is yours to choose.
+
+```scss
+@use "gerillass" as gls;
+
+.avatar {
+  @include gls.circle(50px);
+}
+```
+
+All three produce identical CSS. The prefix predates the Sass module system; if
+you are starting fresh, the namespace does the same job without the extra name.
+
+## Using Gerillass with an AI coding agent
+
+A library this size has no training data behind it, so an agent asked to use
+Gerillass will guess at the argument forms and get them wrong. Two files ship
+with the package to stop that. Both live inside the installed package, so an
+agent working in your project can read them straight out of
+`node_modules/gerillass/`.
+
+**`gerillass.json`** describes every mixin and function: its signature, what
+each argument accepts, examples that compile, and inputs that are refused.
+
+```js
+const api = require("gerillass/gerillass.json");
+```
+
+**`SKILL.md`** is a written guide generated from that manifest. It covers how to
+load the library, the full catalogue, and the argument forms that are easy to
+get wrong. If your agent supports Agent Skills, copy it into your skills folder:
+
+```bash
+mkdir -p .claude/skills/gerillass
+cp node_modules/gerillass/SKILL.md .claude/skills/gerillass/
+```
+
+Otherwise, point your agent at the file and it will read it as plain Markdown.
+
+### Why you can trust what they say
+
+Neither file is written by hand. Signatures are parsed from the Sass sources,
+and the semantics come from a separate set of notes, so nobody can describe a
+mixin that does not exist.
+
+The part that matters is what happens next. The test suite takes every example
+in the manifest and compiles it. It takes every input the manifest claims is
+refused and checks that the library really does refuse it, with its own error
+message rather than an internal Sass one. It runs every example a second time
+under the `gls-` prefixed name and requires byte-identical CSS. And it fails the
+build if either generated file is out of date.
+
+So the manifest cannot claim behaviour the library does not have. That is the
+whole point of it. Documentation drifts away from code in most projects,
+quietly, and an agent reading stale docs writes code that does not work. Here it
+cannot happen without turning the test suite red first.
+
+## Coming from Gerillass 1.x
+
+Version 2.0.0 moved the library to the Sass module system, and two things broke
+along the way. Both are mechanical to fix.
+
+**Every utility function lost its `__` prefix.** `__remify(24px)` is now
+`remify(24px)`, and so on for all of them. This was not a tidy-up: under
+`@use` and `@forward`, a name beginning with an underscore is private to its own
+file, so the old names could not be reached at all. Worse, through
+`@use ... as *` they failed silently and rendered as literal CSS rather than
+raising an error, so search your stylesheets rather than waiting for a build to
+complain.
+
+Three could not simply drop the prefix and were renamed instead:
+
+| Was | Now | Why |
+|---|---|---|
+| `__darken` | `shade` | `darken` is a Sass built-in with different results |
+| `__lighten` | `tint` | the same, for `lighten` |
+| `__null` | `fillNulls` | `null` is a Sass keyword |
+
+**`ratio-box` and `responsive-video` are gone**, replaced by a single
+[`aspect-ratio`](/docs/aspect-ratio) mixin. The rename is mechanical, but where
+the mixin goes is not: the old ones were applied to a wrapping element, and this
+one goes on the element itself.
+
+```scss
+// Before, on a wrapper
+.hero  { @include ratio-box("16/9"); }
+.video { @include responsive-video("16/9"); }
+
+// After, on the element
+.hero  { @include aspect-ratio("16/9"); }
+.video iframe { @include aspect-ratio("16/9"); }
+```
+
+Everything else kept working. The `gls-` prefixed names, `@import "gerillass"`
+and every mixin signature are unchanged.
+
+## Vendor prefixes
+
+Gerillass does not add them. Bundlers already run Autoprefixer or something like
+it, and a library adding its own prefixes on top produces output that is both
+larger and out of step with whatever browser support your project has actually
+set.
+
+If you are not using a bundler, [Autoprefixer CSS
+Online](https://autoprefixer.github.io/) will do it in one pass.

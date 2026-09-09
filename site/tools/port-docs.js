@@ -312,8 +312,16 @@ function example(block, stated, notes, className, pageStyles = [], setup = null)
   against measurements taken in a browser, and the upstream copy was written
   from the release notes rather than from the mixin. Converting over it would
   lose the better of the two.
+
+  line-clamp is here for a different reason: its comparison table arrived as
+  raw HTML carrying the Hugo site's own class names, which MDX reads as JSX and
+  React then warns about, so it was rewritten as a Markdown table. Converting
+  again would put the raw one back.
+
+  content/docs/index.mdx has no counterpart upstream at all. It is the
+  installation page, and it is written here.
 */
-const HAND_WRITTEN = new Set(["aspect-ratio"]);
+const HAND_WRITTEN = new Set(["aspect-ratio", "line-clamp"]);
 
 /*
   Sass an example needs before it can compile, but which is not part of what it

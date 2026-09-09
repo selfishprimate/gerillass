@@ -167,6 +167,11 @@ drift:
 | `<Example>` | **compiles** the Sass. A page cannot state an output the library does not produce |
 | `<Hint kind>` | info, warning or danger |
 
+Markdown tables need `remark-gfm`, which is in the plugin list. Without it a
+table renders as a paragraph of pipes, silently. Two pages use one, and
+`src/docs/content.scss` is what styles them: nothing on this site had a table
+in its prose before the port.
+
 `<Example>` takes a `setup` attribute for Sass that has to run first but is not
 part of what the example shows. One member needs it: `loadify(init)` defines the
 placeholder every later call `@extend`s, so a `loadify()` call compiled on its
@@ -218,11 +223,18 @@ unchanged, the list of pages, the page, then the footer. It is a second
 template rather than a branch inside `HomeTemplate` because the landing page is
 a column of full width sections and this is two columns, one of them sticky.
 
-`/docs` is a landing page generated from the manifest, with every member and
-its summary. Nothing on it is written by hand, and it is what the header's
-`Docs` link now points at — as an in-app `<Link>`, since the documentation is
-part of this site rather than a separate one. **`gtm-navbar-documentation` is
-still on that link** and must stay.
+`/docs` is the installation page, `content/docs/index.mdx`. It is the one page
+here with no member behind it, which its front matter declares with
+`guide: true`; the sidebar puts those in a Getting Started group above the
+catalogue. It is what the header's `Docs` link now points at, as an in-app
+`<Link>`, since the documentation is part of this site rather than a separate
+one. **`gtm-navbar-documentation` is still on that link** and must stay.
+
+Its content follows the README and the old Getting Started page, minus what had
+gone stale in both: the LibSass note from 1.3.0 and the eyeglass warning, whose
+metadata was removed in 2.0.0. What it adds is a "Coming from Gerillass 1.x"
+section, since the two breaks in that release are what a reader arriving from
+an old tutorial will hit first.
 
 The sidebar reads `virtual:docs-index`, a module `plugins/docs-index.js`
 builds: it takes the title from each page's front matter and the kind and
@@ -251,14 +263,32 @@ canonical links** in the document, one pointing at the page and one at the home
 page. The build already stripped them from each generated file, so this was
 only ever visible after an in-app navigation.
 
+### Aliases, and the trailing slash
+
+`plugins/docs-redirects.js` turns the `aliases` in a page's front matter into
+rules at the top of the built `_redirects`, above the `/*` SPA fallback, since
+Netlify takes the first rule that matches. `aspect-ratio` claims the two URLs
+it replaced. The plugin refuses to build if an alias would shadow a real page,
+or if two pages claim the same one.
+
+**The URLs have no trailing slash, and that was measured rather than assumed.**
+`gerillass.com/about/` answers 301 to `gerillass.com/about` today, so Netlify
+serves these from files and normalises the slash away. That means:
+
+- the canonical and `og:url` on every page drop the slash, which `headFor` does
+  centrally. Before this they carried one, inherited from Hugo where a page
+  really was a directory, and every canonical pointed at a URL that redirected
+- redirect targets drop it too, so an old link is one hop rather than two
+
+The old site's URLs are the same shape, `docs.gerillass.com/docs/<slug>/`, so
+the domain move is a host swap rather than a path rewrite.
+
 ### Not done yet
 
-The aliases in front matter (`aspect-ratio` claims `/docs/ratio-box/` and
-`/docs/responsive-video/`) are not served as redirects. No page has been read
-end to end for prose quality since the port. And whether Netlify resolves
-`/docs` to `dist/docs.html` ahead of the `/*` SPA fallback has not been seen in
-production — it is the same convention `/about` already ships under, so it
-should hold, but it has not been watched.
+No page has been read end to end for prose quality since the port. And whether
+Netlify resolves `/docs` to `dist/docs.html` ahead of the `/*` fallback has not
+been seen in production; it is the same convention `/about` already ships
+under, so it should hold, but it has not been watched.
 
 ## Dormant code — do not assume it is live
 

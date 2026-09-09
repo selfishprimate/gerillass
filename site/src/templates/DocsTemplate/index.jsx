@@ -5,6 +5,7 @@ import Footer from "components/Footer";
 import Copyright from "components/Copyright";
 import Sidebar from "docs/Sidebar";
 
+import "docs/content.scss";
 import "./docs-template.scss";
 
 /*

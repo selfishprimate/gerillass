@@ -37,6 +37,22 @@ function build() {
       const match = source.match(/^---\r?\n([\s\S]*?)\r?\n---/);
       const frontmatter = match ? parseYaml(match[1]) : {};
 
+      /*
+        A page marked `guide: true` documents no member. There is one, the
+        installation page, and it is the landing page of the documentation
+        rather than an entry in the catalogue.
+      */
+      if (frontmatter.guide) {
+        return {
+          slug,
+          title: frontmatter.title || slug,
+          kind: "guide",
+          member: null,
+          href: slug === "index" ? "/docs" : `/docs/${slug}`,
+          summary: frontmatter.page_description || "",
+        };
+      }
+
       const name = members.has(slug) ? slug : camel(slug);
       const member = members.get(name);
 
@@ -54,10 +70,14 @@ function build() {
         title: frontmatter.title || slug,
         kind: member.kind,
         member: name,
+        href: `/docs/${slug}`,
         summary: member.summary,
       };
     })
-    .sort((a, b) => a.title.localeCompare(b.title));
+    .sort((a, b) => {
+      if ((a.kind === "guide") !== (b.kind === "guide")) return a.kind === "guide" ? -1 : 1;
+      return a.title.localeCompare(b.title);
+    });
 
   /*
     And the other direction. A page with no member fails above; a member with no
@@ -66,7 +86,7 @@ function build() {
     of gap as the playground's member menu, which has been three mixins short
     since 2.1.0 and nothing said so.
   */
-  const documented = new Set(pages.map((p) => p.member));
+  const documented = new Set(pages.map((p) => p.member).filter(Boolean));
   const undocumented = [...members.keys()].filter((name) => !documented.has(name));
 
   if (undocumented.length) {

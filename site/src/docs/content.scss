@@ -1,0 +1,41 @@
+@import "assets/scss/abstract";
+
+/*
+  Prose that comes from a documentation page rather than from a component.
+  Most of it is already styled globally; a table is not, because until the port
+  no page on this site had one.
+*/
+.content {
+  table {
+    width: 100%;
+    margin: 0 0 remify(28px);
+    border-collapse: collapse;
+    font-family: $secondary-font-family;
+    font-size: remify(15px);
+
+    th,
+    td {
+      text-align: left;
+      vertical-align: top;
+      padding: remify(10px) remify(12px);
+      border-bottom: 1px solid $eggshell;
+    }
+
+    th {
+      font-size: remify(11px);
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      opacity: 0.55;
+      font-weight: 500;
+    }
+  }
+
+  /*
+    A table that will not fit scrolls on its own rather than widening the page,
+    which is what a long recipe or a wide signature would otherwise do on a
+    phone.
+  */
+  .table-scroll {
+    overflow-x: auto;
+  }
+}

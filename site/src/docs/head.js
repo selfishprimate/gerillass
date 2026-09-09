@@ -17,25 +17,20 @@
 
 export const SITE = "https://gerillass.com";
 
-/*
-  The head for /docs itself. That page is generated from the manifest rather
-  than written as markdown, so it has no front matter of its own -- and without
-  this it would fall through to the one index.html carries, and the landing
-  page of the documentation would be titled after the marketing site.
-*/
-export const INDEX_FRONTMATTER = {
-  title: "Documentation",
-  // headFor appends "· Gerillass Documentation", so a page_title of
-  // "Documentation" would have the word twice in one tab.
-  page_title: "Every Mixin and Function",
-  page_description:
-    "Every mixin and function in Gerillass, with what each one does, the arguments it takes and the CSS it emits.",
-  page_keywords:
-    "Gerillass documentation, Sass mixins, Sass functions, SCSS library reference, CSS mixin library",
-};
 
 export function headFor(frontmatter, path) {
-  const url = `${SITE}${path}`;
+  /*
+    No trailing slash, measured rather than assumed. Netlify serves these pages
+    from files -- /docs/aspect-ratio comes from docs/aspect-ratio.html -- and
+    301s the trailing slash form to the bare one: gerillass.com/about/ answers
+    301 to gerillass.com/about today. A canonical pointing at a URL that
+    redirects is telling a crawler the wrong address for the page, so the slash
+    comes off here rather than at each of the three call sites.
+
+    The Hugo site had it the other way round, because there every page really
+    was a directory with an index.html in it.
+  */
+  const url = `${SITE}${path.replace(/\/+$/, "")}`;
   const title = `${frontmatter.page_title} · Gerillass Documentation`;
   const description = frontmatter.page_description;
 

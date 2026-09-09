@@ -12,10 +12,12 @@
 const modules = import.meta.glob("../../content/docs/*.mdx");
 
 export const pages = Object.entries(modules)
-  .map(([file, load]) => ({
-    slug: file.slice(file.lastIndexOf("/") + 1, -".mdx".length),
-    load,
-  }))
+  .map(([file, load]) => {
+    const slug = file.slice(file.lastIndexOf("/") + 1, -".mdx".length);
+    // index.mdx is the documentation's landing page, so it is /docs itself
+    // rather than /docs/index.
+    return { slug, path: slug === "index" ? "docs" : `docs/${slug}`, load };
+  })
   .sort((a, b) => a.slug.localeCompare(b.slug));
 
 export default pages;

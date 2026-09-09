@@ -20,6 +20,7 @@ import "./sidebar.scss";
 */
 
 const GROUPS = [
+  { kind: "guide", label: "Getting Started" },
   { kind: "mixin", label: "Mixins" },
   { kind: "function", label: "Utilities" },
 ];
@@ -36,7 +37,7 @@ function Sidebar({ onNavigate }) {
     return pages.filter(
       (p) =>
         p.title.toLowerCase().includes(needle) ||
-        p.member.toLowerCase().includes(needle) ||
+        (p.member && p.member.toLowerCase().includes(needle)) ||
         p.slug.includes(needle)
     );
   }, [query]);
@@ -48,7 +49,7 @@ function Sidebar({ onNavigate }) {
         type="search"
         value={query}
         onChange={(event) => setQuery(event.target.value)}
-        placeholder="Filter 76 pages"
+        placeholder={`Filter ${pages.length} pages`}
         aria-label="Filter the documentation"
       />
 
@@ -63,11 +64,14 @@ function Sidebar({ onNavigate }) {
         return (
           <div className="docs-sidebar__group" key={kind}>
             <h2 className="docs-sidebar__heading">
-              {label} <span className="docs-sidebar__count">{group.length}</span>
+              {label}
+              {kind === "guide" ? null : (
+                <span className="docs-sidebar__count">{group.length}</span>
+              )}
             </h2>
             <ul className="docs-sidebar__list">
               {group.map((page) => {
-                const to = `/docs/${page.slug}`;
+                const to = page.href;
                 const current = pathname === to || pathname === `${to}/`;
                 return (
                   <li key={page.slug}>

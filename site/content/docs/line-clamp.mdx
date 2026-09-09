@@ -19,39 +19,17 @@ It emits **five declarations rather than one**, because `-webkit-line-clamp` doe
 
 Every combination below was tested on a paragraph running to five lines, clamped to three.
 
-<div class="table">
-  <table>
-    <thead>
-      <tr>
-        <th>What was applied</th>
-        <th>Result</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td class="name">All three prefixed properties, plus <code>overflow</code></td>
-        <td class="description">3 lines, with an ellipsis</td>
-      </tr>
-      <tr>
-        <td class="name">Without <code>-webkit-box-orient: vertical</code></td>
-        <td class="description">5 lines, no clamping, no warning</td>
-      </tr>
-      <tr>
-        <td class="name">Without <code>display: -webkit-box</code></td>
-        <td class="description">5 lines, the same</td>
-      </tr>
-      <tr>
-        <td class="name">The unprefixed <code>line-clamp</code> on its own</td>
-        <td class="description">5 lines. It is not Baseline yet</td>
-      </tr>
-      <tr>
-        <td class="name">Without <code>overflow: hidden</code></td>
-        <td class="description">The box is 3 lines, but the rest of the text spills out below it</td>
-      </tr>
-    </tbody>
-  </table>
-  <p class="footnote">* That last row is the one to watch for. Measuring the element's height reports three lines and looks correct; only looking at it shows the text escaping the box.</p>
-</div>
+| What was applied | Result |
+|---|---|
+| All three prefixed properties, plus `overflow` | 3 lines, with an ellipsis |
+| Without `-webkit-box-orient: vertical` | 5 lines, no clamping, no warning |
+| Without `display: -webkit-box` | 5 lines, the same |
+| The unprefixed `line-clamp` on its own | 5 lines. It is not Baseline yet |
+| Without `overflow: hidden` | The box is 3 lines, but the rest of the text spills out below it |
+
+That last row is the one to watch for. Measuring the element's height reports
+three lines and looks correct; only looking at it shows the text escaping the
+box.
 
 The unprefixed `line-clamp` is emitted alongside the prefixed trio. It does nothing today, as the fourth row shows, and it costs one line to be right when it ships.
 

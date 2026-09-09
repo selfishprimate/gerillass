@@ -13,8 +13,8 @@ import DocsTemplate from "templates/DocsTemplate";
   tags into the generated file through plugins/docs-head.js; this keeps them
   right when somebody moves between pages without a reload.
 */
-function DocPage({ Page, frontmatter, slug }) {
-  useDocumentHead(frontmatter, `/docs/${slug}/`);
+function DocPage({ Page, frontmatter, path }) {
+  useDocumentHead(frontmatter, `/${path}`);
 
   return (
     <DocsTemplate>
