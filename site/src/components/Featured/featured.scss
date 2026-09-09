@@ -20,6 +20,16 @@
   }
   @include breakpoint(min, large) {
     padding: 0 4rem;
+    /*
+      .section--stretched carries the same three steps and reaches -4rem here,
+      and this used to fall through to it. That only held while the partials
+      were injected after the component styles, which is a stylesheet ordering
+      this file cannot see and should not depend on: moving the page imports
+      out of App.jsx reversed it, and the ornaments pulled 16px off each edge.
+      Stated here instead, so the section is right whatever the order.
+    */
+    margin-left: -4rem;
+    margin-right: -4rem;
   }
   @include breakpoint(min, $mobile-breakpoint) {
     &::before,
