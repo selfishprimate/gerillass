@@ -36,6 +36,12 @@ export default defineConfig({
       replacement: join(SRC, entry.replace(/\.jsx?$/, "")),
     })),
   },
+  // react-syntax-highlighter 12 reaches for Node's `global`, which webpack
+  // shimmed and a browser does not have. It only surfaces in dev, where Vite
+  // pre-bundles dependencies; the production build happened to survive without
+  // it, which is exactly the kind of difference that bites whoever runs the dev
+  // server first.
+  define: { global: "globalThis" },
   css: {
     preprocessorOptions: {
       scss: {
