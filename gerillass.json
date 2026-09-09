@@ -1576,6 +1576,55 @@
       ]
     },
     {
+      "name": "fluid",
+      "kind": "function",
+      "arguments": [
+        {
+          "name": "$min",
+          "required": true,
+          "accepts": [
+            "a length in px or rem, the value at $min-viewport"
+          ]
+        },
+        {
+          "name": "$max",
+          "required": true,
+          "accepts": [
+            "a length in px or rem, the value at $max-viewport, no smaller than $min"
+          ]
+        },
+        {
+          "name": "$min-viewport",
+          "default": "320px",
+          "accepts": [
+            "a length in px or rem, the width below which the value stops shrinking"
+          ]
+        },
+        {
+          "name": "$max-viewport",
+          "default": "1280px",
+          "accepts": [
+            "a length in px or rem, larger than $min-viewport"
+          ]
+        }
+      ],
+      "file": "scss/utilities/_fluid.scss",
+      "signature": "fluid($min, $max, $min-viewport: 320px, $max-viewport: 1280px)",
+      "summary": "A clamp() value that grows with the viewport between two widths, then stops. The preferred value keeps a rem term rather than being pure vw, because a vw-only value ignores browser text zoom and fails WCAG 1.4.4. It is a function rather than a mixin because the value is the hard part and belongs to any property, not only font-size.",
+      "examples": [
+        ".title { font-size: fluid(24px, 48px); }",
+        ".title { font-size: fluid(1rem, 3rem, 320px, 1200px); }",
+        ".section { padding: fluid(16px, 64px) fluid(8px, 40px); }",
+        ".stack { gap: fluid(0.5rem, 2rem); }"
+      ],
+      "rejects": [
+        ".title { font-size: fluid(16px, 24px, 1280px, 320px); }",
+        ".title { font-size: fluid(40px, 20px); }",
+        ".title { font-size: fluid(16, 24); }",
+        ".title { font-size: fluid(1em, 2em); }"
+      ]
+    },
+    {
       "name": "fontSizer",
       "kind": "function",
       "arguments": [

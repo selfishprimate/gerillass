@@ -5,7 +5,7 @@ description: Use the Gerillass Sass mixin library — loading it, the mixin cata
 
 # Gerillass
 
-A Sass mixin library: 52 mixins and 22 functions that emit CSS from
+A Sass mixin library: 52 mixins and 23 functions that emit CSS from
 semantic declarations. It is Sass source only — there is no runtime and no
 utility classes, so styles live in your stylesheet and your markup stays clean.
 
@@ -170,6 +170,7 @@ and camelCase is what tells them apart from the kebab-case mixins above.
 | `convertToEm($value)` | Converts a pixel length to em, against a 16px base. |
 | `convertToNumber($value)` | Parses a string of digits into a number. |
 | `fillNulls($value, $seperation: comma, $skip: false)` | Replaces null entries in a list with 0, or drops them. |
+| `fluid($min, $max, $min-viewport: 320px, $max-viewport: 1280px)` | A clamp() value that grows with the viewport between two widths, then stops. The preferred value keeps a rem term rather than being pure vw, because a vw-only value ignores browser text zoom and fails WCAG 1.4.4. It is a function rather than a mixin because the value is the hard part and belongs to any property, not only font-size. |
 | `fontSizer($size, $time)` | Multiplies a size by a factor. Handy for a modular scale. |
 | `fontSource($font-family, $file-path, $file-formats)` | Builds one src entry for an @font-face rule. |
 | `isColor($value)` | Returns the value if every item in it is a colour, and errors otherwise. |

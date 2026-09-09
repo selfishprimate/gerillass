@@ -1,6 +1,6 @@
 # Gerillass
 
-> A Sass toolkit of 52 mixins and 22 functions, built to be read by coding agents as well as by people. Every member is described in a machine-readable manifest whose examples and refusals are executed by the test suite, so the documentation cannot drift away from the code.
+> A Sass toolkit of 52 mixins and 23 functions, built to be read by coding agents as well as by people. Every member is described in a machine-readable manifest whose examples and refusals are executed by the test suite, so the documentation cannot drift away from the code.
 
 Gerillass is a pure Sass library. There is no build step and no runtime dependency: the `.scss` sources are the deliverable, and the package installs nothing else. It needs Dart Sass; LibSass and node-sass are not supported. This file describes Gerillass 2.0.1.
 
@@ -74,6 +74,7 @@ Arguments are validated and refused with a message naming what is accepted, so a
 - [convertToEm($value)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_convert-to-em.scss): Converts a pixel length to em, against a 16px base.
 - [convertToNumber($value)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_convert-to-number.scss): Parses a string of digits into a number.
 - [fillNulls($value, $seperation: comma, $skip: false)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_fill-nulls.scss): Replaces null entries in a list with 0, or drops them.
+- [fluid($min, $max, $min-viewport: 320px, $max-viewport: 1280px)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_fluid.scss): A clamp() value that grows with the viewport between two widths, then stops.
 - [fontSizer($size, $time)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_font-sizer.scss): Multiplies a size by a factor.
 - [fontSource($font-family, $file-path, $file-formats)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_font-source.scss): Builds one src entry for an @font-face rule.
 - [isColor($value)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_is-color.scss): Returns the value if every item in it is a colour, and errors otherwise.

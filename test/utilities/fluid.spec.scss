@@ -1,0 +1,42 @@
+// The clamp() slope and intercept are arithmetic, so they are asserted rather
+// than snapshotted. Worked by hand for fluid(16px, 24px, 320px, 1280px):
+//
+//   slope     = (24 - 16) / (1280 - 320) = 0.0083333
+//   intercept = 16 - 0.0083333 * 320     = 13.3333px = 0.8333rem
+//   preferred = 0.8333rem + 0.8333vw
+//
+// Checked in a browser at a 900px viewport: the floor, the ceiling and an
+// interpolated value all matched the arithmetic to two decimals.
+@use 'sass:string';
+@use 'true' as *;
+@use '../../scss/gerillass' as *;
+
+@include describe('fluid()') {
+  @include it('Builds the clamp from the line through both ends.') {
+    @include assert-equal(
+      fluid(16px, 24px, 320px, 1280px),
+      string.unquote("clamp(1rem, 0.8333rem + 0.8333vw, 1.5rem)")
+    );
+  }
+
+  @include it('Takes rem in as readily as px.') {
+    @include assert-equal(
+      fluid(1rem, 1.5rem, 320px, 1280px),
+      string.unquote("clamp(1rem, 0.8333rem + 0.8333vw, 1.5rem)")
+    );
+  }
+
+  @include it('Keeps a rem term even when the intercept is negative.') {
+    @include assert-equal(
+      fluid(8px, 40px, 320px, 1280px),
+      string.unquote("clamp(0.5rem, -0.1667rem + 3.3333vw, 2.5rem)")
+    );
+  }
+
+  @include it('Collapses to a constant when both ends are equal.') {
+    @include assert-equal(
+      fluid(18px, 18px, 320px, 1280px),
+      string.unquote("clamp(1.125rem, 1.125rem + 0vw, 1.125rem)")
+    );
+  }
+}

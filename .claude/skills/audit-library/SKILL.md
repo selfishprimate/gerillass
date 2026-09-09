@@ -135,7 +135,7 @@ their own but reject bad input through `validateRatio`, so a plain grep for
 npm pack --dry-run
 ```
 
-Expect 96 files. `meta/` and `tools/` must not appear; `gerillass.json` and
+Expect 97 files. `meta/` and `tools/` must not appear; `gerillass.json` and
 `SKILL.md` must. For a release-grade audit, install the tarball somewhere else
 and compile against it — `.npmignore` and the `exports` map mean the working
 tree and the published package are not the same thing.

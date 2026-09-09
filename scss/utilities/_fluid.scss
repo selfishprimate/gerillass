@@ -1,0 +1,76 @@
+@charset "UTF-8";
+
+@use "sass:list";
+@use "sass:math";
+@use "sass:meta";
+@use "sass:string";
+@use "../utilities/clear-unit" as *;
+@use "../utilities/remify" as *;
+
+// A value that grows with the viewport between two widths, then stops.
+//
+// clamp() takes a floor, a preferred value and a ceiling. The preferred value
+// is the straight line through (min-viewport, min) and (max-viewport, max):
+//
+//   slope     = (max - min) / (max-viewport - min-viewport)
+//   intercept = min - slope * min-viewport
+//   preferred = intercept + slope * 100vw
+//
+// The intercept is emitted in rem rather than px deliberately. A preferred
+// value made only of vw ignores browser zoom, which fails WCAG 1.4.4, and
+// keeping a rem term in the sum is what restores it. This is the part that is
+// easy to get wrong by hand, and the reason this is a function rather than a
+// mixin: the value is the hard part, and it belongs to any property, not just
+// font-size.
+//
+// Sass cannot add rem to vw, so the sum is assembled as a string. CSS evaluates
+// it; Sass only writes it.
+
+$_fluid-root-size: 16px;
+
+@function fluid($min, $max, $min-viewport: 320px, $max-viewport: 1280px) {
+  // Pairs rather than a map: two arguments can legitimately hold the same
+  // length, and a map would reject that as a duplicate key.
+  $given: (($min, "$min"), ($max, "$max"), ($min-viewport, "$min-viewport"), ($max-viewport, "$max-viewport"));
+  @each $pair in $given {
+    $value: list.nth($pair, 1);
+    $label: list.nth($pair, 2);
+    @if meta.type-of($value) != "number" or math.is-unitless($value) {
+      @error "`#{$value}` is not a valid #{$label} for `fluid`. Pass a length in px or rem.";
+    }
+    @if math.unit($value) != "px" and math.unit($value) != "rem" {
+      @error "`#{$value}` is not a valid #{$label} for `fluid`. Pass a length in px or rem, not #{math.unit($value)}.";
+    }
+  }
+
+  // Everything is compared in px, because Sass cannot convert rem to px on its
+  // own: it has no way to know the root font size, so the assumption is stated
+  // here rather than hidden.
+  $min-px: $min;
+  $max-px: $max;
+  $from-px: $min-viewport;
+  $to-px: $max-viewport;
+  @if math.unit($min) == "rem" { $min-px: clearUnit($min) * $_fluid-root-size; }
+  @if math.unit($max) == "rem" { $max-px: clearUnit($max) * $_fluid-root-size; }
+  @if math.unit($min-viewport) == "rem" { $from-px: clearUnit($min-viewport) * $_fluid-root-size; }
+  @if math.unit($max-viewport) == "rem" { $to-px: clearUnit($max-viewport) * $_fluid-root-size; }
+
+  @if $from-px >= $to-px {
+    @error "`fluid` needs $min-viewport to be smaller than $max-viewport, and was given #{$min-viewport} and #{$max-viewport}.";
+  }
+  @if $min-px > $max-px {
+    @error "`fluid` needs $min to be no larger than $max, and was given #{$min} and #{$max}. clamp() would return the floor at every width, so the value would never grow.";
+  }
+
+  $slope: math.div($max-px - $min-px, $to-px - $from-px);
+  $intercept: $min-px - $slope * $from-px;
+
+  // Four decimals is past the point any browser renders differently, and keeps
+  // the output readable.
+  $vw: math.div(math.round($slope * 100 * 10000), 10000);
+  $floor: math.div(math.round(clearUnit(remify($min-px)) * 10000), 10000);
+  $base: math.div(math.round(clearUnit(remify($intercept)) * 10000), 10000);
+  $ceiling: math.div(math.round(clearUnit(remify($max-px)) * 10000), 10000);
+
+  @return string.unquote("clamp(#{$floor}rem, #{$base}rem + #{$vw}vw, #{$ceiling}rem)");
+}

@@ -78,7 +78,7 @@ grep -o 'https://[^)]*' llms.txt | sort -u | while read u; do
 done | grep -v '^200'
 ```
 
-Expect 96 files / ~38 kB as of v2.0.0: everything under `scss/`, the generated
+Expect 97 files / ~38 kB as of v2.0.0: everything under `scss/`, the generated
 `gerillass.json` and `SKILL.md`, plus `README.md`, `LICENSE.md` and
 `package.json`. If `test/`, `meta/`, `tools/`, `yarn.lock` or
 `node_modules` appear, `.npmignore` is broken — stop and fix it.
