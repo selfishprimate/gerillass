@@ -1,0 +1,44 @@
+---
+title: "Ellipsis"
+page_title: "Ellipsis Sass Mixin"
+page_description: "The Ellipsis Sass mixin helps you trim text and add an ellipsis at the end of it using the CSS text-overflow property."
+page_image: "gerillass-ellipsis.jpg"
+---
+
+# Ellipsis
+
+<Member name="ellipsis">
+
+The **Ellipsis** Sass mixin helps you truncate text and add an **ellipsis** at the end of it, based on the given `$width` value.
+
+</Member>
+
+## Arguments
+
+<Arguments of="ellipsis">
+  <Argument name="$width (100%)" type="number <br/>(with unit)">The <code>max-width</code> of the selected element before its text is truncated.</Argument>
+  <Argument name="$display (inline-block)" type="string">Sets the <code>display</code> property of the selected elements. The default value is <code>inline-block</code>.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="Simply call the mixin inside an element's selector to truncate the text in it.">
+```scss
+.element{
+  @include ellipsis;
+}
+```
+</Example>
+
+<Example caption="Change the <code>$width</code> or <code>$display</code> values if you need to.">
+```scss
+.element{
+  @include ellipsis(
+    $width: 200px,
+    $display: block
+  );
+}
+```
+</Example>
+
+

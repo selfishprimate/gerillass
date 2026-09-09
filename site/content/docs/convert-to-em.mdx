@@ -1,0 +1,33 @@
+---
+title: "Convert To Em"
+page_title: "Convert To Em Sass Function"
+page_description: "Converts a pixel length to em, against a 16px base."
+page_keywords: "Gerillass convertToEm, Sass convertToEm, Sass Functions, SCSS Functions, Sass Utility Functions, Gerillass Utilities"
+---
+
+# Convert To Em
+
+<Member name="convertToEm">
+
+Converts a pixel length to em, against a 16px base.
+
+</Member>
+
+## Arguments
+
+<Arguments of="convertToEm">
+  <Argument name="$value" type="number (with unit)">Accepts a pixel length.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="Spacing written in px, emitted in em.">
+```scss
+.card {
+  padding: convertToEm(24px);
+  border-radius: convertToEm(8px);
+}
+```
+</Example>
+
+

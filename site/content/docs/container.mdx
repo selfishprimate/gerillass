@@ -1,0 +1,80 @@
+---
+title: "Container"
+page_title: "Container Sass Mixin"
+page_description: "The Container Sass mixin marks an element as a query container, so container-query can ask about its width instead of the viewport's."
+page_keywords: "CSS Container Queries, Sass Container Query, container-type, container-name, CSS inline-size, Component Level Responsiveness, Sass Container Mixin"
+---
+
+# Container
+
+<Member name="container">
+
+A media query asks how wide the **viewport** is. That is the wrong question for a component that has to work in a sidebar, in a wide main column and in a grid cell on the same page. The **Container Sass mixin** marks an element as a query container, so [container-query](/docs/container-query/) can ask how wide **that element** is instead.
+
+<Hint kind="danger">
+
+**The rule that asks has to sit on a descendant.** An element is never matched by a `@container` rule that reads its own container. Measured in a browser: a 600px element carrying `container-type: inline-size` did **not** match `@container (min-width: 400px)`, while a child of it did. An element with no container ancestor at all matches nothing. Both fail silently, with no warning. The rule is simply never applied.
+
+</Hint>
+
+</Member>
+
+## Arguments
+
+<Arguments of="container" footnote="Give the container a name when a component sits inside another container and you need to say which one you mean.">
+  <Argument name="$name (null)" type="string">Accepts a container name as a string, such as <code>"card"</code>, or <code>null</code> for an unnamed container.</Argument>
+  <Argument name="$type (inline-size)" type="string">Accepts <code>inline-size</code>, <code>size</code>, or <code>normal</code>. <code>inline-size</code> queries the width only, which is what almost every layout needs.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="A named container. The name is what <code>container-query</code> targets when several containers are nested.">
+```scss
+.card {
+  @include container("card");
+}
+```
+</Example>
+
+<Example caption="Without a name. Queries with no <code>$name</code> resolve to the nearest container ancestor.">
+```scss
+.panel {
+  @include container;
+}
+```
+</Example>
+
+<Example caption="Querying height as well as width costs more, because the element then has to be sized independently of its content. Reach for it only when you need it.">
+```scss
+.panel {
+  @include container(null, size);
+}
+```
+</Example>
+
+## What it refuses
+
+Arguments are checked, so a wrong value stops the build with a message instead of quietly producing the wrong CSS.
+
+```scss
+.card {
+  @include container("card", sideways);
+}
+```
+```text
+Error: `sideways` is not a valid $type for `container`. Pass one of: inline-size, size, normal.
+```
+
+```scss
+.card {
+  @include container(42);
+}
+```
+```text
+Error: `42` is not a valid $name for `container`. Pass a name as a string, such as `"card"`, or no name at all.
+```
+
+## Related Links
+* [container-query](/docs/container-query/)
+* [CSS container-type](https://developer.mozilla.org/en-US/docs/Web/CSS/container-type)
+

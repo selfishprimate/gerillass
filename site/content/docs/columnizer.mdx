@@ -1,0 +1,223 @@
+---
+title: "Columnizer"
+page_title: "Columnizer Sass Mixin"
+page_description: "The Columnizer Sass mixin helps you create beautiful, responsive, card-based design layouts in CSS and Sass."
+page_image: "gerillass-columnizer.jpg"
+---
+
+# Columnizer
+
+<Member name="columnizer">
+
+The **Columnizer** Sass mixin helps you **create evenly divided hypothetical columns** inside a container element, as many as the value you pass for the `$columns` argument. This lets you show all the children of the parent element as if they were lined up in columns. 
+
+**Important:** The Columnizer mixin **must be applied to the parent** element to **align the children** inside it!
+<Hint kind="info">
+
+**Tip:** This mixin is very useful when you want to create **card-based design layouts**.
+
+</Hint>
+
+</Member>
+
+## Arguments
+
+<Arguments of="columnizer">
+  <Argument name="$columns" type="number">Sets the number of the hypothetical columns.</Argument>
+  <Argument name="$gutter" type="number (with unit)">Sets the value of the space between the columns.</Argument>
+  <Argument name="$fill" type="boolean">Lets the orphans fill the remaining gap at the end of the list. This argument is optional and <strong>should always come last</strong>. The default value is <code>false</code>.</Argument>
+</Arguments>
+
+## Examples
+
+```html
+<div class="parent-element">
+  <div class="item">01</div>
+  <div class="item">02</div>
+  <div class="item">03</div>
+  <div class="item">04</div>
+  <div class="item">05</div>
+  <div class="item">06</div>
+  <div class="item">07</div>
+  <div class="item">08</div>
+</div>
+```
+
+<Example caption="Now let's get cracking. Just call the mixin inside the <code>.parent-element{}</code> selector and pass a value for the number of columns.">
+```scss
+.parent-element{
+  @include columnizer(3);
+}
+```
+```html
+<style>
+.parent-element .item {
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #5bc0bb;
+  font-weight: bold;
+  color: #d8f7f5;
+}
+.parent-element .item:nth-of-type(even) {
+  background-color: #d8f7f5;
+  color: #5bc0bb;
+}
+</style>
+<div class="columnizer parent-element example01">
+  <div class="item">01</div>
+  <div class="item">02</div>
+  <div class="item">03</div>
+  <div class="item">04</div>
+  <div class="item">05</div>
+  <div class="item">06</div>
+  <div class="item">07</div>
+  <div class="item">08</div>
+</div>
+```
+</Example>
+
+<Example caption="Let's pass a value for the <code>$gutter</code> argument to put space between the items.">
+```scss
+.parent-element{
+  @include columnizer(3, 20px);
+}
+```
+```html
+<style>
+.parent-element .item {
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #5bc0bb;
+  font-weight: bold;
+  color: #d8f7f5;
+}
+.parent-element .item:nth-of-type(even) {
+  background-color: #d8f7f5;
+  color: #5bc0bb;
+}
+</style>
+<div class="columnizer parent-element example02">
+  <div class="item">01</div>
+  <div class="item">02</div>
+  <div class="item">03</div>
+  <div class="item">04</div>
+  <div class="item">05</div>
+  <div class="item">06</div>
+  <div class="item">07</div>
+  <div class="item">08</div>
+</div>
+```
+</Example>
+
+<Example caption="To make the orphans fill the gap, let's pass the <code>true</code> value at the end.">
+```scss
+.parent-element{
+  @include columnizer(3, 20px, true);
+}
+```
+```html
+<style>
+.parent-element .item {
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #5bc0bb;
+  font-weight: bold;
+  color: #d8f7f5;
+}
+.parent-element .item:nth-of-type(even) {
+  background-color: #d8f7f5;
+  color: #5bc0bb;
+}
+</style>
+<div class="columnizer parent-element example03">
+  <div class="item">01</div>
+  <div class="item">02</div>
+  <div class="item">03</div>
+  <div class="item">04</div>
+  <div class="item">05</div>
+  <div class="item">06</div>
+  <div class="item">07</div>
+  <div class="item">08</div>
+</div>
+```
+</Example>
+
+<Example caption="You can use either the <code>$gutter</code> or the <code>$fill</code> argument optionally. But remember, <strong>the <code>$fill</code> argument should always come last</strong>.">
+```scss
+.parent-element{
+  @include columnizer(3, true);
+}
+```
+```html
+<style>
+.parent-element .item {
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #5bc0bb;
+  font-weight: bold;
+  color: #d8f7f5;
+}
+.parent-element .item:nth-of-type(even) {
+  background-color: #d8f7f5;
+  color: #5bc0bb;
+}
+</style>
+<div class="columnizer parent-element example04">
+  <div class="item">01</div>
+  <div class="item">02</div>
+  <div class="item">03</div>
+  <div class="item">04</div>
+  <div class="item">05</div>
+  <div class="item">06</div>
+  <div class="item">07</div>
+  <div class="item">08</div>
+</div>
+```
+</Example>
+
+<Example caption="Now let's try it with the <strong>breakpoint mixin</strong> to show you how these mixins work harmoniously together.">
+```scss
+.parent-element{
+  @include columnizer(2, 10px, true);
+  @include breakpoint(min, large) {
+    @include columnizer(4, 20px, false);
+  }
+}
+```
+```html
+<style>
+.parent-element .item {
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #5bc0bb;
+  font-weight: bold;
+  color: #d8f7f5;
+}
+.parent-element .item:nth-of-type(even) {
+  background-color: #d8f7f5;
+  color: #5bc0bb;
+}
+</style>
+<div class="columnizer parent-element example05">
+  <div class="item">01</div>
+  <div class="item">02</div>
+  <div class="item">03</div>
+  <div class="item">04</div>
+  <div class="item">05</div>
+  <div class="item">06</div>
+  <div class="item">07</div>
+</div>
+```
+</Example>
+
+

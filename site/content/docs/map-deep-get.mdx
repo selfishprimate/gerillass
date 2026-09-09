@@ -1,0 +1,34 @@
+---
+title: "Map Deep Get"
+page_title: "Map Deep Get Sass Function"
+page_description: "Reads a value out of a nested map by following a chain of keys."
+page_keywords: "Gerillass mapDeepGet, Sass mapDeepGet, Sass Functions, SCSS Functions, Sass Utility Functions, Gerillass Utilities"
+---
+
+# Map Deep Get
+
+<Member name="mapDeepGet">
+
+Reads a value out of a nested map by following a chain of keys.
+
+</Member>
+
+## Arguments
+
+<Arguments of="mapDeepGet">
+  <Argument name="$map" type="map">Accepts a map.</Argument>
+  <Argument name="$keys…" type="string">Accepts one key per level of nesting.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="Reading two values out of one of the library's own maps.">
+```scss
+.tablet-frame {
+  width: mapDeepGet($map-for-tablets, "iPadPro", "width");
+  height: mapDeepGet($map-for-tablets, "iPadPro", "height");
+}
+```
+</Example>
+
+

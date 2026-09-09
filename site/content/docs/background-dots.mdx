@@ -1,0 +1,126 @@
+---
+title: "Background Dots"
+page_title: "Background Dots Sass Mixin"
+page_description: "The Background Dots Sass mixin allows you to create stylish, colorful dotted background patterns (also known as polka dots)."
+page_keywords: "CSS Dotted Background Generator, CSS Background Dots, CSS Polka Dots, CSS Dotted Gradient, CSS Background Pattern, CSS Dotted Background Pattern, CSS Multiple Dots, CSS Dots, CSS Polka Dot Background, Dot Pattern CSS, Dot Pattern Art"
+page_image: "gerillass-background-dots.jpg"
+---
+
+# Background Dots
+
+<Member name="background-dots">
+
+The **Background Dots** Sass mixin allows you to easily create a stylish dotted background pattern (also known as **polka dots**).
+
+</Member>
+
+## Arguments
+
+<Arguments of="background-dots" footnote="Using two separate color values together is only possible when the <code>$diagonal</code> option is true. See the examples for more.">
+  <Argument name="$color" type="list">The color or colors of the dots. Accepts no more than two color values. By default there is only one color, a translucent black.</Argument>
+  <Argument name="$size (1em)" type="number (with unit)">The size of the dots. The default value is <code>1em</code>.</Argument>
+  <Argument name="$gutter ($size * 5)" type="number (with unit)">The size of the space between the dots. The default value is <code>$size * 5</code>, which means <code>5em</code>.</Argument>
+  <Argument name="$diagonal (true)" type="boolean">This option lets you set the line order of the dots. The default value is <code>true</code>.</Argument>
+  <Argument name="$image" type="string (quoted)">Accepts the URL of an image. This option helps you add an image underneath the dots to create more stylish design elements.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="Simply call the mixin without passing any arguments.">
+```scss
+.element{
+  @include background-dots;
+}
+```
+```html
+{{< sandbox class="medium" >}}
+background-image: radial-gradient(rgba(0, 0, 0, 0.1) 1em, transparent 0), radial-gradient(rgba(0, 0, 0, 0.1) 1em, transparent 0);background-position: 2.5em 2.5em, 10em 10em;background-size: 5em 5em;background-repeat: repeat;
+{{< /sandbox >}}
+```
+</Example>
+
+<Example caption="Let's play with the <code>$color</code> and <code>$size</code> arguments.">
+```scss
+.element{
+  @include background-dots(
+    $color: pink,
+    $size: 10px
+  );
+}
+```
+```html
+{{< sandbox class="medium" >}}
+background-image:radial-gradient(pink 10px, transparent 0), radial-gradient(pink 10px, transparent 0);
+background-position: 25px 25px, 100px 100px;background-size: 50px 50px;background-repeat: repeat;
+{{< /sandbox >}}
+```
+</Example>
+
+<Example caption="You can increase or decrease the space between the dots. Compare the result with example 2.">
+```scss
+.element{
+  @include background-dots(
+    $color: pink,
+    $size: 10px,
+    $gutter: 70px
+  );
+}
+```
+```html
+{{< sandbox class="medium" >}}
+background-image: radial-gradient(pink 10px, transparent 0), radial-gradient(pink 10px, transparent 0);background-position: 35px 35px, 140px 140px;background-size: 70px 70px;background-repeat: repeat;
+{{< /sandbox >}}
+```
+</Example>
+
+<Example caption="You can add a second color value as well. Note that the second color only works when the <code>$diagonal</code> argument is <code>true</code>, and the two colors must be separated by a space.">
+```scss
+.element{
+  @include background-dots(
+    $color: red orange,
+    $size: 10px
+  );
+}
+```
+```html
+{{< sandbox class="medium" >}}
+background-image: radial-gradient(red 10px, transparent 0), radial-gradient(orange 10px, transparent 0);background-position: 25px 25px, 100px 100px;background-size: 50px 50px;
+background-repeat: repeat;
+{{< /sandbox >}}
+```
+</Example>
+
+<Example caption="Set the <code>$diagonal</code> argument to <code>false</code> to make the dots look more linear.">
+```scss
+.element{
+  @include background-dots(
+    $color: red,
+    $size: 4px,
+    $diagonal: false
+  );
+}
+```
+```html
+{{< sandbox class="medium" >}}
+background-image: radial-gradient(red 4px, transparent 0);background-position: 10px 10px;background-size: 20px 20px;background-repeat: repeat;
+{{< /sandbox >}}
+```
+</Example>
+
+<Example caption="Now let's add an image and see how sexy this design piece will look!">
+```scss
+.element{
+  @include background-dots(
+    $color: rgba(black, 0.1) rgba(green, 0.2),
+    $size: 4px,
+    $gutter: 20px,
+    $image: "/images/backgrounds/03.jpg"
+  );
+}
+```
+```html
+<div class="sandbox xxlarge example06" style="border-radius:3px; overflow: hidden; background-image: radial-gradient(rgba(0, 0, 0, 0.1) 4px, transparent 0), radial-gradient(rgba(0, 128, 0, 0.2) 4px, transparent 0);background-position: 10px 10px, 40px 40px;background-size: 20px 20px;background-repeat: repeat;position: relative;"></div>
+```
+</Example>
+
+

@@ -1,0 +1,148 @@
+---
+title: "Breakpoint"
+page_title: "Create Breakpoints and CSS Media Queries with Sass and Gerillass"
+page_description: "The Breakpoint Sass mixin helps you create scalable media queries and breakpoints using the @media CSS at-rule in SCSS."
+page_keywords: "CSS Breakpoints, CSS Breakpoints 2021, CSS Breakpoints Bootstrap, CSS Breakpoints for Mobile Devices, CSS Breakpoints List, Sass Breakpoints, CSS Breakpoints 2022, CSS Media Queries, Sass Media Queries, CSS Breakpoints for Responsive Design, Sass Include Breakpoint, Sass Breakpoint Mixin"
+page_image: "gerillass-breakpoint.jpg"
+---
+
+# Breakpoint
+
+<Member name="breakpoint">
+
+The **Breakpoint** Sass mixin helps you create scalable media queries and breakpoints using the [@media CSS at-rule](https://developer.mozilla.org/en-US/docs/Web/CSS/@media) in SCSS.
+
+<Hint kind="info">
+
+**Tip:** There are predefined values for breakpoints in the `_map-for-breakpoints.scss` file based on Bootstrap's breakpoint values. **You can add more values here to expand the list or replace existing ones with yours**.
+
+</Hint>
+
+</Member>
+
+## Arguments
+
+<Arguments of="breakpoint" footnote="When you use the <code>between</code> option you must pass two values for <code>width</code>, and they must be separated by a space. See the [examples](#examples) for more.">
+  <Argument name="$mode" type="string">Sets the <code>width</code> media feature. Accepts the values <code>only</code>, <code>min</code>, <code>max</code>, and <code>between</code>.</Argument>
+  <Argument name="$value" type="number (with unit)">The width value at which your styles will be applied.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="Simply call the mixin and <strong>pass a custom value</strong> to it. The code below will apply styles only if your browser's viewport is equal to <code>320px</code>.">
+```scss
+.element{
+  @include breakpoint(320px) {
+    background-color: green;
+  };
+}
+```
+</Example>
+
+<Example caption="If you set the <code>$mode</code> option to <code>only</code>, you will see that the result is similar to the first example. The code below will apply styles only if your browser's viewport is equal to <code>1200px</code>.">
+```scss
+.element{
+  @include breakpoint(only, 1200px) {
+    background-color: teal;
+  };
+}
+```
+</Example>
+
+<Example caption="Now let's set the <code>$mode</code> option to <code>min</code> and pass a predefined breakpoint value. If you are a <strong>mobile-first</strong> person, you are going to use this one a lot!">
+```scss
+.element{
+  @include breakpoint(min, medium) {
+    background-color: green;
+  };
+}
+```
+</Example>
+
+<Example caption="For <strong>desktop-first</strong> arrangements, set the <code>$mode</code> option to <code>max</code>. This time, let's pass a custom value for the second argument.">
+```scss
+.element{
+  @include breakpoint(max, 1024px) {
+    background-color: green;
+  };
+}
+```
+</Example>
+
+<Hint kind="info">
+
+**Tip:** You can use **predefined** and **custom** values together if you like.
+
+</Hint>
+
+<Example caption="We can set a range between two values to apply our styles.">
+```scss
+.element{
+  @include breakpoint(between, small 1200px) {
+    background-color: green;
+  };
+}
+```
+</Example>
+
+<Hint kind="info">
+
+**Important:** Please examine how the predefined breakpoint values line up against each other in the code below.
+
+</Hint>
+
+<Example caption="<strong>Note that</strong> when you use the <code>between</code> mode with predefined values, the <code>max-width</code> value is always reduced by one. <strong>This prevents the styles you apply from overlapping each other.</strong>">
+```scss
+.element{
+  @include breakpoint(between, small medium) {
+    background-color: green;
+  };
+  @include breakpoint(between, medium large) {
+    background-color: blue;
+  };
+  @include breakpoint(between, large xlarge) {
+    background-color: purple;
+  };
+}
+```
+</Example>
+
+<Example caption="<strong>Reducing by one</strong> only happens with <strong>predefined</strong> values. When you work with custom values, you don't have to worry about it!">
+```scss
+.element{
+  @include breakpoint(between, small 1199px) {
+    background-color: green;
+  };
+  @include breakpoint(between, 1200px 1400px) {
+    background-color: blue;
+  };
+}
+```
+</Example>
+
+<Hint kind="info">
+
+The values can be either custom numbers (with a unit) or predefined values.
+
+</Hint>
+
+<Example caption="<strong>Now let's define a range without passing the <code>between</code> option.</strong> Simply pass two values and <strong>separate them with a comma</strong>.">
+```scss
+.element{
+  @include breakpoint(320px, 768px) {
+    background-color: teal;
+  };
+}
+```
+</Example>
+
+<Example caption="Now let's try it with the predefined values just to see that it works.">
+```scss
+.element{
+  @include breakpoint(small, large) {
+    background-color: teal;
+  };
+}
+```
+</Example>
+

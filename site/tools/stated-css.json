@@ -1,0 +1,1072 @@
+{
+  "adaptive": [
+    {
+      "source": ".main-container{\n  @include adaptive;\n}",
+      "css": ".main-container {\n  margin: 0 auto;\n}\n@media (min-width: 576px) {\n  .main-container {\n    max-width: calc(576px - (30px * 2));\n  }\n}\n@media (min-width: 768px) {\n  .main-container {\n    max-width: calc(768px - (30px * 2));\n  }\n}\n@media (min-width: 992px) {\n  .main-container {\n    max-width: calc(992px - (30px * 2));\n  }\n}\n@media (min-width: 1200px) {\n  .main-container {\n    max-width: calc(1200px - (30px * 2));\n  }\n}"
+    },
+    {
+      "source": ".main-container{\n  @include adaptive(2em);\n}",
+      "css": ".main-container {\n  margin: 0 auto;\n}\n@media (min-width: 576px) {\n  .main-container {\n    max-width: calc(576px - (2em * 2));\n  }\n}\n@media (min-width: 768px) {\n  .main-container {\n    max-width: calc(768px - (2em * 2));\n  }\n}\n@media (min-width: 992px) {\n  .main-container {\n    max-width: calc(992px - (2em * 2));\n  }\n}\n@media (min-width: 1200px) {\n  .main-container {\n    max-width: calc(1200px - (2em * 2));\n  }\n}"
+    }
+  ],
+  "after": [
+    {
+      "source": ".element{\n  @include after(\"Text to use!\");\n}",
+      "css": ".element::after {\n  content: \"Text to use!\";\n}"
+    },
+    {
+      "source": ".element{\n  @include after{\n    content: \"Easy to use!\";\n    font-style: italic;\n    color: red;\n  };\n}",
+      "css": ".element::after {\n  content: \"Easy to use!\";\n  font-style: italic;\n  color: red;\n}"
+    },
+    {
+      "source": ".element{\n  @include after(\"data-currency\");\n}",
+      "css": ".element::after {\n  content: attr(data-currency);\n}"
+    },
+    {
+      "source": ".element{\n  @include after(\"data-currency\"){\n    font-size: .8em;\n    color: red;\n  };\n}",
+      "css": ".element::after {\n  content: attr(data-currency);\n  font-size: .8em;\n  color: red;\n}"
+    }
+  ],
+  "all-buttons": [
+    {
+      "source": "@include all-buttons {\n  background-color: teal;\n  color: white;\n}",
+      "css": "button,\n[type=\"button\"],\n[type=\"reset\"],\n[type=\"submit\"] {\n  background-color: teal;\n  color: white;\n}"
+    },
+    {
+      "source": "@include all-buttons(hover) {\n  background-color: crimson;\n  color: white;\n}",
+      "css": "button:hover, \n[type='button']:hover, \n[type='reset']:hover, \n[type='submit']:hover {\n  background-color: crimson;\n  color: white;\n}"
+    },
+    {
+      "source": "@include all-buttons {\n  background-color: teal;\n  color: white;\n}\n@include all-buttons(hover) {\n  background-color: teal;\n  color: white;\n}\n@include all-buttons(focus) {\n  background-color: purple;\n  color: white;\n}\n@include all-buttons(active) {\n  background-color: blue;\n  color: white;\n}\n@include all-buttons(disabled) {\n  background-color: gray;\n  color: black;\n}",
+      "css": "button,\n[type=\"button\"],\n[type=\"reset\"],\n[type=\"submit\"] {\n  background-color: teal;\n  color: white;\n}\nbutton:hover, \n[type='button']:hover, \n[type='reset']:hover, \n[type='submit']:hover {\n  background-color: teal;\n  color: white;\n}\nbutton:focus, \n[type='button']:focus, \n[type='reset']:focus, \n[type='submit']:focus {\n  background-color: purple;\n  color: white;\n}\nbutton:active, \n[type='button']:active, \n[type='reset']:active, \n[type='submit']:active {\n  background-color: blue;\n  color: white;\n}\nbutton:disabled, \n[type='button']:disabled, \n[type='reset']:disabled, \n[type='submit']:disabled {\n  background-color: gray;\n  color: black;\n}"
+    },
+    {
+      "source": ".containing-element {\n  @include all-buttons {\n    background-color: teal;\n    color: white;\n  }\n}",
+      "css": ".containing-element button, \n.containing-element [type='button'], \n.containing-element [type='reset'], \n.containing-element [type='submit'] {\n  background-color: teal;\n  color: white;\n}"
+    }
+  ],
+  "all-text-inputs": [
+    {
+      "source": "@include all-text-inputs {\n  background-color: #e6e6e6;\n}",
+      "css": "[type='color'], \n[type='date'], \n[type='datetime'], \n[type='datetime-local'], \n[type='email'], \n[type='month'], \n[type='number'], \n[type='password'], \n[type='search'], \n[type='tel'], \n[type='text'], \n[type='time'], \n[type='url'], \n[type='week'], \ninput:not([type]), \ntextarea {\n  background-color: #e6e6e6;\n}"
+    },
+    {
+      "source": "@include all-text-inputs(hover) {\n  background-color: orange;\n}",
+      "css": "[type='color']:hover, \n[type='date']:hover, \n[type='datetime']:hover, \n[type='datetime-local']:hover, \n[type='email']:hover, \n[type='month']:hover, \n[type='number']:hover, \n[type='password']:hover, \n[type='search']:hover, \n[type='tel']:hover, \n[type='text']:hover, \n[type='time']:hover, \n[type='url']:hover, \n[type='week']:hover, \ninput:not([type]):hover, \ntextarea:hover {\n  background-color: orange;\n}"
+    },
+    {
+      "source": "@include all-text-inputs(focus) {\n  background-color: green;\n}",
+      "css": "[type='color']:focus, \n[type='date']:focus, \n[type='datetime']:focus, \n[type='datetime-local']:focus, \n[type='email']:focus, \n[type='month']:focus, \n[type='number']:focus, \n[type='password']:focus, \n[type='search']:focus, \n[type='tel']:focus, \n[type='text']:focus, \n[type='time']:focus, \n[type='url']:focus, \n[type='week']:focus, \ninput:not([type]):focus, \ntextarea:focus {\n  background-color: green;\n}"
+    },
+    {
+      "source": ".element {\n  @include all-text-inputs(active) {\n    background-color: green;\n    color: white;\n  };\n}",
+      "css": ".element [type='color']:active, \n.element [type='date']:active, \n.element [type='datetime']:active, \n.element [type='datetime-local']:active, \n.element [type='email']:active, \n.element [type='month']:active, \n.element [type='number']:active, \n.element [type='password']:active, \n.element [type='search']:active, \n.element [type='tel']:active, \n.element [type='text']:active, \n.element [type='time']:active, \n.element [type='url']:active, \n.element [type='week']:active, \n.element input:not([type]):active, \n.element textarea:active {\n  background-color: green;\n  color: white;\n}"
+    },
+    {
+      "source": ".element {\n  @include all-text-inputs(invalid) {\n    background-color: red;\n    color: white;\n  };\n}",
+      "css": ".element [type='color']:invalid, \n.element [type='date']:invalid, \n.element [type='datetime']:invalid, \n.element [type='datetime-local']:invalid, \n.element [type='email']:invalid, \n.element [type='month']:invalid, \n.element [type='number']:invalid, \n.element [type='password']:invalid, \n.element [type='search']:invalid, \n.element [type='tel']:invalid, \n.element [type='text']:invalid, \n.element [type='time']:invalid, \n.element [type='url']:invalid, \n.element [type='week']:invalid, \n.element input:not([type]):invalid, \n.element textarea:invalid {\n  background-color: red;\n  color: white;\n}"
+    },
+    {
+      "source": ".element {\n  @include all-text-inputs(required) {\n    background-color: orange;\n    color: white;\n  };\n}",
+      "css": ".element [type='color']:required, \n.element [type='date']:required, \n.element [type='datetime']:required, \n.element [type='datetime-local']:required, \n.element [type='email']:required, \n.element [type='month']:required, \n.element [type='number']:required, \n.element [type='password']:required, \n.element [type='search']:required, \n.element [type='tel']:required, \n.element [type='text']:required, \n.element [type='time']:required, \n.element [type='url']:required, \n.element [type='week']:required, \n.element input:not([type]):required, \n.element textarea:required {\n  background-color: orange;\n  color: white;\n}"
+    },
+    {
+      "source": ".element {\n  @include all-text-inputs(disabled) {\n    background-color: gray;\n    color: black;\n  };\n}",
+      "css": ".element [type='color']:disabled, \n.element [type='date']:disabled, \n.element [type='datetime']:disabled, \n.element [type='datetime-local']:disabled, \n.element [type='email']:disabled, \n.element [type='month']:disabled, \n.element [type='number']:disabled, \n.element [type='password']:disabled, \n.element [type='search']:disabled, \n.element [type='tel']:disabled, \n.element [type='text']:disabled, \n.element [type='time']:disabled, \n.element [type='url']:disabled, \n.element [type='week']:disabled, \n.element input:not([type]):disabled, \n.element textarea:disabled {\n  background-color: gray;\n  color: black;\n}"
+    },
+    {
+      "source": ".containing-element {\n  @include all-text-inputs {\n    background-color: green;\n  }\n}",
+      "css": ".containing-element [type='color'], \n.containing-element [type='date'], \n.containing-element [type='datetime'], \n.containing-element [type='datetime-local'], \n.containing-element [type='email'], \n.containing-element [type='month'], \n.containing-element [type='number'], \n.containing-element [type='password'], \n.containing-element [type='search'], \n.containing-element [type='tel'], \n.containing-element [type='text'], \n.containing-element [type='time'], \n.containing-element [type='url'], \n.containing-element [type='week'], \n.containing-element input:not([type]), \n.containing-element textarea {\n  background-color: green;\n}"
+    }
+  ],
+  "antialias": [
+    {
+      "source": ".element{\n  @include antialias;\n}",
+      "css": ".element, .element:before, .element:after,\n.element *,\n.element *::before,\n.element *::after {\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n}"
+    },
+    {
+      "source": ".element{\n  @include antialias(only);\n}",
+      "css": ".element, .element::before, .element::after {\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n}"
+    },
+    {
+      "source": "@include antialias;",
+      "css": "*,\n*::before,\n*::after {\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n}"
+    }
+  ],
+  "background-dots": [
+    {
+      "source": ".element{\n  @include background-dots;\n}",
+      "css": ".element {\n  background-image: \n    radial-gradient(rgba(0, 0, 0, 0.1) 1em, transparent 0), \n    radial-gradient(rgba(0, 0, 0, 0.1) 1em, transparent 0);\n  background-position: 2.5em 2.5em, 10em 10em;\n  background-size: 5em 5em;\n  background-repeat: repeat;\n}"
+    },
+    {
+      "source": ".element{\n  @include background-dots(\n    $color: pink,\n    $size: 10px\n  );\n}",
+      "css": ".element {\n  background-image:\n    radial-gradient(pink 10px, transparent 0), \n    radial-gradient(pink 10px, transparent 0);\n  background-position: 25px 25px, 100px 100px;\n  background-size: 50px 50px;\n  background-repeat: repeat;\n}"
+    },
+    {
+      "source": ".element{\n  @include background-dots(\n    $color: pink,\n    $size: 10px,\n    $gutter: 70px\n  );\n}",
+      "css": ".element {\n  background-image: \n    radial-gradient(pink 10px, transparent 0), \n    radial-gradient(pink 10px, transparent 0);\n  background-position: 35px 35px, 140px 140px;\n  background-size: 70px 70px;\n  background-repeat: repeat;\n}"
+    },
+    {
+      "source": ".element{\n  @include background-dots(\n    $color: red orange,\n    $size: 10px\n  );\n}",
+      "css": ".element {\n  background-image: \n    radial-gradient(red 10px, transparent 0), \n    radial-gradient(orange 10px, transparent 0);\n  background-position: 25px 25px, 100px 100px;\n  background-size: 50px 50px;\n  background-repeat: repeat;\n}"
+    },
+    {
+      "source": ".element{\n  @include background-dots(\n    $color: red,\n    $size: 4px,\n    $diagonal: false\n  );\n}",
+      "css": ".element {\n  background-image: radial-gradient(red 4px, transparent 0);\n  background-position: 10px 10px;\n  background-size: 20px 20px;\n  background-repeat: repeat;\n}"
+    },
+    {
+      "source": ".element{\n  @include background-dots(\n    $color: rgba(black, 0.1) rgba(green, 0.2),\n    $size: 4px,\n    $gutter: 20px,\n    $image: \"/images/backgrounds/03.jpg\"\n  );\n}",
+      "css": ".element {\n  background-image: \n    radial-gradient(rgba(0, 0, 0, 0.1) 4px, transparent 0), \n    radial-gradient(rgba(0, 128, 0, 0.2) 4px, transparent 0);\n  background-position: 10px 10px, 40px 40px;\n  background-size: 20px 20px;\n  background-repeat: repeat;\n  position: relative;\n}\n.element::before {\n  content: \"\";\n  display: block;\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  top: 0;\n  left: 0;\n  background-image: url(\"/images/backgrounds/03.jpg\");\n  background-repeat: no-repeat;\n  background-position: center;\n  background-size: cover;\n  z-index: -1;\n}"
+    }
+  ],
+  "background-image": [
+    {
+      "source": ".element{\n  @include background-image(\"/images/backgrounds/07.jpg\");\n}",
+      "css": ".element {\n  position: relative;\n  background-image: url(\"/images/backgrounds/07.jpg\");\n  background-position: center center;\n  background-repeat: no-repeat;\n  background-size: cover;\n}"
+    },
+    {
+      "source": ".element{\n  @include background-image(\"/images/backgrounds/07.jpg\", rgba(255, 204, 153, 0.5));\n}",
+      "css": ".element {\n  position: relative;\n  background-image: linear-gradient(to top, rgba(255, 204, 153, 0.5), rgba(255, 204, 153, 0.5)), url(\"/images/backgrounds/07.jpg\");\n  background-position: center center;\n  background-repeat: no-repeat;\n  background-size: cover;\n}"
+    },
+    {
+      "source": ".element{\n  @include background-image(\"/images/backgrounds/07.jpg\", rgba(0, 0, 0, 0.5) rgba(40, 102, 100, 0.8));\n}",
+      "css": ".element {\n  position: relative;\n  background-image: linear-gradient(to top, rgba(0, 0, 0, 0.5), rgba(40, 102, 100, 0.8)), url(\"/images/backgrounds/07.jpg\");\n  background-position: center center;\n  background-repeat: no-repeat;\n  background-size: cover;\n}"
+    },
+    {
+      "source": ".element{\n  @include background-image(\"/images/backgrounds/07.jpg\", rgba(0, 128, 128, 0.7) rgba(255, 192, 203, 0.8), right);\n}",
+      "css": ".element {\n  position: relative;\n  background-image: linear-gradient(to right, rgba(0, 128, 128, 0.7), rgba(255, 192, 203, 0.8)), url(\"/images/backgrounds/07.jpg\");\n  background-position: center center;\n  background-repeat: no-repeat;\n  background-size: cover;\n}"
+    },
+    {
+      "source": ".element{\n  @include background-image(null, rgba(teal, 0.7) rgba(pink, 0.8), right);\n}",
+      "css": ".element {\n  position: relative;\n  background-position: center center;\n  background-repeat: no-repeat;\n  background-size: cover;\n}\n.element::after {\n  content: \"\";\n  display: block;\n  position: absolute;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  background: linear-gradient(to right, rgba(0, 128, 128, 0.7), rgba(255, 192, 203, 0.8));\n}\n.element > * {\n  position: relative;\n  z-index: 1;\n}"
+    },
+    {
+      "source": ".element{\n  @include background-image(null, rgba(teal, 0.7) rgba(pink, 0.8), right);\n}",
+      "css": ".element {\n  position: relative;\n  background-position: center center;\n  background-repeat: no-repeat;\n  background-size: cover;\n}\n.element::after {\n  content: \"\";\n  display: block;\n  position: absolute;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  background: linear-gradient(to right, rgba(0, 128, 128, 0.7), rgba(255, 192, 203, 0.8));\n}\n.element > * {\n  position: relative;\n  z-index: 1;\n}"
+    }
+  ],
+  "background-stripes": [
+    {
+      "source": ".element{\n  @include background-stripes();\n}",
+      "css": ".element {\n  background-image: repeating-linear-gradient(\n    -45deg, \n    rgba(0, 0, 0, 0.1) 0, \n    rgba(0, 0, 0, 0.1) 1em, \n    transparent 1em, \n    transparent 2em\n  );\n}"
+    },
+    {
+      "source": ".element{\n  @include background-stripes(\n    $color: pink\n  );\n}",
+      "css": ".element {\n  background-image: repeating-linear-gradient(\n    -45deg, \n    pink 0, \n    pink 1em, \n    transparent 1em, \n    transparent 2em\n  );\n}"
+    },
+    {
+      "source": ".element{\n  @include background-stripes(\n    $color: #FFD393 #FF974F #F54F29,\n    $thickness: 3em,\n    $rotation: 90deg\n  );\n}",
+      "css": ".element {\n  background-image: repeating-linear-gradient(\n    90deg, \n    #FFD393 0em, \n    #FFD393 3em, \n    #FF974F 3em, \n    #FF974F 6em, \n    #F54F29 6em, \n    #F54F29 9em\n  );\n}"
+    },
+    {
+      "source": ".element{\n  @include background-stripes(\n    $color: rgba(blue, 0.4),\n    $thickness: 3px,\n    $rotation: 45deg,\n    $image: \"/images/backgrounds/05.jpg\"\n  );\n}",
+      "css": ".element {\n  background-image: repeating-linear-gradient(\n    45deg, \n    rgba(0, 0, 255, 0.4) 0, \n    rgba(0, 0, 255, 0.4) 3px, \n    transparent 3px, transparent 6px\n  ), url(\"/images/backgrounds/05.jpg\");\n  background-position: center;\n  background-repeat: no-repeat;\n  background-size: cover;\n}"
+    },
+    {
+      "source": ".element{\n  @include background-stripes(\n    $color: black,\n    $thickness: 1px,\n    $rotation: 180deg,\n    $image: \"/images/backgrounds/03.jpg\"\n  );\n}",
+      "css": ".element {\n  background-image: repeating-linear-gradient(\n    180deg, \n    black 0, \n    black 1px, \n    transparent 1px, \n    transparent 2px\n  ), url(\"/images/backgrounds/03.jpg\");\n  background-position: center;\n  background-repeat: no-repeat;\n  background-size: cover;\n}"
+    }
+  ],
+  "before": [
+    {
+      "source": ".element{\n  @include before(\"Text to use!\");\n}",
+      "css": ".element::before {\n  content: \"Text to use!\";\n}"
+    },
+    {
+      "source": ".element{\n  @include before{\n    content: \"Easy to use!\";\n    font-style: italic;\n    color: red;\n  };\n}",
+      "css": ".element::before {\n  content: \"Easy to use!\";\n  font-style: italic;\n  color: red;\n}"
+    },
+    {
+      "source": ".element{\n  @include before(\"data-currency\");\n}",
+      "css": ".element::before {\n  content: attr(data-currency);\n}"
+    },
+    {
+      "source": ".element{\n  @include before(\"data-currency\"){\n    font-size: .8em;\n    color: red;\n  };\n}",
+      "css": ".element::before {\n  content: attr(data-currency);\n  font-size: .8em;\n  color: red;\n}"
+    }
+  ],
+  "border-box": [
+    {
+      "source": ".element {\n  @include border-box;\n}",
+      "css": ".element, \n.element::before, \n.element::after,\n.element *,\n.element *::before,\n.element *::after {\n  box-sizing: border-box;\n}"
+    },
+    {
+      "source": ".element {\n  @include border-box(\"only\");\n}",
+      "css": ".element, \n.element::before, \n.element::after {\n  box-sizing: border-box;\n}"
+    },
+    {
+      "source": "@include border-box;",
+      "css": "*,\n*::before,\n*::after {\n  box-sizing: border-box;\n}"
+    }
+  ],
+  "border-radius": [
+    {
+      "source": ".element{\n  @include border-radius(20px);\n}",
+      "css": ".element {\n  border-radius: 20px;\n}"
+    },
+    {
+      "source": ".element{\n  @include border-radius(top, 40px);\n}",
+      "css": ".element {\n  border-top-left-radius: 40px;\n  border-top-right-radius: 40px;\n}"
+    },
+    {
+      "source": ".element{\n  @include border-radius(right, 40px);\n}",
+      "css": ".element {\n  border-top-right-radius: 40px;\n  border-bottom-right-radius: 40px;\n}"
+    },
+    {
+      "source": ".element{\n  @include border-radius(cross-left, 40px);\n}",
+      "css": ".element {\n  border-top-left-radius: 40px;\n  border-bottom-right-radius: 40px;\n}"
+    },
+    {
+      "source": ".element{\n  @include border-radius(25px 50px 100px 150px);\n}",
+      "css": ".element {\n  border-radius: 25px 50px 100px 150px;\n}"
+    },
+    {
+      "source": ".element{\n  @include border-radius(25px, 50px, 100px, 150px);\n}",
+      "css": ".element {\n  border-top-left-radius: 25px;\n  border-top-right-radius: 50px;\n  border-bottom-right-radius: 100px;\n  border-bottom-left-radius: 150px;\n}"
+    },
+    {
+      "source": ".element{\n  @include border-radius(100px 40px, 50px 20%, 100px 30%, 150px 2rem);\n}",
+      "css": ".element {\n  border-top-left-radius: 100px 40px;\n  border-top-right-radius: 50px 20%;\n  border-bottom-right-radius: 100px 30%;\n  border-bottom-left-radius: 150px 2rem;\n}"
+    },
+    {
+      "source": ".element{\n  @include border-radius(null, null, 100px 30%, 150px 2rem);\n}",
+      "css": ".element {\n  border-bottom-right-radius: 100px 30%;\n  border-bottom-left-radius: 150px 2rem;\n}"
+    }
+  ],
+  "brand-logo": [
+    {
+      "source": ".brand-logo{\n  @include brand-logo(\n    $width: 100px,\n    $height: 30px,\n    $image-url: \"https://coolors.co/assets/img/logo.svg\"\n  );\n}",
+      "css": ".brand-logo {\n  position: relative;\n  display: inline-block;\n  width: 100px;\n  height: 30px;\n  background-image: url(\"https://coolors.co/assets/img/logo.svg\");\n  background-repeat: no-repeat;\n  background-position: center;\n  background-size: 100%;\n}\n.brand-logo a {\n  display: block;\n  width: 0;\n  height: 0;\n  overflow: hidden;\n}\n.brand-logo a::after {\n  content: \"\";\n  position: absolute;\n  pointer-events: auto;\n  background-color: rgba(0, 0, 0, 0);\n  top: 0;\n  right: 0;\n  bottom: 0;\n  left: 0;\n  z-index: 1;\n}"
+    },
+    {
+      "source": ".brand-logo{\n  @include brand-logo(\n    $width: 100px,\n    $height: 30px\n  );\n}",
+      "css": ".brand-logo {\n  display: inline-block;\n  position: relative;\n  width: 100px;\n  height: 30px;\n  background-position: center;\n  background-repeat: no-repeat;\n  background-size: 100%;\n}\n.brand-logo a {\n  display: block;\n  width: 0;\n  height: 0;\n  overflow: hidden;\n}\n.brand-logo a::after {\n  content: \"\";\n  position: absolute;\n  pointer-events: auto;\n  background-color: rgba(0, 0, 0, 0);\n  top: 0;\n  right: 0;\n  bottom: 0;\n  left: 0;\n  z-index: 1;\n}"
+    }
+  ],
+  "breakpoint": [
+    {
+      "source": ".element{\n  @include breakpoint(320px) {\n    background-color: green;\n  };\n}",
+      "css": "@media (width: 320px) {\n  .element {\n    background-color: green;\n  }\n}"
+    },
+    {
+      "source": ".element{\n  @include breakpoint(only, 1200px) {\n    background-color: teal;\n  };\n}",
+      "css": "@media (width: 1200px) {\n  .element {\n    background-color: teal;\n  }\n}"
+    },
+    {
+      "source": ".element{\n  @include breakpoint(min, medium) {\n    background-color: green;\n  };\n}",
+      "css": "@media (min-width: 768px) {\n  .element {\n    background-color: green;\n  }\n}"
+    },
+    {
+      "source": ".element{\n  @include breakpoint(max, 1024px) {\n    background-color: green;\n  };\n}",
+      "css": "@media (max-width: 1024px) {\n  .element {\n    background-color: green;\n  }\n}"
+    },
+    {
+      "source": ".element{\n  @include breakpoint(between, small 1200px) {\n    background-color: green;\n  };\n}",
+      "css": "@media (min-width: 576px) and (max-width: 1200px) {\n  .element {\n    background-color: green;\n  }\n}"
+    },
+    {
+      "source": ".element{\n  @include breakpoint(between, small medium) {\n    background-color: green;\n  };\n  @include breakpoint(between, medium large) {\n    background-color: blue;\n  };\n  @include breakpoint(between, large xlarge) {\n    background-color: purple;\n  };\n}",
+      "css": "@media (min-width: 576px) and (max-width: 767px) {\n  .element {\n    background-color: green;\n  }\n}\n@media (min-width: 768px) and (max-width: 991px) {\n  .element {\n    background-color: blue;\n  }\n}\n@media (min-width: 992px) and (max-width: 1199px) {\n  .element {\n    background-color: purple;\n  }\n}"
+    },
+    {
+      "source": ".element{\n  @include breakpoint(between, small 1199px) {\n    background-color: green;\n  };\n  @include breakpoint(between, 1200px 1400px) {\n    background-color: blue;\n  };\n}",
+      "css": "@media (min-width: 576px) and (max-width: 1199px) {\n  .element {\n    background-color: green;\n  }\n}\n@media (min-width: 1200px) and (max-width: 1400px) {\n  .element {\n    background-color: blue;\n  }\n}"
+    },
+    {
+      "source": ".element{\n  @include breakpoint(320px, 768px) {\n    background-color: teal;\n  };\n}",
+      "css": "@media (min-width: 320px) and (max-width: 768px) {\n  .element {\n    background-color: teal;\n  }\n}"
+    },
+    {
+      "source": ".element{\n  @include breakpoint(small, large) {\n    background-color: teal;\n  };\n}",
+      "css": "@media (min-width: 576px) and (max-width: 991px) {\n  .element {\n    background-color: teal;\n  }\n}"
+    }
+  ],
+  "breakpointer": [
+    {
+      "source": "@include breakpointer;",
+      "css": "@media (min-width: 0) {\n  body::before {\n    content: \"xsmall\";\n  }\n}\n@media (min-width: 576px) {\n  body::before {\n    content: \"small\";\n  }\n}\n@media (min-width: 768px) {\n  body::before {\n    content: \"medium\";\n  }\n}\n@media (min-width: 992px) {\n  body::before {\n    content: \"large\";\n  }\n}\n@media (min-width: 1200px) {\n  body::before {\n    content: \"xlarge\";\n  }\n}"
+    },
+    {
+      "source": ".element {\n  @include breakpointer();\n}",
+      "css": "@media (min-width: 0) {\n  .element::before {\n    content: \"xsmall\";\n  }\n}\n@media (min-width: 576px) {\n  .element::before {\n    content: \"small\";\n  }\n}\n@media (min-width: 768px) {\n  .element::before {\n    content: \"medium\";\n  }\n}\n@media (min-width: 992px) {\n  .element::before {\n    content: \"large\";\n  }\n}\n@media (min-width: 1200px) {\n  .element::before {\n    content: \"xlarge\";\n  }\n}"
+    }
+  ],
+  "center": [
+    {
+      "source": ".parent-element {\n  position: relative;\n  .element{\n    position: absolute;\n    @include center;\n  }\n}",
+      "css": ".parent-element {\n  position: relative;\n}\n.parent-element .element {\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  transform: translateX(-50%) translateY(-50%);\n}"
+    },
+    {
+      "source": ".parent-element {\n  position: relative;\n  .element{\n    position: absolute;\n    @include center(horizontal);\n  }\n}",
+      "css": ".parent-element {\n  position: relative;\n}\n.parent-element .element {\n  position: absolute;\n  left: 50%;\n  transform: translateX(-50%);\n}"
+    },
+    {
+      "source": ".parent-element {\n  position: relative;\n  .element{\n    position: absolute;\n    @include center(vertical);\n  }\n}",
+      "css": ".parent-element {\n  position: relative;\n}\n.parent-element .element {\n  position: absolute;\n  top: 50%;\n  transform: translateY(-50%);\n}"
+    },
+    {
+      "source": ".parent-element {\n  position: relative;\n  .element{\n    position: absolute;\n    @include center(both);\n  }\n}",
+      "css": ".parent-element {\n  position: relative;\n}\n.parent-element .element {\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  transform: translateX(-50%) translateY(-50%);\n}"
+    }
+  ],
+  "circle": [
+    {
+      "source": ".element{\n  @include circle(150px);\n}",
+      "css": ".element {\n  width: 150px;\n  height: 150px;\n  display: inline-block;\n  border-radius: 100%;\n}"
+    }
+  ],
+  "clear-unit": [
+    {
+      "source": "@use \"sass:math\";\n.title {\n  font-size: 24px;\n  line-height: math.div(clearUnit(36px), clearUnit(24px));\n}",
+      "css": ".title {\n  font-size: 24px;\n  line-height: 1.5;\n}"
+    }
+  ],
+  "clear-whitespace": [
+    {
+      "source": ".brand {\n  font-family: \"Fanwood Text\", serif;\n  background-image: url(\"/fonts/#{clearWhitespace(\"Fanwood Text\")}.svg\");\n}",
+      "css": ".brand {\n  font-family: \"Fanwood Text\", serif;\n  background-image: url(\"/fonts/FanwoodText.svg\");\n}"
+    }
+  ],
+  "clearfix": [
+    {
+      "source": ".element{\n  @include clearfix;\n}",
+      "css": ".element::after {\n  content: \"\";\n  display: block;\n  clear: both;\n}"
+    }
+  ],
+  "columnizer": [
+    {
+      "source": ".parent-element{\n  @include columnizer(3);\n}",
+      "css": ".parent-element {\n  display: flex;\n  flex-wrap: wrap;\n}\n.parent-element > * {\n  flex: 0 0 calc(100% / 3);\n  margin-bottom: 0;\n}\n.parent-element > *:not(:last-child) {\n  margin-right: 0;\n}"
+    },
+    {
+      "source": ".parent-element{\n  @include columnizer(3, 20px);\n}",
+      "css": ".parent-element {\n  display: flex;\n  flex-wrap: wrap;\n}\n.parent-element > * {\n  flex-grow: 0;\n  flex-shrink: 0;\n  flex-basis: calc((100% - (3 - 1) * 20px) / 3);\n  margin-bottom: 20px;\n}\n.parent-element > *:not(:last-child) {\n  margin-right: 20px;\n}\n.parent-element > *:nth-child(3n) {\n  margin-right: 0;\n}"
+    },
+    {
+      "source": ".parent-element{\n  @include columnizer(3, 20px, true);\n}",
+      "css": ".parent-element {\n  display: flex;\n  flex-wrap: wrap;\n}\n.parent-element > * {\n  flex-grow: 1;\n  flex-shrink: 0;\n  flex-basis: calc((100% - (3 - 1) * 20px) / 3);\n  margin-bottom: 20px;\n}\n.parent-element > *:not(:last-child) {\n  margin-right: 20px;\n}\n.parent-element > *:nth-child(3n) {\n  margin-right: 0;\n}"
+    },
+    {
+      "source": ".parent-element{\n  @include columnizer(3, true);\n}",
+      "css": ".parent-element {\n  display: flex;\n  flex-wrap: wrap;\n}\n.parent-element > * {\n  flex-grow: 1;\n  flex-shrink: 0;\n  flex-basis: calc(100% / 3);\n  margin-bottom: 0;\n}\n.parent-element > *:not(:last-child) {\n  margin-right: 0;\n}"
+    },
+    {
+      "source": ".parent-element{\n  @include columnizer(2, 10px, true);\n  @include breakpoint(min, large) {\n    @include columnizer(4, 20px, false);\n  }\n}",
+      "css": ".parent-element {\n  display: flex;\n  flex-wrap: wrap;\n}\n.parent-element > * {\n  flex-grow: 1;\n  flex-shrink: 0;\n  flex-basis: calc((100% - (2 - 1) * 10px) / 2);\n  margin-bottom: 10px;\n}\n.parent-element > *:not(:last-child) {\n  margin-right: 10px;\n}\n.parent-element > *:nth-child(2n) {\n  margin-right: 0;\n}\n@media (min-width: 992px) {\n  .parent-element {\n    display: flex;\n    flex-wrap: wrap;\n  }\n  .parent-element > * {\n    flex-grow: 0;\n    flex-shrink: 0;\n    flex-basis: calc((100% - (4 - 1) * 20px) / 4);\n    margin-bottom: 20px;\n  }\n  .parent-element > *:not(:last-child) {\n    margin-right: 20px;\n  }\n  .parent-element > *:nth-child(4n) {\n    margin-right: 0;\n  }\n}"
+    }
+  ],
+  "container": [
+    {
+      "source": ".card {\n  @include container(\"card\");\n}",
+      "css": ".card {\n  container-type: inline-size;\n  container-name: card;\n}"
+    },
+    {
+      "source": ".panel {\n  @include container;\n}",
+      "css": ".panel {\n  container-type: inline-size;\n}"
+    },
+    {
+      "source": ".panel {\n  @include container(null, size);\n}",
+      "css": ".panel {\n  container-type: size;\n}"
+    }
+  ],
+  "container-query": [
+    {
+      "source": ".title {\n  @include container-query(\"min\", 400px) {\n    font-size: 2rem;\n  }\n}",
+      "css": "@container (min-width: 400px) {\n  .title {\n    font-size: 2rem;\n  }\n}"
+    },
+    {
+      "source": ".title {\n  @include container-query(\"max\", 399px) {\n    font-size: 1rem;\n  }\n}",
+      "css": "@container (max-width: 399px) {\n  .title {\n    font-size: 1rem;\n  }\n}"
+    },
+    {
+      "source": ".title {\n  @include container-query(\"between\", 300px 500px) {\n    color: red;\n  }\n}\n.title {\n  @include container-query(300px, 500px) {\n    color: red;\n  }\n}",
+      "css": "@container (min-width: 300px) and (max-width: 500px) {\n  .title {\n    color: red;\n  }\n}\n@container (min-width: 300px) and (max-width: 500px) {\n  .title {\n    color: red;\n  }\n}"
+    },
+    {
+      "source": ".title {\n  @include container-query(\"min\", \"medium\") {\n    color: red;\n  }\n}",
+      "css": "@container (min-width: 768px) {\n  .title {\n    color: red;\n  }\n}"
+    },
+    {
+      "source": ".title {\n  @include container-query(\"min\", 400px, $name: \"card\") {\n    color: red;\n  }\n}",
+      "css": "@container card (min-width: 400px) {\n  .title {\n    color: red;\n  }\n}"
+    }
+  ],
+  "convert-to-em": [
+    {
+      "source": ".card {\n  padding: convertToEm(24px);\n  border-radius: convertToEm(8px);\n}",
+      "css": ".card {\n  padding: 1.5em;\n  border-radius: 0.5em;\n}"
+    }
+  ],
+  "convert-to-number": [
+    {
+      "source": ".column {\n  width: convertToNumber(\"50\") * 1%;\n}",
+      "css": ".column {\n  width: 50%;\n}"
+    }
+  ],
+  "counter": [
+    {
+      "source": ".listicle-wrapper {\n  @include counter;\n}",
+      "css": ".listicle-wrapper.counter-start {\n  counter-reset: glsCounter;\n}\n.listicle-wrapper.counter-start .counter-item::before,\n.listicle-wrapper.counter-continue .counter-item::before {\n  content: counter(glsCounter);\n  counter-increment: glsCounter;\n}"
+    },
+    {
+      "source": ".listicle-wrapper {\n  @include counter {\n    color: rgb(0, 85, 187);\n    font-size: 1.1em;\n    font-weight: bold;\n    margin-right: 5px;\n  };\n}",
+      "css": ".listicle-wrapper.counter-start {\n  counter-reset: glsCounter;\n}\n.listicle-wrapper.counter-start .counter-item::before,\n.listicle-wrapper.counter-continue .counter-item::before {\n  content: counter(glsCounter);\n  counter-increment: glsCounter;\n  color: rgb(0, 85, 187);\n  font-size: 1.1em;\n  font-weight: bold;\n  margin-right: 5px;\n}"
+    },
+    {
+      "source": ".listicle-wrapper {\n  @include counter(upper-roman) {\n    color: rgb(0, 85, 187);\n    font-size: 1.1em;\n    font-weight: bold;\n    margin-right: 5px;\n  };\n}",
+      "css": ".listicle-wrapper.counter-start {\n  counter-reset: glsCounter;\n}\n.listicle-wrapper.counter-start .counter-item::before,\n.listicle-wrapper.counter-continue .counter-item::before {\n  content: counter(glsCounter, upper-roman);\n  counter-increment: glsCounter;\n  color: rgb(0, 85, 187);\n  font-size: 1.1em;\n  font-weight: bold;\n  margin-right: 5px;\n}"
+    },
+    {
+      "source": ".listicle-wrapper {\n  @include counter(\"____\") {\n    color: rgb(0, 85, 187);\n    font-size: 1.1em;\n    font-weight: bold;\n    margin-right: 5px;\n  };\n}",
+      "css": ".listicle-wrapper.counter-start {\n  counter-reset: glsCounter;\n}\n.listicle-wrapper.counter-start .counter-item::before,\n.listicle-wrapper.counter-continue .counter-item::before {\n  content: counter(glsCounter) \"____\";\n  counter-increment: glsCounter;\n  color: rgb(0, 85, 187);\n  font-size: 1.1em;\n  font-weight: bold;\n  margin-right: 5px;\n}"
+    },
+    {
+      "source": ".listicle-wrapper {\n  @include counter(\"( \", \" ) \") {\n    color: rgb(0, 85, 187);\n    font-size: 1.1em;\n    font-weight: bold;\n    margin-right: 5px;\n  };\n}",
+      "css": ".listicle-wrapper.counter-start {\n  counter-reset: glsCounter;\n}\n.listicle-wrapper.counter-start .counter-item::before,\n.listicle-wrapper.counter-continue .counter-item::before {\n  content: \"( \" counter(glsCounter) \" ) \";\n  counter-increment: glsCounter;\n  color: rgb(0, 85, 187);\n  font-size: 1.1em;\n  font-weight: bold;\n  margin-right: 5px;\n}"
+    },
+    {
+      "source": ".listicle-wrapper {\n  @include counter(decimal, \"th \") {\n    color: rgb(0, 85, 187);\n    font-size: 1.1em;\n    font-weight: bold;\n    margin-right: 5px;\n  };\n}",
+      "css": ".listicle-wrapper.counter-start {\n  counter-reset: glsCounter;\n}\n.listicle-wrapper.counter-start .counter-item::before,\n.listicle-wrapper.counter-continue .counter-item::before {\n  content: counter(glsCounter, decimal) \"th \";\n  counter-increment: glsCounter;\n  color: rgb(0, 85, 187);\n  font-size: 1.1em;\n  font-weight: bold;\n  margin-right: 5px;\n}"
+    },
+    {
+      "source": ".listicle-wrapper {\n  @include counter(\"Section \", decimal-leading-zero) {\n    color: rgb(0, 85, 187);\n    font-size: 1.1em;\n    font-weight: bold;\n    margin-right: 5px;\n  };\n}",
+      "css": ".listicle-wrapper.counter-start {\n  counter-reset: glsCounter;\n}\n.listicle-wrapper.counter-start .counter-item::before,\n.listicle-wrapper.counter-continue .counter-item::before {\n  content: \"Section \" counter(glsCounter, decimal-leading-zero);\n  counter-increment: glsCounter;\n  color: rgb(0, 85, 187);\n  font-size: 1.1em;\n  font-weight: bold;\n  margin-right: 5px;\n}"
+    },
+    {
+      "source": ".listicle-wrapper {\n  @include counter(\"[ Section \", decimal-leading-zero, \" ]\") {\n    color: rgb(0, 85, 187);\n    font-size: 1.1em;\n    font-weight: bold;\n    margin-right: 5px;\n  };\n}",
+      "css": ".listicle-wrapper.counter-start {\n  counter-reset: glsCounter;\n}\n.listicle-wrapper.counter-start .counter-item::before,\n.listicle-wrapper.counter-continue .counter-item::before {\n  content: \"[ Section \" counter(glsCounter, decimal-leading-zero) \" ]\";\n  counter-increment: glsCounter;\n  color: rgb(0, 85, 187);\n  font-size: 1.1em;\n  font-weight: bold;\n  margin-right: 5px;\n}"
+    },
+    {
+      "source": ".listicle-wrapper {\n  @include counter {\n    position: absolute;\n    top: 0;\n    left: 0;\n    font-size: 7em;\n    font-weight: bold;\n    font-style: italic;\n    font-family: \"Jumble\", sans-serif;\n    transform: translateY(-20%);\n    color: rgb(230,230,230);\n    line-height: 1;\n    z-index: -1;\n  };\n  .item {\n    position: relative;\n    padding-left: 50px;\n    &:not(:last-child) {\n        margin-bottom: 3rem;\n    }\n  }\n}",
+      "css": ".listicle-wrapper.counter-start {\n  counter-reset: glsCounter;\n}\n.listicle-wrapper.counter-start .counter-item::before,\n.listicle-wrapper.counter-continue .counter-item::before {\n  content: counter(glsCounter);\n  counter-increment: glsCounter;\n  position: absolute;\n  top: 0;\n  left: 0;\n  font-size: 7em;\n  font-weight: bold;\n  font-style: italic;\n  font-family: \"Jumble\", sans-serif;\n  transform: translateY(-20%);\n  color: #e6e6e6;\n  line-height: 1;\n  z-index: -1;\n}\n.listicle-wrapper .item {\n  position: relative;\n  padding-left: 50px;\n}\n.listicle-wrapper .item:not(:last-child) {\n  margin-bottom: 3rem;\n}"
+    }
+  ],
+  "ellipsis": [
+    {
+      "source": ".element{\n  @include ellipsis;\n}",
+      "css": ".element {\n  display: inline-block;\n  max-width: 100%;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  overflow: hidden;\n  word-wrap: normal;\n}"
+    },
+    {
+      "source": ".element{\n  @include ellipsis(\n    $width: 200px,\n    $display: block\n  );\n}",
+      "css": ".element {\n  display: block;\n  max-width: 200px;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  overflow: hidden;\n  word-wrap: normal;\n}"
+    }
+  ],
+  "escape-to-parent": [
+    {
+      "source": ".parent-element{\n  .element{\n    @include escape-to-parent(\".smartphone\"){\n      background-color: red;\n    }\n    @include escape-to-parent(\".desktop\"){\n      background-color: green;\n    }\n  }\n}",
+      "css": ".smartphone.parent-element .element {\n  background-color: red;\n}\n.desktop.parent-element .element {\n  background-color: green;\n}"
+    }
+  ],
+  "except": [
+    {
+      "source": ".list-wrapper{\n  .list-item{\n    @include except(first){\n      background-color: #5bc0bb;\n      color: white;\n    }\n  }\n}",
+      "css": ".list-wrapper .list-item:not(:first-of-type) {\n  background-color: #5bc0bb;\n  color: white;\n}"
+    },
+    {
+      "source": ".list-wrapper{\n  .list-item{\n    @include except(last){\n      background-color: #5bc0bb;\n      color: white;\n    }\n  }\n}",
+      "css": ".list-wrapper .list-item:not(:last-of-type) {\n  background-color: #5bc0bb;\n  color: white;\n}"
+    },
+    {
+      "source": ".list-wrapper{\n  .list-item{\n    @include except(3){\n      background-color: #5bc0bb;\n      color: white;\n    }\n  }\n}",
+      "css": ".list-wrapper .list-item:not(:nth-of-type(3)) {\n  background-color: #5bc0bb;\n  color: white;\n}"
+    },
+    {
+      "source": ".list-wrapper{\n  .list-item{\n    @include except(even){\n      background-color: #5bc0bb;\n      color: white;\n    }\n  }\n}",
+      "css": ".list-wrapper .list-item:not(:nth-of-type(even)) {\n  background-color: #5bc0bb;\n  color: white;\n}"
+    },
+    {
+      "source": ".list-wrapper{\n  .list-item{\n    @include except(1, 4, 5){\n      background-color: #5bc0bb;\n      color: white;\n    }\n  }\n}",
+      "css": ".list-wrapper .list-item:not(:nth-of-type(1)):not(:nth-of-type(4)):not(:nth-of-type(5)) {\n  background-color: #5bc0bb;\n  color: white;\n}"
+    },
+    {
+      "source": ".list-wrapper{\n  .list-item{\n    @include except(\".exclude\"){\n      background-color: #5bc0bb;\n      color: white;\n    }\n  }\n}",
+      "css": ".list-wrapper .list-item:not(.exclude) {\n  background-color: #5bc0bb;\n  color: white;\n}"
+    },
+    {
+      "source": ".list-wrapper{\n  .list-item{\n    @include except(-2){\n      background-color: #5bc0bb;\n      color: white;\n    }\n  }\n}",
+      "css": ".list-wrapper .list-item:not(:nth-last-of-type(2)) {\n  background-color: #5bc0bb;\n  color: white;\n}"
+    },
+    {
+      "source": ".list-wrapper {\n  .list-item {\n    @include except(-2, -4) {\n      background-color: #5bc0bb;\n      color: white;\n    }\n  }\n}",
+      "css": ".list-wrapper .list-item:not(:nth-last-of-type(2)):not(:nth-last-of-type(4)) {\n  background-color: #5bc0bb;\n  color: white;\n}"
+    },
+    {
+      "source": ".list-wrapper {\n  .list-item {\n    @include except(1, -1, -2) {\n      background-color: #5bc0bb;\n      color: white;\n    }\n  }\n}",
+      "css": ".list-wrapper .list-item:not(:nth-of-type(1)):not(:nth-last-of-type(1)):not(:nth-last-of-type(2)) {\n  background-color: #5bc0bb;\n  color: white;\n}"
+    }
+  ],
+  "fill-nulls": [
+    {
+      "source": ".card {\n  margin: fillNulls(24px null null null, space);\n}",
+      "css": ".card {\n  margin: 24px 0 0 0;\n}"
+    }
+  ],
+  "fluid": [
+    {
+      "source": ".title {\n  font-size: fluid(24px, 48px);\n}",
+      "css": ".title {\n  font-size: clamp(1.5rem, 1rem + 2.5vw, 3rem);\n}"
+    },
+    {
+      "source": ".title {\n  font-size: fluid(1rem, 3rem, 320px, 1200px);\n}",
+      "css": ".title {\n  font-size: clamp(1rem, 0.2727rem + 3.6364vw, 3rem);\n}"
+    },
+    {
+      "source": ".section {\n  padding: fluid(16px, 64px) fluid(8px, 40px);\n}",
+      "css": ".section {\n  padding: clamp(1rem, 0rem + 5vw, 4rem) clamp(0.5rem, -0.1667rem + 3.3333vw, 2.5rem);\n}"
+    },
+    {
+      "source": ".stack {\n  gap: fluid(0.5rem, 2rem);\n}",
+      "css": ".stack {\n  gap: clamp(0.5rem, 0rem + 2.5vw, 2rem);\n}"
+    }
+  ],
+  "font-face": [
+    {
+      "source": "@include font-face(\"Fanwood Text\", \"fonts/fanwood-text/fanwood-text-regular\");",
+      "css": "@font-face {\n  font-family: \"Fanwood Text\";\n  src: url(\"fonts/fanwood-text/fanwood-text-regular.eot\");\n  src: url(\"fonts/fanwood-text/fanwood-text-regular.eot?#iefix\") format(\"embedded-opentype\"), \n       url(\"fonts/fanwood-text/fanwood-text-regular.woff2\") format(\"woff2\"), \n       url(\"fonts/fanwood-text/fanwood-text-regular.woff\") format(\"woff\"), \n       url(\"fonts/fanwood-text/fanwood-text-regular.ttf\") format(\"truetype\"), \n       url(\"fonts/fanwood-text/fanwood-text-regular.svg#FanwoodText\") format(\"svg\");\n  font-style: normal;\n  font-weight: 400;\n}"
+    },
+    {
+      "source": "@include font-face(\"Fanwood Text\", \"fonts/fanwood-text/fanwood-text-regular\", italic);",
+      "css": "@font-face {\n  font-family: \"Fanwood Text\";\n  src: url(\"../fonts/fanwood-text/fanwood-text-v9-latin-italic.eot\");\n  src: url(\"../fonts/fanwood-text/fanwood-text-v9-latin-italic.eot?#iefix\") format(\"embedded-opentype\"),\n       url(\"../fonts/fanwood-text/fanwood-text-v9-latin-italic.woff2\") format(\"woff2\"), \n       url(\"../fonts/fanwood-text/fanwood-text-v9-latin-italic.woff\") format(\"woff\"), \n       url(\"../fonts/fanwood-text/fanwood-text-v9-latin-italic.ttf\") format(\"truetype\"), \n       url(\"../fonts/fanwood-text/fanwood-text-v9-latin-italic.svg#FanwoodText\") format(\"svg\");\n  font-style: italic;\n  font-weight: 400;\n}"
+    },
+    {
+      "source": "@include font-face(\"Fanwood Text\", \"fonts/fanwood-text/fanwood-text-bold\", 700);",
+      "css": "@font-face {\n  font-family: \"Fanwood Text\";\n  src: url(\"fonts/fanwood-text/fanwood-text-bold.eot\");\n  src: url(\"fonts/fanwood-text/fanwood-text-bold.eot?#iefix\") format(\"embedded-opentype\"), \n       url(\"fonts/fanwood-text/fanwood-text-bold.woff2\") format(\"woff2\"), \n       url(\"fonts/fanwood-text/fanwood-text-bold.woff\") format(\"woff\"), \n       url(\"fonts/fanwood-text/fanwood-text-bold.ttf\") format(\"truetype\"), \n       url(\"fonts/fanwood-text/fanwood-text-bold.svg#FanwoodText\") format(\"svg\");\n  font-style: normal;\n  font-weight: 700;\n}"
+    },
+    {
+      "source": "@include font-face(\"Fanwood Text\", \"fonts/fanwood-text/fanwood-text-bold-italic\", italic, 700);",
+      "css": "@font-face {\n  font-family: \"Fanwood Text\";\n  src: url(\"fonts/fanwood-text/fanwood-text-bold-italic.eot\");\n  src: url(\"fonts/fanwood-text/fanwood-text-bold-italic.eot?#iefix\") format(\"embedded-opentype\"), \n       url(\"fonts/fanwood-text/fanwood-text-bold-italic.woff2\") format(\"woff2\"), \n       url(\"fonts/fanwood-text/fanwood-text-bold-italic.woff\") format(\"woff\"), \n       url(\"fonts/fanwood-text/fanwood-text-bold-italic.ttf\") format(\"truetype\"), \n       url(\"fonts/fanwood-text/fanwood-text-bold-italic.svg#FanwoodText\") format(\"svg\");\n  font-style: italic;\n  font-weight: 700;\n}"
+    },
+    {
+      "source": "@include font-face(\"Fanwood Text\", \"fonts/fanwood-text/fanwood-text-regular\", woff2 woff ttf);",
+      "css": "@font-face {\n  font-family: \"Fanwood Text\";\n  src: url(\"fonts/fanwood-text/fanwood-text-regular.woff2\") format(\"woff2\"), \n       url(\"fonts/fanwood-text/fanwood-text-regular.woff\") format(\"woff\"), \n       url(\"fonts/fanwood-text/fanwood-text-regular.ttf\") format(\"truetype\");\n  font-style: normal;\n  font-weight: 400;\n}"
+    },
+    {
+      "source": "@include font-face(\"Fanwood Text\", \"fonts/fanwood-text/fanwood-text-bold-italic\", italic, 700, woff2 woff);",
+      "css": "@font-face {\n  font-family: \"Fanwood Text\";\n  src: url(\"fonts/fanwood-text/fanwood-text-bold-italic.woff2\") format(\"woff2\"), \n       url(\"fonts/fanwood-text/fanwood-text-bold-italic.woff\") format(\"woff\");\n  font-style: italic;\n  font-weight: 700;\n}"
+    },
+    {
+      "source": "@include font-face (\n  $font-family: \"Fanwood Text\", \n  $file-path: \"fonts/fanwood-text/fanwood-text-bold-italic\",\n  $font-style: italic, \n  $font-weight: 700,\n  $file-formats: eot woff2 woff\n);",
+      "css": "@font-face {\n  font-family: \"Fanwood Text\";\n  src: url(\"fonts/fanwood-text/fanwood-text-bold-italic.eot\");\n  src: url(\"fonts/fanwood-text/fanwood-text-bold-italic.eot?#iefix\") format(\"embedded-opentype\"), \n       url(\"fonts/fanwood-text/fanwood-text-bold-italic.woff2\") format(\"woff2\"), \n       url(\"fonts/fanwood-text/fanwood-text-bold-italic.woff\") format(\"woff\");\n  font-style: italic;\n  font-weight: 700;\n}"
+    },
+    {
+      "source": "@include font-face (\n  $font-weight: 700,\n  $font-style: italic,\n  $file-formats: eot woff2 woff, \n  $font-family: \"Fanwood Text\",\n  $file-path: \"fonts/fanwood-text/fanwood-text-bold-italic\",\n);",
+      "css": "@font-face {\n  font-family: \"Fanwood Text\";\n  src: url(\"fonts/fanwood-text/fanwood-text-bold-italic.eot\");\n  src: url(\"fonts/fanwood-text/fanwood-text-bold-italic.eot?#iefix\") format(\"embedded-opentype\"), \n       url(\"fonts/fanwood-text/fanwood-text-bold-italic.woff2\") format(\"woff2\"), \n       url(\"fonts/fanwood-text/fanwood-text-bold-italic.woff\") format(\"woff\");\n  font-style: italic;\n  font-weight: 700;\n}"
+    },
+    {
+      "source": "@include font-face (\"Fanwood Text\", \"fonts/fanwood-text/fanwood-text-regular\") {\n  font-display: fallback;\n}",
+      "css": "@font-face {\n  font-family: \"Fanwood Text\";\n  src: url(\"fonts/fanwood-text/fanwood-text-regular.eot\");\n  src: url(\"fonts/fanwood-text/fanwood-text-regular.eot?#iefix\") format(\"embedded-opentype\"),\n       url(\"fonts/fanwood-text/fanwood-text-regular.woff2\") format(\"woff2\"),\n       url(\"fonts/fanwood-text/fanwood-text-regular.woff\") format(\"woff\"),\n       url(\"fonts/fanwood-text/fanwood-text-regular.ttf\") format(\"truetype\"),\n       url(\"fonts/fanwood-text/fanwood-text-regular.svg#FanwoodText\") format(\"svg\");\n  font-style: normal;\n  font-weight: 400;\n  font-display: fallback;\n}"
+    }
+  ],
+  "font-sizer": [
+    {
+      "source": ".title {\n  font-size: fontSizer(16px, 1.5);\n}",
+      "css": ".title {\n  font-size: 24px;\n}"
+    }
+  ],
+  "font-source": [
+    {
+      "source": "@font-face {\n  font-family: \"Inter\";\n  src: fontSource(\"Inter\", \"/fonts/inter\", woff2),\n       fontSource(\"Inter\", \"/fonts/inter\", woff);\n}",
+      "css": "@font-face {\n  font-family: \"Inter\";\n  src: url(\"/fonts/inter.woff2\") format(\"woff2\"), url(\"/fonts/inter.woff\") format(\"woff\");\n}"
+    }
+  ],
+  "hide": [
+    {
+      "source": ".element {\n  @include hide;\n}",
+      "css": ".element {\n  position: absolute;\n  width: 1px;\n  height: 1px;\n  padding: 0;\n  border: 0;\n  overflow: hidden;\n  clip: rect(1px, 1px, 1px, 1px);\n  -webkit-clip-path: inset(100%);\n  clip-path: inset(100%);\n  white-space: nowrap;\n}"
+    },
+    {
+      "source": ".element {\n  @include hide(unhide);\n}",
+      "css": ".element {\n  position: static;\n  width: auto;\n  height: auto;\n  overflow: visible;\n  clip: auto;\n  -webkit-clip-path: none;\n  clip-path: none;\n  white-space: inherit;\n}"
+    }
+  ],
+  "is-color": [
+    {
+      "source": "@mixin badge($color) {\n  background-color: isColor($color);\n  color: white;\n}\n.badge {\n  @include badge(crimson);\n}",
+      "css": ".badge {\n  background-color: crimson;\n  color: white;\n}"
+    }
+  ],
+  "is-gutter": [
+    {
+      "source": "@mixin stack($gap) {\n  @if not isGutter($gap) {\n    @error \"`#{$gap}` cannot be used as a gap.\";\n  }\n  display: grid;\n  gap: $gap;\n}\n.stack {\n  @include stack(var(--gap));\n}",
+      "css": ".stack {\n  display: grid;\n  gap: var(--gap);\n}"
+    }
+  ],
+  "is-number": [
+    {
+      "source": "@mixin z($layer) {\n  position: relative;\n  z-index: isNumber($layer);\n}\n.modal {\n  @include z(100);\n}",
+      "css": ".modal {\n  position: relative;\n  z-index: 100;\n}"
+    }
+  ],
+  "is-time": [
+    {
+      "source": "@mixin fade($duration) {\n  transition: opacity isTime($duration) ease;\n}\n.panel {\n  @include fade(0.4s);\n}",
+      "css": ".panel {\n  transition: opacity 0.4s ease;\n}"
+    }
+  ],
+  "line-clamp": [
+    {
+      "source": ".excerpt {\n  @include line-clamp(3);\n}",
+      "css": ".excerpt {\n  display: -webkit-box;\n  -webkit-box-orient: vertical;\n  -webkit-line-clamp: 3;\n  line-clamp: 3;\n  overflow: hidden;\n}"
+    },
+    {
+      "source": ".title {\n  @include line-clamp(2);\n}",
+      "css": ".title {\n  display: -webkit-box;\n  -webkit-box-orient: vertical;\n  -webkit-line-clamp: 2;\n  line-clamp: 2;\n  overflow: hidden;\n}"
+    },
+    {
+      "source": ".default {\n  @include line-clamp;\n}",
+      "css": ".default {\n  display: -webkit-box;\n  -webkit-box-orient: vertical;\n  -webkit-line-clamp: 3;\n  line-clamp: 3;\n  overflow: hidden;\n}"
+    },
+    {
+      "source": ".full {\n  @include line-clamp(none);\n}",
+      "css": ".full {\n  display: -webkit-box;\n  -webkit-box-orient: vertical;\n  -webkit-line-clamp: none;\n  line-clamp: none;\n  overflow: hidden;\n}"
+    }
+  ],
+  "linear-gradient": [
+    {
+      "source": ".element{\n  @include linear-gradient(right, #43c6ac #191654);\n}",
+      "css": ".element {\n  background: linear-gradient(to right, #43c6ac, #191654);\n}"
+    },
+    {
+      "source": ".element{\n  @include linear-gradient(\n    $direction: right,\n    $colors: #43c6ac #191654 #963d91\n  );\n}",
+      "css": ".element {\n  background: linear-gradient(to right, #43c6ac, #191654, #963d91);\n}"
+    },
+    {
+      "source": ".element{\n  @include linear-gradient(\n    $direction: right,\n    $colors: (#1a2a6c 0 10%) (#b21f1f 30% 60%) (#fdbb2d 90% 100%)\n  );\n}",
+      "css": ".element {\n  background: linear-gradient(to right, #1a2a6c 0 10%, #b21f1f 30% 60%, #fdbb2d 90% 100%);\n}"
+    },
+    {
+      "source": ".element{\n  @include linear-gradient(\n    $direction: right,\n    $colors: (#1a2a6c 25%) (#b21f1f 25% 50%) (#fdbb2d 50% 75%) (orange 75% 100%)\n  );\n}",
+      "css": ".element {\n  background: linear-gradient(to right, #1a2a6c 25%, #b21f1f 25% 50%, #fdbb2d 50% 75%, orange 75% 100%);\n}"
+    }
+  ],
+  "loadify": [
+    {
+      "source": ".loadify-img {\n  @include loadify();\n}",
+      "css": ".loadify-img {\n  opacity: 0;\n  visibility: hidden;\n  backface-visibility: hidden;\n  animation-name: loadify;\n  animation-fill-mode: forwards;\n}\n@media (prefers-reduced-motion: reduce) {\n  .loadify-img {\n    opacity: 1;\n    visibility: visible;\n    backface-visibility: visible;\n    animation: none;\n  }\n}\n\n.loadify-img {\n  animation-delay: 0.2s;\n  animation-duration: 0.5s;\n}"
+    },
+    {
+      "source": ".parent-element {\n  .item {\n    @include loadify();\n  }\n}",
+      "css": ".parent-element .item {\n  opacity: 0;\n  visibility: hidden;\n  backface-visibility: hidden;\n  animation-name: loadify;\n  animation-fill-mode: forwards;\n}\n@media (prefers-reduced-motion: reduce) {\n  .parent-element .item {\n    opacity: 1;\n    visibility: visible;\n    backface-visibility: visible;\n    animation: none;\n  }\n}\n\n.parent-element .item {\n  animation-delay: 0.2s;\n  animation-duration: 0.5s;\n}"
+    },
+    {
+      "source": ".parent-element {\n  .item {\n    @include loadify(1s);\n  }\n}",
+      "css": ".parent-element .item {\n  opacity: 0;\n  visibility: hidden;\n  backface-visibility: hidden;\n  animation-name: loadify;\n  animation-fill-mode: forwards;\n}\n@media (prefers-reduced-motion: reduce) {\n  .parent-element .item {\n    opacity: 1;\n    visibility: visible;\n    backface-visibility: visible;\n    animation: none;\n  }\n}\n\n.parent-element .item {\n  animation-delay: 1s;\n  animation-duration: 0.5s;\n}"
+    },
+    {
+      "source": ".parent-element {\n  .item {\n    @include only(1) {\n      @include loadify(0.2s);\n    }\n    @include only(2) {\n      @include loadify(0.4s);\n    }\n    @include only(3) {\n      @include loadify(0.6s);\n    }\n    @include only(4) {\n      @include loadify(0.8s);\n    }\n    @include only(5) {\n      @include loadify(0.1s);\n    }\n    @include only(6) {\n      @include loadify(1.2s);\n    }\n    @include only(7) {\n      @include loadify(1.4s);\n    }\n    @include only(8) {\n      @include loadify(1.6s);\n    }\n  }\n}",
+      "css": ".parent-element .item:nth-of-type(8), .parent-element .item:nth-of-type(7), .parent-element .item:nth-of-type(6), .parent-element .item:nth-of-type(5), .parent-element .item:nth-of-type(4), .parent-element .item:nth-of-type(3), .parent-element .item:nth-of-type(2), .parent-element .item:nth-of-type(1) {\n  opacity: 0;\n  visibility: hidden;\n  backface-visibility: hidden;\n  animation-name: loadify;\n  animation-fill-mode: forwards;\n}\n@media (prefers-reduced-motion: reduce) {\n  .parent-element .item:nth-of-type(8), .parent-element .item:nth-of-type(7), .parent-element .item:nth-of-type(6), .parent-element .item:nth-of-type(5), .parent-element .item:nth-of-type(4), .parent-element .item:nth-of-type(3), .parent-element .item:nth-of-type(2), .parent-element .item:nth-of-type(1) {\n    opacity: 1;\n    visibility: visible;\n    backface-visibility: visible;\n    animation: none;\n  }\n}\n\n.parent-element .item:nth-of-type(1) {\n  animation-delay: 0.2s;\n  animation-duration: 0.5s;\n}\n.parent-element .item:nth-of-type(2) {\n  animation-delay: 0.4s;\n  animation-duration: 0.5s;\n}\n.parent-element .item:nth-of-type(3) {\n  animation-delay: 0.6s;\n  animation-duration: 0.5s;\n}\n.parent-element .item:nth-of-type(4) {\n  animation-delay: 0.8s;\n  animation-duration: 0.5s;\n}\n.parent-element .item:nth-of-type(5) {\n  animation-delay: 0.1s;\n  animation-duration: 0.5s;\n}\n.parent-element .item:nth-of-type(6) {\n  animation-delay: 1.2s;\n  animation-duration: 0.5s;\n}\n.parent-element .item:nth-of-type(7) {\n  animation-delay: 1.4s;\n  animation-duration: 0.5s;\n}\n.parent-element .item:nth-of-type(8) {\n  animation-delay: 1.6s;\n  animation-duration: 0.5s;\n}"
+    },
+    {
+      "source": ".parent-element {\n  .item {\n    @include only(1) {\n      @include loadify(0.2s, 0.5s);\n    }\n    @include only(2) {\n      @include loadify(1.2s, 3s);\n    }\n    @include only(3) {\n      @include loadify(0.6s, 1.5s);\n    }\n    @include only(4) {\n      @include loadify(1.6s, 4s);\n    }\n    @include only(5) {\n      @include loadify(1s, 2.5s);\n    }\n    @include only(6) {\n      @include loadify(0.4s, 1s);\n    }\n    @include only(7) {\n      @include loadify(1.4s, 3.5s);\n    }\n    @include only(8) {\n      @include loadify(0.8s, 2s);\n    }\n  }\n}",
+      "css": ".parent-element .item:nth-of-type(8), .parent-element .item:nth-of-type(7), .parent-element .item:nth-of-type(6), .parent-element .item:nth-of-type(5), .parent-element .item:nth-of-type(4), .parent-element .item:nth-of-type(3), .parent-element .item:nth-of-type(2), .parent-element .item:nth-of-type(1) {\n  opacity: 0;\n  visibility: hidden;\n  backface-visibility: hidden;\n  animation-name: loadify;\n  animation-fill-mode: forwards;\n}\n@media (prefers-reduced-motion: reduce) {\n  .parent-element .item:nth-of-type(8), .parent-element .item:nth-of-type(7), .parent-element .item:nth-of-type(6), .parent-element .item:nth-of-type(5), .parent-element .item:nth-of-type(4), .parent-element .item:nth-of-type(3), .parent-element .item:nth-of-type(2), .parent-element .item:nth-of-type(1) {\n    opacity: 1;\n    visibility: visible;\n    backface-visibility: visible;\n    animation: none;\n  }\n}\n\n.parent-element .item:nth-of-type(1) {\n  animation-delay: 0.2s;\n  animation-duration: 0.5s;\n}\n.parent-element .item:nth-of-type(2) {\n  animation-delay: 1.2s;\n  animation-duration: 3s;\n}\n.parent-element .item:nth-of-type(3) {\n  animation-delay: 0.6s;\n  animation-duration: 1.5s;\n}\n.parent-element .item:nth-of-type(4) {\n  animation-delay: 1.6s;\n  animation-duration: 4s;\n}\n.parent-element .item:nth-of-type(5) {\n  animation-delay: 1s;\n  animation-duration: 2.5s;\n}\n.parent-element .item:nth-of-type(6) {\n  animation-delay: 0.4s;\n  animation-duration: 1s;\n}\n.parent-element .item:nth-of-type(7) {\n  animation-delay: 1.4s;\n  animation-duration: 3.5s;\n}\n.parent-element .item:nth-of-type(8) {\n  animation-delay: 0.8s;\n  animation-duration: 2s;\n}"
+    }
+  ],
+  "map-deep-get": [
+    {
+      "source": ".tablet-frame {\n  width: mapDeepGet($map-for-tablets, \"iPadPro\", \"width\");\n  height: mapDeepGet($map-for-tablets, \"iPadPro\", \"height\");\n}",
+      "css": ".tablet-frame {\n  width: 1024px;\n  height: 1366px;\n}"
+    }
+  ],
+  "only": [
+    {
+      "source": ".list-wrapper{\n  .list-item{\n    @include only(first) {\n      background-color: #5bc0bb;\n      color: white;\n    }\n  }\n}",
+      "css": ".list-wrapper .list-item:first-of-type {\n  background-color: #5bc0bb;\n  color: white;\n}"
+    },
+    {
+      "source": ".list-wrapper{\n  .list-item{\n    @include only(last) {\n      background-color: #5bc0bb;\n      color: white;\n    }\n  }\n}",
+      "css": ".list-wrapper .list-item:last-of-type {\n  background-color: #5bc0bb;\n  color: white;\n}"
+    },
+    {
+      "source": ".list-wrapper{\n  .list-item{\n    @include only(2) {\n      background-color: #5bc0bb;\n      color: white;\n    }\n  }\n}",
+      "css": ".list-wrapper .list-item:nth-of-type(2) {\n  background-color: #5bc0bb;\n  color: white;\n}"
+    },
+    {
+      "source": ".list-wrapper{\n  .list-item{\n    @include only(odd){\n      background-color: #5bc0bb;\n      color: white;\n    }\n  }\n}",
+      "css": ".list-wrapper .list-item:nth-of-type(odd) {\n  background-color: #5bc0bb;\n  color: white;\n}"
+    },
+    {
+      "source": ".list-wrapper{\n  .list-item{\n    @include only(4, 5, 6) {\n      background-color: #5bc0bb;\n      color: white;\n    }\n  }\n}",
+      "css": ".list-wrapper .list-item:nth-of-type(4), \n.list-wrapper .list-item:nth-of-type(5), \n.list-wrapper .list-item:nth-of-type(6) {\n  background-color: #5bc0bb;\n  color: white;\n}"
+    },
+    {
+      "source": ".list-wrapper {\n  .list-item {\n    @include only(-3) {\n      background-color: #5bc0bb;\n      color: white;\n    }\n  }\n}",
+      "css": ".list-wrapper .list-item:nth-last-of-type(3) {\n  background-color: #5bc0bb;\n  color: white;\n}"
+    },
+    {
+      "source": ".list-wrapper {\n  .list-item {\n    @include only(-1, -2, -4) {\n      background-color: #5bc0bb;\n      color: white;\n    }\n  }\n}",
+      "css": ".list-wrapper .list-item:nth-last-of-type(1), \n.list-wrapper .list-item:nth-last-of-type(2), \n.list-wrapper .list-item:nth-last-of-type(4) {\n  background-color: #5bc0bb;\n  color: white;\n}"
+    },
+    {
+      "source": ".list-wrapper {\n  .list-item {\n    @include only(1, -2) {\n      background-color: #5bc0bb;\n      color: white;\n    }\n  }\n}",
+      "css": ".list-wrapper .list-item:nth-of-type(1), \n.list-wrapper .list-item:nth-last-of-type(2) {\n  background-color: #5bc0bb;\n  color: white;\n}"
+    }
+  ],
+  "pixelify": [
+    {
+      "source": ".icon {\n  width: pixelify(24);\n  height: pixelify(24px);\n}",
+      "css": ".icon {\n  width: 24px;\n  height: 24px;\n}"
+    }
+  ],
+  "placeholder": [
+    {
+      "source": ".element{\n  @include placeholder{\n    color: red;\n  }\n}",
+      "css": ".element::-webkit-input-placeholder {\n  color: red;\n}\n.element::-moz-placeholder {\n  color: red;\n}\n.element:-ms-input-placeholder {\n  color: red;\n}\n.element:-moz-placeholder {\n  color: red;\n}\n.element::placeholder {\n  color: red;\n}"
+    },
+    {
+      "source": "@include placeholder{\n  color: orange;\n}",
+      "css": "::-webkit-input-placeholder {\n  color: orange;\n}\n::-moz-placeholder {\n  color: orange;\n}\n:-ms-input-placeholder {\n  color: orange;\n}\n:-moz-placeholder {\n  color: orange;\n}\n::placeholder {\n  color: orange;\n}"
+    }
+  ],
+  "placeholder-shown": [
+    {
+      "source": "input{\n  @include placeholder-shown{\n    background-color: yellow;\n  }\n}",
+      "css": "input:placeholder-shown {\n  background-color: yellow;\n}"
+    },
+    {
+      "source": "@include placeholder-shown{\n  background-color: yellow;\n}",
+      "css": ":placeholder-shown {\n  background-color: yellow;\n}"
+    }
+  ],
+  "position": [
+    {
+      "source": ".element{\n  @include position;\n}",
+      "css": ".element {\n  position: absolute;\n  top: 0;\n  right: 0;\n  bottom: 0;\n  left: 0;\n}"
+    },
+    {
+      "source": ".element{\n  @include position(fixed);\n}",
+      "css": ".element {\n  position: fixed;\n  top: 0;\n  right: 0;\n  bottom: 0;\n  left: 0;\n}"
+    },
+    {
+      "source": ".element{\n  @include position(fixed, 10px 10px 10px 50px);\n}",
+      "css": ".element {\n  position: fixed;\n  top: 10px;\n  right: 10px;\n  bottom: 10px;\n  left: 50px;\n}"
+    },
+    {
+      "source": ".element{\n  @include position(absolute, null 16px 16px 16px);\n}",
+      "css": ".element {\n  position: absolute;\n  right: 16px;\n  bottom: 16px;\n  left: 16px;\n}"
+    }
+  ],
+  "pseudo-selector": [
+    {
+      "source": "#{pseudoSelector((\"button\", \".btn\", \"a\"), \"focus-visible\")} {\n  outline: 2px solid crimson;\n  outline-offset: 2px;\n}",
+      "css": "button:focus-visible, .btn:focus-visible, a:focus-visible {\n  outline: 2px solid crimson;\n  outline-offset: 2px;\n}"
+    }
+  ],
+  "radial-gradient": [
+    {
+      "source": ".element{\n  @include radial-gradient(circle, center, red orange);\n}",
+      "css": ".element {\n  background: radial-gradient(circle at center, red, orange);\n}"
+    },
+    {
+      "source": ".element{\n  @include radial-gradient(ellipse, center, red orange);\n}",
+      "css": ".element {\n  background: radial-gradient(ellipse at center, red, orange);\n}"
+    },
+    {
+      "source": ".element{\n  @include radial-gradient(circle, top-right, red orange gold);\n}",
+      "css": ".element {\n  background: radial-gradient(circle at top right, red, orange, gold);\n}"
+    },
+    {
+      "source": ".element{\n  @include radial-gradient(circle, center, (darkslateblue 0 10%) (white 10% 20%) (dodgerblue 20% 30%) (powderblue 30% 100%));\n}",
+      "css": ".element {\n  background: radial-gradient(circle at center, darkslateblue 0 10%, white 10% 20%, dodgerblue 20% 30%, powderblue 30% 100%);\n}"
+    },
+    {
+      "source": ".element{\n  @include radial-gradient(\n    $shape: circle,\n    $position: top,\n    $colors: pink crimson\n  );\n}",
+      "css": ".element {\n  background: radial-gradient(circle at top, pink, crimson);\n}"
+    }
+  ],
+  "remify": [
+    {
+      "source": ".title {\n  font-size: remify(30px);\n  margin-bottom: remify(12px);\n}",
+      "css": ".title {\n  font-size: 1.875rem;\n  margin-bottom: 0.75rem;\n}"
+    }
+  ],
+  "remove": [
+    {
+      "source": ".element{\n  @include remove(500px);\n}",
+      "css": "@media (width: 500px) {\n  .element {\n    display: none;\n  }\n}"
+    },
+    {
+      "source": ".element{\n  @include remove(500px, 1024px);\n}",
+      "css": "@media (min-width: 500px) and (max-width: 1024px) {\n  .element {\n    display: none;\n  }\n}"
+    },
+    {
+      "source": ".element{\n  @include remove(min, 1200px);\n}",
+      "css": "@media (min-width: 1200px) {\n  .element {\n    display: none;\n  }\n}"
+    },
+    {
+      "source": ".element{\n  @include remove(max, medium);\n}",
+      "css": "@media (max-width: 768px) {\n  .element {\n    display: none;\n  }\n}"
+    },
+    {
+      "source": ".element{\n  @include remove(small, medium);\n}",
+      "css": "@media (min-width: 576px) and (max-width: 767px) {\n  .element {\n    display: none;\n  }\n}"
+    }
+  ],
+  "reset-css": [
+    {
+      "source": "@include reset-css;",
+      "css": "/* http://meyerweb.com/eric/tools/css/reset/ \n   v2.0 | 20110126\n   License: none (public domain)\n*/\nhtml, body, div, span, applet, object, iframe,\nh1, h2, h3, h4, h5, h6, p, blockquote, pre,\na, abbr, acronym, address, big, cite, code,\ndel, dfn, em, img, ins, kbd, q, s, samp,\nsmall, strike, strong, sub, sup, tt, var,\nb, u, i, center,\ndl, dt, dd, ol, ul, li,\nfieldset, form, label, legend,\ntable, caption, tbody, tfoot, thead, tr, th, td,\narticle, aside, canvas, details, embed,\nfigure, figcaption, footer, header, hgroup,\nmenu, nav, output, ruby, section, summary,\ntime, mark, audio, video {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline;\n}\n/* HTML5 display-role reset for older browsers */\narticle, aside, details, figcaption, figure,\nfooter, header, hgroup, menu, main, nav, section {\n  display: block;\n}\nbody {\n  line-height: 1;\n}\nol, ul {\n  list-style: none;\n}\nblockquote, q {\n  quotes: none;\n}\nblockquote:before, blockquote:after,\nq:before, q:after {\n  content: '';\n  content: none;\n}\ntable {\n  border-collapse: collapse;\n  border-spacing: 0;\n}"
+    }
+  ],
+  "reset-figure": [
+    {
+      "source": "figure{\n  @include reset-figure;\n}",
+      "css": "figure {\n  margin: 0;\n}\nfigure img {\n  display: block;\n  width: 100%;\n}"
+    }
+  ],
+  "resizable": [
+    {
+      "source": ".element{\n  @include resizable;\n}",
+      "css": ".element {\n  resize: both;\n  overflow: auto;\n  max-width: 100%;\n}"
+    }
+  ],
+  "responsive-image": [
+    {
+      "source": "img {\n  @include responsive-image;\n}",
+      "css": "img {\n  display: block;\n  width: 100%;\n}"
+    }
+  ],
+  "scissors": [
+    {
+      "source": ".element{\n  @include scissors(30px);\n}",
+      "css": ".element {\n  clip-path: polygon(0 30px, 30px 0, calc(100% - 30px) 0, 100% 30px, 100% calc(100% - 30px), calc(100% - 30px) 100%, 30px 100%, 0 calc(100% - 30px));\n}"
+    },
+    {
+      "source": ".element{\n  @include scissors(30px 30px 0 0);\n}",
+      "css": ".element {\n  clip-path: polygon(0 30px, 30px 0, calc(100% - 30px) 0, 100% 30px, 100% calc(100% - 0px), calc(100% - 0px) 100%, 0px 100%, 0 calc(100% - 0px));\n}"
+    },
+    {
+      "source": ".element{\n  @include scissors(null null 50px 50px);\n}",
+      "css": ".element {\n  clip-path: polygon(0 0px, 0px 0, calc(100% - 0px) 0, 100% 0px, 100% calc(100% - 50px), calc(100% - 50px) 100%, 50px 100%, 0 calc(100% - 50px));\n}"
+    },
+    {
+      "source": ".element{\n  height: 200px;\n  display: flex;\n  justify-content: center;\n  background-color: #5bc0bb;\n  @include scissors(0 0 50% 50%);\n  h2 {\n    color: white;\n    font-size: 2.5em; \n    text-align: center;\n  }\n}",
+      "css": ".element {\n  height: 200px;\n  display: flex;\n  justify-content: center;\n  background-color: #5bc0bb;\n  clip-path: polygon(0 0px, 0px 0, calc(100% - 0px) 0, 100% 0px, 100% calc(100% - 50%), calc(100% - 50%) 100%, 50% 100%, 0 calc(100% - 50%));\n}\n.element h2 {\n  color: white;\n  font-size: 2.5em;\n  text-align: center;\n}"
+    }
+  ],
+  "screen-agent": [
+    {
+      "source": ".element{\n  background-image: url(https://sample-site.com/images/sample-image-1920x1080.jpg);\n  @include screen-agent(\"2x\"){\n    background-image: url(https://sample-site.com/images/sample-image-3840x2160.jpg);\n  }\n}",
+      "css": ".element {\n  background-image: url(https://sample-site.com/images/sample-image-1920x1080.jpg);\n}\n@media (min-resolution: 192dpi) {\n  .element {\n    background-image: url(https://sample-site.com/images/sample-image-3840x2160.jpg);\n  }\n}"
+    },
+    {
+      "source": ".element{\n  background-color: green;\n  @include screen-agent(192dpi){\n    background-color: teal;\n  }\n}",
+      "css": ".element {\n  background-color: green;\n}\n@media (min-resolution: 192dpi) {\n  .element {\n    background-color: teal;\n  }\n}"
+    }
+  ],
+  "shade": [
+    {
+      "source": "$brand: crimson;\n.button {\n  background-color: $brand;\n}\n.button:hover {\n  background-color: shade($brand, 20%);\n}",
+      "css": ".button {\n  background-color: crimson;\n}\n\n.button:hover {\n  background-color: #b01030;\n}"
+    }
+  ],
+  "shorthand-property": [
+    {
+      "source": ".card {\n  padding: shorthandProperty(16px 24px);\n}",
+      "css": ".card {\n  padding: 16px 24px 16px 24px;\n}"
+    }
+  ],
+  "sizer": [
+    {
+      "source": ".element{\n  @include sizer(200px);\n}",
+      "css": ".element {\n  width: 200px;\n  height: 200px;\n}"
+    },
+    {
+      "source": ".element{\n  @include sizer(500px, 100px);\n}",
+      "css": ".element {\n  width: 500px;\n  height: 100px;\n}"
+    },
+    {
+      "source": ".element{\n  @include sizer(400px, auto);\n}",
+      "css": ".element {\n  width: 400px;\n  height: auto;\n}"
+    }
+  ],
+  "smartphone": [
+    {
+      "source": ".element {\n  @include smartphone(iPhone8) {\n    background-color: teal;\n  }\n}",
+      "css": "@media only screen and (device-width: 375px) and (device-height: 667px) and (orientation: portrait) {\n  .element {\n    background-color: teal;\n  }\n}"
+    },
+    {
+      "source": ".element{\n  @include smartphone(iPhone8-Plus, landscape){\n    background-color: teal;\n  }\n}",
+      "css": "@media only screen and (device-width: 736px) and (device-height: 414px) and (orientation: landscape) {\n  .element {\n    background-color: teal;\n  }\n}"
+    }
+  ],
+  "sprite": [
+    {
+      "source": ".sprite-element{\n  @include sprite(\"../images/sprite.png\", 0 0);\n}",
+      "css": ".sprite-element {\n  display: inline-block;\n  background-image: url(\"../images/sprite.png\");\n  background-position: 0 0;\n  background-repeat: no-repeat;\n}"
+    },
+    {
+      "source": ".sprite-element{\n  width: 100px;\n  height: 100px;\n  @include sprite(\"sprite.png\");\n}",
+      "css": ".sprite-element {\n  width: 100px;\n  height: 100px;\n  display: inline-block;\n  background-image: url(\"sprite.png\");\n  background-repeat: no-repeat;\n}\n.sprite-element.first {\n  background-position: 0 0;\n}\n.sprite-element.second {\n  background-position: -100px 0;\n}\n.sprite-element.third {\n  background-position: -200px 0;\n}\n.sprite-element.fourth {\n  background-position: -300px 0;\n}"
+    }
+  ],
+  "stretched-link": [
+    {
+      "source": ".element{\n  @include stretched-link;\n}",
+      "css": ".element::before {\n  content: \"\";\n  position: absolute;\n  pointer-events: auto;\n  background-color: rgba(0, 0, 0, 0);\n  top: 0;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  z-index: 1;\n}"
+    },
+    {
+      "source": ".element{\n  @include stretched-link(after);\n}",
+      "css": ".element::after {\n  content: \"\";\n  position: absolute;\n  pointer-events: auto;\n  background-color: rgba(0, 0, 0, 0);\n  top: 0;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  z-index: 1;\n}"
+    },
+    {
+      "source": ".element{\n  @include stretched-link(before);\n  &:after{\n    content: \"\\2192\";\n  }\n}",
+      "css": ".element::before {\n  content: \"\";\n  position: absolute;\n  pointer-events: auto;\n  background-color: rgba(0, 0, 0, 0);\n  top: 0;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  z-index: 1;\n}\n.element::after {\n  content: \"\\2192\";\n}"
+    },
+    {
+      "source": ".containing-element{\n  position: relative;\n  .element{\n    @include stretched-link(after);\n  }\n}",
+      "css": ".containing-element {\n  position: relative;\n}\n.containing-element .element::after {\n  content: \"\";\n  position: absolute;\n  pointer-events: auto;\n  background-color: rgba(0, 0, 0, 0);\n  top: 0;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  z-index: 1;\n}"
+    }
+  ],
+  "tablet": [
+    {
+      "source": ".element {\n  @include tablet(iPad) {\n    background-color: teal;\n  }\n}",
+      "css": "@media only screen and (device-width: 810px) and (device-height: 1080px) and (orientation: portrait) {\n  .element {\n    background-color: teal;\n  }\n}"
+    },
+    {
+      "source": ".element {\n  @include tablet(Nexus10, landscape) {\n    background-color: teal;\n  }\n}",
+      "css": "@media only screen and (device-width: 1280px) and (device-height: 800px) and (orientation: landscape) {\n  .element {\n    background-color: teal;\n  }\n}"
+    }
+  ],
+  "text-gradient": [
+    {
+      "source": ".element{\n  @include text-gradient(right, orange red purple blue green);\n}",
+      "css": ".element {\n  background: linear-gradient(\n    to right, orange, red, purple, blue, green\n  );\n  -webkit-background-clip: text;\n  -webkit-text-fill-color: transparent;\n  background-clip: text;\n  color: transparent;\n}"
+    },
+    {
+      "source": ".element{\n  @include text-gradient(\n    $direction: top-left,\n    $colors: red orange\n  );\n}",
+      "css": ".element {\n  background: linear-gradient(\n    to top left, red, orange\n  );\n  -webkit-background-clip: text;\n  -webkit-text-fill-color: transparent;\n  background-clip: text;\n  color: transparent;\n}"
+    },
+    {
+      "source": ".element{\n  @include text-gradient(\n    $direction: bottom,\n    $colors: (red 50%) (orange 50%) \n  );\n}",
+      "css": ".element {\n  background: linear-gradient(\n    to bottom, red 50%, orange 50%\n  );\n  -webkit-background-clip: text;\n  -webkit-text-fill-color: transparent;\n  background-clip: text;\n  color: transparent;\n}"
+    },
+    {
+      "source": ".element{\n  @include text-gradient(\n    $direction: top,\n    $colors: (green 0 40%) (blue 40% 60%) (purple 60% 100%) \n  );\n}",
+      "css": ".element {\n  background: linear-gradient(\n    to top, green 0 40%, blue 40% 60%, purple 60% 100%\n  );\n  -webkit-background-clip: text;\n  -webkit-text-fill-color: transparent;\n  background-clip: text;\n  color: transparent;\n}"
+    },
+    {
+      "source": ".element{\n  @include text-gradient(\n    $direction: bottom,\n    $colors: (red 30%) (orange 60%) (brown 80%)\n  );\n}",
+      "css": ".element {\n  background: linear-gradient(\n    to bottom, red 30%, orange 60%, brown 80%\n  );\n  -webkit-background-clip: text;\n  -webkit-text-fill-color: transparent;\n  background-clip: text;\n  color: transparent;\n}"
+    }
+  ],
+  "text-image": [
+    {
+      "source": ".element{\n  @include text-image(\"/images/backgrounds/05.jpg\");\n}",
+      "css": ".element {\n  background-image: url(\"/images/backgrounds/05.jpg\");\n  background-size: cover;\n  background-position: center;\n  -webkit-background-clip: text;\n  -webkit-text-fill-color: transparent;\n  background-clip: text;\n  color: transparent;\n}"
+    },
+    {
+      "source": ".element{\n  @include text-image;\n}",
+      "css": ".element {\n  background-size: cover;\n  background-position: center;\n  -webkit-background-clip: text;\n  -webkit-text-fill-color: transparent;\n  background-clip: text;\n  color: transparent;\n}"
+    }
+  ],
+  "text-selection": [
+    {
+      "source": ".element{\n  @include text-selection{\n    color: pink;\n    background-color: red;\n  }\n}",
+      "css": ".element::selection,\n.element *::selection {\n  color: pink;\n  background-color: red;\n}"
+    },
+    {
+      "source": ".element{\n  @include text-selection(only){\n    color: pink;\n    background-color: red;\n  }\n}",
+      "css": ".element::selection {\n  color: pink;\n  background-color: red;\n}"
+    },
+    {
+      "source": "@include text-selection{\n  color: pink;\n  background-color: red;\n}",
+      "css": "::selection {\n  color: pink;\n  background-color: red;\n}"
+    }
+  ],
+  "text-shadow": [
+    {
+      "source": ".element{\n  @include text-shadow(bottom rgba(black, 0.3) 6px);\n}",
+      "css": ".element {\n  text-shadow: 0 6px rgba(0, 0, 0, 0.3);\n}"
+    },
+    {
+      "source": ".element{\n  @include text-shadow(bottom rgba(black, 0.3) 6px 4px);\n}",
+      "css": ".element {\n  text-shadow: 0 6px 4px rgba(0, 0, 0, 0.3);\n}"
+    },
+    {
+      "source": ".element{\n  @include text-shadow(bottom #5bc0bb 30px);\n}",
+      "css": ".element {\n  text-shadow: 0 30px #5bc0bb;\n}"
+    },
+    {
+      "source": ".element{\n  @include text-shadow(bottom #5bc0bb 30px true);\n}",
+      "css": ".element {\n  text-shadow: 0 1px #5bc0bb, 0 2px #5bc0bb, 0 3px #5bc0bb, 0 4px #5bc0bb, 0 5px #5bc0bb, 0 6px #5bc0bb, 0 7px #5bc0bb, 0 8px #5bc0bb, 0 9px #5bc0bb, 0 10px #5bc0bb, 0 11px #5bc0bb, 0 12px #5bc0bb, 0 13px #5bc0bb, 0 14px #5bc0bb, 0 15px #5bc0bb, 0 16px #5bc0bb, 0 17px #5bc0bb, 0 18px #5bc0bb, 0 19px #5bc0bb, 0 20px #5bc0bb, 0 21px #5bc0bb, 0 22px #5bc0bb, 0 23px #5bc0bb, 0 24px #5bc0bb, 0 25px #5bc0bb, 0 26px #5bc0bb, 0 27px #5bc0bb, 0 28px #5bc0bb, 0 29px #5bc0bb, 0 30px #5bc0bb;\n}"
+    },
+    {
+      "source": ".element{\n  @include text-shadow(bottom rgba(#5bc0bb, 0.04) 30px true);\n}",
+      "css": ".element {\n  text-shadow: 0 1px rgba(91, 192, 187, 0.04), 0 2px rgba(91, 192, 187, 0.04), 0 3px rgba(91, 192, 187, 0.04), 0 4px rgba(91, 192, 187, 0.04), 0 5px rgba(91, 192, 187, 0.04), 0 6px rgba(91, 192, 187, 0.04), 0 7px rgba(91, 192, 187, 0.04), 0 8px rgba(91, 192, 187, 0.04), 0 9px rgba(91, 192, 187, 0.04), 0 10px rgba(91, 192, 187, 0.04), 0 11px rgba(91, 192, 187, 0.04), 0 12px rgba(91, 192, 187, 0.04), 0 13px rgba(91, 192, 187, 0.04), 0 14px rgba(91, 192, 187, 0.04), 0 15px rgba(91, 192, 187, 0.04), 0 16px rgba(91, 192, 187, 0.04), 0 17px rgba(91, 192, 187, 0.04), 0 18px rgba(91, 192, 187, 0.04), 0 19px rgba(91, 192, 187, 0.04), 0 20px rgba(91, 192, 187, 0.04), 0 21px rgba(91, 192, 187, 0.04), 0 22px rgba(91, 192, 187, 0.04), 0 23px rgba(91, 192, 187, 0.04), 0 24px rgba(91, 192, 187, 0.04), 0 25px rgba(91, 192, 187, 0.04), 0 26px rgba(91, 192, 187, 0.04), 0 27px rgba(91, 192, 187, 0.04), 0 28px rgba(91, 192, 187, 0.04), 0 29px rgba(91, 192, 187, 0.04), 0 30px rgba(91, 192, 187, 0.04);\n}"
+    },
+    {
+      "source": ".element{\n  @include text-shadow(\n    top yellow 5px, \n    right lightseagreen 15px,\n    bottom orange 5px, \n    left pink 15px,\n  );\n}",
+      "css": ".element {\n  text-shadow: 0 -5px yellow, 15px 0 lightseagreen, 0 5px orange, -15px 0 pink;\n}"
+    },
+    {
+      "source": ".element{\n  @include text-shadow(\n    top rgba(yellow, 0.1) 10px true, \n    bottom rgba(orange, 0.1) 10px true, \n    left rgba(pink, 0.1) 10px true,\n    right rgba(lightseagreen, 0.1) 10px true\n  );\n}",
+      "css": ".element {\n  text-shadow: 0 -1px rgba(255, 255, 0, 0.1), 0 -2px rgba(255, 255, 0, 0.1), 0 -3px rgba(255, 255, 0, 0.1), 0 -4px rgba(255, 255, 0, 0.1), 0 -5px rgba(255, 255, 0, 0.1), 0 -6px rgba(255, 255, 0, 0.1), 0 -7px rgba(255, 255, 0, 0.1), 0 -8px rgba(255, 255, 0, 0.1), 0 -9px rgba(255, 255, 0, 0.1), 0 -10px rgba(255, 255, 0, 0.1), 0 1px rgba(255, 165, 0, 0.1), 0 2px rgba(255, 165, 0, 0.1), 0 3px rgba(255, 165, 0, 0.1), 0 4px rgba(255, 165, 0, 0.1), 0 5px rgba(255, 165, 0, 0.1), 0 6px rgba(255, 165, 0, 0.1), 0 7px rgba(255, 165, 0, 0.1), 0 8px rgba(255, 165, 0, 0.1), 0 9px rgba(255, 165, 0, 0.1), 0 10px rgba(255, 165, 0, 0.1), -1px 0 rgba(255, 192, 203, 0.1), -2px 0 rgba(255, 192, 203, 0.1), -3px 0 rgba(255, 192, 203, 0.1), -4px 0 rgba(255, 192, 203, 0.1), -5px 0 rgba(255, 192, 203, 0.1), -6px 0 rgba(255, 192, 203, 0.1), -7px 0 rgba(255, 192, 203, 0.1), -8px 0 rgba(255, 192, 203, 0.1), -9px 0 rgba(255, 192, 203, 0.1), -10px 0 rgba(255, 192, 203, 0.1), 1px 0 rgba(32, 178, 170, 0.1), 2px 0 rgba(32, 178, 170, 0.1), 3px 0 rgba(32, 178, 170, 0.1), 4px 0 rgba(32, 178, 170, 0.1), 5px 0 rgba(32, 178, 170, 0.1), 6px 0 rgba(32, 178, 170, 0.1), 7px 0 rgba(32, 178, 170, 0.1), 8px 0 rgba(32, 178, 170, 0.1), 9px 0 rgba(32, 178, 170, 0.1), 10px 0 rgba(32, 178, 170, 0.1);\n}"
+    },
+    {
+      "source": ".element{\n  color: pink;\n  @include text-shadow(top-left crimson 15px true);\n}",
+      "css": ".element {\n  color: pink;\n  text-shadow: -1px -1px crimson, -2px -2px crimson, -3px -3px crimson, -4px -4px crimson, -5px -5px crimson, -6px -6px crimson, -7px -7px crimson, -8px -8px crimson, -9px -9px crimson, -10px -10px crimson, -11px -11px crimson, -12px -12px crimson, -13px -13px crimson, -14px -14px crimson, -15px -15px crimson;\n}"
+    },
+    {
+      "source": ".element{\n  transition: .3s;\n  @include text-shadow(left gold 3px true);\n  &:hover{\n    @include text-shadow(right gold 8px true);\n  }\n  &:active{\n    @include text-shadow(right deepskyblue 8px true);\n  }\n}",
+      "css": ".element {\n  transition: .3s;\n  text-shadow: -1px 0 gold, -2px 0 gold, -3px 0 gold;\n}\n.element:hover {\n  text-shadow: 1px 0 gold, 2px 0 gold, 3px 0 gold, 4px 0 gold, 5px 0 gold, 6px 0 gold, 7px 0 gold, 8px 0 gold;\n}\n.element:active {\n  text-shadow: 1px 0 deepskyblue, 2px 0 deepskyblue, 3px 0 deepskyblue, 4px 0 deepskyblue, 5px 0 deepskyblue, 6px 0 deepskyblue, 7px 0 deepskyblue, 8px 0 deepskyblue;\n}"
+    }
+  ],
+  "text-stroke": [
+    {
+      "source": ".element {\n  @include text-stroke;\n}",
+      "css": ".element {\n  color: black;\n  -webkit-text-fill-color: transparent;\n  -webkit-text-stroke-color: black;\n  -webkit-text-stroke-width: 1px;\n}"
+    },
+    {
+      "source": ".element {\n  @include text-stroke(\n    $color: azure,\n    $stroke-color: cadetblue,\n    $fallback-color: cadetblue,\n    $stroke-width: 1px\n  );\n}",
+      "css": ".element {\n  color: cadetblue;\n  -webkit-text-fill-color: azure;\n  -webkit-text-stroke-color: cadetblue;\n  -webkit-text-stroke-width: 1px;\n}"
+    }
+  ],
+  "tint": [
+    {
+      "source": "$brand: crimson;\n.notice {\n  border: 1px solid $brand;\n  background-color: tint($brand, 80%);\n}",
+      "css": ".notice {\n  border: 1px solid crimson;\n  background-color: #f8d0d8;\n}"
+    }
+  ],
+  "triangle": [
+    {
+      "source": ".element {\n  &::after {\n    @include triangle;\n  }\n}",
+      "css": ".element::after {\n  content: \"\";\n  height: 0;\n  width: 0;\n  display: inline-block;\n  border-style: solid;\n  border-color: black transparent transparent;\n  border-width: 8px 5px 0;\n}"
+    },
+    {
+      "source": ".element {\n  &::after {\n    @include triangle(\n      $color: crimson,\n      $size: 6px\n    ) {\n      margin-left: 6px;\n    };\n  }\n}",
+      "css": ".element::after {\n  content: \"\";\n  height: 0;\n  width: 0;\n  display: inline-block;\n  border-style: solid;\n  border-color: crimson transparent transparent;\n  border-width: 6px 3px 0;\n  margin-left: 6px;\n}"
+    },
+    {
+      "source": ".element{\n  &::after {\n    @include triangle(\n      $direction: \"bottom\",\n      $color: crimson,\n      $size: 10px 6px\n    ) {\n      position: relative;\n      margin-left: 6px;\n      top: -2px;\n    };\n  }\n}",
+      "css": ".element::after {\n  content: \"\";\n  height: 0;\n  width: 0;\n  display: inline-block;\n  border-style: solid;\n  border-color: crimson transparent transparent;\n  border-width: 6px 5px 0;\n  position: relative;\n  margin-left: 6px;\n  top: -2px;\n}"
+    },
+    {
+      "source": ".element{\n  @include triangle(\n    $direction: \"top\",\n    $color: crimson,\n    $size: 100px 50px\n  )\n}",
+      "css": ".element {\n  content: \"\";\n  height: 0;\n  width: 0;\n  display: inline-block;\n  border-style: solid;\n  border-color: transparent transparent crimson;\n  border-width: 0 50px 50px;\n}"
+    }
+  ],
+  "validate-breakpoint": [
+    {
+      "source": ".container {\n  max-width: validateBreakpoint(\"large\");\n  margin: 0 auto;\n}",
+      "css": ".container {\n  max-width: 992px;\n  margin: 0 auto;\n}"
+    }
+  ],
+  "validate-length": [
+    {
+      "source": "@mixin inset($amount) {\n  padding: validateLength($amount);\n}\n.panel {\n  @include inset(2rem);\n}",
+      "css": ".panel {\n  padding: 2rem;\n}"
+    }
+  ],
+  "validate-ratio": [
+    {
+      "source": ".hero {\n  aspect-ratio: validateRatio(\"16:9\");\n}\n.avatar {\n  aspect-ratio: validateRatio(1);\n}",
+      "css": ".hero {\n  aspect-ratio: 16 / 9;\n}\n\n.avatar {\n  aspect-ratio: 1;\n}"
+    }
+  ],
+  "validate-scissors": [
+    {
+      "source": ".element {\n  --corners: #{validateScissors(12px 0)};\n}",
+      "css": ".element {\n  --corners: 12px, 0px;\n}"
+    }
+  ]
+}

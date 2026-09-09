@@ -1,0 +1,55 @@
+---
+title: "Text Stroke"
+page_title: "Text Stroke Sass Mixin"
+page_description: "The Text Stroke Sass mixin helps you add a stroke to a text element and style it very easily."
+page_keywords: "CSS text Stroke, Sass Text Stroke, CSS Text Stroke Generator, CSS Text Stroke Property, CSS Text Stroke Inside, CSS Text Stroke Width, CSS Text Stroke Animation, CSS Text Stroke Fallback Color, CSS Text Stroke Color, CSS Text Stroke Fill Color"
+page_image: "gerillass-text-stroke.jpg"
+---
+
+# Text Stroke
+
+<Member name="text-stroke">
+
+The **Text Stroke Sass mixin** helps you add a stroke to a text element and style it very easily.
+
+</Member>
+
+## Arguments
+
+<Arguments of="text-stroke" footnote="<strong>Design Tip:</strong> When your stroke color is dark, try making the fallback color the same, so the text looks more consistent with the rest of the design.">
+  <Argument name="$color" type="color">Sets the color of the text. The default value is transparent.</Argument>
+  <Argument name="$stroke-color" type="color">Sets the stroke color of the text. The default value is black.</Argument>
+  <Argument name="$fallback-color" type="color">This option is for browsers that do not support text stroke. It prevents the text from disappearing entirely in those browsers. The default value is black.</Argument>
+  <Argument name="$stroke-width" type="number (with unit)">Sets the width of the stroke. You can also pass the string values <code>thin</code>, <code>medium</code>, and <code>thick</code>.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="Simply call the mixin without passing any arguments.">
+```scss
+.element {
+  @include text-stroke;
+}
+```
+```html
+<h1 style="margin: 0;color: black;-webkit-text-fill-color: transparent;-webkit-text-stroke-color: black;-webkit-text-stroke-width: 1px;">Text Stroke is Awesome!</h1>
+```
+</Example>
+
+<Example caption="Now pass some arguments to make the text look sexier!">
+```scss
+.element {
+  @include text-stroke(
+    $color: azure,
+    $stroke-color: cadetblue,
+    $fallback-color: cadetblue,
+    $stroke-width: 1px
+  );
+}
+```
+```html
+<h1 style="margin: 0;color: cadetblue;-webkit-text-fill-color: azure;-webkit-text-stroke-color: cadetblue;-webkit-text-stroke-width: 1px;">Text Stroke is Awesome!</h1>
+```
+</Example>
+
+

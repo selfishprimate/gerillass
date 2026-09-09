@@ -1,0 +1,34 @@
+---
+title: "Pseudo Selector"
+page_title: "Pseudo Selector Sass Function"
+page_description: "Appends a pseudo-class to every selector in a list."
+page_keywords: "Gerillass pseudoSelector, Sass pseudoSelector, Sass Functions, SCSS Functions, Sass Utility Functions, Gerillass Utilities"
+---
+
+# Pseudo Selector
+
+<Member name="pseudoSelector">
+
+Appends a pseudo-class to every selector in a list.
+
+</Member>
+
+## Arguments
+
+<Arguments of="pseudoSelector">
+  <Argument name="$elements" type="list">Accepts a list of selectors.</Argument>
+  <Argument name="$pseudo (null)" type="string">Accepts a pseudo-class name, without the colon.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="One rule applied to several selectors in the same state.">
+```scss
+#{pseudoSelector(("button", ".btn", "a"), "focus-visible")} {
+  outline: 2px solid crimson;
+  outline-offset: 2px;
+}
+```
+</Example>
+
+

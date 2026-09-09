@@ -1,0 +1,44 @@
+---
+title: "Convert To Number"
+page_title: "Convert To Number Sass Function"
+page_description: "Parses a string of digits into a number."
+page_keywords: "Gerillass convertToNumber, Sass convertToNumber, Sass Functions, SCSS Functions, Sass Utility Functions, Gerillass Utilities"
+---
+
+# Convert To Number
+
+<Member name="convertToNumber">
+
+Parses a string of digits into a number.
+
+</Member>
+
+## Arguments
+
+<Arguments of="convertToNumber">
+  <Argument name="$value" type="string">Accepts a string containing only digits.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="A numeric string turned into a number you can do arithmetic with.">
+```scss
+.column {
+  width: convertToNumber("50") * 1%;
+}
+```
+</Example>
+
+## What it refuses
+
+Arguments are checked, so a wrong value stops the build with a message instead of quietly producing the wrong CSS.
+
+```scss
+.column {
+  width: convertToNumber(50) * 1%;
+}
+```
+```text
+Error: `50` is not a valid $value for `convertToNumber`. Pass a string made only of digits, such as `"42"`.
+```
+

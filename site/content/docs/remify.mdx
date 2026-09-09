@@ -1,0 +1,40 @@
+---
+title: "Remify"
+page_title: "Remify Sass Function"
+page_description: "Converts a pixel length to rem, against a 16px root."
+page_keywords: "Gerillass remify, Sass remify, Sass Functions, SCSS Functions, Sass Utility Functions, Gerillass Utilities"
+page_image: "gerillass-remify.jpg"
+---
+
+# Remify
+
+<Member name="remify">
+
+Converts a pixel length to rem, against a 16px root.
+
+</Member>
+
+<Hint kind="warning">
+
+**Changed in Gerillass 2.0.0:** this function used to be called `__remify`. The `__` prefix has been dropped from every utility function. The old name does not raise an error, because Sass passes an unknown function through as literal CSS, so check your stylesheets for any `__` names left over.
+
+</Hint>
+
+## Arguments
+
+<Arguments of="remify">
+  <Argument name="$value" type="number (with unit)">Accepts a pixel length.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="Pixel sizes emitted as rem.">
+```scss
+.title {
+  font-size: remify(30px);
+  margin-bottom: remify(12px);
+}
+```
+</Example>
+
+

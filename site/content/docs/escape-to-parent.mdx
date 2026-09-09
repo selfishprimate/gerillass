@@ -1,0 +1,39 @@
+---
+title: "Escape to Parent"
+page_title: "Escape to Parent Sass Mixin"
+page_description: "The Escape to Parent Sass mixin allows you to escape to the parent element and use multiple class or id selectors with it."
+page_image: "gerillass-escape-to-parent.jpg"
+---
+
+# Escape to Parent
+
+<Member name="escape-to-parent">
+
+The **Escape to Parent** Sass mixin allows you to **escape to the parent** element and use multiple class or id selectors with it. This makes it easy to control how the selected child elements respond in different cases.
+
+</Member>
+
+## Arguments
+
+<Arguments of="escape-to-parent" footnote="Note that you have to use a quoted string!">
+  <Argument name="$selector" type="string (quoted)">Accepts a value as a <code>class</code> or <code>id</code> selector.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="Call the mixin once for each case you want the element to respond to, and pass the matching argument each time.">
+```scss
+.parent-element{
+  .element{
+    @include escape-to-parent(".smartphone"){
+      background-color: red;
+    }
+    @include escape-to-parent(".desktop"){
+      background-color: green;
+    }
+  }
+}
+```
+</Example>
+
+

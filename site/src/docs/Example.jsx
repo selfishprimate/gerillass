@@ -26,6 +26,21 @@ const FRAME_BASE = `
   *, *::before, *::after { box-sizing: border-box; }
   body { margin: 0; padding: 16px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; background: #fff; }
   img { max-width: 100%; }
+
+  /*
+    The demo surface the documentation has always used. A mixin like center or
+    position needs a box with a height before there is anything to see, and the
+    pages being ported here mark that box \`sandbox\` with a size beside it.
+    Carrying the four rules over is what lets those demos render unchanged.
+  */
+  .sandbox { margin-bottom: 24px; border-radius: 6px; }
+  .sandbox.xsmall { height: 50px; }
+  .sandbox.small { height: 100px; }
+  .sandbox.medium { height: 150px; }
+  .sandbox.large { height: 200px; }
+  .sandbox.xlarge { height: 300px; }
+  .sandbox.xxlarge { height: 400px; }
+  .sandbox.text { font-size: 3em; margin: 0; }
 `;
 
 function Example({ source, css, html, title, caption, height = 160, interactive = false }) {

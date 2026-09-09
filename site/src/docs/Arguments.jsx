@@ -33,6 +33,18 @@ function Arguments({ of: name, footnote, children }) {
     // The page writes "$ratio (16/9)"; the manifest knows it as "$ratio".
     .map((label) => label.split(/\s|\(/)[0]);
 
+  /*
+    A variadic member is exempt, and has to be. `border-radius($args...)` says
+    nothing about what may be passed, while the page documents `$corner` and
+    `$value`, which is what a reader actually writes. Comparing the two names
+    something real against something that is only a placeholder. Twelve members
+    have this shape; for them the manifest's `accepts` list is the record of
+    what is allowed, and the page is prose beside it.
+  */
+  if (member.arguments.some((a) => a.variadic)) {
+    return render(children, footnote);
+  }
+
   const expected = member.arguments.map((a) => a.name);
 
   const missing = expected.filter((a) => !documented.includes(a));
@@ -47,6 +59,10 @@ function Arguments({ of: name, footnote, children }) {
     );
   }
 
+  return render(children, footnote);
+}
+
+function render(children, footnote) {
   return (
     <div className="arguments">
       <table className="arguments__table">

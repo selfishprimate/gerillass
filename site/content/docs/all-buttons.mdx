@@ -1,0 +1,77 @@
+---
+title: "All Buttons"
+page_title: "All Buttons Sass Mixin"
+page_description: "The All Buttons Sass mixin helps you target all the HTML button elements in the DOM, so you can easily apply your style rules."
+page_image: "gerillass-all-buttons.jpg"
+---
+
+# All Buttons
+
+<Member name="all-buttons">
+
+The **All Buttons** Sass mixin helps you target all the HTML button elements in the DOM, so you can easily apply your style rules.
+
+</Member>
+
+## Arguments
+
+<Arguments of="all-buttons" footnote="You can call the mixin at the root level of your stylesheet to target all the HTML button elements in the DOM, or call it inside a parent selector to target only its children.">
+  <Argument name="$pseudo" type="string">Sets the pseudo-class selector for the selected button elements. Accepts the values <code>hover</code>, <code>focus</code>, <code>active</code>, and <code>disabled</code>.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="Simply call the mixin at the root level of your stylesheet <strong>to target all the HTML button elements</strong>.">
+```scss
+@include all-buttons {
+  background-color: teal;
+  color: white;
+}
+```
+</Example>
+
+<Example caption="Now pass the <code>hover</code> value as an argument to style all the button elements when they are in the <strong>:hover</strong> state.">
+```scss
+@include all-buttons(hover) {
+  background-color: crimson;
+  color: white;
+}
+```
+</Example>
+
+<Example caption="Now, let's try it again with all the possible pseudo-class selectors.">
+```scss
+@include all-buttons {
+  background-color: teal;
+  color: white;
+}
+@include all-buttons(hover) {
+  background-color: teal;
+  color: white;
+}
+@include all-buttons(focus) {
+  background-color: purple;
+  color: white;
+}
+@include all-buttons(active) {
+  background-color: blue;
+  color: white;
+}
+@include all-buttons(disabled) {
+  background-color: gray;
+  color: black;
+}
+```
+</Example>
+
+<Example caption="Call the mixin inside a selector to target only the button elements inside that selector.">
+```scss
+.containing-element {
+  @include all-buttons {
+    background-color: teal;
+    color: white;
+  }
+}
+```
+</Example>
+

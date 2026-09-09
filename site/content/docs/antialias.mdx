@@ -1,0 +1,48 @@
+---
+title: "Antialias"
+page_title: "Antialias Sass Mixin"
+page_description: "The Antialias Sass mixin provides smooth font rendering. It smooths fonts at the pixel level and prevents subpixel rendering."
+page_image: "gerillass-antialias.jpg"
+---
+
+# Antialias
+
+<Member name="antialias">
+
+The **Antialias** Sass mixin provides smooth font rendering. It smooths fonts at the pixel level and prevents subpixel rendering.
+
+</Member>
+
+## Arguments
+
+<Arguments of="antialias" footnote="Please check out the links at the end of the page for more information about font smoothing.">
+  <Argument name="$value" type="string">Accepts the <code>only</code> value. Use it when you want to apply the styles to one specific HTML element.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="If you call it inside a selector without passing a value, the style rules apply to that element and all of its children.">
+```scss
+.element{
+  @include antialias;
+}
+```
+</Example>
+
+<Example caption="Pass the <code>only</code> value as an argument to apply the style rules to only one specific HTML element.">
+```scss
+.element{
+  @include antialias(only);
+}
+```
+</Example>
+
+<Example caption="Call the mixin at the root of your stylesheet to target all the HTML elements.">
+```scss
+@include antialias;
+```
+</Example>
+
+## Related Articles
+* [Stop Fixing Font Smoothing](https://usabilitypost.com/2012/11/05/stop-fixing-font-smoothing/)  
+* [Font Smooth](https://www.zachleat.com/web/font-smooth/)

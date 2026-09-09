@@ -1,0 +1,45 @@
+---
+title: "Pixelify"
+page_title: "Pixelify Sass Function"
+page_description: "Returns the value with a px unit, adding one if it is missing."
+page_keywords: "Gerillass pixelify, Sass pixelify, Sass Functions, SCSS Functions, Sass Utility Functions, Gerillass Utilities"
+---
+
+# Pixelify
+
+<Member name="pixelify">
+
+Returns the value with a px unit, adding one if it is missing.
+
+</Member>
+
+## Arguments
+
+<Arguments of="pixelify">
+  <Argument name="$value" type="number">Accepts a number, with or without a unit.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="Accepting a size with or without a unit.">
+```scss
+.icon {
+  width: pixelify(24);
+  height: pixelify(24px);
+}
+```
+</Example>
+
+## What it refuses
+
+Arguments are checked, so a wrong value stops the build with a message instead of quietly producing the wrong CSS.
+
+```scss
+.icon {
+  width: pixelify("24");
+}
+```
+```text
+Error: `24` is not a valid $value for `pixelify`. Pass a number, with or without a unit.
+```
+

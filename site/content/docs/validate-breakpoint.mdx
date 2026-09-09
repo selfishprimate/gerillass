@@ -1,0 +1,33 @@
+---
+title: "Validate Breakpoint"
+page_title: "Validate Breakpoint Sass Function"
+page_description: "Resolves a breakpoint name to its width, passing other values through."
+page_keywords: "Gerillass validateBreakpoint, Sass validateBreakpoint, Sass Functions, SCSS Functions, Sass Utility Functions, Gerillass Utilities"
+---
+
+# Validate Breakpoint
+
+<Member name="validateBreakpoint">
+
+Resolves a breakpoint name to its width, passing other values through.
+
+</Member>
+
+## Arguments
+
+<Arguments of="validateBreakpoint">
+  <Argument name="$value" type="string | number">Accepts a key from $map-for-breakpoints, or a raw length.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="A breakpoint name used as a length.">
+```scss
+.container {
+  max-width: validateBreakpoint("large");
+  margin: 0 auto;
+}
+```
+</Example>
+
+

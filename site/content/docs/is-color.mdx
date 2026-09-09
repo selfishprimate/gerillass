@@ -1,0 +1,49 @@
+---
+title: "Is Color"
+page_title: "Is Color Sass Function"
+page_description: "Returns the value if every item in it is a colour, and errors otherwise."
+page_keywords: "Gerillass isColor, Sass isColor, Sass Functions, SCSS Functions, Sass Utility Functions, Gerillass Utilities"
+---
+
+# Is Color
+
+<Member name="isColor">
+
+Returns the value if every item in it is a colour, and errors otherwise.
+
+</Member>
+
+## Arguments
+
+<Arguments of="isColor">
+  <Argument name="$value" type="color | list">Accepts a colour, or a list of colours.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="Validating a colour argument in a mixin of your own.">
+```scss
+@mixin badge($color) {
+  background-color: isColor($color);
+  color: white;
+}
+.badge {
+  @include badge(crimson);
+}
+```
+</Example>
+
+## What it refuses
+
+Arguments are checked, so a wrong value stops the build with a message instead of quietly producing the wrong CSS.
+
+```scss
+$brand: crimson;
+.badge {
+  background-color: isColor(brand);
+}
+```
+```text
+Error: 'brand' is not a color value, please replace it with a valid one.
+```
+

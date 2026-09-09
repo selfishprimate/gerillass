@@ -1,0 +1,46 @@
+---
+title: "Clear Whitespace"
+page_title: "Clear Whitespace Sass Function"
+page_description: "Removes every space from a string."
+page_keywords: "Gerillass clearWhitespace, Sass clearWhitespace, Sass Functions, SCSS Functions, Sass Utility Functions, Gerillass Utilities"
+---
+
+# Clear Whitespace
+
+<Member name="clearWhitespace">
+
+Removes every space from a string.
+
+</Member>
+
+## Arguments
+
+<Arguments of="clearWhitespace">
+  <Argument name="$string" type="string">Accepts any string.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="Turning a font family name into a filename.">
+```scss
+.brand {
+  font-family: "Fanwood Text", serif;
+  background-image: url("/fonts/#{clearWhitespace("Fanwood Text")}.svg");
+}
+```
+</Example>
+
+## What it refuses
+
+Arguments are checked, so a wrong value stops the build with a message instead of quietly producing the wrong CSS.
+
+```scss
+$size: 16;
+.brand {
+  background-image: url("/fonts/#{clearWhitespace($size)}.svg");
+}
+```
+```text
+Error: `16` is not a valid $string for `clearWhitespace`. Pass a string.
+```
+

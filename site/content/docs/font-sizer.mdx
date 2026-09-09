@@ -1,0 +1,33 @@
+---
+title: "Font Sizer"
+page_title: "Font Sizer Sass Function"
+page_description: "Multiplies a size by a factor. Handy for a modular scale."
+page_keywords: "Gerillass fontSizer, Sass fontSizer, Sass Functions, SCSS Functions, Sass Utility Functions, Gerillass Utilities"
+---
+
+# Font Sizer
+
+<Member name="fontSizer">
+
+Multiplies a size by a factor. Handy for a modular scale.
+
+</Member>
+
+## Arguments
+
+<Arguments of="fontSizer">
+  <Argument name="$size" type="number (with unit)">Accepts a length.</Argument>
+  <Argument name="$time" type="number (unitless)">Accepts a unitless multiplier.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="A size scaled by a factor.">
+```scss
+.title {
+  font-size: fontSizer(16px, 1.5);
+}
+```
+</Example>
+
+

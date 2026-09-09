@@ -1,0 +1,79 @@
+---
+title: "Breakpointer"
+page_title: "Breakpointer Sass Mixin"
+page_description: "The Breakpointer Sass mixin is a handy little tool that shows which breakpoint you are at, so you can write your styles for that specific device."
+page_image: "gerillass-breakpointer.jpg"
+---
+
+# Breakpointer
+
+<Member name="breakpointer">
+
+The **Breakpointer Sass mixin** is a handy little tool that shows which breakpoint you are at, so you can write your styles for that specific screen size. 
+
+<Hint kind="info">
+
+This mixin has been applied to this page only, to show you how the **Breakpointer Sass mixin** works. You can see the result in the top right corner of your screen. **Please, resize the width of your browser to see which breakpoint you're at.**
+
+</Hint>
+
+<Hint kind="info">
+
+**Tip:** This mixin works best with the predefined breakpoint values in the `_map-for-breakpoints.scss` file. OK, let me put it this way. **If the breakpoint mixin is the knight, the breakpointer is its squire.**
+
+</Hint>
+
+</Member>
+
+## Arguments
+
+<Arguments of="breakpointer" footnote="You can pass a declaration block to change its appearance cosmetically.">
+  <Argument name="$selector" type="string">Helps you target one specific selector. By default it targets the <code>::before</code> pseudo-element of the <code>&lt;body&gt;</code> tag.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="Call the mixin at the root level of your stylesheet without passing any arguments.">
+```scss
+@include breakpointer;
+```
+```html
+<figure class="highlight-figure">
+  <img src="breakpointer_inspect.png" />
+</figure>
+```
+</Example>
+
+<Example caption="You can pass a CSS declaration block to customize how it looks (as I did when I was developing the Gerillass site itself).">
+```scss
+@include breakpointer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  color: white;
+  padding: 5px 10px;
+  z-index: 10;
+}
+```
+```html
+<p>You can change the appearance as you like. </p>
+
+<figure class="highlight-figure">
+  <img src="breakpointer_gerillass_02.png" />
+</figure>
+```
+</Example>
+
+<Example caption="Well, good news! You can call the Breakpointer Sass mixin in a selector if you wish.">
+```scss
+.element {
+  @include breakpointer();
+}
+```
+</Example>
+
+<Hint kind="info">
+
+**Important:** This mixin is for development only, so don't forget to comment out or remove the code before you go to production.
+
+</Hint>

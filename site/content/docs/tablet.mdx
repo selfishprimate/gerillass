@@ -1,0 +1,50 @@
+---
+title: "Tablet"
+page_title: "Tablet Sass Mixin"
+page_description: "There will be times when you need to style elements for one particular tablet model only. The Tablet Sass mixin helps you do that."
+page_image: "gerillass-tablet.jpg"
+---
+
+# Tablet
+
+<Member name="tablet">
+
+There will be times when you need to style elements for one particular tablet model only. The **Tablet** Sass mixin helps you do that.
+<Hint kind="info">
+
+**Tip:** There are predefined values for commonly used tablet models in the `_map-for-tablets.scss` file. **You can add more model specifications here to expand the list if you like.**
+
+</Hint>
+
+</Member>
+
+## Arguments
+
+<Arguments of="tablet" footnote="String values can be passed with or without quotation marks.">
+  <Argument name="$device" type="string">Accepts the name of a tablet model. Predefined values are <code>iPadMini</code>, <code>iPad</code>, <code>iPadAir</code>, <code>iPadPro</code>, <code>Nexus7</code>, <code>Nexus9</code>, <code>Nexus10</code>.</Argument>
+  <Argument name="$orientation" type="string">Accepts two values: <code>portrait</code> and <code>landscape</code>. The default value is <code>portrait</code>.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="First, call the mixin and pass only the <code>$device</code> model name. Unless you pass a value for <code>$orientation</code>, it will be <code>portrait</code>.">
+```scss
+.element {
+  @include tablet(iPad) {
+    background-color: teal;
+  }
+}
+```
+</Example>
+
+<Example caption="Now let's pass two arguments: one for the <code>$device</code> model name, and the other for the <code>$orientation</code>.">
+```scss
+.element {
+  @include tablet(Nexus10, landscape) {
+    background-color: teal;
+  }
+}
+```
+</Example>
+
+

@@ -1,0 +1,48 @@
+---
+title: "Tint"
+page_title: "Tint Sass Function"
+page_description: "Mixes a colour towards white by a percentage."
+page_keywords: "Gerillass tint, Sass tint, Sass Functions, SCSS Functions, Sass Utility Functions, Gerillass Utilities"
+---
+
+# Tint
+
+<Member name="tint">
+
+Mixes a colour towards white by a percentage.
+
+</Member>
+
+## Arguments
+
+<Arguments of="tint">
+  <Argument name="$color" type="color">Accepts a colour.</Argument>
+  <Argument name="$percentage" type="number (percentage)">Accepts a percentage.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="A pale background derived from the same brand colour.">
+```scss
+$brand: crimson;
+.notice {
+  border: 1px solid $brand;
+  background-color: tint($brand, 80%);
+}
+```
+</Example>
+
+## What it refuses
+
+Arguments are checked, so a wrong value stops the build with a message instead of quietly producing the wrong CSS.
+
+```scss
+$brand: crimson;
+.notice {
+  background-color: tint(brand, 85%);
+}
+```
+```text
+Error: 'brand' is not a color value, please replace it with a valid one.
+```
+

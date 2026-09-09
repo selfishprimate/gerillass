@@ -1,0 +1,32 @@
+---
+title: "Validate Scissors"
+page_title: "Validate Scissors Sass Function"
+page_description: "Normalises corner values for the scissors mixin, adding px where missing."
+page_keywords: "Gerillass validateScissors, Sass validateScissors, Sass Functions, SCSS Functions, Sass Utility Functions, Gerillass Utilities"
+---
+
+# Validate Scissors
+
+<Member name="validateScissors">
+
+Normalises corner values for the scissors mixin, adding px where missing.
+
+</Member>
+
+## Arguments
+
+<Arguments of="validateScissors">
+  <Argument name="$value" type="number">Accepts one to four numbers, with or without units.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="Corner values normalised the way the scissors mixin does it internally.">
+```scss
+.element {
+  --corners: #{validateScissors(12px 0)};
+}
+```
+</Example>
+
+

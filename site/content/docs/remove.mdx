@@ -1,0 +1,71 @@
+---
+title: "Remove"
+page_title: "Remove Sass Mixin"
+page_description: "The Remove Sass mixin helps you set the display CSS property of an element to none. It combines that with CSS media queries to show or hide an element in the document flow at different device widths."
+page_image: "gerillass-remove.jpg"
+---
+
+# Remove
+
+<Member name="remove">
+
+The **Remove Sass mixin** helps you set the `display` CSS property of an element to `none`. It combines that with CSS media queries to show or hide an element in the document flow at different device widths.
+
+<Hint kind="info">
+
+**Tip:** The usage is very similar to the **Breakpoint** mixin, and it accepts the same arguments.
+
+</Hint>
+
+</Member>
+
+## Arguments
+
+<Arguments of="remove">
+  <Argument name="$value" type="number (with unit)">Sets the width value at which your styles will be applied.</Argument>
+  <Argument name="$mode" type="string">Sets the <code>width</code> media feature. Accepts the values <code>only</code>, <code>min</code>, <code>max</code>, and <code>between</code>.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="Simply call the mixin and pass the width at which you want the selected element removed from the document layout.">
+```scss
+.element{
+  @include remove(500px);
+}
+```
+</Example>
+
+<Example caption="You can <strong>specify a range</strong> where you don't want the selected element to appear.">
+```scss
+.element{
+  @include remove(500px, 1024px);
+}
+```
+</Example>
+
+<Example caption="You can use the <code>$mode</code> option to set the <code>width</code> media feature. It accepts the values <code>only</code>, <code>min</code>, <code>max</code>, and <code>between</code>.">
+```scss
+.element{
+  @include remove(min, 1200px);
+}
+```
+</Example>
+
+<Example caption="You can use the predefined breakpoint values, which are <code>xsmall</code>, <code>small</code>, <code>medium</code>, <code>large</code>, and <code>xlarge</code>.">
+```scss
+.element{
+  @include remove(max, medium);
+}
+```
+</Example>
+
+<Example caption="You can set a range by using predefined values as well!">
+```scss
+.element{
+  @include remove(small, medium);
+}
+```
+</Example>
+
+

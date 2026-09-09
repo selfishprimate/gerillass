@@ -1,0 +1,101 @@
+---
+title: "All Text Inputs"
+page_title: "All Text Inputs Sass Mixin"
+page_description: "The All Text Inputs Sass mixin helps you target all the text-based HTML input elements in the DOM, so you can easily apply your style rules."
+page_image: "gerillass-all-text-inputs.jpg"
+---
+
+# All Text Inputs
+
+<Member name="all-text-inputs">
+
+The **All Text Inputs** Sass mixin helps you target all the text-based HTML input elements in the DOM, so you can easily apply your style rules.
+
+</Member>
+
+## Arguments
+
+<Arguments of="all-text-inputs" footnote="You can call the mixin at the root level of your stylesheet to target all the text-based input elements in the DOM, or call it inside a selector to target only the elements that are children of that selector.">
+  <Argument name="$pseudo" type="string">Sets the pseudo-class selector for the selected text-based input elements. Accepts the values <code>hover</code>, <code>focus</code>, <code>active</code>, <code>invalid</code>, <code>required</code>, and <code>disabled</code>.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="Simply call the mixin at the root level of your stylesheet <strong>to target all the text-based input elements</strong>.">
+```scss
+@include all-text-inputs {
+  background-color: #e6e6e6;
+}
+```
+</Example>
+
+<Example caption="Let's target all the text-based HTML inputs with the <strong>:hover</strong> pseudo-class selector applied.">
+```scss
+@include all-text-inputs(hover) {
+  background-color: orange;
+}
+```
+</Example>
+
+<Example caption="Let's target all the text-based HTML inputs with the <strong>:focus</strong> pseudo-class selector applied.">
+```scss
+@include all-text-inputs(focus) {
+  background-color: green;
+}
+```
+</Example>
+
+<Example caption="Now let's target all the text-based HTML inputs with the <strong>:active</strong> pseudo-class selector applied.">
+```scss
+.element {
+  @include all-text-inputs(active) {
+    background-color: green;
+    color: white;
+  };
+}
+```
+</Example>
+
+<Example caption="Now let's target all the text-based HTML inputs with the <strong>:invalid</strong> pseudo-class selector applied.">
+```scss
+.element {
+  @include all-text-inputs(invalid) {
+    background-color: red;
+    color: white;
+  };
+}
+```
+</Example>
+
+<Example caption="Now let's try it with the <strong>:required</strong> pseudo-class selector applied.">
+```scss
+.element {
+  @include all-text-inputs(required) {
+    background-color: orange;
+    color: white;
+  };
+}
+```
+</Example>
+
+<Example caption="Now let's try it with the <strong>:disabled</strong> pseudo-class selector applied.">
+```scss
+.element {
+  @include all-text-inputs(disabled) {
+    background-color: gray;
+    color: black;
+  };
+}
+```
+</Example>
+
+<Example caption="Call the mixin inside a selector to target only the text-based input elements inside that selector.">
+```scss
+.containing-element {
+  @include all-text-inputs {
+    background-color: green;
+  }
+}
+```
+</Example>
+

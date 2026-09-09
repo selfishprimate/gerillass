@@ -1,0 +1,100 @@
+---
+title: "Radial Gradient"
+page_title: "Radial Gradient Sass Mixin"
+page_description: "The Radial Gradient Sass mixin helps you generate beautiful radial CSS gradients. It uses the radial-gradient CSS function."
+page_image: "gerillass-radial-gradient.jpg"
+---
+
+# Radial Gradient
+
+<Member name="radial-gradient">
+
+The **Radial Gradient Sass mixin** helps you generate beautiful radial CSS gradients. It uses the radial-gradient CSS function.
+
+The one-line method makes it very easy to use. To generate a radial gradient, you must pass values for the `$shape` and `$position` of the gradient, and for `$colors` (you need at least two color values). You can also add color stop points (the starting and ending positions of the colors).
+
+<Hint kind="info">
+
+Color stop points can be defined with `length` or `percentage` units.
+
+</Hint>
+
+</Member>
+
+## Arguments
+
+<Arguments of="radial-gradient" footnote="<strong>Important:</strong> When you use color stop points together with the color values, each group of values must be wrapped in parentheses and separated by a space. See the &lt;a href='#examples'&gt;examples&lt;/a&gt; for more.">
+  <Argument name="$shape" type="string">Sets the shape of the gradient. Accepts the values <code>circle</code> and <code>ellipse</code>. The default value is <code>ellipse</code>. To skip this argument, use <code>null</code>.</Argument>
+  <Argument name="$position" type="string, number">Sets the position of the gradient's shape. Accepts the following values: <code>top</code>, <code>top-right</code>, <code>right</code>, <code>bottom-right</code>, <code>bottom</code>, <code>bottom-left</code>, <code>left</code>, <code>top-left</code>, <code>center</code>, <code>closest-side</code>, <code>farthest-side</code>, <code>closest-corner</code>, <code>farthest-corner</code>.</Argument>
+  <Argument name="$colors" type="list">Accepts a list of colors, with or without color stop points. You can pass as many color values as you want.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="Let's call the mixin and pass some values by using the one-line method.">
+```scss
+.element{
+  @include radial-gradient(circle, center, red orange);
+}
+```
+```html
+<div class="sandbox large" style="background: radial-gradient(circle at center, red, orange);"></div>
+```
+</Example>
+
+<Example caption="Let's change the shape of the gradient.">
+```scss
+.element{
+  @include radial-gradient(ellipse, center, red orange);
+}
+```
+```html
+<div class="sandbox large" style="background: radial-gradient(ellipse at center, red, orange);"></div>
+```
+</Example>
+
+<Example caption="Now change the position of the gradient's shape.">
+```scss
+.element{
+  @include radial-gradient(circle, top-right, red orange gold);
+}
+```
+```html
+<div class="sandbox large" style="background: radial-gradient(circle at top right, red, orange, gold);"></div>
+```
+</Example>
+
+<Example caption="Use color stops to make sharp transitions between the colors.">
+```scss
+.element{
+  @include radial-gradient(circle, center, (darkslateblue 0 10%) (white 10% 20%) (dodgerblue 20% 30%) (powderblue 30% 100%));
+}
+```
+```html
+<div class="sandbox large" style="background: radial-gradient(circle at center, darkslateblue 0 10%, white 10% 20%, dodgerblue 20% 30%, powderblue 30% 100%);"></div>
+```
+</Example>
+
+<Hint kind="info">
+
+Using **named arguments** may take a little longer than using **positional arguments**, but it is definitely easier, especially when you pass a lot of arguments.
+
+</Hint>
+
+<Example caption="Now let's try it with the named arguments.">
+```scss
+.element{
+  @include radial-gradient(
+    $shape: circle,
+    $position: top,
+    $colors: pink crimson
+  );
+}
+```
+```html
+<div class="sandbox large" style="background: radial-gradient(circle at top, pink, crimson);"></div>
+```
+</Example>
+
+## Related Links
+* [Radial Gradient](https://developer.mozilla.org/en-US/docs/Web/CSS/radial-gradient)

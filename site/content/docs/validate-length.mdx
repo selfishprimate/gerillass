@@ -1,0 +1,35 @@
+---
+title: "Validate Length"
+page_title: "Validate Length Sass Function"
+page_description: "Returns the value if it is a length or one of auto, inherit, initial, 0."
+page_keywords: "Gerillass validateLength, Sass validateLength, Sass Functions, SCSS Functions, Sass Utility Functions, Gerillass Utilities"
+---
+
+# Validate Length
+
+<Member name="validateLength">
+
+Returns the value if it is a length or one of auto, inherit, initial, 0.
+
+</Member>
+
+## Arguments
+
+<Arguments of="validateLength">
+  <Argument name="$value" type="number (with unit)">Accepts a length with a unit, or auto, inherit, initial, 0.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="Validating a length argument in a mixin of your own.">
+```scss
+@mixin inset($amount) {
+  padding: validateLength($amount);
+}
+.panel {
+  @include inset(2rem);
+}
+```
+</Example>
+
+

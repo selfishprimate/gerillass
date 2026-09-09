@@ -1,0 +1,268 @@
+---
+title: "Except"
+page_title: "Exclude Elements in the list with Except Sass Mixin"
+page_description: "The Except Sass mixin helps you apply style changes to every element in a list except the ones you choose. It uses the :not() CSS pseudo-class."
+page_image: "gerillass-except.jpg"
+---
+
+# Except
+
+<Member name="except">
+
+The **Except** Sass mixin helps you apply style changes to every element in a list except the ones you choose.
+<Hint kind="info">
+
+You can pass a **string** value to target elements by their `id`, `class`, or `pseudo-class` selector. Or you can pass a **number** (or **multiple numbers** separated by commas) to target items by their index position in the list.
+
+</Hint>
+
+</Member>
+
+## Arguments
+
+<Arguments of="except" footnote="<strong>Important:</strong> Passing multiple arguments only works with numeric values, and the values must be separated by commas.">
+  <Argument name="--" type="string">The pseudo-class, class, or id selector. Accepts <code>first</code>, <code>last</code>, <code>odd</code>, <code>even</code>, and class or id selectors.</Argument>
+  <Argument name="--" type="number">The index number of the element in the list. You can also make multiple selections.</Argument>
+</Arguments>
+
+## Examples
+
+Let's say you have a list of items wrapped in a container, just like the example below. Now you want to apply some style changes to all of them, **except** for one or more.
+
+```html
+<div class="list-wrapper">
+  <div class="list-item">01</div>
+  <div class="list-item">02</div>
+  <div class="list-item">03</div>
+  <div class="list-item">04</div>
+  <div class="list-item">05</div>
+  <div class="list-item">06</div>
+</div>
+```
+
+<Example caption="Let's exclude the <strong>first</strong> one!">
+```scss
+.list-wrapper{
+  .list-item{
+    @include except(first){
+      background-color: #5bc0bb;
+      color: white;
+    }
+  }
+}
+```
+```html
+<div class="list-wrapper example01">
+  <div class="list-item">01</div>
+  <div class="list-item">02</div>
+  <div class="list-item">03</div>
+  <div class="list-item">04</div>
+  <div class="list-item">05</div>
+  <div class="list-item">06</div>
+</div>
+```
+</Example>
+
+<Example caption="Now, let's try to exclude the <strong>last item</strong> in the list.">
+```scss
+.list-wrapper{
+  .list-item{
+    @include except(last){
+      background-color: #5bc0bb;
+      color: white;
+    }
+  }
+}
+```
+```html
+<div class="list-wrapper example02">
+  <div class="list-item">01</div>
+  <div class="list-item">02</div>
+  <div class="list-item">03</div>
+  <div class="list-item">04</div>
+  <div class="list-item">05</div>
+  <div class="list-item">06</div>
+</div>
+```
+</Example>
+
+<Example caption="Now, let's exclude the <strong>third</strong> item in the list.">
+```scss
+.list-wrapper{
+  .list-item{
+    @include except(3){
+      background-color: #5bc0bb;
+      color: white;
+    }
+  }
+}
+```
+```html
+<div class="list-wrapper example03">
+  <div class="list-item">01</div>
+  <div class="list-item">02</div>
+  <div class="list-item">03</div>
+  <div class="list-item">04</div>
+  <div class="list-item">05</div>
+  <div class="list-item">06</div>
+</div>
+```
+</Example>
+
+<Example caption="Let's exclude the elements whose position is even (e.g. 2, 4, 6, and so on).">
+```scss
+.list-wrapper{
+  .list-item{
+    @include except(even){
+      background-color: #5bc0bb;
+      color: white;
+    }
+  }
+}
+```
+```html
+<div class="list-wrapper example04">
+  <div class="list-item">01</div>
+  <div class="list-item">02</div>
+  <div class="list-item">03</div>
+  <div class="list-item">04</div>
+  <div class="list-item">05</div>
+  <div class="list-item">06</div>
+</div>
+```
+</Example>
+
+<Hint kind="info">
+
+Remember that when you target multiple items in the list, the arguments you pass must be numbers separated by commas.
+
+</Hint>
+
+<Example caption="Now, let's try something really fancy and exclude multiple items!">
+```scss
+.list-wrapper{
+  .list-item{
+    @include except(1, 4, 5){
+      background-color: #5bc0bb;
+      color: white;
+    }
+  }
+}
+```
+```html
+<div class="list-wrapper example05">
+    <div class="list-item">01</div>
+    <div class="list-item">02</div>
+    <div class="list-item">03</div>
+    <div class="list-item">04</div>
+    <div class="list-item">05</div>
+    <div class="list-item">06</div>
+</div>
+```
+</Example>
+
+<Hint kind="info">
+
+When you pass arguments for the `id` or `class` attributes of the items, don't forget to wrap your arguments in quotes.
+
+</Hint>
+
+<Example caption="Let's exclude the items with class <code>exclude</code> on them.">
+```scss
+.list-wrapper{
+  .list-item{
+    @include except(".exclude"){
+      background-color: #5bc0bb;
+      color: white;
+    }
+  }
+}
+```
+```html
+<div class="list-wrapper">
+  <div class="list-item exclude">01</div>
+  <div class="list-item">02</div>
+  <div class="list-item">03</div>
+  <div class="list-item">04</div>
+  <div class="list-item">05</div>
+  <div class="list-item exclude">06</div>
+</div>
+```
+</Example>
+
+<Hint kind="info">
+
+**Information:** You can pass negative values to exclude elements based on their position among a group of siblings, counting from the end.
+
+</Hint>
+
+<Example caption="Now suppose you don't know how many items will appear in the list, and <strong>you want to exclude the second item from the end</strong>. How can you do that? It's easy!">
+```scss
+.list-wrapper{
+  .list-item{
+    @include except(-2){
+      background-color: #5bc0bb;
+      color: white;
+    }
+  }
+}
+```
+```html
+<div class="list-wrapper example07">
+    <div class="list-item exclude">01</div>
+    <div class="list-item">02</div>
+    <div class="list-item">03</div>
+    <div class="list-item">04</div>
+    <div class="list-item">05</div>
+    <div class="list-item exclude">06</div>
+</div>
+```
+</Example>
+
+<Example caption="Now let's pass multiple negative values.">
+```scss
+.list-wrapper {
+  .list-item {
+    @include except(-2, -4) {
+      background-color: #5bc0bb;
+      color: white;
+    }
+  }
+}
+```
+```html
+<div class="list-wrapper example08">
+  <div class="list-item exclude">01</div>
+  <div class="list-item">02</div>
+  <div class="list-item">03</div>
+  <div class="list-item">04</div>
+  <div class="list-item">05</div>
+  <div class="list-item exclude">06</div>
+</div>
+```
+</Example>
+
+<Example caption="Now let's pass <strong>positive and negative values together</strong>.">
+```scss
+.list-wrapper {
+  .list-item {
+    @include except(1, -1, -2) {
+      background-color: #5bc0bb;
+      color: white;
+    }
+  }
+}
+```
+```html
+<div class="list-wrapper example09">
+  <div class="list-item exclude">01</div>
+  <div class="list-item">02</div>
+  <div class="list-item">03</div>
+  <div class="list-item">04</div>
+  <div class="list-item">05</div>
+  <div class="list-item exclude">06</div>
+</div>
+```
+</Example>
+
+

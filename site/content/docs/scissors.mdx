@@ -1,0 +1,101 @@
+---
+title: "Scissors"
+page_title: "Scissors Sass Mixin"
+page_description: "The Scissors Sass mixin helps you cut off the corners of an element. It provides an easy one-line method to set the size of the cut and choose the corners you want to apply it to."
+page_keywords: "CSS Cut Corner, CSS Cutted Edges, Cut Box Edges with CSS, Cut Corners Using CSS, Cut Corners Using Sass, Cut Corners Using SCSS, CSS Border Cut, CSS Cutted Edge, Cutout Corners with CSS, Cutout Corners with Sass, Cutout Corners with SCSS, CSS Cutting-Edge"
+page_image: "gerillass-scissors.jpg"
+---
+
+# Scissors
+
+<Member name="scissors">
+
+The **Scissors** Sass mixin helps you **cut off** the corners of an element. It provides an easy one-line method to set the size of the cut and choose the corners you want to apply it to.
+
+<Hint kind="info">
+
+The **first** value selects the `top-left` corner, the **second** the `top-right`, the **third** the `bottom-right`, and the **fourth** the `bottom-left`.
+
+</Hint>
+
+</Member>
+
+## Arguments
+
+<Arguments of="scissors" footnote="You can use <code>0</code> or <code>null</code> to skip styling the related corner.">
+  <Argument name="$corners" type="number (with unit)">Accepts one or four values. The values must be separated by a space. Use the <code>null</code> value to <strong>skip</strong> a corner of the box.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="Simply call the mixin and pass just one value to affect all the corners evenly.">
+```scss
+.element{
+  @include scissors(30px);
+}
+```
+```html
+{{< sandbox class="medium" >}}
+background-color: #5bc0bb;
+clip-path: polygon(0 30px, 30px 0, calc(100% - 30px) 0, 100% 30px, 100% calc(100% - 30px), calc(100% - 30px) 100%, 30px 100%, 0 calc(100% - 30px));
+{{< /sandbox >}}
+```
+</Example>
+
+<Example caption="Do the following to target only the top corners.">
+```scss
+.element{
+  @include scissors(30px 30px 0 0);
+}
+```
+```html
+{{< sandbox class="medium" >}}
+background-color: #5bc0bb;
+clip-path: polygon(0 30px, 30px 0, calc(100% - 30px) 0, 100% 30px, 100% calc(100% - 0px), calc(100% - 0px) 100%, 0px 100%, 0 calc(100% - 0px));
+{{< /sandbox >}}
+```
+</Example>
+
+<Example caption="You can use <code>null</code> to skip a corner as well! The following arrangement will target only the bottom corners.">
+```scss
+.element{
+  @include scissors(null null 50px 50px);
+}
+```
+```html
+{{< sandbox class="medium" >}}
+background-color: #5bc0bb;
+clip-path: polygon(0 0px, 0px 0, calc(100% - 0px) 0, 100% 0px, 100% calc(100% - 50px), calc(100% - 50px) 100%, 50px 100%, 0 calc(100% - 50px));
+{{< /sandbox >}}
+```
+</Example>
+
+<Hint kind="info">
+
+For some reason, your design component might look different, but I'm sure you get the idea.
+
+</Hint>
+
+<Example caption="Now, let's try something really fancy!">
+```scss
+.element{
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  background-color: #5bc0bb;
+  @include scissors(0 0 50% 50%);
+  h2 {
+    color: white;
+    font-size: 2.5em; 
+    text-align: center;
+  }
+}
+```
+```html
+<div class="element">
+  <h2>It's a fancy looking title text!</h2>
+</div>
+```
+</Example>
+
+

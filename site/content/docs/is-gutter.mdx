@@ -1,0 +1,39 @@
+---
+title: "Is Gutter"
+page_title: "Is Gutter Sass Function"
+page_description: "True for anything that can sit where a CSS length is expected: a number, a calculation, or a CSS function such as var()."
+page_keywords: "Gerillass isGutter, Sass isGutter, Sass Functions, SCSS Functions, Sass Utility Functions, Gerillass Utilities"
+---
+
+# Is Gutter
+
+<Member name="isGutter">
+
+True for anything that can sit where a CSS length is expected: a number, a calculation, or a CSS function such as var().
+
+</Member>
+
+## Arguments
+
+<Arguments of="isGutter">
+  <Argument name="$value" type="value">Accepts any value.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="Accepting var() and calc() where a length is expected.">
+```scss
+@mixin stack($gap) {
+  @if not isGutter($gap) {
+    @error "`#{$gap}` cannot be used as a gap.";
+  }
+  display: grid;
+  gap: $gap;
+}
+.stack {
+  @include stack(var(--gap));
+}
+```
+</Example>
+
+

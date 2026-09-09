@@ -65,8 +65,23 @@ export default function remarkCompileExamples() {
         that loads the library itself is left alone, so a page can still
         demonstrate namespacing.
       */
+      /*
+        A `setup` attribute is Sass that has to run before the example does but
+        is not part of what the example shows. One mixin needs it: loadify
+        defines a placeholder under `loadify(init)` and every later call
+        @extends it, so a call compiled on its own fails with "the target
+        selector was not found". The page states that requirement in prose; the
+        attribute is what makes the example beside it actually compile.
+      */
+      const setup = node.attributes.find(
+        (a) => a.type === "mdxJsxAttribute" && a.name === "setup"
+      )?.value;
+
       const loads = /^\s*@(use|import)\s/m.test(scss);
-      const toCompile = loads ? scss : `@use "gerillass" as *;\n${scss}`;
+      const preamble = [loads ? null : '@use "gerillass" as *;', setup]
+        .filter(Boolean)
+        .join("\n");
+      const toCompile = preamble ? `${preamble}\n${scss}` : scss;
 
       let css;
       try {

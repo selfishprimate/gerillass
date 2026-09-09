@@ -1,0 +1,98 @@
+---
+title: "Triangle"
+page_title: "Triangle Sass Mixin"
+page_description: "The Triangle Sass mixin helps you generate triangles using the ::before or ::after CSS pseudo-elements."
+page_image: "gerillass-triangle.jpg"
+---
+
+# Triangle
+
+<Member name="triangle">
+
+The **Triangle** Sass mixin helps you generate triangles using the `::before` or `::after` CSS pseudo-elements.
+<Hint kind="info">
+
+**Tip:** It works best with text based elements, where it points in a direction to invite the user to take action (for example, dropdown menu labels). It is especially useful when you apply it to the selected element's `::before` or `::after` pseudo-elements.
+
+</Hint>
+
+</Member>
+
+## Arguments
+
+<Arguments of="triangle" footnote="When you pass the <code>top</code>, <code>right</code>, <code>bottom</code>, or <code>left</code> values for the <strong><code>$direction</code></strong> argument, you can pass two values to resize the triangle. <strong>The first value controls the width of the triangle and the second controls the height.</strong>">
+  <Argument name="$direction" type="string">Sets the direction of the triangle. Accepts the values <code>top</code>, <code>top-right</code>, <code>right</code>, <code>bottom-right</code>, <code>bottom</code>, <code>bottom-left</code>, <code>left</code>, and <code>top-left</code>.</Argument>
+  <Argument name="$color" type="color">The color of the triangle.</Argument>
+  <Argument name="$size" type="number (with unit)">The size of the triangle. Multiple values must be separated by a space.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="Suppose you have an expandable box and you want users to click a label to expand it. <strong>Let's apply the mixin to the <code>::after</code> pseudo-element of the selected element.</strong>">
+```scss
+.element {
+  &::after {
+    @include triangle;
+  }
+}
+```
+```html
+<div class="element">Click here to expand it!</div>
+```
+</Example>
+
+<Example caption="Now let's <strong>change the <code>$color</code> and the <code>$size</code></strong> of the triangle, and separate it from the text by <strong>passing a declaration block into the mixin</strong>.">
+```scss
+.element {
+  &::after {
+    @include triangle(
+      $color: crimson,
+      $size: 6px
+    ) {
+      margin-left: 6px;
+    };
+  }
+}
+```
+```html
+<div class="element example02">Click here to expand it!</div>
+```
+</Example>
+
+<Example caption="When you pass one of the <code>top</code>, <code>right</code>, <code>bottom</code>, or <code>left</code> values for the <code>$direction</code> argument, you can pass a second value to resize the triangle. The first value controls the width of the triangle and the second controls the height.">
+```scss
+.element{
+  &::after {
+    @include triangle(
+      $direction: "bottom",
+      $color: crimson,
+      $size: 10px 6px
+    ) {
+      position: relative;
+      margin-left: 6px;
+      top: -2px;
+    };
+  }
+}
+```
+```html
+<div class="element example03">Click here to expand it!</div>
+```
+</Example>
+
+<Example caption="You can apply the mixin not only to the pseudo-elements, but to the selected element itself.">
+```scss
+.element{
+  @include triangle(
+    $direction: "top",
+    $color: crimson,
+    $size: 100px 50px
+  )
+}
+```
+```html
+<div class="element example04"></div>
+```
+</Example>
+
+

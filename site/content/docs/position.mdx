@@ -1,0 +1,60 @@
+---
+title: "Position"
+page_title: "Position Sass Mixin"
+page_description: "The Position Sass mixin provides a one-line method to quickly set both the position and the offset properties of a selected element."
+page_image: "gerillass-position.jpg"
+---
+
+# Position
+
+<Member name="position">
+
+The **Position Sass mixin** provides a one-line method to quickly set both the position and the offset properties of a selected element.
+
+</Member>
+
+## Arguments
+
+<Arguments of="position" footnote="To learn more about CSS shorthand properties, check out the links at the end of this page.">
+  <Argument name="$position" type="string">Sets the <code>position</code> property of the selected elements. Accepts the CSS values <code>static</code>, <code>relative</code>, <code>fixed</code>, <code>absolute</code>, and <code>sticky</code>. The default value is <code>absolute</code>.</Argument>
+  <Argument name="$offsets" type="list">Accepts a list of values to set the offsets of the box edges. It uses the CSS shorthand method. The default value is <code>0</code>.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="Call the mixin without passing any arguments to see the default values that it generates.">
+```scss
+.element{
+  @include position;
+}
+```
+</Example>
+
+<Example caption="Now let's set the position value to <code>fixed</code> and leave the offset values as they are.">
+```scss
+.element{
+  @include position(fixed);
+}
+```
+</Example>
+
+<Example caption="Changing the offset values is easy. Note that multiple offset values must be separated by a space.">
+```scss
+.element{
+  @include position(fixed, 10px 10px 10px 50px);
+}
+```
+</Example>
+
+<Example caption="You can use the <code>null</code> value to skip positioning particular edges of an element.">
+```scss
+.element{
+  @include position(absolute, null 16px 16px 16px);
+}
+```
+</Example>
+
+## Related Articles
+* [CSS Shorthand Properties](https://developer.mozilla.org/en-US/docs/Web/CSS/Shorthand_properties)
+* [Introduction to CSS Shorthand](https://www.sitepoint.com/introduction-css-shorthand/)
+

@@ -1,0 +1,103 @@
+---
+title: "Center"
+page_title: "Center Sass Mixin"
+page_description: "The Center Sass mixin allows you to center selected elements on both the horizontal and vertical axes using absolute positioning in CSS and Sass."
+page_image: "gerillass-center.jpg"
+---
+
+# Center
+
+<Member name="center">
+
+The **Center** Sass mixin allows you to center elements (**those with a `position` value of either `absolute` or `fixed`**) on both the horizontal and vertical axes.
+<Hint kind="info">
+
+**Important:** You must set either `position: absolute` or `position: fixed` on the selected element to make this mixin work correctly. **The parent element you are centering within must have a `position` value other than `static`.**
+
+</Hint>
+
+<Hint kind="warning">
+
+**Keep in mind** that because this mixin uses the CSS **transform** property, that property will no longer be available for the selected element!
+
+</Hint>
+
+</Member>
+
+## Arguments
+
+<Arguments of="center" footnote="Pass the <code>both</code> value to center an element on both the horizontal and vertical axes, or pass nothing at all.">
+  <Argument name="$axis" type="string">Sets the axis of the alignment. Accepts the values <code>horizontal</code>, <code>vertical</code>, and <code>both</code>. The default value is <code>both</code>.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="Simply call the mixin without passing any arguments <strong>to center the selected element on both the horizontal and vertical axes</strong>.">
+```scss
+.parent-element {
+  position: relative;
+  .element{
+    position: absolute;
+    @include center;
+  }
+}
+```
+```html
+<div class="parent-element sandbox large example01">
+  <h2 class="element">Gerillass</h2>
+</div>
+```
+</Example>
+
+<Example caption="Let's <strong>center</strong> the selected element on the <strong>horizontal axis only</strong>.">
+```scss
+.parent-element {
+  position: relative;
+  .element{
+    position: absolute;
+    @include center(horizontal);
+  }
+}
+```
+```html
+<div class="parent-element sandbox large example02">
+  <h2 class="element">Gerillass</h2>
+</div>
+```
+</Example>
+
+<Example caption="Now let's <strong>center</strong> the selected element on the <strong>vertical axis only</strong>.">
+```scss
+.parent-element {
+  position: relative;
+  .element{
+    position: absolute;
+    @include center(vertical);
+  }
+}
+```
+```html
+<div class="parent-element sandbox large example03">
+    <h2 class="element">Gerillass</h2>
+</div>
+```
+</Example>
+
+<Example caption="Now let's pass the <code>both</code> value to <strong>center</strong> the selected element <strong>on both the horizontal and vertical axes</strong>.">
+```scss
+.parent-element {
+  position: relative;
+  .element{
+    position: absolute;
+    @include center(both);
+  }
+}
+```
+```html
+<div class="parent-element sandbox large example04">
+  <h2 class="element">Gerillass</h2>
+</div>
+```
+</Example>
+
+

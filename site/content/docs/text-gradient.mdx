@@ -1,0 +1,103 @@
+---
+title: "Text Gradient"
+page_title: "Text Gradient Sass Mixin"
+page_description: "The Text Gradient Sass mixin (also known as CSS Gradient Text) helps you add a gradient overlay to a text element. It provides a one-line method to set the direction of the gradient line, the color values, and the color stop positions very easily."
+page_keywords: "Text Gradient, CSS Text Gradient, Sass Text Gradient, Text Gradient Generator, CSS Text Gradient Left to Right, CSS Text Gradient Overlay, CSS Text Gradient Top to Bottom, CSS Give Text Gradient Color, Tailwind CSS Text Gradient"
+page_image: "gerillass-text-gradient.jpg"
+---
+
+# Text Gradient
+
+<Member name="text-gradient">
+
+The **Text Gradient** Sass mixin (also known as **CSS Gradient Text**) helps you add a gradient overlay to a text element. It provides a one-line method to set the direction of the gradient line, the color values, and the color stop positions very easily. 
+
+<Hint kind="info">
+
+A color stop position can be defined with `length` or `percentage` units.
+
+</Hint>
+
+</Member>
+
+## Arguments
+
+<Arguments of="text-gradient" footnote="<strong>Important:</strong> When you use color stop points together with the color values, each group of values must be wrapped in parentheses and separated by a space. See the &lt;a href='#examples'&gt;examples&lt;/a&gt; for more.">
+  <Argument name="$direction" type="string, number">Sets the direction of the gradient line. Accepts the string values <code>top</code>, <code>top-right</code>, <code>right</code>, <code>bottom-right</code>, <code>bottom</code>, <code>bottom-left</code>, <code>left</code>, and <code>top-left</code>. You can also pass a custom value as a number followed by a <code>deg</code> unit.</Argument>
+  <Argument name="$colors" type="list">Accepts a list of colors, with or without color stop points. You can pass as many color values as you want.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="First, let's forget about color stop positioning and pass values only for the <code>$direction</code> and <code>$colors</code> arguments.">
+```scss
+.element{
+  @include text-gradient(right, orange red purple blue green);
+}
+```
+```html
+<h2 class="sandbox text" style="background: linear-gradient(to right, orange, red, purple, blue, green);color: transparent;-webkit-background-clip: text;-webkit-text-fill-color: transparent;background-clip: text;">Text Gradient is Awesome!</h2>
+```
+</Example>
+
+<Example caption="The one-line method (also known as using <strong>positional arguments</strong>) can be confusing sometimes. To explain clearly how this mixin works, let's use <strong>named arguments</strong> (not harder, just a little slower) to pass some values.">
+```scss
+.element{
+  @include text-gradient(
+    $direction: top-left,
+    $colors: red orange
+  );
+}
+```
+```html
+<h2 class="sandbox text" style="background: linear-gradient(to top left, red, orange);color: transparent;-webkit-background-clip: text;-webkit-text-fill-color: transparent;background-clip: text;">Text Gradient is Awesome!</h2>
+```
+</Example>
+
+<Example caption="Now let's try it with color stop positions to make it a bit more complex.">
+```scss
+.element{
+  @include text-gradient(
+    $direction: bottom,
+    $colors: (red 50%) (orange 50%) 
+  );
+}
+```
+```html
+<h2 class="sandbox text" style="background: linear-gradient(to bottom, red 50%, orange 50%);color: transparent;-webkit-background-clip: text;-webkit-text-fill-color: transparent;background-clip: text;">Text Gradient is Awesome!</h2>
+```
+</Example>
+
+<Example caption="You can use the starting position and the ending position of a color together.">
+```scss
+.element{
+  @include text-gradient(
+    $direction: top,
+    $colors: (green 0 40%) (blue 40% 60%) (purple 60% 100%) 
+  );
+}
+```
+```html
+<h2 class="sandbox text" style="background: linear-gradient(to top, green 0 40%, blue 40% 60%, purple 60% 100%);color: transparent;-webkit-background-clip: text;-webkit-text-fill-color: transparent;background-clip: text;">Text Gradient is Awesome!</h2>
+```
+</Example>
+
+<Example caption="The transitions between the colors do not always have to be as sharp as in the examples above.">
+```scss
+.element{
+  @include text-gradient(
+    $direction: bottom,
+    $colors: (red 30%) (orange 60%) (brown 80%)
+  );
+}
+```
+```html
+<h2 class="sandbox text" style="background: linear-gradient(to bottom, red 30%, orange 60%, brown 80%);color: transparent;-webkit-background-clip: text;-webkit-text-fill-color: transparent;background-clip: text;">Text Gradient is Awesome!</h2>
+```
+</Example>
+
+If you want to master this, you need a clear understanding of how **linear-gradient()** works. For more, check out the links below:
+
+## Related Links
+* [Using CSS Gradients](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Images/Using_CSS_gradients)
+* [Linear Gradient](https://developer.mozilla.org/en-US/docs/Web/CSS/linear-gradient)

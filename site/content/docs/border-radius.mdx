@@ -1,0 +1,135 @@
+---
+title: "Border Radius"
+page_title: "Border Radius Sass Mixin"
+page_description: "The Border Radius Sass mixin helps you round the corners of a selected element using the border-radius CSS property. You can pass one value (with a unit) to style all the corners equally, or use the CSS shorthand to style each corner differently."
+page_image: "gerillass-border-radius.jpg"
+---
+
+# Border Radius
+
+<Member name="border-radius">
+
+The **Border Radius** Sass mixin helps you round the corners of a selected element using the [border-radius CSS property](https://developer.mozilla.org/en-US/docs/Web/CSS/border-radius). You can pass one value (with a unit) to style all the corners equally, or use the CSS shorthand to style each corner differently. See [the examples](#examples) for more.
+
+</Member>
+
+## Arguments
+
+<Arguments of="border-radius">
+  <Argument name="$corner" type="string">Lets you choose which corners of an element you want to style. Accepts the following values: <code>top</code>, <code>top-right</code>, <code>right</code>, <code>bottom-right</code>, <code>bottom</code>, <code>bottom-left</code>, <code>left</code>, <code>top-left</code>, <code>cross-left</code>, <code>cross-right</code>, <code>all</code>.</Argument>
+  <Argument name="$value" type="number (with unit)">The size of the border radius that will be applied.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="Simply pass a value to target all the corners of an element and style them equally.">
+```scss
+.element{
+  @include border-radius(20px);
+}
+```
+```html
+{{< sandbox class="medium" >}}
+background-color: #5bc0bb;border-radius: 20px;
+{{< /sandbox >}}
+```
+</Example>
+
+<Example caption="Now let's pass two values. The first one is <code>top</code>, to target only the top corners of the selected element, and the second one is <code>40px</code>, for the size of the radius.">
+```scss
+.element{
+  @include border-radius(top, 40px);
+}
+```
+```html
+{{< sandbox class="medium" >}}
+background-color:#5bc0bb;border-top-left-radius: 40px;border-top-right-radius: 40px;
+{{< /sandbox >}}
+```
+</Example>
+
+<Hint kind="info">
+
+Just to remind you once more, these are the predefined values you can use to target the corners: `top`, `top-right`, `right`, `bottom-right`, `bottom`, `bottom-left`, `left`, `top-left`, `cross-left`, `cross-right`, `all`.
+
+</Hint>
+
+<Example caption="Now, let's try to target right corners.">
+```scss
+.element{
+  @include border-radius(right, 40px);
+}
+```
+```html
+{{< sandbox class="medium" >}}
+background-color:#5bc0bb;border-top-right-radius: 40px;border-bottom-right-radius: 40px;
+{{< /sandbox >}}
+```
+</Example>
+
+<Example caption="Now let's try the <code>cross-left</code> and <code>cross-right</code> values, which let you target the corners diagonally.">
+```scss
+.element{
+  @include border-radius(cross-left, 40px);
+}
+```
+```html
+{{< sandbox class="medium" >}}
+background-color:#5bc0bb;border-top-left-radius: 40px;border-bottom-right-radius: 40px;
+{{< /sandbox >}}
+```
+</Example>
+
+<Example caption="You can use the CSS shorthand method to pass different radius size values for different corners.">
+```scss
+.element{
+  @include border-radius(25px 50px 100px 150px);
+}
+```
+```html
+{{< sandbox class="large" >}}
+background-color:#5bc0bb;border-radius: 25px 50px 100px 150px;
+{{< /sandbox >}}
+```
+</Example>
+
+<Example caption="Now let's <strong>pass four values</strong> again, but this time we are going to <strong>separate them with commas</strong> to try something different.">
+```scss
+.element{
+  @include border-radius(25px, 50px, 100px, 150px);
+}
+```
+```html
+{{< sandbox class="large" >}}
+background-color:#5bc0bb;border-top-left-radius: 25px;border-top-right-radius: 50px;border-bottom-right-radius: 100px;border-bottom-left-radius: 150px;
+{{< /sandbox >}}
+```
+</Example>
+
+<Example caption="For each corner you can pass a second value next to the first one to bend the curve.">
+```scss
+.element{
+  @include border-radius(100px 40px, 50px 20%, 100px 30%, 150px 2rem);
+}
+```
+```html
+{{< sandbox class="large" >}}
+background-color:#5bc0bb;border-top-left-radius: 100px 40px;border-top-right-radius: 50px 20%;border-bottom-right-radius: 100px 30%;border-bottom-left-radius: 150px 2rem;
+{{< /sandbox >}}
+```
+</Example>
+
+<Example caption="Use <code>null</code> to skip a corner!">
+```scss
+.element{
+  @include border-radius(null, null, 100px 30%, 150px 2rem);
+}
+```
+```html
+{{< sandbox class="large" >}}
+background-color:#5bc0bb;border-bottom-right-radius: 100px 30%;border-bottom-left-radius: 150px 2rem;
+{{< /sandbox >}}
+```
+</Example>
+
+

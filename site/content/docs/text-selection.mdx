@@ -1,0 +1,54 @@
+---
+title: "Text Selection"
+page_title: "Text Selection Sass Mixin"
+page_description: "The Text Selection Sass mixin helps you style the portion of text (or an element) that a user has selected."
+page_image: "gerillass-text-selection.jpg"
+---
+
+# Text Selection
+
+<Member name="text-selection">
+
+The **Text Selection** Sass mixin helps you style the portion of text (or an element) that a user has selected.
+
+</Member>
+
+## Arguments
+
+<Arguments of="text-selection">
+  <Argument name="$value" type="string">Accepts the <code>only</code> value. Use it when you want to apply the styles to one specific HTML element.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="If you call it inside a selector without passing a value, the style rules apply to that element and its children.">
+```scss
+.element{
+  @include text-selection{
+    color: pink;
+    background-color: red;
+  }
+}
+```
+</Example>
+
+<Example caption="Pass the <code>only</code> value as an argument to apply the style rules to only one specific HTML element.">
+```scss
+.element{
+  @include text-selection(only){
+    color: pink;
+    background-color: red;
+  }
+}
+```
+</Example>
+
+<Example caption="Call the mixin at the root of your stylesheet to target all the HTML elements.">
+```scss
+@include text-selection{
+  color: pink;
+  background-color: red;
+}
+```
+</Example>
+

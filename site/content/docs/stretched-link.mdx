@@ -1,0 +1,77 @@
+---
+title: "Stretched Link"
+page_title: "Stretched Link Sass Mixin"
+page_description: "The Stretched Link Sass mixin helps you make any HTML element clickable by stretching a nested link across its entire area."
+page_keywords: "Stretched Link, Bootstrap Stretched Link, Stretched Link without Bootstrap, Tailwind Stretched Link, Stretched Link Example, CSS Stretched Link, Sass Stretched Link, SCSS Stretched Link, Stretched Link Bootstrap 5"
+page_image: "gerillass-stretched-link.jpg"
+---
+
+# Stretched Link
+
+<Member name="stretched-link">
+
+Suppose you have a container element with a link inside it, and you want the entire surface of that container to be clickable through the link. How can you do that?
+
+The **Stretched Link** Sass mixin helps you do that. It spreads the clickable area of a link across the entire containing block. 
+
+**Important:** Note that the containing block must have the `position: relative;` style rule, and the mixin must be applied to only one of its children.
+
+<Hint kind="info">
+
+It can be useful with HTML radio buttons or checkbox list design patterns, to control the clickable area of a `<label>` element.
+
+</Hint>
+
+</Member>
+
+## Arguments
+
+<Arguments of="stretched-link" footnote="Sometimes you need to use both the ::before and ::after pseudo-elements of a link. That is why the mixin lets you choose where to apply the stretched link style rules.">
+  <Argument name="$value" type="string">Accepts the values <code>before</code> and <code>after</code>. If you do not pass a value, it targets the <code>::before</code> pseudo-element of the selected elements.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="If no value is passed, the <code>::before</code> pseudo-element is targeted by default.">
+```scss
+.element{
+  @include stretched-link;
+}
+```
+</Example>
+
+<Example caption="Pass either the <code>before</code> or the <code>after</code> option as an argument to choose which pseudo-element you want to target.">
+```scss
+.element{
+  @include stretched-link(after);
+}
+```
+</Example>
+
+<Example caption="Targeting both the <code>::before</code> and <code>::after</code> pseudo-elements of the selected elements.">
+```scss
+.element{
+  @include stretched-link(before);
+  &:after{
+    content: "\2192";
+  }
+}
+```
+</Example>
+
+<Example caption="Don't forget that the containing block must have the <code>position: relative;</code> style rule.">
+```scss
+.containing-element{
+  position: relative;
+  .element{
+    @include stretched-link(after);
+  }
+}
+```
+```html
+<div class="containing-element">
+  <a class="element" href="https://sample-site.com/">Stretched Link</a>
+</div>
+```
+</Example>
+

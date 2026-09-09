@@ -1,0 +1,67 @@
+---
+title: "Before"
+page_title: "Before Sass Mixin"
+page_description: "The Before Sass mixin is an easy way to use the ::before CSS pseudo-element. You can insert text or design elements before the content of each selected element."
+page_keywords: "CSS After Before, CSS Before Icon, CSS Before Usage, CSS Pseudo Classes, CSS Before Selector"
+page_image: "gerillass-before.jpg"
+---
+
+# Before
+
+<Member name="before">
+
+The **Before** Sass mixin helps you generate content or a style element before the actual content of the selected element or elements.
+
+</Member>
+
+## Arguments
+
+<Arguments of="before" footnote="When you want to fetch a value using a custom property, the name of the property must start with the 'data-' prefix. See the examples for more.">
+  <Argument name="$content" type="string">You can pass content as a string, or fetch a value using a custom property such as <code>data-content</code>.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="Simply pass a value as a string.">
+```scss
+.element{
+  @include before("Text to use!");
+}
+```
+</Example>
+
+<Example caption="You can target the <code>::before</code> pseudo-element on its own and pass a declaration block.">
+```scss
+.element{
+  @include before{
+    content: "Easy to use!";
+    font-style: italic;
+    color: red;
+  };
+}
+```
+</Example>
+
+<Example caption="You can fetch a value using a custom property. One important thing to remember is that the name of the property must start with the 'data-' prefix.">
+```scss
+.element{
+  @include before("data-currency");
+}
+```
+```html
+<div class="element" data-currency="$">200</div>
+```
+</Example>
+
+<Example caption="You can pass a value for the CSS content property as a string, and a declaration block between the opening and closing curly braces.">
+```scss
+.element{
+  @include before("data-currency"){
+    font-size: .8em;
+    color: red;
+  };
+}
+```
+</Example>
+
+

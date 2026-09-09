@@ -1,0 +1,122 @@
+---
+title: "Background Image"
+page_title: "Background Image Sass Mixin"
+page_description: "The Background Image Sass mixin allows you to apply the background-image CSS property to the selected elements."
+page_image: "gerillass-background-image.jpg"
+---
+
+# Background Image
+
+<Member name="background-image">
+
+The **Background Image** Sass mixin allows you to apply background images to the selected elements. It gives you an easy, one-line method.
+
+</Member>
+
+## Arguments
+
+<Arguments of="background-image" footnote="Use <code>null</code> if you want to skip an argument. See [the examples](#examples) for more.">
+  <Argument name="$image-url" type="string">The URL of the background image.</Argument>
+  <Argument name="$filter-color" type="color | list">The color or list of colors you want to apply as a filter over the background image. <strong>Multiple color values must be separated by a space.</strong></Argument>
+  <Argument name="$filter-direction" type="string">The direction of the gradient. <strong>It only works when you pass multiple color values for the <code>$filter-color</code> argument.</strong> Accepts the values <code>top</code>, <code>top-right</code>, <code>right</code>, <code>bottom-right</code>, <code>bottom</code>, <code>bottom-left</code>, <code>left</code>, and <code>top-left</code>. The default value is <code>top</code>.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="Simply call the mixin in a selector and pass the URL of the background image.">
+```scss
+.element{
+  @include background-image("/images/backgrounds/07.jpg");
+}
+```
+```html
+{{< sandbox class="xlarge" >}}
+position: relative;background-image: url("/images/backgrounds/07.jpg");background-position: center center;background-repeat: no-repeat;background-size: cover;
+{{< /sandbox >}}
+```
+</Example>
+
+<Example caption="Now let's apply a color filter to it by passing a color value for the <code>$filter-color</code> argument.">
+```scss
+.element{
+  @include background-image("/images/backgrounds/07.jpg", rgba(255, 204, 153, 0.5));
+}
+```
+```html
+{{< sandbox class="xlarge" >}}
+position: relative;background-image: -webkit-gradient(linear, left bottom, left top, from(rgba(255, 204, 153, 0.5)), to(rgba(255, 204, 153, 0.5))), url("/images/backgrounds/07.jpg");background-image: linear-gradient(to top, rgba(255, 204, 153, 0.5), rgba(255, 204, 153, 0.5)), url("/images/backgrounds/07.jpg");background-position: center center;background-repeat: no-repeat;background-size: cover;
+{{< /sandbox >}}
+```
+</Example>
+
+<Hint kind="info">
+
+**Important:** Multiple color values must be separated by a space.
+
+</Hint>
+
+<Example caption="Now let's pass multiple color values for <code>$filter-color</code> to make the background image look even more interesting.">
+```scss
+.element{
+  @include background-image("/images/backgrounds/07.jpg", rgba(0, 0, 0, 0.5) rgba(40, 102, 100, 0.8));
+}
+```
+```html
+{{< sandbox class="xlarge" >}}
+position: relative;background-image: -webkit-gradient(linear, left bottom, left top, from(rgba(0, 0, 0, 0.5)), to(rgba(40, 102, 100, 0.8))), url("/images/backgrounds/07.jpg");background-image: linear-gradient(to top, rgba(0, 0, 0, 0.5), rgba(40, 102, 100, 0.8)), url("/images/backgrounds/07.jpg");background-position: center center;background-repeat: no-repeat;background-size: cover;
+{{< /sandbox >}}
+```
+</Example>
+
+<Hint kind="info">
+
+**Tip:** The value you pass for `$filter-direction` indicates the position of the final color stop.
+
+</Hint>
+
+<Example caption="Now let's try the <code>$filter-direction</code> option. While we do, let's use sharper color transitions to see the effect clearly.">
+```scss
+.element{
+  @include background-image("/images/backgrounds/07.jpg", rgba(0, 128, 128, 0.7) rgba(255, 192, 203, 0.8), right);
+}
+```
+```html
+{{< sandbox class="xlarge" >}}
+position: relative;background-image: -webkit-gradient(linear, left top, right top, from(rgba(0, 128, 128, 0.7)), to(rgba(255, 192, 203, 0.8))), url("/images/backgrounds/07.jpg");background-image: linear-gradient(to right, rgba(0, 128, 128, 0.7), rgba(255, 192, 203, 0.8)), url("/images/backgrounds/07.jpg");background-position: center center;background-repeat: no-repeat;background-size: cover;
+{{< /sandbox >}}
+```
+</Example>
+
+<Hint kind="info">
+
+**Important:** Please examine the CSS output. When you add a background image to an element using the style attribute, the CSS output is different from the others. This prevents the `background-image` declarations on both sides from overriding each other.
+
+</Hint>
+
+<Example caption="There will be times when you want to <strong>add a background image to an element using the style attribute</strong>, like in the example below. <strong>In those cases, just use <code>null</code> to skip the <code>$image-url</code> argument.</strong>">
+```scss
+.element{
+  @include background-image(null, rgba(teal, 0.7) rgba(pink, 0.8), right);
+}
+```
+```html
+<div class="element" style="background-image: url(/images/backgrounds/07.jpg)"></div>
+```
+</Example>
+
+<Example caption="You are probably wondering why those <code>position: relative</code> and <code>z-index: 1</code> style rules are applied to the direct children of the selected element. <strong>These rules exist to prevent the color filter from covering the direct children when you add the background image to an element using the style attribute.</strong>
+
+Let's try it with a title placed inside the selected element to see it in action.">
+```scss
+.element{
+  @include background-image(null, rgba(teal, 0.7) rgba(pink, 0.8), right);
+}
+```
+```html
+<div class="element" style="background-image: url(/images/backgrounds/07.jpg)">
+  <h2>A beautiful title text standing over the color filter.</h2>
+</div>
+```
+</Example>
+
+

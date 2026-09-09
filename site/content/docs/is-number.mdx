@@ -1,0 +1,36 @@
+---
+title: "Is Number"
+page_title: "Is Number Sass Function"
+page_description: "Returns the value if it is a number."
+page_keywords: "Gerillass isNumber, Sass isNumber, Sass Functions, SCSS Functions, Sass Utility Functions, Gerillass Utilities"
+---
+
+# Is Number
+
+<Member name="isNumber">
+
+Returns the value if it is a number.
+
+</Member>
+
+## Arguments
+
+<Arguments of="isNumber">
+  <Argument name="$value" type="value">Accepts any value.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="Validating a numeric argument in a mixin of your own.">
+```scss
+@mixin z($layer) {
+  position: relative;
+  z-index: isNumber($layer);
+}
+.modal {
+  @include z(100);
+}
+```
+</Example>
+
+

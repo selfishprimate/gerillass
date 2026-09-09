@@ -1,0 +1,80 @@
+---
+title: "Brand Logo"
+page_title: "Brand Logo Sass Mixin"
+page_description: "The Brand Logo Sass mixin helps you create an SEO-friendly logo component for your brand's website using CSS best practices."
+page_image: "gerillass-brand-logo.jpg"
+---
+
+# Brand Logo
+
+<Member name="brand-logo">
+
+The **Brand Logo** Sass mixin helps you create an SEO-friendly logo component for your brand's website using CSS best practices.
+<Hint kind="info">
+
+This is a **Gerillass** technique for **image replacement**. There are other methods too. Check out the links at the end of this article to find out more.
+
+</Hint>
+
+</Member>
+
+## Arguments
+
+<Arguments of="brand-logo">
+  <Argument name="$width" type="number (with unit)">Sets the width value of the logo image.</Argument>
+  <Argument name="$height" type="number (with unit)">Sets the height value of the logo image.</Argument>
+  <Argument name="$image-url" type="string">Sets the URL of the logo image. Works best with absolute URLs. This argument is optional, so you can also specify the image with the style attribute.</Argument>
+</Arguments>
+
+## Examples
+
+<Hint kind="info">
+
+In this example, I create a logo for **Coolors**. You can use your own brand's logo file and change the logo text if you like.
+
+</Hint>
+
+<Example caption="It is important to use markup similar to the example below. The containing element does not have to be an <code>&lt;h1&gt;</code> tag, so feel free to change it depending on the SEO strategy you use on your site.">
+```scss
+.brand-logo{
+  @include brand-logo(
+    $width: 100px,
+    $height: 30px,
+    $image-url: "https://coolors.co/assets/img/logo.svg"
+  );
+}
+```
+```html
+<h1 class="brand-logo">
+  <a href="#">Coolors</a>
+</h1>
+```
+</Example>
+
+<Hint kind="info">
+
+Note that the `background-image` declaration has disappeared from the generated CSS.
+
+</Hint>
+
+<Example caption="As mentioned before, the <code>$image-url</code> argument is optional. With that in mind, let's specify the logo image using the selected element's style attribute.">
+```scss
+.brand-logo{
+  @include brand-logo(
+    $width: 100px,
+    $height: 30px
+  );
+}
+```
+```html
+<h1 class="brand-logo" style="background-image: url(https://coolors.co/assets/img/logo.svg);">
+  <a href="#">Coolors</a>
+</h1>
+```
+</Example>
+
+## Related Links
+* [Nine Techniques for CSS Image Replacement](https://css-tricks.com/css-image-replacement/)
+* [A History of CSS Image Replacement](https://www.sitepoint.com/css-image-replacement-text-indent-negative-margins-and-more/)
+
+

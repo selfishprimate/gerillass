@@ -1,0 +1,123 @@
+---
+title: "Line Clamp"
+page_title: "Line Clamp Sass Mixin"
+page_description: "The Line Clamp Sass mixin truncates text after a number of lines. It emits the five declarations the effect actually needs, because -webkit-line-clamp does nothing on its own."
+page_keywords: "CSS Line Clamp, Sass Line Clamp, webkit-line-clamp, Multiline Truncate CSS, CSS Truncate Multiple Lines, Multiline Ellipsis CSS, Sass Text Truncation"
+---
+
+# Line Clamp
+
+<Member name="line-clamp">
+
+[ellipsis](/docs/ellipsis/) truncates one line. The **Line Clamp Sass mixin** truncates several, cutting the text off after the number of lines you give it and ending with an ellipsis.
+
+It emits **five declarations rather than one**, because `-webkit-line-clamp` does nothing on its own. Leave one of the others out and the text is not clamped at all, and nothing warns you.
+
+</Member>
+
+## What each declaration is doing
+
+Every combination below was tested on a paragraph running to five lines, clamped to three.
+
+<div class="table">
+  <table>
+    <thead>
+      <tr>
+        <th>What was applied</th>
+        <th>Result</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="name">All three prefixed properties, plus <code>overflow</code></td>
+        <td class="description">3 lines, with an ellipsis</td>
+      </tr>
+      <tr>
+        <td class="name">Without <code>-webkit-box-orient: vertical</code></td>
+        <td class="description">5 lines, no clamping, no warning</td>
+      </tr>
+      <tr>
+        <td class="name">Without <code>display: -webkit-box</code></td>
+        <td class="description">5 lines, the same</td>
+      </tr>
+      <tr>
+        <td class="name">The unprefixed <code>line-clamp</code> on its own</td>
+        <td class="description">5 lines. It is not Baseline yet</td>
+      </tr>
+      <tr>
+        <td class="name">Without <code>overflow: hidden</code></td>
+        <td class="description">The box is 3 lines, but the rest of the text spills out below it</td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="footnote">* That last row is the one to watch for. Measuring the element's height reports three lines and looks correct; only looking at it shows the text escaping the box.</p>
+</div>
+
+The unprefixed `line-clamp` is emitted alongside the prefixed trio. It does nothing today, as the fourth row shows, and it costs one line to be right when it ships.
+
+## Arguments
+
+<Arguments of="line-clamp">
+  <Argument name="$lines (3)" type="number | keyword">Accepts a whole number of lines, at least 1, or <code>none</code> to undo a clamp.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="Clamp an excerpt to three lines.">
+```scss
+.excerpt {
+  @include line-clamp(3);
+}
+```
+</Example>
+
+<Example caption="Two lines, for a card title that must not push the card taller.">
+```scss
+.title {
+  @include line-clamp(2);
+}
+```
+</Example>
+
+<Example caption="Without an argument the clamp is three lines.">
+```scss
+.default {
+  @include line-clamp;
+}
+```
+</Example>
+
+<Example caption="Pass <code>none</code> to undo a clamp, for instance when an excerpt expands on click.">
+```scss
+.full {
+  @include line-clamp(none);
+}
+```
+</Example>
+
+## What it refuses
+
+A clamp is a whole number of lines, so anything else stops the build.
+
+```scss
+.excerpt {
+  @include line-clamp(0);
+}
+```
+```text
+Error: `0` is not a valid $lines for `line-clamp`. Pass a whole number of lines that is at least 1, or `none` to undo a clamp.
+```
+
+```scss
+.excerpt {
+  @include line-clamp(3px);
+}
+```
+```text
+Error: `3px` is not a valid $lines for `line-clamp`. Pass a whole number of lines, or `none` to undo a clamp.
+```
+
+## Related Links
+* [ellipsis](/docs/ellipsis/)
+* [-webkit-line-clamp](https://developer.mozilla.org/en-US/docs/Web/CSS/-webkit-line-clamp)
+

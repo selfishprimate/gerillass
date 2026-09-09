@@ -1,0 +1,49 @@
+---
+title: "Sizer"
+page_title: "Sizer Sass Mixin"
+page_description: "The Sizer Sass mixin helps you size elements with one statement (or two). Size elements or create squares and rectangles very easily."
+page_image: "gerillass-sizer.jpg"
+---
+
+# Sizer
+
+<Member name="sizer">
+
+The **Sizer Sass mixin** helps you size elements with one statement (or two). Size elements or create squares and rectangles very easily.
+
+</Member>
+
+## Arguments
+
+<Arguments of="sizer">
+  <Argument name="$width" type="number (with unit),<br/>string">Sets the width of the selected elements.</Argument>
+  <Argument name="$height" type="number (with unit),<br/>string">Sets the height of the selected elements. The default value is the <code>$width</code> value.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="Call the mixin to adjust the <code>$width</code> and the <code>$height</code> of an element.">
+```scss
+.element{
+  @include sizer(200px);
+}
+```
+</Example>
+
+<Example caption="To assign different values to the width and height properties of an element, do the following:">
+```scss
+.element{
+  @include sizer(500px, 100px);
+}
+```
+</Example>
+
+<Example caption="You can pass string values as well!">
+```scss
+.element{
+  @include sizer(400px, auto);
+}
+```
+</Example>
+
+

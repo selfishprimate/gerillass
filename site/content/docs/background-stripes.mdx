@@ -1,0 +1,111 @@
+---
+title: "Background Stripes"
+page_title: "Background Stripes Sass Mixin"
+page_description: "The Background Stripes Sass mixin allows you to create stylish and colorful background stripes using the repeating-linear-gradient CSS function. You can easily create colorful background lines that are difficult to create with vanilla CSS."
+page_keywords: "CSS Background Lines, CSS Vertical Background Lines, CSS Horizontal Background Lines, CSS Background Stripes, CSS Animated Background Lines, SCSS to CSS"
+page_image: "gerillass-background-stripes.jpg"
+---
+
+# Background Stripes
+
+<Member name="background-stripes">
+
+The **Background Stripes** Sass mixin allows you to create stylish and colorful background stripes.
+
+</Member>
+
+## Arguments
+
+<Arguments of="background-stripes" footnote="Multiple color values must be separated by a space (e.g. <code>$color: red blue green</code>).">
+  <Argument name="$color" type="list">The color or colors of the stripes. By default there is only one color, a translucent black. Accepts one or more color values to create multiple color stops.</Argument>
+  <Argument name="$thickness" type="number<br/>(with unit)">The thickness of the stripes. The default value is <code>1em</code>.</Argument>
+  <Argument name="$rotation" type="number<br/>(with deg unit)">The rotation of the stripes. The default value is <code>-45deg</code>. This option lets you create diagonal or straight stripes very easily.</Argument>
+  <Argument name="$image" type="string<br/>(quoted)">Accepts the URL of an image. This option helps you add an image underneath the stripes to create more stylish design elements.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="Simply call the mixin without passing any arguments.">
+```scss
+.element{
+  @include background-stripes();
+}
+```
+```html
+{{< sandbox class="small" >}}
+background-image: repeating-linear-gradient(-45deg, rgba(0, 0, 0, 0.1) 0, rgba(0, 0, 0, 0.1) 1em, transparent 1em, transparent 2em);
+{{< /sandbox >}}
+```
+</Example>
+
+<Example caption="Let's pass a <code>$color</code> value to it!">
+```scss
+.element{
+  @include background-stripes(
+    $color: pink
+  );
+}
+```
+```html
+{{< sandbox class="small" >}}
+background-image: repeating-linear-gradient(-45deg, pink 0, pink 1em, transparent 1em, transparent 2em);
+{{< /sandbox >}}
+```
+</Example>
+
+<Example caption="Now let's add more colors and change the <code>$thickness</code> and <code>$rotation</code> values. <strong>Important:</strong> Don't forget that multiple color values must be separated by a space!">
+```scss
+.element{
+  @include background-stripes(
+    $color: #FFD393 #FF974F #F54F29,
+    $thickness: 3em,
+    $rotation: 90deg
+  );
+}
+```
+```html
+{{< sandbox class="small" >}}
+background-image: repeating-linear-gradient(90deg, #FFD393 0em, #FFD393 3em, #FF974F 3em, #FF974F 6em, #F54F29 6em, #F54F29 9em);
+{{< /sandbox >}}
+```
+</Example>
+
+<Example caption="Add an image to make your design look more alive! <strong>Just do not forget to use quotes when you pass the URL of an image.</strong>">
+```scss
+.element{
+  @include background-stripes(
+    $color: rgba(blue, 0.4),
+    $thickness: 3px,
+    $rotation: 45deg,
+    $image: "/images/backgrounds/05.jpg"
+  );
+}
+```
+```html
+{{< sandbox class="xlarge" >}}
+background-image: repeating-linear-gradient(45deg, rgba(0, 0, 255, 0.4) 0, rgba(0, 0, 255, 0.4) 3px, transparent 3px, transparent 6px), url('/images/backgrounds/05.jpg');background-position: center;background-repeat: no-repeat;background-size: cover;
+{{< /sandbox >}}
+```
+</Example>
+
+<Example caption="You can create an old-fashioned TV screen effect as well.">
+```scss
+.element{
+  @include background-stripes(
+    $color: black,
+    $thickness: 1px,
+    $rotation: 180deg,
+    $image: "/images/backgrounds/03.jpg"
+  );
+}
+```
+```html
+{{< sandbox class="xlarge" >}}
+background-image: repeating-linear-gradient(180deg, black 0, black 1px, transparent 1px, transparent 2px), url(/images/backgrounds/03.jpg);background-position: center;background-repeat: no-repeat;background-size: cover;
+{{< /sandbox >}}
+
+Just play with the values of the given arguments to create more interesting things. **Use your imagination!**
+```
+</Example>
+
+

@@ -1,0 +1,50 @@
+---
+title: "Shade"
+page_title: "Shade Sass Function"
+page_description: "Mixes a colour towards black by a percentage."
+page_keywords: "Gerillass shade, Sass shade, Sass Functions, SCSS Functions, Sass Utility Functions, Gerillass Utilities"
+---
+
+# Shade
+
+<Member name="shade">
+
+Mixes a colour towards black by a percentage.
+
+</Member>
+
+## Arguments
+
+<Arguments of="shade">
+  <Argument name="$color" type="color">Accepts a colour.</Argument>
+  <Argument name="$percentage" type="number (percentage)">Accepts a percentage.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="A darker hover state derived from one brand colour.">
+```scss
+$brand: crimson;
+.button {
+  background-color: $brand;
+}
+.button:hover {
+  background-color: shade($brand, 20%);
+}
+```
+</Example>
+
+## What it refuses
+
+Arguments are checked, so a wrong value stops the build with a message instead of quietly producing the wrong CSS.
+
+```scss
+$brand: crimson;
+.button:hover {
+  background-color: shade(brand, 20%);
+}
+```
+```text
+Error: 'brand' is not a color value, please replace it with a valid one.
+```
+

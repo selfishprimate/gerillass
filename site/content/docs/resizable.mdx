@@ -1,0 +1,51 @@
+---
+title: "Resizable"
+page_title: "Resizable Sass Mixin"
+page_description: "The Resizable Sass mixin helps you make an element resizable in both the horizontal and vertical directions."
+page_keywords: "Resizable Sass Mixin, Sass Resize, SCSS Resize, CSS Resizable, SCSS to CSS, Sass to CSS"
+page_image: "gerillass-resizable.jpg"
+---
+
+# Resizable
+
+<Member name="resizable">
+
+The **Resizable** Sass mixin helps you make an element resizable in both the horizontal and vertical directions.
+
+</Member>
+
+<Hint kind="info">
+
+**Note:** This property doesn't work on inline elements, or on block elements whose `overflow` property is set to `visible`.
+
+</Hint>
+
+## Arguments
+
+<Arguments of="resizable">
+  <Argument name="$direction" type="string">Sets the direction of the <code>resize</code> property. Accepts the values <code>both</code>, <code>horizontal</code>, <code>vertical</code>, and <code>none</code>. The default value is <code>both</code>.</Argument>
+  <Argument name="$overflow" type="string">Sets the <code>overflow</code> property. The default value is <code>auto</code>.</Argument>
+</Arguments>
+
+## Examples
+
+<Hint kind="info">
+
+A tiny icon will appear in the lower right corner of the box below. Grab it and try resizing the box.
+
+</Hint>
+
+<Example caption="Simply call the mixin without passing any arguments.">
+```scss
+.element{
+  @include resizable;
+}
+```
+```html
+{{< sandbox class="small" >}}
+resize: both;overflow: auto;max-width: 100%;background-image: repeating-linear-gradient(-45deg, crimson 0, crimson 1em, pink 1em, pink 2em);
+{{< /sandbox >}}
+```
+</Example>
+
+

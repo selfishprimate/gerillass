@@ -1,0 +1,40 @@
+---
+title: "Hide"
+page_title: "Hide Sass Mixin"
+page_description: "You can improve web accessibility by hiding elements with the Hide Sass mixin. It hides content visually on a web page while keeping it accessible to assistive technologies such as screen readers."
+page_image: "gerillass-hide.jpg"
+---
+
+# Hide
+
+<Member name="hide">
+
+The **Hide** Sass mixin allows you to improve web accessibility by hiding elements. It hides content visually on a web page while keeping it accessible to assistive technologies such as screen readers.
+
+</Member>
+
+## Arguments
+
+<Arguments of="hide">
+  <Argument name="$toggle" type="string">Accepts the values <code>hide</code> and <code>unhide</code>. The default value is <code>hide</code>. Use <code>unhide</code> to reverse the effect.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="Simply call the mixin to make the selected element and all of its children visually hidden (but still accessible to screen readers).">
+```scss
+.element {
+  @include hide;
+}
+```
+</Example>
+
+<Example caption="Now let's pass the <code>unhide</code> value to reverse the effect.">
+```scss
+.element {
+  @include hide(unhide);
+}
+```
+</Example>
+
+

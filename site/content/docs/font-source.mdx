@@ -1,0 +1,36 @@
+---
+title: "Font Source"
+page_title: "Font Source Sass Function"
+page_description: "Builds one src entry for an @font-face rule."
+page_keywords: "Gerillass fontSource, Sass fontSource, Sass Functions, SCSS Functions, Sass Utility Functions, Gerillass Utilities"
+---
+
+# Font Source
+
+<Member name="fontSource">
+
+Builds one src entry for an @font-face rule.
+
+</Member>
+
+## Arguments
+
+<Arguments of="fontSource">
+  <Argument name="$font-family" type="string">Accepts the family name.</Argument>
+  <Argument name="$file-path" type="string">Accepts path without an extension.</Argument>
+  <Argument name="$file-formats" type="string">Accepts one of eot, woff2, woff, ttf, svg.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="Building the src list of your own @font-face rule. Each call makes one entry, so comma-join them for several formats.">
+```scss
+@font-face {
+  font-family: "Inter";
+  src: fontSource("Inter", "/fonts/inter", woff2),
+       fontSource("Inter", "/fonts/inter", woff);
+}
+```
+</Example>
+
+

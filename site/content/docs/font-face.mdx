@@ -1,0 +1,120 @@
+---
+title: "Font Face"
+page_title: "Font Face Sass Mixin"
+page_description: "The Font Face Sass mixin helps you generate a cross-browser compatible @font-face CSS at-rule in CSS and SCSS."
+page_image: "gerillass-font-face.jpg"
+---
+
+# Font Face
+
+<Member name="font-face">
+
+The **Font Face** Sass mixin helps you generate a cross-browser compatible @font-face declaration.
+<Hint kind="info">
+
+**Important:** The mixin must be called at the root level of your stylesheet.
+
+</Hint>
+
+</Member>
+
+## Arguments
+
+<Arguments of="font-face" footnote="To learn more about the <strong>font-weight</strong> property values, check out the [links](#related-articles) at the end of the article.">
+  <Argument name="$font-family" type="string">Sets the name of the <code>font-family</code>.</Argument>
+  <Argument name="$file-path" type="string">Sets the path and the name of the font file. The file name must be written without the extension.</Argument>
+  <Argument name="$font-style" type="string">Sets the <code>font-style</code> property. The default value is <code>normal</code>. If there is an <code>italic</code> version of the font, you can set the value to <code>italic</code> or <code>oblique</code>.</Argument>
+  <Argument name="$font-weight" type="number">Sets the weight of the font. The default value is <code>400</code>. Accepts <code>100</code>, <code>200</code>, <code>300</code>, <code>400</code>, <code>500</code>, <code>600</code>, <code>700</code>, <code>800</code>, and <code>900</code>.</Argument>
+  <Argument name="$file-formats" type="string | list">Sets the font file formats you want to include. The default value is <code>eot woff2 woff ttf svg</code>.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="Let's call the mixin and pass values for the required arguments: <code>$font-family</code> and <code>$file-path</code>.">
+```scss
+@include font-face("Fanwood Text", "fonts/fanwood-text/fanwood-text-regular");
+```
+</Example>
+
+<Example caption="Now let's add the <code>italic</code> version of the family.">
+```scss
+@include font-face("Fanwood Text", "fonts/fanwood-text/fanwood-text-regular", italic);
+```
+</Example>
+
+<Example caption="Now let's add the <code>bold</code> version of the <code>Fanwood Text</code> font-family (if there is one) by passing <code>700</code> for the <code>$font-weight</code> argument.">
+```scss
+@include font-face("Fanwood Text", "fonts/fanwood-text/fanwood-text-bold", 700);
+```
+</Example>
+
+<Example caption="If you pass values for both the <code>$font-style</code> and <code>$font-weight</code> arguments, the <code>$font-weight</code> value should always come last, unless you also pass a value for <code>$file-formats</code>.">
+```scss
+@include font-face("Fanwood Text", "fonts/fanwood-text/fanwood-text-bold-italic", italic, 700);
+```
+</Example>
+
+<Hint kind="info">
+
+Things get trickier when you want to pass a value for `$file-formats`. The examples below show the ways to do it.
+
+</Hint>
+
+<Example caption="Suppose you only have three file formats: <code>woff2</code>, <code>woff</code>, and <code>ttf</code>.">
+```scss
+@include font-face("Fanwood Text", "fonts/fanwood-text/fanwood-text-regular", woff2 woff ttf);
+```
+</Example>
+
+<Example caption="If you want to pass values for all the arguments, the order must be <code>$font-family</code>, <code>$file-path</code>, <code>$font-style</code>, <code>$font-weight</code>, <code>$file-formats</code>, like in the example below.">
+```scss
+@include font-face("Fanwood Text", "fonts/fanwood-text/fanwood-text-bold-italic", italic, 700, woff2 woff);
+```
+</Example>
+
+<Hint kind="info">
+
+**Tip:** Do you know what is beautiful about named arguments? **They are order-independent**, which makes them very useful when it is hard to stick to the argument order.
+
+</Hint>
+
+<Example caption="If you are having trouble passing the arguments by position, try <strong>named arguments</strong>.">
+```scss
+@include font-face (
+  $font-family: "Fanwood Text", 
+  $file-path: "fonts/fanwood-text/fanwood-text-bold-italic",
+  $font-style: italic, 
+  $font-weight: 700,
+  $file-formats: eot woff2 woff
+);
+```
+</Example>
+
+<Example caption="Try changing the order of the arguments. Whatever order you use, the result is the same.">
+```scss
+@include font-face (
+  $font-weight: 700,
+  $font-style: italic,
+  $file-formats: eot woff2 woff, 
+  $font-family: "Fanwood Text",
+  $file-path: "fonts/fanwood-text/fanwood-text-bold-italic",
+);
+```
+</Example>
+
+<Example caption="Now let's use the <code>@content</code> directive to pass a content block into the mixin.">
+```scss
+@include font-face ("Fanwood Text", "fonts/fanwood-text/fanwood-text-regular") {
+  font-display: fallback;
+}
+```
+</Example>
+
+If you don't have all the font varieties, or you have a font you want to convert into a **web font** (embeddable with @font-face), try **Font Squirrel**'s [Webfont Generator](https://www.fontsquirrel.com/tools/webfont-generator).
+
+## Related Articles
+* [Font Face](https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face)  
+* [Font Weight](https://developer.mozilla.org/en-US/docs/Web/CSS/font-weight)
+* [Font Style](https://developer.mozilla.org/en-US/docs/Web/CSS/font-style)
+
+

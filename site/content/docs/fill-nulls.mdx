@@ -1,0 +1,46 @@
+---
+title: "Fill Nulls"
+page_title: "Fill Nulls Sass Function"
+page_description: "Replaces null entries in a list with 0, or drops them."
+page_keywords: "Gerillass fillNulls, Sass fillNulls, Sass Functions, SCSS Functions, Sass Utility Functions, Gerillass Utilities"
+---
+
+# Fill Nulls
+
+<Member name="fillNulls">
+
+Replaces null entries in a list with 0, or drops them.
+
+</Member>
+
+## Arguments
+
+<Arguments of="fillNulls">
+  <Argument name="$value" type="list">Accepts a list that may contain nulls.</Argument>
+  <Argument name="$seperation (comma)" type="string">Accepts comma, or space.</Argument>
+  <Argument name="$skip (false)" type="boolean">Accepts true to leave nulls in place instead of using 0.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="Shorthand where only some sides are given.">
+```scss
+.card {
+  margin: fillNulls(24px null null null, space);
+}
+```
+</Example>
+
+## What it refuses
+
+Arguments are checked, so a wrong value stops the build with a message instead of quietly producing the wrong CSS.
+
+```scss
+.card {
+  margin: fillNulls(24px null, spaces);
+}
+```
+```text
+Error: `spaces` is not a valid $seperation for `fillNulls`. Pass `comma`, `space` or `slash`.
+```
+

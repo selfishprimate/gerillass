@@ -1,0 +1,44 @@
+---
+title: "Shorthand Property"
+page_title: "Shorthand Property Sass Function"
+page_description: "Expands one to four values into the four-value CSS shorthand order."
+page_keywords: "Gerillass shorthandProperty, Sass shorthandProperty, Sass Functions, SCSS Functions, Sass Utility Functions, Gerillass Utilities"
+---
+
+# Shorthand Property
+
+<Member name="shorthandProperty">
+
+Expands one to four values into the four-value CSS shorthand order.
+
+</Member>
+
+## Arguments
+
+<Arguments of="shorthandProperty">
+  <Argument name="$value" type="list">Accepts one to four values.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="One to four values expanded to the full four-value shorthand.">
+```scss
+.card {
+  padding: shorthandProperty(16px 24px);
+}
+```
+</Example>
+
+## What it refuses
+
+Arguments are checked, so a wrong value stops the build with a message instead of quietly producing the wrong CSS.
+
+```scss
+.card {
+  padding: shorthandProperty(1px 2px 3px 4px 5px);
+}
+```
+```text
+Error: You've passed 5 arguments. Please do not pass more than 4.
+```
+

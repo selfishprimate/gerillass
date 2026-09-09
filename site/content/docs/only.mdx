@@ -1,0 +1,239 @@
+---
+title: "Only"
+page_title: "Only Sass Mixin"
+page_description: "The Only Sass mixin helps you target elements based on their position among siblings of the same type (tag name). This mixin uses the :first-of-type, :last-of-type, and :nth-of-type CSS pseudo-classes."
+page_image: "gerillass-only.jpg"
+---
+
+# Only
+
+<Member name="only">
+
+The **Only** Sass mixin helps you filter elements based on their position among a group of siblings and apply your style rules to **only** those elements. This mixin uses `:first-of-type`, `:last-of-type`, and `:nth-of-type` CSS pseudo-classes.
+<Hint kind="info">
+
+You can pass a **string** value to target elements by their `id`, `class`, or `pseudo-class` selector. Or you can pass a **number** (or **multiple numbers** separated by commas) to target items by their index position in the list.
+
+</Hint>
+
+</Member>
+
+## Arguments
+
+<Arguments of="only" footnote="<strong>Important:</strong> Passing multiple arguments only works with numeric values, and the values must be separated by commas.">
+  <Argument name="--" type="string">The pseudo-class, class, or id selector. Accepts <code>first</code>, <code>last</code>, <code>odd</code>, <code>even</code>, and class or id selectors.</Argument>
+  <Argument name="--" type="number">The index number of the element in the list. You can also make multiple selections.</Argument>
+</Arguments>
+
+## Examples
+
+Suppose you have a group of items like the ones below, and you want to apply style changes to only some of them.
+
+```html
+<div class="list-wrapper">
+  <div class="list-item">01</div>
+  <div class="list-item">02</div>
+  <div class="list-item">03</div>
+  <div class="list-item">04</div>
+  <div class="list-item">05</div>
+  <div class="list-item">06</div>
+</div>
+```
+
+<Example caption="Let's start with the <strong>first</strong> one!">
+```scss
+.list-wrapper{
+  .list-item{
+    @include only(first) {
+      background-color: #5bc0bb;
+      color: white;
+    }
+  }
+}
+```
+```html
+<div class="list-wrapper example01">
+  <div class="list-item">01</div>
+  <div class="list-item">02</div>
+  <div class="list-item">03</div>
+  <div class="list-item">04</div>
+  <div class="list-item">05</div>
+  <div class="list-item">06</div>
+</div>
+```
+</Example>
+
+<Example caption="Now, let's try to get the <strong>last item</strong> in the list.">
+```scss
+.list-wrapper{
+  .list-item{
+    @include only(last) {
+      background-color: #5bc0bb;
+      color: white;
+    }
+  }
+}
+```
+```html
+<div class="list-wrapper example02">
+  <div class="list-item">01</div>
+  <div class="list-item">02</div>
+  <div class="list-item">03</div>
+  <div class="list-item">04</div>
+  <div class="list-item">05</div>
+  <div class="list-item">06</div>
+</div>
+```
+</Example>
+
+<Example caption="Now, let's target the <strong>second</strong> item in the list.">
+```scss
+.list-wrapper{
+  .list-item{
+    @include only(2) {
+      background-color: #5bc0bb;
+      color: white;
+    }
+  }
+}
+```
+```html
+<div class="list-wrapper example03">
+  <div class="list-item">01</div>
+  <div class="list-item">02</div>
+  <div class="list-item">03</div>
+  <div class="list-item">04</div>
+  <div class="list-item">05</div>
+  <div class="list-item">06</div>
+</div>
+```
+</Example>
+
+<Example caption="Let's get the elements whose position is odd (e.g. 1, 3, 5, and so on).">
+```scss
+.list-wrapper{
+  .list-item{
+    @include only(odd){
+      background-color: #5bc0bb;
+      color: white;
+    }
+  }
+}
+```
+```html
+<div class="list-wrapper example04">
+  <div class="list-item">01</div>
+  <div class="list-item">02</div>
+  <div class="list-item">03</div>
+  <div class="list-item">04</div>
+  <div class="list-item">05</div>
+  <div class="list-item">06</div>
+</div>
+```
+</Example>
+
+<Hint kind="info">
+
+Remember that when you make a multiple selection, the arguments you pass must be numbers separated by commas.
+
+</Hint>
+
+<Example caption="Now, let's try something really fancy!">
+```scss
+.list-wrapper{
+  .list-item{
+    @include only(4, 5, 6) {
+      background-color: #5bc0bb;
+      color: white;
+    }
+  }
+}
+```
+```html
+<div class="list-wrapper example05">
+  <div class="list-item">01</div>
+  <div class="list-item">02</div>
+  <div class="list-item">03</div>
+  <div class="list-item">04</div>
+  <div class="list-item">05</div>
+  <div class="list-item">06</div>
+</div>
+```
+</Example>
+
+<Hint kind="info">
+
+**Information:** You can pass negative values to target elements based on their position among a group of siblings, counting from the end.
+
+</Hint>
+
+<Example caption="Now suppose you don't know how many items will appear in the list, and <strong>you want to target only the third item from the end</strong>. How can you do that? It's surprisingly easy!">
+```scss
+.list-wrapper {
+  .list-item {
+    @include only(-3) {
+      background-color: #5bc0bb;
+      color: white;
+    }
+  }
+}
+```
+```html
+<div class="list-wrapper example06">
+  <div class="list-item exclude">01</div>
+  <div class="list-item">02</div>
+  <div class="list-item">03</div>
+  <div class="list-item">04</div>
+  <div class="list-item">05</div>
+  <div class="list-item exclude">06</div>
+</div>
+```
+</Example>
+
+<Example caption="Now let's pass multiple negative values.">
+```scss
+.list-wrapper {
+  .list-item {
+    @include only(-1, -2, -4) {
+      background-color: #5bc0bb;
+      color: white;
+    }
+  }
+}
+```
+```html
+<div class="list-wrapper example07">
+  <div class="list-item exclude">01</div>
+  <div class="list-item">02</div>
+  <div class="list-item">03</div>
+  <div class="list-item">04</div>
+  <div class="list-item">05</div>
+  <div class="list-item exclude">06</div>
+</div>
+```
+</Example>
+
+<Example caption="Now let's pass <strong>positive and negative values together</strong>.">
+```scss
+.list-wrapper {
+  .list-item {
+    @include only(1, -2) {
+      background-color: #5bc0bb;
+      color: white;
+    }
+  }
+}
+```
+```html
+<div class="list-wrapper example08">
+  <div class="list-item exclude">01</div>
+  <div class="list-item">02</div>
+  <div class="list-item">03</div>
+  <div class="list-item">04</div>
+  <div class="list-item">05</div>
+  <div class="list-item exclude">06</div>
+</div>
+```
+</Example>
+
+

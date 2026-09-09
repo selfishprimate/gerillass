@@ -1,0 +1,65 @@
+---
+title: "Sprite"
+page_title: "Sprite Sass Mixin"
+page_description: "The Sprite Sass mixin helps you apply background images to the selected elements using the CSS sprite technique."
+page_keywords: "CSS Sprite, Sass Sprite, CSS Sprite Technique, CSS Sprite Sheet Generator, CSS Sprite Tool, CSS Sprite Background Position, CSS Sprite and Image Maps"
+page_image: "gerillass-sprite.jpg"
+---
+
+# Sprite
+
+<Member name="sprite">
+
+The **Sprite** Sass mixin helps you apply background images to the selected elements using the CSS sprite technique.
+
+</Member>
+
+## Arguments
+
+<Arguments of="sprite" footnote="To learn more about the <code>background-position</code> property values, check out the [links](#related-articles) at the end of the page.">
+  <Argument name="$image-url" type="string">The URL of the sprite image. <strong>Important:</strong> Don't forget that the image link must be either absolute or relative to the generated CSS file.</Argument>
+  <Argument name="$position" type="number | string">Sets the position of the <code>background-image</code>. <strong>Multiple values must be separated by a space.</strong></Argument>
+</Arguments>
+
+## Examples
+
+<Hint kind="info">
+
+**Important:** Don't forget to give `width` and `height` values to the selected element. **It is very important to know the exact size of the image you want to select from a sprite sheet.**
+
+</Hint>
+
+<Example caption="You can apply it to a single element and pass both the <code>$image-url</code> and <code>$position</code> arguments using the one-line method.">
+```scss
+.sprite-element{
+  @include sprite("../images/sprite.png", 0 0);
+}
+```
+```html
+<div class="sprite-elements">
+  <div class="sprite-element single"></div>
+</div>
+```
+</Example>
+
+<Example caption="Or you can apply it to multiple elements, with a different image for each one selected from a single sprite sheet. <strong>Suppose you have markup like the one below, and you want to assign a different background image to each element from a single sprite sheet.</strong>">
+```scss
+.sprite-element{
+  width: 100px;
+  height: 100px;
+  @include sprite("sprite.png");
+}
+```
+```html
+<div class="sprite-element first"></div>
+<div class="sprite-element second"></div>
+<div class="sprite-element third"></div>
+<div class="sprite-element fourth"></div>
+```
+</Example>
+
+Easy, isn't it?
+
+## Related Articles
+* [CSS Sprites](https://css-tricks.com/css-sprites/)
+* [Background Position](https://developer.mozilla.org/en-US/docs/Web/CSS/background-position)

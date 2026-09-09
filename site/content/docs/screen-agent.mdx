@@ -1,0 +1,51 @@
+---
+title: "Screen Agent"
+page_title: "Screen Agent Sass Mixin"
+page_description: "The Screen Agent Sass mixin helps you target elements based on different screen resolutions."
+page_image: "gerillass-screen-agent.jpg"
+---
+
+# Screen Agent
+
+<Member name="screen-agent">
+
+The **Screen Agent Sass mixin** helps you target elements based on different screen resolutions.
+<Hint kind="info">
+
+Suppose you have two types of photos loading on your site: one for normal screens, and another one at twice the size for retina screens. In cases like that, you may want to use this mixin.
+
+</Hint>
+
+</Member>
+
+## Arguments
+
+<Arguments of="screen-agent" footnote="String values must be wrapped in quotation marks.">
+  <Argument name="$resolution" type="string,<br/>number (with unit)">Accepts one argument with three possible values that target the screen resolution: <code>1x</code>, <code>2x</code>, and <code>3x</code>. You can also pass a custom numeric value with <code>dpi</code> or <code>dpcm</code> units.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="Based on the case above, we can give the following example.">
+```scss
+.element{
+  background-image: url(https://sample-site.com/images/sample-image-1920x1080.jpg);
+  @include screen-agent("2x"){
+    background-image: url(https://sample-site.com/images/sample-image-3840x2160.jpg);
+  }
+}
+```
+</Example>
+
+<Example caption="Now, let's try it with a custom value.">
+```scss
+.element{
+  background-color: green;
+  @include screen-agent(192dpi){
+    background-color: teal;
+  }
+}
+```
+</Example>
+
+

@@ -1,0 +1,50 @@
+---
+title: "Smartphone"
+page_title: "Smartphone Sass Mixin"
+page_description: "There will be times when you need to style elements for one particular smartphone model only. The Smartphone Sass mixin helps you do that."
+page_image: "gerillass-smartphone.jpg"
+---
+
+# Smartphone
+
+<Member name="smartphone">
+
+There will be times when you need to style elements for one particular smartphone model only. The **Smartphone** Sass mixin helps you do that.
+<Hint kind="info">
+
+**Tip:** There are predefined values for commonly used smartphone models in the `_map-for-smartphones.scss` file. **You can add more model specifications here to expand the list if you like.**
+
+</Hint>
+
+</Member>
+
+## Arguments
+
+<Arguments of="smartphone" footnote="String values can be passed with or without quotation marks.">
+  <Argument name="$device" type="string">Accepts the name of a smartphone model. Predefined values are <code>iPhone4</code>, <code>iPhone-SE</code>, <code>iPhone5-SE</code>, <code>iPhone6</code>, <code>iPhone6-Plus</code>, <code>iPhone7</code>, <code>iPhone7-Plus</code>, <code>iPhone8</code>, <code>iPhone8-Plus</code>, <code>iPhone11</code>, <code>iPhone11-Pro</code>, <code>iPhone11-Pro-Max</code>, <code>iPhoneX</code>, <code>Galaxy-S7</code>, <code>Galaxy-S8</code>, <code>Galaxy-S8-Plus</code>, <code>Galaxy-S10</code>.</Argument>
+  <Argument name="$orientation" type="string">Accepts two values: <code>portrait</code> and <code>landscape</code>. The default value is <code>portrait</code>.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="First, call the mixin and pass only the <code>$device</code> model name. Unless you pass a value for <code>$orientation</code>, it will be <code>portrait</code>.">
+```scss
+.element {
+  @include smartphone(iPhone8) {
+    background-color: teal;
+  }
+}
+```
+</Example>
+
+<Example caption="Now let's pass two arguments: one for the <code>$device</code> model name, and the other for the <code>$orientation</code>.">
+```scss
+.element{
+  @include smartphone(iPhone8-Plus, landscape){
+    background-color: teal;
+  }
+}
+```
+</Example>
+
+

@@ -1,0 +1,49 @@
+---
+title: "Border Box"
+page_title: "Border Box Sass Mixin"
+page_description: "The Border Box Sass mixin sets the box-sizing CSS property to border-box for the selected HTML elements."
+page_image: "gerillass-border-box.jpg"
+---
+
+# Border Box
+
+<Member name="border-box">
+
+The **Border Box** Sass mixin sets the [box-sizing CSS property](https://developer.mozilla.org/en-US/docs/Web/CSS/box-sizing) to `border-box` for the selected HTML elements. This keeps the padding and the border inside the element.
+
+</Member>
+
+## Arguments
+
+<Arguments of="border-box" footnote="Please check out the links at the end of the page to learn more about box sizing.">
+  <Argument name="$value" type="string">Accepts the <code>only</code> value. Use it when you want to apply the styles to one specific HTML element.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="If you call the mixin inside a selector without passing a value, the style rules apply to that element and all of its children.">
+```scss
+.element {
+  @include border-box;
+}
+```
+</Example>
+
+<Example caption="Pass the <code>only</code> value as an argument to apply the style rules only to the selected element.">
+```scss
+.element {
+  @include border-box("only");
+}
+```
+</Example>
+
+<Example caption="Call the mixin at the root of your stylesheet to target all the HTML elements.">
+```scss
+@include border-box;
+```
+</Example>
+
+## Related Articles
+* [CSS Box Sizing](https://www.w3schools.com/css/css3_box-sizing.asp)
+* [Box Sizing](https://css-tricks.com/box-sizing/)
+

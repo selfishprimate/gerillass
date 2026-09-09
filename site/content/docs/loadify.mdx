@@ -1,0 +1,218 @@
+---
+title: "Loadify"
+page_title: "Loadify Sass Mixin"
+page_description: "Loadify Sass mixin is a handy tool that helps you make a page element load with a smooth fade-in effect while the page is loading. It also allows you to create smooth image loading effects."
+page_keywords: "Smooth Image Loading with Sass, Smooth Page Loading, Medium Image Loading, Bootstrap Lazy Load Images, CSS Image Loading, Sass Image Loading, Lazy Load Content, Smooth Content Loading, CSS Smooth Content Loading, Defer Image Loading"
+css: css/styles.css
+page_image: "gerillass-loadify.jpg"
+---
+
+# Loadify
+
+<Member name="loadify">
+
+The The **Loadify Sass mixin** is a handy tool that helps you make a page element load with a smooth fade-in effect while the page is loading.
+
+<Hint kind="info">
+
+**Reduced motion is handled for you.** Under `prefers-reduced-motion: reduce` the end state is applied directly and no animation runs, so the content is simply there.
+
+Note that **switching the animation off would not have worked.** The element starts at `opacity: 0` with `visibility: hidden`, and the animation is the thing that reveals it. Turning the animation off and doing nothing else would have left the content invisible for good. That is why the mixin sets the end state instead, and only then sets `animation: none`.
+
+</Hint>
+
+</Member>
+
+## Arguments
+
+<Arguments of="loadify" footnote="The time value must be given in either seconds (s) or milliseconds (ms). The value must be zero or positive, and the unit is always required.">
+  <Argument name="$mode" type="string">Accepts <code>init</code> value. This initializes the whole effects for the selected elements. <strong>It must be called once at the root of your stylesheet document.</strong></Argument>
+  <Argument name="$delay" type="time">Specifies the amount of time a design element must wait before it starts appearing on the page. The default value is set to <code>0.2s</code>.</Argument>
+  <Argument name="$duration" type="time">Sets the length of time a page element takes to load. <strong>This is the second argument. It must always come last and cannot be used on its own.</strong> The default value is <code>0.5s</code>.</Argument>
+</Arguments>
+
+## Examples
+
+```scss
+@include loadify(init);
+```
+```css
+//CSS Output
+@keyframes loadify {
+  to {
+    opacity: 1;
+    visibility: visible;
+    backface-visibility: visible;
+  }
+}
+```
+
+<Hint kind="info">
+
+**Keep in mind!** You are free to give the element any selector name you want.
+
+</Hint>
+
+<Example caption="Let's see the animation on an image element. Call the Loadify mixin inside the element's selector and <strong>do not pass any arguments</strong> yet, just to see the loading effect with the default timing values. 
+
+<strong>Now scroll to the image and refresh the page to see how smooth the image appears on the page.</strong>" setup="@include loadify(init);">
+```scss
+.loadify-img {
+  @include loadify();
+}
+```
+```html
+<figure class="highlight-figure loadify-figure example-1">
+  <img src="images/01.jpg" />
+</figure>
+```
+</Example>
+
+<Example caption="Let's dive a bit deeper to understand exactly what this handy tool can do.
+
+Suppose you have a group of items like the ones below, and you want them to appear smoothly as the page loads." setup="@include loadify(init);">
+```scss
+.parent-element {
+  .item {
+    @include loadify();
+  }
+}
+```
+```html
+<div class="parent-element">
+  <div class="item">01</div>
+  <div class="item">02</div>
+  <div class="item">03</div>
+  <div class="item">04</div>
+  <div class="item">05</div>
+  <div class="item">06</div>
+  <div class="item">07</div>
+  <div class="item">08</div>
+</div>
+```
+</Example>
+
+<Example caption="Now let's pass <code>1s</code> as a custom value for the <code>animation-delay</code> CSS property, to set how long the selected element waits before it starts to appear.
+
+<strong>Refresh the page to see the effect.</strong>" setup="@include loadify(init);">
+```scss
+.parent-element {
+  .item {
+    @include loadify(1s);
+  }
+}
+```
+```html
+<div class="parent-element example-03">
+  <div class="item">01</div>
+  <div class="item">02</div>
+  <div class="item">03</div>
+  <div class="item">04</div>
+  <div class="item">05</div>
+  <div class="item">06</div>
+  <div class="item">07</div>
+  <div class="item">08</div>
+</div>
+
+It's getting more interesting, isn't it?
+```
+</Example>
+
+<Example caption="Now we are going to try a fantastic example to see how the Gerillass Sass library can ease your frontend development, and how well it works when you combine two or more mixins.
+
+We will use the <code>only</code> mixin to select items in the list based on their index positions, and then call the <code>loadify</code> mixin inside each of those selectors to make the elements appear at different times (with different delay and duration values).
+
+<strong>Scroll to the bottom of this example and refresh the page to see the effect.</strong>" setup="@include loadify(init);">
+```scss
+.parent-element {
+  .item {
+    @include only(1) {
+      @include loadify(0.2s);
+    }
+    @include only(2) {
+      @include loadify(0.4s);
+    }
+    @include only(3) {
+      @include loadify(0.6s);
+    }
+    @include only(4) {
+      @include loadify(0.8s);
+    }
+    @include only(5) {
+      @include loadify(0.1s);
+    }
+    @include only(6) {
+      @include loadify(1.2s);
+    }
+    @include only(7) {
+      @include loadify(1.4s);
+    }
+    @include only(8) {
+      @include loadify(1.6s);
+    }
+  }
+}
+```
+```html
+<div class="parent-element example-04">
+  <div class="item">01</div>
+  <div class="item">02</div>
+  <div class="item">03</div>
+  <div class="item">04</div>
+  <div class="item">05</div>
+  <div class="item">06</div>
+  <div class="item">07</div>
+  <div class="item">08</div>
+</div>
+```
+</Example>
+
+<Example caption="Now let's try another sexy example. This time we are going to <strong>change the display order of the boxes (we will be using a diagonal pattern)</strong> and <strong>pass a value for the second argument to control the value of the <code>animation-duration</code> CSS property</strong>.
+
+The display order will be as follows: &quot;<strong>1</strong>&quot;, &quot;<strong>6</strong>&quot;, &quot;<strong>3</strong>&quot;, &quot;<strong>8</strong>&quot;, &quot;<strong>5</strong>&quot;, &quot;<strong>2</strong>&quot;, &quot;<strong>7</strong>&quot;, &quot;<strong>4</strong>&quot; 
+
+<strong>Scroll to the bottom of this example and refresh the page to see the effect.</strong>" setup="@include loadify(init);">
+```scss
+.parent-element {
+  .item {
+    @include only(1) {
+      @include loadify(0.2s, 0.5s);
+    }
+    @include only(2) {
+      @include loadify(1.2s, 3s);
+    }
+    @include only(3) {
+      @include loadify(0.6s, 1.5s);
+    }
+    @include only(4) {
+      @include loadify(1.6s, 4s);
+    }
+    @include only(5) {
+      @include loadify(1s, 2.5s);
+    }
+    @include only(6) {
+      @include loadify(0.4s, 1s);
+    }
+    @include only(7) {
+      @include loadify(1.4s, 3.5s);
+    }
+    @include only(8) {
+      @include loadify(0.8s, 2s);
+    }
+  }
+}
+```
+```html
+<div class="parent-element example-05">
+  <div class="item">01</div>
+  <div class="item">02</div>
+  <div class="item">03</div>
+  <div class="item">04</div>
+  <div class="item">05</div>
+  <div class="item">06</div>
+  <div class="item">07</div>
+  <div class="item">08</div>
+</div>
+```
+</Example>
+
