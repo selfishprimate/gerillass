@@ -11,10 +11,10 @@ The suite tests every member at four depths. Know which one you are adding to:
 
 | Level | Proves | Coverage |
 |---|---|---|
-| smoke (`test/smoke.scss`) | the mixin evaluates | 52/52 mixins |
-| snapshot (`meta/` examples) | its output cannot change unnoticed | 75/75 members |
-| rejection (`meta/` rejects) | bad input is refused, with the library's own message | 46/75 |
-| **sass-true spec** | **the CSS is correct** | **12/75** |
+| smoke (`test/smoke.scss`) | the mixin evaluates | 53/53 mixins |
+| snapshot (`meta/` examples) | its output cannot change unnoticed | 76/76 members |
+| rejection (`meta/` rejects) | bad input is refused, with the library's own message | 47/76 |
+| **sass-true spec** | **the CSS is correct** | **12/76** |
 
 The first three come free from a `meta/` entry. A sass-true spec is the only one
 that says the output was right in the first place — a snapshot of a wrong value

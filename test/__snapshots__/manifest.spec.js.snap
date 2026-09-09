@@ -821,6 +821,46 @@ exports[`Manifest examples isTime: .a { animation-duration: isTime(0.4s); } 1`] 
 }"
 `;
 
+exports[`Manifest examples line-clamp: .default { @include line-clamp; } 1`] = `
+".default {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  overflow: hidden;
+}"
+`;
+
+exports[`Manifest examples line-clamp: .excerpt { @include line-clamp(3); } 1`] = `
+".excerpt {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  overflow: hidden;
+}"
+`;
+
+exports[`Manifest examples line-clamp: .full { @include line-clamp(none); } 1`] = `
+".full {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: none;
+  line-clamp: none;
+  overflow: hidden;
+}"
+`;
+
+exports[`Manifest examples line-clamp: .title { @include line-clamp(2); } 1`] = `
+".title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}"
+`;
+
 exports[`Manifest examples linear-gradient: .a { @include linear-gradient("top", (red, blue)); } 1`] = `
 ".a {
   background: linear-gradient(to top, red, blue);

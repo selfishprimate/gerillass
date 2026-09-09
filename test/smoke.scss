@@ -53,6 +53,7 @@
 .escape-to-parent { @include escape-to-parent(".parent") { color: red; } }
 .except { @include except("first") { color: red; } }
 .hide { @include hide; }
+.line-clamp { @include line-clamp(3); }
 .linear-gradient { @include linear-gradient("top", red blue); }
 .only { @include only("first") { color: red; } }
 .placeholder { @include placeholder { color: gray; } }

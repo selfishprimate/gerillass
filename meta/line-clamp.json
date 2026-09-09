@@ -1,0 +1,19 @@
+{
+  "name": "line-clamp",
+  "summary": "Truncates text after a number of lines, where ellipsis truncates one. It emits five declarations rather than one because -webkit-line-clamp does nothing on its own: without display: -webkit-box or without -webkit-box-orient: vertical the text is not clamped at all and nothing warns you, and without overflow: hidden the clamped text spills out below the box. The unprefixed line-clamp is emitted too, for when it becomes Baseline.",
+  "arguments": [
+    { "name": "$lines", "accepts": ["a whole number of lines, at least 1", "none, to undo a clamp"] }
+  ],
+  "examples": [
+    ".excerpt { @include line-clamp(3); }",
+    ".title { @include line-clamp(2); }",
+    ".full { @include line-clamp(none); }",
+    ".default { @include line-clamp; }"
+  ],
+  "rejects": [
+    ".a { @include line-clamp(0); }",
+    ".a { @include line-clamp(2.5); }",
+    ".a { @include line-clamp(3px); }",
+    ".a { @include line-clamp(\"three\"); }"
+  ]
+}

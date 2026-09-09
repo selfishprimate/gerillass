@@ -1,6 +1,6 @@
 # Gerillass
 
-> A Sass toolkit of 52 mixins and 23 functions, built to be read by coding agents as well as by people. Every member is described in a machine-readable manifest whose examples and refusals are executed by the test suite, so the documentation cannot drift away from the code.
+> A Sass toolkit of 53 mixins and 23 functions, built to be read by coding agents as well as by people. Every member is described in a machine-readable manifest whose examples and refusals are executed by the test suite, so the documentation cannot drift away from the code.
 
 Gerillass is a pure Sass library. There is no build step and no runtime dependency: the `.scss` sources are the deliverable, and the package installs nothing else. It needs Dart Sass; LibSass and node-sass are not supported. This file describes Gerillass 2.0.1.
 
@@ -41,6 +41,7 @@ Arguments are validated and refused with a message naming what is accepted, so a
 - [except($params...)](https://docs.gerillass.com/docs/except/): Selects every sibling except the ones named.
 - [font-face($font-family, $file-path, $font-style: normal, $font-weight: 400, $file-formats: eot woff2 woff ttf svg)](https://docs.gerillass.com/docs/font-face/): Emits an @font-face rule for one family across several file formats.
 - [hide($toggle: "hide")](https://docs.gerillass.com/docs/hide/): Visually hides an element while keeping it available to screen readers, or reverses that.
+- [line-clamp($lines: 3)](https://docs.gerillass.com/docs/line-clamp/): Truncates text after a number of lines, where ellipsis truncates one.
 - [linear-gradient($direction, $colors)](https://docs.gerillass.com/docs/linear-gradient/): Linear gradient background from a direction name or an angle.
 - [loadify($params...)](https://docs.gerillass.com/docs/loadify/): Fades elements in on page load.
 - [only($params...)](https://docs.gerillass.com/docs/only/): Selects only the siblings named.

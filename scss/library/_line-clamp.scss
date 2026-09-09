@@ -1,0 +1,36 @@
+@charset "UTF-8";
+
+@use "sass:math";
+@use "sass:meta";
+
+// Truncates text after a number of lines. `ellipsis` does one line; this does
+// several, and needs five declarations rather than one because -webkit-line-clamp
+// only works alongside two other properties.
+//
+// All five were measured in a browser, on a paragraph that runs to five lines
+// with a clamp of three:
+//
+//   the three together        3 lines, with an ellipsis
+//   without -webkit-box-orient    5 lines, no clamping and no warning
+//   without display: -webkit-box  5 lines, likewise
+//   the standard line-clamp alone 5 lines; it is not Baseline yet
+//   without overflow: hidden      the box is 3 lines, but the rest of the text
+//                                 spills out below it
+//
+// So the standard property is emitted for the future and the prefixed trio is
+// what actually does the work today.
+@mixin line-clamp($lines: 3) {
+  @if $lines != none {
+    @if meta.type-of($lines) != "number" or not math.is-unitless($lines) {
+      @error "`#{$lines}` is not a valid $lines for `line-clamp`. Pass a whole number of lines, or `none` to undo a clamp.";
+    }
+    @if $lines < 1 or $lines != math.round($lines) {
+      @error "`#{$lines}` is not a valid $lines for `line-clamp`. Pass a whole number of lines that is at least 1, or `none` to undo a clamp.";
+    }
+  }
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: $lines;
+  line-clamp: $lines;
+  overflow: hidden;
+}

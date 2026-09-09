@@ -5,7 +5,7 @@ description: Use the Gerillass Sass mixin library — loading it, the mixin cata
 
 # Gerillass
 
-A Sass mixin library: 52 mixins and 23 functions that emit CSS from
+A Sass mixin library: 53 mixins and 23 functions that emit CSS from
 semantic declarations. It is Sass source only — there is no runtime and no
 utility classes, so styles live in your stylesheet and your markup stays clean.
 
@@ -85,6 +85,7 @@ a dropped declaration rather than an error.
 | `except` | `.a { @include except(#ff0000) { margin: 0; } }` |
 | `font-face` | `.a { @include font-face("Inter", "/fonts/inter"); }` |
 | `hide` | `.a { @include hide(nonsense); }` |
+| `line-clamp` | `.a { @include line-clamp(0); }` |
 | `linear-gradient` | `.a { @include linear-gradient(sideways, (red, blue)); }` |
 | `loadify` | `@include loadify(nonsense);` |
 | `only` | `.a { @include only(#ff0000) { margin: 0; } }` |
@@ -132,6 +133,7 @@ a dropped declaration rather than an error.
 | `except($params...)` | Selects every sibling except the ones named. |
 | `font-face($font-family, $file-path, $font-style: normal, $font-weight: 400, $file-formats: eot woff2 woff ttf svg)` | Emits an @font-face rule for one family across several file formats. Must be called at the root. |
 | `hide($toggle: "hide")` | Visually hides an element while keeping it available to screen readers, or reverses that. |
+| `line-clamp($lines: 3)` | Truncates text after a number of lines, where ellipsis truncates one. It emits five declarations rather than one because -webkit-line-clamp does nothing on its own: without display: -webkit-box or without -webkit-box-orient: vertical the text is not clamped at all and nothing warns you, and without overflow: hidden the clamped text spills out below the box. The unprefixed line-clamp is emitted too, for when it becomes Baseline. |
 | `linear-gradient($direction, $colors)` | Linear gradient background from a direction name or an angle. |
 | `loadify($params...)` | Fades elements in on page load. Call once at the root to set up, then on each element. |
 | `only($params...)` | Selects only the siblings named. |
