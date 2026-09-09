@@ -1,0 +1,100 @@
+# Gerillass
+
+> A Sass toolkit of 50 mixins and 22 functions, built to be read by coding agents as well as by people. Every member is described in a machine-readable manifest whose examples and refusals are executed by the test suite, so the documentation cannot drift away from the code.
+
+Gerillass is a pure Sass library. There is no build step and no runtime dependency: the `.scss` sources are the deliverable, and the package installs nothing else. Dart Sass only, version 2.0.0 and later.
+
+Load it with `@use "gerillass" as *;` under a bundler, or `@use "pkg:gerillass" as *;` with the Dart Sass package importer.
+
+Every mixin answers to two names, bare and prefixed: `@include circle(50px)` and `@include gls-circle(50px)` are the same mixin and produce identical CSS. The prefix exists to avoid collisions with other libraries. You can also namespace the whole library instead, with `@use "gerillass" as gls;` and `@include gls.circle(50px)`.
+
+Mixins are kebab-case and always need `@include`. Functions are camelCase and never take it. That is the whole naming convention, and it is what tells the two apart at a call site.
+
+Arguments are validated and refused with a message naming what is accepted, so a wrong call produces an error rather than a missing declaration. The exception is a value passed straight through to CSS, which is left alone so that `var()`, `calc()` and `clamp()` keep working.
+
+## Mixins
+
+- [adaptive($gutter: 30px)](https://docs.gerillass.com/docs/adaptive/): Centred container whose max-width steps up at every breakpoint.
+- [after($content: null)](https://docs.gerillass.com/docs/after/): Styles the ::after pseudo-element.
+- [all-buttons($pseudo: null)](https://docs.gerillass.com/docs/all-buttons/): Targets every button-like element at once, optionally in one pseudo-class state.
+- [all-text-inputs($pseudo: null)](https://docs.gerillass.com/docs/all-text-inputs/): Targets every text-like input at once, optionally in one pseudo-class state.
+- [antialias($value: null)](https://docs.gerillass.com/docs/antialias/): Turns on subpixel-antialiased text smoothing.
+- [aspect-ratio($ratio: null, $fit: cover)](https://docs.gerillass.com/docs/aspect-ratio/): Holds an element to a ratio and adds what CSS aspect-ratio alone leaves out: object-fit so an image is cropped rather than stretched, and border: 0 so an iframe does not overflow its container by 4px.
+- [background-dots($color: null, $size: 1em, $gutter: $size * 5, $diagonal: true, $image: null)](https://docs.gerillass.com/docs/background-dots/): Repeating dot pattern as a background, optionally over an image.
+- [background-image($image-url: null, $filter-color: null, $filter-direction: null)](https://docs.gerillass.com/docs/background-image/): Background image with an optional colour or gradient filter laid over it.
+- [background-stripes($color: null, $thickness: 1em, $rotation: -45deg, $image: null)](https://docs.gerillass.com/docs/background-stripes/): Repeating stripe pattern as a background, optionally over an image.
+- [before($content: null)](https://docs.gerillass.com/docs/before/): Styles the ::before pseudo-element.
+- [border-box($value: null)](https://docs.gerillass.com/docs/border-box/): Applies box-sizing: border-box.
+- [border-radius($args...)](https://docs.gerillass.com/docs/border-radius/): Rounds corners, either all of them, one named corner, or all four individually.
+- [brand-logo($width, $height, $image-url: null)](https://docs.gerillass.com/docs/brand-logo/): Logo box with an image and an accessible stretched link over it.
+- [breakpoint($params...)](https://docs.gerillass.com/docs/breakpoint/): Media query built from the breakpoint map, or from raw lengths.
+- [breakpointer($selector: null)](https://docs.gerillass.com/docs/breakpointer/): Debug helper that prints the active breakpoint name into a pseudo-element.
+- [center($axis: "both")](https://docs.gerillass.com/docs/center/): Absolutely centres an element inside its positioned parent.
+- [circle($size)](https://docs.gerillass.com/docs/circle/): Square element with a fully rounded border, i.e.
+- [clearfix](https://docs.gerillass.com/docs/clearfix/): Clears floated children using an ::after pseudo-element.
+- [columnizer($params...)](https://docs.gerillass.com/docs/columnizer/): Flexbox grid of equal columns, with an optional gutter and fill behaviour.
+- [counter($params...)](https://docs.gerillass.com/docs/counter/): CSS counter for a list, with optional text before and after the number.
+- [ellipsis($width: 100%, $display: inline-block)](https://docs.gerillass.com/docs/ellipsis/): Truncates a single line of text with an ellipsis.
+- [escape-to-parent($selector: null)](https://docs.gerillass.com/docs/escape-to-parent/): Re-roots the current selector under another one using @at-root.
+- [except($params...)](https://docs.gerillass.com/docs/except/): Selects every sibling except the ones named.
+- [font-face($font-family, $file-path, $font-style: normal, $font-weight: 400, $file-formats: eot woff2 woff ttf svg)](https://docs.gerillass.com/docs/font-face/): Emits an @font-face rule for one family across several file formats.
+- [hide($toggle: "hide")](https://docs.gerillass.com/docs/hide/): Visually hides an element while keeping it available to screen readers, or reverses that.
+- [linear-gradient($direction, $colors)](https://docs.gerillass.com/docs/linear-gradient/): Linear gradient background from a direction name or an angle.
+- [loadify($params...)](https://docs.gerillass.com/docs/loadify/): Fades elements in on page load.
+- [only($params...)](https://docs.gerillass.com/docs/only/): Selects only the siblings named.
+- [placeholder-shown](https://docs.gerillass.com/docs/placeholder-shown/): Styles an input while its placeholder is visible.
+- [placeholder](https://docs.gerillass.com/docs/placeholder/): Styles the placeholder text of an input across vendor prefixes.
+- [position($position: absolute, $offsets: 0)](https://docs.gerillass.com/docs/position/): Sets position and offsets in one call, using shorthand order.
+- [radial-gradient($shape, $position, $colors)](https://docs.gerillass.com/docs/radial-gradient/): Radial gradient background from a shape and a position.
+- [remove($params...)](https://docs.gerillass.com/docs/remove/): Hides an element outright, or only within a breakpoint range.
+- [reset-css](https://docs.gerillass.com/docs/reset-css/): Meyer reset.
+- [reset-figure](https://docs.gerillass.com/docs/reset-figure/): Removes default figure margins and makes the image inside responsive.
+- [resizable($direction: both, $overflow: auto)](https://docs.gerillass.com/docs/resizable/): Makes an element user-resizable.
+- [responsive-image](https://docs.gerillass.com/docs/responsive-image/): Makes an image fill its container width.
+- [scissors($corners)](https://docs.gerillass.com/docs/scissors/): Cuts the corners off an element with clip-path.
+- [screen-agent($resolution)](https://docs.gerillass.com/docs/screen-agent/): Media query targeting a screen pixel density.
+- [sizer($width, $height: $width)](https://docs.gerillass.com/docs/sizer/): Sets width and height together; one argument makes a square.
+- [smartphone($device, $orientation: null)](https://docs.gerillass.com/docs/smartphone/): Media query targeting a known smartphone by device dimensions.
+- [sprite($params...)](https://docs.gerillass.com/docs/sprite/): Sets up an element as a sprite tile: an image, a background position, or both.
+- [stretched-link($value: "before")](https://docs.gerillass.com/docs/stretched-link/): Expands a link to cover its positioned parent, so the whole card is clickable.
+- [tablet($device, $orientation: null)](https://docs.gerillass.com/docs/tablet/): Media query targeting a known tablet by device dimensions.
+- [text-gradient($direction, $colors)](https://docs.gerillass.com/docs/text-gradient/): Applies a linear gradient to the text itself via background-clip.
+- [text-image($image: null)](https://docs.gerillass.com/docs/text-image/): Fills the text with an image via background-clip.
+- [text-selection($value: null)](https://docs.gerillass.com/docs/text-selection/): Styles the ::selection pseudo-element.
+- [text-shadow($params...)](https://docs.gerillass.com/docs/text-shadow/): Layered text shadows built from a direction, a colour and an offset.
+- [text-stroke($fallback-color: black, $color: transparent, $stroke-color: black, $stroke-width: 1px)](https://docs.gerillass.com/docs/text-stroke/): Outlines text using the webkit text-stroke properties.
+- [triangle($direction: "bottom", $color: black, $size: 10px 8px)](https://docs.gerillass.com/docs/triangle/): Draws a CSS triangle out of borders, pointing in a given direction.
+
+## Functions
+
+- [clearUnit($value)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_clear-unit.scss): Strips the unit off a number, returning it unitless.
+- [clearWhitespace($string)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_clear-whitespace.scss): Removes every space from a string.
+- [convertToEm($value)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_convert-to-em.scss): Converts a pixel length to em, against a 16px base.
+- [convertToNumber($value)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_convert-to-number.scss): Parses a string of digits into a number.
+- [fillNulls($value, $seperation: comma, $skip: false)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_fill-nulls.scss): Replaces null entries in a list with 0, or drops them.
+- [fontSizer($size, $time)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_font-sizer.scss): Multiplies a size by a factor.
+- [fontSource($font-family, $file-path, $file-formats)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_font-source.scss): Builds one src entry for an @font-face rule.
+- [isColor($value)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_is-color.scss): Returns the value if every item in it is a colour, and errors otherwise.
+- [isGutter($value)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_is-gutter.scss): True for anything that can sit where a CSS length is expected: a number, a calculation, or a CSS function such as var().
+- [isNumber($value)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_is-number.scss): Returns the value if it is a number.
+- [isTime($value)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_is-time.scss): Returns the value if it is a time in s or ms, and errors otherwise.
+- [mapDeepGet($map, $keys...)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_map-deep-get.scss): Reads a value out of a nested map by following a chain of keys.
+- [pixelify($value)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_pixelify.scss): Returns the value with a px unit, adding one if it is missing.
+- [pseudoSelector($elements, $pseudo: null)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_pseudo-selector.scss): Appends a pseudo-class to every selector in a list.
+- [remify($value)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_remify.scss): Converts a pixel length to rem, against a 16px root.
+- [shade($color, $percentage)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_shade.scss): Mixes a colour towards black by a percentage.
+- [shorthandProperty($value)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_shorthand-property.scss): Expands one to four values into the four-value CSS shorthand order.
+- [tint($color, $percentage)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_tint.scss): Mixes a colour towards white by a percentage.
+- [validateBreakpoint($value)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_validate-breakpoint.scss): Resolves a breakpoint name to its width, passing other values through.
+- [validateLength($value)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_validate-length.scss): Returns the value if it is a length or one of auto, inherit, initial, 0.
+- [validateRatio($ratio)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_validate-ratio.scss): Turns an aspect ratio into a value for the CSS aspect-ratio property.
+- [validateScissors($value)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_validate-scissors.scss): Normalises corner values for the scissors mixin, adding px where missing.
+
+## Optional
+
+- [gerillass.json](https://github.com/selfishprimate/gerillass/blob/main/gerillass.json): the full machine-readable API. Every member with its signature, what each argument accepts, examples that compile, and the inputs it refuses. Ships inside the installed package at `node_modules/gerillass/gerillass.json`.
+- [SKILL.md](https://github.com/selfishprimate/gerillass/blob/main/SKILL.md): the same material written as an agent skill, generated from the manifest. Ships in the package.
+- [README](https://github.com/selfishprimate/gerillass/blob/main/README.md): installation for Vite, webpack, Next.js, Angular, Gulp and Grunt, and how to point an agent at the two files above.
+- [MIGRATION.md](https://github.com/selfishprimate/gerillass/blob/main/MIGRATION.md): upgrading a project from 1.x to 2.0.0. The utility functions were renamed and two mixins were replaced.
+- [CHANGELOG](https://github.com/selfishprimate/gerillass/blob/main/CHANGELOG.md): what changed in every release.
+- [Source repository](https://github.com/selfishprimate/gerillass): the `.scss` sources, which are short and readable.

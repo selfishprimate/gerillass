@@ -32,6 +32,13 @@ if ! output=$(node tools/build-manifest.js 2>&1); then
   exit 2
 fi
 
+# llms.txt is derived from the manifest too, for the docs site.
+if ! llms=$(node tools/build-llms-txt.js 2>&1); then
+  echo "llms.txt could not be rebuilt:" >&2
+  echo "$llms" >&2
+  exit 2
+fi
+
 # SKILL.md is derived from the manifest, so it has to follow.
 if ! skill=$(node tools/build-skill.js 2>&1); then
   printf 'Rebuilding SKILL.md failed:\n%s\n' "$skill" >&2

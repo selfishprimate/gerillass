@@ -102,8 +102,8 @@ ${mixins.map(row).join("\n")}
 
 ## Functions
 
-Called like normal Sass functions. The two leading underscores mark them as
-functions rather than mixins; they are public API.
+Called like normal Sass functions, with no \`@include\`. They are public API,
+and camelCase is what tells them apart from the kebab-case mixins above.
 
 | Signature | What it does |
 |---|---|

@@ -67,6 +67,17 @@ Write what changed for a **user of the library**, not what changed in the repo.
 npm pack --dry-run
 ```
 
+`llms.txt` is generated too, and its links are the one thing no test can check,
+because they point at a site this repository does not build. A new mixin has no
+documentation page until someone writes one, so verify them by hand when the
+release adds a member:
+
+```bash
+grep -o 'https://[^)]*' llms.txt | sort -u | while read u; do
+  echo "$(curl -s -o /dev/null -w '%{http_code}' -L --max-time 20 "$u") $u"
+done | grep -v '^200'
+```
+
 Expect 94 files / ~38 kB as of v2.0.0: everything under `scss/`, the generated
 `gerillass.json` and `SKILL.md`, plus `README.md`, `LICENSE.md` and
 `package.json`. If `test/`, `meta/`, `tools/`, `yarn.lock` or

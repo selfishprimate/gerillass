@@ -40,7 +40,7 @@
     "sass-tool-set"
   ],
   "scripts": {
-    "manifest": "node tools/build-manifest.js && node tools/build-skill.js",
+    "manifest": "node tools/build-manifest.js && node tools/build-skill.js && node tools/build-llms-txt.js",
     "test": "jest"
   },
   "devDependencies": {

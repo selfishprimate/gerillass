@@ -139,10 +139,20 @@ never hand-edit either.
 |---|---|---|
 | `gerillass.json` | `tools/build-manifest.js` | signatures parsed from `scss/`, semantics from `meta/*.json` |
 | `SKILL.md` | `tools/build-skill.js` | `gerillass.json` |
+| `llms.txt` | `tools/build-llms-txt.js` | `gerillass.json` |
 
-Run both with `npm run manifest`. Only the two generated files ship; `meta/` and
-`tools/` are excluded in `.npmignore`, and `SKILL.md` is re-included there
-because the `*.md` rule would otherwise drop it.
+Run all three with `npm run manifest`. Only the first two ship; `meta/`,
+`tools/` and `llms.txt` are excluded in `.npmignore`, and `SKILL.md` is
+re-included there because the `*.md` rule would otherwise drop it.
+
+`llms.txt` follows the format at https://llmstxt.org/ and is meant to be served
+at `https://docs.gerillass.com/llms.txt`, so it is generated here and deployed
+from the docs repository. Its links are the one thing the test suite cannot
+check, since they point at a site this repository does not build: the 50 mixins
+link to documentation pages and the 22 functions link to their source, because
+only `remify` has a page of its own. All 78 links were verified by hand when it
+was written. Re-check them when a release adds a member, using the loop in
+`/release`.
 
 **What keeps them honest is `test/manifest.spec.js`**, and this is the whole
 point of the design:
