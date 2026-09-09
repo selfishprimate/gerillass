@@ -8,12 +8,12 @@
     sits under whatever comes before it, and on the landing page the last
     section carries 256px of bottom padding for exactly this.
 
-    A margin and not padding, which is the whole point. This element is a grid
-    and the containing block for the sticky list of pages, so padding here
-    extends how far that list can travel: it would slide down into the 256px
-    and end up behind the footer, which draws over it at z-index 200. A margin
-    leaves the grid ending where the content does, so the list stops there and
-    the footer pulls up into empty space.
+    A margin and not padding, which is the whole point. This element is the
+    containing block for the sticky list of pages, so padding here extends how
+    far that list can travel: it would slide down into the 256px and end up
+    behind the footer, which draws over it at z-index 200. A margin leaves the
+    box ending where the content does, so the list stops there and the footer
+    pulls up into empty space.
   */
   margin-bottom: remify(256px);
 
@@ -44,25 +44,40 @@
   }
 
   @include breakpoint(min, large) {
-    display: grid;
-    grid-template-columns: remify(240px) minmax(0, 1fr);
-    gap: remify(48px);
-    align-items: start;
+    position: relative;
+    padding-left: remify(288px);
 
     &__toggle { display: none; }
 
+    /*
+      Out of the flow, and that is the point.
+
+      As a grid column the list decided how tall the row was, because it is 77
+      items and most pages are shorter than that. On a short page the content
+      ended half a screen above a footer that had been pushed down to clear a
+      list nobody was looking at. Taken out of the flow it contributes no
+      height at all, and the page ends where the page ends.
+    */
     &__aside {
       display: block;
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: remify(240px);
+      height: 100%;
       margin-bottom: 0;
+    }
 
-      /*
-        The list stays in view while the page scrolls. Its own overflow is what
-        keeps a 76 item list from running past the bottom of the window, and
-        the offset leaves room for the header above it.
-      */
+    /*
+      The part that sticks. Its height is capped by the viewport, or by the
+      page when the page is the shorter of the two -- without that second
+      bound a long list would spill out of a short page and over the footer,
+      which is the fault this replaces rather than a new one.
+    */
+    &__sidebar {
       position: sticky;
       top: remify(24px);
-      max-height: calc(100vh - #{remify(48px)});
+      max-height: min(calc(100vh - #{remify(48px)}), 100%);
       overflow-y: auto;
     }
   }

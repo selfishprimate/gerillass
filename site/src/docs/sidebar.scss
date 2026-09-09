@@ -27,7 +27,44 @@
     opacity: 0.7;
   }
 
-  &__group + &__group { margin-top: remify(28px); }
+  &__group { margin-bottom: remify(24px); }
+
+  /*
+    Two tabs rather than two stacked lists. Fifty-three mixins above
+    twenty-three utilities meant the second group began below the fold of the
+    list and most readers never saw it was there.
+  */
+  &__tabs {
+    display: flex;
+    gap: remify(4px);
+    margin-bottom: remify(12px);
+    border-bottom: 1px solid $eggshell;
+  }
+
+  &__tab {
+    padding: remify(6px) remify(8px);
+    margin-bottom: -1px;
+    font-family: $secondary-font-family;
+    font-size: remify(13px);
+    font-weight: 600;
+    color: $primary-color;
+    background: none;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    opacity: 0.55;
+    transition: color $global-transition, opacity $global-transition,
+      border-color $global-transition;
+
+    &:hover { opacity: 0.85; }
+
+    /* Colour as well as the rule, so the open tab reads as open on its own. */
+    &.is-active {
+      opacity: 1;
+      color: $accent-color;
+      border-bottom-color: $accent-color;
+    }
+  }
 
   &__heading {
     font-family: $secondary-font-family;
@@ -35,15 +72,14 @@
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    opacity: 0.55;
-    margin: 0 0 remify(10px);
+    opacity: 0.5;
+    margin: 0 0 remify(8px);
   }
 
   &__count {
-    /* The number is a fact about the list, not part of the heading. */
     font-weight: 400;
     opacity: 0.7;
-    margin-left: remify(4px);
+    margin-left: remify(2px);
   }
 
   &__list {
@@ -52,28 +88,29 @@
     padding: 0;
   }
 
+  /*
+    Plain text, not buttons. Seventy-seven padded rows with a hover panel each
+    read as a control surface and took a screen and a half; as a list of names
+    they take what a list of names takes.
+  */
   &__link {
     display: block;
-    padding: remify(5px) remify(10px);
-    margin-left: remify(-10px);
+    padding: remify(3px) 0;
     font-size: remify(14px);
     line-height: 1.45;
     color: $primary-color;
     text-decoration: none;
-    border-radius: $border-radius;
-    transition: background-color $global-transition, color $global-transition;
+    transition: color $global-transition;
 
-    &:hover { background: $alabaster; }
+    &:hover { color: $accent-color; }
 
     /*
-      The current page is marked by weight and a rule down its left edge rather
-      than by colour alone, so it still reads as the current one to somebody
-      who cannot separate the two colours.
+      The current page is marked by colour and weight together, so it is still
+      the current one to somebody who cannot separate the two colours.
     */
     &.is-current {
+      color: $accent-color;
       font-weight: 600;
-      background: $alabaster;
-      box-shadow: inset remify(2px) 0 0 $accent-color;
     }
   }
 }

@@ -347,6 +347,21 @@ metadata was removed in 2.0.0. What it adds is a "Coming from Gerillass 1.x"
 section, since the two breaks in that release are what a reader arriving from
 an old tutorial will hit first.
 
+**The list is out of the flow, and that is deliberate.** As a grid column it
+decided how tall the row was, because it is 77 items and most pages are shorter
+than that: on a short page the content ended half a screen above a footer that
+had been pushed down to clear a list nobody was looking at. `.docs-layout__aside`
+is now absolutely positioned at `height: 100%`, so it contributes no height, and
+the inner `.docs-layout__sidebar` is what sticks and scrolls. Its
+`max-height: min(calc(100vh - 48px), 100%)` carries both bounds: the viewport,
+and the page when the page is the shorter of the two. Without that second one a
+long list spills out of a short page and over the footer.
+
+The catalogue sits behind two tabs, Mixins and Utilities, because 53 above 23
+put the second group below the fold of the list. The tab follows the page, so
+arriving at a function's page opens Utilities; a filter that matches nothing in
+the open tab opens the other one.
+
 The sidebar reads `virtual:docs-index`, a module `plugins/docs-index.js`
 builds: it takes the title from each page's front matter and the kind and
 summary from `gerillass.json`. Front matter is read at build time on purpose —

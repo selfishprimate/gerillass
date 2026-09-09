@@ -45,7 +45,14 @@ function DocsTemplate({ children }) {
           </button>
 
           <aside className={`docs-layout__aside${open ? " is-open" : ""}`}>
-            <Sidebar onNavigate={() => setOpen(false)} />
+            {/*
+              The list is one box inside another on purpose. The outer one is
+              taken out of the flow so it cannot make the page taller than its
+              content; the inner one is what sticks and scrolls.
+            */}
+            <div className="docs-layout__sidebar">
+              <Sidebar onNavigate={() => setOpen(false)} />
+            </div>
           </aside>
 
           <main className="docs-layout__main content">{children}</main>
