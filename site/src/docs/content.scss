@@ -93,29 +93,13 @@
   }
 
   /*
-    A highlighted block, as the documentation shows one. The landing page
-    frames the same component quite differently, which is why none of this
-    lives in the component itself.
+    Inside a sentence, a name in backticks is not a listing. The block itself
+    is styled once, in components/CodeBlock.
   */
-  .code-block {
-    border-radius: $border-radius;
-    overflow: hidden;
-
-    pre {
-      margin: 0;
-      padding: 1.1rem 1.25rem;
-      overflow-x: auto;
-      font-family: $tertiary-font-family;
-      font-size: 0.85rem;
-      line-height: 1.6;
-    }
-
-    /* Inside a highlighted block the theme owns the type, so this steps back. */
-    code {
-      background: none;
-      padding: 0;
-      font-size: inherit;
-    }
+  .code-block code {
+    background: none;
+    padding: 0;
+    font-size: inherit;
   }
 
   a {

@@ -193,13 +193,25 @@ are load-bearing:
   router already had. An outbound link keeps `target` and `rel`; a bare
   fragment stays an anchor.
 
-`CodeBlock` carries almost no styling of its own, deliberately. The landing
-page frames a block as a large tinted panel and the documentation as a listing
-in a column of prose, so appearance belongs to whichever page is showing it.
-The landing page reaches it through `.highlight pre`, a descendant selector, so
-the wrapper the component adds does not come between them; its computed padding,
-radius, background and size were compared before and after the change and are
-unchanged.
+`CodeBlock` carries the look as well as the behaviour: `$primary-color`,
+1.5rem of padding, 1rem Roboto Mono, a 16px radius. That is the landing page's
+treatment, and the documentation showing a paler, smaller, tighter block read
+as a different site. The landing page also reaches the same `<pre>` through
+`.highlight pre`, a descendant selector that the component's wrapper does not
+come between, and it sets the same values, so it is unchanged.
+
+**The `!important` in `code-block.scss` is load-bearing.**
+react-syntax-highlighter writes the theme's padding, size and background as
+*inline styles* on the `<pre>`, and an inline style beats a stylesheet. A rule
+without it is silently ignored, which is how the documentation's blocks sat at
+zenburn's grey and 0.5em of padding while looking, in the source, as though
+they had been styled. The landing page's rule has always carried the same three.
+
+Adopting that size forced a layout change: **the Sass and CSS panes of an
+`<Example>` stack rather than sitting side by side.** At 16px a pane holds
+about thirty characters and a compiled selector runs to sixty five; measured on
+columnizer, a 365px pane held 694px of CSS. Two readable panes would want a
+content column near 1380px.
 
 **Attributes carry Markdown, not markup.** A `caption` or a `footnote` reaches
 its component as a string, and a string rendered by React is text: 47 pages

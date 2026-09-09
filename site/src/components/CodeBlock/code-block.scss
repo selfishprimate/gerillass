@@ -1,19 +1,33 @@
 @import "assets/scss/abstract";
 
 /*
-  Deliberately almost empty.
+  One look for every block of code on the site.
 
-  This component is shared by the landing page and the documentation, and those
-  two want a block to look different: the landing page's is a large tinted
-  panel inside a tabbed figure, the documentation's is a listing in a column of
-  prose. Appearance therefore belongs to whichever page is showing it, and all
-  that is set here is the one thing true in both places.
+  This used to be empty, on the theory that the landing page and the
+  documentation would want to frame a block differently. They do not: the
+  landing page's treatment is the house style, and a documentation page showing
+  a paler, smaller, tighter block just looked like a different site.
 
-  The landing page styles it through `.highlight pre`, which is a descendant
-  selector, so the wrapper this adds does not come between them.
+  The `!important` is not decoration. react-syntax-highlighter writes the
+  theme's padding, size and background as inline styles on the <pre>, and an
+  inline style beats a stylesheet, so a rule without it is simply ignored --
+  which is why the documentation's blocks kept zenburn's grey at 0.5em of
+  padding while appearing to have been styled. The landing page's own rule has
+  carried the same three for this reason.
 */
 .code-block {
+  border-radius: remify(16px);
+  overflow: hidden;
+
   pre {
+    margin: 0 !important;
+    padding: 1.5rem !important;
+    overflow-x: auto;
+    font-family: $tertiary-font-family;
+    font-size: 1rem !important;
+    line-height: 1.4;
+    background-color: $primary-color !important;
+    border-radius: remify(16px);
     tab-size: 2;
   }
 

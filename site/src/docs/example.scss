@@ -21,22 +21,25 @@
     font-size: remify(15px);
   }
 
+  /*
+    The Sass and the CSS sit one above the other, not side by side.
+
+    They were side by side while the code was set at 13.6px. At the size the
+    rest of the site sets code, a pane holds about thirty characters, and a
+    compiled selector runs to sixty five: measured on columnizer, a 365px pane
+    held 694px of CSS. Two readable panes would need a content column of about
+    1380px, which no one has. So the comparison is vertical, and each block
+    gets the full width of the page.
+  */
   &__panes {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    @include breakpoint(max, medium) {
-      grid-template-columns: 1fr;
-    }
+    grid-template-columns: 1fr;
   }
 
   &__pane {
     min-width: 0;
-    border-right: 1px solid $eggshell;
-    &:last-child { border-right: 0; }
-    @include breakpoint(max, medium) {
-      border-right: 0;
-      border-bottom: 1px solid $eggshell;
-    }
+    border-bottom: 1px solid $eggshell;
+    &:last-child { border-bottom: 0; }
   }
 
   &__label {
@@ -56,11 +59,18 @@
     The block itself is a CodeBlock now, shared with the landing page, so this
     caps the height of the pane rather than styling the code.
   */
+  /*
+    Flush inside the pane. The block keeps the house look everywhere else on
+    the site, but here it sits inside a bordered card that already has corners,
+    and a second set inside the first leaves slivers of the card showing
+    through at each one.
+  */
   &__pane .code-block {
     margin: 0;
     border-radius: 0;
 
     pre {
+      border-radius: 0;
       max-height: remify(320px);
       overflow: auto;
     }
