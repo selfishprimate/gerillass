@@ -7,6 +7,11 @@ repository and cannot see what changed here.
 
 One file per released version, named after it: `v2.1.0.md`.
 
+The one exception is [`monorepo-plan.md`](monorepo-plan.md), the plan to fold
+both sites into this repository. It sits here because this folder exists only
+while there are other repositories, and that plan is how they stop existing.
+When it is finished, most of this folder goes with them.
+
 ## The one rule
 
 **Never restate the API here.** `gerillass.json` already carries every
