@@ -41,7 +41,7 @@ Arguments are validated and refused with a message naming what is accepted, so a
 - [except($params...)](https://docs.gerillass.com/docs/except/): Selects every sibling except the ones named.
 - [font-face($font-family, $file-path, $font-style: normal, $font-weight: 400, $file-formats: eot woff2 woff ttf svg)](https://docs.gerillass.com/docs/font-face/): Emits an @font-face rule for one family across several file formats.
 - [hide($toggle: "hide")](https://docs.gerillass.com/docs/hide/): Visually hides an element while keeping it available to screen readers, or reverses that.
-- [line-clamp($lines: 3)](https://docs.gerillass.com/docs/line-clamp/): Truncates text after a number of lines, where ellipsis truncates one.
+- [line-clamp($lines: 3)](https://github.com/selfishprimate/gerillass/blob/main/scss/library/_line-clamp.scss): Truncates text after a number of lines, where ellipsis truncates one.
 - [linear-gradient($direction, $colors)](https://docs.gerillass.com/docs/linear-gradient/): Linear gradient background from a direction name or an angle.
 - [loadify($params...)](https://docs.gerillass.com/docs/loadify/): Fades elements in on page load.
 - [only($params...)](https://docs.gerillass.com/docs/only/): Selects only the siblings named.
@@ -83,12 +83,12 @@ Arguments are validated and refused with a message naming what is accepted, so a
 - [isNumber($value)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_is-number.scss): Returns the value if it is a number.
 - [isTime($value)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_is-time.scss): Returns the value if it is a time in s or ms, and errors otherwise.
 - [mapDeepGet($map, $keys...)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_map-deep-get.scss): Reads a value out of a nested map by following a chain of keys.
-- [pixelify($value)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_pixelify.scss): Returns the value with a px unit, adding one if it is missing.
+- [pixelify($value)](https://docs.gerillass.com/docs/pixelify/): Returns the value with a px unit, adding one if it is missing.
 - [pseudoSelector($elements, $pseudo: null)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_pseudo-selector.scss): Appends a pseudo-class to every selector in a list.
 - [remify($value)](https://docs.gerillass.com/docs/remify/): Converts a pixel length to rem, against a 16px root.
-- [shade($color, $percentage)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_shade.scss): Mixes a colour towards black by a percentage.
+- [shade($color, $percentage)](https://docs.gerillass.com/docs/shade/): Mixes a colour towards black by a percentage.
 - [shorthandProperty($value)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_shorthand-property.scss): Expands one to four values into the four-value CSS shorthand order.
-- [tint($color, $percentage)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_tint.scss): Mixes a colour towards white by a percentage.
+- [tint($color, $percentage)](https://docs.gerillass.com/docs/tint/): Mixes a colour towards white by a percentage.
 - [validateBreakpoint($value)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_validate-breakpoint.scss): Resolves a breakpoint name to its width, passing other values through.
 - [validateLength($value)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_validate-length.scss): Returns the value if it is a length or one of auto, inherit, initial, 0.
 - [validateRatio($ratio)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_validate-ratio.scss): Turns an aspect ratio into a value for the CSS aspect-ratio property.

@@ -42,13 +42,21 @@ const firstSentence = (text) => {
   return cut === -1 ? text : text.slice(0, cut + 1);
 };
 
-// Members whose documentation page does not exist yet. Remove a name from here
-// once its page is published, and re-run `npm run manifest`.
-const NO_PAGE_YET = new Set(["container", "container-query"]);
+// Which members have a page on the documentation site. Kept as two small lists
+// because the majority case differs by kind: nearly every mixin has a page and
+// nearly no function does. Neither can be checked from here, so both are
+// maintained by hand against the live site. When a page is published, move the
+// name across and re-run `npm run manifest`; the loop in `/release` is what
+// finds a name that was forgotten.
+//
+// Last checked against docs.gerillass.com when v2.1.0 was cut.
+const MIXINS_WITHOUT_PAGE = new Set(["container", "container-query", "line-clamp"]);
+const FUNCTIONS_WITH_PAGE = new Set(["remify", "pixelify", "shade", "tint"]);
 
 const hasDocsPage = (member) =>
-  !NO_PAGE_YET.has(member.name) &&
-  (member.kind === "mixin" || member.name === "remify");
+  member.kind === "mixin"
+    ? !MIXINS_WITHOUT_PAGE.has(member.name)
+    : FUNCTIONS_WITH_PAGE.has(member.name);
 
 const link = (member) => {
   const url = hasDocsPage(member)
