@@ -35,7 +35,7 @@ background-color: #5bc0bb;border-radius: 20px;
 ```
 </Example>
 
-<Example caption="Now let's pass two values. The first one is <code>top</code>, to target only the top corners of the selected element, and the second one is <code>40px</code>, for the size of the radius.">
+<Example caption="Now let's pass two values. The first one is `top`, to target only the top corners of the selected element, and the second one is `40px`, for the size of the radius.">
 ```scss
 .element{
   @include border-radius(top, 40px);
@@ -67,7 +67,7 @@ background-color:#5bc0bb;border-top-right-radius: 40px;border-bottom-right-radiu
 ```
 </Example>
 
-<Example caption="Now let's try the <code>cross-left</code> and <code>cross-right</code> values, which let you target the corners diagonally.">
+<Example caption="Now let's try the `cross-left` and `cross-right` values, which let you target the corners diagonally.">
 ```scss
 .element{
   @include border-radius(cross-left, 40px);
@@ -93,7 +93,7 @@ background-color:#5bc0bb;border-radius: 25px 50px 100px 150px;
 ```
 </Example>
 
-<Example caption="Now let's <strong>pass four values</strong> again, but this time we are going to <strong>separate them with commas</strong> to try something different.">
+<Example caption="Now let's **pass four values** again, but this time we are going to **separate them with commas** to try something different.">
 ```scss
 .element{
   @include border-radius(25px, 50px, 100px, 150px);
@@ -119,7 +119,7 @@ background-color:#5bc0bb;border-top-left-radius: 100px 40px;border-top-right-rad
 ```
 </Example>
 
-<Example caption="Use <code>null</code> to skip a corner!">
+<Example caption="Use `null` to skip a corner!">
 ```scss
 .element{
   @include border-radius(null, null, 100px 30%, 150px 2rem);

@@ -1,0 +1,23 @@
+@import "assets/scss/abstract";
+
+/*
+  Deliberately almost empty.
+
+  This component is shared by the landing page and the documentation, and those
+  two want a block to look different: the landing page's is a large tinted
+  panel inside a tabbed figure, the documentation's is a listing in a column of
+  prose. Appearance therefore belongs to whichever page is showing it, and all
+  that is set here is the one thing true in both places.
+
+  The landing page styles it through `.highlight pre`, which is a descendant
+  selector, so the wrapper this adds does not come between them.
+*/
+.code-block {
+  pre {
+    tab-size: 2;
+  }
+
+  code {
+    font-family: inherit;
+  }
+}

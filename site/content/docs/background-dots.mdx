@@ -16,7 +16,7 @@ The **Background Dots** Sass mixin allows you to easily create a stylish dotted 
 
 ## Arguments
 
-<Arguments of="background-dots" footnote="Using two separate color values together is only possible when the <code>$diagonal</code> option is true. See the examples for more.">
+<Arguments of="background-dots" footnote="Using two separate color values together is only possible when the `$diagonal` option is true. See the examples for more.">
   <Argument name="$color" type="list">The color or colors of the dots. Accepts no more than two color values. By default there is only one color, a translucent black.</Argument>
   <Argument name="$size (1em)" type="number (with unit)">The size of the dots. The default value is <code>1em</code>.</Argument>
   <Argument name="$gutter ($size * 5)" type="number (with unit)">The size of the space between the dots. The default value is <code>$size * 5</code>, which means <code>5em</code>.</Argument>
@@ -39,7 +39,7 @@ background-image: radial-gradient(rgba(0, 0, 0, 0.1) 1em, transparent 0), radial
 ```
 </Example>
 
-<Example caption="Let's play with the <code>$color</code> and <code>$size</code> arguments.">
+<Example caption="Let's play with the `$color` and `$size` arguments.">
 ```scss
 .element{
   @include background-dots(
@@ -73,7 +73,7 @@ background-image: radial-gradient(pink 10px, transparent 0), radial-gradient(pin
 ```
 </Example>
 
-<Example caption="You can add a second color value as well. Note that the second color only works when the <code>$diagonal</code> argument is <code>true</code>, and the two colors must be separated by a space.">
+<Example caption="You can add a second color value as well. Note that the second color only works when the `$diagonal` argument is `true`, and the two colors must be separated by a space.">
 ```scss
 .element{
   @include background-dots(
@@ -90,7 +90,7 @@ background-repeat: repeat;
 ```
 </Example>
 
-<Example caption="Set the <code>$diagonal</code> argument to <code>false</code> to make the dots look more linear.">
+<Example caption="Set the `$diagonal` argument to `false` to make the dots look more linear.">
 ```scss
 .element{
   @include background-dots(

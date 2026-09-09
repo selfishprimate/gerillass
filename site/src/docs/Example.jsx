@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
+import inline from "./inline";
+import CodeBlock from "components/CodeBlock";
 
 import "./example.scss";
 
@@ -112,25 +114,21 @@ function Example({ source, css, html, title, caption, height = 160, interactive 
 
   return (
     <figure className="example">
-      {title ? <figcaption className="example__title">{title}</figcaption> : null}
-      {caption ? <p className="example__caption">{caption}</p> : null}
+      {title ? <figcaption className="example__title">{inline(title)}</figcaption> : null}
+      {caption ? <p className="example__caption">{inline(caption)}</p> : null}
 
       <div className="example__panes">
-        <div className="example__pane">
-          <div className="example__label">Sass</div>
-          <pre className="example__code">
-            <code>{source}</code>
-          </pre>
-        </div>
-
-        <div className="example__pane">
-          <div className="example__label">CSS</div>
-          <pre className="example__code">
-            <code>{css}</code>
-          </pre>
-        </div>
+        <Pane label="Sass" language="scss" code={source} />
+        <Pane label="CSS" language="css" code={css} />
       </div>
 
+      {/*
+        No demo, no Result. An example that is only a call and its output --
+        a converter like remify, or a mixin whose effect is invisible in an
+        empty box -- was showing an empty frame under a Result label, which
+        reads as a demo that failed rather than as one that was never there.
+      */}
+      {html ? (
       <div className="example__result">
         <div className="example__label">Result</div>
         <iframe
@@ -148,7 +146,22 @@ function Example({ source, css, html, title, caption, height = 160, interactive 
           srcDoc={srcDoc}
         />
       </div>
+      ) : null}
     </figure>
+  );
+}
+
+/*
+  One pane of the example. Both of them are the same thing with a different
+  label, and the code inside goes through the same highlighter as every other
+  block on the site.
+*/
+function Pane({ label, language, code }) {
+  return (
+    <div className="example__pane">
+      <div className="example__label">{label}</div>
+      <CodeBlock language={language}>{code}</CodeBlock>
+    </div>
   );
 }
 

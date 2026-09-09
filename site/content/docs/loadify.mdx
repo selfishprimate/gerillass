@@ -53,9 +53,9 @@ Note that **switching the animation off would not have worked.** The element sta
 
 </Hint>
 
-<Example caption="Let's see the animation on an image element. Call the Loadify mixin inside the element's selector and <strong>do not pass any arguments</strong> yet, just to see the loading effect with the default timing values. 
+<Example caption="Let's see the animation on an image element. Call the Loadify mixin inside the element's selector and **do not pass any arguments** yet, just to see the loading effect with the default timing values. 
 
-<strong>Now scroll to the image and refresh the page to see how smooth the image appears on the page.</strong>" setup="@include loadify(init);">
+**Now scroll to the image and refresh the page to see how smooth the image appears on the page.**" setup="@include loadify(init);">
 ```scss
 .loadify-img {
   @include loadify();
@@ -92,9 +92,9 @@ Suppose you have a group of items like the ones below, and you want them to appe
 ```
 </Example>
 
-<Example caption="Now let's pass <code>1s</code> as a custom value for the <code>animation-delay</code> CSS property, to set how long the selected element waits before it starts to appear.
+<Example caption="Now let's pass `1s` as a custom value for the `animation-delay` CSS property, to set how long the selected element waits before it starts to appear.
 
-<strong>Refresh the page to see the effect.</strong>" setup="@include loadify(init);">
+**Refresh the page to see the effect.**" setup="@include loadify(init);">
 ```scss
 .parent-element {
   .item {
@@ -120,9 +120,9 @@ It's getting more interesting, isn't it?
 
 <Example caption="Now we are going to try a fantastic example to see how the Gerillass Sass library can ease your frontend development, and how well it works when you combine two or more mixins.
 
-We will use the <code>only</code> mixin to select items in the list based on their index positions, and then call the <code>loadify</code> mixin inside each of those selectors to make the elements appear at different times (with different delay and duration values).
+We will use the `only` mixin to select items in the list based on their index positions, and then call the `loadify` mixin inside each of those selectors to make the elements appear at different times (with different delay and duration values).
 
-<strong>Scroll to the bottom of this example and refresh the page to see the effect.</strong>" setup="@include loadify(init);">
+**Scroll to the bottom of this example and refresh the page to see the effect.**" setup="@include loadify(init);">
 ```scss
 .parent-element {
   .item {
@@ -167,11 +167,11 @@ We will use the <code>only</code> mixin to select items in the list based on the
 ```
 </Example>
 
-<Example caption="Now let's try another sexy example. This time we are going to <strong>change the display order of the boxes (we will be using a diagonal pattern)</strong> and <strong>pass a value for the second argument to control the value of the <code>animation-duration</code> CSS property</strong>.
+<Example caption="Now let's try another sexy example. This time we are going to **change the display order of the boxes (we will be using a diagonal pattern)** and **pass a value for the second argument to control the value of the `animation-duration` CSS property**.
 
-The display order will be as follows: &quot;<strong>1</strong>&quot;, &quot;<strong>6</strong>&quot;, &quot;<strong>3</strong>&quot;, &quot;<strong>8</strong>&quot;, &quot;<strong>5</strong>&quot;, &quot;<strong>2</strong>&quot;, &quot;<strong>7</strong>&quot;, &quot;<strong>4</strong>&quot; 
+The display order will be as follows: &quot;**1**&quot;, &quot;**6**&quot;, &quot;**3**&quot;, &quot;**8**&quot;, &quot;**5**&quot;, &quot;**2**&quot;, &quot;**7**&quot;, &quot;**4**&quot; 
 
-<strong>Scroll to the bottom of this example and refresh the page to see the effect.</strong>" setup="@include loadify(init);">
+**Scroll to the bottom of this example and refresh the page to see the effect.**" setup="@include loadify(init);">
 ```scss
 .parent-element {
   .item {

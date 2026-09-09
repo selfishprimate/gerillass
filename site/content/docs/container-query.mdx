@@ -23,7 +23,7 @@ It takes the same argument shapes as [breakpoint](/docs/breakpoint/), so the two
 
 ## Arguments
 
-<Arguments of="container-query" footnote="$name is passed as a keyword rather than by position, because <code>container-query(&quot;card&quot;, &quot;medium&quot;)</code> could not be told apart from <code>container-query(&quot;min&quot;, &quot;medium&quot;)</code>.">
+<Arguments of="container-query" footnote="$name is passed as a keyword rather than by position, because `container-query(&quot;card&quot;, &quot;medium&quot;)` could not be told apart from `container-query(&quot;min&quot;, &quot;medium&quot;)`.">
   <Argument name="$params…" type="string, number">Accepts a size, two sizes for a range, or one of <code>min</code>, <code>max</code>, <code>only</code> or <code>between</code> followed by a size.</Argument>
   <Argument name="$name" type="string">Accepts a container name as a string, to query one named container rather than the nearest one. Pass it as a keyword, <code>$name: "card"</code>.</Argument>
 </Arguments>
@@ -63,7 +63,7 @@ The markup all of these assume: the container on the parent, the query on the ch
 ```
 </Example>
 
-<Example caption="A range, written either with <code>between</code> or as two sizes. Both produce the same rule.">
+<Example caption="A range, written either with `between` or as two sizes. Both produce the same rule.">
 ```scss
 .title {
   @include container-query("between", 300px 500px) {
@@ -78,7 +78,7 @@ The markup all of these assume: the container on the parent, the query on the ch
 ```
 </Example>
 
-<Example caption="A predefined breakpoint name works too, resolved through <code>$map-for-breakpoints</code>.">
+<Example caption="A predefined breakpoint name works too, resolved through `$map-for-breakpoints`.">
 ```scss
 .title {
   @include container-query("min", "medium") {

@@ -1,5 +1,7 @@
 import React from "react";
 
+import inline from "./inline";
+
 import manifest from "../../../gerillass.json";
 import "./arguments.scss";
 
@@ -75,7 +77,7 @@ function render(children, footnote) {
         </thead>
         <tbody>{children}</tbody>
       </table>
-      {footnote ? <p className="arguments__footnote">{footnote}</p> : null}
+      {footnote ? <p className="arguments__footnote">{inline(footnote)}</p> : null}
     </div>
   );
 }

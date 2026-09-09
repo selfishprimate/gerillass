@@ -52,9 +52,20 @@ function attrs(raw) {
   return { out, bare };
 }
 
-// Attribute values are read as JSX strings, not markdown, so the little bit of
-// markdown the Hugo attributes carry has to become the tags it stood for.
-function inlineMarkdown(text) {
+/*
+  Two destinations, two rules.
+
+  An <Argument> description becomes JSX children, where a tag is a tag, so its
+  Markdown is converted here. A caption or a footnote becomes an attribute,
+  which reaches the component as a string: a tag written into one is rendered
+  as the characters that spell it, which is what put a literal <code>$gutter</code>
+  on 47 pages. Those keep their Markdown and src/docs/inline.jsx renders it.
+*/
+function forAttribute(text) {
+  return String(text);
+}
+
+function forChildren(text) {
   return String(text)
     /*
       Angle brackets come first, before any tag is introduced. Several pages
@@ -135,7 +146,7 @@ function convert(slug, source) {
     }
 
     if (name === "arguments/table") {
-      const footnote = a.footnote ? ` footnote="${quote(inlineMarkdown(a.footnote))}"` : "";
+      const footnote = a.footnote ? ` footnote="${quote(forAttribute(a.footnote))}"` : "";
       out.push(`<Arguments of="${quote(member || slug)}"${footnote}>`);
       i += 1;
       continue;
@@ -145,7 +156,7 @@ function convert(slug, source) {
       const argName = ARGUMENT_NAMES[slug]?.[a.name] ?? a.name;
       out.push(
         `  <Argument name="${quote(argName)}" type="${quote(a.type || "")}">` +
-          `${inlineMarkdown(a.description || "")}</Argument>`
+          `${forChildren(a.description || "")}</Argument>`
       );
       i += 1;
       continue;
@@ -286,7 +297,7 @@ function example(block, stated, notes, className, pageStyles = [], setup = null)
   const text = caption.join("\n").trim();
   const open = [
     "<Example",
-    text ? ` caption="${quote(inlineMarkdown(text))}"` : "",
+    text ? ` caption="${quote(forAttribute(text))}"` : "",
     setup ? ` setup="${quote(setup)}"` : "",
     ">",
   ].join("");

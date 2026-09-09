@@ -22,14 +22,14 @@ The **Breakpoint** Sass mixin helps you create scalable media queries and breakp
 
 ## Arguments
 
-<Arguments of="breakpoint" footnote="When you use the <code>between</code> option you must pass two values for <code>width</code>, and they must be separated by a space. See the [examples](#examples) for more.">
+<Arguments of="breakpoint" footnote="When you use the `between` option you must pass two values for `width`, and they must be separated by a space. See the [examples](#examples) for more.">
   <Argument name="$mode" type="string">Sets the <code>width</code> media feature. Accepts the values <code>only</code>, <code>min</code>, <code>max</code>, and <code>between</code>.</Argument>
   <Argument name="$value" type="number (with unit)">The width value at which your styles will be applied.</Argument>
 </Arguments>
 
 ## Examples
 
-<Example caption="Simply call the mixin and <strong>pass a custom value</strong> to it. The code below will apply styles only if your browser's viewport is equal to <code>320px</code>.">
+<Example caption="Simply call the mixin and **pass a custom value** to it. The code below will apply styles only if your browser's viewport is equal to `320px`.">
 ```scss
 .element{
   @include breakpoint(320px) {
@@ -39,7 +39,7 @@ The **Breakpoint** Sass mixin helps you create scalable media queries and breakp
 ```
 </Example>
 
-<Example caption="If you set the <code>$mode</code> option to <code>only</code>, you will see that the result is similar to the first example. The code below will apply styles only if your browser's viewport is equal to <code>1200px</code>.">
+<Example caption="If you set the `$mode` option to `only`, you will see that the result is similar to the first example. The code below will apply styles only if your browser's viewport is equal to `1200px`.">
 ```scss
 .element{
   @include breakpoint(only, 1200px) {
@@ -49,7 +49,7 @@ The **Breakpoint** Sass mixin helps you create scalable media queries and breakp
 ```
 </Example>
 
-<Example caption="Now let's set the <code>$mode</code> option to <code>min</code> and pass a predefined breakpoint value. If you are a <strong>mobile-first</strong> person, you are going to use this one a lot!">
+<Example caption="Now let's set the `$mode` option to `min` and pass a predefined breakpoint value. If you are a **mobile-first** person, you are going to use this one a lot!">
 ```scss
 .element{
   @include breakpoint(min, medium) {
@@ -59,7 +59,7 @@ The **Breakpoint** Sass mixin helps you create scalable media queries and breakp
 ```
 </Example>
 
-<Example caption="For <strong>desktop-first</strong> arrangements, set the <code>$mode</code> option to <code>max</code>. This time, let's pass a custom value for the second argument.">
+<Example caption="For **desktop-first** arrangements, set the `$mode` option to `max`. This time, let's pass a custom value for the second argument.">
 ```scss
 .element{
   @include breakpoint(max, 1024px) {
@@ -91,7 +91,7 @@ The **Breakpoint** Sass mixin helps you create scalable media queries and breakp
 
 </Hint>
 
-<Example caption="<strong>Note that</strong> when you use the <code>between</code> mode with predefined values, the <code>max-width</code> value is always reduced by one. <strong>This prevents the styles you apply from overlapping each other.</strong>">
+<Example caption="**Note that** when you use the `between` mode with predefined values, the `max-width` value is always reduced by one. **This prevents the styles you apply from overlapping each other.**">
 ```scss
 .element{
   @include breakpoint(between, small medium) {
@@ -107,7 +107,7 @@ The **Breakpoint** Sass mixin helps you create scalable media queries and breakp
 ```
 </Example>
 
-<Example caption="<strong>Reducing by one</strong> only happens with <strong>predefined</strong> values. When you work with custom values, you don't have to worry about it!">
+<Example caption="**Reducing by one** only happens with **predefined** values. When you work with custom values, you don't have to worry about it!">
 ```scss
 .element{
   @include breakpoint(between, small 1199px) {
@@ -126,7 +126,7 @@ The values can be either custom numbers (with a unit) or predefined values.
 
 </Hint>
 
-<Example caption="<strong>Now let's define a range without passing the <code>between</code> option.</strong> Simply pass two values and <strong>separate them with a comma</strong>.">
+<Example caption="**Now let's define a range without passing the `between` option.** Simply pass two values and **separate them with a comma**.">
 ```scss
 .element{
   @include breakpoint(320px, 768px) {

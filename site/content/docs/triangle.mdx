@@ -20,7 +20,7 @@ The **Triangle** Sass mixin helps you generate triangles using the `::before` or
 
 ## Arguments
 
-<Arguments of="triangle" footnote="When you pass the <code>top</code>, <code>right</code>, <code>bottom</code>, or <code>left</code> values for the <strong><code>$direction</code></strong> argument, you can pass two values to resize the triangle. <strong>The first value controls the width of the triangle and the second controls the height.</strong>">
+<Arguments of="triangle" footnote="When you pass the `top`, `right`, `bottom`, or `left` values for the **`$direction`** argument, you can pass two values to resize the triangle. **The first value controls the width of the triangle and the second controls the height.**">
   <Argument name="$direction" type="string">Sets the direction of the triangle. Accepts the values <code>top</code>, <code>top-right</code>, <code>right</code>, <code>bottom-right</code>, <code>bottom</code>, <code>bottom-left</code>, <code>left</code>, and <code>top-left</code>.</Argument>
   <Argument name="$color" type="color">The color of the triangle.</Argument>
   <Argument name="$size" type="number (with unit)">The size of the triangle. Multiple values must be separated by a space.</Argument>
@@ -28,7 +28,7 @@ The **Triangle** Sass mixin helps you generate triangles using the `::before` or
 
 ## Examples
 
-<Example caption="Suppose you have an expandable box and you want users to click a label to expand it. <strong>Let's apply the mixin to the <code>::after</code> pseudo-element of the selected element.</strong>">
+<Example caption="Suppose you have an expandable box and you want users to click a label to expand it. **Let's apply the mixin to the `::after` pseudo-element of the selected element.**">
 ```scss
 .element {
   &::after {
@@ -41,7 +41,7 @@ The **Triangle** Sass mixin helps you generate triangles using the `::before` or
 ```
 </Example>
 
-<Example caption="Now let's <strong>change the <code>$color</code> and the <code>$size</code></strong> of the triangle, and separate it from the text by <strong>passing a declaration block into the mixin</strong>.">
+<Example caption="Now let's **change the `$color` and the `$size`** of the triangle, and separate it from the text by **passing a declaration block into the mixin**.">
 ```scss
 .element {
   &::after {
@@ -59,7 +59,7 @@ The **Triangle** Sass mixin helps you generate triangles using the `::before` or
 ```
 </Example>
 
-<Example caption="When you pass one of the <code>top</code>, <code>right</code>, <code>bottom</code>, or <code>left</code> values for the <code>$direction</code> argument, you can pass a second value to resize the triangle. The first value controls the width of the triangle and the second controls the height.">
+<Example caption="When you pass one of the `top`, `right`, `bottom`, or `left` values for the `$direction` argument, you can pass a second value to resize the triangle. The first value controls the width of the triangle and the second controls the height.">
 ```scss
 .element{
   &::after {

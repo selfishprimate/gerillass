@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import ReactDOM from "react-dom";
 import { Controlled as CodeMirror } from "react-codemirror2";
 import { motion, AnimatePresence } from "framer-motion";
@@ -66,7 +67,9 @@ const HINTS = {
   mixin: "Load a worked example for any mixin, or start your own.",
 };
 /* Every mixin's page, named by the directory the demo was read out of. */
-const DOCS = "https://docs.gerillass.com/docs";
+// The documentation lives under this site now, so this is a path rather
+// than another origin, and the link stays inside the app.
+const DOCS = "/docs";
 
 const HINT_ORDER = ["version", "mixin"];
 const HINT_KEY = "gerillass:playground:hints";
@@ -717,14 +720,12 @@ class Playground extends Component {
                         <span aria-hidden="true">{"// "}</span>
                         {DEMOS[mixin].description} Learn more about{" "}
                         {DEMOS[mixin].title || mixinTitle(mixin)}:{" "}
-                        <a
+                        <Link
                           className="playground__editor__link"
-                          href={`${DOCS}/${mixin}/`}
-                          target="_blank"
-                          rel="noopener noreferrer"
+                          to={`${DOCS}/${mixin}`}
                         >
-                          {`${DOCS.replace(/^https:\/\//, "")}/${mixin}`}
-                        </a>
+                          {`gerillass.com${DOCS}/${mixin}`}
+                        </Link>
                       </motion.p>
                     )}
                     <CodeMirror

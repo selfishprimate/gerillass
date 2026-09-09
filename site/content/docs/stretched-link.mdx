@@ -32,7 +32,7 @@ It can be useful with HTML radio buttons or checkbox list design patterns, to co
 
 ## Examples
 
-<Example caption="If no value is passed, the <code>::before</code> pseudo-element is targeted by default.">
+<Example caption="If no value is passed, the `::before` pseudo-element is targeted by default.">
 ```scss
 .element{
   @include stretched-link;
@@ -40,7 +40,7 @@ It can be useful with HTML radio buttons or checkbox list design patterns, to co
 ```
 </Example>
 
-<Example caption="Pass either the <code>before</code> or the <code>after</code> option as an argument to choose which pseudo-element you want to target.">
+<Example caption="Pass either the `before` or the `after` option as an argument to choose which pseudo-element you want to target.">
 ```scss
 .element{
   @include stretched-link(after);
@@ -48,7 +48,7 @@ It can be useful with HTML radio buttons or checkbox list design patterns, to co
 ```
 </Example>
 
-<Example caption="Targeting both the <code>::before</code> and <code>::after</code> pseudo-elements of the selected elements.">
+<Example caption="Targeting both the `::before` and `::after` pseudo-elements of the selected elements.">
 ```scss
 .element{
   @include stretched-link(before);
@@ -59,7 +59,7 @@ It can be useful with HTML radio buttons or checkbox list design patterns, to co
 ```
 </Example>
 
-<Example caption="Don't forget that the containing block must have the <code>position: relative;</code> style rule.">
+<Example caption="Don't forget that the containing block must have the `position: relative;` style rule.">
 ```scss
 .containing-element{
   position: relative;

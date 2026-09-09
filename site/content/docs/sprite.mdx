@@ -16,7 +16,7 @@ The **Sprite** Sass mixin helps you apply background images to the selected elem
 
 ## Arguments
 
-<Arguments of="sprite" footnote="To learn more about the <code>background-position</code> property values, check out the [links](#related-articles) at the end of the page.">
+<Arguments of="sprite" footnote="To learn more about the `background-position` property values, check out the [links](#related-articles) at the end of the page.">
   <Argument name="$image-url" type="string">The URL of the sprite image. <strong>Important:</strong> Don't forget that the image link must be either absolute or relative to the generated CSS file.</Argument>
   <Argument name="$position" type="number | string">Sets the position of the <code>background-image</code>. <strong>Multiple values must be separated by a space.</strong></Argument>
 </Arguments>
@@ -29,7 +29,7 @@ The **Sprite** Sass mixin helps you apply background images to the selected elem
 
 </Hint>
 
-<Example caption="You can apply it to a single element and pass both the <code>$image-url</code> and <code>$position</code> arguments using the one-line method.">
+<Example caption="You can apply it to a single element and pass both the `$image-url` and `$position` arguments using the one-line method.">
 ```scss
 .sprite-element{
   @include sprite("../images/sprite.png", 0 0);
@@ -42,7 +42,7 @@ The **Sprite** Sass mixin helps you apply background images to the selected elem
 ```
 </Example>
 
-<Example caption="Or you can apply it to multiple elements, with a different image for each one selected from a single sprite sheet. <strong>Suppose you have markup like the one below, and you want to assign a different background image to each element from a single sprite sheet.</strong>">
+<Example caption="Or you can apply it to multiple elements, with a different image for each one selected from a single sprite sheet. **Suppose you have markup like the one below, and you want to assign a different background image to each element from a single sprite sheet.**">
 ```scss
 .sprite-element{
   width: 100px;

@@ -1,28 +1,144 @@
 @import "assets/scss/abstract";
 
 /*
-  Prose that comes from a documentation page rather than from a component.
-  Most of it is already styled globally; a table is not, because until the port
-  no page on this site had one.
+  The documentation's own typographic scale.
+
+  Until now these pages inherited the landing page's, which is built for a
+  headline over a hero image: 1.1rem body text under a 3.25rem h1. That reads
+  as a poster and not as a reference somebody scans for an argument name, so
+  the scale is set here rather than borrowed, and scoped to the documentation
+  so the landing page keeps the one it was designed with.
 */
-.content {
+.docs-layout__main {
+  font-size: 1rem;
+  line-height: 1.65;
+
+  /*
+    One rhythm for the prose. It deliberately does not reach the components:
+    an <Example> is a bordered card that wants more air around it than a
+    paragraph does, and setting this on every child flattened its 2.5rem to
+    1.15rem without anything saying so.
+  */
+  > p,
+  > ul,
+  > ol,
+  > blockquote,
+  > table,
+  > .code-block {
+    margin-top: 0;
+    margin-bottom: 1.15rem;
+  }
+
+  /* The bigger blocks keep the room they ask for. */
+  > .example,
+  > .member,
+  > .arguments,
+  > .hint {
+    margin-top: 0;
+  }
+
+  p,
+  li {
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+
+  ul,
+  ol {
+    padding-left: 1.25rem;
+  }
+
+  li + li {
+    margin-top: 0.35rem;
+  }
+
+  /* The page title. It is an h2, because the logo in the header is the h1. */
+  .docs-title {
+    font-size: 2.1rem;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+  }
+
+  h3 {
+    font-size: 1.45rem;
+    line-height: 1.3;
+    margin-top: 2.75rem;
+    margin-bottom: 0.85rem;
+  }
+
+  h4 {
+    font-size: 1.1rem;
+    line-height: 1.35;
+    margin-top: 2rem;
+    margin-bottom: 0.6rem;
+  }
+
+  h5 {
+    font-size: 1rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  /*
+    Inline code, matching the landing page's. It is a different thing from a
+    fenced block and has to look like one: a name inside a sentence, not a
+    listing.
+  */
+  code {
+    font-family: $tertiary-font-family;
+    font-size: 0.85em;
+    background-color: transparentize($primary-color, 0.92);
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+  }
+
+  /*
+    A highlighted block, as the documentation shows one. The landing page
+    frames the same component quite differently, which is why none of this
+    lives in the component itself.
+  */
+  .code-block {
+    border-radius: $border-radius;
+    overflow: hidden;
+
+    pre {
+      margin: 0;
+      padding: 1.1rem 1.25rem;
+      overflow-x: auto;
+      font-family: $tertiary-font-family;
+      font-size: 0.85rem;
+      line-height: 1.6;
+    }
+
+    /* Inside a highlighted block the theme owns the type, so this steps back. */
+    code {
+      background: none;
+      padding: 0;
+      font-size: inherit;
+    }
+  }
+
+  a {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
   table {
     width: 100%;
-    margin: 0 0 remify(28px);
     border-collapse: collapse;
     font-family: $secondary-font-family;
-    font-size: remify(15px);
+    font-size: 0.9rem;
 
     th,
     td {
       text-align: left;
       vertical-align: top;
-      padding: remify(10px) remify(12px);
+      padding: 0.6rem 0.75rem;
       border-bottom: 1px solid $eggshell;
     }
 
     th {
-      font-size: remify(11px);
+      font-size: 0.7rem;
       letter-spacing: 0.07em;
       text-transform: uppercase;
       opacity: 0.55;
@@ -30,11 +146,7 @@
     }
   }
 
-  /*
-    A table that will not fit scrolls on its own rather than widening the page,
-    which is what a long recipe or a wide signature would otherwise do on a
-    phone.
-  */
+  /* A wide table scrolls inside itself rather than widening the page. */
   .table-scroll {
     overflow-x: auto;
   }

@@ -26,14 +26,9 @@ class Footer extends Component {
               <ul className="footer__menu__list">
                 <li className="footer__menu__list__item">How to use?</li>
                 <li className="footer__menu__list__item">
-                  <a
-                    className="gtm-navbar-documentation"
-                    href="https://docs.gerillass.com/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
+                  <Link className="gtm-navbar-documentation" to="/docs">
                     Docs
-                  </a>
+                  </Link>
                 </li>
                 <li className="footer__menu__list__item">
                   <a

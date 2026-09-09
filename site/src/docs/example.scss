@@ -52,16 +52,18 @@
     output must not push the demo off the bottom of it. reset-css compiles to
     the whole Meyer reset, which is a couple of hundred lines and would leave
     the result three screens below the call that produced it.
+
+    The block itself is a CodeBlock now, shared with the landing page, so this
+    caps the height of the pane rather than styling the code.
   */
-  &__code {
+  &__pane .code-block {
     margin: 0;
-    padding: remify(8px) remify(16px) remify(16px);
-    max-height: remify(320px);
-    overflow: auto;
-    font-family: $tertiary-font-family;
-    font-size: remify(12px);
-    line-height: 1.55;
-    white-space: pre;
+    border-radius: 0;
+
+    pre {
+      max-height: remify(320px);
+      overflow: auto;
+    }
   }
 
   &__result {

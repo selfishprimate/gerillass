@@ -21,7 +21,7 @@ The first three arguments (`$direction`, `$color`, `$size`) are required, and th
 
 ## Arguments
 
-<Arguments of="text-shadow" footnote="<strong>Design Tip:</strong> You can add multi layered shadows to create fancier effects. Just separate each shadow layer with a comma. See the [examples](#examples) for more.">
+<Arguments of="text-shadow" footnote="**Design Tip:** You can add multi layered shadows to create fancier effects. Just separate each shadow layer with a comma. See the [examples](#examples) for more.">
   <Argument name="$direction" type="string">Sets the direction of the shadow. Accepts <code>top</code>, <code>top-right</code>, <code>right</code>, <code>bottom-right</code>, <code>bottom</code>, <code>bottom-left</code>, <code>left</code>, <code>top-left</code>.</Argument>
   <Argument name="$color" type="color value">Sets the color of the shadow.</Argument>
   <Argument name="$size" type="number (with unit)">Sets how far the shadow will be from the text. When used with <code>$fill</code>, it also determines how many times the shadow will be multiplied.</Argument>
@@ -50,7 +50,7 @@ The first three arguments (`$direction`, `$color`, `$size`) are required, and th
 ```
 </Example>
 
-<Example caption="Now, let's <strong>add some $blur</strong> to the shadow.">
+<Example caption="Now, let's **add some $blur** to the shadow.">
 ```scss
 .element{
   @include text-shadow(bottom rgba(black, 0.3) 6px 4px);
@@ -63,7 +63,7 @@ The first three arguments (`$direction`, `$color`, `$size`) are required, and th
 ```
 </Example>
 
-<Example caption="Now, to understand what <code>$fill</code> is for, let's try once more without the <code>$fill</code> argument and examine the CSS output.">
+<Example caption="Now, to understand what `$fill` is for, let's try once more without the `$fill` argument and examine the CSS output.">
 ```scss
 .element{
   @include text-shadow(bottom #5bc0bb 30px);
@@ -82,7 +82,7 @@ It repeats the shadow one step at a time, up to the `$size` value, to **fill the
 
 </Hint>
 
-<Example caption="Now let's pass the <code>true</code> value at the end of the argument list and watch the CSS output carefully, because this is where the magic starts.">
+<Example caption="Now let's pass the `true` value at the end of the argument list and watch the CSS output carefully, because this is where the magic starts.">
 ```scss
 .element{
   @include text-shadow(bottom #5bc0bb 30px true);
@@ -95,7 +95,7 @@ It repeats the shadow one step at a time, up to the `$size` value, to **fill the
 ```
 </Example>
 
-<Example caption="You can <strong>add an alpha value to the colors</strong> to soften the shadow.">
+<Example caption="You can **add an alpha value to the colors** to soften the shadow.">
 ```scss
 .element{
   @include text-shadow(bottom rgba(#5bc0bb, 0.04) 30px true);
@@ -108,7 +108,7 @@ It repeats the shadow one step at a time, up to the `$size` value, to **fill the
 ```
 </Example>
 
-<Example caption="Now let's <strong>add multiple shadow values</strong> with different <code>$direction</code>, <code>$color</code>, and <code>$size</code> values.">
+<Example caption="Now let's **add multiple shadow values** with different `$direction`, `$color`, and `$size` values.">
 ```scss
 .element{
   @include text-shadow(
@@ -126,7 +126,7 @@ It repeats the shadow one step at a time, up to the `$size` value, to **fill the
 ```
 </Example>
 
-<Example caption="Let's <strong>add an alpha value to the colors</strong> and set the <code>$fill</code> option to <code>true</code> to make it look sexier!">
+<Example caption="Let's **add an alpha value to the colors** and set the `$fill` option to `true` to make it look sexier!">
 ```scss
 .element{
   @include text-shadow(
@@ -144,7 +144,7 @@ It repeats the shadow one step at a time, up to the `$size` value, to **fill the
 ```
 </Example>
 
-<Example caption="You can <strong>use corners</strong> as well.">
+<Example caption="You can **use corners** as well.">
 ```scss
 .element{
   color: pink;
@@ -164,7 +164,7 @@ As long as you don't overdo it, the **Text Shadow** mixin can create marvelous e
 
 </Hint>
 
-<Example caption="Here's a good example of how easily you can create artistic effects with <strong>Gerillass</strong>. Just hover over the text below and click on it to see the effect!">
+<Example caption="Here's a good example of how easily you can create artistic effects with **Gerillass**. Just hover over the text below and click on it to see the effect!">
 ```scss
 .element{
   transition: .3s;

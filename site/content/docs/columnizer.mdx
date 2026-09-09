@@ -43,7 +43,7 @@ The **Columnizer** Sass mixin helps you **create evenly divided hypothetical col
 </div>
 ```
 
-<Example caption="Now let's get cracking. Just call the mixin inside the <code>.parent-element{}</code> selector and pass a value for the number of columns.">
+<Example caption="Now let's get cracking. Just call the mixin inside the `.parent-element{}` selector and pass a value for the number of columns.">
 ```scss
 .parent-element{
   @include columnizer(3);
@@ -78,7 +78,7 @@ The **Columnizer** Sass mixin helps you **create evenly divided hypothetical col
 ```
 </Example>
 
-<Example caption="Let's pass a value for the <code>$gutter</code> argument to put space between the items.">
+<Example caption="Let's pass a value for the `$gutter` argument to put space between the items.">
 ```scss
 .parent-element{
   @include columnizer(3, 20px);
@@ -113,7 +113,7 @@ The **Columnizer** Sass mixin helps you **create evenly divided hypothetical col
 ```
 </Example>
 
-<Example caption="To make the orphans fill the gap, let's pass the <code>true</code> value at the end.">
+<Example caption="To make the orphans fill the gap, let's pass the `true` value at the end.">
 ```scss
 .parent-element{
   @include columnizer(3, 20px, true);
@@ -148,7 +148,7 @@ The **Columnizer** Sass mixin helps you **create evenly divided hypothetical col
 ```
 </Example>
 
-<Example caption="You can use either the <code>$gutter</code> or the <code>$fill</code> argument optionally. But remember, <strong>the <code>$fill</code> argument should always come last</strong>.">
+<Example caption="You can use either the `$gutter` or the `$fill` argument optionally. But remember, **the `$fill` argument should always come last**.">
 ```scss
 .parent-element{
   @include columnizer(3, true);
@@ -183,7 +183,7 @@ The **Columnizer** Sass mixin helps you **create evenly divided hypothetical col
 ```
 </Example>
 
-<Example caption="Now let's try it with the <strong>breakpoint mixin</strong> to show you how these mixins work harmoniously together.">
+<Example caption="Now let's try it with the **breakpoint mixin** to show you how these mixins work harmoniously together.">
 ```scss
 .parent-element{
   @include columnizer(2, 10px, true);

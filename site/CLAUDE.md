@@ -172,6 +172,49 @@ table renders as a paragraph of pipes, silently. Two pages use one, and
 `src/docs/content.scss` is what styles them: nothing on this site had a table
 in its prose before the port.
 
+### What a page turns into
+
+`MdxProvider` is where plain Markdown becomes markup, and three of its mappings
+are load-bearing:
+
+- **Headings move down one level.** A page writes its title as `#`, because
+  that is what a Markdown document does, but the header already has an `h1` on
+  every page: the logo. Two of them leaves a screen reader with two competing
+  roots for the page outline. So `#` renders as `h2.docs-title`, `##` as `h3`,
+  and so on.
+- **Headings get an `id`**, slugged from their text. Nothing was giving them
+  one, so a link to a section of a page had nothing to land on.
+- **A fenced block renders through `components/CodeBlock`**, the same component
+  the landing page uses. Before this a fence was unstyled text, which is what
+  made a listing of demo markup look like output that had failed to render.
+
+`CodeBlock` carries almost no styling of its own, deliberately. The landing
+page frames a block as a large tinted panel and the documentation as a listing
+in a column of prose, so appearance belongs to whichever page is showing it.
+The landing page reaches it through `.highlight pre`, a descendant selector, so
+the wrapper the component adds does not come between them; its computed padding,
+radius, background and size were compared before and after the change and are
+unchanged.
+
+**Attributes carry Markdown, not markup.** A `caption` or a `footnote` reaches
+its component as a string, and a string rendered by React is text: 47 pages
+were showing a literal `<code>$gutter</code>`, angle brackets and all, because
+the Hugo shortcodes they came from ran the same prose through a Markdown filter
+on the way out. `src/docs/inline.jsx` renders backticks and bold from those
+strings. An `<Argument>` description is different: it becomes JSX children,
+where a tag is a tag.
+
+### The type scale
+
+`src/docs/content.scss` sets the documentation's own, scoped to
+`.docs-layout__main`. These pages inherited the landing page's until now, which
+is built for a headline over a hero image: 1.1rem body text under a 3.25rem
+`h1`. That reads as a poster rather than as a reference somebody scans for an
+argument name.
+
+The rhythm there reaches the prose only. Setting it on every child flattened
+the `<Example>` card's own 2.5rem to 1.15rem, with nothing to say it had.
+
 `<Example>` takes a `setup` attribute for Sass that has to run first but is not
 part of what the example shows. One member needs it: `loadify(init)` defines the
 placeholder every later call `@extend`s, so a `loadify()` call compiled on its

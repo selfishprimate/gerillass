@@ -16,7 +16,7 @@ The **Background Stripes** Sass mixin allows you to create stylish and colorful 
 
 ## Arguments
 
-<Arguments of="background-stripes" footnote="Multiple color values must be separated by a space (e.g. <code>$color: red blue green</code>).">
+<Arguments of="background-stripes" footnote="Multiple color values must be separated by a space (e.g. `$color: red blue green`).">
   <Argument name="$color" type="list">The color or colors of the stripes. By default there is only one color, a translucent black. Accepts one or more color values to create multiple color stops.</Argument>
   <Argument name="$thickness" type="number<br/>(with unit)">The thickness of the stripes. The default value is <code>1em</code>.</Argument>
   <Argument name="$rotation" type="number<br/>(with deg unit)">The rotation of the stripes. The default value is <code>-45deg</code>. This option lets you create diagonal or straight stripes very easily.</Argument>
@@ -38,7 +38,7 @@ background-image: repeating-linear-gradient(-45deg, rgba(0, 0, 0, 0.1) 0, rgba(0
 ```
 </Example>
 
-<Example caption="Let's pass a <code>$color</code> value to it!">
+<Example caption="Let's pass a `$color` value to it!">
 ```scss
 .element{
   @include background-stripes(
@@ -53,7 +53,7 @@ background-image: repeating-linear-gradient(-45deg, pink 0, pink 1em, transparen
 ```
 </Example>
 
-<Example caption="Now let's add more colors and change the <code>$thickness</code> and <code>$rotation</code> values. <strong>Important:</strong> Don't forget that multiple color values must be separated by a space!">
+<Example caption="Now let's add more colors and change the `$thickness` and `$rotation` values. **Important:** Don't forget that multiple color values must be separated by a space!">
 ```scss
 .element{
   @include background-stripes(
@@ -70,7 +70,7 @@ background-image: repeating-linear-gradient(90deg, #FFD393 0em, #FFD393 3em, #FF
 ```
 </Example>
 
-<Example caption="Add an image to make your design look more alive! <strong>Just do not forget to use quotes when you pass the URL of an image.</strong>">
+<Example caption="Add an image to make your design look more alive! **Just do not forget to use quotes when you pass the URL of an image.**">
 ```scss
 .element{
   @include background-stripes(

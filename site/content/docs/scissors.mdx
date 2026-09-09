@@ -22,7 +22,7 @@ The **first** value selects the `top-left` corner, the **second** the `top-right
 
 ## Arguments
 
-<Arguments of="scissors" footnote="You can use <code>0</code> or <code>null</code> to skip styling the related corner.">
+<Arguments of="scissors" footnote="You can use `0` or `null` to skip styling the related corner.">
   <Argument name="$corners" type="number (with unit)">Accepts one or four values. The values must be separated by a space. Use the <code>null</code> value to <strong>skip</strong> a corner of the box.</Argument>
 </Arguments>
 
@@ -56,7 +56,7 @@ clip-path: polygon(0 30px, 30px 0, calc(100% - 30px) 0, 100% 30px, 100% calc(100
 ```
 </Example>
 
-<Example caption="You can use <code>null</code> to skip a corner as well! The following arrangement will target only the bottom corners.">
+<Example caption="You can use `null` to skip a corner as well! The following arrangement will target only the bottom corners.">
 ```scss
 .element{
   @include scissors(null null 50px 50px);
