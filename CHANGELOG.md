@@ -1,6 +1,60 @@
 # Change Log
 _Change is the essence._
 
+## 2.1.0
+
+Four new members and one accessibility fix. Nothing breaks.
+
+- **Added:** `container` and `container-query`. The responsive API was
+  `breakpoint`, which is media queries, and component-level responsiveness had
+  nothing. `container-query` takes the same argument shapes as `breakpoint`, so
+  the two read alike: a size, two sizes for a range, or `min`, `max`, `only` or
+  `between` followed by a size. Pass `$name` to query one named container.
+
+  ```scss
+  .card  { @include container("card"); }
+  .title { @include container-query("min", 400px) { font-size: 2rem; } }
+  ```
+
+  The container has to be an **ancestor** of whatever the query styles.
+  Measured in a browser: a 600px element carrying `container-type: inline-size`
+  is not matched by a `@container` rule that styles it, while a child of it is,
+  and an element with no container ancestor matches nothing at all. Both fail
+  without any warning.
+
+- **Added:** `line-clamp`, for truncating after several lines where `ellipsis`
+  does one. It emits five declarations because `-webkit-line-clamp` does
+  nothing alone: without `display: -webkit-box` or without
+  `-webkit-box-orient: vertical` the text is not clamped and nothing warns you,
+  and without `overflow: hidden` the clamped text spills out below the box. All
+  four failures were measured. The unprefixed `line-clamp` is emitted too, for
+  when it becomes Baseline.
+
+- **Added:** `fluid`, a function that returns a `clamp()` value growing with
+  the viewport between two widths. A function rather than a mixin because the
+  value is the hard part and it belongs to any property, not only `font-size`.
+
+  ```scss
+  .heading { font-size: fluid(24px, 48px); }
+  .section { padding: fluid(16px, 64px) fluid(8px, 40px); }
+  ```
+
+  The preferred value keeps a `rem` term instead of being pure `vw`, which is
+  not cosmetic: raising the root font size, which is what browser text zoom
+  does, moved the rem-bearing value from 20.83px to 34.17px while an equivalent
+  `vw`-only value stayed at 19.74px and did not respond at all. A `vw`-only
+  fluid value fails WCAG 1.4.4.
+
+- **Fixed:** `loadify` ignored `prefers-reduced-motion` and animated regardless.
+  Switching the animation off would have been worse than the bug, because the
+  element starts invisible and the animation is what reveals it, so the content
+  would have stayed hidden for good. Under reduced motion the end state is
+  applied directly and nothing moves. Output for every other call is unchanged.
+
+- **Note:** the library still emits `if-function` deprecation warnings on a
+  recent Dart Sass, as it did in 2.0.0. See that entry; the fix needs a release
+  of its own.
+
 ## 2.0.1
 
 - **Fixed:** The `SKILL.md` that ships with the package told coding agents that
