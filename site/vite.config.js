@@ -2,6 +2,10 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import svgr from "vite-plugin-svgr";
 import sassExample from "./plugins/sass-example.js";
+import mdx from "@mdx-js/rollup";
+import remarkFrontmatter from "remark-frontmatter";
+import remarkMdxFrontmatter from "remark-mdx-frontmatter";
+import remarkCompileExamples from "./plugins/remark-compile-examples.js";
 import { fileURLToPath, URL } from "node:url";
 import { readdirSync } from "node:fs";
 import { join } from "node:path";
@@ -25,7 +29,28 @@ export default defineConfig({
   // create-react-app turned `import { ReactComponent as X } from "./a.svg"`
   // into a component through SVGR. vite-plugin-svgr is the same thing, and
   // exportAsDefault stays off so the existing named import keeps working.
-  plugins: [react(), svgr(), sassExample()],
+  plugins: [
+    // Before the React plugin: it hands .mdx over as JSX for React to compile.
+    {
+      enforce: "pre",
+      ...mdx({
+        // Without this, a page has to import every component it uses before its
+        // first sentence. With it they come from MDXProvider, so a page stays
+        // content and nothing else.
+        providerImportSource: "@mdx-js/react",
+        remarkPlugins: [
+          remarkFrontmatter,
+          // Front matter becomes an exported `frontmatter` object, which is
+          // where a page's title, description and preview image come from.
+          [remarkMdxFrontmatter, { name: "frontmatter" }],
+          remarkCompileExamples,
+        ],
+      }),
+    },
+    react({ include: /\.(jsx|js|mdx|md|tsx|ts)$/ }),
+    svgr(),
+    sassExample(),
+  ],
   // create-react-app let the source import from the top of src/ without a
   // relative path -- `components/Header`, `release` -- because jsconfig.json set
   // baseUrl there. Vite needs it spelled out, and spelling it out by hand goes
