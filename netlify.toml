@@ -17,8 +17,7 @@
   command = "npm run build"
 
   # Relative to `base`, which is what Netlify does with paths in this file.
-  # Worth confirming on the first deploy: if the publish step reports an empty
-  # directory, it wanted "site/dist" instead.
+  # Confirmed on the first deploy from this repository rather than assumed.
   publish = "dist"
 
 [build.environment]
@@ -28,12 +27,15 @@
   # base directory set, Netlify would look for it in site/.
   NODE_VERSION = "22"
 
-# Two dashboard variables should go with it:
+# Three dashboard variables were deleted when this landed, and the site now has
+# none at all:
 #
-#   NETLIFY_USE_YARN=true          the site is on npm now, and its lockfile is
+#   NETLIFY_USE_YARN               the site is on npm, and its lockfile is
 #                                  package-lock.json
-#   NETLIFY_PRERENDER_ENABLED=true Netlify's prerendering service, which served
-#                                  crawlers a rendered copy of what was then a
-#                                  client-rendered app. Every route is generated
-#                                  at build time now, so there is nothing left
-#                                  for it to do. Netlify has deprecated it.
+#   NETLIFY_PRERENDER_ENABLED      Netlify's prerendering service, with its auth
+#     and its auth token           token. It served crawlers a rendered copy of
+#                                  what was then a client-rendered app, which is
+#                                  how the site kept its search and social
+#                                  previews. Every route is generated at build
+#                                  time now, so there was nothing left for it to
+#                                  do, and Netlify has deprecated it.

@@ -110,15 +110,11 @@ than in the dashboard, which is where `NODE_VERSION=14` sat unread for years
 after create-react-app stopped needing it. Netlify reads a `netlify.toml` only
 from the repository root, which is why the inert one in `public/` is inert.
 
-Two things still have to be done in the dashboard and cannot be done from here:
-
-- **Point the site at this repository.** It is still connected to
-  `selfishprimate/gerillass-web`, so nothing in this file takes effect until
-  that changes.
-- **Delete three environment variables**, each of which is now either wrong or
-  answered elsewhere: `NODE_VERSION` (in `netlify.toml` now, and two answers
-  are worse than one), `NETLIFY_USE_YARN` (the site is on npm), and
-  `NETLIFY_PRERENDER_ENABLED` with its token.
+Both dashboard steps are done: the site points at this repository, and its
+environment variables are gone entirely — `NODE_VERSION` (answered in
+`netlify.toml`), `NETLIFY_USE_YARN` (the site is on npm) and
+`NETLIFY_PRERENDER_ENABLED` with its token. `selfishprimate/gerillass-web` is
+archived.
 
 That last one is worth understanding rather than just deleting. Netlify's
 prerendering service was serving crawlers a rendered copy of the app, which is
