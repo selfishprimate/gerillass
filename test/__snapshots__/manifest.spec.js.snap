@@ -888,6 +888,14 @@ exports[`Manifest examples loadify: @include loadify(init); .a { @include loadif
   animation-name: loadify;
   animation-fill-mode: forwards;
 }
+@media (prefers-reduced-motion: reduce) {
+  .a {
+    opacity: 1;
+    visibility: visible;
+    backface-visibility: visible;
+    animation: none;
+  }
+}
 
 .a {
   animation-delay: 0.2s;
@@ -909,6 +917,14 @@ exports[`Manifest examples loadify: @include loadify; .a { @include loadify(0.4s
   backface-visibility: hidden;
   animation-name: loadify;
   animation-fill-mode: forwards;
+}
+@media (prefers-reduced-motion: reduce) {
+  .a {
+    opacity: 1;
+    visibility: visible;
+    backface-visibility: visible;
+    animation: none;
+  }
 }
 
 .a {

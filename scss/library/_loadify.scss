@@ -20,6 +20,17 @@
         backface-visibility: hidden;
         animation-name: loadify;
         animation-fill-mode: forwards;
+
+        // The element starts invisible and the animation is what reveals it,
+        // so switching the animation off is not enough on its own: it would
+        // leave the content hidden for good. Under reduced motion the end
+        // state is applied directly instead, and nothing moves.
+        @media (prefers-reduced-motion: reduce) {
+          opacity: 1;
+          visibility: visible;
+          backface-visibility: visible;
+          animation: none;
+        }
       }
     } @else if (list.length($params) == 1 and list.nth($params, 1) != "init") or (list.length($params) == 1 and meta.type-of(list.nth($params, 1)) != "string") {
       @error "#{list.nth($params, 1)} is not a valid argument. Please pass `init` as an argument to initialize the effect or do not pass any argument at all.";

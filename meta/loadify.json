@@ -1,6 +1,6 @@
 {
   "name": "loadify",
-  "summary": "Fades elements in on page load. Call once at the root to set up, then on each element.",
+  "summary": "Fades elements in on page load. Call once at the root to set up, then on each element. Under prefers-reduced-motion: reduce the end state is applied directly and no animation runs. Switching the animation off alone would not do, because the element starts invisible and the animation is what reveals it, so the content would stay hidden for good.",
   "arguments": [
     {
       "name": "$params",

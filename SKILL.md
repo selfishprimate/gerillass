@@ -135,7 +135,7 @@ a dropped declaration rather than an error.
 | `hide($toggle: "hide")` | Visually hides an element while keeping it available to screen readers, or reverses that. |
 | `line-clamp($lines: 3)` | Truncates text after a number of lines, where ellipsis truncates one. It emits five declarations rather than one because -webkit-line-clamp does nothing on its own: without display: -webkit-box or without -webkit-box-orient: vertical the text is not clamped at all and nothing warns you, and without overflow: hidden the clamped text spills out below the box. The unprefixed line-clamp is emitted too, for when it becomes Baseline. |
 | `linear-gradient($direction, $colors)` | Linear gradient background from a direction name or an angle. |
-| `loadify($params...)` | Fades elements in on page load. Call once at the root to set up, then on each element. |
+| `loadify($params...)` | Fades elements in on page load. Call once at the root to set up, then on each element. Under prefers-reduced-motion: reduce the end state is applied directly and no animation runs. Switching the animation off alone would not do, because the element starts invisible and the animation is what reveals it, so the content would stay hidden for good. |
 | `only($params...)` | Selects only the siblings named. |
 | `placeholder-shown` | Styles an input while its placeholder is visible. |
 | `placeholder` | Styles the placeholder text of an input across vendor prefixes. |
