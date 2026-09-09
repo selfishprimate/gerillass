@@ -69,17 +69,18 @@ npm pack --dry-run
 ```
 
 `llms.txt` is generated too, and its links are the one thing no test can check,
-because they point at a site this repository does not build. A new mixin has no
-documentation page until someone writes one, so verify them by hand when the
-release adds a member:
+because they point at sites this repository does not build:
 
 ```bash
-grep -o 'https://[^)]*' llms.txt | sort -u | while read u; do
-  echo "$(curl -s -o /dev/null -w '%{http_code}' -L --max-time 20 "$u") $u"
-done | grep -v '^200'
+node tools/check-links.js
 ```
 
-Expect 98 files / ~38 kB as of v2.0.0: everything under `scss/`, the generated
+Run it on **every** release, not only ones that add a member: a page published
+on the documentation site since the last release should stop linking to source.
+v2.1.0 shipped with `line-clamp` pointing at a page that did not exist, because
+this step was a loop to copy and it was skipped.
+
+Expect 98 files / ~40 kB as of v2.1.0: everything under `scss/`, the generated
 `gerillass.json` and `SKILL.md`, plus `README.md`, `LICENSE.md` and
 `package.json`. If `test/`, `meta/`, `tools/`, `yarn.lock` or
 `node_modules` appear, `.npmignore` is broken — stop and fix it.
