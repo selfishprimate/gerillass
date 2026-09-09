@@ -2,7 +2,7 @@ import { readFileSync, existsSync } from "node:fs";
 import { fileURLToPath, URL } from "node:url";
 import { parse as parseYaml } from "yaml";
 
-import { headFor, headToHtml } from "../src/docs/head.js";
+import { headFor, headToHtml, INDEX_FRONTMATTER } from "../src/docs/head.js";
 
 /*
   Writes each documentation page's head into the file the build generates.
@@ -28,6 +28,9 @@ function normalise(route) {
 }
 
 function frontmatterFor(route) {
+  // /docs is generated from the manifest and has no file to read.
+  if (normalise(route) === "/docs") return INDEX_FRONTMATTER;
+
   const slug = normalise(route).replace(/^\/docs\//, "");
   if (slug === normalise(route)) return null;
   const file = `${CONTENT}/${slug}.mdx`;

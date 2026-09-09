@@ -17,6 +17,23 @@
 
 export const SITE = "https://gerillass.com";
 
+/*
+  The head for /docs itself. That page is generated from the manifest rather
+  than written as markdown, so it has no front matter of its own -- and without
+  this it would fall through to the one index.html carries, and the landing
+  page of the documentation would be titled after the marketing site.
+*/
+export const INDEX_FRONTMATTER = {
+  title: "Documentation",
+  // headFor appends "· Gerillass Documentation", so a page_title of
+  // "Documentation" would have the word twice in one tab.
+  page_title: "Every Mixin and Function",
+  page_description:
+    "Every mixin and function in Gerillass, with what each one does, the arguments it takes and the CSS it emits.",
+  page_keywords:
+    "Gerillass documentation, Sass mixins, Sass functions, SCSS library reference, CSS mixin library",
+};
+
 export function headFor(frontmatter, path) {
   const url = `${SITE}${path}`;
   const title = `${frontmatter.page_title} · Gerillass Documentation`;

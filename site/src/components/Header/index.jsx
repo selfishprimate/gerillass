@@ -30,14 +30,15 @@ class Header extends Component {
             <h2 className="navbar__title">Site Navigation</h2>
             <ul className="navbar__nav__menu">
               <li>
-                <a
-                  className="gtm-navbar-documentation"
-                  href="https://docs.gerillass.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                {/*
+                  An in-app link now that the documentation is part of this
+                  site rather than a separate one, so it no longer opens a tab
+                  or reloads the app. gtm-navbar-documentation is a Google Tag
+                  Manager trigger and has to stay exactly as it is.
+                */}
+                <Link className="gtm-navbar-documentation" to="/docs">
                   Docs
-                </a>
+                </Link>
               </li>
               <li>
                 <a

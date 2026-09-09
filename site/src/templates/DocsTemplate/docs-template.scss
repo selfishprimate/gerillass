@@ -1,0 +1,55 @@
+@import "assets/scss/abstract";
+
+.docs-layout {
+  padding-top: remify(24px);
+
+  &__toggle {
+    display: block;
+    width: 100%;
+    padding: remify(10px) remify(14px);
+    margin-bottom: remify(16px);
+    font-family: $secondary-font-family;
+    font-size: remify(14px);
+    color: $primary-color;
+    background: $white;
+    border: 1px solid $eggshell;
+    border-radius: $border-radius;
+    cursor: pointer;
+  }
+
+  &__aside {
+    /* Collapsed on a narrow screen until the button above opens it. */
+    display: none;
+    margin-bottom: remify(28px);
+
+    &.is-open { display: block; }
+  }
+
+  &__main {
+    min-width: 0;
+  }
+
+  @include breakpoint(min, large) {
+    display: grid;
+    grid-template-columns: remify(240px) minmax(0, 1fr);
+    gap: remify(48px);
+    align-items: start;
+
+    &__toggle { display: none; }
+
+    &__aside {
+      display: block;
+      margin-bottom: 0;
+
+      /*
+        The list stays in view while the page scrolls. Its own overflow is what
+        keeps a 76 item list from running past the bottom of the window, and
+        the offset leaves room for the header above it.
+      */
+      position: sticky;
+      top: remify(24px);
+      max-height: calc(100vh - #{remify(48px)});
+      overflow-y: auto;
+    }
+  }
+}

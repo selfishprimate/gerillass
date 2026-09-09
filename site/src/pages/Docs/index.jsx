@@ -2,6 +2,7 @@ import React from "react";
 
 import DocsMdx from "docs/MdxProvider";
 import useDocumentHead from "docs/useDocumentHead";
+import DocsTemplate from "templates/DocsTemplate";
 
 /*
   The frame every documentation page renders inside. The page itself arrives as
@@ -16,15 +17,11 @@ function DocPage({ Page, frontmatter, slug }) {
   useDocumentHead(frontmatter, `/docs/${slug}/`);
 
   return (
-    <div className="main-container">
-      <div className="main-wrapper">
-        <div className="content">
-          <DocsMdx>
-            <Page />
-          </DocsMdx>
-        </div>
-      </div>
-    </div>
+    <DocsTemplate>
+      <DocsMdx>
+        <Page />
+      </DocsMdx>
+    </DocsTemplate>
   );
 }
 

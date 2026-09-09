@@ -211,17 +211,54 @@ Per-example `<style>` blocks are dropped instead. They were hand-prefixed
 copies of the compiled output, scoped to one demo, and keeping them would let a
 demo go on looking right after the mixin behind it broke.
 
+### The shell around a page
+
+`templates/DocsTemplate` is the documentation's own layout: the site's `Header`
+unchanged, the list of pages, the page, then the footer. It is a second
+template rather than a branch inside `HomeTemplate` because the landing page is
+a column of full width sections and this is two columns, one of them sticky.
+
+`/docs` is a landing page generated from the manifest, with every member and
+its summary. Nothing on it is written by hand, and it is what the header's
+`Docs` link now points at — as an in-app `<Link>`, since the documentation is
+part of this site rather than a separate one. **`gtm-navbar-documentation` is
+still on that link** and must stay.
+
+The sidebar reads `virtual:docs-index`, a module `plugins/docs-index.js`
+builds: it takes the title from each page's front matter and the kind and
+summary from `gerillass.json`. Front matter is read at build time on purpose —
+the pages are lazy so a reader downloads one of them, and importing all 76 to
+read their titles would undo that.
+
+That plugin is also where the two directions are checked, and it prints before
+it throws, because an error raised in a plugin's load hook reaches the terminal
+as vite-react-ssg's "An internal error occurred" and nothing else:
+
+- a page documenting something not in `gerillass.json` fails the build
+- **a member with no page fails the build too**, which is the direction that
+  would otherwise be invisible: the sidebar would look complete while the
+  member went undocumented. It is the same gap the playground's member menu
+  has, three mixins short since 2.1.0 with nothing saying so
+
+It currently holds at 76 pages for 76 members, one to one.
+
+### The head, on a client-side navigation
+
+`useDocumentHead` takes out the `index.html` tags a documentation page replaces
+and puts them back on the way out, rather than appending beside them. Without
+that, arriving at a page from the landing page rather than by URL left **two
+canonical links** in the document, one pointing at the page and one at the home
+page. The build already stripped them from each generated file, so this was
+only ever visible after an in-app navigation.
+
 ### Not done yet
 
-**The documentation pages have no navigation.** `Header` belongs to `Home`, not
-to `Layout`, so a docs page renders with no header, no sidebar and no link to
-any other page — one anchor on the whole page, the GitHub source link in
-`<Member>`. A reader can only arrive by URL. The sidebar wants building from
-`gerillass.json` rather than a list, for the same reason the routes are.
-
-Also outstanding: the aliases in front matter (`aspect-ratio` claims
-`/docs/ratio-box/` and `/docs/responsive-video/`) are not served as redirects,
-and no page has been read end to end for prose quality since the port.
+The aliases in front matter (`aspect-ratio` claims `/docs/ratio-box/` and
+`/docs/responsive-video/`) are not served as redirects. No page has been read
+end to end for prose quality since the port. And whether Netlify resolves
+`/docs` to `dist/docs.html` ahead of the `/*` SPA fallback has not been seen in
+production — it is the same convention `/about` already ships under, so it
+should hold, but it has not been watched.
 
 ## Dormant code — do not assume it is live
 

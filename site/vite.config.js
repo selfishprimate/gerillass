@@ -2,6 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import svgr from "vite-plugin-svgr";
 import sassExample from "./plugins/sass-example.js";
+import docsIndex from "./plugins/docs-index.js";
 import docsHead from "./plugins/docs-head.js";
 import mdx from "@mdx-js/rollup";
 import remarkFrontmatter from "remark-frontmatter";
@@ -51,6 +52,7 @@ export default defineConfig({
     react({ include: /\.(jsx|js|mdx|md|tsx|ts)$/ }),
     svgr(),
     sassExample(),
+    docsIndex(),
   ],
   // create-react-app let the source import from the top of src/ without a
   // relative path -- `components/Header`, `release` -- because jsconfig.json set
