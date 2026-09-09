@@ -47,6 +47,9 @@ const firstSentence = (text) => {
 // but a function is camelCase and its page is not: `clearUnit` lives at
 // /docs/clear-unit/, and /docs/clearUnit/ is a 404.
 //
+// That split is deliberate and settled: kebab-case is the convention for a URL,
+// and camelCase belongs in the code. Do not propose aligning the two.
+//
 // This cost an hour. Probing the site with member names reported 18 functions
 // as having no page, and the five that "passed" were exactly the single-word
 // names, where the two spellings coincide. A perfect correlation between

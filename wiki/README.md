@@ -43,6 +43,13 @@ release that broke anything. Do not update it for a release that breaks
 nothing, and do not report it as stale. It changes when the next breaking
 version ships.
 
+**Documentation URLs are kebab-case, including for the camelCase functions.**
+`clearUnit` is documented at `/docs/clear-unit/`, and that is settled: kebab is
+the convention for a URL and camelCase belongs in the code. It looks like an
+inconsistency and is not one. Do not propose changing it, and when probing the
+site for a page, slug the name first: `/docs/clearUnit/` is a 404 and means
+nothing about whether the page exists.
+
 ## Related documents, and when to use those instead
 
 - **`CHANGELOG.md`** is for users of the library. Written first, and these
