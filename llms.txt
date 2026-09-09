@@ -33,15 +33,15 @@ Arguments are validated and refused with a message naming what is accepted, so a
 - [circle($size)](https://docs.gerillass.com/docs/circle/): Square element with a fully rounded border, i.e.
 - [clearfix](https://docs.gerillass.com/docs/clearfix/): Clears floated children using an ::after pseudo-element.
 - [columnizer($params...)](https://docs.gerillass.com/docs/columnizer/): Flexbox grid of equal columns, with an optional gutter and fill behaviour.
-- [container-query($params...)](https://github.com/selfishprimate/gerillass/blob/main/scss/library/_container-query.scss): A @container rule, taking the same argument shapes as breakpoint so the two read alike.
-- [container($name: null, $type: inline-size)](https://github.com/selfishprimate/gerillass/blob/main/scss/library/_container.scss): Marks an element as a query container, so container-query can ask about its width instead of the viewport's.
+- [container-query($params...)](https://docs.gerillass.com/docs/container-query/): A @container rule, taking the same argument shapes as breakpoint so the two read alike.
+- [container($name: null, $type: inline-size)](https://docs.gerillass.com/docs/container/): Marks an element as a query container, so container-query can ask about its width instead of the viewport's.
 - [counter($params...)](https://docs.gerillass.com/docs/counter/): CSS counter for a list, with optional text before and after the number.
 - [ellipsis($width: 100%, $display: inline-block)](https://docs.gerillass.com/docs/ellipsis/): Truncates a single line of text with an ellipsis.
 - [escape-to-parent($selector: null)](https://docs.gerillass.com/docs/escape-to-parent/): Re-roots the current selector under another one using @at-root.
 - [except($params...)](https://docs.gerillass.com/docs/except/): Selects every sibling except the ones named.
 - [font-face($font-family, $file-path, $font-style: normal, $font-weight: 400, $file-formats: eot woff2 woff ttf svg)](https://docs.gerillass.com/docs/font-face/): Emits an @font-face rule for one family across several file formats.
 - [hide($toggle: "hide")](https://docs.gerillass.com/docs/hide/): Visually hides an element while keeping it available to screen readers, or reverses that.
-- [line-clamp($lines: 3)](https://github.com/selfishprimate/gerillass/blob/main/scss/library/_line-clamp.scss): Truncates text after a number of lines, where ellipsis truncates one.
+- [line-clamp($lines: 3)](https://docs.gerillass.com/docs/line-clamp/): Truncates text after a number of lines, where ellipsis truncates one.
 - [linear-gradient($direction, $colors)](https://docs.gerillass.com/docs/linear-gradient/): Linear gradient background from a direction name or an angle.
 - [loadify($params...)](https://docs.gerillass.com/docs/loadify/): Fades elements in on page load.
 - [only($params...)](https://docs.gerillass.com/docs/only/): Selects only the siblings named.
@@ -75,7 +75,7 @@ Arguments are validated and refused with a message naming what is accepted, so a
 - [convertToEm($value)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_convert-to-em.scss): Converts a pixel length to em, against a 16px base.
 - [convertToNumber($value)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_convert-to-number.scss): Parses a string of digits into a number.
 - [fillNulls($value, $seperation: comma, $skip: false)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_fill-nulls.scss): Replaces null entries in a list with 0, or drops them.
-- [fluid($min, $max, $min-viewport: 320px, $max-viewport: 1280px)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_fluid.scss): A clamp() value that grows with the viewport between two widths, then stops.
+- [fluid($min, $max, $min-viewport: 320px, $max-viewport: 1280px)](https://docs.gerillass.com/docs/fluid/): A clamp() value that grows with the viewport between two widths, then stops.
 - [fontSizer($size, $time)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_font-sizer.scss): Multiplies a size by a factor.
 - [fontSource($font-family, $file-path, $file-formats)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_font-source.scss): Builds one src entry for an @font-face rule.
 - [isColor($value)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_is-color.scss): Returns the value if every item in it is a colour, and errors otherwise.

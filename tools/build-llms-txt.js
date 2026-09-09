@@ -11,12 +11,12 @@
 // the manifest matches the code.
 //
 // A member links to its documentation page when it has one, and to its source
-// when it does not. Only `remify` among the functions has a page, and a mixin
-// added in a release has none until someone writes it, which is what
-// NO_PAGE_YET records. gerillass.json documents every member either way.
+// when it does not; gerillass.json documents it either way. Which is which is
+// recorded in the two lists below, because it cannot be worked out from here.
 //
-// Nothing here can check these links, because the pages belong to a site this
-// repository does not build. `/release` carries a loop that re-checks them.
+// Nothing in this repository can check those links, since the pages belong to a
+// site it does not build. `node tools/check-links.js` fetches them instead, and
+// `/release` says to run it on every release.
 //
 //   node tools/build-llms-txt.js            # write llms.txt
 //   node tools/build-llms-txt.js --check    # fail if it is out of date
@@ -49,9 +49,10 @@ const firstSentence = (text) => {
 // name across and re-run `npm run manifest`; the loop in `/release` is what
 // finds a name that was forgotten.
 //
-// Last checked against docs.gerillass.com when v2.1.0 was cut.
-const MIXINS_WITHOUT_PAGE = new Set(["container", "container-query", "line-clamp"]);
-const FUNCTIONS_WITH_PAGE = new Set(["remify", "pixelify", "shade", "tint"]);
+// Last checked against docs.gerillass.com after v2.1.0 shipped: every mixin has
+// a page, and 5 of the 23 functions do.
+const MIXINS_WITHOUT_PAGE = new Set([]);
+const FUNCTIONS_WITH_PAGE = new Set(["fluid", "pixelify", "remify", "shade", "tint"]);
 
 const hasDocsPage = (member) =>
   member.kind === "mixin"
