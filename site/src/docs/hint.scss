@@ -6,7 +6,14 @@
   border-left: 3px solid $eggshell;
   border-radius: 0 remify(6px) remify(6px) 0;
   background: $alabaster;
-  font-size: remify(15px);
+
+  /*
+    A shade smaller and tighter than the prose around it. A hint is an aside,
+    and set at the body size with the body's rhythm it read as another
+    paragraph that happened to have a bar down its left.
+  */
+  font-size: remify(14px);
+  line-height: 1.5;
 
   > :first-child { margin-top: 0; }
   > :last-child { margin-bottom: 0; }

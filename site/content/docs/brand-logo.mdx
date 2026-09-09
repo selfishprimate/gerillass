@@ -34,7 +34,9 @@ In this example, I create a logo for **Coolors**. You can use your own brand's l
 
 </Hint>
 
-<Example caption="It is important to use markup similar to the example below. The containing element does not have to be an `<h1>` tag, so feel free to change it depending on the SEO strategy you use on your site.">
+<Example caption="It is important to use markup similar to the example below. The containing element does not have to be an `<h1>` tag, so feel free to change it depending on the SEO strategy you use on your site." listing="<h1 class=&quot;brand-logo&quot;>
+  <a href=&quot;#&quot;>Coolors</a>
+</h1>">
 ```scss
 .brand-logo{
   @include brand-logo(
@@ -45,7 +47,9 @@ In this example, I create a logo for **Coolors**. You can use your own brand's l
 }
 ```
 ```html
-<h1 class="brand-logo">
+Now simply call the mixin as in the example below, and change the argument values to fit your brand logo.
+
+<h1 class="brand-logo example01">
   <a href="#">Coolors</a>
 </h1>
 ```
@@ -57,7 +61,9 @@ Note that the `background-image` declaration has disappeared from the generated 
 
 </Hint>
 
-<Example caption="As mentioned before, the `$image-url` argument is optional. With that in mind, let's specify the logo image using the selected element's style attribute.">
+<Example caption="As mentioned before, the `$image-url` argument is optional. With that in mind, let's specify the logo image using the selected element's style attribute." listing="<h1 class=&quot;brand-logo&quot; style=&quot;background-image: url(https://coolors.co/assets/img/logo.svg);&quot;>
+  <a href=&quot;#&quot;>Coolors</a>
+</h1>">
 ```scss
 .brand-logo{
   @include brand-logo(

@@ -232,6 +232,29 @@ function convert(slug, source) {
   transcript in the install page is the one case -- so it is left as plain
   fenced code.
 */
+/*
+  Pulls {{< hint >}} blocks out of a run of lines, leaving the rest in place and
+  returning what it found. Hints are prose about the example, not part of it.
+*/
+function takeHints(lines) {
+  const found = [];
+  const kept = [];
+  let kind = null;
+  let held = [];
+
+  for (const line of lines) {
+    const o = line.match(OPEN);
+    const c = line.match(CLOSE);
+    if (o && o[1] === "hint") { kind = attrs(o[2]).bare[0] || "info"; continue; }
+    if (c && c[1] === "hint") { found.push({ kind, text: held.join("\n").trim() }); kind = null; held = []; continue; }
+    (kind ? held : kept).push(line);
+  }
+
+  lines.length = 0;
+  lines.push(...kept);
+  return found;
+}
+
 function example(block, stated, notes, className, pageStyles = [], setup = null) {
   const caption = [];
   const fences = [];
@@ -258,21 +281,15 @@ function example(block, stated, notes, className, pageStyles = [], setup = null)
     part of the sentence introducing it, so it comes out and is written above
     the example rather than being escaped into the caption attribute.
   */
-  const hints = [];
-  {
-    const kept = [];
-    let open = null;
-    let held = [];
-    for (const line of caption) {
-      const o = line.match(OPEN);
-      const c = line.match(CLOSE);
-      if (o && o[1] === "hint") { open = attrs(o[2]).bare[0] || "info"; continue; }
-      if (c && c[1] === "hint") { hints.push({ kind: open, text: held.join("\n").trim() }); open = null; held = []; continue; }
-      (open ? held : kept).push(line);
-    }
-    caption.length = 0;
-    caption.push(...kept);
-  }
+  const hints = takeHints(caption);
+
+  /*
+    A hint can also sit after the code rather than before it, which is how two
+    of loadify's ended up inside the rendered demo and reached the page as the
+    characters "{{< hint info >}}". They come out here and are written under
+    the example, where the page had them.
+  */
+  const trailingHints = takeHints(demo);
 
   const scss = fences.find((f) => f.lang === "scss");
   const css = fences.find((f) => f.lang === "css");
@@ -298,13 +315,56 @@ function example(block, stated, notes, className, pageStyles = [], setup = null)
     carrying its own copy would keep looking right after the mixin broke. Any
     that hold more than a restatement are reported rather than guessed at.
   */
-  const markup = demo.join("\n");
+  /*
+    The sandbox shortcode rendered an empty div carrying the compiled CSS again
+    as an inline style, by hand: <div class="sandbox xlarge" style="position:
+    relative;background-image:...">. Six pages use it, twenty six times.
+
+    Here the div takes the class the example's own Sass targets instead, so the
+    demo is painted by the CSS this repository compiled rather than by a copy
+    somebody kept up to date by hand. If the mixin changes, the demo changes
+    with it; if it breaks, the demo breaks and says so.
+  */
+  const target = scss ? scss.code.match(/^\s*\.([a-zA-Z][\w-]*)/m)?.[1] : null;
+
+  const markup = demo
+    .join("\n")
+    .replace(
+      /\{\{<\s*sandbox\s*(.*?)\s*>\}\}[\s\S]*?\{\{<\s*\/\s*sandbox\s*>\}\}/g,
+      (_, raw) => {
+        const size = attrs(raw).out.class || "";
+        const names = [target, "sandbox", size].filter(Boolean).join(" ");
+        return `<div class="${names}"></div>`;
+      }
+    );
   const styles = [...markup.matchAll(/<style>([\s\S]*?)<\/style>/gi)].map((m) => m[1]);
   if (styles.length) notes.push({ caption: caption.join(" ").trim().slice(0, 60), styles });
 
-  const body = html
-    ? html.code
-    : markup.replace(/<style>[\s\S]*?<\/style>/gi, "").trim();
+  /*
+    A listing and a demo are two things, and fourteen examples across ten pages
+    carry both: an ```html fence showing the markup to write, and a separate
+    sandbox rendering the result. Taking the fence as the demo, as this did at
+    first, threw the sandbox away and left those examples rendering a snippet
+    that was never meant to stand on its own.
+
+    So the fence stays a fence and the raw markup becomes the demo. Where there
+    is no fence, the markup is both, which is the other hundred and one.
+  */
+  /*
+    A listing and a demo are two things, and fourteen examples across ten pages
+    carry both: an ```html fence showing the markup to write, and a separate
+    sandbox rendering the result.
+
+    The fence always holds what gets rendered, because that keeps the .mdx
+    readable. What the page prints is the `listing` attribute, and it is set
+    only where the old page chose to print one. The other hundred and one
+    examples carry markup purely so the demo has something to style -- an empty
+    div with a sizing class -- and printing that would put scaffolding in front
+    of a reader as though it were the answer.
+  */
+  const rendered = markup.replace(/<style>[\s\S]*?<\/style>/gi, "").trim();
+  const body = rendered || (html ? html.code : "");
+  const listing = html ? html.code : null;
 
   const parts = [];
   for (const h of hints) parts.push(`<Hint kind="${quote(h.kind)}">`, "", h.text, "", "</Hint>", "");
@@ -314,6 +374,7 @@ function example(block, stated, notes, className, pageStyles = [], setup = null)
     "<Example",
     text ? ` caption="${quote(forAttribute(text))}"` : "",
     setup ? ` setup="${quote(setup)}"` : "",
+    listing ? ` listing="${quote(listing)}"` : "",
     ">",
   ].join("");
   parts.push(open);
@@ -330,6 +391,7 @@ function example(block, stated, notes, className, pageStyles = [], setup = null)
     : body;
   if (decorated) parts.push("```html", decorated, "```");
   parts.push("</Example>", "");
+  for (const h of trailingHints) parts.push(`<Hint kind="${quote(h.kind)}">`, "", h.text, "", "</Hint>", "");
   return parts;
 }
 

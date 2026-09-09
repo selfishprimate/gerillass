@@ -35,10 +35,7 @@ The **first** value selects the `top-left` corner, the **second** the `top-right
 }
 ```
 ```html
-{{< sandbox class="medium" >}}
-background-color: #5bc0bb;
-clip-path: polygon(0 30px, 30px 0, calc(100% - 30px) 0, 100% 30px, 100% calc(100% - 30px), calc(100% - 30px) 100%, 30px 100%, 0 calc(100% - 30px));
-{{< /sandbox >}}
+<div class="element sandbox medium"></div>
 ```
 </Example>
 
@@ -49,10 +46,7 @@ clip-path: polygon(0 30px, 30px 0, calc(100% - 30px) 0, 100% 30px, 100% calc(100
 }
 ```
 ```html
-{{< sandbox class="medium" >}}
-background-color: #5bc0bb;
-clip-path: polygon(0 30px, 30px 0, calc(100% - 30px) 0, 100% 30px, 100% calc(100% - 0px), calc(100% - 0px) 100%, 0px 100%, 0 calc(100% - 0px));
-{{< /sandbox >}}
+<div class="element sandbox medium"></div>
 ```
 </Example>
 
@@ -63,10 +57,7 @@ clip-path: polygon(0 30px, 30px 0, calc(100% - 30px) 0, 100% 30px, 100% calc(100
 }
 ```
 ```html
-{{< sandbox class="medium" >}}
-background-color: #5bc0bb;
-clip-path: polygon(0 0px, 0px 0, calc(100% - 0px) 0, 100% 0px, 100% calc(100% - 50px), calc(100% - 50px) 100%, 50px 100%, 0 calc(100% - 50px));
-{{< /sandbox >}}
+<div class="element sandbox medium"></div>
 ```
 </Example>
 
@@ -76,7 +67,9 @@ For some reason, your design component might look different, but I'm sure you ge
 
 </Hint>
 
-<Example caption="Now, let's try something really fancy!">
+<Example caption="Now, let's try something really fancy!" listing="<div class=&quot;element&quot;>
+  <h2>It's a fancy looking title text!</h2>
+</div>">
 ```scss
 .element{
   height: 200px;

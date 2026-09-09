@@ -62,12 +62,24 @@ const components = {
   h4: heading(5),
   h5: heading(6),
 
-  // A fenced block. Mapping `pre` rather than `code` keeps inline code alone,
-  // which is a different thing and styled as one.
-  pre: CodeBlock,
+  /*
+    A fenced block. Mapping `pre` rather than `code` keeps inline code alone,
+    which is a different thing and styled as one. The fence's language becomes
+    the label inside the block, so a reader can tell Sass from CSS from markup
+    without the page saying so in prose.
+  */
+  pre: Fence,
 
   a: DocLink,
 };
+
+const LANGUAGE_NAMES = { scss: "Sass", css: "CSS", html: "HTML", js: "JavaScript", json: "JSON", bash: "Terminal", text: null, nix: "Terminal" };
+
+function Fence(props) {
+  const lang = String(props.children?.props?.className || "").match(/language-([\w-]+)/)?.[1];
+  const label = lang ? (lang in LANGUAGE_NAMES ? LANGUAGE_NAMES[lang] : lang.toUpperCase()) : null;
+  return <CodeBlock label={label} {...props} />;
+}
 
 function DocsMdx({ children }) {
   return <MDXProvider components={components}>{children}</MDXProvider>;

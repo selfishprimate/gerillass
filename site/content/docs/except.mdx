@@ -167,7 +167,14 @@ When you pass arguments for the `id` or `class` attributes of the items, don't f
 
 </Hint>
 
-<Example caption="Let's exclude the items with class `exclude` on them.">
+<Example caption="Let's exclude the items with class `exclude` on them." listing="<div class=&quot;list-wrapper&quot;>
+  <div class=&quot;list-item exclude&quot;>01</div>
+  <div class=&quot;list-item&quot;>02</div>
+  <div class=&quot;list-item&quot;>03</div>
+  <div class=&quot;list-item&quot;>04</div>
+  <div class=&quot;list-item&quot;>05</div>
+  <div class=&quot;list-item exclude&quot;>06</div>
+</div>">
 ```scss
 .list-wrapper{
   .list-item{
@@ -179,7 +186,7 @@ When you pass arguments for the `id` or `class` attributes of the items, don't f
 }
 ```
 ```html
-<div class="list-wrapper">
+<div class="list-wrapper example06">
   <div class="list-item exclude">01</div>
   <div class="list-item">02</div>
   <div class="list-item">03</div>

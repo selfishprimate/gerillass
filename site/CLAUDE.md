@@ -277,6 +277,26 @@ The conversion also turned up one documentation defect the manifest could
 prove: the `scissors` page wrote its argument as `--`, so a reader was never
 told it is `$corners`. It was the only mismatch across all 76 pages.
 
+### Examples
+
+An `<Example>` is not a card. The caption is prose, the Sass and the CSS are
+ordinary `CodeBlock`s carrying their own labels, and the only framed thing is
+the demo, which needs a surface to be a demo.
+
+**A listing and a demo are two different things.** Fourteen examples across ten
+pages carry both: an ```html fence showing the markup to write, and a separate
+`{{< sandbox >}}` rendering the result. The fence always holds what gets
+rendered, because that keeps the `.mdx` readable; what gets *printed* is the
+`listing` attribute, set only where the old page chose to print one. The other
+hundred and one carry markup purely so the demo has something to style, an
+empty div with a sizing class, and printing that would offer scaffolding as
+though it were the answer.
+
+The `sandbox` shortcode itself rendered an empty div carrying the compiled CSS
+again as a hand-written inline style. Here the div takes the class the
+example's Sass targets instead, so the demo is painted by the CSS this
+repository compiled: if the mixin breaks, the demo breaks and says so.
+
 ### Demos
 
 An example's demo markup goes in an ```html fence, which is the one pane the

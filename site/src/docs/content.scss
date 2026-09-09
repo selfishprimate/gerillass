@@ -37,11 +37,12 @@
     margin-top: 0;
   }
 
-  p,
-  li {
-    font-size: 1rem;
-    line-height: 1.65;
-  }
+  /*
+    No rule for `p` here. The size and rhythm are set on the container above
+    and inherited, which leaves a component free to set its own: a rule for `p`
+    at this level reached inside every hint and caption and overrode them
+    without either one being able to say otherwise.
+  */
 
   ul,
   ol {

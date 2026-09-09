@@ -18,16 +18,70 @@
 .code-block {
   border-radius: remify(16px);
   overflow: hidden;
+  background: $primary-color;
+
+  /*
+    The label and the copy button sit in the flow above the code, sharing its
+    background so the two read as one block.
+
+    They were absolutely positioned at first, to leave every block's height
+    untouched. That put them over the first line of code, and the padding meant
+    to clear them lost to the landing page's own `padding: 1.5rem !important`
+    on the same element. A row in normal flow cannot overlap anything.
+  */
+  &__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: remify(12px);
+    padding: remify(12px) remify(16px) 0;
+  }
+
+  &__label {
+    font-family: $secondary-font-family;
+    font-size: remify(10px);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $secondary-color;
+    opacity: 0.45;
+  }
+
+  &__copy {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: remify(6px);
+    padding: remify(4px) remify(9px);
+    font-family: $secondary-font-family;
+    font-size: remify(11px);
+    letter-spacing: 0.04em;
+    color: $secondary-color;
+    background: transparentize($secondary-color, 0.9);
+    border: 0;
+    border-radius: remify(6px);
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity $global-transition, background-color $global-transition;
+
+    &:hover,
+    &:focus-visible {
+      opacity: 1;
+      background: transparentize($secondary-color, 0.8);
+    }
+
+    ion-icon { font-size: remify(14px); }
+  }
 
   pre {
     margin: 0 !important;
-    padding: 1.5rem !important;
+    /* The bar above already provides the room, so the top is tighter. */
+    padding: remify(12px) 1.5rem 1.5rem !important;
     overflow-x: auto;
     font-family: $tertiary-font-family;
     font-size: 1rem !important;
     line-height: 1.4;
     background-color: $primary-color !important;
-    border-radius: remify(16px);
     tab-size: 2;
   }
 

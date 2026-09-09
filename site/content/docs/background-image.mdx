@@ -30,9 +30,7 @@ The **Background Image** Sass mixin allows you to apply background images to the
 }
 ```
 ```html
-{{< sandbox class="xlarge" >}}
-position: relative;background-image: url("/images/backgrounds/07.jpg");background-position: center center;background-repeat: no-repeat;background-size: cover;
-{{< /sandbox >}}
+<div class="element sandbox xlarge"></div>
 ```
 </Example>
 
@@ -43,9 +41,7 @@ position: relative;background-image: url("/images/backgrounds/07.jpg");backgroun
 }
 ```
 ```html
-{{< sandbox class="xlarge" >}}
-position: relative;background-image: -webkit-gradient(linear, left bottom, left top, from(rgba(255, 204, 153, 0.5)), to(rgba(255, 204, 153, 0.5))), url("/images/backgrounds/07.jpg");background-image: linear-gradient(to top, rgba(255, 204, 153, 0.5), rgba(255, 204, 153, 0.5)), url("/images/backgrounds/07.jpg");background-position: center center;background-repeat: no-repeat;background-size: cover;
-{{< /sandbox >}}
+<div class="element sandbox xlarge"></div>
 ```
 </Example>
 
@@ -62,9 +58,7 @@ position: relative;background-image: -webkit-gradient(linear, left bottom, left 
 }
 ```
 ```html
-{{< sandbox class="xlarge" >}}
-position: relative;background-image: -webkit-gradient(linear, left bottom, left top, from(rgba(0, 0, 0, 0.5)), to(rgba(40, 102, 100, 0.8))), url("/images/backgrounds/07.jpg");background-image: linear-gradient(to top, rgba(0, 0, 0, 0.5), rgba(40, 102, 100, 0.8)), url("/images/backgrounds/07.jpg");background-position: center center;background-repeat: no-repeat;background-size: cover;
-{{< /sandbox >}}
+<div class="element sandbox xlarge"></div>
 ```
 </Example>
 
@@ -81,9 +75,7 @@ position: relative;background-image: -webkit-gradient(linear, left bottom, left 
 }
 ```
 ```html
-{{< sandbox class="xlarge" >}}
-position: relative;background-image: -webkit-gradient(linear, left top, right top, from(rgba(0, 128, 128, 0.7)), to(rgba(255, 192, 203, 0.8))), url("/images/backgrounds/07.jpg");background-image: linear-gradient(to right, rgba(0, 128, 128, 0.7), rgba(255, 192, 203, 0.8)), url("/images/backgrounds/07.jpg");background-position: center center;background-repeat: no-repeat;background-size: cover;
-{{< /sandbox >}}
+<div class="element sandbox xlarge"></div>
 ```
 </Example>
 
@@ -93,28 +85,30 @@ position: relative;background-image: -webkit-gradient(linear, left top, right to
 
 </Hint>
 
-<Example caption="There will be times when you want to **add a background image to an element using the style attribute**, like in the example below. **In those cases, just use `null` to skip the `$image-url` argument.**">
+<Example caption="There will be times when you want to **add a background image to an element using the style attribute**, like in the example below. **In those cases, just use `null` to skip the `$image-url` argument.**" listing="<div class=&quot;element&quot; style=&quot;background-image: url(/images/backgrounds/07.jpg)&quot;></div>">
 ```scss
 .element{
   @include background-image(null, rgba(teal, 0.7) rgba(pink, 0.8), right);
 }
 ```
 ```html
-<div class="element" style="background-image: url(/images/backgrounds/07.jpg)"></div>
+<div class="element sandbox xxlarge example05" style="background-image: url(/images/backgrounds/07.jpg)"></div>
 ```
 </Example>
 
 <Example caption="You are probably wondering why those `position: relative` and `z-index: 1` style rules are applied to the direct children of the selected element. **These rules exist to prevent the color filter from covering the direct children when you add the background image to an element using the style attribute.**
 
-Let's try it with a title placed inside the selected element to see it in action.">
+Let's try it with a title placed inside the selected element to see it in action." listing="<div class=&quot;element&quot; style=&quot;background-image: url(/images/backgrounds/07.jpg)&quot;>
+  <h2>A beautiful title text standing over the color filter.</h2>
+</div>">
 ```scss
 .element{
   @include background-image(null, rgba(teal, 0.7) rgba(pink, 0.8), right);
 }
 ```
 ```html
-<div class="element" style="background-image: url(/images/backgrounds/07.jpg)">
-  <h2>A beautiful title text standing over the color filter.</h2>
+<div class="element sandbox large example06" style="background-image: url(/images/backgrounds/07.jpg)">
+  <h2 class="title">A beautiful title text standing over the color filter.</h2>
 </div>
 ```
 </Example>

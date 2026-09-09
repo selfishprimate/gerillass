@@ -45,12 +45,13 @@ const FRAME_BASE = `
   .sandbox.text { font-size: 3em; margin: 0; }
 `;
 
-function Example({ source, css, html, title, caption, height = 160, interactive = false }) {
+function Example({ source, css, html, listing, title, caption, height = 160, interactive = false }) {
   const [measured, setMeasured] = useState(null);
   const frame = useRef(null);
 
   // Re-attach the observer when the demo itself changes, not on every render.
-  const srcDocKey = css + String(html);
+  const rendered = html;
+  const srcDocKey = css + String(rendered);
 
   /*
     The frame is left same-origin so its height can be read back and the box
@@ -110,7 +111,7 @@ function Example({ source, css, html, title, caption, height = 160, interactive 
     };
   }, [srcDocKey]);
 
-  const srcDoc = `<!doctype html><html><head><meta charset="utf-8"><style>${FRAME_BASE}${css}</style></head><body>${html}</body></html>`;
+  const srcDoc = `<!doctype html><html><head><meta charset="utf-8"><style>${FRAME_BASE}${css}</style></head><body>${rendered}</body></html>`;
 
   return (
     <figure className="example">
@@ -118,8 +119,15 @@ function Example({ source, css, html, title, caption, height = 160, interactive 
       {caption ? <p className="example__caption">{inline(caption)}</p> : null}
 
       <div className="example__panes">
-        <Pane label="Sass" language="scss" code={source} />
-        <Pane label="CSS" language="css" code={css} />
+        <CodeBlock label="Sass" language="scss">{source}</CodeBlock>
+        <CodeBlock label="CSS" language="css">{css}</CodeBlock>
+        {/*
+          Printed only where the page wrote a listing. Most examples carry
+          markup purely so the demo has something to style, and putting that in
+          front of a reader would offer scaffolding as though it were the
+          answer.
+        */}
+        {listing ? <CodeBlock label="HTML" language="html">{listing}</CodeBlock> : null}
       </div>
 
       {/*
@@ -128,7 +136,7 @@ function Example({ source, css, html, title, caption, height = 160, interactive 
         empty box -- was showing an empty frame under a Result label, which
         reads as a demo that failed rather than as one that was never there.
       */}
-      {html ? (
+      {rendered ? (
       <div className="example__result">
         <div className="example__label">Result</div>
         <iframe
@@ -151,18 +159,5 @@ function Example({ source, css, html, title, caption, height = 160, interactive 
   );
 }
 
-/*
-  One pane of the example. Both of them are the same thing with a different
-  label, and the code inside goes through the same highlighter as every other
-  block on the site.
-*/
-function Pane({ label, language, code }) {
-  return (
-    <div className="example__pane">
-      <div className="example__label">{label}</div>
-      <CodeBlock language={language}>{code}</CodeBlock>
-    </div>
-  );
-}
 
 export default Example;

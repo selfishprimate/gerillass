@@ -22,25 +22,25 @@ The **Text Image** Sass mixin helps you clip the background image of a selected 
 
 ## Examples
 
-<Example caption="Simply call the mixin inside the selector and pass the URL of an image.">
+<Example caption="Simply call the mixin inside the selector and pass the URL of an image." listing="<h2 class=&quot;element&quot;>Text Image is Awesome!</h2>">
 ```scss
 .element{
   @include text-image("/images/backgrounds/05.jpg");
 }
 ```
 ```html
-<h2 class="element">Text Image is Awesome!</h2>
+<h2 class="sandbox text" style="background-image: url('/images/backgrounds/05.jpg');background-size: cover;background-position: center;-webkit-background-clip: text;-webkit-text-fill-color: transparent;background-clip: text;color: transparent;">Text Image is Awesome!</h2>
 ```
 </Example>
 
-<Example caption="The `$image` argument is optional. This is especially useful when the image is loaded from the markup, as in the example below.">
+<Example caption="The `$image` argument is optional. This is especially useful when the image is loaded from the markup, as in the example below." listing="<h2 class=&quot;element&quot; style=&quot;background-image: url(https://i.picsum.photos/id/225/1500/979.jpg)&quot;>Text Image is Awesome!</h2>">
 ```scss
 .element{
   @include text-image;
 }
 ```
 ```html
-<h2 class="element" style="background-image: url(https://i.picsum.photos/id/225/1500/979.jpg)">Text Image is Awesome!</h2>
+<h2 class="sandbox text" style="background-image: url(https://i.picsum.photos/id/225/1500/979.jpg);background-size: cover;background-position: center;-webkit-background-clip: text;-webkit-text-fill-color: transparent;background-clip: text;color: transparent;">Text Image is Awesome!</h2>
 ```
 </Example>
 

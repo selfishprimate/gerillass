@@ -42,7 +42,10 @@ The **Sprite** Sass mixin helps you apply background images to the selected elem
 ```
 </Example>
 
-<Example caption="Or you can apply it to multiple elements, with a different image for each one selected from a single sprite sheet. **Suppose you have markup like the one below, and you want to assign a different background image to each element from a single sprite sheet.**">
+<Example caption="Or you can apply it to multiple elements, with a different image for each one selected from a single sprite sheet. **Suppose you have markup like the one below, and you want to assign a different background image to each element from a single sprite sheet.**" listing="<div class=&quot;sprite-element first&quot;></div>
+<div class=&quot;sprite-element second&quot;></div>
+<div class=&quot;sprite-element third&quot;></div>
+<div class=&quot;sprite-element fourth&quot;></div>">
 ```scss
 .sprite-element{
   width: 100px;
@@ -51,10 +54,20 @@ The **Sprite** Sass mixin helps you apply background images to the selected elem
 }
 ```
 ```html
-<div class="sprite-element first"></div>
-<div class="sprite-element second"></div>
-<div class="sprite-element third"></div>
-<div class="sprite-element fourth"></div>
+First let's call the mixin to define the sprite image's URL and specify the `width` and `height` of the image we are going to select.
+
+You can pass `width` and `height` values into the mixin as well!
+
+Then let's pass the position values for each of the elements separately, using the secondary classes on them.
+
+The result will look like this:
+
+<div class="sprite-elements">
+  <div class="sprite-element first"></div>
+  <div class="sprite-element second"></div>
+  <div class="sprite-element third"></div>
+  <div class="sprite-element fourth"></div>
+</div>
 ```
 </Example>
 
