@@ -1,0 +1,19 @@
+{
+  "name": "container-query",
+  "summary": "A @container rule, taking the same argument shapes as breakpoint so the two read alike. Sizes may be a key from $map-for-breakpoints or a raw length, and a length is the common case because a container is usually narrower than the viewport. Nothing matches at all unless an ancestor was declared with the container mixin.",
+  "arguments": [
+    { "name": "$params", "accepts": ["a size", "two sizes for a range", "one of min, max, only or between followed by a size", "$name as a keyword, to query one named container"] }
+  ],
+  "examples": [
+    ".title { @include container-query(\"min\", 400px) { font-size: 2rem; } }",
+    ".title { @include container-query(\"max\", 399px) { font-size: 1rem; } }",
+    ".title { @include container-query(\"between\", 300px 500px) { color: red; } }",
+    ".title { @include container-query(300px, 500px) { color: red; } }",
+    ".title { @include container-query(\"min\", \"medium\") { color: red; } }",
+    ".title { @include container-query(\"min\", 400px, $name: \"card\") { color: red; } }"
+  ],
+  "rejects": [
+    ".title { @include container-query(\"min\", 400px, 800px) { color: red; } }",
+    ".title { @include container-query(\"min\", 400px, $name: 42) { color: red; } }"
+  ]
+}

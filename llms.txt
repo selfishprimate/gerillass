@@ -1,6 +1,6 @@
 # Gerillass
 
-> A Sass toolkit of 50 mixins and 22 functions, built to be read by coding agents as well as by people. Every member is described in a machine-readable manifest whose examples and refusals are executed by the test suite, so the documentation cannot drift away from the code.
+> A Sass toolkit of 52 mixins and 22 functions, built to be read by coding agents as well as by people. Every member is described in a machine-readable manifest whose examples and refusals are executed by the test suite, so the documentation cannot drift away from the code.
 
 Gerillass is a pure Sass library. There is no build step and no runtime dependency: the `.scss` sources are the deliverable, and the package installs nothing else. It needs Dart Sass; LibSass and node-sass are not supported. This file describes Gerillass 2.0.1.
 
@@ -33,6 +33,8 @@ Arguments are validated and refused with a message naming what is accepted, so a
 - [circle($size)](https://docs.gerillass.com/docs/circle/): Square element with a fully rounded border, i.e.
 - [clearfix](https://docs.gerillass.com/docs/clearfix/): Clears floated children using an ::after pseudo-element.
 - [columnizer($params...)](https://docs.gerillass.com/docs/columnizer/): Flexbox grid of equal columns, with an optional gutter and fill behaviour.
+- [container-query($params...)](https://github.com/selfishprimate/gerillass/blob/main/scss/library/_container-query.scss): A @container rule, taking the same argument shapes as breakpoint so the two read alike.
+- [container($name: null, $type: inline-size)](https://github.com/selfishprimate/gerillass/blob/main/scss/library/_container.scss): Marks an element as a query container, so container-query can ask about its width instead of the viewport's.
 - [counter($params...)](https://docs.gerillass.com/docs/counter/): CSS counter for a list, with optional text before and after the number.
 - [ellipsis($width: 100%, $display: inline-block)](https://docs.gerillass.com/docs/ellipsis/): Truncates a single line of text with an ellipsis.
 - [escape-to-parent($selector: null)](https://docs.gerillass.com/docs/escape-to-parent/): Re-roots the current selector under another one using @at-root.
@@ -81,7 +83,7 @@ Arguments are validated and refused with a message naming what is accepted, so a
 - [mapDeepGet($map, $keys...)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_map-deep-get.scss): Reads a value out of a nested map by following a chain of keys.
 - [pixelify($value)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_pixelify.scss): Returns the value with a px unit, adding one if it is missing.
 - [pseudoSelector($elements, $pseudo: null)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_pseudo-selector.scss): Appends a pseudo-class to every selector in a list.
-- [remify($value)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_remify.scss): Converts a pixel length to rem, against a 16px root.
+- [remify($value)](https://docs.gerillass.com/docs/remify/): Converts a pixel length to rem, against a 16px root.
 - [shade($color, $percentage)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_shade.scss): Mixes a colour towards black by a percentage.
 - [shorthandProperty($value)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_shorthand-property.scss): Expands one to four values into the four-value CSS shorthand order.
 - [tint($color, $percentage)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_tint.scss): Mixes a colour towards white by a percentage.

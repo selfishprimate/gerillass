@@ -1,0 +1,63 @@
+@charset "UTF-8";
+
+@use "sass:list";
+@use "sass:map";
+@use "sass:meta";
+@use "sass:string";
+@use "../maps/map-for-breakpoints" as *;
+@use "../utilities/validate-breakpoint" as *;
+
+// A @container rule, taking the same argument shapes as `breakpoint` so the two
+// read alike. Sizes may be a key from $map-for-breakpoints or a raw length; a
+// container is usually narrower than the viewport, so a length is the common
+// case.
+//
+// Pass $name to query one named container rather than the nearest ancestor.
+// The container itself is declared with the `container` mixin, on an ancestor
+// of whatever this styles.
+@mixin container-query($params...) {
+  $keywords: meta.keywords($params);
+  $name: map.get($keywords, name);
+  $count: list.length($params);
+
+  @if $name != null and meta.type-of($name) != "string" {
+    @error "`#{$name}` is not a valid $name for `container-query`. Pass a container name as a string, such as `\"card\"`.";
+  }
+
+  $condition: null;
+
+  @if $count == 1 {
+    $condition: "(width: #{validateBreakpoint(list.nth($params, 1))})";
+  } @else if $count == 2 {
+    $mode: list.nth($params, 1);
+    @if not list.index("only" "min" "max" "between", $mode) {
+      // Two bare sizes mean a range, as they do in `breakpoint`.
+      $condition: "(min-width: #{validateBreakpoint($mode)}) and (max-width: #{validateBreakpoint(list.nth($params, 2))})";
+    } @else {
+      $value: list.nth($params, 2);
+      @if $mode == "only" {
+        $condition: "(width: #{validateBreakpoint($value)})";
+      } @else if $mode == "min" {
+        $condition: "(min-width: #{validateBreakpoint($value)})";
+      } @else if $mode == "max" {
+        $condition: "(max-width: #{validateBreakpoint($value)})";
+      } @else {
+        $start: list.nth($value, 1);
+        $end: list.nth($value, 2);
+        $condition: "(min-width: #{validateBreakpoint($start)}) and (max-width: #{validateBreakpoint($end)})";
+      }
+    }
+  } @else {
+    @error "`container-query` takes one or two arguments, and was given #{$count}. Pass a size, two sizes for a range, or one of `min`, `max`, `only` or `between` followed by a size.";
+  }
+
+  @if $name {
+    @container #{string.unquote($name)} #{$condition} {
+      @content;
+    }
+  } @else {
+    @container #{$condition} {
+      @content;
+    }
+  }
+}

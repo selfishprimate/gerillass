@@ -1,0 +1,53 @@
+// container-query builds a condition string from the same argument shapes
+// breakpoint accepts, then wraps it in an @container rule. A snapshot would
+// record whatever string it built; these assert the strings themselves.
+@use 'true' as *;
+@use '../../scss/gerillass' as *;
+
+@include describe('container-query()') {
+  @include it('Builds a min-width query.') {
+    @include assert {
+      @include output { .a { @include container-query("min", 400px) { color: red; } } }
+      @include expect { @container (min-width: 400px) { .a { color: red; } } }
+    }
+  }
+
+  @include it('Reads a name from the breakpoint map.') {
+    @include assert {
+      @include output { .a { @include container-query("min", "medium") { color: red; } } }
+      @include expect { @container (min-width: 768px) { .a { color: red; } } }
+    }
+  }
+
+  @include it('Two bare sizes mean a range, as they do in breakpoint.') {
+    @include assert {
+      @include output { .a { @include container-query(300px, 500px) { color: red; } } }
+      @include expect {
+        @container (min-width: 300px) and (max-width: 500px) { .a { color: red; } }
+      }
+    }
+  }
+
+  @include it('Queries one named container when $name is given.') {
+    @include assert {
+      @include output { .a { @include container-query("min", 400px, $name: "card") { color: red; } } }
+      @include expect { @container card (min-width: 400px) { .a { color: red; } } }
+    }
+  }
+}
+
+@include describe('container()') {
+  @include it('Names the container and defaults to inline-size.') {
+    @include assert {
+      @include output { .card { @include container("card"); } }
+      @include expect { .card { container-type: inline-size; container-name: card; } }
+    }
+  }
+
+  @include it('Leaves the container unnamed when no name is given.') {
+    @include assert {
+      @include output { .panel { @include container; } }
+      @include expect { .panel { container-type: inline-size; } }
+    }
+  }
+}

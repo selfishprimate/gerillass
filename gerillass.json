@@ -572,6 +572,72 @@
       ]
     },
     {
+      "name": "container-query",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$params",
+          "variadic": true,
+          "accepts": [
+            "a size",
+            "two sizes for a range",
+            "one of min, max, only or between followed by a size",
+            "$name as a keyword, to query one named container"
+          ]
+        }
+      ],
+      "file": "scss/library/_container-query.scss",
+      "signature": "container-query($params...)",
+      "summary": "A @container rule, taking the same argument shapes as breakpoint so the two read alike. Sizes may be a key from $map-for-breakpoints or a raw length, and a length is the common case because a container is usually narrower than the viewport. Nothing matches at all unless an ancestor was declared with the container mixin.",
+      "examples": [
+        ".title { @include container-query(\"min\", 400px) { font-size: 2rem; } }",
+        ".title { @include container-query(\"max\", 399px) { font-size: 1rem; } }",
+        ".title { @include container-query(\"between\", 300px 500px) { color: red; } }",
+        ".title { @include container-query(300px, 500px) { color: red; } }",
+        ".title { @include container-query(\"min\", \"medium\") { color: red; } }",
+        ".title { @include container-query(\"min\", 400px, $name: \"card\") { color: red; } }"
+      ],
+      "rejects": [
+        ".title { @include container-query(\"min\", 400px, 800px) { color: red; } }",
+        ".title { @include container-query(\"min\", 400px, $name: 42) { color: red; } }"
+      ]
+    },
+    {
+      "name": "container",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$name",
+          "default": "null",
+          "accepts": [
+            "a container name as a string, such as \"card\"",
+            "null for an unnamed container"
+          ]
+        },
+        {
+          "name": "$type",
+          "default": "inline-size",
+          "accepts": [
+            "inline-size",
+            "size",
+            "normal"
+          ]
+        }
+      ],
+      "file": "scss/library/_container.scss",
+      "signature": "container($name: null, $type: inline-size)",
+      "summary": "Marks an element as a query container, so container-query can ask about its width instead of the viewport's. The rule that asks has to sit on a descendant: an element is never matched by a @container rule reading its own container, and nothing warns you when it is not.",
+      "examples": [
+        ".card { @include container(\"card\"); }",
+        ".panel { @include container; }",
+        ".panel { @include container(null, size); }"
+      ],
+      "rejects": [
+        ".card { @include container(\"card\", sideways); }",
+        ".card { @include container(42); }"
+      ]
+    },
+    {
       "name": "counter",
       "kind": "mixin",
       "arguments": [

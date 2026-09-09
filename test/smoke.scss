@@ -46,6 +46,8 @@
 .circle { @include circle(50px); }
 .clearfix { @include clearfix; }
 .columnizer { @include columnizer(3); }
+.container { @include container("card"); }
+.container-query { @include container-query("min", 400px) { color: red; } }
 .counter { @include counter("decimal"); }
 .ellipsis { @include ellipsis; }
 .escape-to-parent { @include escape-to-parent(".parent") { color: red; } }

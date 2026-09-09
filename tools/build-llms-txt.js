@@ -10,9 +10,13 @@
 // the single source of truth for the API, and the test suite already proves
 // the manifest matches the code.
 //
-// Mixins link to their documentation pages. The utility functions do not have
-// pages yet, so they link to their source instead; gerillass.json documents
-// them in full either way.
+// A member links to its documentation page when it has one, and to its source
+// when it does not. Only `remify` among the functions has a page, and a mixin
+// added in a release has none until someone writes it, which is what
+// NO_PAGE_YET records. gerillass.json documents every member either way.
+//
+// Nothing here can check these links, because the pages belong to a site this
+// repository does not build. `/release` carries a loop that re-checks them.
 //
 //   node tools/build-llms-txt.js            # write llms.txt
 //   node tools/build-llms-txt.js --check    # fail if it is out of date
@@ -38,11 +42,18 @@ const firstSentence = (text) => {
   return cut === -1 ? text : text.slice(0, cut + 1);
 };
 
+// Members whose documentation page does not exist yet. Remove a name from here
+// once its page is published, and re-run `npm run manifest`.
+const NO_PAGE_YET = new Set(["container", "container-query"]);
+
+const hasDocsPage = (member) =>
+  !NO_PAGE_YET.has(member.name) &&
+  (member.kind === "mixin" || member.name === "remify");
+
 const link = (member) => {
-  const url =
-    member.kind === "mixin"
-      ? `${DOCS}/docs/${member.name}/`
-      : `${BLOB}/${member.file}`;
+  const url = hasDocsPage(member)
+    ? `${DOCS}/docs/${member.name}/`
+    : `${BLOB}/${member.file}`;
   return `- [${member.signature}](${url}): ${firstSentence(member.summary)}`;
 };
 
