@@ -14,6 +14,13 @@
     font-size: remify(13px);
   }
 
+  &__caption {
+    margin: 0;
+    padding: remify(12px) remify(16px);
+    border-bottom: 1px solid $eggshell;
+    font-size: remify(15px);
+  }
+
   &__panes {
     display: grid;
     grid-template-columns: 1fr 1fr;

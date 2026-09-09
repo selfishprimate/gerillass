@@ -1,0 +1,17 @@
+@import "assets/scss/abstract";
+
+.hint {
+  margin: 0 0 1.75rem;
+  padding: remify(14px) remify(18px);
+  border-left: 3px solid $eggshell;
+  border-radius: 0 remify(6px) remify(6px) 0;
+  background: $alabaster;
+  font-size: remify(15px);
+
+  > :first-child { margin-top: 0; }
+  > :last-child { margin-bottom: 0; }
+
+  /* Warning carries the site's accent rather than a red: the pages use it for
+     "this will catch you out", not for danger. */
+  &--warning { border-left-color: $primary-color; }
+}

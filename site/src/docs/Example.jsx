@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import "./example.scss";
 
@@ -28,9 +28,12 @@ const FRAME_BASE = `
   img { max-width: 100%; }
 `;
 
-function Example({ source, css, html, title, height = 160 }) {
+function Example({ source, css, html, title, caption, height = 160, interactive = false }) {
   const [measured, setMeasured] = useState(null);
   const frame = useRef(null);
+
+  // Re-attach the observer when the demo itself changes, not on every render.
+  const srcDocKey = css + String(html);
 
   /*
     The frame is left same-origin so its height can be read back and the box
@@ -39,31 +42,63 @@ function Example({ source, css, html, title, height = 160 }) {
     scripts, forms and navigation stay blocked, and the only thing inside is
     CSS this repository compiled.
   */
-  const measure = useCallback(() => {
-    const doc = frame.current?.contentDocument;
-    if (!doc) return;
-    // body.scrollHeight, not documentElement's box: the html element fills the
-    // frame it is given, so measuring it reports the height already set and
-    // the box never grows to its content.
-    const h = Math.ceil(doc.body.scrollHeight);
-    if (h > 0) setMeasured(h);
-  }, []);
-
   /*
-    Measured after mount as well as on load. The page is prerendered, so on a
-    first visit the frame has already loaded by the time React attaches its
-    onLoad and the event never arrives. Two measurements are cheap; a frame
-    stuck at its default height is not.
+    Watched rather than measured once. A frame grows after it is first laid
+    out -- an image inside it decodes, a font arrives, text reflows -- and a
+    single reading catches it empty: the image demos came out 32px tall, which
+    is the padding and nothing else.
+
+    `body` is also the part that can be missing. A frame has a document from
+    the moment it is in the tree, but srcDoc is parsed asynchronously, so on
+    mount the document is often still empty. Reading through it threw, and the
+    error boundary took the whole page down -- invisibly in the built HTML,
+    because none of this runs during a server render.
+  */
+  /*
+    Measured a few times rather than watched. A ResizeObserver was the obvious
+    answer and does not work here: created in this document it attaches to the
+    frame's body and never delivers a notification, and created from the
+    frame's own realm it does the same. Seven observers attached, none fired.
+
+    So: read the height once the frame has a body, then again as its content
+    settles. `body` is the part that can be missing -- srcDoc is parsed
+    asynchronously, and reading through it threw, which took the component down
+    and the error boundary took the page with it. That was invisible in the
+    built HTML, because none of this runs during a server render.
+
+    The later readings are what catch an image. A demo is often a photograph
+    held to a ratio, and at first paint it has no height at all: the box came
+    out 160px tall around a 587px image without them.
   */
   useEffect(() => {
-    measure();
-  }, [measure]);
+    const el = frame.current;
+    if (!el) return undefined;
+
+    const read = () => {
+      const body = el.contentDocument?.body;
+      if (!body) return;
+      const h = Math.ceil(body.scrollHeight);
+      if (h > 0) setMeasured(h);
+    };
+
+    read();
+    el.addEventListener("load", read);
+    window.addEventListener("resize", read);
+    const timers = [60, 250, 800, 2000].map((ms) => setTimeout(read, ms));
+
+    return () => {
+      el.removeEventListener("load", read);
+      window.removeEventListener("resize", read);
+      timers.forEach(clearTimeout);
+    };
+  }, [srcDocKey]);
 
   const srcDoc = `<!doctype html><html><head><meta charset="utf-8"><style>${FRAME_BASE}${css}</style></head><body>${html}</body></html>`;
 
   return (
     <figure className="example">
       {title ? <figcaption className="example__title">{title}</figcaption> : null}
+      {caption ? <p className="example__caption">{caption}</p> : null}
 
       <div className="example__panes">
         <div className="example__pane">
@@ -88,8 +123,13 @@ function Example({ source, css, html, title, height = 160 }) {
           className="example__frame"
           style={{ height: `${measured ?? height}px` }}
           title={title ? `${title}, rendered` : "Rendered example"}
-          sandbox="allow-same-origin"
-          onLoad={measure}
+          /*
+            Scripts are off unless a demo asks for them. Only one kind does --
+            an embed like YouTube, which is script-driven and renders nothing
+            under a closed sandbox -- and a page opting in says so at the call
+            site rather than the whole set being loosened for one case.
+          */
+          sandbox={interactive ? "allow-same-origin allow-scripts allow-presentation" : "allow-same-origin"}
           srcDoc={srcDoc}
         />
       </div>

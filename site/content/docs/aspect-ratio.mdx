@@ -1,0 +1,179 @@
+---
+title: "Aspect Ratio"
+page_title: "Aspect Ratio Sass Mixin"
+page_description: "The Aspect Ratio Sass mixin holds an element to the ratio you give it, and adds what the CSS aspect-ratio property alone leaves out. It replaces the Ratio Box and Responsive Video mixins."
+page_keywords: "CSS Aspect Ratio, Sass Aspect Ratio, CSS Responsive Video, Responsive YouTube Embed, CSS Image Aspect Ratio, aspect-ratio object-fit, CSS Ratio Box, Responsive Image Ratio"
+page_image: "gerillass-aspect-ratio.jpg"
+aliases:
+  - /docs/ratio-box/
+  - /docs/responsive-video/
+---
+
+# Aspect Ratio
+
+<Member name="aspect-ratio">
+
+The **Aspect Ratio Sass mixin** holds an element to the ratio you give it. CSS
+has an `aspect-ratio` property of its own, and this mixin adds the three things
+that property leaves out.
+
+</Member>
+
+<Hint kind="warning">
+
+**New in Gerillass 2.0.0.** This mixin replaces **Ratio Box** and **Responsive
+Video**, which were byte-identical to each other and are both gone. It goes on
+**the element itself**, not on a wrapper around it. See [Coming from Ratio Box
+or Responsive Video](#coming-from-ratio-box-or-responsive-video).
+
+</Hint>
+
+<Hint kind="info">
+
+**Why the extra declarations?** An `<img>` given a ratio but no `object-fit` is
+stretched rather than cropped, and an `<iframe>` carries a 2px default border,
+so `width: 100%` makes it overflow its container by 4px. The mixin sets
+`object-fit` and `border: 0` to close both gaps.
+
+</Hint>
+
+## Arguments
+
+<Arguments of="aspect-ratio" footnote="Pass null as the second argument to leave object-fit out of the output entirely.">
+  <Argument name="$ratio (16/9)" type="string, number">
+    The ratio to hold. Accepts a slash separated string such as <code>16/9</code>, a colon separated string such as <code>16:9</code>, or a bare number, where <code>1.5</code> means 1.5 to 1. The default is <code>16/9</code>. Anything else is refused with an error.
+  </Argument>
+  <Argument name="$fit (cover)" type="string">
+    Sets the <code>object-fit</code> property. Accepts <code>fill</code>, <code>contain</code>, <code>cover</code>, <code>none</code>, <code>scale-down</code>, or <code>null</code> to leave <code>object-fit</code> alone. The default is <code>cover</code>.
+  </Argument>
+</Arguments>
+
+## Examples
+
+<Example title="No arguments" caption="Call it without arguments and the ratio is 16/9.">
+```scss
+.element {
+  @include aspect-ratio;
+}
+```
+</Example>
+
+<Example
+  title="On an image"
+  caption="Because object-fit defaults to cover, the image is cropped to fill the box rather than stretched."
+>
+```scss
+.element {
+  @include aspect-ratio("16:9");
+}
+```
+```html
+<img class="element" src="/images/landscape.jpg" alt="A 16 by 9 box holding a cropped photograph" />
+```
+</Example>
+
+<Example
+  title="A different ratio"
+  caption="A colon and a slash mean the same thing, so 16:9 and 16/9 give identical output."
+>
+```scss
+.element {
+  @include aspect-ratio("4/3");
+}
+```
+```html
+<img class="element" src="/images/landscape.jpg" alt="A 4 by 3 box holding a cropped photograph" />
+```
+</Example>
+
+<Example
+  title="Containing instead of cropping"
+  caption="Pass a second value to change how the content fills the box. Here the box is square and the whole image stays visible."
+>
+```scss
+.element {
+  @include aspect-ratio("1:1", contain);
+  background: #f0f0ee;
+}
+```
+```html
+<img class="element" src="/images/landscape.jpg" alt="A square box containing the whole photograph" />
+```
+</Example>
+
+<Example
+  title="A bare number, and no object-fit"
+  caption="1.5 means 1.5 to 1. Passing null as the second argument leaves object-fit out, which is what you want when the element has no content of its own to fit."
+>
+```scss
+.element {
+  @include aspect-ratio(1.5, null);
+}
+```
+</Example>
+
+<Example
+  title="An embedded video"
+  caption="Apply the mixin to the iframe itself. There is no wrapper element and no padding hack."
+  interactive
+  height={420}
+>
+```scss
+.element {
+  @include aspect-ratio("16/9");
+}
+```
+```html
+<iframe class="element" src="https://www.youtube.com/embed/JBc6JiRlsOU" title="YouTube video player" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+```
+</Example>
+
+<Example
+  title="The ratio on its own"
+  caption="If you want the ratio without the rest of the mixin, validateRatio accepts the same values and returns just the ratio."
+>
+```scss
+.element {
+  aspect-ratio: validateRatio("16:9");
+}
+```
+</Example>
+
+## Coming from Ratio Box or Responsive Video
+
+Both of those mixins held a ratio with a `padding-top` hack, a pseudo-element
+and an absolutely positioned child. The CSS `aspect-ratio` property made all of
+that unnecessary, and it left the two mixins identical to each other, so they
+were replaced by this single one.
+
+The rename itself is mechanical. What is not mechanical is **where the mixin
+goes**: the old mixins were applied to a wrapping element, and this one goes on
+the element itself.
+
+```scss
+// Before, on a wrapper
+.hero  { @include ratio-box("16/9"); }
+.video { @include responsive-video("16/9"); }
+
+// After, on the element
+.hero  { @include aspect-ratio("16/9"); }
+.video iframe { @include aspect-ratio("16/9"); }
+```
+
+<Hint kind="warning">
+
+**This part is easy to get wrong.** A ratio on a **wrapper** does not size an
+`<iframe>` inside it: the iframe keeps its intrinsic 300 by 150. Measured in a
+browser at a container width of 640px, a ratio on the wrapper gives a 640 by 360
+wrapper with a 304 by 154 iframe inside it, while a ratio on the iframe itself
+gives 640 by 360 with no wrapper needed.
+
+</Hint>
+
+If you have a wrapper `<div>` around a video embed only to hold its ratio,
+remove the wrapper along with the old mixin.
+
+## Related links
+
+- [aspect-ratio](https://developer.mozilla.org/en-US/docs/Web/CSS/aspect-ratio)
+- [object-fit](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit)

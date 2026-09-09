@@ -1,0 +1,47 @@
+@import "assets/scss/abstract";
+
+.member {
+  margin: 0 0 2.5rem;
+  padding: remify(20px) remify(24px);
+  border: 1px solid $eggshell;
+  border-radius: remify(8px);
+  background: $alabaster;
+
+  &__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: remify(16px);
+    margin-bottom: remify(12px);
+  }
+
+  &__kind {
+    font-size: remify(11px);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.55;
+  }
+
+  &__call {
+    font-family: $tertiary-font-family;
+    font-size: remify(15px);
+  }
+
+  &__include { opacity: 0.55; }
+
+  &__note {
+    margin: 0 0 remify(16px);
+    font-size: remify(14px);
+    opacity: 0.7;
+  }
+
+  &__description > :first-child { margin-top: 0; }
+  &__description > :last-child { margin-bottom: 0; }
+
+  &__source {
+    display: inline-block;
+    margin-top: remify(16px);
+    font-family: $tertiary-font-family;
+    font-size: remify(12px);
+  }
+}

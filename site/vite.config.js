@@ -57,6 +57,13 @@ export default defineConfig({
   // stale the first time somebody adds a folder, so every top-level entry in
   // src/ becomes an alias.
   resolve: {
+    /*
+      One copy of each of these, or a context provider and its consumer end up
+      in different module instances and the consumer silently sees no provider.
+      react-helmet-async is the one that showed it: <Head> rendered, threw
+      nothing, and the document kept index.html's title.
+    */
+    dedupe: ["react", "react-dom", "react-helmet-async", "react-router-dom"],
     alias: readdirSync(SRC).map((entry) => ({
       find: new RegExp(`^${entry.replace(/\.jsx?$/, "")}(?=/|$)`),
       replacement: join(SRC, entry.replace(/\.jsx?$/, "")),

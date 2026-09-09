@@ -1,0 +1,41 @@
+@import "assets/scss/abstract";
+
+.arguments {
+  margin: 0 0 2.5rem;
+
+  /* The table scrolls on its own so a long description never widens the page. */
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: remify(15px);
+
+    th, td {
+      text-align: left;
+      vertical-align: top;
+      padding: remify(10px) remify(12px);
+      border-bottom: 1px solid $eggshell;
+    }
+
+    th {
+      font-size: remify(11px);
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      opacity: 0.55;
+      font-weight: 500;
+    }
+
+    td:first-child { white-space: nowrap; }
+  }
+
+  &__type {
+    font-family: $tertiary-font-family;
+    font-size: remify(12px);
+    opacity: 0.7;
+  }
+
+  &__footnote {
+    margin: remify(12px) 0 0;
+    font-size: remify(14px);
+    opacity: 0.7;
+  }
+}
