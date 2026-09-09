@@ -120,11 +120,18 @@ made, plus the workflows that are easy to half-finish:
   blocks on a mismatch. It also prints a reminder naming the prose that usually
   needs updating when `tools/`, `test/` or `.claude/` changes, because that part
   is a judgement no script can make.
+- **`hooks/check-wiki.sh`** — runs `tools/check-wiki.js`, which refuses a
+  release whose `wiki/` page is missing or does not mention something that
+  changed. It reads the manifest at the previous tag rather than guessing, so
+  "what changed" means members added, removed, or whose signature or summary
+  moved. It only bites once `package.json` is ahead of the last tag; between
+  releases the next version has no number yet, so it reports what is pending
+  and exits clean.
 - **`/release`, `/new-mixin`, `/sass-test`, `/audit-library`** — the release
   checklist, the add-a-member checklist, the sass-true conventions, and the
   adversarial sweep over every mixin (`tools/audit.js`).
 
-All three hooks are `PostToolUse` on `Write|Edit` and exit 2 (blocking) on
+All four hooks are `PostToolUse` on `Write|Edit` and exit 2 (blocking) on
 failure. **They only fire for edits made through the editor** — a file changed
 by a shell command does not trigger them. Run `npm run manifest` by hand after
 scripted edits.

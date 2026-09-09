@@ -25,6 +25,7 @@ npm test                    # must pass: specs, smoke test and the manifest suit
 yarn audit                  # must be zero across all severities
 node tools/audit.js         # the SILENT bucket must be empty
 node tools/check-docs.js    # the docs must not claim a count the repo lacks
+node tools/check-wiki.js    # names what the wiki page has to cover
 git status --short          # know exactly what is going out
 ```
 
@@ -89,7 +90,11 @@ A release is not finished when npm has it. `gerillass.com` and
 `docs.gerillass.com` are separate repositories whose sessions cannot see this
 one, and a changelog does not tell them which control on which page to touch.
 
-Add `wiki/vX.Y.Z.md`, following `wiki/README.md` and an existing file. Do not
+Add `wiki/vX.Y.Z.md`, following `wiki/README.md` and an existing file.
+`node tools/check-wiki.js` lists exactly which members it has to name, worked
+out from the manifest at the previous tag, and fails until the page covers all
+of them. A hook runs it too, so bumping the version in step 2 before writing
+the page will block. Do not
 restate the API: `gerillass.json` already holds it and is verified. Write what
 is not in there.
 

@@ -22,6 +22,12 @@
             "command": "\"${CLAUDE_PROJECT_DIR:-.}/.claude/hooks/check-docs.sh\"",
             "timeout": 90,
             "statusMessage": "Checking the docs against the repo"
+          },
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PROJECT_DIR:-.}/.claude/hooks/check-wiki.sh\"",
+            "timeout": 30,
+            "statusMessage": "Checking the wiki against the release"
           }
         ]
       }
