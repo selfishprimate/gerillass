@@ -1,0 +1,39 @@
+# Netlify configuration for gerillass.com.
+#
+# In the repository rather than the dashboard on purpose. The settings used to
+# live only in the Netlify UI, which meant the one that mattered most --
+# NODE_VERSION pinned to 14, because create-react-app 3 could not build on
+# anything newer -- was invisible to anyone reading the code, and stayed put
+# for years after the reason for it was gone.
+#
+# Netlify only reads a netlify.toml at the repository root. There is another
+# one at site/public/netlify.toml which is therefore inert; it is commented out
+# in full and kept only for the cache headers somebody drafted there.
+
+[build]
+  # The library lives at the root and the site lives in site/, so the build runs
+  # from there and installs site/package.json rather than the library's.
+  base = "site"
+  command = "npm run build"
+
+  # Relative to `base`, which is what Netlify does with paths in this file.
+  # Worth confirming on the first deploy: if the publish step reports an empty
+  # directory, it wanted "site/dist" instead.
+  publish = "dist"
+
+[build.environment]
+  # Vite needs 18 or newer. This replaces the NODE_VERSION variable set in the
+  # dashboard, which should be deleted there so there is one answer rather than
+  # two. `.nvmrc` at the repository root is for people, not for Netlify: with a
+  # base directory set, Netlify would look for it in site/.
+  NODE_VERSION = "22"
+
+# Two dashboard variables should go with it:
+#
+#   NETLIFY_USE_YARN=true          the site is on npm now, and its lockfile is
+#                                  package-lock.json
+#   NETLIFY_PRERENDER_ENABLED=true Netlify's prerendering service, which served
+#                                  crawlers a rendered copy of what was then a
+#                                  client-rendered app. Every route is generated
+#                                  at build time now, so there is nothing left
+#                                  for it to do. Netlify has deprecated it.

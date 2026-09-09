@@ -105,10 +105,26 @@ UI, not in the repository.
   enabling those cache headers means moving it.
 - Deploys are rare, so a broken build can sit unnoticed for a long time.
 
-The site now builds from this repository, which means three settings have to
-change and none of them can be changed from here: base directory `site`, build
-command `npm run build`, publish directory `site/dist`, and `NODE_VERSION` off
-14.
+The build settings now live in `netlify.toml` at the repository root rather
+than in the dashboard, which is where `NODE_VERSION=14` sat unread for years
+after create-react-app stopped needing it. Netlify reads a `netlify.toml` only
+from the repository root, which is why the inert one in `public/` is inert.
+
+Two things still have to be done in the dashboard and cannot be done from here:
+
+- **Point the site at this repository.** It is still connected to
+  `selfishprimate/gerillass-web`, so nothing in this file takes effect until
+  that changes.
+- **Delete three environment variables**, each of which is now either wrong or
+  answered elsewhere: `NODE_VERSION` (in `netlify.toml` now, and two answers
+  are worse than one), `NETLIFY_USE_YARN` (the site is on npm), and
+  `NETLIFY_PRERENDER_ENABLED` with its token.
+
+That last one is worth understanding rather than just deleting. Netlify's
+prerendering service was serving crawlers a rendered copy of the app, which is
+how a client-rendered site kept its search and social previews. Static
+generation does the same thing at build time, for every route, without a
+service. Netlify has deprecated it.
 
 ## Known advisories
 
