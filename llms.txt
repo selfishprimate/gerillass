@@ -70,29 +70,29 @@ Arguments are validated and refused with a message naming what is accepted, so a
 
 ## Functions
 
-- [clearUnit($value)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_clear-unit.scss): Strips the unit off a number, returning it unitless.
-- [clearWhitespace($string)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_clear-whitespace.scss): Removes every space from a string.
-- [convertToEm($value)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_convert-to-em.scss): Converts a pixel length to em, against a 16px base.
-- [convertToNumber($value)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_convert-to-number.scss): Parses a string of digits into a number.
-- [fillNulls($value, $seperation: comma, $skip: false)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_fill-nulls.scss): Replaces null entries in a list with 0, or drops them.
+- [clearUnit($value)](https://docs.gerillass.com/docs/clear-unit/): Strips the unit off a number, returning it unitless.
+- [clearWhitespace($string)](https://docs.gerillass.com/docs/clear-whitespace/): Removes every space from a string.
+- [convertToEm($value)](https://docs.gerillass.com/docs/convert-to-em/): Converts a pixel length to em, against a 16px base.
+- [convertToNumber($value)](https://docs.gerillass.com/docs/convert-to-number/): Parses a string of digits into a number.
+- [fillNulls($value, $seperation: comma, $skip: false)](https://docs.gerillass.com/docs/fill-nulls/): Replaces null entries in a list with 0, or drops them.
 - [fluid($min, $max, $min-viewport: 320px, $max-viewport: 1280px)](https://docs.gerillass.com/docs/fluid/): A clamp() value that grows with the viewport between two widths, then stops.
-- [fontSizer($size, $time)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_font-sizer.scss): Multiplies a size by a factor.
-- [fontSource($font-family, $file-path, $file-formats)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_font-source.scss): Builds one src entry for an @font-face rule.
-- [isColor($value)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_is-color.scss): Returns the value if every item in it is a colour, and errors otherwise.
-- [isGutter($value)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_is-gutter.scss): True for anything that can sit where a CSS length is expected: a number, a calculation, or a CSS function such as var().
-- [isNumber($value)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_is-number.scss): Returns the value if it is a number.
-- [isTime($value)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_is-time.scss): Returns the value if it is a time in s or ms, and errors otherwise.
-- [mapDeepGet($map, $keys...)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_map-deep-get.scss): Reads a value out of a nested map by following a chain of keys.
+- [fontSizer($size, $time)](https://docs.gerillass.com/docs/font-sizer/): Multiplies a size by a factor.
+- [fontSource($font-family, $file-path, $file-formats)](https://docs.gerillass.com/docs/font-source/): Builds one src entry for an @font-face rule.
+- [isColor($value)](https://docs.gerillass.com/docs/is-color/): Returns the value if every item in it is a colour, and errors otherwise.
+- [isGutter($value)](https://docs.gerillass.com/docs/is-gutter/): True for anything that can sit where a CSS length is expected: a number, a calculation, or a CSS function such as var().
+- [isNumber($value)](https://docs.gerillass.com/docs/is-number/): Returns the value if it is a number.
+- [isTime($value)](https://docs.gerillass.com/docs/is-time/): Returns the value if it is a time in s or ms, and errors otherwise.
+- [mapDeepGet($map, $keys...)](https://docs.gerillass.com/docs/map-deep-get/): Reads a value out of a nested map by following a chain of keys.
 - [pixelify($value)](https://docs.gerillass.com/docs/pixelify/): Returns the value with a px unit, adding one if it is missing.
-- [pseudoSelector($elements, $pseudo: null)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_pseudo-selector.scss): Appends a pseudo-class to every selector in a list.
+- [pseudoSelector($elements, $pseudo: null)](https://docs.gerillass.com/docs/pseudo-selector/): Appends a pseudo-class to every selector in a list.
 - [remify($value)](https://docs.gerillass.com/docs/remify/): Converts a pixel length to rem, against a 16px root.
 - [shade($color, $percentage)](https://docs.gerillass.com/docs/shade/): Mixes a colour towards black by a percentage.
-- [shorthandProperty($value)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_shorthand-property.scss): Expands one to four values into the four-value CSS shorthand order.
+- [shorthandProperty($value)](https://docs.gerillass.com/docs/shorthand-property/): Expands one to four values into the four-value CSS shorthand order.
 - [tint($color, $percentage)](https://docs.gerillass.com/docs/tint/): Mixes a colour towards white by a percentage.
-- [validateBreakpoint($value)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_validate-breakpoint.scss): Resolves a breakpoint name to its width, passing other values through.
-- [validateLength($value)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_validate-length.scss): Returns the value if it is a length or one of auto, inherit, initial, 0.
-- [validateRatio($ratio)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_validate-ratio.scss): Turns an aspect ratio into a value for the CSS aspect-ratio property.
-- [validateScissors($value)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_validate-scissors.scss): Normalises corner values for the scissors mixin, adding px where missing.
+- [validateBreakpoint($value)](https://docs.gerillass.com/docs/validate-breakpoint/): Resolves a breakpoint name to its width, passing other values through.
+- [validateLength($value)](https://docs.gerillass.com/docs/validate-length/): Returns the value if it is a length or one of auto, inherit, initial, 0.
+- [validateRatio($ratio)](https://docs.gerillass.com/docs/validate-ratio/): Turns an aspect ratio into a value for the CSS aspect-ratio property.
+- [validateScissors($value)](https://docs.gerillass.com/docs/validate-scissors/): Normalises corner values for the scissors mixin, adding px where missing.
 
 ## Optional
 

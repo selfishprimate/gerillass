@@ -42,27 +42,28 @@ const firstSentence = (text) => {
   return cut === -1 ? text : text.slice(0, cut + 1);
 };
 
-// Which members have a page on the documentation site. Kept as two small lists
-// because the majority case differs by kind: nearly every mixin has a page and
-// nearly no function does. Neither can be checked from here, so both are
-// maintained by hand against the live site. When a page is published, move the
-// name across and re-run `npm run manifest`; the loop in `/release` is what
-// finds a name that was forgotten.
+// The documentation site addresses a page by the member's *file* name, not by
+// the member name. For a mixin those are the same, since both are kebab-case,
+// but a function is camelCase and its page is not: `clearUnit` lives at
+// /docs/clear-unit/, and /docs/clearUnit/ is a 404.
 //
-// Last checked against docs.gerillass.com after v2.1.0 shipped: every mixin has
-// a page, and 5 of the 23 functions do.
-const MIXINS_WITHOUT_PAGE = new Set([]);
-const FUNCTIONS_WITH_PAGE = new Set(["fluid", "pixelify", "remify", "shade", "tint"]);
+// This cost an hour. Probing the site with member names reported 18 functions
+// as having no page, and the five that "passed" were exactly the single-word
+// names, where the two spellings coincide. A perfect correlation between
+// "missing" and "more than one word" was the tell, and it was there to see.
+const slugOf = (member) =>
+  member.file.split("/").pop().replace(/^_/, "").replace(/\.scss$/, "");
 
-const hasDocsPage = (member) =>
-  member.kind === "mixin"
-    ? !MIXINS_WITHOUT_PAGE.has(member.name)
-    : FUNCTIONS_WITH_PAGE.has(member.name);
+// Members whose page does not exist yet, which today is none: all 76 are
+// published. A member added in a release has no page until someone writes it,
+// so put its name here and take it out once the page is live.
+// `node tools/check-links.js` is what catches a name left in or left out.
+const WITHOUT_DOCS_PAGE = new Set([]);
 
 const link = (member) => {
-  const url = hasDocsPage(member)
-    ? `${DOCS}/docs/${member.name}/`
-    : `${BLOB}/${member.file}`;
+  const url = WITHOUT_DOCS_PAGE.has(member.name)
+    ? `${BLOB}/${member.file}`
+    : `${DOCS}/docs/${slugOf(member)}/`;
   return `- [${member.signature}](${url}): ${firstSentence(member.summary)}`;
 };
 
