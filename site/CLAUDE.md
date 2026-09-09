@@ -124,8 +124,9 @@ service. Netlify has deprecated it.
 
 ## Known advisories
 
-`npm audit` in this directory reports **two** open, both medium and both in
-`react-router`: an open redirect through a backslash in `<Link>` and
+`npm audit` in this directory reports **three**, which are the same two
+advisories counted once per package in the chain `react-router` →
+`react-router-dom` → `vite-react-ssg`. Both are in `react-router`: an open redirect through a backslash in `<Link>` and
 `useNavigate`, and constructor injection in `deserializeErrors()` during SSR
 hydration. Neither has a fix on the 6.x line; both are fixed in 7.18.0, and
 `vite-react-ssg` at its latest version peers on `react-router-dom ^6.14.1`. So
@@ -138,6 +139,11 @@ rather than served by a live renderer, so neither advisory has a way in here.
 
 **This clears when `vite-react-ssg` supports react-router 7, or when the site
 moves to a generator that already does.** Check on any dependency pass.
+
+A fourth, a prototype pollution advisory in `toml` reached here through
+`remark-mdx-frontmatter`, and is pinned away with an `overrides` entry. The
+front matter is YAML, so that parser is never called; the override keeps the
+alert off the repository rather than fixing a path anything uses.
 
 The root `package.json` is unaffected and `yarn audit` there stays at zero:
 these live in `site/package-lock.json`, which is the whole reason the site

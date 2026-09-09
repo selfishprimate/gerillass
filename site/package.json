@@ -37,5 +37,9 @@
   },
   "engines": {
     "node": ">=22"
-  }
+  },
+  "overrides": {
+    "toml": "^4.1.2"
+  },
+  "//overrides": "remark-mdx-frontmatter pulls toml 3.0.0, which has a prototype pollution advisory fixed in 4.1.2. The front matter here is YAML, so the toml parser is never called; the override is to keep the alert off the repository rather than to fix a path anything uses."
 }
