@@ -1,6 +1,7 @@
 import React from "react";
 
 import DocsMdx from "docs/MdxProvider";
+import useDocumentHead from "docs/useDocumentHead";
 import Page, { frontmatter } from "../../../content/docs/aspect-ratio.mdx";
 
 /*
@@ -13,16 +14,10 @@ function Docs() {
   const url = "https://gerillass.com/docs/aspect-ratio/";
   const image = `https://gerillass.com/images/docs/${frontmatter.page_image}`;
 
+  useDocumentHead(frontmatter, "/docs/aspect-ratio/");
+
   return (
     <div className="main-container">
-      {/*
-        The per-page head is not wired yet. react-helmet-async, which
-        vite-react-ssg uses for it, does not apply here at all: neither <Head>
-        nor a <Helmet> used directly inside its own <HelmetProvider> sets the
-        title, on 1.3.0 or 2.0.5, and it leaves no data-rh marks, so it is not
-        running its side effects. Nothing in this repository overwrites the
-        title. See wiki/monorepo-plan.md; this is the last thing phase 3 needs.
-      */}
 
       <div className="main-wrapper">
         <div className="content">

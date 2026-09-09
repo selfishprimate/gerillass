@@ -23,7 +23,7 @@ export const routes = [
       { index: true, element: <Home /> },
       { path: "playground", element: <Home /> },
       { path: "about", element: <About /> },
-      { path: "docs", element: <Docs /> },
+      { path: "docs/aspect-ratio", element: <Docs /> },
       { path: "*", element: <NotFound /> },
     ],
   },

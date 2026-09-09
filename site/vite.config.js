@@ -2,6 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import svgr from "vite-plugin-svgr";
 import sassExample from "./plugins/sass-example.js";
+import docsHead from "./plugins/docs-head.js";
 import mdx from "@mdx-js/rollup";
 import remarkFrontmatter from "remark-frontmatter";
 import remarkMdxFrontmatter from "remark-mdx-frontmatter";
@@ -84,6 +85,11 @@ export default defineConfig({
   // strictly than a bundler does. react-syntax-highlighter's ESM build imports
   // its themes without file extensions, which Node refuses, so Vite bundles it
   // for the server pass rather than handing it to Node's resolver.
+  // Each documentation route gets its own head written into the file the
+  // build generates. See plugins/docs-head.js.
+  ssgOptions: {
+    onPageRendered: (route, renderedHTML) => docsHead(route, renderedHTML),
+  },
   ssr: { noExternal: ["react-syntax-highlighter"] },
   build: { outDir: "dist" },
 });
