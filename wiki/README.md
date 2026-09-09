@@ -37,6 +37,12 @@ The playground is the part that is easy to forget. It has two `<select>`
 menus: one listing versions, one listing members. A release that adds a mixin
 without adding it to the member menu leaves it invisible to anyone browsing.
 
+**The announcement banner on `gerillass.com` is for breaking changes only.** It
+still reads "Gerillass 2.0.0 is out", and that is correct: 2.0.0 was the last
+release that broke anything. Do not update it for a release that breaks
+nothing, and do not report it as stale. It changes when the next breaking
+version ships.
+
 ## Related documents, and when to use those instead
 
 - **`CHANGELOG.md`** is for users of the library. Written first, and these
