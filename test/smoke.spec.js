@@ -16,12 +16,14 @@ describe("Smoke", () => {
   let result;
 
   it("compiles every mixin in the library", () => {
-    // The library is still @import-based on purpose; the deprecation noise is
-    // expected here and tracked for 2.0.0, so it is silenced rather than fixed.
+    // if-function only, and only because it is deliberately deferred; see
+    // CLAUDE.md. `import` and `global-builtin` stay unsilenced on purpose:
+    // 2.0.0 removed both from the library, so a warning for either is a
+    // regression and should be seen rather than swallowed.
     result = sass.compile(ENTRY, {
       loadPaths: [LOAD_PATH],
       quietDeps: true,
-      silenceDeprecations: ["import", "global-builtin"],
+      silenceDeprecations: ["if-function"],
     });
 
     expect(result.css.length).toBeGreaterThan(0);

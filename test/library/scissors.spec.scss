@@ -2,8 +2,8 @@
 // clockwise from the top-left cut, the eight points are: (0, n), (n, 0),
 // (100%-n, 0), (100%, n), (100%, 100%-n), (100%-n, 100%), (n, 100%),
 // (0, 100%-n). The expectations are that walk, not a copy of the output.
-@import 'true';
-@import '../../scss/gerillass';
+@use 'true' as *;
+@use '../../scss/gerillass' as *;
 
 @include describe('scissors()') {
   @include it('One size cuts all four corners equally.') {

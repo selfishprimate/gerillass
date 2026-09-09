@@ -1,6 +1,6 @@
-@import 'true';
-@import '../../scss/utilities/map-deep-get';
-@import '../../scss/maps/map-for-tablets';
+@use 'true' as *;
+@use '../../scss/utilities/map-deep-get' as *;
+@use '../../scss/maps/map-for-tablets' as *;
 
 @include describe('mapDeepGet()') {
   @include it('Return the value from a deep-map request.') {

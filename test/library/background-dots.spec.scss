@@ -2,8 +2,8 @@
 // square; the first layer sits at half a gutter in both axes, the second at
 // twice the gutter, which lands it on the opposite diagonal of the next tile.
 // With the default 1em size the gutter is five times that, so 5em.
-@import 'true';
-@import '../../scss/gerillass';
+@use 'true' as *;
+@use '../../scss/gerillass' as *;
 
 @include describe('background-dots()') {
   @include it('The default is a diagonal grid on a 5em tile.') {

@@ -14,7 +14,10 @@ const manifest = JSON.parse(fs.readFileSync(path.join(ROOT, "gerillass.json"), "
 const SASS_OPTS = {
   loadPaths: [LOAD_PATH],
   quietDeps: true,
-  silenceDeprecations: ["import", "global-builtin"],
+  // if-function only, and only because it is deliberately deferred; see
+  // CLAUDE.md. `import` and `global-builtin` stay unsilenced on purpose, so
+  // that a regression to either one is visible rather than swallowed.
+  silenceDeprecations: ["if-function"],
 };
 
 const compile = (snippet) =>

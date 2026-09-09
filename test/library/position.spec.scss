@@ -2,8 +2,8 @@
 // two are vertical then horizontal, three are top / horizontal / bottom, and
 // four are top, right, bottom, left. The expectations below apply those rules
 // by hand rather than reading them back out of the mixin.
-@import 'true';
-@import '../../scss/gerillass';
+@use 'true' as *;
+@use '../../scss/gerillass' as *;
 
 @include describe('position()') {
   @include it('One offset applies to all four sides.') {

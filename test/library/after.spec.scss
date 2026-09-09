@@ -1,5 +1,5 @@
-@import 'true';
-@import '../../scss/library/after';
+@use 'true' as *;
+@use '../../scss/library/after' as *;
 
 @include describe('after()') {
   @include it('Return a decleration block and a given attribute name as a content value.') {

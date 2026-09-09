@@ -3,8 +3,8 @@
 // height, the left and right borders are transparent and each take half the
 // width, and the bottom border is zero. The expectations below are worked out
 // from that, not copied from the output.
-@import 'true';
-@import '../../scss/gerillass';
+@use 'true' as *;
+@use '../../scss/gerillass' as *;
 
 @include describe('triangle()') {
   @include it('Point down: the top border is coloured, the sides are half the width each.') {

@@ -710,6 +710,30 @@ exports[`Manifest examples fillNulls: .a { margin: fillNulls(1px null 3px null, 
 }"
 `;
 
+exports[`Manifest examples fluid: .section { padding: fluid(16px, 64px) fluid(8px, 40px); } 1`] = `
+".section {
+  padding: clamp(1rem, 0rem + 5vw, 4rem) clamp(0.5rem, -0.1667rem + 3.3333vw, 2.5rem);
+}"
+`;
+
+exports[`Manifest examples fluid: .stack { gap: fluid(0.5rem, 2rem); } 1`] = `
+".stack {
+  gap: clamp(0.5rem, 0rem + 2.5vw, 2rem);
+}"
+`;
+
+exports[`Manifest examples fluid: .title { font-size: fluid(1rem, 3rem, 320px, 1200px); } 1`] = `
+".title {
+  font-size: clamp(1rem, 0.2727rem + 3.6364vw, 3rem);
+}"
+`;
+
+exports[`Manifest examples fluid: .title { font-size: fluid(24px, 48px); } 1`] = `
+".title {
+  font-size: clamp(1.5rem, 1rem + 2.5vw, 3rem);
+}"
+`;
+
 exports[`Manifest examples font-face: @include font-face("Inter", "/fonts/inter"); 1`] = `
 "@font-face {
   font-family: "Inter";
