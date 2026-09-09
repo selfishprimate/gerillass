@@ -6,10 +6,16 @@
   /*
     Room for the footer to tuck into. `.footer` sets margin-top: -10rem so it
     sits under whatever comes before it, and on the landing page the last
-    section carries 256px of bottom padding for exactly this. Without the same
-    room here the footer climbed over the last example on the page.
+    section carries 256px of bottom padding for exactly this.
+
+    A margin and not padding, which is the whole point. This element is a grid
+    and the containing block for the sticky list of pages, so padding here
+    extends how far that list can travel: it would slide down into the 256px
+    and end up behind the footer, which draws over it at z-index 200. A margin
+    leaves the grid ending where the content does, so the list stops there and
+    the footer pulls up into empty space.
   */
-  padding-bottom: remify(256px);
+  margin-bottom: remify(256px);
 
   &__toggle {
     display: block;

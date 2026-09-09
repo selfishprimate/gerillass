@@ -288,7 +288,15 @@ that. The documentation had two of the three copied across, without the Slack
 invitation and without the room, so the footer climbed over the last example on
 the page. `.docs-layout` now carries the same 256px, and both pages measure
 identically: the container 1149px at x=66, the footer 1021px at x=130, with the
-two ornaments 64px square at -64px on each side. It is a second
+two ornaments 64px square at -64px on each side, and 96px of visible space
+above the footer.
+
+**That 256px is a margin, not padding, and the distinction is the whole
+point.** `.docs-layout` is the grid and therefore the containing block for the
+sticky list of pages. As padding it extended how far that list could travel, so
+it slid down into the room made for the footer and ended up behind it, the
+footer drawing over it at `z-index: 200`. As a margin the grid ends where the
+content does, the list stops with it, and the footer pulls up into empty space. It is a second
 template rather than a branch inside `HomeTemplate` because the landing page is
 a column of full width sections and this is two columns, one of them sticky.
 
