@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 
 import Header from "components/Header";
-import Footer from "components/Footer";
-import Copyright from "components/Copyright";
+import SiteFooter from "components/SiteFooter";
 import Sidebar from "docs/Sidebar";
 
 import "docs/content.scss";
@@ -52,10 +51,7 @@ function DocsTemplate({ children }) {
           <main className="docs-layout__main content">{children}</main>
         </div>
 
-        <div className="footer-container section section--stretched">
-          <Footer />
-          <Copyright />
-        </div>
+        <SiteFooter />
       </div>
     </div>
   );

@@ -3,6 +3,14 @@
 .docs-layout {
   padding-top: remify(24px);
 
+  /*
+    Room for the footer to tuck into. `.footer` sets margin-top: -10rem so it
+    sits under whatever comes before it, and on the landing page the last
+    section carries 256px of bottom padding for exactly this. Without the same
+    room here the footer climbed over the last example on the page.
+  */
+  padding-bottom: remify(256px);
+
   &__toggle {
     display: block;
     width: 100%;

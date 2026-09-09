@@ -279,7 +279,16 @@ demo go on looking right after the mixin behind it broke.
 ### The shell around a page
 
 `templates/DocsTemplate` is the documentation's own layout: the site's `Header`
-unchanged, the list of pages, the page, then the footer. It is a second
+unchanged, the list of pages, the page, then `components/SiteFooter`.
+
+**`SiteFooter` is one component because its three parts only work together.**
+`.footer` sets `margin-top: -10rem` so it tucks under whatever precedes it, and
+the landing page's last section carries 256px of bottom padding for exactly
+that. The documentation had two of the three copied across, without the Slack
+invitation and without the room, so the footer climbed over the last example on
+the page. `.docs-layout` now carries the same 256px, and both pages measure
+identically: the container 1149px at x=66, the footer 1021px at x=130, with the
+two ornaments 64px square at -64px on each side. It is a second
 template rather than a branch inside `HomeTemplate` because the landing page is
 a column of full width sections and this is two columns, one of them sticky.
 
