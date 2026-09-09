@@ -1,0 +1,7 @@
+@use "gerillass" as *;
+
+/*
+  Emits Meyer's reset for the whole document. Injected into the page around it,
+  it would flatten that page instead.
+*/
+@include reset-css;

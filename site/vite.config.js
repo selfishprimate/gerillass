@@ -1,6 +1,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import svgr from "vite-plugin-svgr";
+import sassExample from "./plugins/sass-example.js";
 import { fileURLToPath, URL } from "node:url";
 import { readdirSync } from "node:fs";
 import { join } from "node:path";
@@ -24,7 +25,7 @@ export default defineConfig({
   // create-react-app turned `import { ReactComponent as X } from "./a.svg"`
   // into a component through SVGR. vite-plugin-svgr is the same thing, and
   // exportAsDefault stays off so the existing named import keeps working.
-  plugins: [react(), svgr()],
+  plugins: [react(), svgr(), sassExample()],
   // create-react-app let the source import from the top of src/ without a
   // relative path -- `components/Header`, `release` -- because jsconfig.json set
   // baseUrl there. Vite needs it spelled out, and spelling it out by hand goes

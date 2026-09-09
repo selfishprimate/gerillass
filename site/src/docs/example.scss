@@ -1,0 +1,70 @@
+@import "assets/scss/abstract";
+
+.example {
+  margin: 0 0 2.5rem;
+  border: 1px solid $eggshell;
+  border-radius: remify(8px);
+  overflow: hidden;
+  background: $snow;
+
+  &__title {
+    padding: remify(10px) remify(16px);
+    border-bottom: 1px solid $eggshell;
+    font-family: $tertiary-font-family;
+    font-size: remify(13px);
+  }
+
+  &__panes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    @include breakpoint(max, medium) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__pane {
+    min-width: 0;
+    border-right: 1px solid $eggshell;
+    &:last-child { border-right: 0; }
+    @include breakpoint(max, medium) {
+      border-right: 0;
+      border-bottom: 1px solid $eggshell;
+    }
+  }
+
+  &__label {
+    padding: remify(8px) remify(16px) 0;
+    font-size: remify(10px);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.5;
+  }
+
+  /*
+    Scrolls on both axes: a long selector must not widen the page, and a long
+    output must not push the demo off the bottom of it. reset-css compiles to
+    the whole Meyer reset, which is a couple of hundred lines and would leave
+    the result three screens below the call that produced it.
+  */
+  &__code {
+    margin: 0;
+    padding: remify(8px) remify(16px) remify(16px);
+    max-height: remify(320px);
+    overflow: auto;
+    font-family: $tertiary-font-family;
+    font-size: remify(12px);
+    line-height: 1.55;
+    white-space: pre;
+  }
+
+  &__result {
+    border-top: 1px solid $eggshell;
+  }
+
+  &__frame {
+    display: block;
+    width: 100%;
+    border: 0;
+    background: #fff;
+  }
+}

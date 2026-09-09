@@ -4,6 +4,7 @@ import Layout from "./App";
 import Home from "pages/Home";
 import About from "pages/About";
 import NotFound from "components/NotFound";
+import Docs from "pages/Docs";
 
 /*
   The routes as data rather than JSX, which is what vite-react-ssg needs in
@@ -22,6 +23,7 @@ export const routes = [
       { index: true, element: <Home /> },
       { path: "playground", element: <Home /> },
       { path: "about", element: <About /> },
+      { path: "docs", element: <Docs /> },
       { path: "*", element: <NotFound /> },
     ],
   },

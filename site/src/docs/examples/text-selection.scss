@@ -1,0 +1,10 @@
+@use "gerillass" as *;
+
+/*
+  ::selection is document-wide. Injected into the page, it would restyle the
+  selection everywhere, including in the code blocks above.
+*/
+@include text-selection {
+  background: #dee0cd;
+  color: #2f3937;
+}

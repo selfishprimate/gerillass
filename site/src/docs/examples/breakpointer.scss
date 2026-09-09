@@ -1,0 +1,17 @@
+@use "gerillass" as *;
+
+/*
+  Prints the active breakpoint name into body::before. There is no way to scope
+  that to a container, which is why the demo needs a document of its own.
+*/
+@include breakpointer;
+
+body::before {
+  display: inline-block;
+  padding: 0.4em 0.8em;
+  border-radius: 4px;
+  background: #2f3937;
+  color: #fafaf8;
+  font-family: "Roboto Mono", monospace;
+  font-size: 13px;
+}

@@ -1,0 +1,18 @@
+@use "gerillass" as *;
+
+/*
+  Two calls: once at the root to set the keyframes up, then on each element.
+  The staggered delays are what the mixin exists for.
+*/
+@include loadify(init);
+
+.card {
+  padding: 1rem;
+  border-radius: 6px;
+  background: #dee0cd;
+  @include loadify(0.1s, 0.6s);
+
+  & + .card { margin-top: 0.5rem; }
+  &:nth-child(2) { @include loadify(0.35s, 0.6s); }
+  &:nth-child(3) { @include loadify(0.6s, 0.6s); }
+}
