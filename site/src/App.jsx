@@ -1,17 +1,8 @@
 import React, { Suspense, lazy } from 'react';
-import {
-    BrowserRouter as Router,
-    Routes,
-    Route,
-    useNavigationType
-} from 'react-router-dom';
+import { Outlet, useLocation, useNavigationType } from 'react-router-dom';
+import { ClientOnly } from 'vite-react-ssg';
 
-import Home from 'pages/Home';
-import About from 'pages/About';
-
-import NotFound from 'components/NotFound';
 import PlaygroundCover from 'components/Playground/Cover';
-
 
 import 'assets/scss/App.scss';
 
@@ -40,37 +31,43 @@ function PlaygroundRoute() {
     when the app first rendered, which was the cover on every first opening.
   */
   const openedOverSite = useNavigationType() === 'PUSH';
+  const { pathname } = useLocation();
 
+  if (pathname !== '/playground') return null;
+
+  /*
+    CodeMirror reaches for document as it initialises, so there is nothing to
+    render on a build machine. ClientOnly holds it back until the browser has
+    it; the prerendered /playground is the home page, which is what sits under
+    the window anyway.
+  */
   return (
-    <Suspense fallback={openedOverSite ? null : <PlaygroundCover />}>
-      <Routes>
-        <Route path="/playground" element={<Playground />} />
-      </Routes>
-    </Suspense>
+    <ClientOnly>
+      {() => (
+        <Suspense fallback={openedOverSite ? null : <PlaygroundCover />}>
+          <Playground />
+        </Suspense>
+      )}
+    </ClientOnly>
   );
 }
 
 /*
-  The playground opens over the home page, so both addresses render the same
-  page and it stays mounted while the window is up: routing them separately
-  built a second copy of it, and coming back looked like a reload.
+  The shell every route renders inside. The playground sits outside the outlet
+  rather than in it, so the page underneath stays mounted while the window is
+  up: routing them separately built a second copy of it, and coming back looked
+  like a reload. Which page that is comes from routes.jsx, where "/" and
+  "/playground" both point at Home.
 */
-function App() {
+function Layout() {
   return (
-    <Router>
+    <>
       <Suspense fallback={<div />}>
-        <Routes>
-          {/* Both addresses render Home, so it stays mounted under the
-              playground window -- see the note above. */}
-          <Route path="/" element={<Home />} />
-          <Route path="/playground" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <Outlet />
       </Suspense>
       <PlaygroundRoute />
-    </Router>
+    </>
   );
 }
 
-export default App;
+export default Layout;

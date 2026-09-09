@@ -36,12 +36,6 @@ export default defineConfig({
       replacement: join(SRC, entry.replace(/\.jsx?$/, "")),
     })),
   },
-  // react-syntax-highlighter 12 reaches for Node's `global`, which webpack
-  // shimmed and a browser does not have. It only surfaces in dev, where Vite
-  // pre-bundles dependencies; the production build happened to survive without
-  // it, which is exactly the kind of difference that bites whoever runs the dev
-  // server first.
-  define: { global: "globalThis" },
   css: {
     preprocessorOptions: {
       scss: {
@@ -53,5 +47,10 @@ export default defineConfig({
       },
     },
   },
+  // Static generation runs the app in Node, which resolves modules more
+  // strictly than a bundler does. react-syntax-highlighter's ESM build imports
+  // its themes without file extensions, which Node refuses, so Vite bundles it
+  // for the server pass rather than handing it to Node's resolver.
+  ssr: { noExternal: ["react-syntax-highlighter"] },
   build: { outDir: "dist" },
 });
