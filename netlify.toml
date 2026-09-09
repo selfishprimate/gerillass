@@ -21,10 +21,10 @@
   publish = "dist"
 
 [build.environment]
-  # Vite needs 18 or newer. This replaces the NODE_VERSION variable set in the
-  # dashboard, which should be deleted there so there is one answer rather than
-  # two. `.nvmrc` at the repository root is for people, not for Netlify: with a
-  # base directory set, Netlify would look for it in site/.
+  # Vite needs 18 or newer. This is the only place the version is set: the
+  # dashboard variable that pinned it to 14 has been deleted, so there is one
+  # answer rather than two. `.nvmrc` at the repository root is for people, not
+  # for Netlify: with a base directory set, Netlify looks for it in site/.
   NODE_VERSION = "22"
 
 # Three dashboard variables were deleted when this landed, and the site now has
