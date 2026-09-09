@@ -4,19 +4,15 @@ import manifest from "../../../gerillass.json";
 import "./member.scss";
 
 /*
-  The header of a member's page: what it is, how it is called, and where its
+  The opening of a member's page: what it does, how it is called, and where its
   source lives.
 
-  The name is looked up in the manifest and the lookup is the check. A page for
-  a member that does not exist, or one left behind after a member was removed,
-  fails the build here rather than sitting on the site describing nothing --
-  which is how `ratio-box` lingered on docs.gerillass.com after 2.0.0 deleted
-  it.
+  Not a card. This is the shape the documentation has always had: a rule under
+  the title, the type on one side and the call on the other, the namespace note
+  under that, then the description as ordinary page prose and a link to the
+  source at the end. Boxing the description made the page open on a panel of
+  chrome rather than on the sentence a reader came for.
 
-  Two things come from the manifest rather than from the page: the source path,
-  because `scss/library/_name.scss` is wrong for every one of the 23 functions,
-  and the kind, because "Mixin" or "Function" is not a thing a page should be
-  able to get wrong.
 */
 
 const REPO = "https://github.com/selfishprimate/gerillass/blob/main";
@@ -35,37 +31,47 @@ function Member({ name, children }) {
 
   return (
     <div className="member">
-      <div className="member__meta">
-        <span className="member__kind">
-          {isMixin ? "Mixin" : "Function"}
-        </span>
-        <code className="member__call">
-          {isMixin ? <span className="member__include">@include </span> : null}
-          {member.name}();
-        </code>
+      <div className="member__subheader">
+        <div className="member__item">
+          <span className="member__key">Type:</span>{" "}
+          <span className="member__value">{isMixin ? "Mixin" : "Function"}</span>
+        </div>
+        <div className="member__item">
+          <span className="member__call">
+            {isMixin ? <span className="member__method">@include </span> : null}
+            <span className="member__name">{member.name}();</span>
+          </span>
+        </div>
       </div>
 
       {isMixin ? (
         <p className="member__note">
-          Callable with or without the <code>{manifest.prefix}</code> prefix, so{" "}
-          <code>@include {manifest.prefix}{member.name}()</code> is the same mixin.
+          * You can call mixins with or without the{" "}
+          <code>
+            <strong>{manifest.prefix}</strong>
+          </code>{" "}
+          namespace (e.g. <code>@include {manifest.prefix}{member.name}();</code>).
         </p>
-      ) : (
-        <p className="member__note">
-          A function, so it is called directly and never takes <code>@include</code>.
-        </p>
-      )}
+      ) : null}
 
       <div className="member__description">{children}</div>
 
-      <a
-        className="member__source"
-        href={`${REPO}/${member.file}`}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Source: {member.file}
-      </a>
+      <div className="member__actions">
+        <a
+          className="member__source"
+          href={`${REPO}/${member.file}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {/*
+            ionicons is loaded by index.html for the whole site, so the element
+            hydrates into an icon in the browser and is simply absent before
+            that rather than showing a broken one.
+          */}
+          <ion-icon name="logo-github" class="member__icon"></ion-icon>
+          <span>Github Source Code</span>
+        </a>
+      </div>
     </div>
   );
 }

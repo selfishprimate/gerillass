@@ -102,7 +102,12 @@
     font-size: inherit;
   }
 
-  a {
+  /*
+    Prose links only. A link that carries a class is a component -- the source
+    button under a member, for one -- and it brings its own treatment; without
+    the exclusion this underlined the text inside it.
+  */
+  a:not([class]) {
     text-decoration: underline;
     text-underline-offset: 2px;
   }

@@ -163,6 +163,7 @@ drift:
 | | |
 |---|---|
 | `<Member name>` | throws if the name is not in `gerillass.json` |
+
 | `<Arguments of>` | throws if the documented argument names differ from the signature. Variadic members are exempt: `border-radius($args...)` says nothing to check against |
 | `<Example>` | **compiles** the Sass. A page cannot state an output the library does not produce |
 | `<Hint kind>` | info, warning or danger |
@@ -171,6 +172,19 @@ Markdown tables need `remark-gfm`, which is in the plugin list. Without it a
 table renders as a paragraph of pipes, silently. Two pages use one, and
 `src/docs/content.scss` is what styles them: nothing on this site had a table
 in its prose before the port.
+
+### How a member's page opens
+
+`<Member>` reproduces the shape the documentation has always had, and it is not
+a card: a rule under the title with **Type** on one side and the call on the
+other, the `gls-` namespace note beneath it, then the description as ordinary
+page prose, then an outlined link to the source. Boxing the description made
+the page open on a panel of chrome rather than on the sentence a reader came
+for.
+
+The source link is an `<a>` with a class, which is why `content.scss`
+underlines `a:not([class])` rather than every link: a link carrying a class is
+a component and brings its own treatment.
 
 ### What a page turns into
 

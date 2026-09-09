@@ -1,47 +1,83 @@
 @import "assets/scss/abstract";
 
+/*
+  The opening of a member's page, in the shape the documentation has always
+  used: a rule under the title with the type on one side and the call on the
+  other, the namespace note beneath it, the description as ordinary prose, and
+  a link to the source at the end.
+*/
 .member {
-  margin: 0 0 2.5rem;
-  padding: remify(20px) remify(24px);
-  border: 1px solid $eggshell;
-  border-radius: remify(8px);
-  background: $alabaster;
+  margin: 0 0 3rem;
 
-  &__meta {
+  &__subheader {
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-between;
     align-items: center;
-    gap: remify(16px);
-    margin-bottom: remify(12px);
+    gap: remify(8px) remify(16px);
+    padding: remify(14px) 0;
+    border-top: 1px solid $eggshell;
+    border-bottom: 1px solid $eggshell;
+    margin-bottom: remify(14px);
+
+    /* Stacked on a narrow screen, as the old pages did. */
+    @include breakpoint(max, medium) {
+      flex-direction: column;
+      align-items: flex-start;
+    }
   }
 
-  &__kind {
-    font-size: remify(11px);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    opacity: 0.55;
+  &__key {
+    font-weight: bold;
   }
 
   &__call {
     font-family: $tertiary-font-family;
-    font-size: remify(15px);
   }
 
-  &__include { opacity: 0.55; }
+  &__name {
+    font-weight: bold;
+  }
 
   &__note {
-    margin: 0 0 remify(16px);
-    font-size: remify(14px);
-    opacity: 0.7;
+    margin: 0 0 1.15rem;
+    font-size: 0.9em;
+    line-height: 1.5;
   }
 
-  &__description > :first-child { margin-top: 0; }
-  &__description > :last-child { margin-bottom: 0; }
+  &__description {
+    margin-bottom: 1.75rem;
+
+    p, ul, ol {
+      margin-top: 0;
+      margin-bottom: 1.15rem;
+    }
+
+    > :last-child { margin-bottom: 0; }
+  }
 
   &__source {
-    display: inline-block;
-    margin-top: remify(16px);
-    font-family: $tertiary-font-family;
-    font-size: remify(12px);
+    display: inline-flex;
+    align-items: center;
+    gap: remify(10px);
+    padding: remify(10px) remify(18px);
+    font-family: $secondary-font-family;
+    font-size: remify(15px);
+    font-weight: 600;
+    color: $primary-color;
+    text-decoration: none;
+    border: 2px solid $primary-color;
+    border-radius: remify(8px);
+    transition: color $global-transition, border-color $global-transition;
+
+    &:hover {
+      color: $accent-color;
+      border-color: $accent-color;
+      text-decoration: none;
+    }
+  }
+
+  &__icon {
+    font-size: remify(20px);
   }
 }
