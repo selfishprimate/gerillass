@@ -83,6 +83,25 @@ Expect 98 files / ~38 kB as of v2.0.0: everything under `scss/`, the generated
 `package.json`. If `test/`, `meta/`, `tools/`, `yarn.lock` or
 `node_modules` appear, `.npmignore` is broken — stop and fix it.
 
+## 3b. Write the wiki page for the other repositories
+
+A release is not finished when npm has it. `gerillass.com` and
+`docs.gerillass.com` are separate repositories whose sessions cannot see this
+one, and a changelog does not tell them which control on which page to touch.
+
+Add `wiki/vX.Y.Z.md`, following `wiki/README.md` and an existing file. Do not
+restate the API: `gerillass.json` already holds it and is verified. Write what
+is not in there.
+
+If the release adds or changes a member, the page must cover:
+
+- **the playground member `<select>` on `gerillass.com`**, which needs every
+  new mixin adding by hand, and the version `<select>`, which needs the new
+  version;
+- **which documentation pages to write or update** on `docs.gerillass.com`;
+- **the measurement behind each member**. This is the part with no other home,
+  and it is what a documentation page should be built on.
+
 ## 4. Commit, tag, push
 
 ```bash

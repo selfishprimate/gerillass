@@ -291,6 +291,33 @@ From `CONTRIBUTING.md`, which is the authority here:
 - One mixin or one function per file; the filename matches the member name (`_border-radius.scss` → `@mixin border-radius`).
 - Maps and lists carry `!default` so users can override them before importing.
 
+## The wiki
+
+`wiki/` holds handover notes for the **other two** repositories, `gerillass.com`
+and `docs.gerillass.com`, one file per released version. Neither of those
+sessions can see this repository, and neither can work out from a changelog
+which control on a page needs touching.
+
+The rule is that it never restates the API. `gerillass.json` carries every
+signature and example and the test suite compiles all of it, so a wiki page
+repeating that is an unchecked second copy. What goes in is what the manifest
+cannot hold: which files and controls to change, and **the measurements**.
+Almost every member added since 2.0.0 exists because something silently does
+not work, and that failing case is what a documentation page has to open with.
+
+Two things are easy to miss and are called out in every file:
+
+- **The playground on `gerillass.com` has two `<select>` menus**, one of
+  versions and one of members. A release that adds a mixin without adding it to
+  the member menu leaves it invisible to anyone browsing. It listed 50 of 53
+  mixins as of v2.1.0.
+- **`llms.txt` is coupled to the documentation site.** A member with no page
+  links to its source instead, through `NO_PAGE_YET` in
+  `tools/build-llms-txt.js`. When a page is published, remove the name there
+  and re-run `npm run manifest`.
+
+`wiki/` is excluded from the package by the `*.md` rule in `.npmignore`.
+
 ## Releasing
 
 The security fix only reaches users when the npm package is republished — updating the repo alone changes nothing for consumers.
