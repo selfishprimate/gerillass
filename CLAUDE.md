@@ -347,9 +347,17 @@ Verified as of v1.6.1.
   so this is not urgent, but it is the last thing between the library and a
   clean compile.
 
-- **Agent-facing work beyond the manifest.** An MCP server exposing
-  `gerillass.json` and an `llms.txt` on the docs site were scoped out of the
-  v1.6.0 work. Neither is worth doing until the manifest has users.
+- **An MCP server was considered and declined**, most recently in 2.0.1. A
+  server whose only job is to serve `gerillass.json` adds nothing: that file
+  already ships inside the package, an agent can read it directly, and putting
+  a server in front of it only adds an install step. The one version that would
+  earn its place exposes something a static file cannot, such as a
+  `gerillass_compile(snippet)` tool that returns the CSS or the library's own
+  error, so an agent can check a call instead of guessing at it. Revisit only
+  for that, not to republish the manifest over a protocol.
+
+  The other half of this item, an `llms.txt` for the docs site, was done in
+  2.0.1 and is generated from the manifest like everything else.
 
 ### Done in 2.0.0
 
