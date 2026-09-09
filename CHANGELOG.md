@@ -1,6 +1,23 @@
 # Change Log
 _Change is the essence._
 
+## 2.0.1
+
+- **Fixed:** The `SKILL.md` that ships with the package told coding agents that
+  "the two leading underscores mark them as functions". That prefix was removed
+  in 2.0.0, so an agent following the shipped skill would write `__remify(24px)`
+  and get no error at all: Sass does not raise on an unknown function, it emits
+  the call as literal CSS. The line now describes the real convention, which is
+  that functions are camelCase and mixins are kebab-case.
+- **Added:** An `llms.txt` for the documentation site, generated from the same
+  manifest as `gerillass.json` and `SKILL.md`. It is served from
+  https://docs.gerillass.com/llms.txt rather than shipped in the package.
+- **Updated:** The README says at the top what the library offers a coding
+  agent, instead of leaving it to a section two thirds of the way down, and
+  explains why the manifest can be trusted: the test suite compiles every
+  documented example and asserts every documented refusal, so a stale
+  description fails the build.
+
 ## 2.0.0
 
 Gerillass now uses the Sass module system. Two things break; everything else is

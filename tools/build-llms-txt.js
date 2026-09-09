@@ -50,7 +50,7 @@ const build = () => `# Gerillass
 
 > A Sass toolkit of ${mixins.length} mixins and ${functions.length} functions, built to be read by coding agents as well as by people. Every member is described in a machine-readable manifest whose examples and refusals are executed by the test suite, so the documentation cannot drift away from the code.
 
-Gerillass is a pure Sass library. There is no build step and no runtime dependency: the \`.scss\` sources are the deliverable, and the package installs nothing else. Dart Sass only, version 2.0.0 and later.
+Gerillass is a pure Sass library. There is no build step and no runtime dependency: the \`.scss\` sources are the deliverable, and the package installs nothing else. It needs Dart Sass; LibSass and node-sass are not supported. This file describes Gerillass ${manifest.version}.
 
 Load it with \`${manifest.load.bundler}\` under a bundler, or \`${manifest.load.packageImporter}\` with the Dart Sass package importer.
 
