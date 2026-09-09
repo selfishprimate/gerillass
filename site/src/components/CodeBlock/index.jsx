@@ -2,6 +2,8 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { zenburn } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
+import { CopyIcon, CheckIcon } from "components/Icons";
+
 import "./code-block.scss";
 
 /*
@@ -58,14 +60,19 @@ function CodeBlock({ label, language, children, className, ...rest }) {
     <div className="code-block">
       <div className="code-block__bar">
         {label ? <span className="code-block__label">{label}</span> : null}
+        {/*
+          The same icon button the playground uses, down to the icons: two
+          places on the site let you copy code and they should not be two
+          different controls.
+        */}
         <button
           type="button"
           className="code-block__copy"
           onClick={copy}
+          title={copied ? "Copied" : "Copy to the clipboard"}
           aria-label={`Copy the ${label || lang} to the clipboard`}
         >
-          <ion-icon name={copied ? "checkmark-outline" : "copy-outline"}></ion-icon>
-          <span className="code-block__copy-text">{copied ? "Copied" : "Copy"}</span>
+          {copied ? <CheckIcon size={16} /> : <CopyIcon size={16} />}
         </button>
       </div>
 

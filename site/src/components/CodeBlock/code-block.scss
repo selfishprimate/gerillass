@@ -47,30 +47,30 @@
     opacity: 0.45;
   }
 
+  /*
+    The playground's action button, to the pixel: the two places on the site
+    that let you copy code should not offer two different controls.
+  */
   &__copy {
+    @include sizer(remify(32px));
     margin-left: auto;
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    gap: remify(6px);
-    padding: remify(4px) remify(9px);
-    font-family: $secondary-font-family;
-    font-size: remify(11px);
-    letter-spacing: 0.04em;
-    color: $secondary-color;
-    background: transparentize($secondary-color, 0.9);
+    justify-content: center;
+    padding: 0;
+    color: rgba($secondary-color, 0.5);
+    background-color: transparent;
     border: 0;
-    border-radius: remify(6px);
+    border-radius: remify(9px);
     cursor: pointer;
-    opacity: 0.5;
-    transition: opacity $global-transition, background-color $global-transition;
+    transition: $global-transition;
 
     &:hover,
-    &:focus-visible {
-      opacity: 1;
-      background: transparentize($secondary-color, 0.8);
+    &:focus {
+      color: $secondary-color;
+      background-color: rgba($secondary-color, 0.12);
+      outline: 0;
     }
-
-    ion-icon { font-size: remify(14px); }
   }
 
   pre {

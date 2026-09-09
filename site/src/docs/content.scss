@@ -94,6 +94,22 @@
   }
 
   /*
+    Code set smaller here than on the landing page, and only here.
+
+    Both were nominally 1rem, the same as this page's prose, but Roboto Mono
+    at a given size reads larger than the body face at it, so a block looked
+    like it had been set a step up from the paragraph above it. The landing
+    page wants the larger setting: there a block is a display element in a
+    tabbed figure rather than a listing in a column of text.
+
+    14px is the playground's editor size, so the two places that show Sass on
+    this site show it at the same size.
+  */
+  .code-block pre {
+    font-size: remify(14px) !important;
+  }
+
+  /*
     Inside a sentence, a name in backticks is not a listing. The block itself
     is styled once, in components/CodeBlock.
   */
