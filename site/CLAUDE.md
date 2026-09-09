@@ -106,6 +106,27 @@ change and none of them can be changed from here: base directory `site`, build
 command `npm run build`, publish directory `site/dist`, and `NODE_VERSION` off
 14.
 
+## Known advisories
+
+`npm audit` in this directory reports **two** open, both medium and both in
+`react-router`: an open redirect through a backslash in `<Link>` and
+`useNavigate`, and constructor injection in `deserializeErrors()` during SSR
+hydration. Neither has a fix on the 6.x line; both are fixed in 7.18.0, and
+`vite-react-ssg` at its latest version peers on `react-router-dom ^6.14.1`. So
+the upgrade that clears them is blocked on the tool that made static
+generation possible.
+
+They are carried deliberately, not overlooked. This site navigates only to its
+own paths and takes nothing from a URL, and it is generated at build time
+rather than served by a live renderer, so neither advisory has a way in here.
+
+**This clears when `vite-react-ssg` supports react-router 7, or when the site
+moves to a generator that already does.** Check on any dependency pass.
+
+The root `package.json` is unaffected and `yarn audit` there stays at zero:
+these live in `site/package-lock.json`, which is the whole reason the site
+keeps its own.
+
 ## Dormant code — do not assume it is live
 
 `src/pages/Contact` (no route), `components/Invitations/TopInvitation` (never
