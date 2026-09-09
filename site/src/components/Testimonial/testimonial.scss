@@ -1,0 +1,79 @@
+@import "assets/scss/abstract";
+
+.testimonial {
+  position: relative;
+  background-color: $secondary-color;
+  padding: 8rem 2rem 16rem;
+  @include background-dots(rgba($alabaster, 1), 15rem);
+  @include breakpoint(min, xlarge) {
+    padding-top: 12rem;
+    @include background-dots(rgba($alabaster, 1), 20rem);
+  }
+  &__list {
+    margin-bottom: 3rem;
+    @include breakpoint(min, medium) {
+      @include columnizer(2, 2rem);
+    }
+    &__item {
+      position: relative;
+      display: flex;
+      align-items: flex-start;
+      transition: 0.3s;
+      @include breakpoint(xsmall, medium) {
+        margin-bottom: 3rem;
+      }
+      &__content {
+        position: relative;
+        padding: 0.5rem 3rem 0.5rem;
+        &::before {
+          content: "“";
+          position: absolute;
+          font-family: $primary-font-family;
+          left: 0;
+          top: 4rem;
+          line-height: 1;
+          font-size: 6rem;
+          z-index: 0;
+          opacity: 0.1;
+        }
+        @include breakpoint(xsmall, medium) {
+          padding: 0.5rem 1rem 0.5rem 3rem;
+        }
+      }
+      &__name {
+        font-family: $primary-font-family;
+        font-size: 1.8rem;
+        line-height: 1.1;
+        margin-bottom: 0.5rem;
+        // @include text-shadow(right $lime 14px true);
+      }
+      &__role {
+        color: transparentize($primary-color, 0.2);
+        margin-bottom: 0.5rem;
+      }
+      &__statement {
+        margin-bottom: 0.5rem;
+      }
+      &__user {
+        display: flex;
+        align-items: center;
+        line-height: 1;
+        a {
+          font-style: italic;
+          font-size: 1rem;
+          @include stretched-link;
+          line-height: 1;
+        }
+      }
+      &:hover {
+        * {
+          color: $accent-color;
+        }
+
+        a {
+          color: $accent-color;
+        }
+      }
+    }
+  }
+}

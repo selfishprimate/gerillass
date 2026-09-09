@@ -1,0 +1,52 @@
+/* Colors Library */
+$white: #ffffff;
+$black: #000000;
+$snow: #fafaf8;
+$charleston-green: #222c25;
+$crayola: #2f3937;
+$granite-green: #657167;
+$artichoke: #8b9381;
+$steal-teal: #668f80;
+$cedar: #DB504A;
+$terra: #ED6A5A;
+$green: #69995D;
+$corn: #F7EC59;
+$sage: #BDC488;
+$alabaster: #f2f2eb;
+$eggshell: #dee0cd;
+$lime: #eefa92;
+$laurel: #BFC1A4;
+
+$primary-color: $crayola;
+$secondary-color: $snow;
+$accent-color: $steal-teal;
+
+$link-color: $primary-color;
+$link-color-hover: $accent-color;
+$link-color-active: $primary-color;
+$link-color-visited: $primary-color;
+
+$primary-font-family: "Jumble", sans-serif;
+$secondary-font-family: "Inter", sans-serif;
+$tertiary-font-family: "Roboto Mono", sans-serif;
+$font-size-base: 16px;
+
+$global-space: 1rem;
+$global-transition: 0.3s;
+
+$body-border-radius: $global-space * 2;
+$border-radius: 5px !default;
+
+$icons-name: "gerillass" !default;
+
+$mobile-breakpoint: large;
+$inner-width: 1000px;
+
+$map-for-breakpoints: (
+  "xsmall": 0,
+  "small": 576px,
+  "medium": 768px,
+  "large": 992px,
+  "xlarge": 1200px,
+  "xxlarge": 1500px,
+);

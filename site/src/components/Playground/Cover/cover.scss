@@ -1,0 +1,12 @@
+@import "assets/scss/abstract";
+
+/* The same ground, at the same height, as the window that replaces it. */
+.playground-cover {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1000;
+  background-color: $secondary-color;
+}

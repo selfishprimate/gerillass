@@ -1,0 +1,31 @@
+{
+  "name": "gerillass-site",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "description": "gerillass.com. Not published; see `site` in .npmignore at the repository root.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "playground-demos": "node scripts/update-playground-demos.js",
+    "supporters": "node scripts/update-supporters.js"
+  },
+  "//": "Versions are deliberately left where create-react-app had them. This step changes the build and nothing else, so anything that looks different afterwards is the build's doing. React, the router and the editor move in a step of their own.",
+  "dependencies": {
+    "codemirror": "5.65.16",
+    "framer-motion": "4.1.17",
+    "react": "^17.0.2",
+    "react-codemirror2": "7.3.0",
+    "react-dom": "^17.0.2",
+    "react-router-dom": "^5.3.4",
+    "react-syntax-highlighter": "^12.2.1",
+    "react-tabs": "^3.1.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "sass": "^1.83.0",
+    "vite": "^6.0.5",
+    "vite-plugin-svgr": "^5.2.0"
+  }
+}

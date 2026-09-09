@@ -1,0 +1,187 @@
+@import "assets/scss/abstract";
+
+.select {
+  /*
+    The metrics live here rather than in each rule so the invisible copy that
+    sizes the control can be laid out from exactly the same numbers.
+  */
+  --select-height: #{remify(42px)};
+  --select-size: #{remify(15px)};
+  --select-border: #{remify(2px)};
+  --select-space-left: #{remify(14px)};
+  --select-space-right: #{remify(38px)};
+  --select-arrow-right: #{remify(14px)};
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  &__label {
+    margin-bottom: remify(6px);
+    padding-left: remify(2px);
+    font-size: remify(14px);
+    font-weight: 500;
+    letter-spacing: normal;
+    opacity: 0.5;
+  }
+
+  &__field {
+    position: relative;
+    /* Shrink to fit the label it is showing, but never past the bar it is in. */
+    display: inline-block;
+    max-width: 100%;
+    height: var(--select-height);
+  }
+
+  /*
+    The selected label, printed in the control's own face and then hidden: it
+    is what gives the field its width.
+  */
+  &__sizer {
+    display: block;
+    height: 0;
+    padding: 0 var(--select-space-right) 0 var(--select-space-left);
+    border: var(--select-border) solid transparent;
+    font-family: $secondary-font-family;
+    font-size: var(--select-size);
+    font-weight: 500;
+    letter-spacing: normal;
+    white-space: nowrap;
+    overflow: hidden;
+    visibility: hidden;
+  }
+
+  /*
+    The browser's own arrow sits hard against the edge and cannot be moved, so
+    the control drops it and the chevron below takes its place.
+  */
+  &__control {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    /*
+      Laid over the invisible label rather than beside it: in the flow, the
+      select's own widest option would set the field's width and the sizing
+      would be back where it started.
+    */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0 var(--select-space-right) 0 var(--select-space-left);
+    font-family: $secondary-font-family;
+    font-size: var(--select-size);
+    font-weight: 500;
+    letter-spacing: normal;
+    /* Squeezed into a phone's bar, a long label ends rather than being cut. */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: $primary-color;
+    background-color: transparent;
+    border: var(--select-border) solid rgba($primary-color, 0.2);
+    border-radius: remify(12px);
+    cursor: pointer;
+    transition: $global-transition;
+    &:hover,
+    &:focus {
+      border-color: rgba($primary-color, 0.5);
+      outline: 0;
+    }
+    &:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+    /* Firefox keeps a focus ring inside the control on top of ours. */
+    &:-moz-focusring {
+      color: transparent;
+      text-shadow: 0 0 0 $primary-color;
+    }
+  }
+
+  &__arrow {
+    position: absolute;
+    top: 50%;
+    right: var(--select-arrow-right);
+    margin-top: remify(-8px);
+    color: $primary-color;
+    opacity: 0.6;
+    pointer-events: none;
+  }
+  /* Screen readers still get the name; the bar has no room to print it. */
+  &__label--hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /*
+    On a dark panel bar rather than on the page: no outline, just enough of a
+    lift off the panel to read as something you can press.
+  */
+  &--dark &__control {
+    color: $secondary-color;
+    background-color: rgba($secondary-color, 0.1);
+    border-color: transparent;
+    &:hover,
+    &:focus {
+      background-color: rgba($secondary-color, 0.18);
+      border-color: transparent;
+    }
+    option {
+      color: $primary-color;
+      background-color: $secondary-color;
+    }
+  }
+  &--dark &__arrow {
+    color: $secondary-color;
+  }
+
+  /*
+    Inside a panel that already has an edge of its own: no box around the
+    control, just the word and its chevron, at the height of the icon buttons
+    it shares the bar with.
+  */
+  &--bare {
+    --select-height: #{remify(32px)};
+    --select-border: 0;
+    --select-space-left: 0;
+    --select-space-right: #{remify(20px)};
+    --select-arrow-right: 0;
+  }
+  &--bare &__control {
+    background-color: transparent;
+    &:hover,
+    &:focus {
+      background-color: transparent;
+    }
+  }
+  &--dark#{&}--bare &__control {
+    color: rgba($secondary-color, 0.75);
+    &:hover,
+    &:focus {
+      color: $secondary-color;
+    }
+  }
+
+  &--compact {
+    --select-height: #{remify(32px)};
+    --select-size: #{remify(13px)};
+    --select-space-left: #{remify(10px)};
+    --select-space-right: #{remify(30px)};
+    --select-arrow-right: #{remify(9px)};
+  }
+  &--compact &__control {
+    border-radius: remify(9px);
+  }
+  &--compact &__arrow {
+    margin-top: remify(-7px);
+  }
+}

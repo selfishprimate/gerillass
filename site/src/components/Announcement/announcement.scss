@@ -1,0 +1,39 @@
+@import "assets/scss/abstract";
+
+.announcement {
+  /*
+    A row rather than an icon positioned into a padded box: the icon lines up
+    with the first line of the notice because the row starts them together, so
+    it stays put whether the notice runs to one line or four. Absolutely
+    positioned, it was centred on the paragraph and drifted further from the
+    words it marks the longer the notice got.
+  */
+  display: flex;
+  align-items: flex-start;
+  padding: 1.6rem 2rem;
+  background-color: $primary-color;
+  color: $secondary-color;
+  @include adaptive(2%);
+  @include breakpoint(min, medium) {
+    ion-icon {
+      flex: none;
+      margin-right: 1.2rem;
+      font-size: 1.4rem;
+    }
+  }
+  ion-icon {
+    @include remove(max, medium);
+  }
+  a {
+    color: $secondary-color;
+    text-decoration: underline;
+    &:hover {
+      color: $sage;
+    }
+  }
+  &__description {
+    font-size: 1rem;
+    letter-spacing: 0.6px;
+    line-height: 1.4;
+  }
+}

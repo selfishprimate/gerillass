@@ -1,0 +1,47 @@
+@import "assets/scss/abstract";
+
+.tooltip {
+  position: absolute;
+  top: calc(100% + #{remify(10px)});
+  z-index: 5;
+  /* As wide as the line it holds, up to the point where wrapping reads better. */
+  width: max-content;
+  max-width: remify(230px);
+  padding: remify(9px) remify(13px);
+  font-family: $secondary-font-family;
+  font-size: remify(13px);
+  font-weight: 400;
+  line-height: 1.45;
+  letter-spacing: normal;
+  text-transform: none;
+  color: $primary-color;
+  background-color: $secondary-color;
+  border-radius: remify(10px);
+  box-shadow: 0 remify(8px) remify(24px) rgba($primary-color, 0.3);
+  /* It explains the control; it must never stand between you and one. */
+  pointer-events: none;
+
+  &::before {
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    width: 0;
+    height: 0;
+    border: remify(6px) solid transparent;
+    border-bottom-color: $secondary-color;
+  }
+
+  &--left {
+    left: 0;
+    &::before {
+      left: remify(13px);
+    }
+  }
+
+  &--right {
+    right: 0;
+    &::before {
+      right: remify(13px);
+    }
+  }
+}

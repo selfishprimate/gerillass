@@ -1,0 +1,291 @@
+@import "assets/scss/abstract";
+
+.header {
+  position: relative;
+  /* Animation */
+  opacity: 0;
+  animation: setBack 0.5s 0.1s forwards;
+  @include breakpoint(min, small) {
+    margin-bottom: 2rem;
+  }
+  @include breakpoint(min, $mobile-breakpoint) {
+    margin-bottom: 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  @include breakpoint(min, small) {
+    &::before,
+    &::after {
+      content: "";
+      display: block;
+      position: absolute;
+    }
+    &::before {
+      left: -3rem;
+      top: -3rem;
+      width: remify(200px);
+      height: remify(80px);
+      @include background-image("/images/ornaments/ornament-12.svg");
+
+      // @include breakpoint(min, small) {
+      //   @include border-radius("top-left", $body-border-radius);
+      // }
+
+      @include breakpoint(min, large) {
+        left: -4rem;
+        top: -4rem;
+      }
+    }
+    &::after {
+      right: -3rem;
+      top: -3rem;
+      width: remify(240px);
+      height: remify(100px);
+      @include background-image("/images/ornaments/ornament-13.svg");
+      // @include breakpoint(min, small) {
+      //   @include border-radius("top-right", $body-border-radius);
+      // }
+      @include breakpoint(min, large) {
+        right: -4rem;
+        top: -4rem;
+      }
+    }
+  }
+  &__brand {
+    position: relative;
+    display: flex;
+    align-items: center;
+    /* Only as wide as the lockup: the version hangs off this box's right
+       edge, and on a phone the row stretches to the toggler without it. */
+    width: fit-content;
+    &__face {
+      position: relative;
+      height: 3rem;
+      width: 3rem;
+      margin-right: 0.5rem;
+      &::before {
+        content: "\e815";
+        @include position;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: $icons-name;
+        font-size: 3rem;
+      }
+      &::after {
+        content: "";
+        display: block;
+        position: absolute;
+        right: -42px;
+        top: -32px;
+        width: 72px;
+        height: 44px;
+        @include background-image("/images/speech-bubbles/iamsassy.svg");
+        transform: scale(0);
+        animation: speechBubble 0.3s 2s forwards ease-in-out;
+      }
+    }
+    /*
+      Holds the wordmark alone, so the row centres the wordmark against the
+      mark beside it rather than centring the pair of them and leaving the
+      wordmark riding high. Deliberately unpositioned: the logo link stretches
+      to the nearest positioned ancestor, which stays .header__brand, so the
+      whole lockup keeps linking home.
+    */
+    &__mark {
+      display: flex;
+      align-items: center;
+    }
+    /*
+      Out of the flow for the same reason, hung off the brand rather than the
+      wordmark: half the wordmark below the middle of the row puts it under the
+      tail, and the wordmark is the last thing in the row, so its right edge is
+      the row's.
+    */
+    &__version {
+      position: absolute;
+      right: 0;
+      top: calc(50% + #{remify(17px)});
+      font-size: remify(13px);
+      line-height: 1;
+      letter-spacing: normal;
+      opacity: 0.5;
+    }
+    &__logo {
+      @include brand-logo(
+        $width: remify(140px),
+        $height: remify(30px),
+        $image-url: "/images/logo/logo.svg"
+      );
+      @include breakpoint(medium, large) {
+        @include brand-logo(
+          $width: remify(140px),
+          $height: remify(30px),
+          $image-url: "/images/logo/logo.svg"
+        );
+      }
+      position: static;
+      a {
+        @include stretched-link;
+      }
+    }
+  }
+}
+
+.navbar {
+  z-index: 1;
+  &__title {
+    @include hide;
+  }
+  &__nav {
+    display: none;
+    @include breakpoint(xsmall, small) {
+      margin-left: -2rem;
+      margin-right: -2rem;
+    }
+    @include breakpoint(min, $mobile-breakpoint) {
+      display: flex;
+      align-items: center;
+    }
+    &__menu {
+      position: relative;
+      display: flex;
+      @include breakpoint(xsmall, small) {
+        width: 100%;
+        flex-direction: column;
+        margin-bottom: 1rem;
+        padding: 2rem 2rem 0.5rem 2rem;
+        background-color: $primary-color;
+        &::before {
+          content: "";
+          display: block;
+          position: absolute;
+          right: 43px;
+          top: 0;
+          width: remify(20px);
+          height: remify(20px);
+          border-radius: 2px;
+          transform: translateY(-40%) rotate(-45deg);
+          background-color: $primary-color;
+        }
+        &::after {
+          content: "";
+          display: block;
+          position: absolute;
+          width: 100%;
+          left: 0;
+          bottom: 2px;
+          padding-top: 5.81%;
+          transform: translateY(100%);
+          @include background-image("/images/ornaments/ornament-21.svg");
+        }
+        li {
+          padding: 0.5rem 0;
+          a {
+            color: $secondary-color;
+          }
+        }
+      }
+      @include breakpoint(xsmall, large) {
+        margin-top: 1.5rem;
+        justify-content: center;
+      }
+      @include breakpoint(min, $mobile-breakpoint) {
+        margin-right: remify(26px);
+      }
+      li {
+        &:not(:last-of-type) {
+          margin-right: remify(26px);
+        }
+        a {
+          font-size: remify(16px);
+          font-weight: 500;
+        }
+      }
+    }
+    &__channels {
+      display: flex;
+      justify-content: center;
+      padding: 1rem 0;
+      @include breakpoint(min, $mobile-breakpoint) {
+        display: flex;
+        padding: 0;
+      }
+      li {
+        position: relative;
+        &:not(:last-of-type) {
+          margin-right: 2px;
+        }
+        @include before("data-tooltip") {
+          position: absolute;
+          left: 50%;
+          top: 100%;
+          font-family: $primary-font-family;
+          font-size: 0.8rem;
+          color: $accent-color;
+          text-align: center;
+          line-height: 1.2;
+          transform: translateX(-50%) translateY(-100%);
+          transition: all 0.3s 0.1s;
+          opacity: 0;
+        }
+        &:hover {
+          &::before {
+            top: -4px;
+            opacity: 1;
+          }
+          a {
+            opacity: 1;
+            color: $accent-color;
+          }
+        }
+      }
+      &__icon {
+        font-size: 2.8rem;
+      }
+    }
+  }
+}
+
+.navbar__toggler {
+  position: absolute;
+  z-index: 200;
+  right: 0;
+  @include breakpoint(min, small) {
+  }
+  @include breakpoint(min, $mobile-breakpoint) {
+    display: none;
+  }
+  &::before {
+    content: "\e81c";
+    font-size: 3rem;
+    transform: rotate(-180deg);
+    transition: 0.3s;
+  }
+  @include breakpoint(min, medium) {
+    &::before {
+      font-size: 3rem;
+    }
+  }
+}
+
+#navbar__toggler__input {
+  display: none;
+  &:checked {
+    & ~ {
+      .navbar .navbar__nav {
+        display: flex;
+        @include breakpoint(max, $mobile-breakpoint) {
+          flex-direction: column;
+        }
+      }
+      .navbar__toggler {
+        &::before {
+          content: "\e80c";
+          transform: rotate(0);
+        }
+      }
+    }
+  }
+}

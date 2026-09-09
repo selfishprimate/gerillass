@@ -1,0 +1,45 @@
+/*
+Typography
+Scale: Based on major second, 1: 1.125
+https://www.modularscale.com/?1&rem&1.125
+*/
+
+html {
+  font-size: 90%;
+  @include breakpoint(min, medium) {
+    font-size: 100%;
+  }
+}
+
+body {
+  font-size: 1.1rem;
+  line-height: 1.4rem;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-top: 0;
+  font-family: $primary-font-family;
+  font-style: normal;
+  line-height: 1.3;
+}
+
+h1 {
+  font-size: 3.247rem;
+}
+
+h2 {
+  font-size: 2.566rem;
+  line-height: 2.887rem;
+  margin-bottom: 1rem;
+}
+
+h3 {
+  font-size: 1.802rem;
+  line-height: 2.027rem;
+  margin-bottom: 1rem;
+}

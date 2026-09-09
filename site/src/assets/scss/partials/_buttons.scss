@@ -1,0 +1,78 @@
+$button-colors: (
+  primary: $primary-color,
+  secondary: $secondary-color,
+  accent: $accent-color,
+);
+
+$button-border-radius: 16px;
+
+$button-sizes: (
+  small: remify(40px),
+  medium: remify(50px),
+  large: remify(66px),
+);
+
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  font-family: $primary-font-family;
+  font-size: remify(26px);
+  color: $secondary-color;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  border: 3px solid transparent;
+  border-radius: $button-border-radius;
+  padding: 0 $global-space * 2;
+  cursor: pointer;
+  &:focus,
+  &:active {
+    outline: 0;
+  }
+  @each $name, $color in $button-colors {
+    &.button--#{$name} {
+      background-color: $color;
+      @if $name == "secondary" {
+        color: $primary-color;
+      }
+      &:hover {
+        @if $name == "primary" {
+          background-color: $accent-color;
+          &.button--outlined {
+            border-color: $accent-color;
+            color: $accent-color;
+          }
+        } @else if $name == "secondary" {
+          background-color: $secondary-color;
+          &.button--outlined {
+            border-color: $secondary-color;
+            color: $secondary-color;
+          }
+        } @else if $name == "accent" {
+          background-color: $primary-color;
+          color: $secondary-color;
+          &.button--outlined {
+            border-color: $primary-color;
+            color: $primary-color;
+          }
+        }
+      }
+      &.button--outlined {
+        background-color: transparent;
+        border-color: $color;
+        color: $color;
+      }
+    }
+  }
+  @each $size, $value in $button-sizes {
+    &.button--#{$size} {
+      height: $value;
+    }
+  }
+}

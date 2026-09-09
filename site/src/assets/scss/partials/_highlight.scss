@@ -1,0 +1,47 @@
+.highlight {
+  &__header {
+    margin-bottom: $global-space * 2;
+  }
+  &__title {
+    display: block;
+    margin-bottom: $global-space;
+  }
+  &__description {
+    font-size: 1.1rem;
+    margin-bottom: $global-space;
+  }
+  &__description,
+  &__item__description {
+    code {
+      font-family: $tertiary-font-family;
+      font-size: 0.9rem;
+      background-color: transparentize($primary-color, 0.9);
+      padding: 1px 5px;
+      border-radius: 3px;
+    }
+  }
+  &__item {
+    &:not(:last-of-type) {
+      margin-bottom: remify(20px);
+    }
+    &__description {
+      margin-bottom: $global-space;
+    }
+  }
+  &__footnote {
+    font-size: 0.889rem;
+    line-height: 1.1rem;
+    margin: $global-space 0;
+    opacity: 0.6;
+    a {
+      text-decoration: underline;
+    }
+  }
+  pre {
+    font-family: "Roboto Mono", sans-serif;
+    font-size: 1rem !important;
+    padding: 1.5rem !important;
+    border-radius: remify(16px);
+    background-color: $primary-color !important;
+  }
+}

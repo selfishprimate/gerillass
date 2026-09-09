@@ -1,0 +1,280 @@
+@import "assets/scss/abstract";
+
+/* The ring is part of the border box, so the size below is the whole footprint. */
+$avatar-size: remify(60px);
+$avatar-ring: remify(6px);
+$avatar-overlap: remify(22px);
+
+/*
+  The blob the site already uses behind its social icons: the "empty-circle"
+  glyph (\e812) of the Gerillass icon font, lifted out as a mask so avatars get
+  the same silhouette. The path is the glyph verbatim; the transform flips it
+  out of font space (baseline origin, y up) and the square viewBox is its
+  bounding box padded to 1:1 so the shape keeps its proportions.
+*/
+$avatar-shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='32 27.6 934.9 934.9'%3E%3Cpath fill='%23000' transform='translate(0,850) scale(1,-1)' d='M192 699c167 162 501 167 662 0s104-549-63-711-474-116-635 51-132 498 36 660z'/%3E%3C/svg%3E");
+
+@mixin avatar-shape {
+  -webkit-mask-image: $avatar-shape;
+  mask-image: $avatar-shape;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+.supporters {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: remify(24px);
+  @include breakpoint(min, large) {
+    align-items: flex-start;
+  }
+
+  &__icon {
+    flex: none;
+  }
+
+  &__people {
+    display: flex;
+    align-items: center;
+  }
+
+  &__avatars {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    li {
+      &:not(:first-of-type) {
+        margin-left: -$avatar-overlap;
+      }
+      /* Eight of them do not fit next to the button on a phone. */
+      @include breakpoint(max, small) {
+        &:nth-of-type(n + 7) {
+          display: none;
+        }
+      }
+    }
+  }
+
+  /*
+    Two nested shapes: the item paints the ring in the page background colour —
+    that is what separates the avatars where they overlap — and the image sits
+    inside it, masked to the same silhouette one ring smaller.
+  */
+  &__avatar {
+    @include sizer($avatar-size);
+    @include avatar-shape;
+    display: block;
+    /* Padding, not a margin on the image: a margin would collapse through the
+       link and push the whole thing off centre. */
+    padding: $avatar-ring;
+    /* Slightly see-through, so the avatar underneath glows through the ring. */
+    background-color: rgba($secondary-color, 0.75);
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      background-color: $eggshell;
+      transition: opacity $global-transition;
+      @include avatar-shape;
+    }
+    &:hover img,
+    &:focus img {
+      opacity: 0.7;
+    }
+  }
+
+  &__more {
+    @include sizer(remify(38px));
+    border-radius: remify(12px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: remify(4px);
+    padding: 0;
+    color: $primary-color;
+    background-color: transparent;
+    border: 0;
+    cursor: pointer;
+    transition: $global-transition;
+    &:hover,
+    &:focus {
+      background-color: $eggshell;
+    }
+    &:focus {
+      outline: 0;
+    }
+  }
+
+  &__stats {
+    display: flex;
+    align-items: center;
+    margin: remify(14px) 0 0;
+    font-size: remify(15px);
+    line-height: 1;
+    /* The global 0.33px tracking makes this short line look spaced out. */
+    letter-spacing: normal;
+    /*
+      Optical alignment with the first avatar. Its leftmost point only touches
+      the box edge at mid height; averaged over the shape the silhouette starts
+      about 4px in, plus the 6px ring, less the icon's own 1.9px of inner space.
+    */
+    padding-left: remify(8px);
+    &__item {
+      display: flex;
+      align-items: center;
+      opacity: 0.75;
+      transition: opacity $global-transition;
+      .supporters__icon {
+        margin-right: remify(6px);
+      }
+      &:hover {
+        opacity: 1;
+      }
+    }
+    &__separator {
+      margin: 0 remify(10px);
+      opacity: 0.4;
+    }
+  }
+}
+
+/* Dialog */
+.supporters__dialog {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $global-space;
+  background-color: rgba($charleston-green, 0.6);
+  animation: supportersFadeIn 0.2s ease-out;
+
+  &__card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: remify(640px);
+    max-height: 86vh;
+    overflow: hidden;
+    padding: remify(36px) remify(28px) remify(28px);
+    text-align: left;
+    background-color: $secondary-color;
+    border-radius: remify(24px);
+    box-shadow: 0 remify(24px) remify(60px) rgba($charleston-green, 0.35);
+    animation: supportersZoomIn 0.2s ease-out;
+  }
+
+  &__close {
+    position: absolute;
+    top: remify(16px);
+    right: remify(16px);
+    @include sizer(remify(34px));
+    border-radius: remify(11px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    color: $primary-color;
+    background-color: transparent;
+    border: 0;
+    cursor: pointer;
+    transition: $global-transition;
+    &:hover,
+    &:focus {
+      background-color: $eggshell;
+    }
+    &:focus {
+      outline: 0;
+    }
+  }
+
+  &__title {
+    margin-bottom: remify(6px);
+  }
+
+  &__description {
+    margin: 0 0 remify(24px);
+    font-size: remify(16px);
+    line-height: 1.4;
+    opacity: 0.75;
+  }
+
+  /*
+    Only the avatars scroll, so the heading and the close button stay put.
+    A grid rather than a wrapping flex row: auto-fill columns share the leftover
+    width instead of piling it up as a ragged gutter on the right.
+  */
+  &__list {
+    display: grid;
+    /* Ten to a row once there is room; narrow screens fit what they can. */
+    grid-template-columns: repeat(auto-fill, minmax(#{remify(48px)}, 1fr));
+    @include breakpoint(min, medium) {
+      grid-template-columns: repeat(10, 1fr);
+    }
+    grid-gap: remify(10px);
+    justify-items: center;
+    overflow-y: auto;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    li {
+      margin: 0;
+    }
+  }
+
+  &__avatar {
+    display: block;
+    img {
+      @include sizer(remify(48px));
+      @include avatar-shape;
+      display: block;
+      object-fit: cover;
+      background-color: $eggshell;
+      transition: opacity $global-transition;
+    }
+    &:hover img,
+    &:focus img {
+      opacity: 0.7;
+    }
+  }
+
+  &__footnote {
+    margin: remify(20px) 0 0;
+    font-size: remify(15px);
+    opacity: 0.75;
+    a {
+      text-decoration: underline;
+    }
+  }
+}
+
+@keyframes supportersFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes supportersZoomIn {
+  from {
+    opacity: 0;
+    transform: translateY(#{remify(12px)}) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

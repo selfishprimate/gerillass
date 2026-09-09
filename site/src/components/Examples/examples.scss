@@ -1,0 +1,146 @@
+@import "assets/scss/abstract";
+
+.examples {
+  position: relative;
+  background-color: $alabaster;
+  margin-top: 100px;
+  padding: 2rem;
+  @include breakpoint(min, xlarge) {
+    padding-top: 5rem;
+    padding-bottom: 5rem;  
+  }
+  &::before {
+    content: "";
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 2px;
+    width: 100%;
+    height: 100px;
+    transform: translateY(-100%);
+    @include background-image("/images/ornaments/ornament-07.svg");
+  }
+  &::after {
+    content: "";
+    display: block;
+    position: absolute;
+    left: 0;
+    bottom: 5px;
+    width: 100%;
+    padding-top: 10.4%;
+    transform: translateY(100%);
+    z-index: 1;
+    @include background-image("/images/ornaments/ornament-04.svg");
+  }
+  &__figure {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    background-color: $secondary-color;
+    transform: translateX(-50%) translateY(-100%);
+    @include circle(9rem);
+    padding: $global-space;
+    &::before {
+      content: "";
+      display: block;
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 12em;
+      height: 9em;
+      transform: translateX(55%) translateY(-70%);
+      @include background-image("/images/speech-bubbles/examples.svg");
+    }
+    img {
+      @include responsive-image;
+    }
+  }
+
+  &__tab-panels {
+    &__tabs {
+      &:focus {
+        outline: none;
+      }
+      &__tab {
+        position: relative;
+        cursor: pointer;
+        opacity: 0.5;
+        &:focus {
+          outline: none;
+        }
+        &__title {
+          font-size: 1.802rem;
+          line-height: 2.027rem;
+          font-family: $primary-font-family;
+        }
+      }
+    }
+    &__panels {}
+    @include breakpoint(xsmall, xlarge) {
+      &__tabs {
+        display: flex;
+        overflow-x: auto;
+        margin-bottom: $global-space * 2;
+        &__tab {
+          padding: $global-space;
+          @include except(last) {
+            margin-right: $global-space * 2;
+          }
+          &__title {
+            white-space: nowrap;
+          }
+          &__description {
+            display: none;
+          }
+          &.react-tabs__tab--selected {
+            opacity: 1;
+            background-color: $primary-color;
+            border-radius: $border-radius;
+            color: $secondary-color;
+          }
+        }
+      }
+    }
+    @include breakpoint(min, xlarge) {
+      display: flex;
+      &__tabs {
+        flex-direction: column;
+        flex: 0 0 50%;
+        max-width: 50%;
+        padding-right: $global-space * 2;
+        &__tab {
+          padding: $global-space $global-space * 3 $global-space $global-space *
+            2;
+          &.react-tabs__tab--selected {
+            opacity: 1;
+            @include before {
+              content: "";
+              display: block;
+              position: absolute;
+              left: 0;
+              top: 0;
+              width: 8px;
+              height: 100%;
+              @include background-image(
+                "/images/general/active-tab-border.svg"
+              );
+            }
+            // @include after {
+            //   content: "\e802";
+            //   font-family: $icons-name;
+            //   font-size: 2.5rem;
+            //   right: 0;
+            //   @include center(vertical);
+            //   display: block;
+            //   position: absolute;
+            // }
+          }
+        }
+      }
+      &__panels {
+        flex: 0 0 50%;
+        max-width: 50%;
+      }
+    }
+  }
+}

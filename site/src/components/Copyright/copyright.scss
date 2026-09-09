@@ -1,0 +1,17 @@
+@import "assets/scss/abstract";
+
+.copyright {
+  &__info {
+    font-size: 1rem;
+    text-align: center;
+    padding: 2rem;
+    opacity: 0.8;
+    a {
+      font-weight: 500;
+      color: $accent-color;
+      &:hover {
+        color: darken($accent-color, 20%);
+      }
+    }
+  }
+}

@@ -1,0 +1,52 @@
+@import "assets/scss/abstract";
+
+.footer-invitation {
+  position: relative;
+  padding: 3rem 0;
+  color: $primary-color;
+  @include breakpoint(xsmall, medium) {
+    &__left {
+      margin-bottom: 1rem;
+    }
+    &__right {
+      justify-content: center;
+    }
+    &__title,
+    &__description {
+      text-align: center;
+    }
+  }
+  @include breakpoint(min, medium) {
+    &__left {
+      flex: 1.5;
+      padding-right: 3rem;
+    }
+    &__right {
+      flex: 0.5;
+    }
+  }
+  @include breakpoint(min, xlarge) {
+    &__left {
+      padding-right: 6rem;
+    }
+  }
+  &__container {
+    @include breakpoint(min, medium) {
+      display: flex;
+      justify-content: center;
+    }
+  }
+  &__left {
+  }
+  &__right {
+    display: flex;
+    align-items: center;
+  }
+  &__title {
+    font-size: 1.802rem;
+    line-height: 2.027rem;
+    margin-bottom: 0.7rem;
+  }
+  &__description {
+  }
+}

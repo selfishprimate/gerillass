@@ -1,0 +1,137 @@
+@import "assets/scss/abstract";
+
+.featured {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  /* Animation */
+  opacity: 0;
+  animation: setBack 0.5s 0.4s forwards;
+  justify-content: space-between;
+  align-items: center;
+  min-height: remify(120px);
+  margin-left: -2rem;
+  margin-right: -2rem;
+  padding: 0 3rem;
+  @include remove(xsmall, medium);
+  @include breakpoint(min, medium) {
+    margin-left: -3rem;
+    margin-right: -3rem;
+  }
+  @include breakpoint(min, large) {
+    padding: 0 4rem;
+  }
+  @include breakpoint(min, $mobile-breakpoint) {
+    &::before,
+    &::after {
+      content: "";
+      display: block;
+      position: absolute;
+    }
+    &::before {
+      width: remify(120px);
+      height: remify(150px);
+      left: 0;
+      @include background-image("/images/ornaments/ornament-15.svg");
+    }
+    &::after {
+      width: remify(100px);
+      height: remify(260px);
+      top: remify(-30px);
+      right: 0;
+      @include background-image("/images/ornaments/ornament-14.svg");
+    }
+  }
+  &__left,
+  &__right {
+    position: relative;
+    z-index: 1;
+  }
+  &__author {
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    &__label {
+      display: block;
+      font-size: 0.8em;
+      line-height: 1;
+      opacity: 0.7;
+    }
+    &__link {
+      position: relative;
+      padding-left: 2.6rem;
+      &::before {
+        position: absolute;
+        left: 0;
+        font-family: $icons-name;
+        margin-right: remify(5px);
+        font-size: 2.2rem;
+        line-height: 0;
+        @include center(vertical);
+      }
+      &.linkedin {
+        &::before {
+          content: "\e81f";
+        }
+      }
+      &.twitter {
+        &::before {
+          content: "\e82c";
+        }
+      }
+    }
+  }
+  .github-buttons {
+    position: relative;
+    display: flex;
+    align-items: center;
+    &::before {
+      content: "\e81b";
+      position: absolute;
+      left: remify(-32px);
+      font-family: $icons-name;
+      font-size: remify(28px);
+    }
+    &__item {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: remify(28px);
+      font-size: remify(13px);
+      padding: 0 0.8rem;
+      border: remify(2px) solid $primary-color;
+      border-radius: 999px;
+      &:not(:last-of-type) {
+        margin-right: remify(6px);
+        &::after {
+          content: "";
+          position: absolute;
+          height: remify(2px);
+          width: remify(8px);
+          right: remify(-8px);
+          @include center(vertical);
+          background-color: $primary-color;
+        }
+      }
+      &:hover {
+        background-color: $primary-color;
+        a {
+          color: $secondary-color;
+          opacity: 1;
+        }
+      }
+      a {
+        font-weight: 500;
+        line-height: 1;
+        @include stretched-link;
+      }
+      &--dark {
+        background-color: $primary-color;
+        a {
+          color: $secondary-color;
+        }
+      }
+    }
+  }
+}

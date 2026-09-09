@@ -1,0 +1,500 @@
+@import "assets/scss/abstract";
+
+$pane-radius: remify(16px);
+
+/*
+  The playground is a window over the site rather than a page of its own: it
+  wants the whole screen for two editors, and the site's header and footer have
+  nothing to add while you are typing Sass.
+*/
+.playground {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1000;
+  display: flex;
+  background-color: $secondary-color;
+
+  &__window {
+    display: flex;
+    flex-direction: column;
+    /* Edge to edge: the screen is the window. */
+    width: 100%;
+    height: 100%;
+    padding: remify(20px);
+    overflow: hidden auto;
+    background-color: $secondary-color;
+    @include breakpoint(min, medium) {
+      padding: remify(28px);
+    }
+  }
+
+  /* Title, the three selectors and the way out, on one line where there is room. */
+  &__bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    margin-bottom: remify(18px);
+
+    &__intro {
+      flex: 1 1 remify(260px);
+      margin-bottom: remify(12px);
+      padding-right: $global-space;
+      @include breakpoint(min, large) {
+        margin-bottom: 0;
+      }
+    }
+
+    /* Sharing what you wrote and leaving, together at the far end. */
+    &__actions {
+      display: flex;
+      align-items: center;
+      flex: none;
+      margin-left: auto;
+    }
+  }
+
+  &__title {
+    margin: 0;
+    font-size: remify(36px);
+    line-height: 1.1;
+  }
+
+  &__subtitle {
+    margin: remify(6px) 0 0;
+    font-size: remify(17px);
+    letter-spacing: normal;
+    opacity: 0.6;
+  }
+
+  &__close {
+    @include sizer(remify(42px));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    color: $primary-color;
+    background-color: transparent;
+    border: remify(2px) solid rgba($primary-color, 0.2);
+    border-radius: remify(12px);
+    cursor: pointer;
+    transition: $global-transition;
+    &:hover,
+    &:focus {
+      border-color: rgba($primary-color, 0.5);
+      outline: 0;
+    }
+  }
+
+  &__panes {
+    display: grid;
+    grid-gap: $global-space;
+    flex: 1 1 auto;
+    min-height: 0;
+    @include breakpoint(min, medium) {
+      grid-template-columns: 1fr 1fr;
+      grid-gap: $global-space * 1.5;
+    }
+  }
+
+  &__pane {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: remify(220px);
+    /* Stacked, and with the description above the code, a block needs asking
+       for its height or the snippet is down to a few lines. The window
+       scrolls; the code should not have to. */
+    @include breakpoint(max, small) {
+      min-height: remify(320px);
+    }
+
+    /*
+      On the page above the block rather than on it: what the block is for on
+      the left, the controls that shape it on the right. The block's own name
+      and buttons live inside it.
+    */
+    &__head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex: none;
+      margin-bottom: remify(10px);
+      padding-left: remify(4px);
+    }
+
+    &__note {
+      min-width: 0;
+      margin: 0;
+      padding-right: $global-space;
+      font-size: remify(15px);
+      letter-spacing: normal;
+      opacity: 0.5;
+      /* The controls come first when there is no room for both. */
+      @include breakpoint(max, small) {
+        display: none;
+      }
+    }
+
+    &__title {
+      flex: none;
+      margin-right: remify(16px);
+      @include breakpoint(max, small) {
+        margin-right: remify(12px);
+      }
+      font-family: $secondary-font-family;
+      font-size: remify(13px);
+      font-weight: 500;
+      letter-spacing: normal;
+      text-transform: uppercase;
+      color: rgba($secondary-color, 0.5);
+    }
+
+    &__buttons {
+      display: flex;
+      align-items: center;
+      /* On a phone the selectors give up their width before the bar wraps. */
+      min-width: 0;
+    }
+
+  }
+
+  /*
+    On a phone the bar runs out of room, and it is the mixin that gives it up:
+    a name shortened to an ellipsis still reads, a release number does not.
+  */
+  &__pick {
+    min-width: 0;
+    &--version {
+      flex: none;
+    }
+  }
+
+  &__status {
+    margin-right: remify(10px);
+    font-size: remify(13px);
+    letter-spacing: normal;
+    color: rgba($secondary-color, 0.5);
+    &--busy {
+      font-style: italic;
+    }
+  }
+
+  &__action {
+    @include sizer(remify(32px));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    color: rgba($primary-color, 0.6);
+    background-color: transparent;
+    border: 0;
+    border-radius: remify(9px);
+    cursor: pointer;
+    transition: $global-transition;
+    &:hover,
+    &:focus {
+      color: $primary-color;
+      background-color: rgba($primary-color, 0.08);
+      outline: 0;
+    }
+    /* Inside the block the same button reads against the dark panel. */
+    &--onDark {
+      color: rgba($secondary-color, 0.5);
+      &:hover,
+      &:focus {
+        color: $secondary-color;
+        background-color: rgba($secondary-color, 0.12);
+      }
+    }
+  }
+
+  /* Everything below the panes sits on the page colour, not on a panel. */
+  &__footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    flex: none;
+    margin-top: remify(16px);
+
+    &__actions {
+      display: flex;
+      align-items: center;
+      code {
+        margin-right: remify(4px);
+        font-family: $tertiary-font-family;
+        font-size: remify(14px);
+        letter-spacing: normal;
+        opacity: 0.75;
+      }
+      .playground__action {
+        color: rgba($primary-color, 0.6);
+        &:hover,
+        &:focus {
+          color: $primary-color;
+          background-color: rgba($primary-color, 0.08);
+        }
+      }
+    }
+  }
+
+  &__compiler {
+    margin: 0;
+    font-size: remify(13px);
+    letter-spacing: normal;
+    opacity: 0.4;
+  }
+
+  &__share {
+    display: flex;
+    align-items: center;
+    height: remify(42px);
+    margin-right: remify(10px);
+    padding: 0 remify(18px) 0 remify(14px);
+    font-family: $secondary-font-family;
+    font-size: remify(15px);
+    font-weight: 500;
+    letter-spacing: normal;
+    color: $primary-color;
+    background-color: transparent;
+    border: remify(2px) solid rgba($primary-color, 0.2);
+    border-radius: remify(12px);
+    cursor: pointer;
+    transition: $global-transition;
+    span {
+      margin-left: remify(7px);
+    }
+    &:hover,
+    &:focus {
+      border-color: rgba($primary-color, 0.5);
+      outline: 0;
+    }
+  }
+
+  /*
+    CodeMirror ships its own layout; everything below only restates the site's
+    code-block look — the dark panel, the mono face and the rounded corners the
+    static examples already use.
+  */
+  &__editor {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+    background-color: $primary-color;
+    border-radius: $pane-radius;
+
+    /* The block's own name and buttons, on the panel with the code. */
+    &__bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex: none;
+      padding: remify(14px) remify(20px) 0 remify(24px);
+      /* The selectors sit in the bar as words, so they need room to breathe. */
+      .select {
+        margin-right: remify(16px);
+      }
+      /* On a phone the last few pixels are the difference between a name and
+         a name with an ellipsis, so the bar closes its gaps first. */
+      @include breakpoint(max, small) {
+        padding-right: remify(16px);
+        padding-left: remify(18px);
+        .select {
+          margin-right: remify(10px);
+        }
+      }
+    }
+
+    /*
+      What the mixin is for, in the documentation's own words, written as the
+      comment it would be if you had typed it. It is not in the source, though:
+      a real comment would be compiled, copied, shared and gone on the first
+      edit, and this is about the snippet rather than part of it.
+
+      So it borrows the editor's metrics instead — the mono face, the same
+      size and line height, the comment colour, and the left edge the code
+      itself starts at, which is the gutter plus the editor's own padding.
+      Wrapped lines hang under the text rather than under the slashes.
+    */
+    &__note {
+      flex: none;
+      margin: remify(16px) 0 0;
+      /* The gutter plus the editor's padding is where the code starts, so the
+         slashes start there too; the rest hangs under the text after them. */
+      padding: 0 remify(24px) 0 calc(#{remify(40px)} + 3ch);
+      text-indent: -3ch;
+      font-family: $tertiary-font-family;
+      font-size: remify(14px);
+      line-height: 1.6;
+      letter-spacing: normal;
+      color: rgba($secondary-color, 0.45);
+      @include breakpoint(max, small) {
+        padding-right: remify(16px);
+      }
+    }
+
+    /* The page the sentence came from, written out as you would paste it. */
+    &__link {
+      color: inherit;
+      text-decoration: underline;
+      text-underline-offset: remify(3px);
+      transition: $global-transition;
+      &:hover,
+      &:focus {
+        color: $secondary-color;
+      }
+    }
+
+    /*
+      react-codemirror2 wraps the editor in a div of its own, and that div is
+      the flex item here — the editor can only be as tall as its wrapper, so
+      the wrapper is what has to take the room the bar and the comment leave.
+      Without this the wrapper sized itself to the code, the panel clipped what
+      would not fit, and long output could not be scrolled to: CodeMirror
+      scrolls its own content, and its scroller is 100% of an element that has
+      to have a height for that to mean anything.
+    */
+    .react-codemirror2 {
+      flex: 1 1 auto;
+      min-height: 0;
+    }
+
+    .CodeMirror {
+      height: 100%;
+      padding: remify(18px) remify(8px) remify(24px);
+      /* The comment above it is already the top of the snippet. */
+      .playground__editor__note + & {
+        padding-top: remify(6px);
+      }
+      font-family: $tertiary-font-family;
+      font-size: remify(14px);
+      line-height: 1.6;
+      color: $secondary-color;
+      background-color: transparent;
+    }
+    .CodeMirror-gutters {
+      background-color: transparent;
+      border: 0;
+    }
+    .CodeMirror-linenumber {
+      color: rgba($secondary-color, 0.3);
+    }
+    .CodeMirror-cursor {
+      border-left-color: $lime;
+    }
+    .CodeMirror-selected {
+      background-color: rgba($secondary-color, 0.18);
+    }
+    .cm-comment {
+      color: rgba($secondary-color, 0.45);
+    }
+    .cm-def,
+    .cm-tag,
+    .cm-builtin {
+      color: $lime;
+    }
+    .cm-keyword,
+    .cm-atom {
+      color: $sage;
+    }
+    .cm-variable,
+    .cm-variable-2,
+    .cm-property {
+      color: $eggshell;
+    }
+    .cm-number,
+    .cm-string,
+    .cm-string-2,
+    .cm-qualifier {
+      color: $corn;
+    }
+    .cm-error,
+    .cm-invalidchar {
+      color: $terra;
+    }
+
+    /*
+      Every remaining class CodeMirror's own theme colours, and it colours them
+      for a white page: a media feature comes out #00c and a vendor prefix
+      #555, neither of which can be read on this panel. Anything the mode can
+      emit is given a colour here, so nothing falls back to that palette.
+
+      `attribute` is the media feature — `screen` beside the `only` and `and`
+      that are already keywords, so it reads with them. `meta` is the vendor
+      prefix on a property, which belongs to the property name it is stuck to.
+    */
+    .cm-attribute,
+    .cm-positive {
+      color: $sage;
+    }
+    .cm-meta,
+    .cm-variable-3,
+    .cm-type {
+      color: $eggshell;
+    }
+    .cm-link {
+      color: $corn;
+    }
+    .cm-negative {
+      color: $terra;
+    }
+    .cm-bracket,
+    .cm-header,
+    .cm-quote,
+    .cm-hr {
+      color: rgba($secondary-color, 0.75);
+    }
+
+    &--output .CodeMirror {
+      cursor: default;
+    }
+
+    /*
+      The right-hand panel is what the compiler produced, so nothing in it can
+      be a syntax error — anything that fails arrives as a message instead. The
+      mode flags it all the same, because a vendor-prefixed property is not in
+      its list of the ones it knows, and `-webkit-text-fill-color` came back
+      half a property and half a mistake.
+    */
+    &--output .cm-error {
+      color: $secondary-color;
+    }
+    &--output .cm-property.cm-error {
+      color: $eggshell;
+    }
+  }
+
+  &__message {
+    display: flex;
+    flex: 1 1 auto;
+    min-height: 0;
+    padding: remify(20px);
+    color: rgba($secondary-color, 0.75);
+    font-size: remify(14px);
+    line-height: 1.5;
+    overflow: auto;
+    p {
+      margin: 0;
+    }
+    pre {
+      margin: 0;
+      font-family: $tertiary-font-family;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    &__icon {
+      flex: none;
+      margin-right: remify(10px);
+      color: $terra;
+    }
+    &--error {
+      color: rgba($secondary-color, 0.9);
+    }
+  }
+}

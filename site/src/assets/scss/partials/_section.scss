@@ -1,0 +1,50 @@
+.section {
+  &__header {
+  text-align: center;
+  margin-bottom: 3rem;
+  @include breakpoint(min, large) {
+    margin-bottom: 4rem;
+  }
+    &.hidden {
+      @include hide;
+    }
+  }
+  &__title {}
+  &__description {
+    @include breakpoint(min, large) {
+      padding: 0 6rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+  }
+  &__inner {
+    width: 100%;
+    max-width: $inner-width;
+    margin: 0 auto;
+  }
+  &--stretched {
+    margin-left: -2rem;
+    margin-right: -2rem;
+    @include breakpoint(min, small) {
+      margin-left: -3rem;
+      margin-right: -3rem;
+    }
+    @include breakpoint(min, large) {
+      margin-left: -4rem;
+      margin-right: -4rem;
+    }
+  }
+  &__cta {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    &__form {
+      margin-bottom: 0.5rem;
+    }
+    &__button {}
+    &__description {
+      font-size: 1rem;
+    } 
+  }
+}

@@ -1,0 +1,44 @@
+@import "assets/scss/abstract";
+
+.benefits {
+  padding: 6rem 0 10rem;
+  /* Animation */
+  opacity: 0;
+  animation: setBack 0.5s 0.6s forwards;
+  @include breakpoint(min, large) {
+    padding: 8rem 0 10rem;
+  }
+  &__list {
+    width: 100%;
+    max-width: $inner-width;
+    margin: 0 auto;
+    &__item {
+      display: flex;
+      margin-bottom: $global-space * 3;
+      @include breakpoint(min, small) {
+        margin-bottom: $global-space * 4;
+      }
+    }
+    @include breakpoint(min, large) {
+      @include columnizer(2, $global-space * 3);
+    }
+  }
+  &__figure {
+    @include reset-figure;
+    flex: 0 0 100px;
+    margin-left: -$global-space;
+    margin-right: -$global-space;
+    @include breakpoint(min, small) {
+      flex: 0 0 140px;
+    }
+  }
+  &__label {
+    color: transparentize($primary-color, 0.2);
+    margin-bottom: calc($global-space / 2);
+    font-weight: 300;
+  }
+  &__title {}
+  &__description {
+    font-weight: 300;
+  }
+}

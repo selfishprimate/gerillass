@@ -1,0 +1,26 @@
+@import "assets/scss/abstract";
+
+.product-hunt {
+  $background-color: #26293d;
+  position: relative;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem 0;
+  // background-color: $background-color;
+  @include adaptive(2%);
+  &__label {
+    color: $secondary-color;
+    margin-right: 1rem;
+    padding: 0.5rem;
+  }
+  &__cta {
+    img {
+      display: block;
+    }
+  }
+  @include breakpoint(min, small) {
+    display: flex;
+    @include border-radius(bottom, 2rem);
+  }
+}

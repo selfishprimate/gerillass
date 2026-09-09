@@ -1,0 +1,114 @@
+@import "assets/scss/abstract";
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  /* Animation */
+  opacity: 0;
+  animation: setBack 0.5s 0.2s forwards;
+  @include breakpoint(min, $mobile-breakpoint) {
+    flex-direction: row;
+    padding: 1rem 0 3rem;
+  }
+  &__link {
+    text-decoration: underline;
+  }
+  &__left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    @include breakpoint(min, $mobile-breakpoint) {
+      flex: 1 0 30%;
+    }
+  }
+
+  &__right {
+    order: -1;
+    @include breakpoint(min, $mobile-breakpoint) {
+      flex: 1 0 20rem;
+      order: 1;
+      padding: 0 2rem;
+    }
+    @include breakpoint(xsmall, large) {
+      margin-bottom: 2rem;
+    }
+  }
+
+  &__content {}
+
+  /*
+    The mascot is an inline SVG with a viewBox of its own, so its own ratio is
+    what gives the figure its height. `ratio-box` used to reserve 570:450 here
+    and lay the drawing over it absolutely, which was 12px shorter than the
+    drawing actually paints — it is gone in 2.0.0, and nothing needs to take
+    its place: `aspect-ratio` belongs on the element being sized, and this
+    element sizes itself.
+  */
+  &__figure {
+    margin-left: -$global-space;
+    margin-right: -$global-space;
+    img {
+      width: 100%;
+      height: auto;
+    }
+    svg {
+      width: 100%;
+      height: auto;
+      padding: 2em;
+      .cls-4 {
+        transform-origin: 50% 50%;
+        animation: heartBeat 0.8s infinite;
+        animation-timing-function: cubic-bezier(.04,.9,.83,.67);
+      } 
+    }
+
+    &__caption {
+      font-size: 0.889rem;
+      font-weight: 300;
+      line-height: 1.1rem;
+      padding: 0 $global-space;
+      width: 100%;
+      max-width: 300px;
+      margin: -1rem auto 0;
+      text-align: center;
+      opacity: 0.82;
+      @include breakpoint(min, small) {
+        margin: 0 auto;
+      }
+    }
+    @include breakpoint(xsmall, small) {
+      transform: scale(1.1);
+      margin-left: 0;
+      margin-right: 0;
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+    }
+  }
+  &__title {}
+  &__description {
+    font-size: 1.2rem;
+    font-weight: 300;
+    line-height: 1.6rem;
+    margin-bottom: 2.281rem;
+  }
+  &__buttons {
+    margin-bottom: remify(20px);
+    &__item {
+      @include breakpoint(max, large) {
+        @include except(last) {
+          margin-bottom: $global-space;
+        }
+      }
+    }
+    @include breakpoint(min, large) {
+      display: flex;
+      max-width: 500px;
+      &__item {
+        flex: 1;
+        &:not(:last-of-type) {
+          margin-right: $global-space * 0.75;
+        }
+      }
+    }
+  }
+}

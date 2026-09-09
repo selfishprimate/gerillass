@@ -1,0 +1,94 @@
+@include reset-css;
+@include border-box;
+@include antialias;
+
+// @include breakpointer {
+//   position: fixed;
+//   top: 0;
+//   right: 0;
+//   color: white;
+//   padding: 5px 10px;
+//   z-index: 10;
+// }
+
+html,
+body {
+  position: relative;
+  width: 100%;
+  min-height: 100%;
+  font-family: $secondary-font-family;
+  text-rendering: optimizeLegibility;
+  color: $primary-color;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  letter-spacing: 0.33px;
+  scroll-behavior: smooth;
+  background-color: #888d80;
+  &::after {
+    content: "";
+    @include position;
+    @include radial-gradient(circle, center, #bfc1a4 (#888d80 80%));
+    z-index: 0;
+  }
+}
+
+body {
+  position: relative;
+  z-index: 1;
+}
+
+button,
+a {
+  transition: 0.1s;
+}
+
+a {
+  color: $link-color;
+  text-decoration: none;
+  &:hover {
+    color: $accent-color;
+  }
+}
+
+strong {
+  font-weight: bold;
+}
+
+figure {
+  @include reset-figure;
+}
+
+// .main-container {
+//   @include breakpoint(min, small) {
+//     padding: 3rem 0;
+//   }
+// }
+
+.main-wrapper {
+  position: relative;
+  padding: 3rem 2rem;
+  background-color: $secondary-color;
+  @include adaptive(2%);
+  @include breakpoint(min, small) {
+    padding: 3rem;
+  }
+  @include breakpoint(min, large) {
+    padding: 4rem;
+  }
+}
+
+.padding--global {
+  padding-left: 2rem;
+  padding-right: 2rem;
+  @include breakpoint(min, small) {
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+  @include breakpoint(min, large) {
+    padding-left: 4rem;
+    padding-right: 4rem;
+  }
+}

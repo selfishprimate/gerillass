@@ -1,0 +1,172 @@
+@import "assets/scss/abstract";
+
+.footer-container {
+  padding: 0 2rem;
+  background-color: $alabaster;
+  margin-bottom: -3rem;
+  // @include breakpoint(min, small) {
+  //   @include border-radius(bottom, 2rem);
+  // }
+  @include breakpoint(min, medium) {
+    padding: 0 4rem;
+  }
+  @include breakpoint(min, large) {
+    margin-bottom: -4rem;
+  }
+}
+.footer {
+  position: relative;
+  color: $secondary-color;
+  background-color: $primary-color;
+  border-radius: 24px;
+  font-size: 1rem;
+  padding: 3rem 2rem;
+  padding-top: 4rem;
+  z-index: 200;
+  margin-top: -10rem;
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    top: 130px;
+    @include sizer(2rem);
+    @include breakpoint(min, medium) {
+      top: 100px;
+      @include sizer(4rem);
+    }
+  }
+  &::before {
+    left: -2rem;
+    @include background-image("/images/general/footer-ornament-01.svg");
+    @include breakpoint(min, medium) {
+      left: -4rem;
+    }
+  }
+  &::after {
+    right: -2rem;
+    @include background-image("/images/general/footer-ornament-02.svg");
+    @include breakpoint(min, medium) {
+      right: -4rem;
+    }
+  }
+  @include breakpoint(min, medium) {
+    padding-top: 6rem;
+  }
+  &__ghost-image {
+    @include position;
+    @include background-image("/images/general/sass-logo-white.svg");
+    opacity: 0.02;
+    z-index: -1;
+  }
+  &__menu {
+    margin-bottom: 0;
+    @include columnizer(1, 2rem);
+    @include breakpoint(min, xlarge) {
+      margin-bottom: 3rem;
+    }
+    &__item {
+      input {
+        display: none;
+      }
+    }
+    &__list {
+      &__item {
+        &:first-of-type {
+          font-size: 1.2rem;
+          font-weight: bold;
+          color: transparentize($secondary-color, 0.5);
+          margin-bottom: 1.2rem;
+        }
+        @include except(1, -1) {
+          margin-bottom: 0.5rem;
+        }
+        a {
+          color: $secondary-color;
+          &:hover {
+            color: transparentize($secondary-color, 0.5);
+          }
+        }
+      }
+    }
+    &__toggler {
+      display: block;
+      margin-bottom: 2.2rem;
+      & > * {
+        margin-bottom: 0;
+      }
+    }
+
+    @include breakpoint(xsmall, small) {
+      &__item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      &__toggler {
+        position: relative;
+        text-align: center;
+        margin-bottom: 0;
+        &::after {
+          content: "\e827";
+          display: block;
+          position: absolute;
+          right: -2rem;
+          font-size: 1.1rem;
+          font-family: $icons-name;
+          line-height: 0;
+          transition: 0.3s;
+          @include center(vertical);
+        }
+      }
+      &__list {
+        display: none;
+        &__item {
+          text-align: center;
+        }
+      }
+      input:checked ~ {
+        .footer__menu__list {
+          display: block;
+          margin-bottom: 2rem;
+        }
+        .footer__menu__toggler {
+          margin-bottom: 1rem;
+          &::after {
+            content: "\e822";
+            transform: rotate(-180deg);
+          }
+        }
+      }
+    }
+
+    @include breakpoint(small, large) {
+      @include columnizer(2);
+      &__item {
+        text-align: center;
+        margin-bottom: 3rem;
+      }
+    }
+
+    @include breakpoint(min, large) {
+      @include columnizer(4, 2rem);
+    }
+  }
+  &__note {
+    text-align: center;
+    a {
+      color: $secondary-color;
+      font-weight: 500;
+      &:hover {
+        color: transparentize($secondary-color, 0.5);
+      }
+    }
+  }
+  /* The two names in the credits, marked as the links they are. */
+  &__link {
+    text-decoration: underline;
+    text-underline-offset: remify(3px);
+    &--secondary {
+      color: $lime;
+    }
+  }
+}

@@ -1,0 +1,18 @@
+/* TEAM */
+
+Name: Halil İbrahim Çakıroğlu
+Twitter: @selfishprimate
+Location: Istanbul, Turkey.
+
+/* THANKS */		
+
+Muhammed Mirza Kılıç
+Medium: @muhammedmirzakilic
+
+Pınar Aksu
+Twitter: @AksuPin
+
+/* SITE */
+
+Standards: HTML5, CSS3
+Components: Sass, Gerillass, React.js, Visual Studio Code, Git, Github, Netlify
