@@ -39,6 +39,16 @@ function`, with or without Gerillass. It also rides the legacy JS API, which
 Dart Sass removes in 2.0.0. Removing the block is a breaking change for a
 hypothetical old-toolchain user, so it is queued for 2.0.0 rather than done now.
 
+## Node
+
+The library needs no Node at all: it is `.scss` files and consumers compile
+them with whatever they already have. Its `package.json` deliberately carries
+**no `engines` field**, because declaring one would warn people off a runtime
+the library does not use.
+
+`site/` does need one, and `.nvmrc` pins 22 for anyone working in the
+repository. That constraint lives in `site/package.json`, not the root.
+
 ## Commands
 
 ```bash

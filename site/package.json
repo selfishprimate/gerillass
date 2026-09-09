@@ -18,7 +18,7 @@
     "react": "^17.0.2",
     "react-codemirror2": "7.3.0",
     "react-dom": "^17.0.2",
-    "react-router-dom": "^5.3.4",
+    "react-router-dom": "^6.30.6",
     "react-syntax-highlighter": "^12.2.1",
     "react-tabs": "^3.1.1"
   },
@@ -27,5 +27,8 @@
     "sass": "^1.83.0",
     "vite": "^6.0.5",
     "vite-plugin-svgr": "^5.2.0"
+  },
+  "engines": {
+    "node": ">=22"
   }
 }

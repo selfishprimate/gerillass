@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate, useNavigationType } from "react-router-dom";
 
 import Playground from "components/Playground";
 
@@ -7,7 +8,10 @@ import Playground from "components/Playground";
   it linkable, and closing it drops back to the page it covers — which is still
   mounted underneath, since both addresses render it (see App).
 */
-function PlaygroundPage({ history }) {
+function PlaygroundPage() {
+  const navigate = useNavigate();
+  const navigationType = useNavigationType();
+
   /*
     Arriving by a click is the playground opening over a page you were already
     reading; arriving by address, back or reload is simply where you are. The
@@ -17,8 +21,8 @@ function PlaygroundPage({ history }) {
   */
   return (
     <Playground
-      onClose={() => history.push("/")}
-      openedOverSite={history.action === "PUSH"}
+      onClose={() => navigate("/")}
+      openedOverSite={navigationType === "PUSH"}
     />
   );
 }

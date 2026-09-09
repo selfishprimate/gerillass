@@ -1,10 +1,9 @@
 import React, { Suspense, lazy } from 'react';
 import {
     BrowserRouter as Router,
-    Switch,
+    Routes,
     Route,
-    useHistory,
-    useLocation
+    useNavigationType
 } from 'react-router-dom';
 
 import Home from 'pages/Home';
@@ -33,18 +32,20 @@ const Playground = lazy(() => import('pages/Playground'));
   it again as the window fades would be a flicker of its own.
 */
 function PlaygroundRoute() {
-  const history = useHistory();
   /*
-    useLocation is what subscribes this to navigation. useHistory alone hands
-    over the object and never re-renders, so the fallback would keep whatever
-    was true when the app first rendered — the cover, on every first opening.
+    useNavigationType subscribes this to navigation, so the fallback is decided
+    afresh on each one. Under react-router 5 this took two hooks: useHistory
+    handed over the object without re-rendering, and useLocation was there to
+    make it re-render at all -- without it the fallback kept whatever was true
+    when the app first rendered, which was the cover on every first opening.
   */
-  useLocation();
-  const openedOverSite = history.action === 'PUSH';
+  const openedOverSite = useNavigationType() === 'PUSH';
 
   return (
     <Suspense fallback={openedOverSite ? null : <PlaygroundCover />}>
-      <Route exact path="/playground" component={Playground} />
+      <Routes>
+        <Route path="/playground" element={<Playground />} />
+      </Routes>
     </Suspense>
   );
 }
@@ -58,11 +59,14 @@ function App() {
   return (
     <Router>
       <Suspense fallback={<div />}>
-        <Switch>
-          <Route exact path={['/', '/playground']} component={Home} />
-          <Route exact path="/about" component={About} />
-          <Route exact path="*" component={NotFound} />
-        </Switch>
+        <Routes>
+          {/* Both addresses render Home, so it stays mounted under the
+              playground window -- see the note above. */}
+          <Route path="/" element={<Home />} />
+          <Route path="/playground" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </Suspense>
       <PlaygroundRoute />
     </Router>
