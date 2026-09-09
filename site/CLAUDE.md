@@ -10,8 +10,10 @@ in the archived repository and somebody will read it.
 
 ## What this is
 
-The marketing site: a landing page and the playground. React class components,
-`react-router-dom` v5, Dart Sass, built by Vite. Deployed to Netlify.
+The marketing site: a landing page and the playground. React 18 class
+components, `react-router-dom` v6, Dart Sass, built by Vite and **generated
+statically** — every route is written out as a real HTML file at build time
+rather than assembled in the browser. Deployed to Netlify.
 
 It dogfoods the library for all of its styling. `@import "gerillass"` resolves
 to `../scss` through a `loadPaths` entry in `vite.config.js`, so the site is
@@ -43,6 +45,8 @@ The old repository's guidance is wrong on these, and only these:
 | `src/serviceWorker.js` | deleted; it was already unregistered |
 | `graphql`, `graphql.macro` dependencies | dropped; nothing imported them |
 | `src/release.js` reads the installed `gerillass` package | reads `../../package.json`, so no install is involved |
+| React 16, `react-router-dom` v5, `ReactDOM.render` | React 18 and router v6; the entry is `ViteReactSSG` in `src/index.jsx` |
+| One `index.html` for every route | one file per route, from `vite-react-ssg build` |
 
 Everything below is still true.
 
