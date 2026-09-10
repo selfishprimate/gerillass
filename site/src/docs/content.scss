@@ -173,6 +173,10 @@
       vertical-align: top;
       padding: 0.6rem 0.75rem;
       border-bottom: 1px solid $eggshell;
+
+      /* Flush with the column of prose, as the arguments table is. */
+      &:first-child { padding-left: 0; }
+      &:last-child { padding-right: 0; }
     }
 
     th {

@@ -14,6 +14,14 @@
       vertical-align: top;
       padding: remify(10px) remify(12px);
       border-bottom: 1px solid $eggshell;
+
+      /*
+        Flush with the column of prose. The gutter between cells is wanted;
+        the same gutter on the outside only inset the table from the text
+        above and below it.
+      */
+      &:first-child { padding-left: 0; }
+      &:last-child { padding-right: 0; }
     }
 
     th {
