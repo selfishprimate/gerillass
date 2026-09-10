@@ -27,10 +27,28 @@ function normalise(route) {
   return `/${route}`.replace(/\/{2,}/g, "/").replace(/\/$/, "");
 }
 
+/*
+  The two marketing routes that are not the landing page. Both were serving the
+  landing page's title, description and canonical, so /playground declared
+  itself a duplicate of / and had nothing of its own for a search result to
+  show.
+*/
+const MARKETING = {
+  "/playground": {
+    page_title: "Playground",
+    page_suffix: "Gerillass",
+    page_description:
+      "Write Sass against Gerillass in the browser and watch the CSS compile as you type. Pick a mixin, change its arguments, and share the result as a link.",
+    page_keywords:
+      "Sass playground, SCSS playground, compile Sass online, Gerillass playground, Sass mixin editor",
+  },
+};
+
 function frontmatterFor(route) {
-  // /docs is the documentation's landing page, which is content/docs/index.mdx.
+  // /docs redirects to the introduction, so it carries the same head.
   const path = normalise(route);
-  if (path === "/docs") return read("index");
+  if (MARKETING[path]) return MARKETING[path];
+  if (path === "/docs") return read("introduction");
 
   const slug = path.replace(/^\/docs\//, "");
   if (slug === path) return null;

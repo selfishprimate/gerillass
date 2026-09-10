@@ -31,7 +31,12 @@ export function headFor(frontmatter, path) {
     was a directory with an index.html in it.
   */
   const url = `${SITE}${path.replace(/\/+$/, "")}`;
-  const title = `${frontmatter.page_title} · Gerillass Documentation`;
+  /*
+    The suffix says which part of the site a result belongs to. It is the
+    documentation for almost every page that comes through here, and the two
+    marketing routes say otherwise.
+  */
+  const title = `${frontmatter.page_title} · ${frontmatter.page_suffix ?? "Gerillass Documentation"}`;
   const description = frontmatter.page_description;
 
   const tags = [

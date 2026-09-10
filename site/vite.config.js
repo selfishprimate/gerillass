@@ -4,6 +4,7 @@ import svgr from "vite-plugin-svgr";
 import sassExample from "./plugins/sass-example.js";
 import docsIndex from "./plugins/docs-index.js";
 import docsRedirects from "./plugins/docs-redirects.js";
+import writeSiteMetadata from "./plugins/site-metadata.js";
 import docsHead from "./plugins/docs-head.js";
 import mdx from "@mdx-js/rollup";
 import remarkFrontmatter from "remark-frontmatter";
@@ -97,6 +98,10 @@ export default defineConfig({
   // build generates. See plugins/docs-head.js.
   ssgOptions: {
     onPageRendered: (route, renderedHTML) => docsHead(route, renderedHTML),
+    onFinished: (dir) => {
+      const { adres, llms } = writeSiteMetadata(dir);
+      console.log(`sitemap.xml: ${adres} adres. llms.txt: ${llms ? "yazildi" : "kaynak yok"}.`);
+    },
   },
   ssr: { noExternal: ["react-syntax-highlighter"] },
   build: { outDir: "dist" },
