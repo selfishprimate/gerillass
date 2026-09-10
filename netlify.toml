@@ -39,3 +39,60 @@
 #                                  previews. Every route is generated at build
 #                                  time now, so there was nothing left for it to
 #                                  do, and Netlify has deprecated it.
+
+# Response headers. There were none until now: no transport policy, nothing
+# stopping a browser from guessing at a content type, and no limit on what the
+# page could be embedded in.
+#
+# Content-Security-Policy is deliberately not here. It is the one header that
+# breaks a site silently when it is wrong, and this page loads a Typekit
+# stylesheet, an ionicons module from unpkg, Google's tag, and renders every
+# documentation example inside a srcdoc iframe. It deserves its own change,
+# measured against a real page rather than guessed at.
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Two years, subdomains included: docs.gerillass.com serves over HTTPS
+    # already, and it is the one subdomain that matters. `preload` is left off
+    # on purpose -- getting off that list takes months, so it is a separate
+    # decision rather than a side effect of adding headers.
+    Strict-Transport-Security = "max-age=63072000; includeSubDomains"
+
+    # A browser should take the Content-Type at its word rather than sniffing
+    # the bytes and deciding a file is something else.
+    X-Content-Type-Options = "nosniff"
+
+    # SAMEORIGIN rather than DENY: the documentation renders its examples in
+    # iframes, and while those are srcdoc rather than page loads, a demo that
+    # ever points at a real URL should not fail because of a header.
+    X-Frame-Options = "SAMEORIGIN"
+
+    # The full URL to same-origin destinations, the origin alone to others.
+    # A documentation page's path can carry a member name, which is not
+    # something a third party needs.
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+    # None of these are used. Saying so means an embedded frame cannot ask for
+    # them either.
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()"
+
+# Vite fingerprints everything under /assets, so the name changes whenever the
+# bytes do and these can be cached for a year without ever going stale.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# The fonts and icons in public/ are versioned by hand rather than by the
+# build, so they get a week: long enough to be worth caching, short enough that
+# replacing one reaches people.
+[[headers]]
+  for = "/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
