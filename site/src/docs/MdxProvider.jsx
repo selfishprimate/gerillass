@@ -88,7 +88,7 @@ function Title({ children, ...rest }) {
         >
           {/* Gerillass's own icon font, the same one the header's links use. */}
           <i className="gls-github" aria-hidden="true"></i>
-          Source
+          Source Code
         </a>
       ) : null}
     </div>

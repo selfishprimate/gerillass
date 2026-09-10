@@ -100,27 +100,31 @@
   }
 
   /*
-    Quiet on purpose. The link it replaces was a two pixel outline around
-    fifteen pixel bold text, which made the loudest thing on the opening screen
-    a link away from the page. This is the surface a hint sits on with the rule
-    a table draws, and it only takes a colour when somebody is pointing at it.
+    A filled chip in the site's dark, no outline, at a size that keeps it
+    beside the title rather than competing with it. The link it replaces was a
+    two pixel outline around fifteen pixel bold text at the end of the
+    description, which made the loudest thing on the opening screen a link
+    away from the page.
+
+    Dark to accent on hover, because that is what a primary button does
+    everywhere else on the site -- see $button-colors in partials/_buttons.
   */
   .docs-source {
     flex: none;
     display: inline-flex;
     align-items: center;
     gap: remify(7px);
-    padding: remify(6px) remify(12px);
+    padding: remify(8px) remify(14px);
     font-family: $secondary-font-family;
     font-size: remify(13px);
     font-weight: 600;
     letter-spacing: normal;
-    color: transparentize($primary-color, 0.3);
-    background: $alabaster;
-    border: 1px solid $eggshell;
+    color: $secondary-color;
+    background: $primary-color;
+    border: 0;
     border-radius: remify(8px);
     text-decoration: none;
-    transition: color $global-transition, border-color $global-transition;
+    transition: background-color $global-transition;
 
     i {
       font-size: remify(15px);
@@ -129,8 +133,8 @@
 
     &:hover,
     &:focus-visible {
-      color: $accent-color;
-      border-color: $laurel;
+      color: $secondary-color;
+      background: $accent-color;
       text-decoration: none;
     }
   }
