@@ -146,15 +146,19 @@ function Example({ source, css, html, listing, title, caption, height = 160, int
       {caption ? <p className="example__caption">{inline(caption)}</p> : null}
 
       <div className="example__panes">
-        <CodeBlock label="Sass" language="scss">{source}</CodeBlock>
-        <CodeBlock label="CSS" language="css">{css}</CodeBlock>
         {/*
-          Printed only where the page wrote a listing. Most examples carry
-          markup purely so the demo has something to style, and putting that in
-          front of a reader would offer scaffolding as though it were the
-          answer.
+          Markup first, where the page wrote one, because it is what the Sass
+          below is written against: a reader following the example needs to
+          know what is being styled before reading the rules that style it.
+
+          It is printed only where the page wrote a listing. Most examples
+          carry markup purely so the demo has something to style, and putting
+          that in front of a reader would offer scaffolding as though it were
+          the answer.
         */}
         {listing ? <CodeBlock label="HTML" language="html">{listing}</CodeBlock> : null}
+        <CodeBlock label="Sass" language="scss">{source}</CodeBlock>
+        <CodeBlock label="CSS" language="css">{css}</CodeBlock>
       </div>
 
       {/*

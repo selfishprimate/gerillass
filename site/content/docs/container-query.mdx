@@ -11,7 +11,7 @@ page_keywords: "CSS Container Query, Sass Container Query, @container, Component
 
 The same component often has to work in a narrow sidebar and in a wide main column on the same page. A media query cannot tell those apart, because it only knows the viewport. The **Container Query Sass mixin** writes a `@container` rule, so the component responds to the width of its container instead.
 
-It takes the same argument shapes as [breakpoint](/docs/breakpoint), so the two read alike: a size, two sizes for a range, or `min`, `max`, `only` or `between` followed by a size. Sizes may be a key from `$map-for-breakpoints` or a raw length, and a raw length is the common case here, because a container is usually narrower than the viewport.
+It takes the same argument shapes as [Breakpoint](/docs/breakpoint), so the two read alike: a size, two sizes for a range, or `min`, `max`, `only` or `between` followed by a size. Sizes may be a key from `$map-for-breakpoints` or a raw length, and a raw length is the common case here, because a container is usually narrower than the viewport.
 
 <Hint kind="danger">
 
@@ -125,7 +125,7 @@ Error: `42` is not a valid $name for `container-query`. Pass a container name as
 ```
 
 ## Related Links
-* [container](/docs/container)
-* [breakpoint](/docs/breakpoint)
+* [Container](/docs/container)
+* [Breakpoint](/docs/breakpoint)
 * [CSS container queries](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_containment/Container_queries)
 

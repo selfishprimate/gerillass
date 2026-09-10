@@ -44,10 +44,20 @@
     without either one being able to say otherwise.
   */
 
+  /*
+    Markers back. The site applies the library's own `reset-css` globally,
+    which sets `list-style: none` on every list, so a list in prose here had
+    none: the Related Links on sixteen pages were a stack of bare links.
+  */
   ul,
   ol {
     padding-left: 1.25rem;
   }
+
+  ul { list-style: disc; }
+  ol { list-style: decimal; }
+
+  li::marker { color: inherit; opacity: 0.45; }
 
   li + li {
     margin-top: 0.35rem;

@@ -448,6 +448,30 @@ serves these from files and normalises the slash away. That means:
 The old site's URLs are the same shape, `docs.gerillass.com/docs/<slug>/`, so
 the domain move is a host swap rather than a path rewrite.
 
+### Related Links
+
+Every one of the 76 member pages carries the section, and the links are not
+guesses. For a mixin that emits properties they point at the properties it
+actually emits, taken from compiling its manifest example; for one that wraps a
+selector or an at-rule they point at that, so `breakpoint` links `@media` and
+`only` links `:nth-child`. A page also links the sibling it is usually reached
+from.
+
+**Every external link on the site was fetched.** Four of the six that answered
+403 to `curl` load in a browser, which is bot protection rather than a broken
+link; the fifth, a listicle-writing article on the `counter` page, now
+redirects to a sign-up page and was replaced with MDN's counters guide.
+
+**MDN has restructured its URLs.** Everything under `/Web/CSS/<name>` now
+redirects into `/Web/CSS/Reference/Properties/`, `/Reference/Selectors/`,
+`/Reference/At-rules/`, `/Reference/Values/` or `/Guides/`. The old form still
+works, but the links here are written to where the pages actually live.
+
+Markers on those lists need saying out loud: the site applies the library's own
+`reset-css` globally, which sets `list-style: none`, so `content.scss` puts
+`disc` and `decimal` back for prose. Without it a list of links renders as a
+stack of bare links.
+
 ### Editorial consistency
 
 Two things the upstream pages disagreed with themselves about, normalised in
