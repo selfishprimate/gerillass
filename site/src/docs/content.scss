@@ -114,9 +114,13 @@
     display: inline-flex;
     align-items: center;
     gap: remify(7px);
-    padding: remify(8px) remify(14px);
+    padding: remify(8px) remify(16px);
     font-family: $secondary-font-family;
-    font-size: remify(13px);
+    /*
+      The page's own body size. Set smaller it read as a footnote pinned to
+      the title rather than as something to press.
+    */
+    font-size: 1rem;
     font-weight: 600;
     letter-spacing: normal;
     color: $secondary-color;
@@ -127,7 +131,7 @@
     transition: background-color $global-transition;
 
     i {
-      font-size: remify(15px);
+      font-size: remify(18px);
       line-height: 1;
     }
 
