@@ -91,24 +91,28 @@
     line-height: 1.6rem;
     margin-bottom: 2.281rem;
   }
+  /*
+    The space between the buttons is a gap, not a margin on all but the last
+    one.
+
+    It was `:not(:last-of-type)`, which counts by element type: both buttons
+    were forms, so the first was not the last form and took the margin. When
+    the second became a link the form was the only one left, so it was the
+    last of its type and the gap vanished. A gap does not care what the items
+    are made of.
+  */
   &__buttons {
+    display: flex;
+    flex-direction: column;
+    gap: $global-space;
     margin-bottom: remify(20px);
-    &__item {
-      @include breakpoint(max, large) {
-        @include except(last) {
-          margin-bottom: $global-space;
-        }
-      }
-    }
+
     @include breakpoint(min, large) {
-      display: flex;
+      flex-direction: row;
       max-width: 500px;
-      &__item {
-        flex: 1;
-        &:not(:last-of-type) {
-          margin-right: $global-space * 0.75;
-        }
-      }
+      gap: $global-space * 0.75;
+
+      &__item { flex: 1; }
     }
   }
 }
