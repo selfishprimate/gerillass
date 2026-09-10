@@ -182,7 +182,8 @@
         }
         li {
           padding: 0.5rem 0;
-          a {
+          a,
+          .search-trigger {
             color: $secondary-color;
           }
         }
@@ -198,7 +199,9 @@
         &:not(:last-of-type) {
           margin-right: remify(26px);
         }
-        a {
+        /* The search trigger is a button, and a menu item all the same. */
+        a,
+        .search-trigger {
           font-size: remify(16px);
           font-weight: 500;
         }

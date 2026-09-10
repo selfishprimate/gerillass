@@ -1,0 +1,197 @@
+@import "assets/scss/abstract";
+
+/*
+  The palette in the site's own materials: $snow surfaces, $eggshell rules,
+  $alabaster for the row under the cursor, and the accent only on the icon.
+  It is the same set the member card, the argument table and the sidebar are
+  built from, so the dialog belongs to the page it opens over.
+*/
+
+/*
+  A menu item with an icon, not a box. It takes its size, weight and colour
+  from the menu around it, in header.scss, so it changes with the others: the
+  icon is the only thing marking it out.
+*/
+.search-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: remify(7px);
+  padding: 0;
+  font-family: inherit;
+  /*
+    A button takes its font from the user agent, which resets line-height to
+    `normal`. The links beside it inherit the body's, so the word sat about two
+    pixels high in the row until this said otherwise.
+  */
+  line-height: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+
+  svg {
+    display: block;
+    color: $accent-color;
+  }
+
+  &:hover svg,
+  &:focus-visible svg {
+    color: inherit;
+  }
+}
+
+/* Keys look like the site's inline code, because that is what they are. */
+kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: remify(18px);
+  height: remify(18px);
+  padding: 0 remify(5px);
+  font-family: $tertiary-font-family;
+  font-size: remify(10px);
+  line-height: 1;
+  color: inherit;
+  background: transparentize($primary-color, 0.92);
+  border-radius: 3px;
+}
+
+.palette {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: remify(90px) remify(16px) remify(16px);
+  background: transparentize($primary-color, 0.45);
+
+  &__dialog {
+    width: 100%;
+    max-width: remify(600px);
+    max-height: 68vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: $snow;
+    border: 1px solid $eggshell;
+    border-radius: remify(16px);
+    box-shadow: 0 remify(20px) remify(50px) transparentize($primary-color, 0.78);
+  }
+
+  &__field {
+    display: flex;
+    align-items: center;
+    gap: remify(10px);
+    padding: remify(14px) remify(16px);
+    border-bottom: 1px solid $eggshell;
+
+    svg {
+      display: block;
+      flex: none;
+      color: $accent-color;
+    }
+  }
+
+  &__input {
+    flex: 1;
+    min-width: 0;
+    font-family: $secondary-font-family;
+    font-size: remify(16px);
+    letter-spacing: normal;
+    color: $primary-color;
+    background: transparent;
+    border: 0;
+    outline: 0;
+
+    &::placeholder { color: transparentize($primary-color, 0.55); }
+  }
+
+  &__close {
+    flex: none;
+    padding: 0;
+    background: none;
+    border: 0;
+    cursor: pointer;
+  }
+
+  &__list {
+    overflow-y: auto;
+    padding: remify(8px);
+  }
+
+  /* The same label the sidebar's groups carry. */
+  &__group [cmdk-group-heading] {
+    padding: remify(10px) remify(10px) remify(6px);
+    font-family: $secondary-font-family;
+    font-size: remify(11px);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.5;
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    gap: remify(2px);
+    padding: remify(8px) remify(10px);
+    border-radius: $border-radius;
+    cursor: pointer;
+
+    /*
+      cmdk marks the highlighted row, and it follows the arrow keys and the
+      mouse together, so there is one idea of "selected" rather than two. The
+      mark is the sidebar's hover colour with the accent down the left edge,
+      which is how the current page is marked there.
+    */
+    &[data-selected="true"] {
+      background: $alabaster;
+      box-shadow: inset remify(2px) 0 0 $accent-color;
+    }
+  }
+
+  &__title {
+    font-family: $secondary-font-family;
+    font-size: remify(14px);
+    font-weight: 600;
+    letter-spacing: normal;
+    color: $primary-color;
+  }
+
+  &__summary {
+    font-family: $secondary-font-family;
+    font-size: remify(12.5px);
+    line-height: 1.45;
+    letter-spacing: normal;
+    color: transparentize($primary-color, 0.4);
+  }
+
+  &__empty {
+    padding: remify(28px) remify(16px);
+    text-align: center;
+    font-family: $secondary-font-family;
+    font-size: remify(14px);
+    color: transparentize($primary-color, 0.4);
+  }
+
+  &__footer {
+    display: flex;
+    gap: remify(18px);
+    padding: remify(10px) remify(16px);
+    background: $alabaster;
+    border-top: 1px solid $eggshell;
+    font-family: $secondary-font-family;
+    font-size: remify(11.5px);
+    letter-spacing: normal;
+    color: transparentize($primary-color, 0.45);
+
+    span {
+      display: inline-flex;
+      align-items: center;
+      gap: remify(6px);
+    }
+
+    @include breakpoint(max, medium) { display: none; }
+  }
+}

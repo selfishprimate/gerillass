@@ -4,6 +4,7 @@ import "./header.scss";
 import { Link } from "react-router-dom";
 
 import { VERSION } from "release";
+import SearchCommand from "components/SearchCommand";
 
 class Header extends Component {
   render() {
@@ -30,6 +31,9 @@ class Header extends Component {
             <h2 className="navbar__title">Site Navigation</h2>
             <ul className="navbar__nav__menu">
               <li>
+                <SearchCommand />
+              </li>
+              <li>
                 {/*
                   An in-app link now that the documentation is part of this
                   site rather than a separate one, so it no longer opens a tab
@@ -38,11 +42,6 @@ class Header extends Component {
                 */}
                 <Link className="gtm-navbar-documentation" to="/docs/introduction">
                   Docs
-                </Link>
-              </li>
-              <li>
-                <Link className="gtm-navbar-playground" to="/playground">
-                  Playground
                 </Link>
               </li>
               <li>

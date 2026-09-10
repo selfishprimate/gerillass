@@ -108,6 +108,35 @@ export function ChevronDownIcon(props) {
   );
 }
 
+export function SearchIcon(props) {
+  return (
+    <Icon {...props}>
+      <path d="m21 21-4.34-4.34" />
+      <circle cx="11" cy="11" r="8" />
+    </Icon>
+  );
+}
+
+export function ArrowUpDownIcon(props) {
+  return (
+    <Icon {...props}>
+      <path d="m21 16-4 4-4-4" />
+      <path d="M17 20V4" />
+      <path d="m3 8 4-4 4 4" />
+      <path d="M7 4v16" />
+    </Icon>
+  );
+}
+
+export function CornerDownLeftIcon(props) {
+  return (
+    <Icon {...props}>
+      <path d="M20 4v7a4 4 0 0 1-4 4H4" />
+      <path d="m9 10-5 5 5 5" />
+    </Icon>
+  );
+}
+
 export function HomeIcon(props) {
   return (
     <Icon {...props}>

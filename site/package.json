@@ -14,6 +14,7 @@
   },
   "//": "Versions are deliberately left where create-react-app had them. This step changes the build and nothing else, so anything that looks different afterwards is the build's doing. React, the router and the editor move in a step of their own.",
   "dependencies": {
+    "cmdk": "^1.1.1",
     "codemirror": "5.65.16",
     "framer-motion": "^11.18.2",
     "react": "^18.3.1",

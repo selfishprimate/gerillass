@@ -582,6 +582,42 @@ Netlify resolves `/docs` to `dist/docs.html` ahead of the `/*` fallback has not
 been seen in production; it is the same convention `/about` already ships
 under, so it should hold, but it has not been watched.
 
+## Search
+
+`components/SearchCommand` is a command palette over `virtual:docs-index`, the
+same module the sidebar reads, so it cannot fall behind the pages. Eighty of
+them is more than a menu holds, and what a reader is doing is looking for a
+name they half remember.
+
+`cmdk` does the keyboard and the accessibility, which is why it is worth a
+dependency: arrows move, Enter opens, the list is announced. Two things it does
+not do and this component does: `Cmd`/`Ctrl` + `K` to open, and `Escape` to
+close, since the dialog is ours.
+
+An item's search value carries the member's own name as well as its title, so
+`clearUnit` finds the page called Clear Unit, and the summary is matched too,
+so `grad` finds `background-image` for the filter it can lay over one.
+
+**The trigger is a menu item, not a box.** It takes its size, weight and colour
+from `header.scss` along with the links beside it, and the icon is the only
+thing marking it out. It needs `line-height: inherit`: a button takes its font
+from the user agent, which resets line-height to `normal`, and the word sat two
+pixels high in the row.
+
+### Icons: two sets, and which to use
+
+`gerillass-v2` is the house icon font, loaded in `_icons.scss` and used through
+`gls-` classes; the header's social links are the visible example. It has 48
+glyphs, including `close`, `chevron-*` and `arrow-*`, and **no search glyph**.
+
+`components/Icons` inlines Lucide paths as components, which is where the
+breadcrumb chevron, the copy button and the palette's icons come from.
+
+Reach for the house font when a glyph exists in it and it stands on its own.
+Reach for `components/Icons` inside a cluster that has to look like one set:
+the palette's footer needs a search, an up-down and a return, and the font has
+only one of the three.
+
 ## Dormant code — do not assume it is live
 
 `src/pages/Contact` (no route), `components/Invitations/TopInvitation` (never
