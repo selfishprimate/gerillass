@@ -598,6 +598,12 @@ An item's search value carries the member's own name as well as its title, so
 `clearUnit` finds the page called Clear Unit, and the summary is matched too,
 so `grad` finds `background-image` for the filter it can lay over one.
 
+It lists mixins first: fifty-three of them against twenty-three functions and
+four guides, and a mixin is what somebody opening a search box here is looking
+for. The guides are on every page in the sidebar, so they sit at the bottom.
+The site's own routes are not in it at all; the header and the hero are two
+clicks closer.
+
 **The trigger is a menu item, not a box.** It takes its size, weight and colour
 from `header.scss` along with the links beside it, and the icon is the only
 thing marking it out: both parts are `$link-color` and both turn

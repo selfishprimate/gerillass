@@ -25,24 +25,16 @@ import "./search-command.scss";
   filtering and the styling.
 */
 
+/*
+  Mixins first, because that is what somebody opening a search box on this site
+  is looking for: fifty-three of them against twenty-three functions and four
+  guides. The guides are reachable from the sidebar on every page, so they sit
+  at the bottom here rather than at the top.
+*/
 const GROUPS = [
-  { kind: "guide", label: "Overview" },
   { kind: "mixin", label: "Mixins" },
   { kind: "function", label: "Utilities" },
-];
-
-/*
-  The places on the site that are not documentation pages. Few enough to write
-  down, and they would be strange to leave out of a search box.
-*/
-const SITE = [
-  { slug: "home", title: "Home", href: "/", summary: "The landing page." },
-  {
-    slug: "playground",
-    title: "Playground",
-    href: "/playground",
-    summary: "Write Sass against the library and watch the CSS compile.",
-  },
+  { kind: "guide", label: "Overview" },
 ];
 
 function matches(page, needle) {
@@ -94,13 +86,12 @@ function SearchCommand() {
   );
 
   const needle = query.trim().toLowerCase();
-  const site = SITE.filter((page) => matches(page, needle));
   const groups = GROUPS.map(({ kind, label }) => ({
     label,
     items: pages.filter((page) => page.kind === kind && matches(page, needle)),
   })).filter((group) => group.items.length);
 
-  const nothing = !site.length && !groups.length;
+  const nothing = !groups.length;
 
   return (
     <>
@@ -163,21 +154,6 @@ function SearchCommand() {
                   </Command.Empty>
                 ) : null}
 
-                {site.length ? (
-                  <Command.Group heading="Site" className="palette__group">
-                    {site.map((page) => (
-                      <Command.Item
-                        key={page.slug}
-                        value={`site ${page.title} ${page.slug}`}
-                        onSelect={() => go(page.href)}
-                        className="palette__item"
-                      >
-                        <span className="palette__title">{page.title}</span>
-                        <span className="palette__summary">{page.summary}</span>
-                      </Command.Item>
-                    ))}
-                  </Command.Group>
-                ) : null}
 
                 {groups.map((group) => (
                   <Command.Group

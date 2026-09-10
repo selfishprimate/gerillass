@@ -68,29 +68,39 @@ kbd {
   inset: 0;
   z-index: 9999;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
-  padding: remify(90px) remify(16px) remify(16px);
+  padding: remify(16px);
   background: transparentize($primary-color, 0.45);
 
   &__dialog {
     width: 100%;
-    max-width: remify(600px);
-    max-height: 68vh;
+    max-width: remify(720px);
+    max-height: 52vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
     background: $snow;
-    border: 1px solid $eggshell;
-    border-radius: remify(16px);
-    box-shadow: 0 remify(20px) remify(50px) transparentize($primary-color, 0.78);
+    /*
+      No border. The shadow and the dimmed page behind it are enough to lift
+      the dialog off the page, and a rule around it only competed with the
+      rounding.
+    */
+    border-radius: remify(24px);
+    /*
+      A translucent ring instead of a border: it sits outside the rounding
+      rather than on it, so the corners stay clean, and it lifts the dialog off
+      the dimmed page without drawing a hard line around it.
+    */
+    box-shadow: 0 0 0 remify(6px) transparentize($snow, 0.88),
+      0 remify(20px) remify(50px) transparentize($primary-color, 0.78);
   }
 
   &__field {
     display: flex;
     align-items: center;
     gap: remify(10px);
-    padding: remify(14px) remify(16px);
+    padding: $global-space $global-space * 1.25;
     border-bottom: 1px solid $eggshell;
 
     svg {
@@ -124,12 +134,12 @@ kbd {
 
   &__list {
     overflow-y: auto;
-    padding: remify(8px);
+    padding: $global-space * 0.5 $global-space * 0.75;
   }
 
   /* The same label the sidebar's groups carry. */
   &__group [cmdk-group-heading] {
-    padding: remify(10px) remify(10px) remify(6px);
+    padding: $global-space * 0.75 $global-space * 0.5 $global-space * 0.35;
     font-family: $secondary-font-family;
     font-size: remify(11px);
     font-weight: 600;
@@ -142,7 +152,7 @@ kbd {
     display: flex;
     flex-direction: column;
     gap: remify(2px);
-    padding: remify(8px) remify(10px);
+    padding: $global-space * 0.6 $global-space * 0.5;
     border-radius: $border-radius;
     cursor: pointer;
 
@@ -185,7 +195,7 @@ kbd {
   &__footer {
     display: flex;
     gap: remify(18px);
-    padding: remify(10px) remify(16px);
+    padding: $global-space * 0.75 $global-space * 1.25;
     background: $alabaster;
     border-top: 1px solid $eggshell;
     font-family: $secondary-font-family;
