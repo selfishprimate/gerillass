@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 
 /*
@@ -42,9 +42,24 @@ const DEPTH = 0.9;
 
 function Analytics() {
   const { pathname, search } = useLocation();
+  const sent = useRef(null);
 
   useEffect(() => {
     if (typeof window.gtag !== "function") return;
+
+    const path = `${pathname}${search}`;
+    /*
+      StrictMode runs an effect twice on mount in development, so the first
+      page of every local session was reported twice and localhost data goes
+      into the same property as everything else. Remembering the last path
+      reported drops the repeat.
+
+      It cannot swallow a real one: the effect only runs again when the path
+      changes, and arriving back at a page after visiting another sets this to
+      the other page in between.
+    */
+    if (sent.current === path) return;
+    sent.current = path;
 
     /*
       The title comes from the page's own front matter, written by an effect in
@@ -53,7 +68,7 @@ function Analytics() {
       document.title is the new page's rather than the last one's.
     */
     window.gtag("event", "page_view", {
-      page_path: `${pathname}${search}`,
+      page_path: path,
       page_location: window.location.href,
       page_title: document.title,
       content_group: group(pathname),
