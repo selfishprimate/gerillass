@@ -47,6 +47,9 @@ The unprefixed `line-clamp` is emitted alongside the prefixed trio. It does noth
   @include line-clamp(3);
 }
 ```
+```html
+<p class="excerpt">Gerillass is a set of Sass mixins and functions built for people who would rather describe what they want than remember how the browser wants it spelled. Every member ships with a manifest the test suite compiles, so a coding agent reading it cannot be told something the library does not do. There is no build step and no runtime: the .scss files are the whole library.</p>
+```
 </Example>
 
 <Example caption="Two lines, for a card title that must not push the card taller.">
@@ -54,6 +57,9 @@ The unprefixed `line-clamp` is emitted alongside the prefixed trio. It does noth
 .title {
   @include line-clamp(2);
 }
+```
+```html
+<p class="title">Gerillass is a set of Sass mixins and functions built for people who would rather describe what they want than remember how the browser wants it spelled. Every member ships with a manifest the test suite compiles, so a coding agent reading it cannot be told something the library does not do. There is no build step and no runtime: the .scss files are the whole library.</p>
 ```
 </Example>
 
@@ -63,6 +69,9 @@ The unprefixed `line-clamp` is emitted alongside the prefixed trio. It does noth
   @include line-clamp;
 }
 ```
+```html
+<p class="default">Gerillass is a set of Sass mixins and functions built for people who would rather describe what they want than remember how the browser wants it spelled. Every member ships with a manifest the test suite compiles, so a coding agent reading it cannot be told something the library does not do. There is no build step and no runtime: the .scss files are the whole library.</p>
+```
 </Example>
 
 <Example caption="Pass `none` to undo a clamp, for instance when an excerpt expands on click.">
@@ -70,6 +79,9 @@ The unprefixed `line-clamp` is emitted alongside the prefixed trio. It does noth
 .full {
   @include line-clamp(none);
 }
+```
+```html
+<p class="full">Gerillass is a set of Sass mixins and functions built for people who would rather describe what they want than remember how the browser wants it spelled. Every member ships with a manifest the test suite compiles, so a coding agent reading it cannot be told something the library does not do. There is no build step and no runtime: the .scss files are the whole library.</p>
 ```
 </Example>
 

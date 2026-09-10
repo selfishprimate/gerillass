@@ -287,11 +287,11 @@ own fails with "the target selector was not found".
 
 ### The port, and what it found
 
-`node tools/port-docs.js` does the conversion, and it is a migration tool, not
-a build step — the pages under `content/docs/` are this repository's content
-now, and re-running it would overwrite anything edited by hand. `aspect-ratio`
-is already excluded because the copy here was written against measurements and
-the upstream one was written from the release notes.
+`node tools/port-docs.js` did the conversion, and **it now writes nothing it
+would overwrite**: every page already exists, so a re-run reports 76 skipped
+and stops. The pages are this repository's content and several have been edited
+since, so a re-run to pick up a fix in the tool would quietly undo that work.
+`--force` regenerates; read the diff before committing it.
 
 Compiling the examples rather than trusting them is the point, and it earned
 its place immediately. `node tools/check-ported-css.js` compiles all 230 and

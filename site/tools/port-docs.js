@@ -484,32 +484,18 @@ function example(block, stated, notes, className, pageStyles = [], setup = null,
 }
 
 /*
-  Pages this repository owns. aspect-ratio was written here during the port,
-  against measurements taken in a browser, and the upstream copy was written
-  from the release notes rather than from the mixin. Converting over it would
-  lose the better of the two.
+  The conversion is done, so by default this writes nothing it would overwrite.
 
-  line-clamp is here for a different reason: its comparison table arrived as
-  raw HTML carrying the Hugo site's own class names, which MDX reads as JSX and
-  React then warns about, so it was rewritten as a Markdown table. Converting
-  again would put the raw one back.
+  These pages are the repository's content now and several have been edited
+  since: sprite's examples were rewritten against the sheet it ships,
+  line-clamp's comparison table became Markdown, aspect-ratio was written here
+  from measurements rather than converted at all. A re-run to pick up a fix in
+  this tool would quietly undo all of it.
 
-  sprite is here because its second example was prose and four Sass blocks
-  interleaved, which this tool flattens to the first of each. Its examples are
-  written against the sheet the page ships: six frames of a walk cycle, 100 by
-  100 each.
-
-  content/docs/index.mdx has no counterpart upstream at all. It is the
-  installation page, and it is written here.
+  Pass --force to regenerate anyway, and read the diff before committing it.
 */
-const HAND_WRITTEN = new Set(["aspect-ratio", "line-clamp", "sprite"]);
+const FORCE = process.argv.includes("--force");
 
-/*
-  Sass an example needs before it can compile, but which is not part of what it
-  shows. loadify is the only member with this shape: `loadify(init)` defines the
-  placeholder that every later call @extends, and the page says so in prose
-  above the examples rather than repeating the line in each of them.
-*/
 const SETUP = { loadify: "@include loadify(init);" };
 
 /*
@@ -552,14 +538,20 @@ const only = process.argv.includes("--page")
 const slugs = readdirSync(HUGO, { withFileTypes: true })
   .filter((e) => e.isDirectory() && existsSync(`${HUGO}/${e.name}/index.md`))
   .map((e) => e.name)
-  .filter((s) => (only ? s === only : !HAND_WRITTEN.has(s)))
+  .filter((s) => (only ? s === only : true))
   .sort();
 
 mkdirSync(OUT, { recursive: true });
 const reference = existsSync(CSS_REF) ? JSON.parse(readFileSync(CSS_REF, "utf8")) : {};
 let withNotes = 0;
+let skipped = 0;
 
 for (const slug of slugs) {
+  if (!FORCE && existsSync(`${OUT}/${slug}.mdx`)) {
+    skipped += 1;
+    continue;
+  }
+
   const source = readFileSync(`${HUGO}/${slug}/index.md`, "utf8");
   const { body, frontmatter, stated, notes } = convert(slug, source);
 
@@ -587,4 +579,7 @@ for (const slug of slugs) {
 }
 
 writeFileSync(CSS_REF, `${JSON.stringify(reference, null, 2)}\n`);
-console.log(`${slugs.length} sayfa yazildi. ${withNotes} sayfada elle yazilmis <style> vardi.`);
+console.log(
+  `${slugs.length - skipped} sayfa yazildi, ${skipped} atlandi (zaten var; --force ile ustune yaz). ` +
+    `${withNotes} sayfada elle yazilmis <style> vardi.`
+);
