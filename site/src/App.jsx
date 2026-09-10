@@ -3,6 +3,7 @@ import { Outlet, useLocation, useNavigationType } from 'react-router-dom';
 import { ClientOnly } from 'vite-react-ssg';
 
 import PlaygroundCover from 'components/Playground/Cover';
+import ScrollToTop from 'components/ScrollToTop';
 
 import 'assets/scss/App.scss';
 
@@ -62,6 +63,7 @@ function PlaygroundRoute() {
 function Layout() {
   return (
     <>
+      <ScrollToTop />
       <Suspense fallback={<div />}>
         <Outlet />
       </Suspense>

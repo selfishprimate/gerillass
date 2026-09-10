@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 
 // import Images from "assets/images";
 
@@ -46,18 +47,19 @@ class Hero extends Component {
               </button>
             </form>
 
-            <form
-              className="hero__buttons__item"
-              action="https://github.com/sponsors/selfishprimate"
-            >
-              <button
-                type="link"
+            {/*
+              A link rather than a form posting somewhere: the playground is a
+              route of this site, so it opens over the page instead of loading
+              one. Sponsoring is in the header now, under Support.
+            */}
+            <div className="hero__buttons__item">
+              <Link
                 className="button button--primary button--large button--outlined"
-                formTarget="_blank"
+                to="/playground"
               >
-                Support Us
-              </button>
-            </form>
+                Playground
+              </Link>
+            </div>
 
           </div>
           <Supporters />
