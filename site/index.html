@@ -48,26 +48,46 @@
       what this site measures can be read here rather than downloaded from a
       container and disassembled, which is how the last setup had to be found.
 
+      It runs on the site and while somebody is working on it, and nowhere
+      else. Netlify gives every deploy its own hostname, and five of those had
+      turned up in the tag's own diagnostics having sent real traffic into the
+      property -- a preview is a copy of the site measuring itself as if it
+      were the site, and its numbers are indistinguishable from real ones after
+      the fact.
+
       `send_page_view: false` because this is a single page app. gtag would
       count the arrival and then nothing, since the other 81 routes never
       reload the document. Every view is sent from components/Analytics
       instead, the first one included, so there is one code path rather than an
       automatic one and a manual one that can disagree.
 
-      `debug_mode` on localhost puts events in Analytics' DebugView, which is
-      the only place that can confirm a hit arrived: gtag sends over
-      sendBeacon, which does not appear in Resource Timing and which gtag
-      holds its own reference to, so nothing in the page can watch it leave.
+      `debug_mode` while working locally puts events in Analytics' DebugView.
     -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-C92FKJBQ1B"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() { dataLayer.push(arguments); }
-      gtag('js', new Date());
-      gtag('config', 'G-C92FKJBQ1B', {
-        send_page_view: false,
-        debug_mode: location.hostname === 'localhost' || location.hostname === '127.0.0.1'
-      });
+      (function () {
+        var host = location.hostname;
+        var live = host === 'gerillass.com' || host === 'www.gerillass.com';
+        var local = host === 'localhost' || host === '127.0.0.1';
+        if (!live && !local) return;
+
+        window.dataLayer = window.dataLayer || [];
+        /*
+          Assigned to window rather than declared: inside this function a
+          declaration would be local, and everything downstream looks for
+          window.gtag.
+        */
+        window.gtag = function () { window.dataLayer.push(arguments); };
+        window.gtag('js', new Date());
+        window.gtag('config', 'G-C92FKJBQ1B', {
+          send_page_view: false,
+          debug_mode: local
+        });
+
+        var tag = document.createElement('script');
+        tag.async = true;
+        tag.src = 'https://www.googletagmanager.com/gtag/js?id=G-C92FKJBQ1B';
+        document.head.appendChild(tag);
+      })();
     </script>
 
     <link rel="canonical" href="https://gerillass.com/"/>
