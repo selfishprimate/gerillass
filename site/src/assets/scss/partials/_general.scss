@@ -23,6 +23,15 @@ body {
   padding: 0;
 }
 
+/*
+  The site's own selection colour, using the library's own mixin. Left alone a
+  browser paints its default blue, which belongs to no palette on this page.
+*/
+@include text-selection {
+  color: $primary-color;
+  background-color: $sage;
+}
+
 html {
   letter-spacing: 0.33px;
   scroll-behavior: smooth;

@@ -21,7 +21,7 @@ The **Text Selection** Sass mixin helps you style the portion of text (or an ele
 
 ## Examples
 
-<Example caption="If you call it inside a selector without passing a value, the style rules apply to that element and its children.">
+<Example caption="Select the text in the result below. If you call it inside a selector without passing a value, the style rules apply to that element and its children.">
 ```scss
 .element{
   @include text-selection{
@@ -30,9 +30,12 @@ The **Text Selection** Sass mixin helps you style the portion of text (or an ele
   }
 }
 ```
+```html
+<p class="element">Select this line, and the <strong>bolder part inside it</strong>, to see both change.</p>
+```
 </Example>
 
-<Example caption="Pass the `only` value as an argument to apply the style rules to only one specific HTML element.">
+<Example caption="Select the text in the result below and compare it with the example above. Pass the `only` value as an argument to apply the style rules to only one specific HTML element.">
 ```scss
 .element{
   @include text-selection(only){
@@ -41,14 +44,21 @@ The **Text Selection** Sass mixin helps you style the portion of text (or an ele
   }
 }
 ```
+```html
+<p class="element">Select this line, and the <strong>bolder part inside it</strong>. Only the line changes.</p>
+```
 </Example>
 
-<Example caption="Call the mixin at the root of your stylesheet to target all the HTML elements.">
+<Example caption="Call the mixin at the root of your stylesheet to target every element on the page. Select either line in the result below.">
 ```scss
 @include text-selection{
   color: pink;
   background-color: red;
 }
+```
+```html
+<p class="element">Select this line,</p>
+<p>and this one, which carries no class at all.</p>
 ```
 </Example>
 

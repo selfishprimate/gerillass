@@ -501,6 +501,29 @@ Two things the upstream pages disagreed with themselves about, normalised in
 A page's list marker is still `*` on the converted pages and `-` on the two
 written here. It is invisible to a reader, so it was left rather than churned.
 
+### Auditing the demos
+
+A structural check is not enough, and this was learned the hard way: an audit
+that asked whether a demo had content and whether its compiled CSS matched a
+class in it passed 122 demos, and one of them rendered nothing. The text-image
+demo makes its text transparent so a background image shows through, and the
+image was hosted on `i.picsum.photos`, which no longer resolves. Content,
+matching selector, nothing on screen.
+
+**Render them and measure.** `npm run preview` serves the build; from one page
+you can fetch every other, pull the `srcdoc` out of each demo, drop them into
+iframes and measure what comes back: body height, how many elements have a
+non-zero box, and how many images failed. That is what a demo being empty
+actually looks like.
+
+**`$&` in a page corrupts the build, silently.** vite-react-ssg injects the
+rendered app into the template with `String.replace`, where `$&` in the
+*replacement* means "the matched substring". A page containing `data-currency="$"`
+put `$` next to the `&` of `&quot;` and the built file got `<div id="root"></div>`
+spliced into the middle of a `srcdoc` attribute. Written as `&#36;` the sequence
+never forms. Worth remembering for Sass examples, where `$variable` sits next to
+`&` more often than you would like.
+
 ### Not done yet
 
 No page has been read end to end for prose quality since the port; what has

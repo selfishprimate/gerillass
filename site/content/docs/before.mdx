@@ -42,14 +42,14 @@ The **Before** Sass mixin helps you generate content or a style element before t
 ```
 </Example>
 
-<Example caption="You can fetch a value using a custom property. One important thing to remember is that the name of the property must start with the 'data-' prefix." listing="<div class=&quot;element&quot; data-currency=&quot;$&quot;>200</div>">
+<Example caption="You can fetch a value using a custom property. One important thing to remember is that the name of the property must start with the 'data-' prefix." listing="<div class=&quot;element&quot; data-currency=&quot;&#36;&quot;>200</div>">
 ```scss
 .element{
   @include before("data-currency");
 }
 ```
 ```html
-<div class="element" data-currency="$">200</div>
+<div class="element" data-currency="&#36;">200</div>
 ```
 </Example>
 
