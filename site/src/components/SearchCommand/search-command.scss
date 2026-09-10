@@ -44,8 +44,22 @@ $scrim-color: mix($charleston-green, $artichoke, 55%);
   }
 
   svg {
-    /* Centred against the word rather than sitting on its baseline. */
-    vertical-align: -0.18em;
+    /*
+      Centred on the word's own middle, which is not the baseline and not the
+      line box either.
+
+      Measured rather than guessed: against a probe sitting on the baseline,
+      the glyphs of "Search" rise 11.8px above it and drop 0.19px below, so
+      their centre is 5.8px up. A 15px icon is centred there when its bottom
+      edge sits 1.7px under the baseline, which is what this is: half the icon
+      less the 5.8px, over the 16px the button is set at.
+
+      `middle` was tried first, since it needs no number. It is defined as half
+      the x height above the baseline and that came out at 4.37px here, so it
+      left the icon 1.44px low -- further off than the 0.18em it was meant to
+      replace.
+    */
+    vertical-align: -0.106em;
     margin-right: remify(7px);
   }
 }
