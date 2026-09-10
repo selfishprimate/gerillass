@@ -73,6 +73,13 @@ function collect() {
     }
   }
 
+  /*
+    /docs has no page of its own: the documentation opens on its introduction.
+    The router does the same thing for a reader already inside the app.
+  */
+  rules.push(`/docs  /docs/introduction  ${STATUS}!`);
+  rules.push(`/docs/  /docs/introduction  ${STATUS}!`);
+
   return rules;
 }
 

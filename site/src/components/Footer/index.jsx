@@ -26,12 +26,12 @@ class Footer extends Component {
               <ul className="footer__menu__list">
                 <li className="footer__menu__list__item">How to use?</li>
                 <li className="footer__menu__list__item">
-                  <Link className="gtm-navbar-documentation" to="/docs">
+                  <Link className="gtm-navbar-documentation" to="/docs/introduction">
                     Docs
                   </Link>
                 </li>
                 <li className="footer__menu__list__item">
-                  <Link className="gtm-navbar-installation" to="/docs">
+                  <Link className="gtm-navbar-installation" to="/docs/installation">
                     Installation
                   </Link>
                 </li>

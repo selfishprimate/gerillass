@@ -36,7 +36,7 @@ class Header extends Component {
                   or reloads the app. gtm-navbar-documentation is a Google Tag
                   Manager trigger and has to stay exactly as it is.
                 */}
-                <Link className="gtm-navbar-documentation" to="/docs">
+                <Link className="gtm-navbar-documentation" to="/docs/introduction">
                   Docs
                 </Link>
               </li>
@@ -47,7 +47,7 @@ class Header extends Component {
                   anchor on GitHub. gtm-navbar-installation is a Tag Manager
                   trigger and stays as it is.
                 */}
-                <Link className="gtm-navbar-installation" to="/docs">
+                <Link className="gtm-navbar-installation" to="/docs/installation">
                   Installation
                 </Link>
               </li>

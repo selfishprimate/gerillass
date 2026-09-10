@@ -1,0 +1,52 @@
+@import "assets/scss/abstract";
+
+/*
+  shadcn's breadcrumb, in this site's colours. Everything sits in one flex row
+  with a single gap, so the chevrons line up with the text rather than being
+  positioned against it.
+*/
+.breadcrumbs {
+  margin-bottom: remify(20px);
+
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: remify(10px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-family: $secondary-font-family;
+    font-size: remify(13px);
+    line-height: 1;
+    letter-spacing: normal;
+    word-break: break-word;
+    color: rgba($primary-color, 0.55);
+  }
+
+  &__item {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  &__separator {
+    display: inline-flex;
+    align-items: center;
+    opacity: 0.5;
+
+    svg { display: block; }
+  }
+
+  &__link {
+    color: inherit;
+    text-decoration: none;
+    transition: color $global-transition;
+
+    &:hover { color: $primary-color; }
+  }
+
+  /* The page you are on, in the page's own colour rather than the trail's. */
+  &__current {
+    color: $primary-color;
+  }
+}

@@ -374,15 +374,22 @@ content does, the list stops with it, and the footer pulls up into empty space. 
 template rather than a branch inside `HomeTemplate` because the landing page is
 a column of full width sections and this is two columns, one of them sticky.
 
-`/docs` is the installation page, `content/docs/index.mdx`. It is the one page
-here with no member behind it, which its front matter declares with
-`guide: true`; the sidebar puts those in a Getting Started group above the
-catalogue. It is what the header's `Docs` link now points at, as an in-app
+The documentation opens on `/docs/introduction`. Four pages have no member
+behind them and say so with `guide: true` in their front matter, plus an
+`order` that fixes their sequence: Introduction, Installation, Support,
+License. The sidebar groups them under **Overview**, above the catalogue's two
+tabs, and `Breadcrumbs` reads the same data so a page cannot be filed under one
+heading in the list and another in the trail.
+
+`/docs` itself has no page. The router sends it to the introduction and
+`_redirects` carries the same rule for anyone arriving from outside the app.
+That also separated the header's two links, which had both been pointing at
+`/docs`: Docs goes to the introduction, Installation to the installation page. It is what the header's `Docs` link now points at, as an in-app
 `<Link>`, since the documentation is part of this site rather than a separate
 one. **`gtm-navbar-documentation` is still on that link** and must stay.
 
-Its content follows the README and the old Getting Started page, minus what had
-gone stale in both: the LibSass note from 1.3.0 and the eyeglass warning, whose
+The installation page follows the README and the old Getting Started page,
+minus what had gone stale in both: the LibSass note from 1.3.0 and the eyeglass warning, whose
 metadata was removed in 2.0.0. What it adds is a "Coming from Gerillass 1.x"
 section, since the two breaks in that release are what a reader arriving from
 an old tutorial will hit first.

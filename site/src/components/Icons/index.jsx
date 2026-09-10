@@ -108,6 +108,14 @@ export function ChevronDownIcon(props) {
   );
 }
 
+export function ChevronRightIcon(props) {
+  return (
+    <Icon {...props}>
+      <path d="m9 18 6-6-6-6" />
+    </Icon>
+  );
+}
+
 export function AlertIcon(props) {
   return (
     <Icon {...props}>

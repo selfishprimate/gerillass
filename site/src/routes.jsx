@@ -5,6 +5,7 @@ import Home from "pages/Home";
 import About from "pages/About";
 import NotFound from "components/NotFound";
 import DocPage from "pages/Docs";
+import { Navigate } from "react-router-dom";
 import { pages } from "docs/pages";
 
 /*
@@ -39,6 +40,12 @@ export const routes = [
       { index: true, element: <Home /> },
       { path: "playground", element: <Home /> },
       { path: "about", element: <About /> },
+      /*
+        The documentation opens on its introduction. /docs itself has no page
+        behind it any more, and netlify.toml carries the same redirect for
+        anyone arriving at it from outside the app.
+      */
+      { path: "docs", element: <Navigate to="/docs/introduction" replace /> },
       ...docsRoutes,
       { path: "*", element: <NotFound /> },
     ],

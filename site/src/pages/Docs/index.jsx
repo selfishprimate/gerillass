@@ -1,5 +1,6 @@
 import React from "react";
 
+import Breadcrumbs from "docs/Breadcrumbs";
 import DocsMdx from "docs/MdxProvider";
 import useDocumentHead from "docs/useDocumentHead";
 import DocsTemplate from "templates/DocsTemplate";
@@ -18,6 +19,7 @@ function DocPage({ Page, frontmatter, path }) {
 
   return (
     <DocsTemplate>
+      <Breadcrumbs path={`/${path}`} />
       <DocsMdx>
         <Page />
       </DocsMdx>

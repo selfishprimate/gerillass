@@ -48,7 +48,8 @@ function build() {
           title: frontmatter.title || slug,
           kind: "guide",
           member: null,
-          href: slug === "index" ? "/docs" : `/docs/${slug}`,
+          href: `/docs/${slug}`,
+          order: frontmatter.order ?? 99,
           summary: frontmatter.page_description || "",
         };
       }
@@ -71,11 +72,15 @@ function build() {
         kind: member.kind,
         member: name,
         href: `/docs/${slug}`,
+        order: 0,
         summary: member.summary,
       };
     })
     .sort((a, b) => {
+      // Guides first, in the order their front matter gives; the catalogue
+      // alphabetically, because there is no reading order to it.
       if ((a.kind === "guide") !== (b.kind === "guide")) return a.kind === "guide" ? -1 : 1;
+      if (a.kind === "guide") return a.order - b.order;
       return a.title.localeCompare(b.title);
     });
 

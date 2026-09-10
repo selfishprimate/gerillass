@@ -1,0 +1,68 @@
+---
+title: "Introduction"
+guide: true
+order: 1
+page_title: "Introduction to Gerillass"
+page_description: "Gerillass is a Sass library of 53 mixins and 23 functions that ships a machine readable manifest its own test suite compiles, so a coding agent using it cannot be told something the library does not do."
+page_keywords: "Gerillass, Sass library, Sass mixins, SCSS mixins, Sass functions, CSS toolkit, Sass manifest, AI coding agent Sass"
+---
+
+# Introduction
+
+**Gerillass** is a toolkit of Sass mixins and functions: 53 mixins and 23
+functions, in the spirit of Bourbon and Scut. It is pure Sass. The `.scss`
+files are the whole library, there is no build step, and installing it adds
+nothing to what your project ships.
+
+Many of these started as answers to problems that came up in real frontend
+work, and were shaped along the way by Bourbon, Susy, Scut and Bootstrap.
+
+## What a mixin here is for
+
+A mixin earns its place when it encodes something people get wrong, across more
+than one declaration. That is the bar, and it is why the library is 53 mixins
+rather than 200.
+
+`aspect-ratio` is the example to hold in mind. CSS has an `aspect-ratio`
+property, so a mixin that only set it would be worth nothing. What the mixin
+adds is what the property leaves out, and all three were measured in a browser
+before it was written:
+
+- a ratio on an `<img>` stretches it rather than cropping, so the mixin sets
+  `object-fit`
+- an `<iframe>` carries a 2px default border, so `width: 100%` overflows its
+  container by 4px, and the mixin sets `border: 0`
+- a ratio on a wrapper does nothing for an `<iframe>` inside it, so the mixin
+  goes on the element itself
+
+Two mixins were deleted in 2.0.0 for failing that bar. It cuts both ways.
+
+## Written for agents as well as people
+
+A library this size has no training data behind it, so an agent asked to use
+Gerillass will guess at the argument forms and get them wrong. Two files ship
+inside the package to stop that: `gerillass.json`, which describes every member
+and what each argument accepts, and `SKILL.md`, a guide generated from it.
+
+Neither is written by hand, and neither can drift. The test suite compiles every
+example in the manifest, checks that every input it says is refused really is
+refused with the library's own message, and runs each example again under the
+`gls-` prefixed name demanding byte identical CSS. Documentation goes stale in
+most projects quietly; here it cannot happen without turning the suite red.
+
+There is more on this in [Installation](/docs/installation).
+
+## Where to go next
+
+- [Installation](/docs/installation) covers npm, the `pkg:` importer, and a
+  recipe for each bundler.
+- The catalogue is in the sidebar, under **Mixins** and **Utilities**. Every
+  page shows what the member does, the arguments it takes, and the CSS it
+  emits, compiled from the Sass beside it rather than written out by hand.
+- [Support](/docs/support) is where to go when something does not work.
+
+## Related Links
+
+- [Installation](/docs/installation)
+- [Sass Documentation](https://sass-lang.com/documentation/)
+- [Gerillass on GitHub](https://github.com/selfishprimate/gerillass)

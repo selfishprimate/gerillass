@@ -34,10 +34,6 @@ function Sidebar({ onNavigate }) {
     if (current && current.kind !== "guide") setTab(current.kind);
   }, [current]);
 
-  /*
-    No heading over the guides. There is one of them, and a label above a list
-    of one names nothing the row below it does not.
-  */
   const guides = pages.filter((p) => p.kind === "guide");
   const listed = pages.filter((p) => p.kind === tab);
 
@@ -62,6 +58,7 @@ function Sidebar({ onNavigate }) {
     <nav className="docs-sidebar" aria-label="Documentation">
       {guides.length ? (
         <div className="docs-sidebar__group">
+          <h2 className="docs-sidebar__heading">Overview</h2>
           <ul className="docs-sidebar__list">{guides.map(item)}</ul>
         </div>
       ) : null}
