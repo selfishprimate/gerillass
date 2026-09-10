@@ -81,6 +81,18 @@ function forChildren(text) {
 
 const quote = (v) => String(v).replace(/"/g, "&quot;");
 
+/*
+  Leading whitespace on the continuation lines of a multi-line attribute is
+  stripped on the way through MDX, so a markup listing written across lines
+  arrived on the page flat: <h1> and its </h1> at the margin with the <a>
+  between them at the margin too. Written as entities it survives, because the
+  decoding happens after whatever collapses the literal spaces.
+*/
+const keepIndent = (v) =>
+  String(v).replace(/(^|\n)([ \t]+)/g, (_, start, space) =>
+    start + [...space].map((c) => (c === " " ? "&#32;" : "&#9;")).join("")
+  );
+
 function convert(slug, source) {
   const fm = source.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?/);
   const frontmatter = fm ? fm[1] : "";
@@ -462,7 +474,7 @@ function example(block, stated, notes, className, pageStyles = [], setup = null,
     "<Example",
     text ? ` caption="${quote(forAttribute(text))}"` : "",
     setup ? ` setup="${quote(setup)}"` : "",
-    listing ? ` listing="${quote(listing)}"` : "",
+    listing ? ` listing="${keepIndent(quote(listing))}"` : "",
     ">",
   ].join("");
   parts.push(open);

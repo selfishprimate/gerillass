@@ -31,14 +31,9 @@ class Footer extends Component {
                   </Link>
                 </li>
                 <li className="footer__menu__list__item">
-                  <a
-                    className="gtm-navbar-installation"
-                    href="https://github.com/selfishprimate/gerillass"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
+                  <Link className="gtm-navbar-installation" to="/docs">
                     Installation
-                  </a>
+                  </Link>
                 </li>
                 <li className="footer__menu__list__item">
                   {/* A route rather than a page: a plain link would reload the

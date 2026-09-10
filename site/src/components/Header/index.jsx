@@ -41,14 +41,15 @@ class Header extends Component {
                 </Link>
               </li>
               <li>
-                <a
-                  className="gtm-navbar-installation"
-                  href="https://github.com/selfishprimate/gerillass#installation"
-                  target="_black"
-                  rel="noopener noreferrer"
-                >
+                {/*
+                  The documentation's landing page is the installation page, so
+                  this is an in-app link now rather than a jump to the README's
+                  anchor on GitHub. gtm-navbar-installation is a Tag Manager
+                  trigger and stays as it is.
+                */}
+                <Link className="gtm-navbar-installation" to="/docs">
                   Installation
-                </a>
+                </Link>
               </li>
               <li>
                 <Link className="gtm-navbar-playground" to="/playground">
