@@ -10,7 +10,14 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: remify(80px) 0 remify(120px);
+  /*
+    The bottom is not a mirror of the top. The footer rises into whatever is
+    above it -- that is deliberate, it is how the ornaments sit over the edge --
+    and here it was climbing 144px into this page, swallowing the keyboard hint
+    and leaving 17px under the buttons. The padding has to clear that rise
+    before it can leave a gap of its own.
+  */
+  padding: remify(80px) 0 remify(260px);
 
   &__code {
     font-family: $primary-font-family;
@@ -48,6 +55,16 @@
     margin-bottom: remify(36px);
 
     .button { width: auto; }
+
+    /*
+      The site sets `a:hover { color: $accent-color }` for every link, and a
+      filled button's hover background is that same colour -- so the label went
+      green on green and disappeared. The outlined one is fine: the button's own
+      outlined:hover rule is more specific and recolours the border with it.
+    */
+    .button:not(.button--outlined):hover {
+      color: $secondary-color;
+    }
   }
 
   &__hint {
