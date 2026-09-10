@@ -39,7 +39,25 @@ html {
   &::after {
     content: "";
     @include position;
-    @include radial-gradient(circle, center, #bfc1a4 (#888d80 80%));
+    /*
+      farthest-side, not the default farthest-corner, and the difference only
+      shows when somebody overscrolls.
+
+      The gradient is painted across the document; the colour behind the bounce
+      at the top of a page is the flat one on `html`, because nothing can paint
+      outside the document. So the two agree only where the gradient has
+      already reached its own outer colour by the time it gets to the top edge.
+      Sized to the farthest corner it had not: on a page under about 1.33 times
+      the viewport wide -- /docs/license is 1828px at 1440 -- the top edge was
+      still a shade lighter, and pulling the page down showed the seam. Sized
+      to the farthest side, the stop lands at 80% of half the page's height on
+      any page taller than it is wide, so the top and bottom edges are the flat
+      colour exactly and there is nothing to see.
+
+      It costs the long pages nothing: on the home page the bright centre
+      reaches 1866px instead of 1952.
+    */
+    @include radial-gradient("circle farthest-side", center, #bfc1a4 (#888d80 80%));
     z-index: 0;
   }
 }
