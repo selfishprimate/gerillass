@@ -13,8 +13,9 @@ import "./member.scss";
   description made the page open on a panel of chrome rather than on the
   sentence a reader came for.
 
-  The link to the source is not here any more. It sits beside the page title,
-  in MdxProvider -- see the note there.
+  The links out of the page -- the member's source, and the markdown of the
+  page itself -- are not here. They sit opposite the page title, in
+  MdxProvider, because the title is the row they belong on.
 */
 
 function Member({ name, children }) {

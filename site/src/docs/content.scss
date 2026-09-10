@@ -76,12 +76,12 @@
   }
 
   /*
-    The page title and, on a member's page, the way to its source.
+    The page title, and the links out of the page opposite it.
 
     The gap between the title and the page is on this row rather than on the
     heading: inside a flex line an item's own bottom margin counts towards the
     line's height, so leaving it on the title would have pushed the title up
-    against the source button instead of pushing the page down.
+    against the buttons instead of pushing the page down.
   */
   .docs-titlebar {
     display: flex;
@@ -90,6 +90,13 @@
     justify-content: space-between;
     gap: remify(10px) remify(20px);
     margin-bottom: 1.5rem;
+
+    &__links {
+      flex: none;
+      display: flex;
+      align-items: center;
+      gap: remify(8px);
+    }
   }
 
   /* The page title. It is an h2, because the logo in the header is the h1. */
@@ -100,45 +107,29 @@
   }
 
   /*
-    A filled chip in the site's dark, no outline, at a size that keeps it
-    beside the title rather than competing with it. The link it replaces was a
-    two pixel outline around fifteen pixel bold text at the end of the
-    description, which made the loudest thing on the opening screen a link
-    away from the page.
-
-    Dark to accent on hover, because that is what a primary button does
-    everywhere else on the site -- see $button-colors in partials/_buttons.
+    Subtle, not invisible. A bare glyph on the page reads as decoration and
+    gives nothing to aim at; these carry the surface a hint sits on, which is
+    enough to make them plainly controls without competing with a 2.45rem
+    title. The glyph is the page's own text colour, so the pair reads as part
+    of the page rather than as something greyed out; the surface deepens a step
+    and the accent arrives on hover, as it does everywhere else.
   */
-  .docs-source {
-    flex: none;
-    display: inline-flex;
+  .docs-iconlink {
+    @include sizer(remify(38px));
+    display: flex;
     align-items: center;
-    gap: remify(7px);
-    padding: remify(8px) remify(16px);
-    font-family: $secondary-font-family;
-    /*
-      The page's own body size. Set smaller it read as a footnote pinned to
-      the title rather than as something to press.
-    */
-    font-size: 1rem;
-    font-weight: 600;
-    letter-spacing: normal;
-    color: $secondary-color;
-    background: $primary-color;
+    justify-content: center;
+    color: $primary-color;
+    background: $alabaster;
     border: 0;
-    border-radius: remify(8px);
+    border-radius: remify(10px);
     text-decoration: none;
-    transition: background-color $global-transition;
-
-    i {
-      font-size: remify(18px);
-      line-height: 1;
-    }
+    transition: color $global-transition, background-color $global-transition;
 
     &:hover,
     &:focus-visible {
-      color: $secondary-color;
-      background: $accent-color;
+      color: $accent-color;
+      background: $eggshell;
       text-decoration: none;
     }
   }

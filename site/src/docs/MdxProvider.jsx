@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from "react";
+import React from "react";
 import { MDXProvider } from "@mdx-js/react";
 
 import CodeBlock from "components/CodeBlock";
@@ -7,19 +7,14 @@ import Member from "./Member";
 import Arguments, { Argument } from "./Arguments";
 import Hint from "./Hint";
 import DocLink from "./DocLink";
+import { GithubIcon, EditIcon } from "components/Icons";
+import { DocsLinksContext, useDocsLinks } from "./links";
 
 /*
   The components an .mdx page can use without importing them, and what the
   plain Markdown in a page turns into. A page is content, so it carries neither
   a list of imports before its first sentence nor any markup of its own.
 */
-
-/*
-  Where the page's source is, for the title row to link to. It travels by
-  context because the title is written in the page as `#`, so what renders it
-  is this file, while what knows which member the page documents is the route.
-*/
-const SourceContext = createContext(null);
 
 const slug = (node) =>
   text(node)
@@ -57,20 +52,18 @@ function heading(level, className) {
 }
 
 /*
-  The page title, with a way to the source beside it.
+  The page title, and opposite it the two ways out of the page: the member's
+  source, and the markdown of the page itself.
 
-  The link used to be a bordered block at the end of the member's description,
-  where it was the loudest thing on the opening screen and sat between the
-  description and the first example. Reading the source is what somebody does
-  after reading the page, or instead of it -- either way it is a destination,
-  not a step, so it belongs in the furniture at the top rather than in the
-  reading order.
+  They were a bordered block at the end of the member's description, which put
+  the loudest thing on the opening screen between the description and the first
+  example -- in the reading order, for something nobody reads in order.
 
-  The link is a sibling of the heading rather than inside it: in there it would
-  be read out as part of the page's name.
+  The links are siblings of the heading rather than children of it: in there
+  they would be read out as part of the page's name.
 */
 function Title({ children, ...rest }) {
-  const href = useContext(SourceContext);
+  const links = useDocsLinks();
 
   return (
     <div className="docs-titlebar">
@@ -78,18 +71,34 @@ function Title({ children, ...rest }) {
         {children}
       </h2>
 
-      {href ? (
-        <a
-          className="docs-source"
-          href={href}
-          target="_blank"
-          rel="noopener noreferrer"
-          title="Read this member's source on GitHub"
-        >
-          {/* Gerillass's own icon font, the same one the header's links use. */}
-          <i className="gls-github" aria-hidden="true"></i>
-          Source Code
-        </a>
+      {links?.source || links?.edit ? (
+        <div className="docs-titlebar__links">
+          {links.source ? (
+            <a
+              className="docs-iconlink"
+              href={links.source}
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Read this member's source on GitHub"
+              aria-label="Read this member's source on GitHub"
+            >
+              <GithubIcon size={18} />
+            </a>
+          ) : null}
+
+          {links.edit ? (
+            <a
+              className="docs-iconlink"
+              href={links.edit}
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Edit this page on GitHub"
+              aria-label="Edit this page on GitHub"
+            >
+              <EditIcon size={18} />
+            </a>
+          ) : null}
+        </div>
       ) : null}
     </div>
   );
@@ -127,11 +136,11 @@ function Fence(props) {
   return <CodeBlock label={label} {...props} />;
 }
 
-function DocsMdx({ source = null, children }) {
+function DocsMdx({ links = null, children }) {
   return (
-    <SourceContext.Provider value={source}>
+    <DocsLinksContext.Provider value={links}>
       <MDXProvider components={components}>{children}</MDXProvider>
-    </SourceContext.Provider>
+    </DocsLinksContext.Provider>
   );
 }
 
