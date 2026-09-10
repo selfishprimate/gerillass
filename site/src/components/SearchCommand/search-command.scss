@@ -58,8 +58,13 @@ kbd {
   font-family: $tertiary-font-family;
   font-size: remify(11.5px);
   line-height: 1;
-  color: inherit;
-  background: transparentize($primary-color, 0.88);
+  /*
+    $eggshell, not a tint of the text colour. A transparent black over any of
+    the site's surfaces comes out grey, which is a colour this palette does not
+    have; the key sits on the same shelf as the rules and borders around it.
+  */
+  color: $primary-color;
+  background: $eggshell;
   border-radius: remify(5px);
 }
 
@@ -86,7 +91,7 @@ kbd {
       the dialog off the page, and a rule around it only competed with the
       rounding.
     */
-    border-radius: remify(14px);
+    border-radius: remify(16px);
     /*
       A translucent ring instead of a border: it sits outside the rounding
       rather than on it, so the corners stay clean, and it lifts the dialog off
@@ -136,7 +141,12 @@ kbd {
 
   &__list {
     overflow-y: auto;
-    padding: $global-space * 0.5 $global-space * 0.75;
+    /*
+      The bottom is the footer card's own inset, so the last row stops the same
+      distance above the footer as the footer stands from the sides. Anything
+      smaller and the card looked wedged against the list.
+    */
+    padding: $global-space * 0.5 $global-space * 0.75 $global-space * 0.75;
   }
 
   /* The same label the sidebar's groups carry. */
@@ -153,7 +163,7 @@ kbd {
   &__item {
     display: flex;
     flex-direction: column;
-    gap: remify(1px);
+    gap: 0;
     padding: $global-space * 0.6 $global-space * 0.65;
     border-radius: remify(9px);
     cursor: pointer;
@@ -172,6 +182,7 @@ kbd {
   &__title {
     font-family: $secondary-font-family;
     font-size: remify(14px);
+    line-height: 1.35;
     font-weight: 600;
     letter-spacing: normal;
     color: $primary-color;
@@ -180,7 +191,12 @@ kbd {
   &__summary {
     font-family: $secondary-font-family;
     font-size: remify(12.5px);
-    line-height: 1.45;
+    /*
+      Tight, because a summary is one or two lines under a title and not a
+      paragraph. At 1.45 the two lines drifted apart and the row read as two
+      entries.
+    */
+    line-height: 1.3;
     letter-spacing: normal;
     color: transparentize($primary-color, 0.4);
   }
@@ -198,9 +214,16 @@ kbd {
     gap: remify(18px);
     align-items: center;
     min-height: remify(64px);
-    padding: 0 $global-space * 1.25;
+    padding: 0 $global-space * 0.85;
+    /*
+      A card resting at the bottom rather than a band welded to the edges: it
+      keeps the same inset on both sides and underneath, which is the inset the
+      list already uses, so the hints sit on the grid the rows sit on.
+    */
+    margin: 0 $global-space * 0.75 $global-space * 0.75;
     background: $alabaster;
-    border-top: 1px solid $eggshell;
+    border: 1px solid $eggshell;
+    border-radius: remify(9px);
     font-family: $secondary-font-family;
     font-size: remify(11.5px);
     letter-spacing: normal;
