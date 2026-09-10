@@ -223,6 +223,14 @@ on the container they cannot be seen: they are meant to sit in the strip the
 footer rises through, against the snow of `.main-wrapper`. The footer itself
 does not move; the container's top edge does.
 
+**A div marked `sandbox` is the demo surface, whether or not it came from the
+shortcode.** Ten demos across three pages were written as a bare
+`<div class="sandbox …">` with the compiled CSS copied into a `style` attribute
+by hand, and none carried the class the example's Sass targets, so the compiled
+stylesheet reached none of them: background-dots lost the photograph under its
+dots, since that comes from the mixin's `::before` and the hand copy had left it
+out. Those divs get the target class and the same filtering.
+
 **A `sandbox` demo keeps the declarations the mixin does not emit.** The
 scissors demo carried `background-color: #5bc0bb` beside the `clip-path`, and
 the mixin emits only the clip, so dropping the lot left a correctly clipped box

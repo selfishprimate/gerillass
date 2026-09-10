@@ -236,6 +236,49 @@ function convert(slug, source) {
   Pulls {{< hint >}} blocks out of a run of lines, leaving the rest in place and
   returning what it found. Hints are prose about the example, not part of it.
 */
+/*
+  The declarations in a demo's inline style that the mixin does not emit.
+
+  Everything the compiled stylesheet already produces is dropped, because the
+  demo should be painted by it: if the mixin breaks, the demo should break and
+  say so. What is left is the demo's own presentation -- the scissors box's
+  colour, a gradient page's rounded corner -- and it stays.
+*/
+function ownDeclarations(style, stated) {
+  return style
+    .split(";")
+    .map((d) => d.trim())
+    .filter((d) => d.includes(":"))
+    .filter((d) => {
+      const property = d.split(":")[0].trim().replace(/^-(webkit|moz|ms|o)-/, "");
+      return !new RegExp(`(^|[{;\\s])-?(webkit-|moz-|ms-|o-)?${property}\\s*:`).test(stated);
+    });
+}
+
+/*
+  Some demos were written as a bare <div class="sandbox …"> with the compiled
+  CSS copied into a style attribute by hand, rather than through the sandbox
+  shortcode. Ten of them across three pages, and none carried the class the
+  example's own Sass targets, so the compiled stylesheet reached none of them:
+  background-dots lost the photograph under its dots, because that comes from
+  the mixin's ::before and the hand copy had left it out.
+
+  A div marked `sandbox` is the demo surface, so it gets the target class and
+  the same treatment as the shortcode.
+*/
+function adoptSandboxes(markup, target, stated) {
+  if (!target) return markup;
+
+  return markup.replace(/<div class="([^"]*\bsandbox\b[^"]*)"([^>]*)>/g, (whole, cls, rest) => {
+    if (cls.split(/\s+/).includes(target)) return whole;
+
+    const style = rest.match(/style="([^"]*)"/)?.[1];
+    const own = style ? ownDeclarations(style, stated) : [];
+    const attribute = own.length ? ` style="${own.join("; ")}"` : "";
+    return `<div class="${target} ${cls}"${attribute}>`;
+  });
+}
+
 function takeHints(lines) {
   const found = [];
   const kept = [];
@@ -347,17 +390,7 @@ function example(block, stated, notes, className, pageStyles = [], setup = null)
           should be painted by the compiled stylesheet; what it does not emit
           is the demo's own presentation and is kept.
         */
-        const stated = css ? css.code : "";
-        const own = whole
-          .replace(/\{\{<[^>]*>\}\}/g, "")
-          .split(";")
-          .map((d) => d.trim())
-          .filter(Boolean)
-          .filter((d) => {
-            const property = d.split(":")[0].trim().replace(/^-(webkit|moz|ms|o)-/, "");
-            return !new RegExp(`(^|[{;\\s])-?(webkit-|moz-|ms-|o-)?${property}\\s*:`).test(stated);
-          });
-
+        const own = ownDeclarations(whole.replace(/\{\{<[^>]*>\}\}/g, ""), css ? css.code : "");
         const style = own.length ? ` style="${own.join("; ")}"` : "";
         return `<div class="${names}"${style}></div>`;
       }
@@ -387,7 +420,11 @@ function example(block, stated, notes, className, pageStyles = [], setup = null)
     div with a sizing class -- and printing that would put scaffolding in front
     of a reader as though it were the answer.
   */
-  const rendered = markup.replace(/<style>[\s\S]*?<\/style>/gi, "").trim();
+  const rendered = adoptSandboxes(
+    markup.replace(/<style>[\s\S]*?<\/style>/gi, "").trim(),
+    target,
+    css ? css.code : ""
+  );
   const body = rendered || (html ? html.code : "");
   const listing = html ? html.code : null;
 
