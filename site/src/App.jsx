@@ -5,6 +5,7 @@ import { MotionConfig } from 'framer-motion';
 
 import PlaygroundCover from 'components/Playground/Cover';
 import ScrollToTop from 'components/ScrollToTop';
+import Analytics from 'components/Analytics';
 
 import 'assets/scss/App.scss';
 
@@ -75,6 +76,11 @@ function Layout() {
         <Outlet />
       </Suspense>
       <PlaygroundRoute />
+      {/*
+        After the outlet, so the page's own effects -- the one that writes the
+        document title among them -- have run before the page view is sent.
+      */}
+      <Analytics />
     </MotionConfig>
   );
 }
