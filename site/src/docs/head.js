@@ -15,6 +15,8 @@
   archived dependency, the twenty lines it was there for are written out.
 */
 
+import { BRAND } from "../content/sections.js";
+
 export const SITE = "https://gerillass.com";
 
 
@@ -32,11 +34,18 @@ export function headFor(frontmatter, path) {
   */
   const url = `${SITE}${path.replace(/\/+$/, "")}`;
   /*
-    The suffix says which part of the site a result belongs to. It is the
-    documentation for almost every page that comes through here, and the two
-    marketing routes say otherwise.
+    The suffix says which part of the site a result belongs to, and it is the
+    section's to decide, not this function's. Whoever read the page has
+    already resolved it -- routes.jsx in the browser, plugins/docs-head.js at
+    build time -- both through suffixFor in content/sections.js. The bare
+    brand is the fallback because a page outside every section is a marketing
+    page.
+
+    It used to default to "Gerillass Documentation" here, which meant any page
+    added outside content/docs would have silently called itself
+    documentation.
   */
-  const title = `${frontmatter.page_title} · ${frontmatter.page_suffix ?? "Gerillass Documentation"}`;
+  const title = `${frontmatter.page_title} · ${frontmatter.page_suffix ?? BRAND}`;
   const description = frontmatter.page_description;
 
   const tags = [

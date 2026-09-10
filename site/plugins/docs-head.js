@@ -3,19 +3,27 @@ import { fileURLToPath, URL } from "node:url";
 import { parse as parseYaml } from "yaml";
 
 import { headFor, headToHtml } from "../src/docs/head.js";
+import { suffixFor } from "../src/content/sections.js";
 
 /*
-  Writes each documentation page's head into the file the build generates.
+  Writes each content page's head into the file the build generates.
 
   The tags come from the same `headFor` the browser uses, so what a crawler
   reads and what the tab shows after a client-side navigation cannot disagree.
   See src/docs/head.js for why there is no head library involved.
 
-  Only the documentation routes are touched. The marketing pages keep the head
-  index.html gives them, which is the one somebody wrote by hand.
+  Any section under content/ is read, not just content/docs. Before this the
+  lookup was hardcoded to that one folder and every other route fell through to
+  null, which does not mean "no head": it means the generated file keeps the
+  whole of index.html's, including the canonical that names the home page. A
+  page in a section nobody had wired up would have declared itself a duplicate
+  of the landing page, which is the same defect the 404 page had.
+
+  The marketing pages keep index.html's head on purpose, because that one was
+  written by hand.
 */
 
-const CONTENT = fileURLToPath(new URL("../content/docs", import.meta.url));
+const CONTENT = fileURLToPath(new URL("../content", import.meta.url));
 
 /*
   The route arrives without a leading slash -- "docs/aspect-ratio", not
@@ -45,23 +53,35 @@ const MARKETING = {
 };
 
 function frontmatterFor(route) {
-  // /docs redirects to the introduction, so it carries the same head.
   const path = normalise(route);
   if (MARKETING[path]) return MARKETING[path];
-  if (path === "/docs") return read("introduction");
 
-  const slug = path.replace(/^\/docs\//, "");
-  if (slug === path) return null;
-  return read(slug);
+  // /docs has no page of its own; it redirects to the introduction, so it
+  // carries that page's head. The redirect itself is in routes.jsx.
+  if (path === "/docs") return read("docs", "introduction");
+
+  const location = /^\/([^/]+)(?:\/(.+))?$/.exec(path);
+  if (!location) return null;
+
+  const [, section, slug] = location;
+  return read(section, slug ?? "index");
 }
 
-function read(slug) {
-  const file = `${CONTENT}/${slug}.mdx`;
-  if (!slug || !existsSync(file)) return null;
+function read(section, slug) {
+  const file = `${CONTENT}/${section}/${slug}.mdx`;
+  if (!section || !slug || !existsSync(file)) return null;
 
   const source = readFileSync(file, "utf8");
   const match = source.match(/^---\r?\n([\s\S]*?)\r?\n---/);
-  return match ? parseYaml(match[1]) : null;
+  if (!match) return null;
+
+  /*
+    The same defaulting routes.jsx does in the browser, so a page's title is
+    the same string whether a crawler reads it out of the file or a reader
+    arrives at it without a reload.
+  */
+  const frontmatter = parseYaml(match[1]);
+  return { ...frontmatter, page_suffix: frontmatter.page_suffix ?? suffixFor(section) };
 }
 
 export default function docsHead(route, html) {

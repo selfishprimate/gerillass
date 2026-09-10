@@ -5,7 +5,8 @@ import Home from "pages/Home";
 import NotFound from "components/NotFound";
 import DocPage from "pages/Docs";
 import { Navigate } from "react-router-dom";
-import { pages } from "docs/pages";
+import { pages } from "content/pages";
+import { suffixFor } from "content/sections";
 
 /*
   The routes as data rather than JSX, so both halves of the app can walk the
@@ -25,13 +26,41 @@ import { pages } from "docs/pages";
   stay mounted. Routing them separately built a second copy of it and coming
   back looked like a reload.
 */
-const docsRoutes = pages.map(({ path, load }) => ({
-  path,
-  lazy: async () => {
-    const { default: Page, frontmatter } = await load();
-    return { element: <DocPage Page={Page} frontmatter={frontmatter} path={path} /> };
-  },
-}));
+/*
+  Which component renders a section's pages. content/docs is the only entry
+  today; content/blog would add one line here beside its own template, and
+  nothing else in the routing would move.
+
+  A section with no entry is left out and said so out loud. Rendering it
+  through a frame written for something else would be worse than not routing
+  it, and doing either silently would be worse still: an .mdx dropped into a
+  folder nobody wired up would just quietly not exist.
+*/
+const TEMPLATES = { docs: DocPage };
+
+const contentRoutes = pages
+  .filter(({ section }) => {
+    if (TEMPLATES[section]) return true;
+    console.warn(
+      `content/${section} has no template in routes.jsx, so its pages are not routed.`
+    );
+    return false;
+  })
+  .map(({ section, path, load }) => ({
+    path,
+    lazy: async () => {
+      const { default: Page, frontmatter } = await load();
+      const Template = TEMPLATES[section];
+      /*
+        The suffix a title ends with belongs to the section rather than to the
+        page, so it is filled in here instead of being repeated in eighty
+        files. A page that sets its own still wins, which is how the two
+        marketing routes carry the bare brand.
+      */
+      const head = { ...frontmatter, page_suffix: frontmatter.page_suffix ?? suffixFor(section) };
+      return { element: <Template Page={Page} frontmatter={head} path={path} /> };
+    },
+  }));
 
 export const routes = [
   {
@@ -46,7 +75,7 @@ export const routes = [
         anyone arriving at it from outside the app.
       */
       { path: "docs", element: <Navigate to="/docs/introduction" replace /> },
-      ...docsRoutes,
+      ...contentRoutes,
       /*
         Two entries for the same page, and both are needed.
 
