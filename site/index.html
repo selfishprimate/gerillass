@@ -42,7 +42,24 @@
     <meta name="twitter:site" content="@gerillass" />
     <meta name="twitter:creator" content="@selfishprimate" />
     
-    <!-- Measurement is rebuilt from here, one tag at a time. -->
+    <!--
+      Google Analytics, and nothing else. No container in front of it, so what
+      this site measures can be read here rather than downloaded from a panel
+      and disassembled.
+
+      `send_page_view: false` because this is a single page app: gtag would
+      count the first page and then nothing, since the other 81 routes never
+      reload the document. Every page view is sent from components/Analytics
+      instead -- including the first, so there is one code path rather than an
+      automatic one and a manual one that can disagree.
+    -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-C92FKJBQ1B"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', 'G-C92FKJBQ1B', { send_page_view: false });
+    </script>
 
     <link rel="canonical" href="https://gerillass.com/"/>
     <link rel="manifest" href="/manifest.json"/>
