@@ -75,6 +75,13 @@
   h6 {
     font-family: $secondary-font-family;
     font-weight: 600;
+
+    /*
+      And no tracking. `html` carries `letter-spacing: 0.33px` for the display
+      face, which wants the air; Inter does not, and at heading sizes that
+      third of a pixel reads as a gap between every letter.
+    */
+    letter-spacing: normal;
   }
 
   h3 {
