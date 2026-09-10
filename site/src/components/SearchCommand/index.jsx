@@ -111,7 +111,7 @@ function SearchCommand() {
         aria-label="Search the documentation"
       >
         <SearchIcon size={15} />
-        <span>Search</span>
+        Search
       </button>
 
       {open &&

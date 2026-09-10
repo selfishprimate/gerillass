@@ -13,30 +13,37 @@
   icon is the only thing marking it out.
 */
 .search-trigger {
-  display: inline-flex;
-  align-items: center;
-  gap: remify(7px);
+  /*
+    inline-block, not inline-flex. A flex box takes its baseline from its first
+    item, and the first item here is an icon, which has none: the box's bottom
+    edge stood in for it and the word sat off the line the links beside it sit
+    on. An inline-block takes its baseline from its own text, which is the same
+    line.
+  */
+  display: inline-block;
   padding: 0;
   font-family: inherit;
   /*
     A button takes its font from the user agent, which resets line-height to
-    `normal`. The links beside it inherit the body's, so the word sat about two
-    pixels high in the row until this said otherwise.
+    `normal`. The links beside it inherit the body's.
   */
   line-height: inherit;
-  color: inherit;
+  color: $link-color;
   background: none;
   border: 0;
   cursor: pointer;
+  transition: 0.1s;
 
-  svg {
-    display: block;
+  /* Both parts colour together, which is what the links do. */
+  &:hover,
+  &:focus-visible {
     color: $accent-color;
   }
 
-  &:hover svg,
-  &:focus-visible svg {
-    color: inherit;
+  svg {
+    /* Centred against the word rather than sitting on its baseline. */
+    vertical-align: -0.18em;
+    margin-right: remify(7px);
   }
 }
 

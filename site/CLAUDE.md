@@ -600,9 +600,16 @@ so `grad` finds `background-image` for the filter it can lay over one.
 
 **The trigger is a menu item, not a box.** It takes its size, weight and colour
 from `header.scss` along with the links beside it, and the icon is the only
-thing marking it out. It needs `line-height: inherit`: a button takes its font
-from the user agent, which resets line-height to `normal`, and the word sat two
-pixels high in the row.
+thing marking it out: both parts are `$link-color` and both turn
+`$accent-color` on hover, which is what an `<a>` does here.
+
+Two things were needed to sit it on the same line as those links, and each was
+worth a try before it worked. `line-height: inherit`, because a button takes
+its font from the user agent, which resets line-height to `normal`. And
+`inline-block` rather than `inline-flex`: a flex box takes its baseline from
+its first item, the first item is an icon, an icon has no baseline, so the
+box's bottom edge stood in for one. An inline-block takes its baseline from its
+own text. After both, all three baselines land on the same sub-pixel.
 
 ### Icons: two sets, and which to use
 
