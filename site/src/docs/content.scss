@@ -111,8 +111,8 @@
     gives nothing to aim at; these carry the surface a hint sits on, which is
     enough to make them plainly controls without competing with a 2.45rem
     title. The glyph is the page's own text colour, so the pair reads as part
-    of the page rather than as something greyed out; the surface deepens a step
-    and the accent arrives on hover, as it does everywhere else.
+    of the page rather than as something greyed out, and it stays that colour
+    under the pointer -- only the surface deepens a step.
   */
   .docs-iconlink {
     @include sizer(remify(38px));
@@ -124,11 +124,11 @@
     border: 0;
     border-radius: remify(10px);
     text-decoration: none;
-    transition: color $global-transition, background-color $global-transition;
+    transition: background-color $global-transition;
 
+    /* The surface answers, not the glyph: the icon is what you came to read. */
     &:hover,
     &:focus-visible {
-      color: $accent-color;
       background: $eggshell;
       text-decoration: none;
     }
