@@ -328,10 +328,13 @@ not work, and that failing case is what a documentation page has to open with.
 
 Two things are easy to miss and are called out in every file:
 
-- **The playground on `gerillass.com` has two `<select>` menus**, one of
-  versions and one of members. A release that adds a mixin without adding it to
-  the member menu leaves it invisible to anyone browsing. It listed 50 of 53
-  mixins as of v2.1.0.
+- **The playground's member menu no longer needs touching**, and this note
+  used to say it did. `site/src/components/Playground/mixins.js` parses the
+  `@mixin` declarations out of the library source it already downloaded to
+  compile with, so a new member appears once the version is published. What is
+  still kept by hand is `demos.json`, the starting snippet per mixin, which
+  `npm run playground-demos --prefix site` regenerates from the documentation
+  front matter.
 - **`llms.txt` is coupled to the documentation site.** A member with no page
   links to its source instead, through `NO_PAGE_YET` in
   `tools/build-llms-txt.js`. When a page is published, remove the name there
@@ -354,7 +357,7 @@ Default branch is `main` (renamed from `master` in v1.3.3). A repository ruleset
 ## Pending work
 
 Known and deliberately deferred, roughly in the order it makes sense to pick up.
-Verified as of v1.6.1.
+Verified as of v2.1.0.
 
 ### Small, non-breaking
 
@@ -387,36 +390,38 @@ insets, `auto-fit` grids, anchor positioning, `@scope`, view transitions and
 scrollbar styling. The `clamp(` and `anchor` matches in `scss/` are a comment
 and the `<a>` pseudo-class list, not the features.
 
-Ranked, with the trap each one closes:
+**Four of the seven have shipped.** `container-query`, `fluid` and
+`line-clamp` are in, and `loadify` respects `prefers-reduced-motion` now, which
+was the accessibility defect the fourth entry existed for. What is left, in
+order, with the trap each one closes:
 
-1. **Container queries.** The largest hole in the library's own story: the
-   whole responsive API is `breakpoint`, which is media queries, and
-   component-level responsiveness has nothing. Verified in a browser: an
-   element with `container-type` on itself **cannot be matched by a
-   `@container` rule targeting it** (the query silently does not apply); the
-   container has to be an ancestor of what the query styles.
-2. **Fluid type and space.** The `clamp()` slope and intercept is real
-   arithmetic, and mixing `vw` with `rem` is what keeps browser zoom working
-   for WCAG 1.4.4. A `vw`-only value breaks zoom. This is what a preprocessor
-   is for, and `remify`/`fontSizer` already set the house style.
-3. **`line-clamp`.** `ellipsis` truncates one line and nothing truncates
-   several. Multi-line needs four coordinated declarations, one of them the
-   legacy `display: -webkit-box`.
-4. **`prefers-reduced-motion`, and a defect it exposes.** `loadify` animates
-   elements on page load and respects nothing. That is an accessibility bug in
-   a shipped mixin, not a missing feature. A guard mixin plus the fix.
-5. **`focus-ring`.** `:focus-visible` with an offset and a forced-colors
-   fallback. Commonly done wrong by removing the outline altogether.
-6. **`auto-grid`.** Verified in a browser: in a 250px container,
+1. **`auto-grid`.** Verified in a browser: in a 250px container,
    `repeat(auto-fit, minmax(20rem, 1fr))` lays out a 320px column and overflows
    by 70px, while `minmax(min(100%, 20rem), 1fr)` fits at 250px. Forgetting the
    `min()` is what produces horizontal scrolling on phones. Different enough
    from `columnizer`, which is flexbox and wants a column count.
-7. **Decorative, in the spirit of `background-dots` and `scissors`:** `glass`
+2. **`focus-ring`.** `:focus-visible` with an offset and a forced-colors
+   fallback. Commonly done wrong by removing the outline altogether.
+3. **A standalone `prefers-reduced-motion` guard.** The defect it was paired
+   with is fixed; the guard mixin itself was never written, and it is the
+   smaller half.
+4. **Decorative, in the spirit of `background-dots` and `scissors`:** `glass`
    (`backdrop-filter` with a `@supports` fallback, which is unreadable without
    it), `edge-fade` (`mask-image` on a scroll container), `theme`
    (`color-scheme` plus `light-dark()`, where forgetting the first makes the
    second silently pick light).
+
+The first two are the ones that close a real defect. The rest are decorative
+and can wait for a release that wants them.
+
+**What one costs.** A member is seven places, not one: the partial in
+`scss/library/`, its line in that folder's `_index.scss`, a `meta/` entry
+(mandatory -- the suite fails without it, and `rejects` is where the mixin's
+validation gets its coverage), `npm run manifest`, a page under
+`site/content/docs/` (also mandatory -- `plugins/docs-index.js` fails the
+**site** build if a manifest member has no page), `npm run playground-demos`,
+and a sass-true spec if it computes anything. Then a minor release. `/new-mixin`
+is that checklist.
 
 Declined, for failing the bar: `text-wrap: balance`, `subgrid`, `:has()` and
 scrollbar colouring are one or two properties with no trap. Anchor positioning

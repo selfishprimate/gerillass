@@ -11,9 +11,10 @@ in the archived repository and somebody will read it.
 ## What this is
 
 The marketing site: a landing page and the playground. React 18 class
-components, `react-router-dom` v6, Dart Sass, built by Vite and **generated
+components, `react-router-dom` v7, Dart Sass, built by Vite and **generated
 statically** — every route is written out as a real HTML file at build time
-rather than assembled in the browser. Deployed to Netlify.
+rather than assembled in the browser, by `scripts/prerender.mjs`. Deployed to
+Netlify.
 
 It dogfoods the library for all of its styling. `@import "gerillass"` resolves
 to `../scss` through a `loadPaths` entry in `vite.config.js`, so the site is
@@ -45,8 +46,8 @@ The old repository's guidance is wrong on these, and only these:
 | `src/serviceWorker.js` | deleted; it was already unregistered |
 | `graphql`, `graphql.macro` dependencies | dropped; nothing imported them |
 | `src/release.js` reads the installed `gerillass` package | reads `../../package.json`, so no install is involved |
-| React 16, `react-router-dom` v5, `ReactDOM.render` | React 18 and router v6; the entry is `ViteReactSSG` in `src/index.jsx` |
-| One `index.html` for every route | one file per route, from `vite-react-ssg build` |
+| React 16, `react-router-dom` v5, `ReactDOM.render` | React 18 and router v7; `src/index.jsx` resolves the lazy routes and hydrates |
+| One `index.html` for every route | one file per route, from `node scripts/prerender.mjs` |
 
 Everything below is still true.
 
@@ -56,33 +57,153 @@ Not boilerplate. It holds the SEO, Open Graph and Twitter meta, the Typekit
 stylesheet that loads Jumble, and the **ionicons** module script that makes
 `<ion-icon name="...">` render in `Announcement`.
 
-## There is no analytics, on purpose
+## Analytics
 
-The site measures nothing at the moment, and that is a decision rather than an
-oversight. What used to be here: a Tag Manager container (`GTM-WJBLKX9`),
-Universal Analytics (`UA-171697118-1`), Google Ads with a conversion that fired
-on every page load, Google Optimize, and 31 `gtm-*` classes on links that
-existed only as click-trigger hooks for that container.
+The site measures. It did not for a while and this file said so; that section
+is what this one replaces.
 
-Most of it was already dead. Universal Analytics stopped collecting on 1 July
-2023 and Optimize shut down that September; the container held 28 tags and all
-of them pointed at that Analytics property. None of this could be read off the
-code -- the container had to be downloaded and disassembled to find out what
-the site measured -- which is the reason it is being rebuilt in this file
-rather than in a panel.
+What was here before: a Tag Manager container (`GTM-WJBLKX9`), Universal
+Analytics (`UA-171697118-1`), Google Ads with a conversion that fired on every
+page load, Google Optimize, and 31 `gtm-*` classes that existed only as
+click-trigger hooks. Most of it was already dead, none of it could be read off
+the code, and it all came out. The container and its account are deleted.
 
-**Do not add tags back one at a time to see if they work.** The last attempt
-went in, could not be verified, and came out again: a hit sent by `gtag` leaves
-over `sendBeacon`, which does not appear in Resource Timing and which `gtag`
-holds its own reference to, so nothing in the browser can watch it go. From
-inside the page a working setup and a broken one look identical. Analytics'
-DebugView is the only surface that answers the question, and a `g/collect`
-request built by hand and sent with `fetch` is the way to test the property
-separately from the tag -- it returns 204 and shows up in DebugView if the
-measurement ID is live.
+What is here now is one GA4 property, `G-C92FKJBQ1B`, loaded straight from
+`index.html` with no container in front of it. The inline guard runs the tag on
+`gerillass.com` and on localhost and nowhere else: every Netlify deploy preview
+was sending real traffic into the property under a hostname of its own, and
+there is a new one per deploy, so there is no list to maintain.
 
-The `gtm-*` classes are gone. If tagging comes back, it does not need them:
-event names belong in the code that fires them.
+**Every event this site sends, it sends itself**, from `components/Analytics`.
+The config sets `send_page_view: false`; the component sends `page_view` on
+each navigation with a `content_group` of Documentation, Playground or
+Marketing, `scroll` when a reader reaches 90% of a page, and `click` when a
+link leaves the domain. The panel's enhanced measurement for the last two is
+switched **off**.
+
+That is the part to understand before changing any of it. Enhanced measurement
+is built around page loads, and this is one app with 82 routes where only the
+first arrival is a load. Switched on, neither event ever arrived. The tag
+downloaded for this property carried both modules -- `percent_scrolled` and
+`link_url` were in the bundle, while `file_extension`, `video_provider` and
+`form_id`, which were off, were not -- and on the page
+`google_tag_manager.autoEventsSettings` reported the link listener armed and
+the scroll one never started. Nothing was suppressing them: Google signals off,
+the cross-domain list that would exclude outbound clicks empty, the tag's own
+automatic event detection on, and no legacy Universal Analytics tag on the live
+page whatever tag diagnostics still claims. Sending them from the app ended the
+guessing and made them testable.
+
+**Do not switch those two toggles back on** without taking the code out first.
+The event names and parameters are GA4's own, so both halves would count.
+
+**Verifying a tag is its own problem, and the trap is worth knowing.** A hit
+sent by `gtag` leaves over `sendBeacon`, which does not appear in Resource
+Timing and which `gtag` holds its own reference to, so nothing patched in after
+load can watch it go. From inside the page a working setup and a broken one
+look identical. The panel is the only surface that answers: Realtime for
+whether events arrive, DebugView for what is in them, which works from
+localhost because the guard sets `debug_mode` there.
+
+**A hidden browser tab reports nothing about scrolling.** Its
+`visibilityState` is `hidden`, `requestAnimationFrame` never runs, and scroll
+events are not dispatched at all, so a scroll test in a background tab measures
+the tab and not the site. Two separate rounds of this were mistaken for a
+defect in the site.
+
+The `gtm-*` classes are gone and are not coming back: event names belong in the
+code that fires them.
+
+## The static build
+
+`npm run build` is `node scripts/prerender.mjs`, not a Vite command. It builds
+the client, builds an SSR bundle, walks the route table in `src/routes.jsx`,
+renders each path through `src/entry-server.jsx` and writes a flat `.html` file
+for it. Then it calls `plugins/docs-head.js` for each page's head,
+`plugins/site-metadata.js` for `sitemap.xml` and `llms.txt`, and
+`plugins/csp.js` for the policy.
+
+It replaced `vite-react-ssg`, which cannot work with react-router 7 for the
+reason under **Known advisories**.
+
+**Flat files rather than directories, deliberately.** React Router's own
+framework-mode prerender hardcodes `<path>/index.html`, and Netlify serves the
+two layouts differently: with `.html` files `/docs/counter` answers 200 and
+`/docs/counter/` answers 301, while with directories both answer 200 and the
+trailing slash becomes a second address for every page. Every canonical here is
+the bare form.
+
+Two things bit during the move and both showed up the same way, as doubled
+content: 44 code blocks on a page that has 22. `StaticRouterProvider` writes
+its hydration data as a `<script>` inside the container it renders into, which
+put it inside `#root`; `hydrate={false}` stops that. The real cause was the
+lazy routes, unresolved in the browser at hydration, so React found a tree that
+did not match and rendered its own underneath. `src/index.jsx` runs
+`matchRoutes` and awaits `route.lazy()` before it builds the router.
+`matchRoutes` hands back the objects the table holds, so resolving them there
+patches the table itself.
+
+Hydration errors seen under `vite preview` at an address that does not exist
+are the preview server, not the build: it serves `index.html` where Netlify
+serves `404.html`, so the browser renders a different page than the one in the
+file. Requesting `/404.html` directly hydrates clean.
+
+### Sections
+
+A section is a folder of `.mdx` under `content/`, and its folder name is the
+first segment of the URL. `content/docs` is the only one today; `content/blog`
+would be the next, and nothing in the head, the routing or the sitemap would
+have to be rewritten for it.
+
+`src/content/pages.js` globs `content/*/*.mdx`, so a new folder is found.
+`src/content/sections.js` turns a folder name into the suffix its titles end
+with, in title case, so `blog` gives `Gerillass Blog` with nothing registered
+anywhere. `routes.jsx` carries a `TEMPLATES` registry naming which component
+renders a section: one line per section, and a section with no entry is left
+out of the routes and named on the console, because an `.mdx` in a folder
+nobody wired up should not quietly not exist.
+
+This closed a real trap. `plugins/docs-head.js` used to read front matter from
+`content/docs` and nothing else, and every other path fell through to `null`.
+`null` does not mean the page gets no head: it means the generated file keeps
+the whole of `index.html`'s, canonical included. A page in an unregistered
+section would have declared itself a duplicate of the landing page, which is
+exactly what the 404 was doing before it got its own file.
+
+Tried rather than assumed: a temporary `content/blog/deneme.mdx` with no
+template registered printed the warning and produced no file; with one line in
+`TEMPLATES` it produced `dist/blog/deneme.html`, titled
+`... · Gerillass Blog`, canonical to `/blog/deneme`, and listed in the sitemap.
+
+### The policy
+
+`plugins/csp.js` writes the Content-Security-Policy into `_headers`, replacing
+a `%CSP%` token. It is generated rather than kept by hand because the policy
+has to name the SHA-256 of every inline script in the page, and a hash kept by
+hand goes stale silently -- one of those two scripts is the analytics guard, so
+the tag would simply stop running with nothing to say so. The build fails if
+the token is missing, or if any generated page carries different inline scripts
+from `index.html`, because one header covers all 84 of them.
+
+The allowlist was measured, not grepped. Grepping the source found most of the
+hosts and missed three: `avatars.githubusercontent.com` behind the supporters
+row, `p.typekit.net` behind the font CSS, and Google's `ga-audiences` pixel,
+which is gone now because the GA4 property's Google Ads link was removed.
+
+`'unsafe-eval'` is in it for the playground: Dart Sass's browser build compiles
+through eval, and without it the page renders one editor instead of two and
+prints "Evaluating a string as JavaScript violates the following Content
+Security Policy directive".
+
+**It cannot be narrowed to `/playground`, and both halves of that were
+measured.** Netlify does replace a same-name header when a more specific block
+matches rather than sending both, so the header side works. The site is what
+stops it: the playground is a route of this app, not a document of its own, and
+a policy belongs to the document that carried it. Served strict at `/` and
+loose at `/playground`, opening `/playground` directly gives two editors and
+354 characters of CSS, while reaching the same route by clicking Playground on
+the home page gives one editor and no compiler. The hero carries that button,
+so that is the common way in.
 
 ## Announcing a release
 
@@ -137,38 +258,34 @@ service. Netlify has deprecated it.
 
 ## Known advisories
 
-`npm audit` in this directory reports **three**, which are the same two
-advisories counted once per package in the chain `react-router` →
-`react-router-dom` → `vite-react-ssg`. Both are in `react-router`: an open redirect through a backslash in `<Link>` and
+`npm audit` in this directory reports **zero**, and `yarn audit` at the
+repository root does too.
+
+It reported three for a while, which were two advisories in `react-router`
+counted once per package in the chain `react-router` -> `react-router-dom` ->
+`vite-react-ssg`: an open redirect through a backslash in `<Link>` and
 `useNavigate`, and constructor injection in `deserializeErrors()` during SSR
-hydration. Neither has a fix on the 6.x line; both are fixed in 7.18.0, and
-`vite-react-ssg` at its latest version peers on `react-router-dom ^6.14.1`. So
-the upgrade that clears them is blocked on the tool that made static
-generation possible.
+hydration. Both are fixed in 7.18.0, and the upgrade was blocked on
+`vite-react-ssg`, which peers on `react-router-dom ^6.14.1` and imports
+`react-router-dom/server`, a subpath version 7 does not export. That is why the
+static build is ours; see **The static build**.
 
-They are carried deliberately, not overlooked. This site navigates only to its
-own paths and takes nothing from a URL, and it is generated at build time
-rather than served by a live renderer, so neither advisory has a way in here.
-
-**This clears when `vite-react-ssg` supports react-router 7, or when the site
-moves to a generator that already does.** Check on any dependency pass.
-
-A fourth, a prototype pollution advisory in `toml` reached here through
-`remark-mdx-frontmatter`, and is pinned away with an `overrides` entry. The
+A fourth, a prototype pollution advisory in `toml`, reached here through
+`remark-mdx-frontmatter` and is pinned away with an `overrides` entry. The
 front matter is YAML, so that parser is never called; the override keeps the
 alert off the repository rather than fixing a path anything uses.
 
-The root `package.json` is unaffected and `yarn audit` there stays at zero:
-these live in `site/package-lock.json`, which is the whole reason the site
+These live in `site/package-lock.json`, which is the whole reason the site
 keeps its own.
 
 ## The documentation
 
 76 pages under `content/docs/`, one `.mdx` file each, ported from the Hugo site
 in `../../gerillass-docs`. **The filename is the URL and the only registration
-there is**: `src/docs/pages.js` globs the directory and `src/routes.jsx` turns
-each file into a lazy route, which vite-react-ssg resolves at build time, so a
-new page is a new file and nothing else.
+there is**: `src/content/pages.js` globs the sections and `src/routes.jsx` turns
+each file into a lazy route, which the prerender resolves at build time, so a
+new page is a new file and nothing else. See **Sections** under The static
+build for what `content/blog` would take.
 
 Four components carry the page, and three of them refuse to render rather than
 drift:
@@ -434,8 +551,9 @@ the pages are lazy so a reader downloads one of them, and importing all 76 to
 read their titles would undo that.
 
 That plugin is also where the two directions are checked, and it prints before
-it throws, because an error raised in a plugin's load hook reaches the terminal
-as vite-react-ssg's "An internal error occurred" and nothing else:
+it throws, because an error raised in a plugin's load hook does not always
+reach the terminal with its message intact -- the build that ran before this
+one reported "An internal error occurred" and nothing else:
 
 - a page documenting something not in `gerillass.json` fails the build
 - **a member with no page fails the build too**, which is the direction that
@@ -516,10 +634,18 @@ written here. It is invisible to a reader, so it was left rather than churned.
 
 ### The crawler's files
 
-`sitemap.xml` and `llms.txt` are generated by `plugins/site-metadata.js`, run
-from `ssgOptions.onFinished` rather than as a Vite plugin hook: as a plugin it
-fired at the end of the client build and found three HTML files, because
-vite-react-ssg writes the other eighty afterwards. The sitemap it replaced
+`sitemap.xml` and `llms.txt` are generated by `plugins/site-metadata.js`,
+called from `scripts/prerender.mjs` once the last file is on disk rather than
+as a Vite plugin hook: as a plugin it fired at the end of the client build and
+found three HTML files, because the pages are written afterwards.
+
+Each entry is dated by the last commit that touched the page's `.mdx`, and the
+two marketing pages by the last commit under `site/src` or `index.html`. They
+all used to carry the date of the build, which says the whole site changed
+whenever any of it did; a lastmod a crawler cannot trust is one it ignores. A
+shallow clone would give every file the same date, which looks specific and is
+not, so that is checked and falls back to the build date, and the build prints
+which of the two it used. The sitemap it replaced
 listed a single URL, dated 2020, on the `www` host the site no longer
 canonicalises to.
 
@@ -551,13 +677,23 @@ iframes and measure what comes back: body height, how many elements have a
 non-zero box, and how many images failed. That is what a demo being empty
 actually looks like.
 
-**`$&` in a page corrupts the build, silently.** vite-react-ssg injects the
-rendered app into the template with `String.replace`, where `$&` in the
-*replacement* means "the matched substring". A page containing `data-currency="$"`
-put `$` next to the `&` of `&quot;` and the built file got `<div id="root"></div>`
-spliced into the middle of a `srcdoc` attribute. Written as `&#36;` the sequence
-never forms. Worth remembering for Sass examples, where `$variable` sits next to
-`&` more often than you would like.
+**`$&` in a page corrupts the build, silently, and it came back.** The app is
+injected into the template with `String.replace`, where `$&` in the
+*replacement* means "the matched substring". A page containing
+`data-currency="$"` puts `$` next to the `&` of `&quot;`, and the built file
+gets `<div id="root"></div>` spliced into the middle of the attribute instead
+of the `$`.
+
+This was documented here, the tool that did it was replaced, and
+`scripts/prerender.mjs` reintroduced it in exactly the same place -- `before`
+shipped corrupted to production before anybody noticed, which is what "silently"
+means. The fix is a **function** replacement, which is never scanned for `$`,
+and the same is done in `plugins/docs-head.js` and `plugins/csp.js`. The build
+now also counts `<div id="root">` in every page it writes and throws naming the
+route if there is more than one, so the third time it will say so.
+
+Writing the sequence as `&#36;` in a page avoids it too, but the guard is the
+part that does not depend on remembering.
 
 ### Which pages still have no demo
 
@@ -583,10 +719,9 @@ rediscovering why.
 ### Not done yet
 
 No page has been read end to end for prose quality since the port; what has
-been done is a sweep for the things a scan can find. And whether
-Netlify resolves `/docs` to `dist/docs.html` ahead of the `/*` fallback has not
-been seen in production; it is the same convention `/about` already ships
-under, so it should hold, but it has not been watched.
+been done is a sweep for the things a scan can find. The `/docs` question in this
+paragraph is answered: it is a `301!` in `public/_redirects` now, checked
+against the live site along with the trailing-slash form and the two aliases.
 
 ## Search
 
