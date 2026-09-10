@@ -20,6 +20,8 @@ import { compile, COMPILER } from "./compiler";
 import { fetchVersions, FALLBACK } from "./versions";
 import Select from "components/Select";
 
+import { SETTLE, LEAVE } from "animation";
+
 import { listMixins, mixinTitle } from "./mixins";
 import DEMOS from "./demos.json";
 
@@ -27,13 +29,10 @@ import "./playground.scss";
 
 /*
   Opening: the panel comes up over the page and the three bands settle into it
-  one after another, close enough together to read as one movement. Springs
-  rather than durations — a window that arrives with weight looks less like a
-  page swap than one that eases to a stop.
+  one after another, close enough together to read as one movement. The two
+  curves are the site's, in src/animation.js — they were written here first,
+  and the palette and the page reveals now move on them too.
 */
-const SETTLE = { type: "spring", stiffness: 320, damping: 34, mass: 0.9 };
-/* Leaving is the same movement run backwards, and quicker: nobody waits to go. */
-const LEAVE = { duration: 0.18, ease: "easeIn" };
 
 const WINDOW_MOTION = {
   hidden: {

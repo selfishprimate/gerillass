@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Header from "components/Header";
 import SiteFooter from "components/SiteFooter";
 import Sidebar from "docs/Sidebar";
+import PageContent from "components/PageContent";
 
 import "docs/content.scss";
 import "./docs-template.scss";
@@ -55,7 +56,7 @@ function DocsTemplate({ children }) {
             </div>
           </aside>
 
-          <main className="docs-layout__main content">{children}</main>
+          <PageContent className="docs-layout__main content">{children}</PageContent>
         </div>
 
         <SiteFooter />

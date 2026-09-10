@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
+import { AnimatePresence, motion } from "framer-motion";
 import { Command } from "cmdk";
 
 import {
@@ -9,6 +10,7 @@ import {
   CornerDownLeftIcon,
 } from "components/Icons";
 import { pages } from "virtual:docs-index";
+import { SCRIM_MOTION, DIALOG_MOTION } from "animation";
 
 import "./search-command.scss";
 
@@ -31,6 +33,13 @@ import "./search-command.scss";
   guides. The guides are reachable from the sidebar on every page, so they sit
   at the bottom here rather than at the top.
 */
+/*
+  cmdk's Command forwards its ref to the element it renders, which is what
+  lets framer drive it directly. Wrapping it in a motion div instead would put
+  a box between the scrim's centring and the dialog it is centring.
+*/
+const MotionCommand = motion.create(Command);
+
 const GROUPS = [
   { kind: "mixin", label: "Mixins" },
   { kind: "function", label: "Utilities" },
@@ -80,6 +89,15 @@ function SearchCommand() {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
+
+  /*
+    The portal is mounted whether or not the palette is open, because
+    AnimatePresence can only animate a child out if it is still there to be
+    animated. That needs a document, and the build machine has none, so it
+    waits for the first effect rather than for `open`.
+  */
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   // Cmd+K on a Mac, Ctrl+K everywhere else, which is what a reader who knows
   // this control will reach for without being told.
@@ -139,105 +157,120 @@ function SearchCommand() {
         Search
       </button>
 
-      {open &&
+      {mounted &&
         createPortal(
-          <div
-            className="palette"
-            onMouseDown={(event) => {
-              if (event.target === event.currentTarget) setOpen(false);
-            }}
-          >
-            <Command
-              className="palette__dialog"
-              label="Search the documentation"
-              loop
-              /*
-                cmdk moves the selection and opens on Enter, but it does not
-                close: the dialog is ours, so Escape is ours to answer.
-              */
-              onKeyDown={(event) => {
-                if (event.key === "Escape") {
-                  event.preventDefault();
-                  setOpen(false);
-                }
-              }}
-            >
-              <div className="palette__field">
-                <SearchIcon size={17} />
-                <Command.Input
-                  value={query}
-                  onValueChange={setQuery}
-                  placeholder="Search mixins, functions and guides"
-                  className="palette__input"
-                  autoFocus
-                />
-                <button
-                  type="button"
-                  className="palette__close"
-                  onClick={() => setOpen(false)}
-                  aria-label="Close search"
+          <AnimatePresence>
+            {open ? (
+              <motion.div
+                className="palette"
+                variants={SCRIM_MOTION}
+                initial="hidden"
+                animate="shown"
+                exit="hidden"
+                onMouseDown={(event) => {
+                  if (event.target === event.currentTarget) setOpen(false);
+                }}
+              >
+                <MotionCommand
+                  className="palette__dialog"
+                  /*
+                    No initial, animate or exit of its own: a child with
+                    variants follows its parent through the same three states,
+                    so the scrim and the dialog cannot come apart.
+                  */
+                  variants={DIALOG_MOTION}
+                  label="Search the documentation"
+                  loop
+                  /*
+                    cmdk moves the selection and opens on Enter, but it does
+                    not close: the dialog is ours, so Escape is ours to answer.
+                  */
+                  onKeyDown={(event) => {
+                    if (event.key === "Escape") {
+                      event.preventDefault();
+                      setOpen(false);
+                    }
+                  }}
                 >
-                  <kbd>Esc</kbd>
-                </button>
-              </div>
+                  <div className="palette__field">
+                    <SearchIcon size={17} />
+                    <Command.Input
+                      value={query}
+                      onValueChange={setQuery}
+                      placeholder="Search mixins, functions and guides"
+                      className="palette__input"
+                      autoFocus
+                    />
+                    <button
+                      type="button"
+                      className="palette__close"
+                      onClick={() => setOpen(false)}
+                      aria-label="Close search"
+                    >
+                      <kbd>Esc</kbd>
+                    </button>
+                  </div>
 
-              <Command.List className="palette__list">
-                {nothing ? (
-                  <Command.Empty className="palette__empty">
-                    Nothing matches “{query}”.
-                  </Command.Empty>
-                ) : null}
+                  <Command.List className="palette__list">
+                    {nothing ? (
+                      <Command.Empty className="palette__empty">
+                        Nothing matches “{query}”.
+                      </Command.Empty>
+                    ) : null}
 
-
-                {groups.map((group) => (
-                  <Command.Group
-                    key={group.label}
-                    heading={group.label}
-                    className="palette__group"
-                  >
-                    {group.items.map((page) => (
-                      <Command.Item
-                        key={page.slug}
-                        /*
-                          The member's own name goes in the value as well as the
-                          title, so typing clearUnit finds the page called Clear
-                          Unit. cmdk matches on this string.
-                        */
-                        value={`${page.title} ${page.member ?? ""} ${page.slug} ${
-                          ALIASES[page.slug] ?? page.alias ?? ""
-                        }`}
-                        onSelect={() => go(page.href)}
-                        className="palette__item"
+                    {groups.map((group) => (
+                      <Command.Group
+                        key={group.label}
+                        heading={group.label}
+                        className="palette__group"
                       >
-                        <span className="palette__title">{page.title}</span>
-                        <span className="palette__summary">{page.summary}</span>
-                      </Command.Item>
+                        {group.items.map((page) => (
+                          <Command.Item
+                            key={page.slug}
+                            /*
+                              The member's own name goes in the value as well
+                              as the title, so typing clearUnit finds the page
+                              called Clear Unit. cmdk matches on this string.
+                            */
+                            value={`${page.title} ${page.member ?? ""} ${page.slug} ${
+                              ALIASES[page.slug] ?? page.alias ?? ""
+                            }`}
+                            onSelect={() => go(page.href)}
+                            className="palette__item"
+                          >
+                            <span className="palette__title">{page.title}</span>
+                            <span className="palette__summary">
+                              {page.summary}
+                            </span>
+                          </Command.Item>
+                        ))}
+                      </Command.Group>
                     ))}
-                  </Command.Group>
-                ))}
-              </Command.List>
+                  </Command.List>
 
-              <div className="palette__footer">
-                <span>
-                  <kbd>
-                    <ArrowUpDownIcon size={12} />
-                  </kbd>
-                  to navigate
-                </span>
-                <span>
-                  <kbd>
-                    <CornerDownLeftIcon size={12} />
-                  </kbd>
-                  to open
-                </span>
-                <span>
-                  <kbd>Esc</kbd>
-                  to close
-                </span>
-              </div>
-            </Command>
-          </div>,
-          document.body
+                  <div className="palette__footer">
+                    <span>
+                      <kbd>
+                        <ArrowUpDownIcon size={12} />
+                      </kbd>
+                      to navigate
+                    </span>
+                    <span>
+                      <kbd>
+                        <CornerDownLeftIcon size={12} />
+                      </kbd>
+                      to open
+                    </span>
+                    <span>
+                      <kbd>Esc</kbd>
+                      to close
+                    </span>
+                  </div>
+                </MotionCommand>
+              </motion.div>
+            ) : null}
+          </AnimatePresence>,
+          document.body,
         )}
     </>
   );

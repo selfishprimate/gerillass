@@ -1,6 +1,7 @@
 import React, { Suspense, lazy } from 'react';
 import { Outlet, useLocation, useNavigationType } from 'react-router-dom';
 import { ClientOnly } from 'vite-react-ssg';
+import { MotionConfig } from 'framer-motion';
 
 import PlaygroundCover from 'components/Playground/Cover';
 import ScrollToTop from 'components/ScrollToTop';
@@ -59,16 +60,22 @@ function PlaygroundRoute() {
   up: routing them separately built a second copy of it, and coming back looked
   like a reload. Which page that is comes from routes.jsx, where "/" and
   "/playground" both point at Home.
+
+  The pages reveal themselves, in components/PageContent, because only the
+  content should move -- see the note there. What is here is MotionConfig,
+  which carries prefers-reduced-motion down to every animation in the app, the
+  palette included: framer drops the transforms and keeps the crossfades, which
+  is the distinction the setting is asking for.
 */
 function Layout() {
   return (
-    <>
+    <MotionConfig reducedMotion="user">
       <ScrollToTop />
       <Suspense fallback={<div />}>
         <Outlet />
       </Suspense>
       <PlaygroundRoute />
-    </>
+    </MotionConfig>
   );
 }
 

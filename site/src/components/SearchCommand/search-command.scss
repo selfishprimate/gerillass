@@ -1,5 +1,8 @@
 @import "assets/scss/abstract";
 
+/* The veil behind the palette: the palette's darkest green carrying its khaki. */
+$scrim-color: mix($charleston-green, $artichoke, 55%);
+
 /*
   The palette in the site's own materials: $snow surfaces, $eggshell rules,
   $alabaster for the row under the cursor, and the accent only on the icon.
@@ -76,18 +79,24 @@ kbd {
   align-items: center;
   justify-content: center;
   padding: remify(16px);
-  background: transparentize($primary-color, 0.45);
+  /*
+    Khaki rather than the text colour. $crayola over a page this warm reads as
+    grey smoke; $artichoke is the palette's khaki and $charleston-green is its
+    darkest, and the two together give a veil the site could have been printed
+    on.
+  */
+  background: transparentize($scrim-color, 0.42);
 
   /*
     Frosted rather than merely dimmed. The blur is what separates the dialog
     from the page: with the page behind it still legible, the eye keeps reading
-    it and the dialog has to fight for attention. Guarded, and the dim is
-    deeper without it, because a browser with no backdrop-filter would
-    otherwise be left with a lighter veil and no blur at all -- the weakest of
-    the three states rather than the fallback.
+    it and the dialog has to fight for attention. Guarded, and the veil is
+    denser without it, because a browser with no backdrop-filter would
+    otherwise be left with the lighter veil and no blur at all -- the weakest
+    of the three states rather than the fallback.
   */
   @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-    background: transparentize($primary-color, 0.62);
+    background: transparentize($scrim-color, 0.54);
     -webkit-backdrop-filter: blur(remify(8px)) saturate(120%);
     backdrop-filter: blur(remify(8px)) saturate(120%);
   }

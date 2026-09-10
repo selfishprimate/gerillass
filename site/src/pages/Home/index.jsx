@@ -10,6 +10,7 @@ import Examples from "components/Examples";
 import Testimonial from 'components/Testimonial';
 // import ProductHunt from "components/ProductHunt";
 
+import PageContent from "components/PageContent";
 import HomeTemplate from "templates/HomeTemplate";
 
 function Home() {
@@ -23,13 +24,13 @@ function Home() {
       }
       header={<Header />}
       content={
-        <main className="content">
+        <PageContent>
           <Hero />
           <Featured />
           <Benefits />
           <Examples />
           <Testimonial />
-        </main>
+        </PageContent>
       }
       footer={<SiteFooter />}
       bottom={
