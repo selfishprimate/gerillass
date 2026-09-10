@@ -54,16 +54,14 @@
     })(window,document,'script','dataLayer','GTM-WJBLKX9');</script>
     <!-- End Google Tag Manager -->
 
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-171697118-1"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag('js', new Date());
-      gtag('config', 'UA-171697118-1');
-    </script>
+    <!--
+      Universal Analytics used to be configured here. It stopped processing
+      data on 1 July 2023, so the tag was two requests that collected nothing.
+      Measurement is GA4, through the Tag Manager container above.
+
+      The same property is still configured inside that container. Removing it
+      from this file does not stop it loading; that has to be done in GTM.
+    -->
 
     <!-- Global site tag (gtag.js) - Google Ads: 987800235 -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=AW-987800235"></script>
@@ -79,9 +77,6 @@
       gtag('event', 'conversion', {'send_to': 'AW-987800235/bGcQCIfPo9sBEKvFgtcD'});
     </script>
 
-    <!-- Google Optimize Snippet -->
-    <script src="https://www.googleoptimize.com/optimize.js?id=OPT-N3SC8ZD"></script>
-
   </head>
 
   <body>
@@ -92,7 +87,6 @@
     <!-- End Google Tag Manager (noscript) -->
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
-    <script src="/js/script.js"></script>
     <!-- Typekit: the Jumble display face used for headings and the logo -->
     <link rel="stylesheet" href="https://use.typekit.net/tvr2umw.css">
     <script>
