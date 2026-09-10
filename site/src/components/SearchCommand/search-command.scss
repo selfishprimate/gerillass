@@ -78,6 +78,20 @@ kbd {
   padding: remify(16px);
   background: transparentize($primary-color, 0.45);
 
+  /*
+    Frosted rather than merely dimmed. The blur is what separates the dialog
+    from the page: with the page behind it still legible, the eye keeps reading
+    it and the dialog has to fight for attention. Guarded, and the dim is
+    deeper without it, because a browser with no backdrop-filter would
+    otherwise be left with a lighter veil and no blur at all -- the weakest of
+    the three states rather than the fallback.
+  */
+  @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    background: transparentize($primary-color, 0.62);
+    -webkit-backdrop-filter: blur(remify(8px)) saturate(120%);
+    backdrop-filter: blur(remify(8px)) saturate(120%);
+  }
+
   &__dialog {
     width: 100%;
     max-width: remify(720px);
@@ -141,12 +155,7 @@ kbd {
 
   &__list {
     overflow-y: auto;
-    /*
-      The bottom is the footer card's own inset, so the last row stops the same
-      distance above the footer as the footer stands from the sides. Anything
-      smaller and the card looked wedged against the list.
-    */
-    padding: $global-space * 0.5 $global-space * 0.75 $global-space * 0.75;
+    padding: $global-space * 0.5 $global-space * 0.75;
   }
 
   /* The same label the sidebar's groups carry. */
@@ -214,16 +223,9 @@ kbd {
     gap: remify(18px);
     align-items: center;
     min-height: remify(64px);
-    padding: 0 $global-space * 0.85;
-    /*
-      A card resting at the bottom rather than a band welded to the edges: it
-      keeps the same inset on both sides and underneath, which is the inset the
-      list already uses, so the hints sit on the grid the rows sit on.
-    */
-    margin: 0 $global-space * 0.75 $global-space * 0.75;
+    padding: 0 $global-space * 1.25;
     background: $alabaster;
-    border: 1px solid $eggshell;
-    border-radius: remify(9px);
+    border-top: 1px solid $eggshell;
     font-family: $secondary-font-family;
     font-size: remify(11.5px);
     letter-spacing: normal;
