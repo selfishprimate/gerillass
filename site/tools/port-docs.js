@@ -174,7 +174,7 @@ function convert(slug, source) {
         block.push(lines[i]);
         i += 1;
       }
-      out.push(...example(block, stated, notes, a.class, pageStyles, SETUP[slug]));
+      out.push(...example(block, stated, notes, a.class, pageStyles, SETUP[slug], DEMO_TARGET[slug]));
       continue;
     }
 
@@ -215,6 +215,9 @@ function convert(slug, source) {
   const closed = out
     .join("\n")
     .replace(/^## Related (?:Articles|links)\s*$/gm, "## Related Links")
+    // And the links into it, which the rename would otherwise leave pointing
+    // at a heading id that no longer exists.
+    .replace(/\]\(#related-(?:articles|links)\)/g, "](#related-links)")
     .replace(/\]\((\/docs\/[a-z0-9-]+)\/\)/g, "]($1)")
     .replace(/^\s*\{\{<\s*\/\s*(mixin|function)\s*>\}\}\s*$/gm, "\n</Member>")
     .replace(/^\s*\{\{<\s*\/\s*hint\s*>\}\}\s*$/gm, "\n</Hint>")
@@ -256,27 +259,49 @@ function ownDeclarations(style, stated) {
 }
 
 /*
-  Some demos were written as a bare <div class="sandbox …"> with the compiled
-  CSS copied into a style attribute by hand, rather than through the sandbox
-  shortcode. Ten of them across three pages, and none carried the class the
-  example's own Sass targets, so the compiled stylesheet reached none of them:
-  background-dots lost the photograph under its dots, because that comes from
-  the mixin's ::before and the hand copy had left it out.
+  Puts the class the example's Sass targets on the element the example is
+  demonstrating, when nothing in the demo carries it.
 
-  A div marked `sandbox` is the demo surface, so it gets the target class and
-  the same treatment as the shortcode.
+  Nineteen demos across five pages had no element the compiled stylesheet could
+  reach. They had been written with the output copied into a style attribute by
+  hand, which looks right until the mixin does something a copy cannot: the
+  text-shadow page's last example changes on :hover, and its hand copy had only
+  the resting state, so the effect the page is about did nothing.
+
+  The element to mark is the one carrying that hand copy, or failing that the
+  one carrying an example number. A page can name it outright in DEMO_TARGET
+  where neither rule finds the right one.
 */
-function adoptSandboxes(markup, target, stated) {
+function adoptTarget(markup, target, stated, selector) {
   if (!target) return markup;
 
-  return markup.replace(/<div class="([^"]*\bsandbox\b[^"]*)"([^>]*)>/g, (whole, cls, rest) => {
-    if (cls.split(/\s+/).includes(target)) return whole;
+  const tags = [...markup.matchAll(/<([a-z][\w-]*)\b([^>]*)>/g)];
+  if (tags.some((t) => /class="([^"]*)"/.exec(t[2])?.[1].split(/\s+/).includes(target))) {
+    return markup;
+  }
 
-    const style = rest.match(/style="([^"]*)"/)?.[1];
-    const own = style ? ownDeclarations(style, stated) : [];
-    const attribute = own.length ? ` style="${own.join("; ")}"` : "";
-    return `<div class="${target} ${cls}"${attribute}>`;
-  });
+  const pick =
+    (selector && tags.find((t) => t[1] === selector)) ||
+    tags.find((t) => /\bstyle="/.test(t[2])) ||
+    tags.find((t) => /class="[^"]*\bexample[-\d]/.test(t[2]));
+
+  if (!pick) return markup;
+
+  const [whole, tag, rest] = pick;
+  const style = rest.match(/style="([^"]*)"/)?.[1];
+  const own = style ? ownDeclarations(style, stated) : [];
+
+  // A self-closing tag keeps its slash at the end, not in the middle of the
+  // attributes: <img src=".." /> must not become <img src=".." / class="..">.
+  const selfClosing = /\/\s*$/.test(rest);
+  let attributes = rest.replace(/\/\s*$/, "").replace(/\s*style="[^"]*"/, "");
+  attributes = /class="/.test(attributes)
+    ? attributes.replace(/class="([^"]*)"/, `class="${target} $1"`)
+    : `${attributes} class="${target}"`;
+  if (own.length) attributes += ` style="${own.join("; ")}"`;
+
+  const tidy = attributes.replace(/\s+/g, " ").replace(/\s+$/, "");
+  return markup.replace(whole, `<${tag}${tidy}${selfClosing ? " /" : ""}>`);
 }
 
 function takeHints(lines) {
@@ -298,7 +323,7 @@ function takeHints(lines) {
   return found;
 }
 
-function example(block, stated, notes, className, pageStyles = [], setup = null) {
+function example(block, stated, notes, className, pageStyles = [], setup = null, demoTarget = null) {
   const caption = [];
   const fences = [];
   const demo = [];
@@ -420,10 +445,11 @@ function example(block, stated, notes, className, pageStyles = [], setup = null)
     div with a sizing class -- and printing that would put scaffolding in front
     of a reader as though it were the answer.
   */
-  const rendered = adoptSandboxes(
+  const rendered = adoptTarget(
     markup.replace(/<style>[\s\S]*?<\/style>/gi, "").trim(),
     target,
-    css ? css.code : ""
+    css ? css.code : "",
+    demoTarget
   );
   const body = rendered || (html ? html.code : "");
   const listing = html ? html.code : null;
@@ -468,10 +494,15 @@ function example(block, stated, notes, className, pageStyles = [], setup = null)
   React then warns about, so it was rewritten as a Markdown table. Converting
   again would put the raw one back.
 
+  sprite is here because its second example was prose and four Sass blocks
+  interleaved, which this tool flattens to the first of each. Its examples are
+  written against the sheet the page ships: six frames of a walk cycle, 100 by
+  100 each.
+
   content/docs/index.mdx has no counterpart upstream at all. It is the
   installation page, and it is written here.
 */
-const HAND_WRITTEN = new Set(["aspect-ratio", "line-clamp"]);
+const HAND_WRITTEN = new Set(["aspect-ratio", "line-clamp", "sprite"]);
 
 /*
   Sass an example needs before it can compile, but which is not part of what it
@@ -480,6 +511,24 @@ const HAND_WRITTEN = new Set(["aspect-ratio", "line-clamp"]);
   above the examples rather than repeating the line in each of them.
 */
 const SETUP = { loadify: "@include loadify(init);" };
+
+/*
+  The tag to mark, where neither the hand-copied style nor an example number
+  points at the right element. loadify animates the image inside the figure,
+  not the figure.
+*/
+const DEMO_TARGET = { loadify: "img" };
+
+/*
+  Images the pages reach for with a path relative to the page, which is how
+  Hugo page bundles work and is not how these are served. Six of them, and none
+  had been copied across at all until the demos were looked at.
+*/
+const IMAGE_PATHS = [
+  [/(["'(])(?:\.\.\/)?images\/01\.jpg/g, "$1/images/docs/01.jpg"],
+  [/(["'(])(?:\.\.\/images\/)?sprite(@2x)?\.png/g, "$1/images/docs/sprite$2.png"],
+  [/(["'(])(breakpointer_[\w]+\.png)/g, "$1/images/docs/$2"],
+];
 
 /*
   Argument names the Hugo pages left as a placeholder. The scissors page wrote
@@ -526,9 +575,11 @@ for (const slug of slugs) {
     between them is read as part of the block above it, so the tags get their
     own line and the run of blank lines is tidied afterwards.
   */
-  const spaced = body
+  let spaced = body
     .replace(/\n{3,}/g, "\n\n")
     .replace(/^(<\/(?:Member|Hint|Arguments|Example)>)\n(?!\n|$)/gm, "$1\n\n");
+
+  for (const [pattern, replacement] of IMAGE_PATHS) spaced = spaced.replace(pattern, replacement);
 
   writeFileSync(`${OUT}/${slug}.mdx`, `---\n${fm}\n---\n${spaced}\n`);
   reference[slug] = stated;

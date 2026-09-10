@@ -223,6 +223,15 @@ on the container they cannot be seen: they are meant to sit in the strip the
 footer rises through, against the snow of `.main-wrapper`. The footer itself
 does not move; the container's top edge does.
 
+**A demo needs the class the example's Sass targets, or the compiled stylesheet
+reaches nothing.** Nineteen across five pages had none: they had been written
+with the output copied into a `style` attribute by hand, which looks right
+until the mixin does something a copy cannot. text-shadow's last example
+changes on `:hover` and the copy held only the resting state, so the effect the
+page is about did nothing at all. The converter marks the element carrying that
+hand copy, or the one carrying an example number, and `DEMO_TARGET` names the
+tag where neither rule finds the right one.
+
 **A div marked `sandbox` is the demo surface, whether or not it came from the
 shortcode.** Ten demos across three pages were written as a bare
 `<div class="sandbox …">` with the compiled CSS copied into a `style` attribute

@@ -16,63 +16,79 @@ The **Sprite** Sass mixin helps you apply background images to the selected elem
 
 ## Arguments
 
-<Arguments of="sprite" footnote="To learn more about the `background-position` property values, check out the [links](#related-articles) at the end of the page.">
+<Arguments of="sprite" footnote="To learn more about the `background-position` property values, check out the [links](#related-links) at the end of the page.">
   <Argument name="$image-url" type="string">The URL of the sprite image. <strong>Important:</strong> Don't forget that the image link must be either absolute or relative to the generated CSS file.</Argument>
   <Argument name="$position" type="number | string">Sets the position of the <code>background-image</code>. <strong>Multiple values must be separated by a space.</strong></Argument>
 </Arguments>
 
 ## Examples
 
+Every example on this page draws from one sheet, `sprite.png`: six frames of a
+walk cycle laid out in a row, each 100 by 100, in a 600 by 100 image.
+
 <Hint kind="info">
 
-**Important:** Don't forget to give `width` and `height` values to the selected element. **It is very important to know the exact size of the image you want to select from a sprite sheet.**
+**Give the element a `width` and a `height`.** The mixin sets the image and the
+position; it cannot know how much of the sheet you want. Those two values are
+the size of one tile, and you need to know it.
 
 </Hint>
 
-<Example caption="You can apply it to a single element and pass both the `$image-url` and `$position` arguments using the one-line method.">
+<Example caption="One tile. Pass the sheet and the position of the frame you want, and size the element to match a single tile.">
 ```scss
-.sprite-element{
-  @include sprite("../images/sprite.png", 0 0);
-}
-```
-```html
-<div class="sprite-elements">
-  <div class="sprite-element single"></div>
-</div>
-```
-</Example>
-
-<Example caption="Or you can apply it to multiple elements, with a different image for each one selected from a single sprite sheet. **Suppose you have markup like the one below, and you want to assign a different background image to each element from a single sprite sheet.**" listing="<div class=&quot;sprite-element first&quot;></div>
-<div class=&quot;sprite-element second&quot;></div>
-<div class=&quot;sprite-element third&quot;></div>
-<div class=&quot;sprite-element fourth&quot;></div>">
-```scss
-.sprite-element{
+.element {
   width: 100px;
   height: 100px;
-  @include sprite("sprite.png");
+  @include sprite("/images/docs/sprite.png", 0 0);
 }
 ```
 ```html
-First let's call the mixin to define the sprite image's URL and specify the `width` and `height` of the image we are going to select.
-
-You can pass `width` and `height` values into the mixin as well!
-
-Then let's pass the position values for each of the elements separately, using the secondary classes on them.
-
-The result will look like this:
-
-<div class="sprite-elements">
-  <div class="sprite-element first"></div>
-  <div class="sprite-element second"></div>
-  <div class="sprite-element third"></div>
-  <div class="sprite-element fourth"></div>
-</div>
+<div class="element"></div>
 ```
 </Example>
 
-Easy, isn't it?
+<Example caption="Several tiles from the same sheet. The mixin is called once with the sheet, and once per element with only a position: each frame sits 100px further to the left, so the offsets run 0, -100px, -200px and so on.">
+```scss
+.frame {
+  width: 100px;
+  height: 100px;
+  @include sprite("/images/docs/sprite.png");
+}
+
+.frame--1 { @include sprite(0 0); }
+.frame--2 { @include sprite(-100px 0); }
+.frame--3 { @include sprite(-200px 0); }
+.frame--4 { @include sprite(-300px 0); }
+```
+```html
+<div class="frame frame--1"></div>
+<div class="frame frame--2"></div>
+<div class="frame frame--3"></div>
+<div class="frame frame--4"></div>
+```
+</Example>
+
+<Example caption="Why a sheet in the first place. The six frames are a walk cycle, so stepping the background position across them in one animation plays it, out of a single request rather than six.">
+```scss
+.element {
+  width: 100px;
+  height: 100px;
+  @include sprite("/images/docs/sprite.png", 0 0);
+  animation: walk 0.7s steps(6) infinite;
+}
+
+@keyframes walk {
+  to {
+    background-position: -600px 0;
+  }
+}
+```
+```html
+<div class="element"></div>
+```
+</Example>
 
 ## Related Links
-* [CSS Sprites](https://css-tricks.com/css-sprites/)
-* [Background Position](https://developer.mozilla.org/en-US/docs/Web/CSS/background-position)
+
+- [Implementing Image Sprites in CSS](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Images/Implementing_image_sprites_in_CSS)
+- [background-position](https://developer.mozilla.org/en-US/docs/Web/CSS/background-position)
