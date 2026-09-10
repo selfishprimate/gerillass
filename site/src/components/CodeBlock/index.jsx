@@ -1,6 +1,42 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import SyntaxHighlighter from "react-syntax-highlighter";
+import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
 import { zenburn } from "react-syntax-highlighter/dist/esm/styles/hljs";
+
+/*
+  The light build, with the eight languages this site writes.
+
+  The default export carries every language highlight.js has -- erlang,
+  fortran, matlab, verilog and a hundred and eighty others were all in the
+  chunk the landing page downloads, to syntax highlight Sass. Registering what
+  is used is the same component with the rest left behind.
+
+  A language missing here does not throw: highlight.js renders the block
+  unhighlighted. So adding a fence in a language nobody registered fails
+  quietly, which is why the list below is the whole vocabulary the content
+  uses, checked against every fence in content/ and every `language` prop in
+  src/.
+*/
+import bash from "react-syntax-highlighter/dist/esm/languages/hljs/bash";
+import css from "react-syntax-highlighter/dist/esm/languages/hljs/css";
+import javascript from "react-syntax-highlighter/dist/esm/languages/hljs/javascript";
+import json from "react-syntax-highlighter/dist/esm/languages/hljs/json";
+import nix from "react-syntax-highlighter/dist/esm/languages/hljs/nix";
+import plaintext from "react-syntax-highlighter/dist/esm/languages/hljs/plaintext";
+import scss from "react-syntax-highlighter/dist/esm/languages/hljs/scss";
+import xml from "react-syntax-highlighter/dist/esm/languages/hljs/xml";
+
+for (const [name, language] of [
+  ["bash", bash],
+  ["css", css],
+  ["javascript", javascript],
+  ["json", json],
+  ["nix", nix],
+  ["plaintext", plaintext],
+  ["scss", scss],
+  ["xml", xml],
+]) {
+  SyntaxHighlighter.registerLanguage(name, language);
+}
 
 import { CopyIcon, CheckIcon } from "components/Icons";
 
