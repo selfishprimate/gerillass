@@ -21,6 +21,21 @@ import "./code-block.scss";
 
 const FROM_CLASS = /language-([\w-]+)/;
 
+/*
+  What a page calls a language, and what the highlighter calls it.
+
+  react-syntax-highlighter's hljs build lists the canonical names only -- no
+  aliases -- and a name it does not know does not raise anything: it falls back
+  to auto-detection. That is why the markup blocks looked wrong in a way no
+  stylesheet explained. On one line `class` came out as an attribute and on the
+  next as a tag name, and the class values were being split at every hyphen,
+  because 160 fences marked `html` were never highlighted as markup at all.
+
+  Left as the page wrote them: `html` is what an author types and what the
+  label says, so the mapping belongs here rather than in the content.
+*/
+const HLJS_NAMES = { html: "xml", js: "javascript", text: "plaintext" };
+
 function CodeBlock({ label, language, children, className, ...rest }) {
   const [copied, setCopied] = useState(false);
   const timer = useRef(null);
@@ -37,11 +52,12 @@ function CodeBlock({ label, language, children, className, ...rest }) {
       : { children, className };
 
   const source = String(inner.children ?? "").replace(/\n$/, "");
-  const lang =
+  const named =
     language ||
     inner.className?.match(FROM_CLASS)?.[1] ||
     className?.match(FROM_CLASS)?.[1] ||
     "text";
+  const lang = HLJS_NAMES[named] ?? named;
 
   const copy = useCallback(async () => {
     try {
@@ -70,7 +86,7 @@ function CodeBlock({ label, language, children, className, ...rest }) {
           className="code-block__copy"
           onClick={copy}
           title={copied ? "Copied" : "Copy to the clipboard"}
-          aria-label={`Copy the ${label || lang} to the clipboard`}
+          aria-label={`Copy the ${label || named} to the clipboard`}
         >
           {copied ? <CheckIcon size={16} /> : <CopyIcon size={16} />}
         </button>
