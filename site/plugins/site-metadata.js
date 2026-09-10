@@ -67,13 +67,8 @@ export default function writeSiteMetadata(outDir) {
     - /docs has no page of its own; it redirects.
     - the demo pages under /icons belong to the icon font, copied in with it.
       They are not routes of this site and nothing links to them.
-    - /about renders "This is the content! This is the sidebar!". It is a
-      placeholder, and asking Google to index it would be asking for that
-      sentence to be the site's second result.
   */
-  const paths = routes(outDir).filter(
-    (p) => p !== "/docs" && p !== "/about" && !p.startsWith("/icons/")
-  );
+  const paths = routes(outDir).filter((p) => p !== "/docs" && !p.startsWith("/icons/"));
   const stamp = new Date().toISOString().slice(0, 10);
 
   writeFileSync(`${outDir}/sitemap.xml`, sitemap(paths, stamp));

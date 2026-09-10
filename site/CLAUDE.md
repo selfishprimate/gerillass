@@ -66,7 +66,14 @@ down in September 2023. See `wiki/monorepo-plan.md`.
 ## `gtm-*` classes are triggers, not styling
 
 `gtm-hero-download`, `gtm-channels-github`, `gtm-navbar-documentation` and 24
-others are click-trigger hooks for Google Tag Manager. **Renaming or dropping
+others are click-trigger hooks for Google Tag Manager.
+
+**`gtm-navbar-installation` no longer has an element in the header.** That item
+was replaced by Support, which points at GitHub Sponsors and carries no class,
+since inventing one would give Tag Manager a name nothing is listening for. The
+class is still on the footer's Installation link, so the trigger has somewhere
+to fire from; if that link goes too, the trigger should be retired in Tag
+Manager rather than left waiting. **Renaming or dropping
 one silently breaks a trigger**, and nothing in this repository will tell you.
 Keep them when editing markup, and expect them to have drifted from their
 labels: `gtm-navbar-documentation` now sits on a link that reads "Docs".
@@ -510,10 +517,8 @@ vite-react-ssg writes the other eighty afterwards. The sitemap it replaced
 listed a single URL, dated 2020, on the `www` host the site no longer
 canonicalises to.
 
-Three kinds of path are held back from it: `/docs`, which redirects;
-the demo pages under `/icons`, which belong to the icon font and are not
-routes; and `/about`, which renders "This is the content! This is the
-sidebar!" and should not be offered to Google until it says something.
+Two kinds of path are held back from it: `/docs`, which redirects, and the demo
+pages under `/icons`, which belong to the icon font and are not routes.
 
 `llms.txt` is the library's own, copied in with its links rewritten from
 `docs.gerillass.com` to this site. That rewrite falls away when the manifest's
@@ -522,8 +527,8 @@ sidebar!" and should not be offered to Google until it says something.
 
 **Every page has its own title, description, keywords and canonical**, which is
 checkable and worth re-checking after any change here: 84 pages, 82 unique of
-each. The two that repeat are `/about`, which is a placeholder, and
-`/docs`, which carries the introduction's head because it redirects there.
+each. The one that repeats is `/docs`, which carries the
+introduction's head because it redirects there.
 
 ### Auditing the demos
 
@@ -580,6 +585,10 @@ under, so it should hold, but it has not been watched.
 ## Dormant code — do not assume it is live
 
 `src/pages/Contact` (no route), `components/Invitations/TopInvitation` (never
-imported), `components/ProductHunt` (import commented out in `Home`),
-`src/pages/About` (routed, but placeholder text in `BlogTemplate`), and
+imported), `components/ProductHunt` (import commented out in `Home`), and
 `src/assets/scss/abstract/_extends.scss` (empty, not imported).
+
+`src/pages/About` is gone, and `templates/BlogTemplate` with it since nothing
+else used it. It was routed and live, rendering "This is the content! This is
+the sidebar!" to anyone who found it. `/about` is a 301 to the home page in
+`public/_redirects`, because the URL had been answering 200 for years.

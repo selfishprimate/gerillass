@@ -41,22 +41,28 @@ class Header extends Component {
                 </Link>
               </li>
               <li>
-                {/*
-                  The documentation's landing page is the installation page, so
-                  this is an in-app link now rather than a jump to the README's
-                  anchor on GitHub. gtm-navbar-installation is a Tag Manager
-                  trigger and stays as it is.
-                */}
-                <Link className="gtm-navbar-installation" to="/docs/installation">
-                  Installation
-                </Link>
-              </li>
-              <li>
                 <Link className="gtm-navbar-playground" to="/playground">
                   Playground
                 </Link>
               </li>
-              {/* <li><Link to="/about">ABOUT</Link></li> */}
+              <li>
+                {/*
+                  Support here means sponsoring the project, which is what the
+                  repository's FUNDING.yml points at. Getting help is a page of
+                  its own under the documentation and is reached from there.
+
+                  It carries no gtm- class: every other item in this menu has a
+                  trigger that predates it, and inventing a name would give
+                  Tag Manager a class nothing in it is listening for.
+                */}
+                <a
+                  href="https://github.com/sponsors/selfishprimate"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Support
+                </a>
+              </li>
               {/* <li><Link to="/contact">CONTACT</Link></li> */}
             </ul>
 

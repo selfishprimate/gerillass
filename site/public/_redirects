@@ -1,1 +1,9 @@
+# /about was a placeholder that reached production reading "This is the
+# content! This is the sidebar!". The page is gone; the URL is not, so it
+# lands on the home page rather than on a 404.
+/about   /   301!
+/about/  /   301!
+
+# Anything with no file behind it is handed to the app, which renders its own
+# not-found page. Every real route is a file, so this is the last rule.
 /*  /index.html  200
