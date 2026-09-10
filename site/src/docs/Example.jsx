@@ -30,6 +30,14 @@ const FRAME_BASE = `
   img { max-width: 100%; }
 
   /*
+    A caption is a caption, not the picture's last row of pixels. The figure's
+    own margin is deliberately left alone -- zeroing it is what the reset-figure
+    mixin is demonstrating, and a base rule doing it first would leave that
+    demo with nothing to show.
+  */
+  figcaption { margin-top: 10px; }
+
+  /*
     The demo surface the documentation has always used. A mixin like center or
     position needs a box with a height before there is anything to see, and the
     pages being ported here mark that box \`sandbox\` with a size beside it.
