@@ -35,22 +35,28 @@ class Hero extends Component {
             so a coding agent cannot work from stale docs.
           </p>
           <div className="hero__buttons buttons">
-            <form
-              className="hero__buttons__item"
-              action={DOWNLOAD_URL}
-            >
-              <button
-                type="link"
+            {/*
+              A link, not a form. It was a <form action> around a
+              <button type="link">, which is not a button type at all -- the
+              browser reads the unknown value as submit and GETs the address.
+              It worked, and it cost two things: the markup said "submit a
+              form" for what is a link to a file, and analytics saw nothing.
+              An outbound click is measured on links leaving the domain, and a
+              form submission is not a link.
+            */}
+            <div className="hero__buttons__item">
+              <a
                 className="button button--primary button--large"
+                href={DOWNLOAD_URL}
               >
                 Download
-              </button>
-            </form>
+              </a>
+            </div>
 
             {/*
-              A link rather than a form posting somewhere: the playground is a
-              route of this site, so it opens over the page instead of loading
-              one. Sponsoring is in the header now, under Support.
+              The playground is a route of this site, so it opens over the page
+              instead of loading one. Sponsoring is in the header now, under
+              Support.
             */}
             <div className="hero__buttons__item">
               <Link

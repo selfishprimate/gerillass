@@ -84,8 +84,12 @@ function policy(hashes) {
       still look for.
     */
     "frame-ancestors 'self'",
-    // The Download button and the Slack invitation are both <form action>.
-    "form-action 'self' https://github.com https://join.slack.com",
+    /*
+      One <form action> left on the site, the Slack invitation. The Download
+      button was the other and is a link now, which is what it always was: a
+      form submission is not an outbound click and analytics never saw it.
+    */
+    "form-action 'self' https://join.slack.com",
     `script-src ${script.join(" ")}`,
     /*
       'unsafe-inline' is unavoidable here and costs little: React writes style
