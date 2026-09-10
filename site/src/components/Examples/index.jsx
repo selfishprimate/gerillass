@@ -84,7 +84,7 @@ class Examples extends Component {
                     You can set a range between two values ​​(predefined or
                     custom values will be just fine) to apply our styles.
                   </p>
-                  <CodeBlock language="scss">
+                  <CodeBlock language="scss" label="SCSS">
                     {
                       ".element {\n  @include breakpoint(small, large) {\n    background-color: red;\n  } \n}"
                     }
@@ -94,9 +94,9 @@ class Examples extends Component {
                   <p className="highlight__item__description">
                     It will generate the CSS code below..
                   </p>
-                  <CodeBlock language="scss">
+                  <CodeBlock language="css" label="CSS">
                     {
-                      "//CSS Output\n@media (min-width: 576px) and (max-width: 991px) {\n  .element {\n    background-color: red;\n  }\n}"
+                      "@media (min-width: 576px) and (max-width: 991px) {\n  .element {\n    background-color: red;\n  }\n}"
                     }
                   </CodeBlock>
                 </div>
@@ -139,7 +139,7 @@ class Examples extends Component {
                     <code>$font-family</code> and <code>$file-path</code>{" "}
                     arguments.
                   </p>
-                  <CodeBlock language="scss">
+                  <CodeBlock language="scss" label="SCSS">
                     {
                       '@include font-face("Fanwood Text", "fonts/fanwood-text/fanwood-text-regular");'
                     }
@@ -149,9 +149,9 @@ class Examples extends Component {
                   <p className="highlight__item__description">
                     It will generate the CSS code below..
                   </p>
-                  <CodeBlock language="scss">
+                  <CodeBlock language="css" label="CSS">
                     {
-                      '//CSS Output\n@font-face {\n  font-family: "Fanwood Text";\n  src: url("fonts/fanwood-text/fanwood-text-regular.eot");\n  src: url("fonts/fanwood-text/fanwood-text-regular.eot?#iefix") format("embedded-opentype"),\n       url("fonts/fanwood-text/fanwood-text-regular.woff2") format("woff2"),\n       url("fonts/fanwood-text/fanwood-text-regular.woff") format("woff"),\n       url("fonts/fanwood-text/fanwood-text-regular.ttf") format("truetype"),\n       url("fonts/fanwood-text/fanwood-text-regular.svg#FanwoodText") format("svg");\n  font-style: normal;\n  font-weight: 400;\n}'
+                      '@font-face {\n  font-family: "Fanwood Text";\n  src: url("fonts/fanwood-text/fanwood-text-regular.eot");\n  src: url("fonts/fanwood-text/fanwood-text-regular.eot?#iefix") format("embedded-opentype"),\n       url("fonts/fanwood-text/fanwood-text-regular.woff2") format("woff2"),\n       url("fonts/fanwood-text/fanwood-text-regular.woff") format("woff"),\n       url("fonts/fanwood-text/fanwood-text-regular.ttf") format("truetype"),\n       url("fonts/fanwood-text/fanwood-text-regular.svg#FanwoodText") format("svg");\n  font-style: normal;\n  font-weight: 400;\n}'
                     }
                   </CodeBlock>
                 </div>
@@ -195,17 +195,19 @@ class Examples extends Component {
                     <code>only</code>, <code>min</code>, <code>max</code> or{" "}
                     <code>between</code> values.
                   </p>
-                  <CodeBlock language="scss">
-                    {".element {\n  @include remove(min, 1200px);\n}"}
+                  <CodeBlock language="scss" label="SCSS">
+                    {
+                      ".element {\n  @include remove(min, 1200px);\n}"
+                    }
                   </CodeBlock>
                 </div>
                 <div className="highlight__item">
                   <p className="highlight__item__description">
                     It will generate the CSS code below..
                   </p>
-                  <CodeBlock language="scss">
+                  <CodeBlock language="css" label="CSS">
                     {
-                      "//CSS Output\n@media (min-width: 1200px) {\n  .element {\n    display: none;\n  } \n}"
+                      "@media (min-width: 1200px) {\n  .element {\n    display: none;\n  } \n}"
                     }
                   </CodeBlock>
                 </div>
@@ -244,7 +246,7 @@ class Examples extends Component {
                     You can exclude the items within a list based on their
                     numeric positions.
                   </p>
-                  <CodeBlock language="scss">
+                  <CodeBlock language="scss" label="SCSS">
                     {
                       ".element {\n  @include except(1, 4, 8) {\n    background-color: purple;\n  }\n}"
                     }
@@ -254,9 +256,9 @@ class Examples extends Component {
                   <p className="highlight__item__description">
                     It will generate the CSS code below..
                   </p>
-                  <CodeBlock language="scss">
+                  <CodeBlock language="css" label="CSS">
                     {
-                      "//CSS Output\n.element:not(:nth-of-type(1)):not(:nth-of-type(4)):not(:nth-of-type(8)) {\n  background-color: purple;\n}"
+                      ".element:not(:nth-of-type(1)):not(:nth-of-type(4)):not(:nth-of-type(8)) {\n  background-color: purple;\n}"
                     }
                   </CodeBlock>
                 </div>

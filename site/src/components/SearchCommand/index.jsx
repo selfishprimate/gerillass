@@ -193,7 +193,7 @@ function SearchCommand() {
                     <Command.Input
                       value={query}
                       onValueChange={setQuery}
-                      placeholder="Search mixins, functions and guides"
+                      placeholder="Search mixins, functions, and pages"
                       className="palette__input"
                       autoFocus
                     />
