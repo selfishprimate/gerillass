@@ -7,7 +7,7 @@ import Member from "./Member";
 import Arguments, { Argument } from "./Arguments";
 import Hint from "./Hint";
 import DocLink from "./DocLink";
-import { GithubIcon, EditIcon } from "components/Icons";
+import { CodeIcon, EditIcon } from "components/Icons";
 import { DocsLinksContext, useDocsLinks } from "./links";
 
 /*
@@ -79,10 +79,10 @@ function Title({ children, ...rest }) {
               href={links.source}
               target="_blank"
               rel="noopener noreferrer"
-              title="Read this member's source on GitHub"
-              aria-label="Read this member's source on GitHub"
+              title="Read this member's source"
+              aria-label="Read this member's source"
             >
-              <GithubIcon size={18} />
+              <CodeIcon size={18} />
             </a>
           ) : null}
 
