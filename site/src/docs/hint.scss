@@ -3,14 +3,13 @@
 .hint {
   margin: 0 0 1.75rem;
   padding: remify(14px) remify(18px);
-  border-left: 3px solid $eggshell;
-  border-radius: 0 remify(6px) remify(6px) 0;
+  border-radius: remify(12px);
   background: $alabaster;
 
   /*
     A shade smaller and tighter than the prose around it. A hint is an aside,
     and set at the body size with the body's rhythm it read as another
-    paragraph that happened to have a bar down its left.
+    paragraph that happened to be sitting on a tint.
   */
   font-size: remify(14px);
   line-height: 1.5;
@@ -18,7 +17,15 @@
   > :first-child { margin-top: 0; }
   > :last-child { margin-bottom: 0; }
 
-  /* Warning carries the site's accent rather than a red: the pages use it for
-     "this will catch you out", not for danger. */
-  &--warning { border-left-color: $primary-color; }
+  /*
+    The bar down the left was the only thing separating the two kinds, so
+    without it the deeper of the two surfaces does that job. $eggshell is the
+    same step up from $alabaster that a rule is from a background, which is as
+    much emphasis as this needs: the pages use "warning" for "this will catch
+    you out", not for danger, and a red would say something none of them mean.
+  */
+  &--warning,
+  &--danger {
+    background: $eggshell;
+  }
 }
