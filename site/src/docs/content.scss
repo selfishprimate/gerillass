@@ -75,11 +75,64 @@
     margin-top: 0.35rem;
   }
 
+  /*
+    The page title and, on a member's page, the way to its source.
+
+    The gap between the title and the page is on this row rather than on the
+    heading: inside a flex line an item's own bottom margin counts towards the
+    line's height, so leaving it on the title would have pushed the title up
+    against the source button instead of pushing the page down.
+  */
+  .docs-titlebar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: remify(10px) remify(20px);
+    margin-bottom: 1.5rem;
+  }
+
   /* The page title. It is an h2, because the logo in the header is the h1. */
   .docs-title {
     font-size: 2.45rem;
     line-height: 1.2;
-    margin-bottom: 1.5rem;
+    margin-bottom: 0;
+  }
+
+  /*
+    Quiet on purpose. The link it replaces was a two pixel outline around
+    fifteen pixel bold text, which made the loudest thing on the opening screen
+    a link away from the page. This is the surface a hint sits on with the rule
+    a table draws, and it only takes a colour when somebody is pointing at it.
+  */
+  .docs-source {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: remify(7px);
+    padding: remify(6px) remify(12px);
+    font-family: $secondary-font-family;
+    font-size: remify(13px);
+    font-weight: 600;
+    letter-spacing: normal;
+    color: transparentize($primary-color, 0.3);
+    background: $alabaster;
+    border: 1px solid $eggshell;
+    border-radius: remify(8px);
+    text-decoration: none;
+    transition: color $global-transition, border-color $global-transition;
+
+    i {
+      font-size: remify(15px);
+      line-height: 1;
+    }
+
+    &:hover,
+    &:focus-visible {
+      color: $accent-color;
+      border-color: $laurel;
+      text-decoration: none;
+    }
   }
 
   /*

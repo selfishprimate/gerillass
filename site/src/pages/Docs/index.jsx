@@ -2,6 +2,7 @@ import React from "react";
 
 import Breadcrumbs from "docs/Breadcrumbs";
 import DocsMdx from "docs/MdxProvider";
+import sourceHref from "docs/source";
 import useDocumentHead from "docs/useDocumentHead";
 import DocsTemplate from "templates/DocsTemplate";
 
@@ -20,7 +21,7 @@ function DocPage({ Page, frontmatter, path }) {
   return (
     <DocsTemplate>
       <Breadcrumbs path={`/${path}`} />
-      <DocsMdx>
+      <DocsMdx source={sourceHref(path.replace(/^docs\//, ""))}>
         <Page />
       </DocsMdx>
     </DocsTemplate>

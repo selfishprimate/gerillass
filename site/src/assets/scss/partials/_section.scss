@@ -44,7 +44,12 @@
     }
     &__button {}
     &__description {
-      font-size: 1rem;
-    } 
+      /*
+        A caption under a button, so it is set below the body size. At 1rem it
+        was as loud as the prose above the button and competed with the button
+        it is meant to be explaining.
+      */
+      font-size: remify(13px);
+    }
   }
 }

@@ -9,13 +9,13 @@ import "./member.scss";
 
   Not a card. This is the shape the documentation has always had: a rule under
   the title, the type on one side and the call on the other, the namespace note
-  under that, then the description as ordinary page prose and a link to the
-  source at the end. Boxing the description made the page open on a panel of
-  chrome rather than on the sentence a reader came for.
+  under that, then the description as ordinary page prose. Boxing the
+  description made the page open on a panel of chrome rather than on the
+  sentence a reader came for.
 
+  The link to the source is not here any more. It sits beside the page title,
+  in MdxProvider -- see the note there.
 */
-
-const REPO = "https://github.com/selfishprimate/gerillass/blob/main";
 
 function Member({ name, children }) {
   const member = manifest.members.find((m) => m.name === name);
@@ -55,23 +55,6 @@ function Member({ name, children }) {
       ) : null}
 
       <div className="member__description">{children}</div>
-
-      <div className="member__actions">
-        <a
-          className="member__source"
-          href={`${REPO}/${member.file}`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {/*
-            ionicons is loaded by index.html for the whole site, so the element
-            hydrates into an icon in the browser and is simply absent before
-            that rather than showing a broken one.
-          */}
-          <ion-icon name="logo-github" class="member__icon"></ion-icon>
-          <span>Github Source Code</span>
-        </a>
-      </div>
     </div>
   );
 }

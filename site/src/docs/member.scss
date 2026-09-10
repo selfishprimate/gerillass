@@ -3,8 +3,8 @@
 /*
   The opening of a member's page, in the shape the documentation has always
   used: a rule under the title with the type on one side and the call on the
-  other, the namespace note beneath it, the description as ordinary prose, and
-  a link to the source at the end.
+  other, the namespace note beneath it, and the description as ordinary prose.
+  The link to the source sits beside the page title -- see content.scss.
 */
 .member {
   margin: 0 0 3rem;
@@ -54,30 +54,5 @@
     }
 
     > :last-child { margin-bottom: 0; }
-  }
-
-  &__source {
-    display: inline-flex;
-    align-items: center;
-    gap: remify(10px);
-    padding: remify(10px) remify(18px);
-    font-family: $secondary-font-family;
-    font-size: remify(15px);
-    font-weight: 600;
-    color: $primary-color;
-    text-decoration: none;
-    border: 2px solid $primary-color;
-    border-radius: remify(8px);
-    transition: color $global-transition, border-color $global-transition;
-
-    &:hover {
-      color: $accent-color;
-      border-color: $accent-color;
-      text-decoration: none;
-    }
-  }
-
-  &__icon {
-    font-size: remify(20px);
   }
 }
