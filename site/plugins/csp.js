@@ -59,11 +59,22 @@ function policy(hashes) {
     same build served without the header produced both editors and 354
     characters of CSS, which is what identified the header as the cause.
 
-    It could be narrowed to /playground alone, since _headers takes a path per
-    block. That is not done here because two blocks both matching a request
-    may well send two Content-Security-Policy headers, and a browser given two
-    enforces both, which would put the eval block straight back. Worth an
-    experiment against Netlify rather than a guess.
+    It cannot be narrowed to /playground, and both halves of that were
+    measured rather than assumed.
+
+    The header half works. Netlify replaces a same-name header when a more
+    specific block matches, rather than sending both -- probed in production
+    with a header that changed nothing, and /docs/counter came back with the
+    general value while /playground came back with the specific one, one line
+    each.
+
+    The site is what stops it. The playground is a route of this app, not a
+    document of its own, and a policy belongs to the document that carried it.
+    Served strict at / and loose at /playground, opening /playground directly
+    gives two editors and 354 characters of CSS, while reaching the same route
+    by clicking Playground on the home page gives one editor and no compiler:
+    that document came from /, and pushState does not fetch another. The hero
+    carries that button, so it is the common way in.
   */
   const script = [
     "'self'",

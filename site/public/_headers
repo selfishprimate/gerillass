@@ -30,17 +30,6 @@
   # stop running. plugins/csp.js reads the hashes off the built file and
   # replaces the token below. It fails the build if the token is missing.
   %CSP%
-  # Temporary. Answers one question: when two blocks match the same request,
-  # does Netlify send one header or both? If both, a per-path
-  # Content-Security-Policy cannot work -- a browser given two policies
-  # enforces both, so the strict one would keep blocking what the loose one
-  # allows. Asked with a header that changes nothing rather than with the
-  # policy itself. Remove once the answer is recorded.
-  X-Csp-Test: genel
-
-# See the note above. Matches /playground, which /* already matches too.
-/playground
-  X-Csp-Test: ozel
 
 # Vite fingerprints everything under /assets, so the name changes whenever the
 # bytes do and these can be held for a year.
