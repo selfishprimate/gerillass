@@ -35,6 +35,34 @@ const GROUPS = [
   { kind: "mixin", label: "Mixins" },
   { kind: "function", label: "Utilities" },
   { kind: "guide", label: "Overview" },
+  { kind: "site", label: "Elsewhere" },
+];
+
+/*
+  Words a page should answer to that are not in its title or its summary.
+
+  "docs" and "documentation" are what people type when they want the
+  documentation, and no page is called either. The playground is not a
+  documentation page at all, so it is not in the list until somebody asks for
+  it by name: `ONLY_WHEN_SEARCHED` holds the destinations that appear once
+  there is a query and stay out of the opening list.
+*/
+const ALIASES = {
+  introduction: "docs documentation guide reference api",
+  installation: "install setup npm yarn getting started vite webpack",
+  support: "help issue bug question slack discussions",
+  license: "apache legal copyright",
+};
+
+const ONLY_WHEN_SEARCHED = [
+  {
+    slug: "playground",
+    kind: "site",
+    title: "Playground",
+    href: "/playground",
+    summary: "Write Sass against the library and watch the CSS compile.",
+    alias: "editor try sandbox repl",
+  },
 ];
 
 function matches(page, needle) {
@@ -43,7 +71,8 @@ function matches(page, needle) {
     page.title.toLowerCase().includes(needle) ||
     (page.member && page.member.toLowerCase().includes(needle)) ||
     page.slug.includes(needle) ||
-    (page.summary && page.summary.toLowerCase().includes(needle))
+    (page.summary && page.summary.toLowerCase().includes(needle)) ||
+    (ALIASES[page.slug] ?? page.alias ?? "").includes(needle)
   );
 }
 
@@ -88,7 +117,12 @@ function SearchCommand() {
   const needle = query.trim().toLowerCase();
   const groups = GROUPS.map(({ kind, label }) => ({
     label,
-    items: pages.filter((page) => page.kind === kind && matches(page, needle)),
+    items:
+      kind === "site"
+        ? needle
+          ? ONLY_WHEN_SEARCHED.filter((page) => matches(page, needle))
+          : []
+        : pages.filter((page) => page.kind === kind && matches(page, needle)),
   })).filter((group) => group.items.length);
 
   const nothing = !groups.length;
@@ -169,7 +203,9 @@ function SearchCommand() {
                           title, so typing clearUnit finds the page called Clear
                           Unit. cmdk matches on this string.
                         */
-                        value={`${page.title} ${page.member ?? ""} ${page.slug}`}
+                        value={`${page.title} ${page.member ?? ""} ${page.slug} ${
+                          ALIASES[page.slug] ?? page.alias ?? ""
+                        }`}
                         onSelect={() => go(page.href)}
                         className="palette__item"
                       >

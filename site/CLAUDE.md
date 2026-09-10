@@ -601,8 +601,13 @@ so `grad` finds `background-image` for the filter it can lay over one.
 It lists mixins first: fifty-three of them against twenty-three functions and
 four guides, and a mixin is what somebody opening a search box here is looking
 for. The guides are on every page in the sidebar, so they sit at the bottom.
-The site's own routes are not in it at all; the header and the hero are two
-clicks closer.
+
+Two things make words work that no page is called. `ALIASES` gives the guides
+the terms people actually type, so "docs" and "documentation" reach the
+introduction and "npm" reaches installation. `ONLY_WHEN_SEARCHED` holds
+destinations that appear once there is a query and stay out of the opening
+list, which is where the playground lives: it is not a documentation page, but
+somebody typing its name should not be told there is nothing.
 
 **The trigger is a menu item, not a box.** It takes its size, weight and colour
 from `header.scss` along with the links beside it, and the icon is the only
