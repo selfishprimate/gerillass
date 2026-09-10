@@ -45,6 +45,21 @@ export const routes = [
       */
       { path: "docs", element: <Navigate to="/docs/introduction" replace /> },
       ...docsRoutes,
+      /*
+        Two entries for the same page, and both are needed.
+
+        The named one is what the static build writes out, as dist/404.html.
+        Netlify serves that file, with a 404 status, for any address it has no
+        file for -- which is what a crawler has to be told. Before this the
+        catch-all in _redirects answered every wrong address with the home page
+        at status 200, so a mistyped URL looked like a real page to Google.
+        That matters most right now: the documentation is changing address and
+        every stale link lands on it.
+
+        The wildcard is for the browser, once the app is running: a link to
+        nothing inside the app never asks the server.
+      */
+      { path: "404", element: <NotFound /> },
       { path: "*", element: <NotFound /> },
     ],
   },

@@ -66,9 +66,13 @@ export default function writeSiteMetadata(outDir) {
 
     - /docs has no page of its own; it redirects.
     - the demo pages under /icons belong to the icon font, copied in with it.
+    - /404 is a page the server hands back when there is nothing to hand back,
+      so listing it would be inviting a crawler to index the absence of pages.
       They are not routes of this site and nothing links to them.
   */
-  const paths = routes(outDir).filter((p) => p !== "/docs" && !p.startsWith("/icons/"));
+  const paths = routes(outDir).filter(
+    (p) => p !== "/docs" && p !== "/404" && !p.startsWith("/icons/")
+  );
   const stamp = new Date().toISOString().slice(0, 10);
 
   writeFileSync(`${outDir}/sitemap.xml`, sitemap(paths, stamp));

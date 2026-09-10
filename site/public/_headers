@@ -1,0 +1,39 @@
+# Response headers.
+#
+# These live here rather than in netlify.toml, where they were written first
+# and where they were silently ignored: the site builds from a base directory,
+# and the [[headers]] blocks in the repository's root netlify.toml never
+# reached production -- checked against the live site, which came back with
+# Netlify's defaults on every path. `_redirects` ships from public/ and works,
+# so the headers ship the same way.
+
+/*
+  # Two years, subdomains included: docs.gerillass.com serves over HTTPS
+  # already. `preload` is left off on purpose -- getting off that list takes
+  # months, so it is its own decision.
+  Strict-Transport-Security: max-age=63072000; includeSubDomains
+  # Take the Content-Type at its word rather than sniffing the bytes.
+  X-Content-Type-Options: nosniff
+  # SAMEORIGIN rather than DENY: the documentation renders its examples in
+  # iframes. Those are srcdoc rather than page loads, so DENY would not break
+  # them today, but a demo that ever points at a real URL should not fail on a
+  # header nobody remembers setting.
+  X-Frame-Options: SAMEORIGIN
+  # The full URL to same-origin destinations, the origin alone to others: a
+  # documentation path carries a member name, which no third party needs.
+  Referrer-Policy: strict-origin-when-cross-origin
+  # None of these are used, and saying so stops an embedded frame asking.
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
+
+# Vite fingerprints everything under /assets, so the name changes whenever the
+# bytes do and these can be held for a year.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# public/ is versioned by hand rather than by the build, so a week: long enough
+# to be worth caching, short enough that replacing one reaches people.
+/fonts/*
+  Cache-Control: public, max-age=604800
+
+/images/*
+  Cache-Control: public, max-age=604800

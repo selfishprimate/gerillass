@@ -65,6 +65,21 @@ function read(slug) {
 }
 
 export default function docsHead(route, html) {
+  /*
+    The not-found page takes index.html's head like any other generated file,
+    and that head says the page is canonical to the home page -- which would
+    tell a crawler that every wrong address on the site is the home page. It
+    gets neither a canonical nor a place in an index instead.
+  */
+  if (normalise(route) === "/404") {
+    return html
+      .replace(/<link\b[^>]*rel=["']canonical["'][^>]*>\s*/i, "")
+      .replace(
+        "</head>",
+        '  <meta name="robots" content="noindex">\n  </head>'
+      );
+  }
+
   const frontmatter = frontmatterFor(route);
   if (!frontmatter?.page_title) return html;
 

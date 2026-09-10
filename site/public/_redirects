@@ -4,6 +4,12 @@
 /about   /   301!
 /about/  /   301!
 
-# Anything with no file behind it is handed to the app, which renders its own
-# not-found page. Every real route is a file, so this is the last rule.
-/*  /index.html  200
+# Anything with no file behind it gets the not-found page, with a not-found
+# status. Every real route is a file the build wrote, so nothing legitimate
+# reaches this rule.
+#
+# It used to serve /index.html at 200, which meant a mistyped address answered
+# with the home page and told a crawler it was a real page. With the
+# documentation changing address, that would have turned every stale link into
+# a duplicate of the home page.
+/*  /404.html  404
