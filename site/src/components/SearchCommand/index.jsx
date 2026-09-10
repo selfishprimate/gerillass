@@ -4,11 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { Command } from "cmdk";
 
-import {
-  SearchIcon,
-  ArrowUpDownIcon,
-  CornerDownLeftIcon,
-} from "components/Icons";
+import { SearchIcon } from "components/Icons";
 import { pages } from "virtual:docs-index";
 import { SCRIM_MOTION, DIALOG_MOTION } from "animation";
 
@@ -247,25 +243,6 @@ function SearchCommand() {
                       </Command.Group>
                     ))}
                   </Command.List>
-
-                  <div className="palette__footer">
-                    <span>
-                      <kbd>
-                        <ArrowUpDownIcon size={12} />
-                      </kbd>
-                      to navigate
-                    </span>
-                    <span>
-                      <kbd>
-                        <CornerDownLeftIcon size={12} />
-                      </kbd>
-                      to open
-                    </span>
-                    <span>
-                      <kbd>Esc</kbd>
-                      to close
-                    </span>
-                  </div>
                 </MotionCommand>
               </motion.div>
             ) : null}
