@@ -1,0 +1,72 @@
+@import "assets/scss/abstract";
+
+/*
+  Centred and short. There is nothing to read here beyond the fact that the
+  address is wrong and the two places worth going instead, so the page is sized
+  to that rather than padded out to look like a page.
+*/
+.not-found {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: remify(80px) 0 remify(120px);
+
+  &__code {
+    font-family: $primary-font-family;
+    font-size: remify(96px);
+    line-height: 1;
+    margin: 0 0 remify(8px);
+    color: $eggshell;
+  }
+
+  &__title {
+    font-family: $primary-font-family;
+    font-size: remify(34px);
+    line-height: 1.2;
+    margin: 0 0 remify(16px);
+  }
+
+  &__lede {
+    max-width: remify(520px);
+    margin: 0 0 remify(36px);
+    font-size: remify(17px);
+    line-height: 1.6;
+    color: $granite-green;
+
+    code {
+      font-family: $tertiary-font-family;
+      font-size: 0.9em;
+    }
+  }
+
+  &__ways {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: remify(16px);
+    margin-bottom: remify(36px);
+
+    .button { width: auto; }
+  }
+
+  &__hint {
+    margin: 0;
+    font-size: remify(14px);
+    color: $artichoke;
+
+    kbd {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: remify(22px);
+      height: remify(22px);
+      padding: 0 remify(6px);
+      font-family: $tertiary-font-family;
+      font-size: remify(11.5px);
+      color: $primary-color;
+      background: $eggshell;
+      border-radius: remify(5px);
+    }
+  }
+}

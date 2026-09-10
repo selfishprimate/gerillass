@@ -1,4 +1,10 @@
 User-agent: *
 Allow: /
 
+# The icon font's own demo pages, shipped with the font rather than written
+# for this site: no title, no description, no way back. They are not in the
+# sitemap, which keeps them off the list Google is handed but not out of a
+# crawl that finds them another way.
+Disallow: /icons/
+
 Sitemap: https://gerillass.com/sitemap.xml
