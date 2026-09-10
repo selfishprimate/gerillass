@@ -404,9 +404,15 @@ the inner `.docs-layout__sidebar` is what sticks and scrolls. Its
 and the page when the page is the shorter of the two. Without that second one a
 long list spills out of a short page and over the footer.
 
-The catalogue sits behind two tabs, Mixins and Utilities, because 53 above 23
-put the second group below the fold of the list. The tab follows the page, so
-arriving at a function's page opens Utilities.
+The list is three labelled groups: Overview, then Mixins, then Utilities.
+
+**Watch for prose rules reaching into components.** `content.scss` styles the
+documentation's own prose, and three of its rules had to be narrowed to
+`:not([class])` after they were found inside components: the link underline was
+drawing through the source button's label, the list padding was indenting the
+breadcrumb trail past the title, and `li + li { margin-top }` was pushing every
+crumb but the first down half its height. A list or a link that carries a class
+belongs to a component and brings its own layout.
 
 The sidebar reads `virtual:docs-index`, a module `plugins/docs-index.js`
 builds: it takes the title from each page's front matter and the kind and

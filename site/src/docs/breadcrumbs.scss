@@ -6,13 +6,13 @@
   positioned against it.
 */
 .breadcrumbs {
-  margin-bottom: remify(20px);
+  margin-bottom: remify(34px);
 
   &__list {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: remify(10px);
+    gap: remify(5px);
     margin: 0;
     padding: 0;
     list-style: none;
@@ -24,15 +24,30 @@
     color: rgba($primary-color, 0.55);
   }
 
-  &__item {
-    display: inline-flex;
-    align-items: center;
-  }
-
+  /*
+    One height for every crumb and every chevron, so they centre against each
+    other rather than each finding its own middle. Left to themselves the
+    crumb carrying the icon is a pixel or two taller than the text ones and
+    sits high in the row.
+  */
+  &__item,
   &__separator {
     display: inline-flex;
     align-items: center;
+    height: remify(16px);
+  }
+
+  &__separator {
     opacity: 0.5;
+
+    svg { display: block; }
+  }
+
+  /* The icon rides with the word, not beside the crumb. */
+  &__home {
+    display: inline-flex;
+    align-items: center;
+    gap: remify(6px);
 
     svg { display: block; }
   }

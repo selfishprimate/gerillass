@@ -62,9 +62,16 @@
       display: block;
       position: absolute;
       left: 0;
-      top: 0;
+      /*
+        Level with the main column. An absolutely positioned box is placed
+        against the padding box's edge, so at `top: 0` it started 24px above
+        the column beside it and the list's first heading sat higher than the
+        page's first line. `bottom: 0` keeps it reaching the end of the
+        content, which is what bounds the sticky box inside it.
+      */
+      top: remify(24px);
+      bottom: 0;
       width: remify(240px);
-      height: 100%;
       margin-bottom: 0;
     }
 

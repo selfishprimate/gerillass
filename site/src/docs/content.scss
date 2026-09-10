@@ -49,17 +49,29 @@
     which sets `list-style: none` on every list, so a list in prose here had
     none: the Related Links on sixteen pages were a stack of bare links.
   */
-  ul,
-  ol {
+  /*
+    Prose lists only, the same exclusion the links use. A list that carries a
+    class belongs to a component and brings its own layout: without it this
+    indented the breadcrumb trail past the title it sits above.
+  */
+  ul:not([class]),
+  ol:not([class]) {
     padding-left: 1.25rem;
   }
 
-  ul { list-style: disc; }
-  ol { list-style: decimal; }
+  ul:not([class]) { list-style: disc; }
+  ol:not([class]) { list-style: decimal; }
 
   li::marker { color: inherit; opacity: 0.45; }
 
-  li + li {
+  /*
+    Prose lists only, like the rules above it. This reached the breadcrumb
+    trail, where a top margin on every item but the first pushed all of them
+    down half its height relative to the first one: the icon crumb sat 2.8px
+    above the rest and nothing on the trail explained why.
+  */
+  ul:not([class]) li + li,
+  ol:not([class]) li + li {
     margin-top: 0.35rem;
   }
 

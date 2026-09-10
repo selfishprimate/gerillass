@@ -1,12 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import { ChevronRightIcon } from "components/Icons";
+import { ChevronRightIcon, HomeIcon } from "components/Icons";
 import { pages } from "virtual:docs-index";
 import "./breadcrumbs.scss";
 
 /*
-  Where the reader is: Home, then Docs, then the group, then this page.
+  Where the reader is: Home, then Docs, then this page.
 
   Built on shadcn's breadcrumb, which is the shape people expect: a chevron
   between the crumbs rather than a bullet, the trail muted and the last crumb
@@ -14,16 +14,11 @@ import "./breadcrumbs.scss";
   they align with the text on the same baseline instead of being drawn from a
   pseudo-element that has no line box of its own.
 
-  The group comes from the same place the sidebar's does, so a page cannot be
-  filed under one heading in the list and another in the trail. The last crumb
-  is not a link, since it is where you already are.
+  No group crumb between Docs and the page. Mixins and Utilities are how the
+  list beside it is divided, not steps on the way to a page: neither is a place
+  a reader can go, so a trail that named them was offering a stop that does not
+  exist.
 */
-
-const GROUPS = {
-  guide: { label: "Overview", href: "/docs/introduction" },
-  mixin: { label: "Mixins", href: null },
-  function: { label: "Utilities", href: null },
-};
 
 function Separator() {
   return (
@@ -37,14 +32,13 @@ function Breadcrumbs({ path }) {
   const page = pages.find((p) => p.href === path);
   if (!page) return null;
 
-  const group = GROUPS[page.kind];
-
   return (
     <nav className="breadcrumbs" aria-label="breadcrumb">
       <ol className="breadcrumbs__list">
         <li className="breadcrumbs__item">
-          <Link className="breadcrumbs__link" to="/">
-            Home
+          <Link className="breadcrumbs__link breadcrumbs__home" to="/">
+            <HomeIcon size={14} />
+            <span>Home</span>
           </Link>
         </li>
         <Separator />
@@ -53,20 +47,6 @@ function Breadcrumbs({ path }) {
             Docs
           </Link>
         </li>
-        {group ? (
-          <>
-            <Separator />
-            <li className="breadcrumbs__item">
-              {group.href ? (
-                <Link className="breadcrumbs__link" to={group.href}>
-                  {group.label}
-                </Link>
-              ) : (
-                group.label
-              )}
-            </li>
-          </>
-        ) : null}
         <Separator />
         <li className="breadcrumbs__item">
           <span className="breadcrumbs__current" aria-current="page">
