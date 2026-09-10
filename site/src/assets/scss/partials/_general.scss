@@ -32,33 +32,90 @@ body {
   background-color: $sage;
 }
 
+/*
+  How far the camouflage reaches: everywhere except a band at each end of the
+  document. Nothing can paint outside the document, so the colour behind an
+  overscroll bounce is the flat one on `html`, and a drawing that simply
+  stopped at the edge would be a cut. 72px is enough to land on that colour
+  without keeping the pattern off the top of the page, which is the part a
+  reader opens on.
+*/
+$camo-fade: 72px;
+$camo-mask: linear-gradient(
+  to bottom,
+  transparent 0,
+  #000 $camo-fade,
+  #000 calc(100% - #{$camo-fade}),
+  transparent 100%
+);
+
 html {
   letter-spacing: 0.33px;
   scroll-behavior: smooth;
   background-color: #888d80;
-  &::after {
-    content: "";
-    @include position;
-    /*
-      farthest-side, not the default farthest-corner, and the difference only
-      shows when somebody overscrolls.
+  /*
+    Camouflage on the ground, which is the one figure of speech this site's
+    ninja has been making since the logo.
 
-      The gradient is painted across the document; the colour behind the bounce
-      at the top of a page is the flat one on `html`, because nothing can paint
-      outside the document. So the two agree only where the gradient has
-      already reached its own outer colour by the time it gets to the top edge.
-      Sized to the farthest corner it had not: on a page under about 1.33 times
-      the viewport wide -- /docs/license is 1828px at 1440 -- the top edge was
-      still a shade lighter, and pulling the page down showed the seam. Sized
-      to the farthest side, the stop lands at 80% of half the page's height on
-      any page taller than it is wide, so the top and bottom edges are the flat
-      colour exactly and there is nothing to see.
+    There used to be a radial light under this, brightening the middle of the
+    page. With a drawing over it the two were saying different things in the
+    same place, and the flat colour turned out to be the better ground: the
+    pattern is the only thing happening back there now.
 
-      It costs the long pages nothing: on the home page the bright centre
-      reaches 1866px instead of 1952.
-    */
-    @include radial-gradient("circle farthest-side", center, #bfc1a4 (#888d80 80%));
-    z-index: 0;
+    The @supports is the seam rule: without mask support the drawing would run
+    to the edges and cut against the colour the bounce shows, so a browser that
+    cannot mask gets the flat ground alone.
+  */
+  @supports ((mask-image: radial-gradient(#000, transparent)) or
+    (-webkit-mask-image: radial-gradient(#000, transparent))) {
+    &::after {
+      content: "";
+      @include position;
+      z-index: 0;
+
+      /*
+        A drawing rather than anything generated here. Six attempts at making
+        this in CSS failed on the same arithmetic: at the contrast this backdrop
+        wants, a patch spans two to six 8-bit levels, and spreading two levels
+        over two hundred pixels is a band every fifty. A raster carries its own
+        dithering and cannot do that.
+
+        WebP, and the difference is not marginal: 47kB against 1.2MB for the
+        same drawing, which matters here because a fixed, covering background
+        is decoded at full size and held there.
+
+        Imported rather than served from public/, so the build fingerprints the
+        filename. Under a fixed name a browser that has the old drawing keeps
+        showing it -- which is exactly what happened when this was replaced:
+        the bytes on disk, in the build and on the wire were all the new ones
+        and the page was still painting the old.
+      */
+      background-image: url("../images/camouflage.webp");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+      /*
+        Sized to the window, not to the document. The drawing does not tile --
+        measured, its top and bottom edges differ by an average of 198 of 765 --
+        so repeating it draws a line across the page, which leaves covering, and
+        covering has to be measured against something of a fixed size. Against
+        the document it would be a different scale on every page: 3.7 times on
+        the home page, 1.5 on the licence, so the same backdrop would look like
+        two different ones. Against the window it is one scale everywhere, and
+        close enough to the drawing's own size to stay sharp.
+      */
+      background-attachment: fixed;
+
+      /*
+        Barely there, and meant to be: at three percent the drawing is a
+        suggestion in the ground rather than a pattern on it, which is as far
+        as a backdrop can go before it starts asking to be looked at.
+      */
+      opacity: 0.03;
+
+      -webkit-mask-image: $camo-mask;
+      mask-image: $camo-mask;
+    }
   }
 }
 
