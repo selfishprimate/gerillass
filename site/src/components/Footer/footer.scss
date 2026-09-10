@@ -3,6 +3,23 @@
 .footer-container {
   padding: 0 2rem;
   background-color: $alabaster;
+
+  /*
+    A block formatting context, so the footer's own `margin-top: -10rem` lifts
+    the footer and not this box with it.
+
+    Without it the negative margin collapses through the top of the container
+    and the two move up together, which is what has been happening: the dark
+    footer sat flush inside the band instead of rising out of it, and the two
+    ornaments -- which are `$alabaster` blobs, the same colour as this
+    background -- were painted on the band itself and could not be seen. They
+    are meant to sit in the strip the footer rises through, against the snow
+    of `.main-wrapper`, joining the footer to the band below it.
+
+    The footer does not move: the gap above it is still 96px. What moves is
+    this box's top edge, down by the 10rem the footer was borrowing.
+  */
+  display: flow-root;
   margin-bottom: -3rem;
   // @include breakpoint(min, small) {
   //   @include border-radius(bottom, 2rem);

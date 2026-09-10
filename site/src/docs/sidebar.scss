@@ -3,29 +3,7 @@
 .docs-sidebar {
   font-family: $secondary-font-family;
 
-  &__filter {
-    width: 100%;
-    padding: remify(9px) remify(12px);
-    margin-bottom: remify(20px);
-    font: inherit;
-    font-size: remify(14px);
-    color: $primary-color;
-    background: $white;
-    border: 1px solid $eggshell;
-    border-radius: $border-radius;
-    appearance: none;
 
-    &:focus-visible {
-      outline: 2px solid $accent-color;
-      outline-offset: 1px;
-      border-color: transparent;
-    }
-  }
-
-  &__empty {
-    font-size: remify(14px);
-    opacity: 0.7;
-  }
 
   &__group { margin-bottom: remify(24px); }
 
@@ -66,15 +44,6 @@
     }
   }
 
-  &__heading {
-    font-family: $secondary-font-family;
-    font-size: remify(11px);
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    opacity: 0.5;
-    margin: 0 0 remify(8px);
-  }
 
   &__count {
     font-weight: 400;

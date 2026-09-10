@@ -60,6 +60,23 @@
     margin-bottom: 1.5rem;
   }
 
+  /*
+    The display face is for the page title and nothing else.
+
+    Globally every heading level is set in it, which suits a landing page of
+    six sections. A reference page has a heading every few paragraphs, and at
+    that density the display face stops marking anything: the body face at a
+    larger size and a heavier weight separates the sections without the page
+    turning into a poster.
+  */
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: $secondary-font-family;
+    font-weight: 600;
+  }
+
   h3 {
     font-size: 1.45rem;
     line-height: 1.3;

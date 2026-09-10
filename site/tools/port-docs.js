@@ -331,10 +331,35 @@ function example(block, stated, notes, className, pageStyles = [], setup = null)
     .join("\n")
     .replace(
       /\{\{<\s*sandbox\s*(.*?)\s*>\}\}[\s\S]*?\{\{<\s*\/\s*sandbox\s*>\}\}/g,
-      (_, raw) => {
+      (whole, raw) => {
         const size = attrs(raw).out.class || "";
         const names = [target, "sandbox", size].filter(Boolean).join(" ");
-        return `<div class="${names}"></div>`;
+
+        /*
+          Not every declaration in there is a copy of the mixin's output. The
+          scissors demo carries `background-color: #5bc0bb` beside the
+          `clip-path`, and the mixin emits only the clip: dropping the lot left
+          a correctly clipped box with no colour in it, which is to say
+          nothing at all.
+
+          So each declaration is checked against the CSS the page states the
+          example produces. What the mixin emits is dropped, because the demo
+          should be painted by the compiled stylesheet; what it does not emit
+          is the demo's own presentation and is kept.
+        */
+        const stated = css ? css.code : "";
+        const own = whole
+          .replace(/\{\{<[^>]*>\}\}/g, "")
+          .split(";")
+          .map((d) => d.trim())
+          .filter(Boolean)
+          .filter((d) => {
+            const property = d.split(":")[0].trim().replace(/^-(webkit|moz|ms|o)-/, "");
+            return !new RegExp(`(^|[{;\\s])-?(webkit-|moz-|ms-|o-)?${property}\\s*:`).test(stated);
+          });
+
+        const style = own.length ? ` style="${own.join("; ")}"` : "";
+        return `<div class="${names}"${style}></div>`;
       }
     );
   const styles = [...markup.matchAll(/<style>([\s\S]*?)<\/style>/gi)].map((m) => m[1]);

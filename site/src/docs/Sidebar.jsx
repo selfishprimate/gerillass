@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 import { pages } from "virtual:docs-index";
@@ -13,12 +13,6 @@ import "./sidebar.scss";
   gains a page appears here and one that loses its page disappears. The old
   site kept this as a hand-maintained menu file, which is the same shape of
   problem as the playground's member menu, three mixins short since 2.1.0.
-
-  A filter rather than a search index. Seventy-seven titles are already in
-  memory and the thing a reader is doing is finding a name they half remember,
-  which matching on a substring answers. It searches the member name as well as
-  the title: somebody looking for clearUnit should not have to know the page is
-  called Clear Unit.
 */
 
 const TABS = [
@@ -28,8 +22,6 @@ const TABS = [
 
 function Sidebar({ onNavigate }) {
   const { pathname } = useLocation();
-  const [query, setQuery] = useState("");
-
   const current = pages.find((p) => pathname === p.href || pathname === `${p.href}/`);
 
   /*
@@ -42,31 +34,12 @@ function Sidebar({ onNavigate }) {
     if (current && current.kind !== "guide") setTab(current.kind);
   }, [current]);
 
-  const matching = useMemo(() => {
-    const needle = query.trim().toLowerCase();
-    if (!needle) return pages;
-    return pages.filter(
-      (p) =>
-        p.title.toLowerCase().includes(needle) ||
-        (p.member && p.member.toLowerCase().includes(needle)) ||
-        p.slug.includes(needle)
-    );
-  }, [query]);
-
-  const guides = matching.filter((p) => p.kind === "guide");
-  const counts = {
-    mixin: matching.filter((p) => p.kind === "mixin").length,
-    function: matching.filter((p) => p.kind === "function").length,
-  };
-
   /*
-    A filter that matches nothing in the open tab opens the other one. Typing
-    "validate" with Mixins showing otherwise leaves a reader looking at an
-    empty list while four matches sit one unnoticed click away.
+    No heading over the guides. There is one of them, and a label above a list
+    of one names nothing the row below it does not.
   */
-  const other = tab === "mixin" ? "function" : "mixin";
-  const active = counts[tab] === 0 && counts[other] > 0 ? other : tab;
-  const listed = matching.filter((p) => p.kind === active);
+  const guides = pages.filter((p) => p.kind === "guide");
+  const listed = pages.filter((p) => p.kind === tab);
 
   const item = (page) => {
     const to = page.href;
@@ -87,47 +60,31 @@ function Sidebar({ onNavigate }) {
 
   return (
     <nav className="docs-sidebar" aria-label="Documentation">
-      <input
-        className="docs-sidebar__filter"
-        type="search"
-        value={query}
-        onChange={(event) => setQuery(event.target.value)}
-        placeholder={`Filter ${pages.length} pages`}
-        aria-label="Filter the documentation"
-      />
-
       {guides.length ? (
         <div className="docs-sidebar__group">
-          <h2 className="docs-sidebar__heading">Getting Started</h2>
           <ul className="docs-sidebar__list">{guides.map(item)}</ul>
         </div>
       ) : null}
 
       <div className="docs-sidebar__tabs" role="tablist" aria-label="Catalogue">
-        {TABS.map(({ kind, label }) => {
-          const count = counts[kind];
-          return (
-            <button
-              key={kind}
-              type="button"
-              role="tab"
-              aria-selected={active === kind}
-              className={`docs-sidebar__tab${active === kind ? " is-active" : ""}`}
-              onClick={() => setTab(kind)}
-            >
-              {label} <span className="docs-sidebar__count">({count})</span>
-            </button>
-          );
-        })}
+        {TABS.map(({ kind, label }) => (
+          <button
+            key={kind}
+            type="button"
+            role="tab"
+            aria-selected={tab === kind}
+            className={`docs-sidebar__tab${tab === kind ? " is-active" : ""}`}
+            onClick={() => setTab(kind)}
+          >
+            {label}{" "}
+            <span className="docs-sidebar__count">
+              ({pages.filter((p) => p.kind === kind).length})
+            </span>
+          </button>
+        ))}
       </div>
 
-      {listed.length ? (
-        <ul className="docs-sidebar__list">{listed.map(item)}</ul>
-      ) : (
-        <p className="docs-sidebar__empty">
-          {query ? `Nothing here matches “${query}”.` : "Nothing to list."}
-        </p>
-      )}
+      <ul className="docs-sidebar__list">{listed.map(item)}</ul>
     </nav>
   );
 }

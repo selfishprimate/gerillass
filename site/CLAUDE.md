@@ -214,6 +214,23 @@ as a different site. The landing page also reaches the same `<pre>` through
 `.highlight pre`, a descendant selector that the component's wrapper does not
 come between, and it sets the same values, so it is unchanged.
 
+**The footer rises out of its container, and that needs a block formatting
+context.** `.footer` sets `margin-top: -10rem`; without `display: flow-root` on
+`.footer-container` that margin collapses through the container's top and the
+two move up together, which is what was happening. The two ornaments are
+`$alabaster` blobs, the same colour as the container's background, so painted
+on the container they cannot be seen: they are meant to sit in the strip the
+footer rises through, against the snow of `.main-wrapper`. The footer itself
+does not move; the container's top edge does.
+
+**A `sandbox` demo keeps the declarations the mixin does not emit.** The
+scissors demo carried `background-color: #5bc0bb` beside the `clip-path`, and
+the mixin emits only the clip, so dropping the lot left a correctly clipped box
+with no colour in it. Each declaration is checked against the CSS the page
+states the example produces: what the mixin emits goes, since the demo should
+be painted by the compiled stylesheet, and what it does not emit is the demo's
+own presentation and stays.
+
 **The `!important` in `code-block.scss` is load-bearing.**
 react-syntax-highlighter writes the theme's padding, size and background as
 *inline styles* on the `<pre>`, and an inline style beats a stylesheet. A rule
@@ -359,8 +376,7 @@ long list spills out of a short page and over the footer.
 
 The catalogue sits behind two tabs, Mixins and Utilities, because 53 above 23
 put the second group below the fold of the list. The tab follows the page, so
-arriving at a function's page opens Utilities; a filter that matches nothing in
-the open tab opens the other one.
+arriving at a function's page opens Utilities.
 
 The sidebar reads `virtual:docs-index`, a module `plugins/docs-index.js`
 builds: it takes the title from each page's front matter and the kind and
