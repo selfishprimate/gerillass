@@ -68,10 +68,13 @@ export default defineConfig({
     /*
       One copy of each of these, or a context provider and its consumer end up
       in different module instances and the consumer silently sees no provider.
-      react-helmet-async is the one that showed it: <Head> rendered, threw
-      nothing, and the document kept index.html's title.
+
+      react-helmet-async is the one that showed it -- <Head> rendered, threw
+      nothing, and the document kept index.html's title -- and it is not a
+      dependency any more, so naming it here was pointing at a package that is
+      not installed. The head is written by src/docs/head.js now.
     */
-    dedupe: ["react", "react-dom", "react-helmet-async", "react-router-dom"],
+    dedupe: ["react", "react-dom", "react-router-dom"],
     alias: readdirSync(SRC).map((entry) => ({
       find: new RegExp(`^${entry.replace(/\.jsx?$/, "")}(?=/|$)`),
       replacement: join(SRC, entry.replace(/\.jsx?$/, "")),
