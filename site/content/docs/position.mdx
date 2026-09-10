@@ -28,21 +28,32 @@ The **Position Sass mixin** provides a one-line method to quickly set both the p
   @include position;
 }
 ```
+```html
+<div style="position: relative; height: 160px; background: #eef2f3; border-radius: 6px">
+  <div class="element" style="background: #5bc0bb"></div>
+</div>
+```
 </Example>
 
-<Example caption="Now let's set the position value to `fixed` and leave the offset values as they are.">
+<Example caption="Now let's set the position value to `fixed` and leave the offset values as they are." height={180}>
 ```scss
 .element{
   @include position(fixed);
 }
 ```
+```html
+<div class="element" style="background: #5bc0bb"></div>
+```
 </Example>
 
-<Example caption="Changing the offset values is easy. Note that multiple offset values must be separated by a space.">
+<Example caption="Changing the offset values is easy. Note that multiple offset values must be separated by a space." height={180}>
 ```scss
 .element{
   @include position(fixed, 10px 10px 10px 50px);
 }
+```
+```html
+<div class="element" style="background: #5bc0bb"></div>
 ```
 </Example>
 
@@ -51,6 +62,11 @@ The **Position Sass mixin** provides a one-line method to quickly set both the p
 .element{
   @include position(absolute, null 16px 16px 16px);
 }
+```
+```html
+<div style="position: relative; height: 160px; background: #eef2f3; border-radius: 6px">
+  <div class="element" style="height: 48px; background: #5bc0bb"></div>
+</div>
 ```
 </Example>
 

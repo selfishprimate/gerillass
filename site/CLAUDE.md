@@ -524,6 +524,27 @@ spliced into the middle of a `srcdoc` attribute. Written as `&#36;` the sequence
 never forms. Worth remembering for Sass examples, where `$variable` sits next to
 `&` more often than you would like.
 
+### Which pages still have no demo
+
+160 of the 239 examples render one. Twelve mixins still show none, and the
+reason differs:
+
+- **A viewport is the subject.** `breakpoint`, `smartphone`, `tablet`,
+  `screen-agent` and `remove` all turn on how wide the window is, and a demo
+  frame is a fixed width. `remove` is worse: a working demo of it is an empty
+  box.
+- **The subject is a comparison.** `border-box` and `antialias` change one box
+  in a way that only reads against an unchanged one, and building the pair
+  means writing CSS the mixin did not emit.
+- **Nothing is meant to be visible.** `hide` hides, and `container` sets
+  `container-type`, which shows nothing until a `@container` rule reads it.
+- **It needs something the frame has not got.** `font-face` wants font files,
+  `escape-to-parent` an ancestor from another part of the page, `reset-css` a
+  page to reset.
+
+None of these is a defect. They are recorded so nobody spends an afternoon
+rediscovering why.
+
 ### Not done yet
 
 No page has been read end to end for prose quality since the port; what has

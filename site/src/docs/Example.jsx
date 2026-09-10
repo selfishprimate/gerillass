@@ -72,7 +72,7 @@ const FRAME_BASE = `
   .text-shadow-container { height: 100px; display: flex; align-items: center; }
 `;
 
-function Example({ source, css, html, listing, title, caption, height = 160, interactive = false }) {
+function Example({ source, css, html, listing, title, caption, height, interactive = false }) {
   const [measured, setMeasured] = useState(null);
   const frame = useRef(null);
 
@@ -173,7 +173,14 @@ function Example({ source, css, html, listing, title, caption, height = 160, int
         <iframe
           ref={frame}
           className="example__frame"
-          style={{ height: `${measured ?? height}px` }}
+          /*
+            A stated height is a floor, not a starting point. Measuring works
+            for a demo that takes up room in the flow, and a `position: fixed`
+            element takes up none: the body's scrollHeight is its padding, and
+            the frame shrank to 32px around an element that filled it. A page
+            demonstrating that says how tall the frame should be.
+          */
+          style={{ height: `${Math.max(measured ?? 160, height ?? 0)}px` }}
           title={title ? `${title}, rendered` : "Rendered example"}
           /*
             Scripts are off unless a demo asks for them. Only one kind does --

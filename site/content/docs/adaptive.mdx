@@ -39,6 +39,9 @@ The **Adaptive Sass mixin** gives you the fastest and most consistent way to app
   @include adaptive;
 }
 ```
+```html
+<div class="main-container" style="background: #5bc0bb; color: white; padding: 16px">Centred, with a max-width that steps up at every breakpoint.</div>
+```
 </Example>
 
 <Example caption="Try passing a value with an `em` unit. You can use any length unit here, so `px`, `em`, `rem`, and percentages all work.">
@@ -46,6 +49,9 @@ The **Adaptive Sass mixin** gives you the fastest and most consistent way to app
 .main-container{
   @include adaptive(2em);
 }
+```
+```html
+<div class="main-container" style="background: #5bc0bb; color: white; padding: 16px">The gutter keeps this much room from each edge on a narrow screen.</div>
 ```
 </Example>
 

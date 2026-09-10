@@ -23,6 +23,10 @@ input{
   }
 }
 ```
+```html
+<input type="text" placeholder="Empty, so the placeholder shows" style="width: 100%; margin-bottom: 8px" />
+<input type="text" value="Typed in, so it does not" style="width: 100%" />
+```
 </Example>
 
 <Example caption="When you call the mixin at the root of your stylesheet, it targets all the `<input>` and `<textarea>` elements.">
@@ -30,6 +34,10 @@ input{
 @include placeholder-shown{
   background-color: yellow;
 }
+```
+```html
+<input type="text" placeholder="Empty" style="width: 100%; margin-bottom: 8px" />
+<textarea placeholder="Also empty" rows="2" style="width: 100%"></textarea>
 ```
 </Example>
 

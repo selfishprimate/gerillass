@@ -27,6 +27,11 @@ The **All Text Inputs** Sass mixin helps you target all the text-based HTML inpu
   background-color: #e6e6e6;
 }
 ```
+```html
+<input type="text" placeholder="A text input" style="width: 100%; margin-bottom: 8px" />
+<input type="email" placeholder="An email input" style="width: 100%; margin-bottom: 8px" />
+<textarea placeholder="And a textarea" rows="2" style="width: 100%"></textarea>
+```
 </Example>
 
 <Example caption="Let's target all the text-based HTML inputs with the **:hover** pseudo-class selector applied.">
@@ -35,6 +40,11 @@ The **All Text Inputs** Sass mixin helps you target all the text-based HTML inpu
   background-color: orange;
 }
 ```
+```html
+<input type="text" placeholder="A text input" style="width: 100%; margin-bottom: 8px" />
+<input type="email" placeholder="An email input" style="width: 100%; margin-bottom: 8px" />
+<textarea placeholder="And a textarea" rows="2" style="width: 100%"></textarea>
+```
 </Example>
 
 <Example caption="Let's target all the text-based HTML inputs with the **:focus** pseudo-class selector applied.">
@@ -42,6 +52,11 @@ The **All Text Inputs** Sass mixin helps you target all the text-based HTML inpu
 @include all-text-inputs(focus) {
   background-color: green;
 }
+```
+```html
+<input type="text" placeholder="A text input" style="width: 100%; margin-bottom: 8px" />
+<input type="email" placeholder="An email input" style="width: 100%; margin-bottom: 8px" />
+<textarea placeholder="And a textarea" rows="2" style="width: 100%"></textarea>
 ```
 </Example>
 
@@ -54,6 +69,13 @@ The **All Text Inputs** Sass mixin helps you target all the text-based HTML inpu
   };
 }
 ```
+```html
+<div class="element">
+<input type="text" placeholder="A text input" style="width: 100%; margin-bottom: 8px" />
+<input type="email" placeholder="An email input" style="width: 100%; margin-bottom: 8px" />
+<textarea placeholder="And a textarea" rows="2" style="width: 100%"></textarea>
+</div>
+```
 </Example>
 
 <Example caption="Now let's target all the text-based HTML inputs with the **:invalid** pseudo-class selector applied.">
@@ -64,6 +86,12 @@ The **All Text Inputs** Sass mixin helps you target all the text-based HTML inpu
     color: white;
   };
 }
+```
+```html
+<div class="element">
+  <input type="email" value="not-an-email-address" style="width: 100%; margin-bottom: 8px" />
+  <input type="email" value="valid@example.com" style="width: 100%" />
+</div>
 ```
 </Example>
 
@@ -76,6 +104,12 @@ The **All Text Inputs** Sass mixin helps you target all the text-based HTML inpu
   };
 }
 ```
+```html
+<div class="element">
+  <input type="text" placeholder="Required" required style="width: 100%; margin-bottom: 8px" />
+  <input type="text" placeholder="Optional" style="width: 100%" />
+</div>
+```
 </Example>
 
 <Example caption="Now let's try it with the **:disabled** pseudo-class selector applied.">
@@ -87,6 +121,12 @@ The **All Text Inputs** Sass mixin helps you target all the text-based HTML inpu
   };
 }
 ```
+```html
+<div class="element">
+  <input type="text" value="Disabled" disabled style="width: 100%; margin-bottom: 8px" />
+  <input type="text" value="Enabled" style="width: 100%" />
+</div>
+```
 </Example>
 
 <Example caption="Call the mixin inside a selector to target only the text-based input elements inside that selector.">
@@ -96,6 +136,14 @@ The **All Text Inputs** Sass mixin helps you target all the text-based HTML inpu
     background-color: green;
   }
 }
+```
+```html
+<div class="containing-element">
+<input type="text" placeholder="A text input" style="width: 100%; margin-bottom: 8px" />
+<input type="email" placeholder="An email input" style="width: 100%; margin-bottom: 8px" />
+<textarea placeholder="And a textarea" rows="2" style="width: 100%"></textarea>
+</div>
+<input type="text" placeholder="Outside it, so untouched" style="width: 100%; margin-top: 8px" />
 ```
 </Example>
 

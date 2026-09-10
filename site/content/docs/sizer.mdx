@@ -28,6 +28,9 @@ The **Sizer Sass mixin** helps you size elements with one statement (or two). Si
   @include sizer(200px);
 }
 ```
+```html
+<div class="element" style="background: #5bc0bb"></div>
+```
 </Example>
 
 <Example caption="To assign different values to the width and height properties of an element, do the following:">
@@ -36,6 +39,9 @@ The **Sizer Sass mixin** helps you size elements with one statement (or two). Si
   @include sizer(500px, 100px);
 }
 ```
+```html
+<div class="element" style="background: #5bc0bb"></div>
+```
 </Example>
 
 <Example caption="You can pass string values as well!">
@@ -43,6 +49,9 @@ The **Sizer Sass mixin** helps you size elements with one statement (or two). Si
 .element{
   @include sizer(400px, auto);
 }
+```
+```html
+<div class="element" style="background: #5bc0bb">Height comes from the content, so this box is as tall as this sentence needs it to be.</div>
 ```
 </Example>
 

@@ -28,6 +28,11 @@ The **All Buttons** Sass mixin helps you target all the HTML button elements in 
   color: white;
 }
 ```
+```html
+<button type="button">A button element</button>
+<input type="submit" value="A submit input" />
+<input type="reset" value="A reset input" />
+```
 </Example>
 
 <Example caption="Now pass the `hover` value as an argument to style all the button elements when they are in the **:hover** state.">
@@ -36,6 +41,11 @@ The **All Buttons** Sass mixin helps you target all the HTML button elements in 
   background-color: crimson;
   color: white;
 }
+```
+```html
+<button type="button">A button element</button>
+<input type="submit" value="A submit input" />
+<input type="reset" value="A reset input" />
 ```
 </Example>
 
@@ -62,6 +72,10 @@ The **All Buttons** Sass mixin helps you target all the HTML button elements in 
   color: black;
 }
 ```
+```html
+<button type="button">Hover, focus and hold me</button>
+<button type="button" disabled>Disabled</button>
+```
 </Example>
 
 <Example caption="Call the mixin inside a selector to target only the button elements inside that selector.">
@@ -72,6 +86,14 @@ The **All Buttons** Sass mixin helps you target all the HTML button elements in 
     color: white;
   }
 }
+```
+```html
+<div class="containing-element">
+<button type="button">A button element</button>
+<input type="submit" value="A submit input" />
+<input type="reset" value="A reset input" />
+</div>
+<button type="button">Outside it, so untouched</button>
 ```
 </Example>
 

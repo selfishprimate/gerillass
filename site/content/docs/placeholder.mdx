@@ -23,6 +23,9 @@ The **Placeholder Sass mixin** helps you style the **placeholder text** in an `<
   }
 }
 ```
+```html
+<input class="element" type="text" placeholder="This placeholder is red" />
+```
 </Example>
 
 <Example caption="When you call the mixin at the root of your stylesheet, it targets all the `<input>` and `<textarea>` elements.">
@@ -30,6 +33,10 @@ The **Placeholder Sass mixin** helps you style the **placeholder text** in an `<
 @include placeholder{
   color: orange;
 }
+```
+```html
+<input type="text" placeholder="Every placeholder on the page" />
+<textarea placeholder="Including this one" rows="2"></textarea>
 ```
 </Example>
 
