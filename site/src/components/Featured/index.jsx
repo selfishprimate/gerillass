@@ -13,7 +13,7 @@ class Featured extends Component {
         <div className="featured__left">
           <div className="featured__author">
             <a
-              className="gtm-creator-linkedin featured__author__link linkedin"
+              className="featured__author__link linkedin"
               href="https://www.linkedin.com/in/selfishprimate/"
               target="_blank"
               rel="noopener noreferrer"
@@ -27,7 +27,6 @@ class Featured extends Component {
           <ul className="github-buttons">
             <li className="github-buttons__item star">
               <a
-                className="gtm-github-star"
                 href="https://github.com/selfishprimate/gerillass"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -38,7 +37,6 @@ class Featured extends Component {
             </li>
             <li className="github-buttons__item fork">
               <a
-                className="gtm-github-fork"
                 href="https://github.com/selfishprimate/gerillass/fork"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -49,7 +47,6 @@ class Featured extends Component {
             </li>
             <li className="github-buttons__item discussions github-buttons__item--dark">
               <a
-                className="gtm-github-fork"
                 href="https://github.com/selfishprimate/gerillass/discussions"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -60,7 +57,6 @@ class Featured extends Component {
             </li>
             {/* <li className="github-buttons__item github-buttons__item--dark">
               <a
-                className="gtm-download gtm-github-download"
                 href="https://github.com/selfishprimate/gerillass/archive/refs/tags/v1.3.3.zip"
                 target="_blank"
                 rel="noopener noreferrer"

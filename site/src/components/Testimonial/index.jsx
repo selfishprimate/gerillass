@@ -118,7 +118,7 @@ class Testimonial extends Component {
             <div className="section__cta__form">
               <a
                 href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fgerillass.com%2F&text=The%20coolest%20Sass%20toolset%20for%20the%20guerrilla%20type%20of%20CSS%20authors.%20%40gerillass%20%23gerillass%20%23sass"
-                className="section__cta__button button button--accent button--large gtm-share-on-twitter"
+                className="section__cta__button button button--accent button--large"
                 target="_blank"
                 rel="noopener noreferrer"
               >

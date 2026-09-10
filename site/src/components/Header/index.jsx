@@ -37,10 +37,9 @@ class Header extends Component {
                 {/*
                   An in-app link now that the documentation is part of this
                   site rather than a separate one, so it no longer opens a tab
-                  or reloads the app. gtm-navbar-documentation is a Google Tag
-                  Manager trigger and has to stay exactly as it is.
+                  or reloads the app.
                 */}
-                <Link className="gtm-navbar-documentation" to="/docs/introduction">
+                <Link to="/docs/introduction">
                   Docs
                 </Link>
               </li>
@@ -49,10 +48,6 @@ class Header extends Component {
                   Support here means sponsoring the project, which is what the
                   repository's FUNDING.yml points at. Getting help is a page of
                   its own under the documentation and is reached from there.
-
-                  It carries no gtm- class: every other item in this menu has a
-                  trigger that predates it, and inventing a name would give
-                  Tag Manager a class nothing in it is listening for.
                 */}
                 <a
                   href="https://github.com/sponsors/selfishprimate"
@@ -68,7 +63,6 @@ class Header extends Component {
             <ul className="navbar__nav__channels">
               <li data-tooltip="Twitter">
                 <a
-                  className="gtm-channels-twitter"
                   href="https://twitter.com/gerillass"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -79,7 +73,6 @@ class Header extends Component {
               </li>
               <li data-tooltip="Github">
                 <a
-                  className="gtm-channels-github"
                   href="https://github.com/selfishprimate/gerillass"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -90,7 +83,6 @@ class Header extends Component {
               </li>
               <li data-tooltip="Medium">
                 <a
-                  className="gtm-channels-medium"
                   href="https://medium.com/gerillass"
                   target="_blank"
                   rel="noopener noreferrer"

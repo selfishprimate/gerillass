@@ -26,25 +26,24 @@ class Footer extends Component {
               <ul className="footer__menu__list">
                 <li className="footer__menu__list__item">How to use?</li>
                 <li className="footer__menu__list__item">
-                  <Link className="gtm-navbar-documentation" to="/docs/introduction">
+                  <Link to="/docs/introduction">
                     Docs
                   </Link>
                 </li>
                 <li className="footer__menu__list__item">
-                  <Link className="gtm-navbar-installation" to="/docs/installation">
+                  <Link to="/docs/installation">
                     Installation
                   </Link>
                 </li>
                 <li className="footer__menu__list__item">
                   {/* A route rather than a page: a plain link would reload the
                       site to open a window that sits on top of it. */}
-                  <Link className="gtm-navbar-playground" to="/playground">
+                  <Link to="/playground">
                     Playground
                   </Link>
                 </li>
                 <li className="footer__menu__list__item">
                   <a
-                    className="gtm-navbar-change-log"
                     href="https://github.com/selfishprimate/gerillass/blob/master/CHANGELOG.md"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -66,7 +65,6 @@ class Footer extends Component {
                 <li className="footer__menu__list__item">Who we are?</li>
                 <li className="footer__menu__list__item">
                   <a
-                    className="gtm-creator-linkedin gtm-team-halil"
                     href="https://www.linkedin.com/in/selfishprimate/"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -76,7 +74,6 @@ class Footer extends Component {
                 </li>
                 <li className="footer__menu__list__item">
                   <a
-                    className="gtm-team-muhammed"
                     href="https://www.linkedin.com/in/muhammedmirza/"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -98,7 +95,6 @@ class Footer extends Component {
                 <li className="footer__menu__list__item">Join us!</li>
                 <li className="footer__menu__list__item">
                   <a
-                    className="gtm-channels-twitter"
                     href="https://twitter.com/gerillass"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -108,7 +104,6 @@ class Footer extends Component {
                 </li>
                 <li className="footer__menu__list__item">
                   <a
-                    className="gtm-channels-instagram"
                     href="https://www.instagram.com/sassgerillass/"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -118,7 +113,6 @@ class Footer extends Component {
                 </li>
                 <li className="footer__menu__list__item">
                   <a
-                    className="gtm-channels-slack"
                     href="https://gerillass.slack.com"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -140,7 +134,6 @@ class Footer extends Component {
                 <li className="footer__menu__list__item">Help it grow!</li>
                 <li className="footer__menu__list__item">
                   <a
-                    className="gtm-contribution-github"
                     href="https://github.com/selfishprimate/gerillass"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -150,7 +143,6 @@ class Footer extends Component {
                 </li>
                 <li className="footer__menu__list__item">
                   <a
-                    className="gtm-contribution-patreon"
                     href="https://www.patreon.com/selfishprimate"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -160,7 +152,6 @@ class Footer extends Component {
                 </li>
                 <li className="footer__menu__list__item">
                   <a
-                    className="gtm-contribution-sponsors"
                     href="https://github.com/sponsors/selfishprimate"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -170,7 +161,6 @@ class Footer extends Component {
                 </li>
                 <li className="footer__menu__list__item">
                   <a
-                    className="gtm-contribution-product-hunt"
                     href="https://www.producthunt.com/posts/gerillass"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -178,7 +168,7 @@ class Footer extends Component {
                     Product Hunt
                   </a>
                 </li>
-                {/* <li className="footer__menu__list__item"><a className="gtm-contribution-open-collective" href="https://twitter.com/selfishprimate" target="_blank" rel="noopener noreferrer">Open Collective</a></li> */}
+                {/* <li className="footer__menu__list__item"><a href="https://twitter.com/selfishprimate" target="_blank" rel="noopener noreferrer">Open Collective</a></li> */}
               </ul>
             </div>
           </div>

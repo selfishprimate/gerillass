@@ -52,31 +52,37 @@ Everything below is still true.
 
 ## `index.html` carries real behaviour
 
-Not boilerplate. It holds the SEO, Open Graph and Twitter meta, Google Tag
-Manager (`GTM-WJBLKX9`), Google Analytics (`UA-171697118-1`), Google Ads with a
-conversion snippet, Google Optimize, the Typekit stylesheet that loads Jumble,
-and the **ionicons** module script that makes `<ion-icon name="...">` render in
-`Announcement`. `public/js/script.js` is loaded and entirely commented out — an
-old hero parallax.
+Not boilerplate. It holds the SEO, Open Graph and Twitter meta, the Typekit
+stylesheet that loads Jumble, and the **ionicons** module script that makes
+`<ion-icon name="...">` render in `Announcement`.
 
-Two of those are dead and should go when the analytics are rebuilt:
-Universal Analytics stopped collecting on 1 July 2023, and Google Optimize shut
-down in September 2023. See `wiki/monorepo-plan.md`.
+## There is no analytics, on purpose
 
-## `gtm-*` classes are triggers, not styling
+The site measures nothing at the moment, and that is a decision rather than an
+oversight. What used to be here: a Tag Manager container (`GTM-WJBLKX9`),
+Universal Analytics (`UA-171697118-1`), Google Ads with a conversion that fired
+on every page load, Google Optimize, and 31 `gtm-*` classes on links that
+existed only as click-trigger hooks for that container.
 
-`gtm-hero-download`, `gtm-channels-github`, `gtm-navbar-documentation` and 24
-others are click-trigger hooks for Google Tag Manager.
+Most of it was already dead. Universal Analytics stopped collecting on 1 July
+2023 and Optimize shut down that September; the container held 28 tags and all
+of them pointed at that Analytics property. None of this could be read off the
+code -- the container had to be downloaded and disassembled to find out what
+the site measured -- which is the reason it is being rebuilt in this file
+rather than in a panel.
 
-**`gtm-navbar-installation` no longer has an element in the header.** That item
-was replaced by Support, which points at GitHub Sponsors and carries no class,
-since inventing one would give Tag Manager a name nothing is listening for. The
-class is still on the footer's Installation link, so the trigger has somewhere
-to fire from; if that link goes too, the trigger should be retired in Tag
-Manager rather than left waiting. **Renaming or dropping
-one silently breaks a trigger**, and nothing in this repository will tell you.
-Keep them when editing markup, and expect them to have drifted from their
-labels: `gtm-navbar-documentation` now sits on a link that reads "Docs".
+**Do not add tags back one at a time to see if they work.** The last attempt
+went in, could not be verified, and came out again: a hit sent by `gtag` leaves
+over `sendBeacon`, which does not appear in Resource Timing and which `gtag`
+holds its own reference to, so nothing in the browser can watch it go. From
+inside the page a working setup and a broken one look identical. Analytics'
+DebugView is the only surface that answers the question, and a `g/collect`
+request built by hand and sent with `fetch` is the way to test the property
+separately from the tag -- it returns 204 and shows up in DebugView if the
+measurement ID is live.
+
+The `gtm-*` classes are gone. If tagging comes back, it does not need them:
+event names belong in the code that fires them.
 
 ## Announcing a release
 
@@ -393,7 +399,7 @@ heading in the list and another in the trail.
 That also separated the header's two links, which had both been pointing at
 `/docs`: Docs goes to the introduction, Installation to the installation page. It is what the header's `Docs` link now points at, as an in-app
 `<Link>`, since the documentation is part of this site rather than a separate
-one. **`gtm-navbar-documentation` is still on that link** and must stay.
+one.
 
 The installation page follows the README and the old Getting Started page,
 minus what had gone stale in both: the LibSass note from 1.3.0 and the eyeglass warning, whose

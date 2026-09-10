@@ -267,7 +267,7 @@ class Supporters extends Component {
 
         <p className="supporters__stats">
           <a
-            className="supporters__stats__item gtm-github-used-by"
+            className="supporters__stats__item"
             href={DEPENDENTS_URL}
             target="_blank"
             rel="noopener noreferrer"
@@ -279,7 +279,7 @@ class Supporters extends Component {
             ·
           </span>
           <a
-            className="supporters__stats__item gtm-github-stargazers"
+            className="supporters__stats__item"
             href={STARGAZERS_URL}
             target="_blank"
             rel="noopener noreferrer"

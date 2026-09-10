@@ -41,7 +41,7 @@ class Hero extends Component {
             >
               <button
                 type="link"
-                className="button button--primary button--large gtm-hero-download"
+                className="button button--primary button--large"
               >
                 Download
               </button>

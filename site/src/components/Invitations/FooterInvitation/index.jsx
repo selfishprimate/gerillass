@@ -16,7 +16,7 @@ class FooterInvitation extends Component {
             <div className="footer-invitation__right">
               <div className="section__cta">
                 <form className="section__cta__form" action="https://join.slack.com/t/gerillass/shared_invite/zt-ffn16ou9-Vur9hA6oP1GCxNd3hE6OVQ">
-                  <button type="link" className="section__cta__button button button--accent button--large gtm-join-to-slack" formTarget="_blank">Join to Slack</button>
+                  <button type="link" className="section__cta__button button button--accent button--large" formTarget="_blank">Join to Slack</button>
                 </form>
                 <p className="section__cta__description">JOIN OUR SLACK GROUP!</p>
               </div>
