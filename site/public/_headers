@@ -24,6 +24,12 @@
   Referrer-Policy: strict-origin-when-cross-origin
   # None of these are used, and saying so stops an embedded frame asking.
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
+  # Generated. The policy has to name the SHA-256 of each inline script in the
+  # page, and a hash kept by hand goes stale the moment one is edited, without
+  # saying so -- one of those scripts is the analytics guard, which would just
+  # stop running. plugins/csp.js reads the hashes off the built file and
+  # replaces the token below. It fails the build if the token is missing.
+  %CSP%
 
 # Vite fingerprints everything under /assets, so the name changes whenever the
 # bytes do and these can be held for a year.

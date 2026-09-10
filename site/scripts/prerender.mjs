@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 
 import docsHead from "../plugins/docs-head.js";
 import writeSiteMetadata from "../plugins/site-metadata.js";
+import writeCsp from "../plugins/csp.js";
 
 /*
   Static generation, in one file.
@@ -78,6 +79,13 @@ async function main() {
 
   const { adres, llms } = writeSiteMetadata(outDir);
   console.log(`sitemap.xml: ${adres} adres. llms.txt: ${llms ? "yazildi" : "kaynak yok"}.`);
+
+  /*
+    After the pages, because the policy names the hash of the inline scripts in
+    them and checks that every page carries the same ones.
+  */
+  const { hashes } = writeCsp(outDir);
+  console.log(`_headers: CSP yazildi, ${hashes} inline script hash'i.`);
 
   rmSync(ssrDir, { recursive: true, force: true });
 }
