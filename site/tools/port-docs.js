@@ -487,7 +487,14 @@ const SETUP = { loadify: "@include loadify(init);" };
   signature has always been scissors($corners). Checking the page against the
   manifest is what turned this up, and it was the only one of the 76.
 */
-const ARGUMENT_NAMES = { scissors: { "--": "$corners" } };
+const ARGUMENT_NAMES = {
+  scissors: { "--": "$corners" },
+  // Both variadic, so nothing failed the manifest check, and both pages left
+  // the reader with a row named "--" in the Name column. Each row describes a
+  // kind of value $params accepts.
+  except: { "--": "$params…" },
+  only: { "--": "$params…" },
+};
 
 const only = process.argv.includes("--page")
   ? process.argv[process.argv.indexOf("--page") + 1]

@@ -43,6 +43,33 @@ const FRAME_BASE = `
   .sandbox.xlarge { height: 300px; }
   .sandbox.xxlarge { height: 400px; }
   .sandbox.text { font-size: 3em; margin: 0; }
+
+  /*
+    The other demo furniture the old documentation carried in its own
+    stylesheet rather than on the page: the row of numbered boxes that except,
+    only and their neighbours are demonstrated on. Without it those demos are a
+    column of bare numerals, which is what they had become.
+
+    The two margins that came with these rules are left out. They separated one
+    demo from the next on a page where the demos sat inline; here each one has
+    a frame to itself and a 10rem margin only makes the frame taller.
+  */
+  .list-wrapper { display: flex; }
+  .list-wrapper .list-item {
+    flex: 1;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #eef2f3;
+    border-radius: 5px;
+  }
+  .list-wrapper .list-item:not(:last-of-type) { margin-right: 1rem; }
+  @media (min-width: 480px) {
+    .list-wrapper .list-item { height: 70px; font-size: 2em; }
+  }
+
+  .text-shadow-container { height: 100px; display: flex; align-items: center; }
 `;
 
 function Example({ source, css, html, listing, title, caption, height = 160, interactive = false }) {

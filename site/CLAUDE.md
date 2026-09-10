@@ -326,10 +326,16 @@ repository compiled: if the mixin breaks, the demo breaks and says so.
 
 An example's demo markup goes in an ```html fence, which is the one pane the
 reader never sees, and renders in the sandboxed frame beside the compiled CSS.
-Two things make those demos work and both came from the Hugo site: the
-`sandbox` sizing classes, now part of `FRAME_BASE` in `Example.jsx`, and each
-page's own `<style>` block, which is decoration for the demo boxes rather than
-a restatement of the mixin, and rides along in the same fence.
+Three things make those demos work, all of them from the Hugo site: the
+`sandbox` sizing classes and the `list-wrapper` boxes that `except`, `only` and
+their neighbours are demonstrated on, both now part of `FRAME_BASE` in
+`Example.jsx`, and each page's own `<style>` block, which is decoration for the
+demo rather than a restatement of the mixin and rides along in the same fence.
+
+The furniture the old site kept in its own stylesheet had to be carried across
+by hand, and it is easy to miss: nothing fails when it is absent, the demo just
+renders as bare markup. `except` and `only` were a column of numerals for a
+while before anyone noticed they should be a row of boxes.
 
 Per-example `<style>` blocks are dropped instead. They were hand-prefixed
 copies of the compiled output, scoped to one demo, and keeping them would let a

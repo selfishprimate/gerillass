@@ -69,7 +69,15 @@
     larger size and a heavier weight separates the sections without the page
     turning into a poster.
   */
-  h3,
+  /*
+    The display face down to h3, which is the section heading, and the body
+    face below it.
+
+    Globally every level is set in the display face, which suits a landing page
+    of six sections. Here the sections are Arguments and Examples and they
+    carry it; the levels under them are subheadings inside a section, and at
+    that density the display face stops marking anything.
+  */
   h4,
   h5,
   h6 {
