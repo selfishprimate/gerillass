@@ -77,8 +77,8 @@ async function main() {
 
   console.log(`prerender: ${yazilan} sayfa yazildi`);
 
-  const { adres, llms } = writeSiteMetadata(outDir);
-  console.log(`sitemap.xml: ${adres} adres. llms.txt: ${llms ? "yazildi" : "kaynak yok"}.`);
+  const { adres, llms, tarih } = writeSiteMetadata(outDir);
+  console.log(`sitemap.xml: ${adres} adres, lastmod ${tarih}. llms.txt: ${llms ? "yazildi" : "kaynak yok"}.`);
 
   /*
     After the pages, because the policy names the hash of the inline scripts in
