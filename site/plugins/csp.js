@@ -167,6 +167,9 @@ export default function writeCsp(outDir) {
     throw new Error(`csp: ${TOKEN} is not in public/_headers, so the policy has nowhere to go.`);
   }
 
-  writeFileSync(path, headers.replace(TOKEN, `Content-Security-Policy: ${policy(hashes)}`));
+  // A function replacement, for the same reason as scripts/prerender.mjs: a
+  // hash is base64 and carries no `$` today, but the rule is cheaper than the
+  // exception.
+  writeFileSync(path, headers.replace(TOKEN, () => `Content-Security-Policy: ${policy(hashes)}`));
   return { hashes: hashes.length };
 }

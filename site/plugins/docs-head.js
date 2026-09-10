@@ -132,5 +132,7 @@ export default function docsHead(route, html) {
     return key && replaced.has(key) ? "" : tag;
   });
 
-  return out.replace("</head>", `  ${headToHtml(head)}\n  </head>`);
+  // A function, not a string: a title or description carrying `$&` would
+  // otherwise be read as "the matched substring". See scripts/prerender.mjs.
+  return out.replace("</head>", () => `  ${headToHtml(head)}\n  </head>`);
 }

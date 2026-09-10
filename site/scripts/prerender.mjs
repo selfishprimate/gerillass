@@ -29,6 +29,9 @@ const ssrDir = join(root, ".prerender");
 
 /* The one place the two builds have to agree. */
 const ROOT_DIV = '<div id="root"></div>';
+/* The opening tag alone: after the markup goes in, ROOT_DIV is no longer there
+   to count, and the corruption this guards against injects a whole one. */
+const ROOT_OPEN = '<div id="root">';
 
 async function main() {
   console.log("prerender: istemci paketi");
@@ -68,7 +71,26 @@ async function main() {
     // A redirect route, handled at the edge rather than written as a file.
     if (markup === null) continue;
 
-    const html = docsHead(path.replace(/^\//, ""), template.replace(ROOT_DIV, `<div id="root">${markup}</div>`));
+    /*
+      The replacement is a function on purpose. As a string, String.replace
+      reads `$&` in it as "the matched substring", and the markup is a whole
+      rendered page: a documentation example containing `data-currency="$"`
+      puts a `$` against the `&` of `&quot;`, and the built file got
+      `<div id="root"></div>` spliced into the middle of an attribute. Silent,
+      and it shipped. A function replacement is never scanned for `$`.
+    */
+    const page = template.replace(ROOT_DIV, () => `<div id="root">${markup}</div>`);
+    const html = docsHead(path.replace(/^\//, ""), page);
+
+    /*
+      And checked rather than trusted, because that defect looked like a
+      corrupted page rather than a build error. One container per file, always.
+    */
+    const roots = html.split(ROOT_OPEN).length - 1;
+    if (roots !== 1) {
+      throw new Error(`prerender: ${path} icinde ${roots} adet ${ROOT_OPEN} var, 1 olmali.`);
+    }
+
     const file = join(outDir, path === "/" ? "index.html" : `${path.replace(/^\//, "")}.html`);
     mkdirSync(dirname(file), { recursive: true });
     writeFileSync(file, html, "utf8");
