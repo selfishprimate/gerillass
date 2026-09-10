@@ -58,7 +58,17 @@
       window.dataLayer = window.dataLayer || [];
       function gtag() { dataLayer.push(arguments); }
       gtag('js', new Date());
-      gtag('config', 'G-C92FKJBQ1B', { send_page_view: false });
+      /*
+        debug_mode on localhost, so events land in Analytics' DebugView while
+        the site is being worked on. DebugView is the only place that answers
+        "did the hit arrive" -- Realtime can be empty because of an internal
+        traffic filter, and the browser cannot be asked, since gtag sends over
+        sendBeacon and captures its own reference before anything can watch it.
+      */
+      gtag('config', 'G-C92FKJBQ1B', {
+        send_page_view: false,
+        debug_mode: location.hostname === 'localhost' || location.hostname === '127.0.0.1'
+      });
     </script>
 
     <link rel="canonical" href="https://gerillass.com/"/>
