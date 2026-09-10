@@ -96,10 +96,11 @@ function build() {
 
   if (undocumented.length) {
     /*
-      Printed as well as thrown. An error raised from a plugin's load hook is
-      swallowed by vite-react-ssg, which reports "An internal error occurred"
-      and nothing else -- so a guard that only throws stops the build while
-      telling whoever is looking at it that the tool is broken.
+      Printed as well as thrown. An error raised from a plugin's load hook
+      does not always reach the surface with its message intact -- the build
+      that ran before this one reported "An internal error occurred" and
+      nothing else -- so a guard that only throws risks stopping the build
+      while telling whoever is looking at it that the tool is broken.
     */
     const message =
       `${undocumented.length} member(s) in gerillass.json have no page under ` +

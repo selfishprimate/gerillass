@@ -4,8 +4,6 @@ import svgr from "vite-plugin-svgr";
 import sassExample from "./plugins/sass-example.js";
 import docsIndex from "./plugins/docs-index.js";
 import docsRedirects from "./plugins/docs-redirects.js";
-import writeSiteMetadata from "./plugins/site-metadata.js";
-import docsHead from "./plugins/docs-head.js";
 import mdx from "@mdx-js/rollup";
 import remarkFrontmatter from "remark-frontmatter";
 import remarkGfm from "remark-gfm";
@@ -94,15 +92,11 @@ export default defineConfig({
   // strictly than a bundler does. react-syntax-highlighter's ESM build imports
   // its themes without file extensions, which Node refuses, so Vite bundles it
   // for the server pass rather than handing it to Node's resolver.
-  // Each documentation route gets its own head written into the file the
-  // build generates. See plugins/docs-head.js.
-  ssgOptions: {
-    onPageRendered: (route, renderedHTML) => docsHead(route, renderedHTML),
-    onFinished: (dir) => {
-      const { adres, llms } = writeSiteMetadata(dir);
-      console.log(`sitemap.xml: ${adres} adres. llms.txt: ${llms ? "yazildi" : "kaynak yok"}.`);
-    },
-  },
+  /*
+    No ssgOptions any more. The static build is scripts/prerender.mjs, which
+    calls plugins/docs-head.js and plugins/site-metadata.js itself -- see the
+    note there for why vite-react-ssg had to go.
+  */
   ssr: { noExternal: ["react-syntax-highlighter"] },
   build: { outDir: "dist" },
 });

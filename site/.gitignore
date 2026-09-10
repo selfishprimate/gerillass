@@ -1,3 +1,4 @@
 node_modules
 dist
+.prerender
 .DS_Store

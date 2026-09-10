@@ -54,10 +54,10 @@ function sitemap(paths, stamp) {
 }
 
 /*
-  Called after the static generation has written every page, which is the only
-  moment the full list exists: as a Vite plugin this ran at the end of the
-  client build and found three files, because vite-react-ssg writes the other
-  eighty afterwards.
+  Called after the prerender has written every page, which is the only moment
+  the full list exists: as a Vite plugin this ran at the end of the client
+  build and found three files, because the pages are written afterwards. It is
+  called from scripts/prerender.mjs instead, once the last file is on disk.
 */
 export default function writeSiteMetadata(outDir) {
   /*

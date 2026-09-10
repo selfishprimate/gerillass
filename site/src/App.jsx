@@ -1,8 +1,8 @@
 import React, { Suspense, lazy } from 'react';
 import { Outlet, useLocation, useNavigationType } from 'react-router-dom';
-import { ClientOnly } from 'vite-react-ssg';
 import { MotionConfig } from 'framer-motion';
 
+import ClientOnly from 'components/ClientOnly';
 import PlaygroundCover from 'components/Playground/Cover';
 import ScrollToTop from 'components/ScrollToTop';
 import Analytics from 'components/Analytics';
