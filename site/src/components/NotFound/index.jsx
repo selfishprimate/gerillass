@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+import Announcement from "components/Announcement";
 import Header from "components/Header";
 import SiteFooter from "components/SiteFooter";
 import PageContent from "components/PageContent";
@@ -18,20 +19,38 @@ import "./not-found.scss";
   likely looking for.
 
   It is the site's own frame rather than a bare message, because a page with no
-  header is indistinguishable from a broken site.
+  header is indistinguishable from a broken site. The notice belongs to that
+  frame for the same reason, and it earns its place here twice over: a stale
+  link is one of the ways somebody arrives still expecting the 1.x API.
+
+  Passed bare rather than wrapped in `.site-top`, which is the home page's box
+  for grouping the notice with the Product Hunt badge beside it. There is
+  nothing to group with here, and the class carries no styles of its own.
 */
 function NotFound() {
   return (
     <HomeTemplate
+      top={<Announcement />}
       header={<Header />}
       content={
         <PageContent className="content not-found">
-          <p className="not-found__code">404</p>
+          {/*
+            `width` and `height` are the file's own 1142x1377. They are what
+            stops the text below jumping up the page while the PNG downloads:
+            the browser reserves the box from the ratio before a byte of the
+            image arrives.
+          */}
+          <img
+            className="not-found__mascot"
+            src="/images/mascot/scenes/where-am-i.png"
+            width="1142"
+            height="1377"
+            alt="The Gerillass ninja looking up from an open map, asking where am I."
+          />
           <h2 className="not-found__title">This page moved, or never existed.</h2>
           <p className="not-found__lede">
-            The documentation used to live at <code>docs.gerillass.com</code> and is
-            part of this site now. If you followed a link from somewhere else, it
-            may be pointing at the old address.
+            The documentation moved here from <code>docs.gerillass.com</code>. A
+            link from elsewhere may still point at the old address.
           </p>
 
           <div className="not-found__ways">

@@ -11,20 +11,33 @@
   align-items: center;
   text-align: center;
   /*
-    The bottom is not a mirror of the top. The footer rises into whatever is
-    above it -- that is deliberate, it is how the ornaments sit over the edge --
-    and here it was climbing 144px into this page, swallowing the keyboard hint
-    and leaving 17px under the buttons. The padding has to clear that rise
-    before it can leave a gap of its own.
-  */
-  padding: remify(80px) 0 remify(260px);
+    No padding at the top. The header already puts 64px under itself, which is
+    the gap every other page opens on, and the 80px this used to add on top of
+    that left the drawing floating 144px below the logo.
 
-  &__code {
-    font-family: $primary-font-family;
-    font-size: remify(96px);
-    line-height: 1;
-    margin: 0 0 remify(8px);
-    color: $eggshell;
+    The bottom is not a mirror of it. The footer rises into whatever is above
+    it -- that is deliberate, it is how the ornaments sit over the edge -- and
+    here it was climbing 144px into this page, swallowing the keyboard hint and
+    leaving 17px under the buttons. The padding has to clear that rise before
+    it can leave a gap of its own.
+  */
+  padding: 0 0 remify(260px);
+
+  /*
+    Sized by height rather than width, because what has to stay readable is the
+    speech bubble, and the drawing is taller than it is wide. `width: auto`
+    with the ratio from the attributes keeps it from stretching.
+
+    `min()` rather than a flat height so it scales down on a narrow screen
+    instead of running off the sides: the drawing is 1142x1377, so 40vw is the
+    width at which its height stops being the binding limit. Raising the first
+    number grows it on a wide screen and leaves the phone where it was, which
+    is the half that was already the right size.
+  */
+  &__mascot {
+    height: min(remify(260px), 40vw);
+    width: auto;
+    margin-bottom: remify(24px);
   }
 
   &__title {
