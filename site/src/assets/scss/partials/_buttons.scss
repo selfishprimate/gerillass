@@ -44,6 +44,19 @@ $button-sizes: (
       &:hover {
         @if $name == "primary" {
           background-color: $accent-color;
+          /*
+            Said out loud, because these buttons are links. `a:hover` in
+            _general.scss paints an anchor `$accent-color`, and at (0,1,1) it
+            outranks the `color` on `.button` at (0,1,0) -- so the filled
+            primary button, which is the Download button on the home page, was
+            drawing `$accent-color` text on an `$accent-color` ground and
+            losing its label to the hover.
+
+            The other variants were already safe by accident: `secondary` pins
+            its colour at (0,2,0), and `accent` and the outlined primary both
+            set one in their own hover block.
+          */
+          color: $secondary-color;
           &.button--outlined {
             border-color: $accent-color;
             color: $accent-color;
