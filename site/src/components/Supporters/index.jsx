@@ -51,7 +51,21 @@ function writeCachedCount(stargazers) {
   }
 }
 
-/* A different handful on every page load. */
+/*
+  A different handful on every page load, and it has to be picked after the
+  page is in the browser rather than while it is being rendered.
+
+  The site is generated statically: every route is rendered to a real HTML file
+  at build time, so anything chosen during that render is chosen once, for
+  everyone, and written into the file. React then hydrates that markup, and
+  hydration reuses the attributes the server wrote -- it repairs mismatched
+  text, not a different `src` on an <img> -- so a second pick made while
+  rendering would be discarded without a word.
+
+  This worked when it was written: the site was assembled in the browser on
+  every visit, and the pick ran once per visit because the render did.
+  Prerendering arrived a day later and moved that render to build time.
+*/
 function pickRandom(people, count) {
   const pool = people.slice();
   const picked = [];
@@ -67,10 +81,13 @@ class Supporters extends Component {
     this.state = {
       stargazers: SNAPSHOT_STARGAZERS,
       isDialogOpen: false,
+      /*
+        The first render has to be identical on the server and in the browser,
+        or hydration is a mismatch. So it is the head of the list, in order,
+        and the random set replaces it on mount.
+      */
+      rowPeople: PEOPLE_WITH_AVATARS.slice(0, AVATARS_IN_ROW),
     };
-    /* Picked once so re-renders (the star count landing, the dialog opening)
-       keep the same faces; a refresh brings a new set. */
-    this.rowPeople = pickRandom(PEOPLE_WITH_AVATARS, AVATARS_IN_ROW);
     this.closeButton = React.createRef();
     this.openDialog = this.openDialog.bind(this);
     this.closeDialog = this.closeDialog.bind(this);
@@ -81,6 +98,18 @@ class Supporters extends Component {
   componentDidMount() {
     this.isRendered = true;
     document.addEventListener("keydown", this.handleKeyDown);
+
+    /*
+      Before the cache check, which returns early. Behind it, a visitor with a
+      stored star count would keep the row the build wrote and the bug would
+      survive for exactly the people who had been here before.
+
+      Picked once here rather than in render, so the later re-renders -- the
+      star count landing, the dialog opening -- keep the same faces.
+    */
+    this.setState({
+      rowPeople: pickRandom(PEOPLE_WITH_AVATARS, AVATARS_IN_ROW),
+    });
 
     const cached = readCachedCount();
     if (cached) {
@@ -238,14 +267,13 @@ class Supporters extends Component {
   }
 
   render() {
-    const { stargazers, isDialogOpen } = this.state;
-    const visible = this.rowPeople;
+    const { stargazers, isDialogOpen, rowPeople } = this.state;
 
     return (
       <div className="supporters">
         <div className="supporters__people">
           <ul className="supporters__avatars">
-            {visible.map((person) => (
+            {rowPeople.map((person) => (
               <li key={person.login}>
                 {this.renderAvatar(
                   person,
