@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+import Announcement from "components/Announcement";
 import Header from "components/Header";
 import SiteFooter from "components/SiteFooter";
 import Sidebar from "docs/Sidebar";
@@ -19,13 +20,17 @@ import "./docs-template.scss";
   change to either one being made carefully around the other.
 
   The header is reused unchanged, which is the point: the documentation is part
-  of the site now rather than a second site that looks like it.
+  of the site now rather than a second site that looks like it. So is the
+  notice above it: it is a site-wide announcement, and a reader who arrives on
+  a documentation page is exactly the one who needs to be told the API has
+  changed.
 */
 function DocsTemplate({ children }) {
   const [open, setOpen] = useState(false);
 
   return (
     <div className="main-container">
+      <Announcement />
       <div className="main-wrapper">
         <Header />
 
