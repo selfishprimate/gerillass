@@ -25,10 +25,17 @@
     @include remove(max, medium);
   }
   a {
-    color: $secondary-color;
+    /*
+      Green like every other link on the site. It was $snow, the same colour as
+      the notice's own prose, so the only thing marking it as a link was the
+      underline.
+    */
+    color: $sage;
     text-decoration: underline;
     &:hover {
-      color: $sage;
+      /* $sage is the resting colour now, so the hover has to be something
+         else; snow is what the notice's own prose is set in. */
+      color: $secondary-color;
     }
   }
   &__description {

@@ -3,8 +3,45 @@
 .testimonial {
   position: relative;
   background-color: $secondary-color;
-  padding: 8rem 2rem 16rem;
-  @include background-dots(rgba($alabaster, 1), 15rem);
+  /*
+    The bottom padding is two things added together, and only one of them is
+    space.
+
+    $reach is cancelled by the negative margin below, so it costs no height.
+    It is there because a background is painted to the padding box and no
+    further: without it the circles stopped dead on this section's last line.
+    They now carry on through the credit line and under the dark footer, which
+    is opaque and comes later, so it cuts them. 15rem is the circle's own
+    radius, the $size passed to background-dots below, which is the least that
+    lets a circle sitting on the old boundary finish rather than end in a
+    straight edge.
+
+    $gap is the part that is space: real room between the last quote and the
+    foot of the page. Adding it to both would move the footer down and take the
+    circles with it; adding it only here moves the footer and leaves the
+    background reaching the same 154px behind it.
+
+    What used to be here was 16rem of the first kind pretending to be the
+    second: the strip the footer rose through, left behind as empty snow when
+    the footer stopped rising.
+  */
+  $reach: 15rem;
+  $gap: 4rem;
+  padding: 8rem 2rem ($reach + $gap);
+  margin-bottom: -$reach;
+  /*
+    The third argument is $gutter, which the mixin uses for `background-size`
+    and derives both positions from: the first layer at $gutter / 2, the second
+    at $gutter * 2, each with x and y equal. 105rem gives the size asked for
+    and, with it, 52.5rem 52.5rem and 210rem 210rem.
+
+    The line under it is the one thing the mixin cannot be asked for. These two
+    positions have x and y apart -- 46 against 56, 200 against 225 -- and no
+    single $gutter produces a pair like that, so the placement is set here and
+    the mixin keeps the rest.
+  */
+  @include background-dots(rgba($alabaster, 1), 15rem, 105rem);
+  background-position: 46rem 56rem, 200rem 225rem;
   @include breakpoint(min, xlarge) {
     padding-top: 12rem;
     @include background-dots(rgba($alabaster, 1), 20rem);

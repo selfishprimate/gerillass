@@ -3,20 +3,6 @@
 .docs-layout {
   padding-top: remify(24px);
 
-  /*
-    Room for the footer to tuck into. `.footer` sets margin-top: -10rem so it
-    sits under whatever comes before it, and on the landing page the last
-    section carries 256px of bottom padding for exactly this.
-
-    A margin and not padding, which is the whole point. This element is the
-    containing block for the sticky list of pages, so padding here extends how
-    far that list can travel: it would slide down into the 256px and end up
-    behind the footer, which draws over it at z-index 200. A margin leaves the
-    box ending where the content does, so the list stops there and the footer
-    pulls up into empty space.
-  */
-  margin-bottom: remify(256px);
-
   &__toggle {
     display: block;
     width: 100%;

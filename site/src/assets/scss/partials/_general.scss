@@ -164,27 +164,26 @@ figure {
   }
 
   /*
-    A length of barbed wire across each end of the body, on every page rather
-    than only under the notice on the home page. Out of the flow, so neither
-    costs any height: they lie over the first and last 12px of the body.
+    A length of barbed wire across the top of the body, on every page rather
+    than only under the notice on the home page. Out of the flow, so it costs
+    no height: it lies over the body's first 12px.
 
-    Positioned, so they paint over the content, which is what puts the top one
-    in front of the header's corner ornaments and the bottom one in front of
-    the footer band. `left` and `right` at 0 is the body's own width, so there
-    is no `adaptive` here as there was when this hung off `.site-top`, which is
-    full width.
+    There was a second one at the bottom. It has moved to the top of the dark
+    footer, in `footer.scss`, which is now the last thing on the page: against
+    `$crayola` this dark drawing was invisible, and the light one belongs to
+    the box it crosses rather than to this one.
+
+    `left` and `right` at 0 is the body's own width, so there is no `adaptive`
+    here as there was when this hung off `.site-top`, which is full width.
 
     The drawing is 142x12 and is cut to tile, so it repeats across rather than
     stretching, and the box is the drawing's own height. Its gaps are
     transparent, so what shows between the barbs is whatever the wire crosses.
-
-    The dark of the two; `wire.svg` is the same drawing in alabaster, for a
-    dark background.
   */
-  &::before,
-  &::after {
+  &::before {
     content: "";
     position: absolute;
+    top: 0;
     left: 0;
     right: 0;
     height: 12px;
@@ -192,16 +191,10 @@ figure {
     background-repeat: repeat-x;
     /*
       Above the header's two corner ornaments, which are painted by a
-      positioned box that comes later and cut 200px off each end of the top
-      wire without it.
+      positioned box that comes later and cut 200px off each end of the wire
+      without it.
     */
     z-index: 1;
-  }
-  &::before {
-    top: 0;
-  }
-  &::after {
-    bottom: 0;
   }
 }
 

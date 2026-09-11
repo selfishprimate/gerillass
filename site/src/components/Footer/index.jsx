@@ -174,25 +174,16 @@ class Footer extends Component {
           </div>
 
           <p className="footer__note">
-            Made with the loving music of{" "}
+            Copyright © 2020, Designed and built by{" "}
             <a
               className="footer__link"
-              href="https://open.spotify.com/track/7cmusjrA2X3w6eExZuskZp"
+              href="https://github.com/selfishprimate"
               target="_blank"
               rel="noopener noreferrer"
             >
-              Anna German
-            </a>{" "}
-            and dedicated to{" "}
-            <a
-              className="footer__link"
-              href="https://simpleprimate.netlify.app/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              James Williamson
+              @selfishprimate
             </a>
-            : The best web educator ever.
+            . The code licensed under the Apache License, Version 2.0
           </p>
         </div>
       </footer>
