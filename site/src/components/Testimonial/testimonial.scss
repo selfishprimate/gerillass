@@ -29,22 +29,23 @@
   $gap: 4rem;
   padding: 8rem 2rem ($reach + $gap);
   margin-bottom: -$reach;
-  /*
-    The third argument is $gutter, which the mixin uses for `background-size`
-    and derives both positions from: the first layer at $gutter / 2, the second
-    at $gutter * 2, each with x and y equal. 105rem gives the size asked for
-    and, with it, 52.5rem 52.5rem and 210rem 210rem.
-
-    The line under it is the one thing the mixin cannot be asked for. These two
-    positions have x and y apart -- 46 against 56, 200 against 225 -- and no
-    single $gutter produces a pair like that, so the placement is set here and
-    the mixin keeps the rest.
-  */
-  @include background-dots(rgba($alabaster, 1), 15rem, 105rem);
-  background-position: 46rem 56rem, 200rem 225rem;
+  @include background-dots(rgba($alabaster, 1), 15rem);
   @include breakpoint(min, xlarge) {
     padding-top: 12rem;
-    @include background-dots(rgba($alabaster, 1), 20rem);
+
+    /*
+      The third argument is $gutter, which the mixin uses for `background-size`
+      and derives both positions from: the first layer at $gutter / 2, the
+      second at $gutter * 2, each with x and y equal. 105rem gives the size
+      wanted here and, with it, 52.5rem 52.5rem and 210rem 210rem.
+
+      The line under it is the one thing the mixin cannot be asked for. These
+      two positions have x and y apart -- 46 against 56, 200 against 225 --
+      and no single $gutter produces a pair like that, so the placement is set
+      here and the mixin keeps the rest.
+    */
+    @include background-dots(rgba($alabaster, 1), 20rem, 105rem);
+    background-position: 46rem 56rem, 200rem 225rem;
   }
   &__list {
     margin-bottom: 3rem;
