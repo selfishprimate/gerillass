@@ -9,6 +9,13 @@
     a {
       font-weight: 500;
       color: $accent-color;
+      /*
+        The same underline the credit line's link carries in the dark block,
+        offset by the same 3px. These two are names in a sentence, so without
+        it the only thing marking them as links is a colour.
+      */
+      text-decoration: underline;
+      text-underline-offset: remify(3px);
       &:hover {
         color: darken($accent-color, 20%);
       }

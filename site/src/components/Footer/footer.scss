@@ -1,32 +1,33 @@
 @import "assets/scss/abstract";
 
 .footer-container {
-  padding: 0 2rem;
-  background-color: $alabaster;
+  /*
+    No padding and no ground of its own. It is stretched to the card's edges by
+    `section--stretched`, and the `0 2rem` / `0 4rem` it used to carry held the
+    dark block that far in from them, which showed as a band of colour down
+    each side.
+
+    The $alabaster that used to fill it is gone with the rest: what is left
+    above the dark block is the credit line, and it sits on the body's own snow
+    now rather than on a paler strip drawn behind it.
+  */
 
   /*
-    A block formatting context, so the footer's own `margin-top: -10rem` lifts
-    the footer and not this box with it.
+    A block formatting context, so no child's vertical margin collapses through
+    this box and joins the negative one below.
 
-    Without it the negative margin collapses through the top of the container
-    and the two move up together, which is what has been happening: the dark
-    footer sat flush inside the band instead of rising out of it, and the two
-    ornaments -- which are `$alabaster` blobs, the same colour as this
-    background -- were painted on the band itself and could not be seen. They
-    are meant to sit in the strip the footer rises through, against the snow
-    of `.main-wrapper`, joining the footer to the band below it.
-
-    The footer does not move: the gap above it is still 96px. What moves is
-    this box's top edge, down by the 10rem the footer was borrowing.
+    It was here for a specific case of that: the dark block used to carry
+    `margin-top: -10rem` and rise out of the band onto the snow above, and
+    without a formatting context the band rose with it. Nothing rises any more,
+    and measured today the box sits in the same place with or without this
+    line. It stays as the guard it also was, next to a negative margin that
+    would otherwise be at the mercy of whatever the last child grows.
   */
   display: flow-root;
   margin-bottom: -3rem;
   // @include breakpoint(min, small) {
   //   @include border-radius(bottom, 2rem);
   // }
-  @include breakpoint(min, medium) {
-    padding: 0 4rem;
-  }
   @include breakpoint(min, large) {
     margin-bottom: -4rem;
   }
@@ -35,37 +36,34 @@
   position: relative;
   color: $secondary-color;
   background-color: $primary-color;
-  border-radius: 24px;
   font-size: 1rem;
   padding: 3rem 2rem;
-  padding-top: 4rem;
-  z-index: 200;
-  margin-top: -10rem;
-  &::before,
-  &::after {
+
+  /*
+    The barbed wire, moved here from the bottom of `.main-wrapper` now that
+    this block is the last thing on the page.
+
+    Strung just above the block rather than across it: `top: -12px` is the
+    drawing's own height, so its bottom edge lands on this block's top edge and
+    the whole of it sits on the pale band above. That is what lets it stay the
+    dark drawing -- over $crayola, `wire-black.svg` at #222c25 cannot be seen
+    at all, and the alabaster one reads as a different object from the wire at
+    the top of the page.
+
+    Out of the flow, so it costs no height.
+  */
+  &::before {
     content: "";
     position: absolute;
-    top: 130px;
-    @include sizer(2rem);
-    @include breakpoint(min, medium) {
-      top: 100px;
-      @include sizer(4rem);
-    }
+    top: -12px;
+    left: 0;
+    right: 0;
+    height: 12px;
+    background-image: url("/images/general/wire-black.svg");
+    background-repeat: repeat-x;
   }
-  &::before {
-    left: -2rem;
-    @include background-image("/images/general/footer-ornament-01.svg");
-    @include breakpoint(min, medium) {
-      left: -4rem;
-    }
-  }
-  &::after {
-    right: -2rem;
-    @include background-image("/images/general/footer-ornament-02.svg");
-    @include breakpoint(min, medium) {
-      right: -4rem;
-    }
-  }
+  padding-top: 4rem;
+  z-index: 200;
   @include breakpoint(min, medium) {
     padding-top: 6rem;
   }
@@ -171,19 +169,26 @@
   &__note {
     text-align: center;
     a {
-      color: $secondary-color;
+      /*
+        The green in the hero illustration, which is drawn in two colours and
+        no more: $crayola for the ink and this for the heart. So a link on a
+        dark ground is painted in a colour the page already uses rather than in
+        a third green.
+
+        $accent-color is the green for a link on snow and manages 3.4:1 here,
+        under the 4.5:1 body text wants. $lime clears it easily and reads as a
+        highlighter next to the drawing.
+      */
+      color: $sage;
       font-weight: 500;
       &:hover {
-        color: transparentize($secondary-color, 0.5);
+        color: $secondary-color;
       }
     }
   }
-  /* The two names in the credits, marked as the links they are. */
+  /* The credit line's one link, marked as the link it is. */
   &__link {
     text-decoration: underline;
     text-underline-offset: remify(3px);
-    &--secondary {
-      color: $lime;
-    }
   }
 }
