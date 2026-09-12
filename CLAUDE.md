@@ -56,6 +56,7 @@ npm test                          # Jest: sass-true specs, the smoke test, and t
 npx jest -t "mapDeepGet()"      # single test, filtered by the describe/it name
 npm run manifest                  # regenerate gerillass.json and SKILL.md (see below)
 node tools/audit.js               # adversarial sweep: bad arguments at every mixin
+node tools/check-archive.js       # what a GitHub release's source zip would contain
 npm pack --dry-run                # inspect exactly what would be published
 yarn audit                        # must stay at zero across all severities
 ```
@@ -340,7 +341,8 @@ Two things are easy to miss and are called out in every file:
   `tools/build-llms-txt.js`. When a page is published, remove the name there
   and re-run `npm run manifest`.
 
-`wiki/` is excluded from the package by the `*.md` rule in `.npmignore`.
+`wiki/` is excluded from the package by the `*.md` rule in `.npmignore`, and
+from the source zip of a GitHub release by `export-ignore` in `.gitattributes`.
 
 ## Releasing
 
@@ -362,8 +364,19 @@ the short list of things already decided and waiting, and `wiki/` is handover
 for the other repositories. A file in `todos/` is neither decided nor addressed
 to anyone else; it is the reasoning a decision would be made from.
 
-It does not ship. The `*.md` rule in `.npmignore` covers it, as it does
-`wiki/`, and `npm pack --dry-run` lists nothing from it.
+It does not ship, and two separate rules see to that, because npm and GitHub
+build their packages differently:
+
+- **npm:** `todos` is listed in `.npmignore`. The `*.md` rule already covered
+  the Markdown in it, but only by accident; a file of any other type would have
+  been published.
+- **GitHub releases:** the "Source code" zip and tarball attached to a release
+  come from `git archive`, which never reads `.npmignore`. `.gitattributes`
+  marks `todos` as `export-ignore`, along with `site`, `netlify.toml` and
+  `wiki`, none of which is the library either.
+
+Check the first with `npm pack --dry-run` and the second with
+`node tools/check-archive.js`.
 
 Every file there is dated to when it was researched, and **its figures age**.
 Download counts, survey percentages and the state of a standard are exactly the
@@ -395,6 +408,36 @@ What it suggests doing, in its own order:
 And what it argues against: investing further in `llms.txt`, whose measured
 effect is contested; and putting the manifest behind a protocol that only
 serves the file, which Modernisation already declines.
+
+### What `source-comments.md` proposes
+
+Measured 13 September 2026, after the first trial project an agent built with
+the library. The agent read the source rather than the documentation site and
+quoted its comments, and every member it praised was commented while every
+member it tripped on had none. The file proposes comments that say what the
+code cannot (why, the trap, what was measured), never a restatement of the
+signature, and in a set order: the members from that trial first, starting
+with the ones it tripped on.
+
+One part is a defect rather than a proposal and is recorded there with its
+evidence: the two `/* */` comments in `_reset-css.scss` are emitted into the
+user's compiled CSS. The library should use `//` throughout.
+
+### What `agent-trials.md` records
+
+Projects a coding agent built from scratch with the published package, each
+followed by the agent's feedback and by a check here of every claim in it. The
+projects are throwaway; only what they show about the library is kept. Two
+trials so far, on two different models, and the findings both reached
+independently are the ones to trust most.
+
+The file sorts the findings by what they would take: fixes that break nothing
+(`isColor` refusing `var()` and `currentColor`, `position` warning on `null`,
+`breakpoint` silent with three arguments, `counter` failing inside a container
+query), behaviour changes that need a major version or an opt-in, and gaps in
+documentation and the manifest. It also records which of the agents' claims
+turned out wrong, and the two prompt rules that made trial feedback quick to
+check: versions from `npm ls`, and a compiled snippet for every problem.
 
 ## Pending work
 

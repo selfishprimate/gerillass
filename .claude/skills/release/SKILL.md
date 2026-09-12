@@ -85,6 +85,20 @@ Expect 98 files / ~40 kB as of v2.1.0: everything under `scss/`, the generated
 `package.json`. If `test/`, `meta/`, `tools/`, `yarn.lock` or
 `node_modules` appear, `.npmignore` is broken — stop and fix it.
 
+The source zip and tarball GitHub attaches to the release are a different
+package. They are built with `git archive` from the tag, and `.npmignore` does
+not reach them; `export-ignore` in `.gitattributes` does. They are meant to hold
+the library's buildable source, not only what npm ships, so check them against
+their own list:
+
+```bash
+node tools/check-archive.js
+```
+
+It must pass before tagging. An unexpected entry means something was committed
+that `.gitattributes` does not keep out, which is how `site/` was headed for the
+first release after 2.1.0 without anyone deciding it.
+
 ## 3b. Write the wiki page for the other repositories
 
 A release is not finished when npm has it. `gerillass.com` and
