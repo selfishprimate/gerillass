@@ -354,6 +354,48 @@ The security fix only reaches users when the npm package is republished — upda
 
 Default branch is `main` (renamed from `master` in v1.3.3). A repository ruleset blocks force-pushes and deletion of the default branch, with no bypass actors — direct pushes are allowed.
 
+## The todos folder
+
+`todos/` holds research and proposals that have not been acted on. It sits
+between the two neighbours it could be confused with: **Pending work** below is
+the short list of things already decided and waiting, and `wiki/` is handover
+for the other repositories. A file in `todos/` is neither decided nor addressed
+to anyone else; it is the reasoning a decision would be made from.
+
+It does not ship. The `*.md` rule in `.npmignore` covers it, as it does
+`wiki/`, and `npm pack --dry-run` lists nothing from it.
+
+Every file there is dated to when it was researched, and **its figures age**.
+Download counts, survey percentages and the state of a standard are exactly the
+secondary signals **Verifying a claim** warns about. Re-check a number before
+acting on it, and when an item is adopted, move it into Pending work and cut it
+from the `todos/` file rather than keeping two copies.
+
+### What `verifiable-css-layer.md` proposes
+
+Researched 12 September 2026. The argument is that Gerillass cannot compete on
+volume, and that its real asset is the test discipline behind the manifest:
+examples that compile, rejections that must raise the library's own error.
+What it suggests doing, in its own order:
+
+1. **Reposition the description.** From "a Sass mixin library" to computed CSS
+   that utility classes cannot express and agents cannot reliably work out.
+   README, site and the manifest's own description.
+2. **Make the agent-facing files reachable.** `gerillass.json` ships only
+   inside the package, and `gerillass.com/gerillass.json` answered 404 when
+   this was written. `SKILL.md` is in the same position: generated, committed,
+   and registered in no agent directory.
+3. **Build `gerillass_compile`.** This is the MCP item under Modernisation, the
+   one version of that idea that earns its place, and the research found the
+   space empty. The report suggests a CLI first, since it needs no install.
+4. **`focus-ring` and the reduced-motion guard**, already listed under New
+   members worth adding. The report adds outside evidence for both, from the
+   literature on AI-generated UI being inaccessible by default.
+
+And what it argues against: investing further in `llms.txt`, whose measured
+effect is contested; and putting the manifest behind a protocol that only
+serves the file, which Modernisation already declines.
+
 ## Pending work
 
 Known and deliberately deferred, roughly in the order it makes sense to pick up.
