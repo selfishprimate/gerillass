@@ -1,0 +1,9 @@
+# Kept out of the "Source code" zip and tarball GitHub attaches to every
+# release. Those are built with `git archive`, which never reads .npmignore;
+# npm is handled there. tools/check-archive.js fails if anything else turns up.
+
+# Not the library: another product, and notes nobody installing it needs.
+site export-ignore
+netlify.toml export-ignore
+wiki export-ignore
+todos export-ignore
