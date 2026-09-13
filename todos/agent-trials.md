@@ -13,20 +13,20 @@ worth more than anything either finds alone.
 
 ## The trials
 
-| | Trial 1 | Trial 2 |
-|---|---|---|
-| Date | 13 September 2026 | 13 September 2026 |
-| Model | Claude Opus 5 | Claude Fable 5.1 |
-| Project | UI/UX designer portfolio, two pages | "Kıyı 2026", conference site: home, programme, speaker pages, print stylesheet |
-| Folder | `~/Desktop/gerillass-deneme` | `~/Desktop/kiyi-2026` |
-| Gerillass | 2.1.0 | 2.1.0 |
-| Dart Sass | 1.104.1 (the agent reported 1.91.0) | 1.104.1 |
-| Build | Sass CLI | Vite 8.3.0 |
-| Load route | `@use "gerillass/scss/gerillass"` with `--load-path=node_modules` | `@use "gerillass" as gls`, resolved by Vite through `exports`, no `loadPaths` |
-| Way into the library | read the source and quoted its comments | said the manifest and `SKILL.md` were enough |
+| | Trial 1 | Trial 2 | Trial 3 |
+|---|---|---|---|
+| Date | 13 September 2026 | 13 September 2026 | 13 September 2026 |
+| Model | Claude Opus 5 | Claude Fable 5.1 | not recorded |
+| Project | UI/UX designer portfolio, two pages | "Kıyı 2026", conference site: home, programme, speaker pages, print stylesheet | "Harbourline", ferry operations dashboard in English and Arabic |
+| Folder | `~/Desktop/gerillass-deneme` | `~/Desktop/kiyi-2026` | `~/Desktop/Harbourline` |
+| Gerillass | 2.1.0 | 2.1.0 | 2.1.0 |
+| Dart Sass | 1.104.1 (the agent reported 1.91.0) | 1.104.1 | 1.104.1 |
+| Build | Sass CLI | Vite 8.3.0 | Parcel 2.16.4 |
+| Load route | `@use "gerillass/scss/gerillass"` with `--load-path=node_modules` | `@use "gerillass" as gls`, resolved by Vite through `exports`, no `loadPaths` | `@forward "gerillass" with (...)` from a local `_gls.scss`, resolved by Parcel |
+| Way into the library | read the source and quoted its comments | said the manifest and `SKILL.md` were enough | the manifest and `SKILL.md`, and the source comments |
 
-The installed `scss/` was byte-identical to `main` in both, so nothing below has
-been fixed yet.
+The installed `scss/` was byte-identical to `main` in all three, so nothing below
+has been fixed yet.
 
 ### What changed between the two prompts
 
@@ -238,18 +238,66 @@ is the positioning argued for in `verifiable-css-layer.md`.
 | 2 | The manifest has no `$name:` example for `container-query` | It has `container-query("min", 400px, $name: "card")` |
 | 2 | Putting the counter reset on the container fixes counters | Still 01 01 01 in the browser |
 
+Trial 3: none of its verified claims was wrong. Its note that `hide` calls the
+global `index()` is true of the source, but compiling `hide(nonsense)` printed
+no deprecation warning here.
+
+## Trial 3 in brief
+
+Harbourline's prompt added two requirements neither earlier project had, a
+right-to-left interface and forced-colors mode, and one new feedback rule: list
+the members you considered and did not use, with the reason. That list rejected
+about twenty-five members with a reason each, which is the first evidence of why
+members go unused rather than only that they do.
+
+What it added, each verified here by compiling, and the first two in a browser:
+
+- **`aspect-ratio` does not hold its ratio on an `<img>` with `width` and
+  `height` attributes**, the standard way to prevent layout shift. Chrome 152,
+  300px container, 1600x900 source: 300x900 with the attributes, 300x225
+  without, 300x225 with the attributes plus `height: auto`.
+- **A `var()` size in `container-query` compiles and never matches.** In the
+  browser a rule under `(min-width: var(--wide))` did not apply; the same
+  condition in px did.
+- **`breakpoint` and `container-query` end the same range 1px apart**:
+  `max-width: 767px` against `max-width: 768px`. `container-query` never
+  subtracts; the source has no `- 1`.
+- **A rem breakpoint map loses a whole rem** at the end of a range:
+  `max-width: 47rem` for a `48rem` key, a 16px gap.
+- **The direction-bound members cannot serve a bidirectional interface**:
+  `triangle`, `position`, `border-radius` corners and `columnizer` margins are
+  physical only. `triangle("inline-end")` raises.
+- **Out-of-date defaults**: `font-face` still emits EOT and SVG sources,
+  `all-text-inputs` knows no `focus-visible` or `user-invalid`, lists
+  `[type='color']` and omits `select`.
+- **`remove("medium")`**, a manifest example, hides at exactly 768px.
+- **No Parcel recipe** in the README.
+
+It hand-wrote `focus-ring` again, which makes three trials of three, and a
+reduced-motion wrapper and a colour-map-to-custom-properties mixin again, which
+makes two of three.
+
+Not re-run here: the Parcel build failing on `font-face`'s default formats, the
+root `package.json` `"main"` field breaking the bare import under Parcel, and
+the Meyer reset removing list semantics in Safari with VoiceOver. RTL and
+forced-colors rendering were read from the compiled CSS, not seen.
+
+What to do about all of this is in `fix-plan.md`.
+
 ## Limits
 
-- Two trials, two models, two project types. A change of model and project at
-  once means a difference between the trials cannot be attributed to either.
+- Three trials on three project types, and the third trial's model was not
+  recorded. A change of model and project at once means a difference between
+  trials cannot be attributed to either.
 - Browser checks were Chromium only.
 - Sass versions before 1.103 were not available locally.
 
 ## For the next trial
 
 - Keep the two prompt rules above.
-- Vary the project type again: a data-dense dashboard or a documentation site
-  would exercise what neither portfolio nor conference site did.
+- Vary the project type again. A documentation site is the one none of the
+  three has covered.
+- Record the model in the trial table; trial 3's was not written down.
 - Re-running trial 2's prompt on Claude Opus 5 would give one prompt under two
   models, which is the only way to compare the models rather than the projects.
 - After a release carrying the source comments, repeat a prompt with the same

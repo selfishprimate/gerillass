@@ -427,9 +427,9 @@ user's compiled CSS. The library should use `//` throughout.
 
 Projects a coding agent built from scratch with the published package, each
 followed by the agent's feedback and by a check here of every claim in it. The
-projects are throwaway; only what they show about the library is kept. Two
-trials so far, on two different models, and the findings both reached
-independently are the ones to trust most.
+projects are throwaway; only what they show about the library is kept. Three
+trials so far, and the findings more than one of them reached independently
+are the ones to trust most.
 
 The file sorts the findings by what they would take: fixes that break nothing
 (`isColor` refusing `var()` and `currentColor`, `position` warning on `null`,
@@ -438,6 +438,22 @@ query), behaviour changes that need a major version or an opt-in, and gaps in
 documentation and the manifest. It also records which of the agents' claims
 turned out wrong, and the two prompt rules that made trial feedback quick to
 check: versions from `npm ls`, and a compiled snippet for every problem.
+
+### What `fix-plan.md` sets out
+
+The findings of the agent trials turned into work. For each problem: what goes
+wrong, with an example; the change that fixes it, with the code; whether that
+change alters output anyone relies on; and which specs, `meta/` entries and
+documentation pages it touches. It is ordered by release. Guardrails come
+first, so that every later fix lands with a test that would have caught it,
+then changes that alter no existing output, then additions, and last the
+behaviour changes that need a major version.
+
+Two of the agents' own suggestions are recorded there as wrong, because each
+would have introduced a defect: widening `isColor` to accept `var()` breaks
+`tint` and `shade`, which pass its result straight to `color.mix`; and adding
+logical keywords to the shared direction list makes `border-radius` accept them
+and emit nothing.
 
 ## Pending work
 
