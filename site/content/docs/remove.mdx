@@ -23,7 +23,7 @@ The **Remove Sass mixin** helps you set the `display` CSS property of an element
 ## Arguments
 
 <Arguments of="remove">
-  <Argument name="$value" type="number (with unit)">The width, or a key from the breakpoint map. On its own it matches that exact width and no other. It cannot be a custom property: <code>var()</code> is not evaluated in a <code>@media</code> condition, so the rule would never apply, and the mixin refuses it.</Argument>
+  <Argument name="$value" type="number (with unit)">The width, or a key from the breakpoint map. On its own it matches that exact width and no other, and the mixin prints a warning: pass <code>only</code> when that is what you mean. It cannot be a custom property: <code>var()</code> is not evaluated in a <code>@media</code> condition, so the rule would never apply, and the mixin refuses it.</Argument>
   <Argument name="$mode" type="string">Sets the <code>width</code> media feature. Accepts the values <code>only</code>, <code>min</code>, <code>max</code>, and <code>between</code>.</Argument>
 </Arguments>
 
@@ -47,11 +47,11 @@ The **Remove Sass mixin** helps you set the `display` CSS property of an element
 
 <Hint kind="warning">
 
-**One width on its own is a single pixel.** `remove(500px)` compiles to `@media (width: 500px)`, so the element disappears only when the viewport is exactly 500px wide, and at every other width it stays. To hide it below or above a width, pass `max` or `min` as well.
+**One width on its own is a single pixel.** `remove(500px)` compiles to `@media (width: 500px)`, so the element disappears only when the viewport is exactly 500px wide, and at every other width it stays. To hide it below or above a width, pass `max` or `min` as well. Since 2.2.0 the mixin prints a warning for that form, and 3.0.0 will refuse it.
 
 </Hint>
 
-<Example caption="If you do want that exact width, `only` says so explicitly. It compiles to the same query as a single value.">
+<Example caption="If you do want that exact width, `only` says so explicitly. It compiles to the same query as a single value, without the warning.">
 ```scss
 .element{
   @include remove(only, 500px);

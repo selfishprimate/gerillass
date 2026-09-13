@@ -50,7 +50,11 @@
   $condition: null;
 
   @if $count == 1 {
-    $condition: "(width: #{validateBreakpoint(list.nth($params, 1))})";
+    $value: list.nth($params, 1);
+    $width: validateBreakpoint($value);
+    $condition: "(width: #{$width})";
+    // A single pixel, as in `breakpoint`; still emitted until 3.0.0 refuses it.
+    @warn "`container-query(#{$value})` matches only a container exactly #{$width} wide, `(width: #{$width})`. Write `container-query(only, #{$value})` for that width, or `container-query(min, #{$value})` from it upwards. The one-argument form will be refused in 3.0.0.";
   } @else if $count == 2 {
     $mode: list.nth($params, 1);
     @if not list.index("only" "min" "max" "between", $mode) {

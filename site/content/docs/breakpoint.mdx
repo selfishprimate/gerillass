@@ -29,17 +29,13 @@ The **Breakpoint** Sass mixin helps you create scalable media queries and breakp
 
 ## Examples
 
-<Example caption="Simply call the mixin and **pass a custom value** to it. The code below will apply styles only if your browser's viewport is equal to `320px`.">
-```scss
-.element{
-  @include breakpoint(320px) {
-    background-color: green;
-  };
-}
-```
-</Example>
+<Hint kind="warning">
 
-<Example caption="If you set the `$mode` option to `only`, you will see that the result is similar to the first example. The code below will apply styles only if your browser's viewport is equal to `1200px`.">
+**One width on its own is a single pixel.** `breakpoint(320px)` compiles to `@media (width: 320px)`, so the styles apply only when the viewport is exactly 320px wide, and at every other width they do nothing. Since 2.2.0 the mixin prints a warning for that form, and 3.0.0 will refuse it. To style from a width upwards pass `min`, and for that exact width pass `only`.
+
+</Hint>
+
+<Example caption="Set the `$mode` option to `only` to apply styles at exactly one width. The code below will apply styles only if your browser's viewport is equal to `1200px`.">
 ```scss
 .element{
   @include breakpoint(only, 1200px) {

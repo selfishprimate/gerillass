@@ -485,7 +485,8 @@
           "name": "$params",
           "variadic": true,
           "accepts": [
-            "one breakpoint name, for exactly that width",
+            "one breakpoint name, for exactly that width, which prints a warning: write only instead",
+            "only plus a breakpoint, for exactly that width",
             "min or max plus a breakpoint",
             "between plus two breakpoints",
             "a start and an end value"
@@ -496,11 +497,11 @@
       "signature": "breakpoint($params...)",
       "summary": "Media query built from the breakpoint map, or from raw lengths.",
       "caveats": [
-        "With one argument the query matches exactly that width, `(width: 768px)`, which is a single pixel. Use `min`, `max` or a range for anything wider.",
+        "With one argument the query matches exactly that width, `(width: 768px)`, which is a single pixel, and the mixin prints a warning. Write `only` for that width, or `min`, `max` or a range for anything wider. 3.0.0 will refuse the one-argument form.",
         "Declarations written after the include, in the same rule, are emitted after the `@media` block and win over it. Write them before the include."
       ],
       "examples": [
-        ".a { @include breakpoint(\"medium\") { color: red; } }",
+        ".a { @include breakpoint(\"only\", \"medium\") { color: red; } }",
         ".a { @include breakpoint(\"min\", \"medium\") { color: red; } }",
         ".a { @include breakpoint(\"between\", \"medium\" \"large\") { color: red; } }"
       ],
@@ -509,6 +510,9 @@
         ".a { @include breakpoint() { color: red; } }",
         ".a { @include breakpoint(\"min\", var(--wide)) { color: red; } }",
         ".a { @include breakpoint(\"between\", var(--start) \"large\") { color: red; } }"
+      ],
+      "warns": [
+        ".a { @include breakpoint(\"medium\") { color: red; } }"
       ]
     },
     {
@@ -630,7 +634,7 @@
           "name": "$params",
           "variadic": true,
           "accepts": [
-            "a size",
+            "a size, for exactly that width, which prints a warning: write only instead",
             "two sizes for a range",
             "one of min, max, only or between followed by a size",
             "$name as a keyword, to query one named container"
@@ -640,9 +644,13 @@
       "file": "scss/library/_container-query.scss",
       "signature": "container-query($params...)",
       "summary": "A @container rule, taking the same argument shapes as breakpoint so the two read alike. Sizes may be a key from $map-for-breakpoints or a raw length, and a length is the common case because a container is usually narrower than the viewport. Nothing matches at all unless an ancestor was declared with the container mixin.",
+      "caveats": [
+        "A size on its own matches exactly that width, `(width: 400px)`, which is a single pixel, and the mixin prints a warning. Write `only` for that width, or `min`, `max` or a range for anything wider. 3.0.0 will refuse the one-argument form."
+      ],
       "examples": [
         ".title { @include container-query(\"min\", 400px) { font-size: 2rem; } }",
         ".title { @include container-query(\"max\", 399px) { font-size: 1rem; } }",
+        ".title { @include container-query(\"only\", 400px) { color: red; } }",
         ".title { @include container-query(\"between\", 300px 500px) { color: red; } }",
         ".title { @include container-query(300px, 500px) { color: red; } }",
         ".title { @include container-query(\"min\", \"medium\") { color: red; } }",
@@ -652,6 +660,9 @@
         ".title { @include container-query(\"min\", 400px, 800px) { color: red; } }",
         ".title { @include container-query(\"min\", 400px, $name: 42) { color: red; } }",
         ".title { @include container-query(\"min\", var(--wide)) { color: red; } }"
+      ],
+      "warns": [
+        ".title { @include container-query(400px) { color: red; } }"
       ]
     },
     {
@@ -1147,7 +1158,8 @@
           "variadic": true,
           "accepts": [
             "nothing, to hide it always",
-            "one breakpoint, for exactly that width and no other",
+            "one breakpoint, for exactly that width and no other, which prints a warning: write only instead",
+            "only plus a breakpoint, for exactly that width",
             "min or max plus a breakpoint",
             "a start and an end breakpoint"
           ]
@@ -1155,20 +1167,24 @@
       ],
       "file": "scss/library/_remove.scss",
       "signature": "remove($params...)",
-      "summary": "Hides an element outright, or within a media query: from a breakpoint up with min, up to it with max, or between two breakpoints. One breakpoint on its own hides the element at exactly that width, a single pixel.",
+      "summary": "Hides an element outright, or within a media query: from a breakpoint up with min, up to it with max, or between two breakpoints. One breakpoint on its own hides the element at exactly that width, a single pixel, and prints a warning: pass only for that.",
       "caveats": [
-        "With one argument the element is hidden at exactly that width, `(width: 768px)`, which is a single pixel. Use `min`, `max` or a range for anything wider.",
+        "With one argument the element is hidden at exactly that width, `(width: 768px)`, which is a single pixel, and the mixin prints a warning. Write `only` for that width, or `min`, `max` or a range for anything wider. 3.0.0 will refuse the one-argument form.",
         "A `display` written after the include, in the same rule, is emitted after the `@media` block and wins over it. Write it before the include."
       ],
       "examples": [
         ".a { @include remove; }",
         ".a { @include remove(\"min\", \"medium\"); }",
         ".a { @include remove(\"max\", \"medium\"); }",
+        ".a { @include remove(\"only\", \"medium\"); }",
         ".a { @include remove(\"small\", \"large\"); }"
       ],
       "rejects": [
         ".a { @include remove(a, b, c); }",
         ".a { @include remove(\"max\", var(--narrow)); }"
+      ],
+      "warns": [
+        ".a { @include remove(\"medium\"); }"
       ]
     },
     {

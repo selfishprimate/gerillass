@@ -1,8 +1,8 @@
 {
   "name": "remove",
-  "summary": "Hides an element outright, or within a media query: from a breakpoint up with min, up to it with max, or between two breakpoints. One breakpoint on its own hides the element at exactly that width, a single pixel.",
+  "summary": "Hides an element outright, or within a media query: from a breakpoint up with min, up to it with max, or between two breakpoints. One breakpoint on its own hides the element at exactly that width, a single pixel, and prints a warning: pass only for that.",
   "caveats": [
-    "With one argument the element is hidden at exactly that width, `(width: 768px)`, which is a single pixel. Use `min`, `max` or a range for anything wider.",
+    "With one argument the element is hidden at exactly that width, `(width: 768px)`, which is a single pixel, and the mixin prints a warning. Write `only` for that width, or `min`, `max` or a range for anything wider. 3.0.0 will refuse the one-argument form.",
     "A `display` written after the include, in the same rule, is emitted after the `@media` block and wins over it. Write it before the include."
   ],
   "arguments": [
@@ -10,7 +10,8 @@
       "name": "$params",
       "accepts": [
         "nothing, to hide it always",
-        "one breakpoint, for exactly that width and no other",
+        "one breakpoint, for exactly that width and no other, which prints a warning: write only instead",
+        "only plus a breakpoint, for exactly that width",
         "min or max plus a breakpoint",
         "a start and an end breakpoint"
       ]
@@ -20,10 +21,14 @@
     ".a { @include remove; }",
     ".a { @include remove(\"min\", \"medium\"); }",
     ".a { @include remove(\"max\", \"medium\"); }",
+    ".a { @include remove(\"only\", \"medium\"); }",
     ".a { @include remove(\"small\", \"large\"); }"
   ],
   "rejects": [
     ".a { @include remove(a, b, c); }",
     ".a { @include remove(\"max\", var(--narrow)); }"
+  ],
+  "warns": [
+    ".a { @include remove(\"medium\"); }"
   ]
 }

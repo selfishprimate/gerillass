@@ -480,16 +480,16 @@ exports[`Manifest examples breakpoint: .a { @include breakpoint("between", "medi
 }"
 `;
 
-exports[`Manifest examples breakpoint: .a { @include breakpoint("medium") { color: red; } } 1`] = `
-"@media (width: 768px) {
+exports[`Manifest examples breakpoint: .a { @include breakpoint("min", "medium") { color: red; } } 1`] = `
+"@media (min-width: 768px) {
   .a {
     color: red;
   }
 }"
 `;
 
-exports[`Manifest examples breakpoint: .a { @include breakpoint("min", "medium") { color: red; } } 1`] = `
-"@media (min-width: 768px) {
+exports[`Manifest examples breakpoint: .a { @include breakpoint("only", "medium") { color: red; } } 1`] = `
+"@media (width: 768px) {
   .a {
     color: red;
   }
@@ -764,6 +764,14 @@ exports[`Manifest examples container-query: .title { @include container-query("m
 
 exports[`Manifest examples container-query: .title { @include container-query("min", 400px, $name: "card") { color 1`] = `
 "@container card (min-width: 400px) {
+  .title {
+    color: red;
+  }
+}"
+`;
+
+exports[`Manifest examples container-query: .title { @include container-query("only", 400px) { color: red; } } 1`] = `
+"@container (width: 400px) {
   .title {
     color: red;
   }
@@ -1264,6 +1272,14 @@ exports[`Manifest examples remove: .a { @include remove("min", "medium"); } 1`] 
 }"
 `;
 
+exports[`Manifest examples remove: .a { @include remove("only", "medium"); } 1`] = `
+"@media (width: 768px) {
+  .a {
+    display: none;
+  }
+}"
+`;
+
 exports[`Manifest examples remove: .a { @include remove("small", "large"); } 1`] = `
 "@media (min-width: 576px) and (max-width: 991px) {
   .a {
@@ -1702,5 +1718,29 @@ exports[`Manifest examples validateRatio: .a { aspect-ratio: validateRatio(var(-
 exports[`Manifest examples validateScissors: .a { content: "#{validateScissors(12px)}"; } 1`] = `
 ".a {
   content: "12px";
+}"
+`;
+
+exports[`Manifest warnings breakpoint warns: .a { @include breakpoint("medium") { color: red; } } 1`] = `
+"@media (width: 768px) {
+  .a {
+    color: red;
+  }
+}"
+`;
+
+exports[`Manifest warnings container-query warns: .title { @include container-query(400px) { color: red; } } 1`] = `
+"@container (width: 400px) {
+  .title {
+    color: red;
+  }
+}"
+`;
+
+exports[`Manifest warnings remove warns: .a { @include remove("medium"); } 1`] = `
+"@media (width: 768px) {
+  .a {
+    display: none;
+  }
 }"
 `;

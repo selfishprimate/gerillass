@@ -1516,6 +1516,27 @@ raises instead of emitting CSS.
 `scss/library/_container-query.scss`; the first test in
 `test/library/remove.spec.scss`; the manifest examples; the documentation pages.
 
+**Status.** The 2.2.0 half is implemented, for all three members. Each
+one-argument call still emits the same query and now prints a `@warn` naming
+the `only` and `min` spellings and 3.0.0. `remove` calls `breakpoint(only, …)`
+inside, which compiles to the same query, so its warning names `remove` and is
+printed once. A call with var() still raises its error with no warning before it.
+
+`meta/` gained a `warns` list, checked by a new "Manifest warnings" block in
+`test/manifest.spec.js`: the call must print a `@warn`, its CSS is snapshotted,
+and the `gls-` name must give the same CSS and the same warnings. The one-argument
+`breakpoint` example became `only`, whose snapshot is identical to the one it
+replaced; `remove` and `container-query` gained an `only` example. The smoke file
+and the first `remove` spec use `only` too, so the suite prints no warning.
+
+788 calls across the three members, both names, at the root and nested, compile
+to identical CSS before and after. 112 of them are one-argument calls that
+compile, and each prints exactly one warning; no other call prints one. The
+audit's SILENT, UNHELPFUL and BROKEN buckets stay empty. Its WARNED ONLY bucket
+went from 0 to 6 per member: nonsense values such as `breakpoint(true)`, which
+compiled to `(width: true)` without a word before and now at least warn. The
+3.0.0 half refuses them.
+
 ### B3. `columnizer` on `gap`, without margins or universal `box-sizing`
 
 **Problem.** Every trial hit this member in some way:

@@ -147,6 +147,7 @@ function build() {
     if (m.caveats) member.caveats = m.caveats;
     if (m.examples) member.examples = m.examples;
     if (m.rejects) member.rejects = m.rejects;
+    if (m.warns) member.warns = m.warns;
     if (m.arguments) {
       for (const arg of member.arguments) {
         const authored = m.arguments.find((a) => a.name === arg.name);

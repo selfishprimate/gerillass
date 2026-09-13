@@ -2,14 +2,15 @@
   "name": "breakpoint",
   "summary": "Media query built from the breakpoint map, or from raw lengths.",
   "caveats": [
-    "With one argument the query matches exactly that width, `(width: 768px)`, which is a single pixel. Use `min`, `max` or a range for anything wider.",
+    "With one argument the query matches exactly that width, `(width: 768px)`, which is a single pixel, and the mixin prints a warning. Write `only` for that width, or `min`, `max` or a range for anything wider. 3.0.0 will refuse the one-argument form.",
     "Declarations written after the include, in the same rule, are emitted after the `@media` block and win over it. Write them before the include."
   ],
   "arguments": [
     {
       "name": "$params",
       "accepts": [
-        "one breakpoint name, for exactly that width",
+        "one breakpoint name, for exactly that width, which prints a warning: write only instead",
+        "only plus a breakpoint, for exactly that width",
         "min or max plus a breakpoint",
         "between plus two breakpoints",
         "a start and an end value"
@@ -17,7 +18,7 @@
     }
   ],
   "examples": [
-    ".a { @include breakpoint(\"medium\") { color: red; } }",
+    ".a { @include breakpoint(\"only\", \"medium\") { color: red; } }",
     ".a { @include breakpoint(\"min\", \"medium\") { color: red; } }",
     ".a { @include breakpoint(\"between\", \"medium\" \"large\") { color: red; } }"
   ],
@@ -26,5 +27,8 @@
     ".a { @include breakpoint() { color: red; } }",
     ".a { @include breakpoint(\"min\", var(--wide)) { color: red; } }",
     ".a { @include breakpoint(\"between\", var(--start) \"large\") { color: red; } }"
+  ],
+  "warns": [
+    ".a { @include breakpoint(\"medium\") { color: red; } }"
   ]
 }

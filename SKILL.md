@@ -121,8 +121,12 @@ a dropped declaration rather than an error.
 
 **`breakpoint`**
 
-- With one argument the query matches exactly that width, `(width: 768px)`, which is a single pixel. Use `min`, `max` or a range for anything wider.
+- With one argument the query matches exactly that width, `(width: 768px)`, which is a single pixel, and the mixin prints a warning. Write `only` for that width, or `min`, `max` or a range for anything wider. 3.0.0 will refuse the one-argument form.
 - Declarations written after the include, in the same rule, are emitted after the `@media` block and win over it. Write them before the include.
+
+**`container-query`**
+
+- A size on its own matches exactly that width, `(width: 400px)`, which is a single pixel, and the mixin prints a warning. Write `only` for that width, or `min`, `max` or a range for anything wider. 3.0.0 will refuse the one-argument form.
 
 **`container`**
 
@@ -138,7 +142,7 @@ a dropped declaration rather than an error.
 
 **`remove`**
 
-- With one argument the element is hidden at exactly that width, `(width: 768px)`, which is a single pixel. Use `min`, `max` or a range for anything wider.
+- With one argument the element is hidden at exactly that width, `(width: 768px)`, which is a single pixel, and the mixin prints a warning. Write `only` for that width, or `min`, `max` or a range for anything wider. 3.0.0 will refuse the one-argument form.
 - A `display` written after the include, in the same rule, is emitted after the `@media` block and wins over it. Write it before the include.
 
 ## Mixins
@@ -181,7 +185,7 @@ a dropped declaration rather than an error.
 | `placeholder` | Styles the placeholder text of an input across vendor prefixes. |
 | `position($position: absolute, $offsets: 0)` | Sets position and offsets in one call, using shorthand order. |
 | `radial-gradient($shape, $position, $colors)` | Radial gradient background from a shape and a position. |
-| `remove($params...)` | Hides an element outright, or within a media query: from a breakpoint up with min, up to it with max, or between two breakpoints. One breakpoint on its own hides the element at exactly that width, a single pixel. |
+| `remove($params...)` | Hides an element outright, or within a media query: from a breakpoint up with min, up to it with max, or between two breakpoints. One breakpoint on its own hides the element at exactly that width, a single pixel, and prints a warning: pass only for that. |
 | `reset-css` | Meyer reset. Must be called at the root of the stylesheet. |
 | `reset-figure` | Removes default figure margins and makes the image inside responsive. |
 | `resizable($direction: both, $overflow: auto)` | Makes an element user-resizable. |
