@@ -12,6 +12,12 @@
   $filter-color: null,
   $filter-direction: null
 ) {
+  // The direction used to be read only when there were two or more colours,
+  // so with one colour any value was dropped without a word, a typo included.
+  // Check it first, against what the gradient branches accept.
+  @if $filter-direction and not map.has-key($map-for-directions, $filter-direction) and not (meta.type-of($filter-direction) == "number" and math.unit($filter-direction) == "deg") {
+    @error "`#{$filter-direction}` is not a valid $filter-direction. Pass an angle such as `45deg`, or one of: #{map.keys($map-for-directions)}.";
+  }
   @if $image-url {
     @if $filter-color {
       @if list.length($filter-color) == 1 {

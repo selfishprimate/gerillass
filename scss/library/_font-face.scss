@@ -1,8 +1,10 @@
 @charset "UTF-8";
 
 @use "sass:list";
+@use "sass:map";
 @use "sass:meta";
 @use "sass:string";
+@use "../maps/map-for-font-formats" as *;
 @use "../utilities/font-source" as *;
 
 @mixin font-face(
@@ -18,6 +20,10 @@
     @error "`#{$font-family}` is not a valid $font-family for `font-face`. Pass the family name as a string, such as `\"Inter\"`.";
   } @else if meta.type-of($file-path) != "string" {
     @error "`#{$file-path}` is not a valid $file-path for `font-face`. Pass the path to the font files without an extension, as a string.";
+  } @else if string.slice(meta.inspect($file-path), 1, 1) != "\"" and string.index($file-path, "var(") {
+    // The path is written into url("..."), where var() is only text: the
+    // browser would request a file literally named var(--x).woff2.
+    @error "`#{$file-path}` is not a valid $file-path for `font-face`. A custom property cannot supply a font path, because the path is written into url() as text. Pass the path as a string.";
   } @else {
     
     $list: ();
@@ -39,6 +45,14 @@
           $file-formats: $font-style-list;
           $font-style: normal;
         }
+      }
+    }
+
+    // fontSource returns nothing for a format it does not know, so a typo
+    // dropped that source and a list of nothing but typos dropped `src`.
+    @each $format in $file-formats {
+      @if not map.has-key($map-for-font-formats, $format) {
+        @error "`#{meta.inspect($format)}` is not a valid file format for `font-face`. Pass one or more of: #{map.keys($map-for-font-formats)}.";
       }
     }
 

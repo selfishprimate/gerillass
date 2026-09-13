@@ -776,6 +776,24 @@ unchanged, and 57 probe calls moved from CSS that could not work to the new
 errors. One message needs care: `$file-formats: null` prints empty backticks, so
 name `null` explicitly.
 
+**Status.** Implemented, together with the `$file-path` check from G4. Six rejects
+went into `meta/` first and failed. Across 665 `background-image` and `font-face`
+calls compiled before and after, 252 changed and none of them used only valid
+values: each had an unknown direction, an unknown format, or a `var()` path.
+Name two groups in the changelog, because they used to give usable output:
+
+- a direction the library does not accept, with one colour or none, which was
+  ignored and now raises. That includes `1.5turn` and `45rad`, valid CSS angles
+  the gradient branches never accepted, and `var()`.
+- a format list mixing a known format with an unknown one, such as
+  `woff2 nonsense` or `WOFF2`, which kept the known source and now raises.
+
+The documentation pages' 15 examples compile to identical CSS, and no snapshot
+moved. `null` formats now read `` `null` `` in the message.
+
+**Not covered.** `var()` in `$font-family`, `$font-style` or `$font-weight` is
+still written into `@font-face`, where custom properties do not apply either.
+
 ### F11. Utility functions refuse non-numbers with their own message
 
 **Problem.** Five public functions do arithmetic on their argument without

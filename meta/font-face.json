@@ -40,6 +40,10 @@
   "rejects": [
     ".a { @include font-face(\"Inter\", \"/fonts/inter\"); }",
     "@include font-face(42, \"/fonts/x\");",
-    "@include font-face(\"Inter\", 42);"
+    "@include font-face(\"Inter\", 42);",
+    "@include font-face(\"Inter\", \"/fonts/inter\", $file-formats: otf);",
+    "@include font-face(\"Inter\", \"/fonts/inter\", $file-formats: woff2 wof);",
+    "@include font-face(\"Inter\", \"/fonts/inter\", $file-formats: null);",
+    "@include font-face(\"Inter\", var(--font-path));"
   ]
 }
