@@ -7,6 +7,25 @@
 @use "../maps/map-for-breakpoints" as *;
 @use "../utilities/validate-breakpoint" as *;
 
+// Returns the first value in $value that holds var(), looking inside lists and
+// calculations, or null. Custom properties are not evaluated in a @media or
+// @container condition, so a rule built from one never applies, and nothing
+// warns. Measured in Chrome 152: `(min-width: var(--wide))` did not match with
+// `--wide: 200px`, while `(min-width: 200px)` did.
+@function -custom-property-in($value) {
+  @each $item in $value {
+    @if meta.type-of($item) == "list" or meta.type-of($item) == "arglist" {
+      $found: -custom-property-in($item);
+      @if $found {
+        @return $found;
+      }
+    } @else if string.index(meta.inspect($item), "var(") {
+      @return $item;
+    }
+  }
+  @return null;
+}
+
 // A @container rule, taking the same argument shapes as `breakpoint` so the two
 // read alike. Sizes may be a key from $map-for-breakpoints or a raw length; a
 // container is usually narrower than the viewport, so a length is the common
@@ -24,6 +43,10 @@
     @error "`#{$name}` is not a valid $name for `container-query`. Pass a container name as a string, such as `\"card\"`.";
   }
 
+  $custom-property: -custom-property-in($params);
+  @if $custom-property {
+    @error "`#{$custom-property}` cannot be used in a container query: custom properties are not evaluated in a @container condition, so the rule would never apply. Pass a length or a key from $map-for-breakpoints.";
+  }
   $condition: null;
 
   @if $count == 1 {

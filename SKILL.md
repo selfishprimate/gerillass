@@ -94,6 +94,7 @@ a dropped declaration rather than an error.
 | `remove` | `.a { @include remove(a, b, c); }` |
 | `reset-css` | `.a { @include reset-css; }` |
 | `scissors` | `.a { @include scissors(5px 10px); }` |
+| `screen-agent` | `.a { @include screen-agent(var(--density)) { color: red; } }` |
 | `smartphone` | `.a { @include smartphone(Nokia3310) { display: none; } }` |
 | `sprite` | `.icon { @include sprite("/img/sprite.txt"); }` |
 | `stretched-link` | `.card a { @include stretched-link(middle); }` |

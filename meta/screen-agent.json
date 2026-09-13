@@ -13,5 +13,7 @@
   "examples": [
     ".a { @include screen-agent(\"2x\") { background-image: url(\"/img/a@2x.png\"); } }"
   ],
-  "rejects": []
+  "rejects": [
+    ".a { @include screen-agent(var(--density)) { color: red; } }"
+  ]
 }

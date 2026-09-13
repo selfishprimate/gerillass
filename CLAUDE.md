@@ -218,7 +218,7 @@ Until 2.0.0 they carried a `__` prefix. It had to go: under `@use`/`@forward` a 
 
 **A utility that nothing in `scss/` calls is not dead code.** `remify`, `convertToEm`, `fontSizer`, `isNumber`, `tint` and `shade` are called by no mixin at all — they are there for users, and removing them would break stylesheets. Never treat "no internal callers" as a reason to delete a member; the library is the smaller half of its own audience.
 
-Mixins validate their input and `@error` with a message that names the accepted values — 37 of the 47 that take arguments do this, mostly inline. Match that style rather than failing silently.
+Mixins validate their input and `@error` with a message that names the accepted values — 38 of the 47 that take arguments do this, mostly inline. Match that style rather than failing silently.
 
 Silent failure is the trap to watch for. A mixin that branches on `type-of` and
 has no `@else` emits nothing at all for an unexpected type, which surfaces as a
@@ -491,8 +491,8 @@ Verified as of v2.1.0.
   a `var()` gutter work at all. Evaluating the expression would simplify
   `calc(100% / 4)` to `25%` and shorten the output, and would break every call
   whose column count or gutter is a custom property. Verified both ways.
-- **Ten mixins take arguments and validate none of them** — `adaptive`,
-  `brand-logo`, `circle`, `counter`, `ellipsis`, `resizable`, `screen-agent`,
+- **Nine mixins take arguments and validate none of them** — `adaptive`,
+  `brand-logo`, `circle`, `counter`, `ellipsis`, `resizable`,
   `sizer`, `text-image`, `text-stroke`. This is mostly deliberate: they pass
   their arguments straight to CSS, which accepts `var()`, `calc()`, `clamp()`
   and whatever ships next, so a strict check would reject correct code. Revisit

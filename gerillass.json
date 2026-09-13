@@ -473,7 +473,9 @@
       ],
       "rejects": [
         ".a { @include breakpoint(\"between\", \"medium\", \"large\") { color: red; } }",
-        ".a { @include breakpoint() { color: red; } }"
+        ".a { @include breakpoint() { color: red; } }",
+        ".a { @include breakpoint(\"min\", var(--wide)) { color: red; } }",
+        ".a { @include breakpoint(\"between\", var(--start) \"large\") { color: red; } }"
       ]
     },
     {
@@ -615,7 +617,8 @@
       ],
       "rejects": [
         ".title { @include container-query(\"min\", 400px, 800px) { color: red; } }",
-        ".title { @include container-query(\"min\", 400px, $name: 42) { color: red; } }"
+        ".title { @include container-query(\"min\", 400px, $name: 42) { color: red; } }",
+        ".title { @include container-query(\"min\", var(--wide)) { color: red; } }"
       ]
     },
     {
@@ -1073,7 +1076,8 @@
         ".a { @include remove(\"min\", \"medium\"); }"
       ],
       "rejects": [
-        ".a { @include remove(a, b, c); }"
+        ".a { @include remove(a, b, c); }",
+        ".a { @include remove(\"max\", var(--narrow)); }"
       ]
     },
     {
@@ -1186,7 +1190,9 @@
       "examples": [
         ".a { @include screen-agent(\"2x\") { background-image: url(\"/img/a@2x.png\"); } }"
       ],
-      "rejects": []
+      "rejects": [
+        ".a { @include screen-agent(var(--density)) { color: red; } }"
+      ]
     },
     {
       "name": "sizer",
