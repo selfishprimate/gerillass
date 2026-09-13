@@ -4,6 +4,13 @@
 @use "sass:meta";
 @use "../utilities/is-time" as *;
 
+// `init` defines the %loadify placeholder, and every call extends it. Under the
+// module system a selector can only extend a placeholder from a module it
+// loads, so the file with the call must be the file that calls `init`, or must
+// `@use` it. Anything else fails with "The target selector was not found".
+// An entry file calling `init` does not help a partial it loads, since the
+// partial does not load the entry file. Stylesheets using @import share one
+// scope and are unaffected.
 @mixin loadify($params...) {
   @if not & {
     @if list.length($params) == 0 or (list.length($params) == 1 and list.nth($params, 1) == "init") {
