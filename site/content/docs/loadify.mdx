@@ -109,6 +109,31 @@ Suppose you have a group of items like the ones below, and you want them to appe
 
 </Hint>
 
+<Hint kind="warning">
+
+**With `@use`, the call has to be able to see `init`.** The mixin works by `@extend`, and under the module system a selector can only extend a placeholder from a module it loads. So `init` and every call must be in the same file, or the file with the call must `@use` the file that calls `init`. Otherwise Sass stops with:
+
+```
+Error: The target selector was not found.
+```
+
+Putting `init` in your entry file is not enough when the calls live in partials the entry file loads, because those partials do not load the entry file.
+
+```scss
+// _animations.scss
+@use "gerillass" as gls;
+@include gls.loadify(init);
+
+// _hero.scss
+@use "gerillass" as gls;
+@use "animations"; // required: loads init
+.hero { @include gls.loadify; }
+```
+
+A stylesheet that still loads the library with `@import` shares one global scope and is not affected.
+
+</Hint>
+
 <Hint kind="info">
 
 **Important!** When you call the mixin inside a selector without passing any arguments, it works differently, as you can see in the example below. Here, the `item` selector takes the default `animation-delay` and `animation-duration` values.

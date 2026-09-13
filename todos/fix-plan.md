@@ -969,6 +969,14 @@ Adding `@use "a";` to `_b.scss` makes it compile.
 **Fix.** The `caveats` entry from G3, a line in the `loadify` documentation page,
 and the reason in the source comment.
 
+**Status.** Done. The caveat landed with G3; the documentation page now has a
+warning with the error, the two layouts and the fix, and `_loadify.scss` carries
+the reason. Checked again by compiling five layouts. Same file, a partial that
+`@use`s the one with `init`, and an `@import` project all compile. Two separate
+partials fail, and so does one the plan had not considered: `init` in the entry
+file with the call in a partial the entry file loads. The partial does not load
+the entry file, so it cannot see the placeholder.
+
 **Changes existing output?** No.
 
 ### D2. Correct the `remove` summary and example
