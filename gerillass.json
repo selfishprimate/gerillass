@@ -1504,7 +1504,9 @@
           "name": "$color",
           "default": "black",
           "accepts": [
-            "any colour value"
+            "a Sass colour, such as red, #333 or oklch(70% 0.1 200)",
+            "currentColor",
+            "var(), color-mix() or light-dark(), which CSS resolves"
           ]
         },
         {
@@ -1520,11 +1522,15 @@
       "summary": "Draws a CSS triangle out of borders, pointing in a given direction.",
       "examples": [
         ".caret { @include triangle(\"bottom\", black, 10px 8px); }",
-        ".arrow { @include triangle(\"left\", red); }"
+        ".arrow { @include triangle(\"left\", red); }",
+        ".arrow { @include triangle(\"right\", var(--accent), 6px 8px); }",
+        ".arrow { @include triangle(\"right\", currentColor); }",
+        ".arrow { @include triangle(\"top\", color-mix(in srgb, red 50%, blue)); }"
       ],
       "rejects": [
         ".caret { @include triangle(sideways); }",
-        ".caret { @include triangle(\"top\", notacolor); }"
+        ".caret { @include triangle(\"top\", notacolor); }",
+        ".caret { @include triangle(\"top\", url(a.png)); }"
       ]
     },
     {
@@ -1965,7 +1971,8 @@
         ".a { color: shade(red, 20%); }"
       ],
       "rejects": [
-        ".a { color: shade(notacolor, 20%); }"
+        ".a { color: shade(notacolor, 20%); }",
+        ".a { color: shade(var(--x), 20%); }"
       ]
     },
     {
@@ -2016,7 +2023,8 @@
         ".a { color: tint(red, 20%); }"
       ],
       "rejects": [
-        ".a { color: tint(notacolor, 20%); }"
+        ".a { color: tint(notacolor, 20%); }",
+        ".a { color: tint(var(--x), 20%); }"
       ]
     },
     {

@@ -1353,6 +1353,42 @@ exports[`Manifest examples triangle: .arrow { @include triangle("left", red); } 
 }"
 `;
 
+exports[`Manifest examples triangle: .arrow { @include triangle("right", currentColor); } 1`] = `
+".arrow {
+  content: "";
+  height: 0;
+  width: 0;
+  display: inline-block;
+  border-style: solid;
+  border-color: transparent transparent transparent currentColor;
+  border-width: 4px 0 4px 10px;
+}"
+`;
+
+exports[`Manifest examples triangle: .arrow { @include triangle("right", var(--accent), 6px 8px); } 1`] = `
+".arrow {
+  content: "";
+  height: 0;
+  width: 0;
+  display: inline-block;
+  border-style: solid;
+  border-color: transparent transparent transparent var(--accent);
+  border-width: 4px 0 4px 6px;
+}"
+`;
+
+exports[`Manifest examples triangle: .arrow { @include triangle("top", color-mix(in srgb, red 50%, blue));  1`] = `
+".arrow {
+  content: "";
+  height: 0;
+  width: 0;
+  display: inline-block;
+  border-style: solid;
+  border-color: transparent transparent color-mix(in srgb, red 50%, blue);
+  border-width: 0 5px 8px;
+}"
+`;
+
 exports[`Manifest examples triangle: .caret { @include triangle("bottom", black, 10px 8px); } 1`] = `
 ".caret {
   content: "";

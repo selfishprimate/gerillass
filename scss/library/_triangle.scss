@@ -2,12 +2,53 @@
 
 @use "sass:list";
 @use "sass:math";
+@use "sass:meta";
+@use "sass:string";
 @use "../lists/list-of-directions" as *;
-@use "../utilities/is-color" as *;
+
+// A value CSS will take as a colour: a Sass colour, currentColor, or a function
+// that returns a colour when the browser resolves it. A list passes when every
+// item does, as it did through isColor.
+//
+// inherit, initial, unset and revert are left out on purpose. The mixin writes
+// the colour into a border-color shorthand beside `transparent`, and a CSS-wide
+// keyword is only valid as the whole value: `transparent transparent inherit`
+// is rejected by the browser. Checked with CSS.supports in Chrome 152.
+//
+// Deliberately looser than isColor, which stays strict because tint and shade
+// pass its result to color.mix, and that needs a real Sass colour. A border
+// colour does not. The functions are named rather than "anything with a
+// parenthesis", which would let url() through as a colour.
+@function -is-css-color($value) {
+  @if list.length($value) > 1 {
+    @each $item in $value {
+      @if not -is-css-color($item) {
+        @return false;
+      }
+    }
+    @return true;
+  }
+  @if meta.type-of($value) == "color" {
+    @return true;
+  }
+  @if meta.type-of($value) == "string" and string.slice(meta.inspect($value), 1, 1) != "\"" {
+    $text: string.to-lower-case($value);
+    @if $text == "currentcolor" {
+      @return true;
+    }
+    $open: string.index($text, "(");
+    @if $open and list.index("var" "color-mix" "light-dark" "env", string.slice($text, 1, $open - 1)) {
+      @return true;
+    }
+  }
+  @return false;
+}
 
 @mixin triangle($direction: "bottom", $color: black, $size: 10px 8px) {
   @if list.index($list-of-directions, $direction) {
-    @if isColor($color){
+    @if not -is-css-color($color) {
+      @error "`#{meta.inspect($color)}` is not a valid $color for `triangle`. Pass a colour, `currentColor`, or a CSS function such as `var(--accent)`, `color-mix(...)` or `light-dark(...)`.";
+    } @else {
       content: "";
       height: 0;
       width: 0;

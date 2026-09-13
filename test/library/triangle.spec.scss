@@ -92,4 +92,25 @@
       }
     }
   }
+
+  @include it('A custom property is passed through as the colour, since CSS resolves it.') {
+    @include assert {
+      @include output {
+        .caret {
+          @include triangle("bottom", var(--accent), 10px 8px);
+        }
+      }
+      @include expect {
+        .caret {
+          content: "";
+          height: 0;
+          width: 0;
+          display: inline-block;
+          border-style: solid;
+          border-color: var(--accent) transparent transparent;
+          border-width: 8px 5px 0;
+        }
+      }
+    }
+  }
 }
