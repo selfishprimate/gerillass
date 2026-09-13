@@ -106,6 +106,8 @@
             "invalid",
             "required",
             "disabled",
+            "focus-visible",
+            "user-invalid",
             "null for the plain state"
           ]
         }
@@ -115,7 +117,9 @@
       "summary": "Targets every text-like input at once, optionally in one pseudo-class state.",
       "examples": [
         "@include all-text-inputs { border: 1px solid; }",
-        "@include all-text-inputs(\"focus\") { outline: 2px solid; }"
+        "@include all-text-inputs(\"focus\") { outline: 2px solid; }",
+        "@include all-text-inputs(\"focus-visible\") { outline: 2px solid; }",
+        "@include all-text-inputs(\"user-invalid\") { border-color: crimson; }"
       ],
       "rejects": [
         "@include all-text-inputs(nonsense) { color: red; }"

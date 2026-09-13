@@ -5,7 +5,7 @@
 @use "../utilities/pseudo-selector" as *;
 
 @mixin all-text-inputs($pseudo: null) {
-  $list: "hover", "focus", "active", "invalid", "required", "disabled";
+  $list: "hover", "focus", "focus-visible", "active", "invalid", "user-invalid", "required", "disabled";
   @if not $pseudo {
     #{$list-of-text-inputs} {
       @content;

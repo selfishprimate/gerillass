@@ -17,7 +17,7 @@ The **All Text Inputs** Sass mixin helps you target all the text-based HTML inpu
 ## Arguments
 
 <Arguments of="all-text-inputs" footnote="You can call the mixin at the root level of your stylesheet to target all the text-based input elements in the DOM, or call it inside a selector to target only the elements that are children of that selector.">
-  <Argument name="$pseudo" type="string">Sets the pseudo-class selector for the selected text-based input elements. Accepts the values <code>hover</code>, <code>focus</code>, <code>active</code>, <code>invalid</code>, <code>required</code>, and <code>disabled</code>.</Argument>
+  <Argument name="$pseudo" type="string">Sets the pseudo-class selector for the selected text-based input elements. Accepts the values <code>hover</code>, <code>focus</code>, <code>focus-visible</code>, <code>active</code>, <code>invalid</code>, <code>user-invalid</code>, <code>required</code>, and <code>disabled</code>.</Argument>
 </Arguments>
 
 ## Examples
@@ -92,6 +92,28 @@ The **All Text Inputs** Sass mixin helps you target all the text-based HTML inpu
 <div class="element">
   <input type="email" value="not-an-email-address" style="width: 100%; margin-bottom: 8px" />
   <input type="email" value="valid@example.com" style="width: 100%" />
+</div>
+```
+</Example>
+
+<Hint kind="warning">
+
+**`:invalid` marks an empty required field as an error before anyone has typed.** Measured in Chrome 152: on page load an empty required field already matches `:invalid`, so an error style shows up on a form nobody has touched. `:user-invalid` waits for the user. It did not match on load, nor after focusing the field and leaving it empty. An email field with `abc` typed in matched only once the field was left, and pressing Submit made an untouched empty required field match. For error styles, prefer `user-invalid`.
+
+</Hint>
+
+<Example caption="The same error style with **:user-invalid**. Nothing is marked while the fields are untouched. Type something that is not an email address into the field, then click outside it.">
+```scss
+.element {
+  @include all-text-inputs(user-invalid) {
+    border-color: crimson;
+    background-color: #fff5f5;
+  };
+}
+```
+```html
+<div class="element">
+  <input type="email" placeholder="you@example.com" style="width: 100%; border: 2px solid #d4d4d8; padding: 6px" />
 </div>
 ```
 </Example>
