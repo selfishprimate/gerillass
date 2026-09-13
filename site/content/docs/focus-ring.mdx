@@ -1,0 +1,153 @@
+---
+title: "Focus Ring"
+page_title: "Focus Ring Sass Mixin"
+page_description: "Draw a keyboard focus ring with the Focus Ring Sass mixin: an outline on :focus-visible, which stays out of the way of mouse users and survives forced-colors mode."
+page_keywords: "CSS focus ring, focus-visible, Sass focus ring, accessible focus styles, outline-offset, keyboard focus CSS, forced-colors focus"
+---
+
+# Focus Ring
+
+<Member name="focus-ring">
+
+The **Focus Ring Sass mixin** draws the ring a keyboard user follows around the page. It writes an `outline` on `:focus-visible`, with a width, an offset and a colour.
+
+That is two declarations, and both halves of the selector matter. The usual ways of doing this by hand either take the ring away from keyboard users or draw one that disappears in high contrast mode.
+
+</Member>
+
+## What goes wrong by hand
+
+Measured in Chrome 152, on buttons, a link and a text input:
+
+| Written by hand | What happens |
+|---|---|
+| `:focus { outline: none; }` | tabbing to the element shows nothing at all: no outline, no shadow |
+| a ring on `:focus` | it also appears on every mouse click, which is why people remove it |
+| a ring on `:focus-visible` | a mouse click on a button or a link does not show it; <kbd>Tab</kbd> does |
+| a `box-shadow` ring instead of an outline | looks the same, but forced-colors mode sets `box-shadow` to `none` |
+
+<Hint kind="warning">
+
+**The ring must be an outline.** Forced-colors mode, which is how Windows High Contrast reaches CSS, removes box shadows and repaints the outline colour with a system colour. A shadow ring disappears for exactly the people who rely on it most, while an outline stays. This follows the CSS Color Adjustment specification; the browser used for the other measurements on this page could not emulate the mode.
+
+</Hint>
+
+<Hint kind="info">
+
+**Form fields show the ring on a click too.** In Chrome 152 an input, a textarea and a select all match `:focus-visible` when clicked, not only when reached with <kbd>Tab</kbd>, because a browser expects the keyboard to be used next. That is the browser's decision, not the mixin's.
+
+</Hint>
+
+## Arguments
+
+<Arguments of="focus-ring" footnote="The values are written straight into `outline` and `outline-offset`, so anything CSS accepts there works, including `var()`.">
+  <Argument name="$width (2px)" type="number (with unit)">The thickness of the ring.</Argument>
+  <Argument name="$offset (2px)" type="number (with unit)">The gap between the element and the ring. A negative value draws the ring inside the element.</Argument>
+  <Argument name="$color (currentColor)" type="color">The colour of the ring. The default follows the text colour of the element, which is right for text and outlined controls and wrong for a filled button with light text, where the ring would come out white. Pass a colour there.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="Buttons. The outlined button keeps the default, because its text is dark. The filled button has light text, so `currentColor` would draw a white ring, and it is given a colour instead. **Click an empty spot in the result, then press the Tab key on your keyboard**: a click on a button itself does not show the ring, which is the point of `:focus-visible`.">
+```scss
+.btn-outline {
+  @include focus-ring;
+}
+
+.btn-primary {
+  @include focus-ring($color: #18181b);
+}
+```
+```html
+<style>
+  .row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    height: 36px; padding: 0 16px; border-radius: 6px;
+    font: 500 14px/1 Inter, ui-sans-serif, system-ui, sans-serif;
+    cursor: pointer; transition: background-color .15s, border-color .15s;
+  }
+  .btn-primary { background: #18181b; color: #fafafa; border: 1px solid #18181b; }
+  .btn-primary:hover { background: #27272a; }
+  .btn-outline { background: #fff; color: #18181b; border: 1px solid #e4e4e7; }
+  .btn-outline:hover { background: #f4f4f5; }
+</style>
+<div class="row">
+  <button class="btn btn-primary">Save changes</button>
+  <button class="btn btn-outline">Cancel</button>
+</div>
+```
+</Example>
+
+<Example caption="Form fields. **Click into any of them**: form fields show the ring on a click as well as with the Tab key. Measured in Chrome 152 on the input, the select and the textarea.">
+```scss
+.input,
+.textarea,
+.select {
+  @include focus-ring(2px, 2px, #18181b);
+}
+```
+```html
+<style>
+  .form { display: grid; gap: 14px; max-width: 360px; font: 14px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+  .field { display: grid; gap: 6px; }
+  .label { font-weight: 500; }
+  .input, .textarea, .select {
+    width: 100%; border: 1px solid #e4e4e7; border-radius: 6px; background: #fff;
+    font: inherit; color: inherit; padding: 8px 12px;
+  }
+  .input, .select { height: 36px; }
+  .textarea { min-height: 80px; resize: vertical; }
+  .select {
+    appearance: none; padding-right: 32px; cursor: pointer;
+    background-image: linear-gradient(45deg, transparent 50%, #71717a 50%), linear-gradient(135deg, #71717a 50%, transparent 50%);
+    background-position: calc(100% - 16px) 15px, calc(100% - 11px) 15px;
+    background-size: 5px 5px; background-repeat: no-repeat;
+  }
+  .input::placeholder, .textarea::placeholder { color: #a1a1aa; }
+</style>
+<form class="form" onsubmit="return false">
+  <label class="field"><span class="label">Email</span><input class="input" type="email" placeholder="you@example.com"></label>
+  <label class="field"><span class="label">Plan</span><select class="select"><option>Free</option><option>Pro</option><option>Team</option></select></label>
+  <label class="field"><span class="label">Message</span><textarea class="textarea" placeholder="Tell us a little more"></textarea></label>
+</form>
+```
+</Example>
+
+<Hint kind="info">
+
+**Inside a container with `overflow: hidden`, use a negative offset.** An outline drawn outside the element is clipped by that container: with a 2px offset only the corners of the ring were left showing. An offset of `-4px` draws it inside the element, where nothing clips it. The ring also follows `border-radius`, so a rounded button gets a rounded ring.
+
+</Hint>
+
+<Example caption="A menu inside a card that clips its content. The items fill the card edge to edge, so the ring is drawn 4px inside each of them. **Click an empty spot in the result, then press the Tab key on your keyboard.**">
+```scss
+.menu-item {
+  @include focus-ring(2px, -4px, #18181b);
+}
+```
+```html
+<style>
+  .card { width: 240px; border: 1px solid #e4e4e7; border-radius: 8px; overflow: hidden; background: #fff; font: 14px/1 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .menu-item {
+    display: flex; align-items: center; width: 100%; height: 40px; padding: 0 14px;
+    border: 0; background: #fff; color: #18181b; font: inherit; text-align: left; cursor: pointer;
+  }
+  .menu-item + .menu-item { border-top: 1px solid #f4f4f5; }
+  .menu-item:hover { background: #f4f4f5; }
+</style>
+<div class="card">
+  <button class="menu-item">Profile</button>
+  <button class="menu-item">Billing</button>
+  <button class="menu-item">Sign out</button>
+</div>
+```
+</Example>
+
+## Related Links
+
+- [CSS :focus-visible](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:focus-visible)
+- [CSS outline](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/outline)
+- [CSS outline-offset](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/outline-offset)
+- [CSS forced-colors](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@media/forced-colors)
+- [Stretched Link](/docs/stretched-link)

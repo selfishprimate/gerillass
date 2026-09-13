@@ -1,6 +1,6 @@
 # Gerillass
 
-> A Sass toolkit of 53 mixins and 23 functions, built to be read by coding agents as well as by people. Every member is described in a machine-readable manifest whose examples and refusals are executed by the test suite, so the documentation cannot drift away from the code.
+> A Sass toolkit of 54 mixins and 23 functions, built to be read by coding agents as well as by people. Every member is described in a machine-readable manifest whose examples and refusals are executed by the test suite, so the documentation cannot drift away from the code.
 
 Gerillass is a pure Sass library. There is no build step and no runtime dependency: the `.scss` sources are the deliverable, and the package installs nothing else. It needs Dart Sass; LibSass and node-sass are not supported. This file describes Gerillass 2.1.1.
 
@@ -39,6 +39,7 @@ Arguments are validated and refused with a message naming what is accepted, so a
 - [ellipsis($width: 100%, $display: inline-block)](https://docs.gerillass.com/docs/ellipsis/): Truncates a single line of text with an ellipsis.
 - [escape-to-parent($selector: null)](https://docs.gerillass.com/docs/escape-to-parent/): Re-roots the current selector under another one using @at-root.
 - [except($params...)](https://docs.gerillass.com/docs/except/): Selects every sibling except the ones named.
+- [focus-ring($width: 2px, $offset: 2px, $color: currentColor)](https://docs.gerillass.com/docs/focus-ring/): Draws a keyboard focus ring with outline on :focus-visible, which survives forced-colors mode where a box-shadow ring disappears.
 - [font-face($font-family, $file-path, $font-style: normal, $font-weight: 400, $file-formats: eot woff2 woff ttf svg)](https://docs.gerillass.com/docs/font-face/): Emits an @font-face rule for one family across several file formats.
 - [hide($toggle: "hide")](https://docs.gerillass.com/docs/hide/): Visually hides an element while keeping it available to screen readers, or reverses that.
 - [line-clamp($lines: 3)](https://docs.gerillass.com/docs/line-clamp/): Truncates text after a number of lines, where ellipsis truncates one.

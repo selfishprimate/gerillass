@@ -881,6 +881,20 @@ exports[`Manifest examples fluid: .title { font-size: fluid(24px, 48px); } 1`] =
 }"
 `;
 
+exports[`Manifest examples focus-ring: .button { @include focus-ring; } 1`] = `
+".button:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}"
+`;
+
+exports[`Manifest examples focus-ring: .card-link { @include focus-ring(3px, 4px, var(--focus)); } 1`] = `
+".card-link:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 4px;
+}"
+`;
+
 exports[`Manifest examples font-face: @include font-face("Inter", "/fonts/inter"); 1`] = `
 "@font-face {
   font-family: "Inter";

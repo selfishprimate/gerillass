@@ -124,6 +124,11 @@
     "description": "The Except Sass mixin helps you apply style changes to every element in a list except the ones you choose. It uses the :not() CSS pseudo-class.",
     "scss": "@use \"gerillass\" as *;\n\n.list-wrapper {\n  .list-item {\n    @include except(1, -1, -2) {\n      background-color: #5bc0bb;\n      color: white;\n    }\n  }\n}\n"
   },
+  "focus-ring": {
+    "title": "Focus Ring",
+    "description": "Draw a keyboard focus ring with the Focus Ring Sass mixin: an outline on :focus-visible, which stays out of the way of mouse users and survives forced-colors mode.",
+    "scss": "@use \"gerillass\" as *;\n\n.btn-outline {\n  @include focus-ring;\n}\n\n.btn-primary {\n  @include focus-ring($color: #18181b);\n}\n"
+  },
   "font-face": {
     "title": "Font Face",
     "description": "The Font Face Sass mixin helps you generate a cross-browser compatible @font-face CSS at-rule in CSS and SCSS.",
