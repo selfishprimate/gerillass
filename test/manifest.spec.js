@@ -20,8 +20,19 @@ const SASS_OPTS = {
   silenceDeprecations: ["if-function"],
 };
 
-const compile = (snippet) =>
-  sass.compileString(`@use "gerillass" as *;\n${snippet}\n`, SASS_OPTS);
+// Pass an array to collect @warn messages. Deprecations are left out: they are
+// silenced above for a reason recorded in CLAUDE.md, and would fail every test.
+const compile = (snippet, warnings) =>
+  sass.compileString(`@use "gerillass" as *;\n${snippet}\n`, {
+    ...SASS_OPTS,
+    ...(warnings && {
+      logger: {
+        warn(message, { deprecation }) {
+          if (!deprecation) warnings.push(message);
+        },
+      },
+    }),
+  });
 
 const mixins = manifest.members.filter((m) => m.kind === "mixin");
 
@@ -77,11 +88,17 @@ describe("Manifest", () => {
 // into a reviewable diff. A snapshot records what the library does, not what it
 // ought to do -- the sass-true specs under test/library are where correctness
 // is asserted by hand.
+//
+// A documented call must also compile without a @warn. The CSS can be right
+// while the build prints a warning on every compile: `position` did that for
+// `null`, the way its own documentation page skips an edge, and passed.
 describe("Manifest examples", () => {
   for (const member of manifest.members) {
     for (const example of member.examples || []) {
       it(`${member.name}: ${example.replace(/\s+/g, " ").slice(0, 70)}`, () => {
-        const result = compile(example);
+        const warnings = [];
+        const result = compile(example, warnings);
+        expect(warnings).toEqual([]);
         expect(result.css.length).toBeGreaterThan(0);
         expect(result.css).toMatchSnapshot();
       });

@@ -1,6 +1,9 @@
 {
   "name": "counter",
   "summary": "CSS counter for a list, with optional text before and after the number.",
+  "caveats": [
+    "Numbering restarts on every item, each showing the first number, when the items are size containers (`container-type: inline-size`): containment scopes counters to each item."
+  ],
   "arguments": [
     {
       "name": "$params",

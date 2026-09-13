@@ -25,6 +25,17 @@ const tricky = mixins.filter((m) => m.rejects && m.rejects.length);
 
 const row = (m) => `| \`${m.signature}\` | ${m.summary} |`;
 
+// Behaviour a signature cannot show: what fails silently, or in a way the call
+// gives no hint of. Authored as `caveats` in meta/ and omitted when none exist.
+const withCaveats = manifest.members.filter((m) => m.caveats && m.caveats.length);
+const caveats = withCaveats.length
+  ? `
+## Traps a signature does not show
+
+${withCaveats.map((m) => `**\`${m.name}\`**\n\n${m.caveats.map((c) => `- ${c}`).join("\n")}`).join("\n\n")}
+`
+  : "";
+
 const out = `---
 name: gerillass
 description: Use the Gerillass Sass mixin library — loading it, the mixin catalogue, and the argument forms that are easy to get wrong. Use when writing SCSS in a project that has gerillass installed.
@@ -93,7 +104,7 @@ a dropped declaration rather than an error.
 | Mixin | Rejects, for example |
 |---|---|
 ${tricky.map((m) => `| \`${m.name}\` | \`${m.rejects[0].replace(/\|/g, "\\|")}\` |`).join("\n")}
-
+${caveats}
 ## Mixins
 
 | Signature | What it does |

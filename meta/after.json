@@ -1,6 +1,9 @@
 {
   "name": "after",
   "summary": "Styles the ::after pseudo-element. A `data-` argument becomes an attr() content value.",
+  "caveats": [
+    "With no argument no `content` is emitted, so the pseudo-element does not render unless the block sets `content`. Pass `\"\"` for an empty one."
+  ],
   "arguments": [
     {
       "name": "$content",

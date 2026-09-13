@@ -1,6 +1,9 @@
 {
   "name": "container",
   "summary": "Marks an element as a query container, so container-query can ask about its width instead of the viewport's. The rule that asks has to sit on a descendant: an element is never matched by a @container rule reading its own container, and nothing warns you when it is not.",
+  "caveats": [
+    "An element does not match a `@container` query that reads its own container, and nothing warns. Put the `container-query` on a descendant."
+  ],
   "arguments": [
     { "name": "$name", "accepts": ["a container name as a string, such as \"card\"", "null for an unnamed container"] },
     { "name": "$type", "accepts": ["inline-size", "size", "normal"] }

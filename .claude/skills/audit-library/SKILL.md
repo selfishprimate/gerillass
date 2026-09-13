@@ -48,6 +48,13 @@ a sentence naming what the argument accepts. Fix by checking the type before
 reaching for `str-slice`, `nth` or `unit`. Sass's own `Missing argument $name` is
 not in this bucket: it names the argument, which is enough.
 
+Sass's arithmetic errors, `Undefined operation` and `can't be used in a
+calculation`, belong here too. The tool missed them until the groundwork for
+2.1.1, and recognising them raised this bucket from 0 to 39: `background-dots`,
+`background-stripes` and `triangle` doing maths on their sizes, and the utility
+functions `remify`, `fontSizer`, `clearUnit`, `convertToEm` and
+`convertToNumber`. They are F9 and F11 in `todos/fix-plan.md`.
+
 **WARNED ONLY — the build succeeded with a warning.** A warning most pipelines
 never surface. Today all of these are `validateLength` on a value that is not
 a length, six of them reached through `position`, and they stay warnings on
@@ -59,6 +66,17 @@ act on the count. Some are correct — `after(nonsense)` really should emit
 `content: "nonsense"`. Others are real, like a colour argument that lands in the
 CSS as the literal word `true`. The question to ask is whether the emitted value
 could ever be valid CSS.
+
+The sweep then runs again with four values CSS does take, `var(--x)`,
+`currentColor`, `null` and `calc(1rem + 2px)`, into two buckets of their own:
+
+**REFUSED VALID CSS — raised on a value CSS takes.** A report, not a gate. A
+keyword argument, a selector or a size in a media condition is right to refuse
+`var()`. A colour, a length or a `content` value usually is not.
+
+**BROKEN OUTPUT — compiled, but the CSS cannot work.** Always a defect: `var()`
+inside `url()`, `var()` inside a quoted string, or a `/` division Sass left
+unevaluated, such as `var(--x)/2`.
 
 ### False positives this probe has hit before
 

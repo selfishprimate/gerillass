@@ -46,6 +46,7 @@ see G4.
 | F8 | Values that end up in a declaration let a CSS function through | 2.1.1 | probe |
 | F9 | Computed sizes work with `var()`, `calc()` and `clamp()` | 2.1.1 | probe |
 | F10 | `background-image` and `font-face` stop dropping values silently | 2.1.1 | probe |
+| F11 | Utility functions refuse non-numbers with their own message | 2.1.1 | audit |
 | D1 | Document the `loadify` module rule | 2.1.1 | T2 |
 | D2 | Correct the `remove` summary and example | 2.1.1 | T2 T3 |
 | D3 | A Parcel section in the README | 2.1.1 | T3 |
@@ -80,6 +81,9 @@ under Modernisation in `CLAUDE.md`, and the comments in the source are in
 ---
 
 ## Groundwork
+
+**Status.** G1 to G4 are implemented. What each one found when it landed is
+recorded under it; the sections stay because the fixes below refer to them.
 
 ### G1. Fail the manifest suite when an example warns
 
@@ -125,7 +129,9 @@ expect(warnings).toEqual([]);
 **Touches.** `test/manifest.spec.js`.
 
 **Verify.** Add the `null` example above to `meta/position.json`. The suite
-must fail before F2 and pass after it.
+must fail before F2 and pass after it. Done when G1 landed: with the example
+added temporarily the test failed on the empty-message warning, and passed
+again once it was removed.
 
 **Validated.** None of the 143 examples in `meta/` prints a warning today, so
 turning this on does not fail the suite by itself.
@@ -262,8 +268,10 @@ reports none of them:
 **Fix.**
 
 1. Add `Undefined operation` and `can't be used in a calculation` to `INTERNAL`.
-   Expect new UNHELPFUL findings for `background-dots` and `background-stripes`
-   until F9 lands.
+   The plan expected new UNHELPFUL findings for `background-dots` and
+   `background-stripes` only. Landing it found 39: those two (15), `triangle`
+   with a colour as its size (1), and five utility functions doing arithmetic on
+   whatever they are given (23). F9 covers the first 16; the functions are F11.
 2. Extend the second probe list from G2 with a check on the output, not only the
    compile: flag CSS containing `url(var(`, `"var(`, or `var(` next to `/` outside
    a `calc()`, in a new "broken output" bucket.
@@ -277,6 +285,12 @@ buckets.
 
 **Verify.** Before F8 to F10: the new buckets list the cases above. After: they are
 empty, apart from what F4 turns into refusals.
+
+When it landed, BROKEN OUTPUT listed 13: the F8 and F9 cases, plus two not
+predicted. `font-face` with a `var()` `$file-path` emits `url("var(--x).eot")`,
+and `convertToEm(var(--x))` emits `var(--x)/16pxem`. F10's format check does not
+catch the first, since the formats themselves are valid, so give `$file-path` its
+own check in F10. The second is F11.
 
 ---
 
@@ -733,6 +747,44 @@ raises too, which is right: a format list is chosen at compile time.
 unchanged, and 57 probe calls moved from CSS that could not work to the new
 errors. One message needs care: `$file-formats: null` prints empty backticks, so
 name `null` explicitly.
+
+### F11. Utility functions refuse non-numbers with their own message
+
+**Problem.** Five public functions do arithmetic on their argument without
+checking it, so anything that is not a number fails inside Sass, or worse,
+compiles. Found by the audit once G4 taught it Sass's arithmetic errors.
+
+| Function | Given | Today |
+|---|---|---|
+| `remify` | `nonsense` | `Undefined operation "nonsense/16px * 1rem"` |
+| `fontSizer` | `nonsense` | `Undefined operation "nonsense * 10px"` |
+| `clearUnit` | `nonsense` | `Undefined operation "nonsense * 0"` |
+| `convertToNumber` | `nonsense` | `Undefined operation "0-1 * 10"` |
+| `convertToEm` | `#ff0000` | `Undefined operation "#ff0000 / 16px"` |
+| `convertToEm` | `var(--x)` | compiles to `var(--x)/16pxem` |
+
+These are called by users directly; `remify` has its own documentation page.
+
+**Fix.** A type check at the top of each, with a message naming what it takes,
+in the style the mixins already use:
+
+```scss
+@if meta.type-of($value) != "number" {
+  @error "`#{$value}` is not a valid $value for `remify`. Pass a number, such as `24px` or `24`.";
+}
+```
+
+`convertToNumber` parses strings, so its check belongs where the parse fails,
+not on the type.
+
+**Changes existing output?** No working call changes: every row above is an error
+or unusable CSS today. `convertToEm(var(--x))` goes from broken CSS to an error.
+
+**Touches.** `scss/utilities/_remify.scss`, `_font-sizer.scss`, `_clear-unit.scss`,
+`_convert-to-number.scss`, `_convert-to-em.scss`; a reject in each `meta/` file.
+
+**Verify.** `node tools/audit.js` shows none of these five in UNHELPFUL or BROKEN
+OUTPUT. Nothing here has been prototyped yet.
 
 ### D1. Document the `loadify` module rule
 

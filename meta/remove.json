@@ -1,6 +1,10 @@
 {
   "name": "remove",
   "summary": "Hides an element outright, or only within a breakpoint range.",
+  "caveats": [
+    "With one argument the element is hidden at exactly that width, `(width: 768px)`, which is a single pixel. Use `min`, `max` or a range for anything wider.",
+    "A `display` written after the include, in the same rule, is emitted after the `@media` block and wins over it. Write it before the include."
+  ],
   "arguments": [
     {
       "name": "$params",

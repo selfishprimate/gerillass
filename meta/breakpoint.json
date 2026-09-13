@@ -1,6 +1,10 @@
 {
   "name": "breakpoint",
   "summary": "Media query built from the breakpoint map, or from raw lengths.",
+  "caveats": [
+    "With one argument the query matches exactly that width, `(width: 768px)`, which is a single pixel. Use `min`, `max` or a range for anything wider.",
+    "Declarations written after the include, in the same rule, are emitted after the `@media` block and win over it. Write them before the include."
+  ],
   "arguments": [
     {
       "name": "$params",
