@@ -82,6 +82,23 @@
     }
   }
 
+  @include it('A null offset leaves that edge out.') {
+    @include assert {
+      @include output {
+        .badge {
+          @include position(absolute, 0 null null 0);
+        }
+      }
+      @include expect {
+        .badge {
+          position: absolute;
+          top: 0;
+          left: 0;
+        }
+      }
+    }
+  }
+
   @include it('A CSS function is passed through untouched.') {
     @include assert {
       @include output {

@@ -223,7 +223,7 @@ and camelCase is what tells them apart from the kebab-case mixins above.
 | `shorthandProperty($value)` | Expands one to four values into the four-value CSS shorthand order. |
 | `tint($color, $percentage)` | Mixes a colour towards white by a percentage. |
 | `validateBreakpoint($value)` | Resolves a breakpoint name to its width, passing other values through. |
-| `validateLength($value)` | Returns the value if it is a length or one of auto, inherit, initial, 0. |
+| `validateLength($value)` | Returns the value if it is a length or one of auto, inherit, initial, 0. Returns null quietly for null, so a caller can skip a value. |
 | `validateRatio($ratio)` | Turns an aspect ratio into a value for the CSS aspect-ratio property. |
 | `validateScissors($value)` | Normalises corner values for the scissors mixin, adding px where missing. |
 

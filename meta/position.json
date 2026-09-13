@@ -11,13 +11,16 @@
     {
       "name": "$offsets",
       "accepts": [
-        "one to four lengths in shorthand order, or auto/inherit/initial/0"
+        "one to four lengths in shorthand order, or auto/inherit/initial/0",
+        "null in any position to leave that edge out"
       ]
     }
   ],
   "examples": [
     ".a { @include position(absolute, 0); }",
-    ".a { @include position(fixed, 0 10px); }"
+    ".a { @include position(fixed, 0 10px); }",
+    ".a { @include position(absolute, null 16px 16px 16px); }",
+    ".a { @include position(absolute, 0 null null 0); }"
   ],
   "rejects": []
 }

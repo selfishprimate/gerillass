@@ -988,7 +988,8 @@
           "name": "$offsets",
           "default": "0",
           "accepts": [
-            "one to four lengths in shorthand order, or auto/inherit/initial/0"
+            "one to four lengths in shorthand order, or auto/inherit/initial/0",
+            "null in any position to leave that edge out"
           ]
         }
       ],
@@ -997,7 +998,9 @@
       "summary": "Sets position and offsets in one call, using shorthand order.",
       "examples": [
         ".a { @include position(absolute, 0); }",
-        ".a { @include position(fixed, 0 10px); }"
+        ".a { @include position(fixed, 0 10px); }",
+        ".a { @include position(absolute, null 16px 16px 16px); }",
+        ".a { @include position(absolute, 0 null null 0); }"
       ],
       "rejects": []
     },
@@ -2029,13 +2032,14 @@
           "name": "$value",
           "required": true,
           "accepts": [
-            "a length with a unit, or auto, inherit, initial, 0"
+            "a length with a unit, or auto, inherit, initial, 0",
+            "null, returned as null without a warning"
           ]
         }
       ],
       "file": "scss/utilities/_validate-length.scss",
       "signature": "validateLength($value)",
-      "summary": "Returns the value if it is a length or one of auto, inherit, initial, 0.",
+      "summary": "Returns the value if it is a length or one of auto, inherit, initial, 0. Returns null quietly for null, so a caller can skip a value.",
       "examples": [
         ".a { width: validateLength(20px); }"
       ],
