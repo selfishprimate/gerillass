@@ -65,5 +65,9 @@
         }
       }
     }
+  } @else {
+    // Anything else used to match no branch and emit nothing, so a three
+    // argument range such as `between, medium, large` failed without a sound.
+    @error "`breakpoint` takes one or two arguments; you passed #{list.length($params)}. For a range, pass `between` with a space-separated pair, `between, medium large`, or two sizes, `medium, large`.";
   }
 }

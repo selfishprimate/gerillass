@@ -491,6 +491,11 @@ three-argument call as a reject).
 Zero arguments are the same silent case today, and the `@else` catches them too;
 both were checked in the prototype.
 
+**Status.** Implemented. The three-argument call and `breakpoint()` were added to
+`meta/breakpoint.json` as rejects first and failed; they pass after the change.
+Across 730 `breakpoint` and `remove` calls, only the five that emitted nothing
+changed, to this error. No snapshot moved and the audit is unchanged.
+
 ### F4. Size conditions refuse `var()`, which can never match
 
 **Problem.** Custom properties are not allowed in a container or media size
