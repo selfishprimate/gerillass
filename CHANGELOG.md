@@ -1,6 +1,74 @@
 # Change Log
 _Change is the essence._
 
+## 2.1.1
+
+Fixes only. Most of them close a case that compiled to CSS that could not work,
+or failed with an error that did not say what was wrong. No call that produced
+working CSS changes its output, except the few listed at the end, which now
+raise instead.
+
+- **Fixed:** `triangle` takes `currentColor`, `var()`, `color-mix()`,
+  `light-dark()` and `env()` as its colour, so a themed project no longer has to
+  pass a fake colour and override `border-color` by hand. `inherit`, `initial`,
+  `unset` and `revert` are still refused: the colour goes into a `border-color`
+  shorthand beside `transparent`, where a browser rejects a CSS-wide keyword.
+  `isColor`, `tint` and `shade` are unchanged, since colour maths needs a real
+  Sass colour.
+- **Fixed:** `background-dots`, `background-stripes` and `triangle` accept
+  `var()`, `calc()`, `clamp()`, `min()` and `env()` as sizes. Their arithmetic
+  now runs in `calc()`, which Sass simplifies back to the same number for plain
+  lengths, so existing calls emit identical CSS. `triangle(top, red, var(--x))`
+  used to compile to `var(--x)/2`, which is not valid CSS. `background-dots`
+  now defaults `$gutter` to `null` and still derives five times `$size` from it.
+- **Fixed:** CSS functions are written as they are where a value ends up in a
+  declaration. `after`, `before` and `counter` no longer quote `var()`,
+  `attr()`, `counter()` or `counters()` into text, which printed the literal
+  characters. `background-image`, `brand-logo`, `text-image`, `background-dots`
+  and `background-stripes` no longer wrap `var()`, `url()`, `image-set()` or a
+  gradient in `url()`, which loaded nothing. `aspect-ratio`, `validateRatio` and
+  `line-clamp` accept `var()`. A quoted string is still text.
+- **Fixed:** `breakpoint`, `remove`, `container-query` and `screen-agent` refuse
+  `var()` in a size or resolution, naming the value. Custom properties are not
+  evaluated in a `@media` or `@container` condition, so those rules never
+  applied, and nothing said so.
+- **Fixed:** `breakpoint` raises when given no arguments or more than two. A
+  range written as `breakpoint(between, medium, large)` used to emit nothing.
+- **Fixed:** `position` skips an edge given `null` without a warning. The CSS
+  was already right; `validateLength` printed a warning with an empty message
+  for each `null`, including on the documentation page's own example.
+- **Fixed:** `background-image` checks `$filter-direction` whatever the number
+  of colours. With one colour or none it used to be ignored without a word.
+- **Fixed:** `font-face` raises on a file format it does not know, where it
+  used to drop that source, and with only unknown formats emitted no `src` at
+  all. It also refuses a `var()` file path, which was written into `url()` as
+  text.
+- **Fixed:** `remify`, `convertToEm`, `clearUnit`, `fontSizer` and
+  `convertToNumber` refuse input they cannot convert, with a message of their
+  own, rather than failing with Sass's `Undefined operation` or compiling to
+  CSS such as `calc(1.5rem / 1px)`, `var(--x)/16pxem` or `40-1`. `remify` and
+  `convertToEm` take a pixel length, `fontSizer` two numbers of which at least
+  one is unitless, and `convertToNumber` a string of digits.
+  `aspect-ratio("sixteen/nine")` now reports a bad ratio.
+- **Fixed:** `reset-css` no longer writes its licence and display-role comments
+  into compiled CSS.
+- **Updated:** `gerillass.json` and `SKILL.md` carry caveats for behaviour a
+  signature cannot show: `loadify` across modules, `breakpoint` and `remove`
+  with one argument matching a single pixel, `before` and `after` with no
+  argument, `container`, `aspect-ratio` on an element with a `height` attribute,
+  and `counter` inside container queries.
+- **Updated:** the README has a Parcel recipe. The `remove` summary now says
+  that one breakpoint on its own hides the element at exactly that width.
+- **Note:** some calls that used to compile now raise, because the output
+  ignored what the call said. Check for these before upgrading:
+  - `background-image` with a direction it does not accept and one colour or
+    none, including `var()`, and angles in `turn` or `rad`, which only `deg` was
+    ever accepted in
+  - `font-face` with a format list that mixes a known format with an unknown
+    one, such as `woff2 wof` or `WOFF2`
+  - `background-dots` with a `$size` of `null`, or of two values
+  - `triangle` with a list of colours that holds anything other than colours
+
 ## 2.1.0
 
 Four new members and one accessibility fix. Nothing breaks.

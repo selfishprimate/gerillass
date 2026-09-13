@@ -24,7 +24,7 @@ This is a **Gerillass** technique for **image replacement**. There are other met
 <Arguments of="brand-logo">
   <Argument name="$width" type="number (with unit)">Sets the width value of the logo image.</Argument>
   <Argument name="$height" type="number (with unit)">Sets the height value of the logo image.</Argument>
-  <Argument name="$image-url" type="string">Sets the URL of the logo image. Works best with absolute URLs. This argument is optional, so you can also specify the image with the style attribute.</Argument>
+  <Argument name="$image-url" type="string, function">Sets the URL of the logo image. Works best with absolute URLs. This argument is optional, so you can also specify the image with the style attribute. A value that already is an image, <code>var()</code>, <code>url()</code>, <code>image-set()</code> or a gradient, is written as it is rather than wrapped in <code>url()</code>.</Argument>
 </Arguments>
 
 ## Examples

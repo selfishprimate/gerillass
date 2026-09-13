@@ -23,8 +23,8 @@ The **Triangle** Sass mixin helps you generate triangles using the `::before` or
 
 <Arguments of="triangle" footnote="When you pass the `top`, `right`, `bottom`, or `left` values for the **`$direction`** argument, you can pass two values to resize the triangle. **The first value controls the width of the triangle and the second controls the height.**">
   <Argument name="$direction" type="string">Sets the direction of the triangle. Accepts the values <code>top</code>, <code>top-right</code>, <code>right</code>, <code>bottom-right</code>, <code>bottom</code>, <code>bottom-left</code>, <code>left</code>, and <code>top-left</code>.</Argument>
-  <Argument name="$color" type="color">The color of the triangle.</Argument>
-  <Argument name="$size" type="number (with unit)">The size of the triangle. Multiple values must be separated by a space.</Argument>
+  <Argument name="$color" type="color, keyword, function">The color of the triangle. Accepts a Sass color, <code>currentColor</code>, or a function the browser resolves to a color: <code>var()</code>, <code>color-mix()</code>, <code>light-dark()</code> or <code>env()</code>. <code>inherit</code>, <code>initial</code>, <code>unset</code> and <code>revert</code> are refused, because the color is written into a <code>border-color</code> shorthand beside <code>transparent</code>, where a browser rejects them.</Argument>
+  <Argument name="$size" type="number (with unit), function">The size of the triangle. Multiple values must be separated by a space. Each value can also be <code>var()</code>, <code>env()</code>, or a calculation such as <code>calc()</code> or <code>clamp()</code>.</Argument>
 </Arguments>
 
 ## Examples

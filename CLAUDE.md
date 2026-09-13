@@ -365,6 +365,15 @@ The security fix only reaches users when the npm package is republished — upda
 3. Commit, then `git tag -a vX.Y.Z -m "vX.Y.Z"` — tags are `vX.Y.Z`, no dot after `v`.
 4. Push branch and tag, then `gh release create vX.Y.Z --latest --notes-file ...`.
 5. `npm publish`. The account has 2FA enabled, so this needs `--otp=<code>` and must be run by the maintainer.
+6. Update the site, which names the version in several places. The header badge
+   and both download buttons follow `package.json` through `site/src/release.js`,
+   but the download link is a 404 until the tag exists, so the site deploys after
+   the tag. The playground's `FALLBACK` in
+   `site/src/components/Playground/versions.js` is typed by hand and gets the new
+   version once npm has it. Refresh the stargazers with
+   `npm run supporters --prefix site`, and check the documentation pages against
+   what changed. `/release` has the full table, including why the playground
+   demo generator cannot run until it is ported to this repository.
 
 Default branch is `main` (renamed from `master` in v1.3.3). A repository ruleset blocks force-pushes and deletion of the default branch, with no bypass actors — direct pushes are allowed.
 

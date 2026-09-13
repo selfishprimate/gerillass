@@ -40,8 +40,8 @@ so `width: 100%` makes it overflow its container by 4px. The mixin sets
 ## Arguments
 
 <Arguments of="aspect-ratio" footnote="Pass null as the second argument to leave object-fit out of the output entirely.">
-  <Argument name="$ratio (16/9)" type="string, number">
-    The ratio to hold. Accepts a slash separated string such as <code>16/9</code>, a colon separated string such as <code>16:9</code>, or a bare number, where <code>1.5</code> means 1.5 to 1. The default is <code>16/9</code>. Anything else is refused with an error.
+  <Argument name="$ratio (16/9)" type="string, number, function">
+    The ratio to hold. Accepts a slash separated string such as <code>16/9</code>, a colon separated string such as <code>16:9</code>, a bare number, where <code>1.5</code> means 1.5 to 1, or <code>var()</code>, which is written as it is. The default is <code>16/9</code>. Anything else is refused with an error.
   </Argument>
   <Argument name="$fit (cover)" type="string">
     Sets the <code>object-fit</code> property. Accepts <code>fill</code>, <code>contain</code>, <code>cover</code>, <code>none</code>, <code>scale-down</code>, or <code>null</code> to leave <code>object-fit</code> alone. The default is <code>cover</code>.

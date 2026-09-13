@@ -28,7 +28,7 @@
   library's test suite, so it is a sound second source; the docs still win
   wherever they have something to say.
 
-  Usage: node scripts/update-playground-demos.js   (needs `gh auth login` once)
+  Usage: node scripts/update-playground-demos.cjs  (needs `gh auth login` once)
 */
 
 const { execFileSync } = require("child_process");

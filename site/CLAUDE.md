@@ -214,10 +214,19 @@ package, which still meant an install; before that the number was typed by
 hand, and the badge sat two releases behind twice.
 
 A release that changes the documented examples also wants
-`node scripts/update-playground-demos.js`, and the new version seeded into
+`node scripts/update-playground-demos.cjs`, and the new version seeded into
 `FALLBACK` in `src/components/Playground/versions.js` — only a seed, but it
 should not be a lie. Refresh the stargazer snapshot with
-`node scripts/update-supporters.js` in the same pass.
+`node scripts/update-supporters.cjs` in the same pass.
+
+**The demo generator does not run in this repository yet.** Both scripts were
+`.js` files using `require`, which `"type": "module"` in `package.json` turned
+into an error on the first line; they are `.cjs` now, and the stargazer one
+works. The demo one still reads the documentation from the archived
+`gerillass-docs` repository over `gh api`, parses Hugo `{{< highlight >}}`
+shortcodes, and looks for the manifest in `node_modules/gerillass`. None of
+that exists here: the pages are `content/docs/*.mdx` and the manifest is at the
+repository root. Port it before a release that changes a documented example.
 
 Check the tag exists before pointing the download links at it:
 `git ls-remote --tags https://github.com/selfishprimate/gerillass.git`.

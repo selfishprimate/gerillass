@@ -122,6 +122,36 @@ If the release adds or changes a member, the page must cover:
 - **the measurement behind each member**. This is the part with no other home,
   and it is what a documentation page should be built on.
 
+## 3c. The site, which advertises the release
+
+`gerillass.com` and its documentation live under `site/`, and several places on
+it name the version. A release that updates the library and not these leaves
+the site advertising the old one, or linking to a download that does not exist.
+
+| Where | How it follows the version | What to do |
+|---|---|---|
+| Header badge under the logo | `site/src/release.js` reads `VERSION` from the root `package.json` | nothing to edit; confirm it after a build |
+| Both download buttons | `DOWNLOAD_URL` in the same file, `archive/refs/tags/vX.Y.Z.zip` | the link is a 404 until the tag is pushed, so **deploy the site only after step 4** |
+| Playground version menu | reads the npm registry; `FALLBACK` in `site/src/components/Playground/versions.js` is the seed used when that fails | add the version to `versions` and `latest` **after npm has it** (step 7), not before |
+| Stargazers row | a committed snapshot | `npm run supporters --prefix site` |
+| Playground starter snippets | `demos.json`, generated from the documentation | only when a documented example changed. **The generator cannot run yet**: `site/scripts/update-playground-demos.cjs` still reads the archived `gerillass-docs` repository over `gh api`, its Hugo `{{< highlight >}}` shortcodes, and a manifest under `site/node_modules`. Port it to `site/content/docs/*.mdx` and the root `gerillass.json` before a release that needs it |
+| Documentation pages | `site/content/docs/*.mdx` | compile every example against the previous tag and `HEAD`; for each member whose behaviour changed, read its argument table and footnotes for claims that are no longer true |
+| Announcement banner | hand-written | only for a release that breaks something; leave it otherwise |
+
+Confirm the badge and the download link in the build before tagging:
+
+```bash
+npm run build --prefix site
+grep -o "X.Y.Z" site/dist/index.html | sort | uniq -c
+grep -o 'archive/refs/tags/v[^"]*' site/dist/index.html
+```
+
+After the tag is pushed, check that the link resolves:
+
+```bash
+git ls-remote --tags https://github.com/selfishprimate/gerillass.git | grep vX.Y.Z
+```
+
 ## 4. Commit, tag, push
 
 ```bash
@@ -178,6 +208,9 @@ cd "$(mktemp -d)" && npm init -y >/dev/null && npm install gerillass@X.Y.Z
 ls node_modules | grep -v '^\.'            # expect gerillass and nothing else
 npm audit
 ```
+
+Then seed the playground's `FALLBACK` with the new version, as in step 3c, and
+build the site.
 
 Report the published version, the dependency count a consumer now installs, and
 the audit result. If any Dependabot alerts or PRs were resolved by this release,

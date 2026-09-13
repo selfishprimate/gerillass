@@ -23,7 +23,7 @@ The **Remove Sass mixin** helps you set the `display` CSS property of an element
 ## Arguments
 
 <Arguments of="remove">
-  <Argument name="$value" type="number (with unit)">The width, or a key from the breakpoint map. On its own it matches that exact width and no other.</Argument>
+  <Argument name="$value" type="number (with unit)">The width, or a key from the breakpoint map. On its own it matches that exact width and no other. It cannot be a custom property: <code>var()</code> is not evaluated in a <code>@media</code> condition, so the rule would never apply, and the mixin refuses it.</Argument>
   <Argument name="$mode" type="string">Sets the <code>width</code> media feature. Accepts the values <code>only</code>, <code>min</code>, <code>max</code>, and <code>between</code>.</Argument>
 </Arguments>
 

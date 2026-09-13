@@ -8,8 +8,8 @@
     "dev": "vite",
     "build": "node scripts/prerender.mjs",
     "preview": "vite preview",
-    "playground-demos": "node scripts/update-playground-demos.js",
-    "supporters": "node scripts/update-supporters.js",
+    "playground-demos": "node scripts/update-playground-demos.cjs",
+    "supporters": "node scripts/update-supporters.cjs",
     "build:spa": "vite build"
   },
   "//": "Versions are deliberately left where create-react-app had them. This step changes the build and nothing else, so anything that looks different afterwards is the build's doing. React, the router and the editor move in a step of their own.",
