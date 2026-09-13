@@ -12,7 +12,8 @@
   $file-path,
   $font-style: normal,
   $font-weight: 400,
-  $file-formats: eot woff2 woff ttf svg
+  $file-formats: eot woff2 woff ttf svg,
+  $font-display: null
 ) {
   @if & {
     @error "You must call the mixin at the root level of your style sheet, not in the `#{&+'{'+'}'}` selector.";
@@ -48,6 +49,19 @@
       }
     }
 
+    // $font-display comes last so the reinterpretation of $font-style above is
+    // left alone, and it is written only when given: the browser's default is
+    // what a call without it has always had. Measured in Chrome 152, a
+    // @font-face rule drops `font-display: "swap"` and `font-display: var(--d)`
+    // without a word, so a quoted keyword is unquoted and var() is refused.
+    @if $font-display != null {
+      @if meta.type-of($font-display) == "string" and string.index($font-display, "var(") {
+        @error "`#{meta.inspect($font-display)}` is not a valid $font-display for `font-face`. A custom property cannot supply it, because a @font-face rule drops var() in a descriptor. Pass one of: auto, block, swap, fallback, optional.";
+      } @else if not list.index("auto" "block" "swap" "fallback" "optional", $font-display) {
+        @error "`#{meta.inspect($font-display)}` is not a valid $font-display for `font-face`. Pass one of: auto, block, swap, fallback, optional.";
+      }
+    }
+
     // fontSource returns nothing for a format it does not know, so a typo
     // dropped that source and a list of nothing but typos dropped `src`.
     @each $format in $file-formats {
@@ -67,6 +81,9 @@
       src: $list;
       font-style: $font-style;
       font-weight: $font-weight;
+      @if $font-display {
+        font-display: string.unquote($font-display);
+      }
       @content;
     }
   }

@@ -939,6 +939,16 @@ exports[`Manifest examples font-face: @include font-face("Inter", "/fonts/inter"
 }"
 `;
 
+exports[`Manifest examples font-face: @include font-face("Readex Pro", "/fonts/readex", $font-weight: 160 70 1`] = `
+"@font-face {
+  font-family: "Readex Pro";
+  src: url("/fonts/readex.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 160 700;
+  font-display: swap;
+}"
+`;
+
 exports[`Manifest examples fontSizer: .a { font-size: fontSizer(16px, 1.5); } 1`] = `
 ".a {
   font-size: 24px;

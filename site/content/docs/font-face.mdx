@@ -27,6 +27,7 @@ The **Font Face** Sass mixin helps you generate a cross-browser compatible @font
   <Argument name="$font-style" type="string">Sets the <code>font-style</code> property. The default value is <code>normal</code>. If there is an <code>italic</code> version of the font, you can set the value to <code>italic</code> or <code>oblique</code>.</Argument>
   <Argument name="$font-weight" type="number">Sets the weight of the font. The default value is <code>400</code>. Accepts <code>100</code>, <code>200</code>, <code>300</code>, <code>400</code>, <code>500</code>, <code>600</code>, <code>700</code>, <code>800</code>, and <code>900</code>.</Argument>
   <Argument name="$file-formats" type="string | list">Sets the font file formats you want to include. The default value is <code>eot woff2 woff ttf svg</code>. A format outside that list is refused with an error. Pass only the formats you have files for: a bundler such as Parcel resolves every <code>url()</code> and fails on a missing file.</Argument>
+  <Argument name="$font-display" type="string">Sets the <code>font-display</code> descriptor, which decides what the text does while the font is still loading. Accepts <code>auto</code>, <code>block</code>, <code>swap</code>, <code>fallback</code> and <code>optional</code>. The default is <code>null</code>, which leaves it out, so the browser's own behaviour applies.</Argument>
 </Arguments>
 
 ## Examples
@@ -112,6 +113,18 @@ Things get trickier when you want to pass a value for `$file-formats`. The examp
 </Example>
 
 If you don't have all the font varieties, or you have a font you want to convert into a **web font** (embeddable with @font-face), try **Font Squirrel**'s [Webfont Generator](https://www.fontsquirrel.com/tools/webfont-generator).
+
+<Example caption="A **variable font** in one file. The weight range is written through as it is, and `$font-display: swap` shows the text in a fallback font until the file arrives, rather than hiding it.">
+```scss
+@include font-face(
+  "Readex Pro",
+  "/fonts/readex-pro",
+  $font-weight: 160 700,
+  $file-formats: woff2,
+  $font-display: swap
+);
+```
+</Example>
 
 ## Related Links
 * [Font Face](https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face)  
