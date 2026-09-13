@@ -18,6 +18,7 @@
     ".a { aspect-ratio: validateRatio(var(--ratio)); }"
   ],
   "rejects": [
-    ".a { aspect-ratio: validateRatio(16 9); }"
+    ".a { aspect-ratio: validateRatio(16 9); }",
+    ".a { aspect-ratio: validateRatio(\"16 / 9\"); }"
   ]
 }

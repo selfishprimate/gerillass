@@ -11,6 +11,21 @@
   }
 
   $string-numerals: "0" "1" "2" "3" "4" "5" "6" "7" "8" "9";
+
+  // Every character has to be a digit before the parse runs. Otherwise an
+  // empty string or a sign failed with Sass's own "Undefined operation", and a
+  // letter or a space was folded into nonsense such as `40-1`. The empty case
+  // is checked first because `@for $i from 1 through 0` counts down, not zero
+  // times.
+  @if string.length($value) == 0 {
+    @error "`\"\"` is not a valid $value for `convertToNumber`. Pass a string made only of digits, such as `\"42\"`.";
+  }
+  @for $i from 1 through string.length($value) {
+    @if not list.index($string-numerals, string.slice($value, $i, $i)) {
+      @error "`#{meta.inspect($value)}` is not a valid $value for `convertToNumber`. Pass a string made only of digits, such as `\"42\"`.";
+    }
+  }
+
   $calc: 0;
 
   @for $i from 1 through string.length($value) {

@@ -2,8 +2,14 @@
 
 @use "sass:string";
 @use "sass:math";
+@use "sass:meta";
 
 @function convertToEm($value) {
+  // Only a pixel length converts cleanly. A unitless number or another unit
+  // compiled to `calc(1.5 / 1px)em`, and a word or var() to `var(--x)/16pxem`.
+  @if meta.type-of($value) != "number" or math.unit($value) != "px" {
+    @error "`#{meta.inspect($value)}` is not a valid $value for `convertToEm`. Pass a pixel length, such as `24px`.";
+  }
   $base-value: 16px;
   $rem-value: math.div($value, $base-value);
   @return $rem-value + string.unquote("em");

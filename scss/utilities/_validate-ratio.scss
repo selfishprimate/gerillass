@@ -45,8 +45,24 @@
       @error "`#{$ratio}` is not a valid ratio. A string ratio must separate width and height with `/` or `:`, like `\"16/9\"` or `\"16:9\"`.";
     }
 
-    $width: convertToNumber(string.slice($ratio, 1, $separator - 1));
-    $height: convertToNumber(string.slice($ratio, $separator + 1));
+    $width-text: string.slice($ratio, 1, $separator - 1);
+    $height-text: string.slice($ratio, $separator + 1);
+
+    // Checked here so a malformed ratio is reported as a ratio, rather than as
+    // a bad argument to convertToNumber, which the caller never called.
+    @each $part in ($width-text, $height-text) {
+      @if string.length($part) == 0 {
+        @error "`#{$ratio}` is not a valid ratio. Width and height must both be whole numbers, like `\"16/9\"` or `\"16:9\"`.";
+      }
+      @for $i from 1 through string.length($part) {
+        @if not list.index("0" "1" "2" "3" "4" "5" "6" "7" "8" "9", string.slice($part, $i, $i)) {
+          @error "`#{$ratio}` is not a valid ratio. Width and height must both be whole numbers, like `\"16/9\"` or `\"16:9\"`.";
+        }
+      }
+    }
+
+    $width: convertToNumber($width-text);
+    $height: convertToNumber($height-text);
 
     @if $width == 0 {
       @error "`#{$ratio}` is not a valid ratio. The width must be greater than zero.";

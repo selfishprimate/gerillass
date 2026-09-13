@@ -12,5 +12,8 @@
   "examples": [
     ".a { margin: convertToEm(24px); }"
   ],
-  "rejects": []
+  "rejects": [
+    ".a { margin: convertToEm(nonsense); }",
+    ".a { margin: convertToEm(24); }"
+  ]
 }

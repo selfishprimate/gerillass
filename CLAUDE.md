@@ -308,11 +308,12 @@ members that compute something — `triangle`, `scissors`, `columnizer`,
 
 `node tools/audit.js` is the fourth thing the suite cannot do: it throws
 arguments nobody wrote a test for at every member and every argument position.
-Its SILENT bucket must stay empty. UNHELPFUL must too, and was until the audit
-learned to recognise Sass's arithmetic errors: it now lists 39, which are F9 and
-F11 in `todos/fix-plan.md`. A second sweep passes values CSS does take, such as
-`var(--x)`: REFUSED VALID CSS is a report to read, since a keyword argument is
-right to refuse one, and BROKEN OUTPUT is always a defect, 13 of them today.
+Its SILENT, UNHELPFUL and BROKEN OUTPUT buckets must stay empty. UNHELPFUL
+reached 39 once the audit learned to recognise Sass's arithmetic errors, and
+BROKEN OUTPUT started at 13; F8 to F11 in `todos/fix-plan.md` brought both back
+to zero. REFUSED VALID CSS, from a second sweep with values CSS does take such
+as `var(--x)`, is a report to read rather than a gate: a keyword argument is
+right to refuse one.
 
 ## Conventions
 

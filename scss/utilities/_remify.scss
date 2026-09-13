@@ -1,8 +1,15 @@
 @charset "UTF-8";
 
 @use "sass:math";
+@use "sass:meta";
 
 @function remify($value) {
+  // Only a pixel length converts cleanly. Anything else used to reach the
+  // arithmetic unchecked: a word failed with Sass's own "Undefined operation",
+  // and a unitless number or another unit compiled to `calc(1.5rem / 1px)`.
+  @if meta.type-of($value) != "number" or math.unit($value) != "px" {
+    @error "`#{meta.inspect($value)}` is not a valid $value for `remify`. Pass a pixel length, such as `24px`.";
+  }
   $base-value: 16px;
   $rem-value: math.div($value, $base-value);
   @return $rem-value * 1rem;

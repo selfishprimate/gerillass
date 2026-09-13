@@ -1,7 +1,11 @@
 @charset "UTF-8";
 
 @use "sass:math";
+@use "sass:meta";
 
 @function clearUnit($value) {
+  @if meta.type-of($value) != "number" {
+    @error "`#{meta.inspect($value)}` is not a valid $value for `clearUnit`. Pass a number, such as `24px`.";
+  }
   @return math.div($value, ($value * 0 + 1));
 }

@@ -12,5 +12,7 @@
   "examples": [
     ".a { line-height: clearUnit(24px); }"
   ],
-  "rejects": []
+  "rejects": [
+    ".a { line-height: clearUnit(nonsense); }"
+  ]
 }

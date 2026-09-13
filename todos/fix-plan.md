@@ -909,6 +909,33 @@ passes today only because `convertToNumber`, called by `validateRatio`, fails
 with `Undefined operation`. So the pattern belongs in this item, after
 `convertToNumber` gets its check, and the `aspect-ratio` reject is its test.
 
+**Status.** Implemented. What each function now takes was read off what it
+already computed correctly, so no working call is refused:
+
+| Function | Takes | Refuses, which used to give |
+|---|---|---|
+| `remify`, `convertToEm` | a pixel length | a unitless number or other unit: `calc(1.5rem / 1px)`, `calc(1.5 / 1px)em` |
+| `clearUnit` | any number | anything else: `Undefined operation` |
+| `fontSizer` | two numbers, at least one unitless | two units: `calc(16px * 1px)` |
+| `convertToNumber` | a non-empty string of digits | a letter or space: `40-1`; empty or a sign: `Undefined operation` |
+
+`validateRatio` checks its two parts itself, so `aspect-ratio("sixteen/nine")`
+reports a bad ratio rather than a bad argument to `convertToNumber`. The
+manifest suite's pattern for Sass's internal errors now includes
+`Undefined operation` and `can't be used in a calculation`.
+
+Nine rejects and the widened pattern went in first; with the pattern, the
+existing `aspect-ratio("sixteen/nine")` reject failed too, as expected. Across
+674 calls compiled before and after on Dart Sass 1.103.1, keyed by call rather
+than position, 54 went from CSS to an error, every one of them CSS that could
+not work, 201 kept an error with the library's message now in place of Sass's,
+and none changed working output. On 1.71.0 the result matches, and the two
+versions, which disagreed on 44 of these calls because Sass words its internal
+errors differently, now agree on all of them. The audit's UNHELPFUL bucket fell
+from 23 to 0 and BROKEN OUTPUT from 2 to 0. The nine related documentation
+pages compile to identical CSS; their seven failing examples are the ones that
+show a mistake on purpose.
+
 ### D1. Document the `loadify` module rule
 
 **Problem.** With `loadify(init)` in one partial and `@include loadify` in

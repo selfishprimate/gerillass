@@ -36,6 +36,11 @@ const compile = (snippet, warnings) =>
 
 const mixins = manifest.members.filter((m) => m.kind === "mixin");
 
+// A rejection must come with the library's own message. These are the Sass
+// errors that mean a value reached an operation unchecked instead; the last two
+// are arithmetic on something that is not a number, which tools/audit.js also
+// reports as UNHELPFUL.
+const INTERNAL = /is not a string|Invalid index|\$number: .* is not a number|Undefined operation|can't be used in a calculation/;
 const BROKEN = /url\(\s*["']?var\(|["']var\(|var\([^)]*\)\/\S/;
 
 describe("Manifest", () => {
@@ -149,7 +154,7 @@ describe("Prefixed mixins reject the same input", () => {
           message = e.message;
         }
         expect(message).not.toBeNull();
-        expect(message).not.toMatch(/is not a string|Invalid index|\$number: .* is not a number/);
+        expect(message).not.toMatch(INTERNAL);
       });
     }
   }
@@ -168,7 +173,7 @@ describe("Manifest rejections", () => {
           message = e.message;
         }
         expect(message).not.toBeNull();
-        expect(message).not.toMatch(/is not a string|Invalid index|\$number: .* is not a number/);
+        expect(message).not.toMatch(INTERNAL);
       });
     }
   }
