@@ -18,5 +18,8 @@
   "examples": [
     ".a { font-size: fontSizer(16px, 1.5); }"
   ],
-  "rejects": []
+  "rejects": [
+    ".a { font-size: fontSizer(nonsense, 1.5); }",
+    ".a { font-size: fontSizer(16px, 1px); }"
+  ]
 }

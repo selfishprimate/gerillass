@@ -12,5 +12,9 @@
   "examples": [
     ".a { font-size: remify(24px); }"
   ],
-  "rejects": []
+  "rejects": [
+    ".a { font-size: remify(nonsense); }",
+    ".a { font-size: remify(1.5rem); }",
+    ".a { font-size: remify(24); }"
+  ]
 }

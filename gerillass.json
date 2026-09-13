@@ -1585,7 +1585,9 @@
       "examples": [
         ".a { line-height: clearUnit(24px); }"
       ],
-      "rejects": []
+      "rejects": [
+        ".a { line-height: clearUnit(nonsense); }"
+      ]
     },
     {
       "name": "clearWhitespace",
@@ -1627,7 +1629,10 @@
       "examples": [
         ".a { margin: convertToEm(24px); }"
       ],
-      "rejects": []
+      "rejects": [
+        ".a { margin: convertToEm(nonsense); }",
+        ".a { margin: convertToEm(24); }"
+      ]
     },
     {
       "name": "convertToNumber",
@@ -1648,7 +1653,9 @@
         ".a { z-index: convertToNumber(\"42\"); }"
       ],
       "rejects": [
-        ".a { --x: #{convertToNumber(42)}; }"
+        ".a { --x: #{convertToNumber(42)}; }",
+        ".a { z-index: convertToNumber(\"4a\"); }",
+        ".a { z-index: convertToNumber(\"\"); }"
       ]
     },
     {
@@ -1762,7 +1769,10 @@
       "examples": [
         ".a { font-size: fontSizer(16px, 1.5); }"
       ],
-      "rejects": []
+      "rejects": [
+        ".a { font-size: fontSizer(nonsense, 1.5); }",
+        ".a { font-size: fontSizer(16px, 1px); }"
+      ]
     },
     {
       "name": "fontSource",
@@ -1977,7 +1987,11 @@
       "examples": [
         ".a { font-size: remify(24px); }"
       ],
-      "rejects": []
+      "rejects": [
+        ".a { font-size: remify(nonsense); }",
+        ".a { font-size: remify(1.5rem); }",
+        ".a { font-size: remify(24); }"
+      ]
     },
     {
       "name": "shade",
@@ -2126,7 +2140,8 @@
         ".a { aspect-ratio: validateRatio(var(--ratio)); }"
       ],
       "rejects": [
-        ".a { aspect-ratio: validateRatio(16 9); }"
+        ".a { aspect-ratio: validateRatio(16 9); }",
+        ".a { aspect-ratio: validateRatio(\"16 / 9\"); }"
       ]
     },
     {

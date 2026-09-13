@@ -1,5 +1,19 @@
 @charset "UTF-8";
 
+@use "sass:math";
+@use "sass:meta";
+
 @function fontSizer($size, $time) {
+  @if meta.type-of($size) != "number" {
+    @error "`#{meta.inspect($size)}` is not a valid $size for `fontSizer`. Pass a length, such as `16px`.";
+  }
+  @if meta.type-of($time) != "number" {
+    @error "`#{meta.inspect($time)}` is not a valid $time for `fontSizer`. Pass a multiplier, such as `1.5`.";
+  }
+  // Two units multiply into a unit squared, which Sass writes as
+  // `calc(16px * 1px)`: not a length anywhere in CSS.
+  @if not math.is-unitless($size) and not math.is-unitless($time) {
+    @error "`fontSizer(#{$size}, #{$time})` multiplies two units, which is not a length. Pass the multiplier without a unit, such as `1.5`.";
+  }
   @return $size * $time;
 }

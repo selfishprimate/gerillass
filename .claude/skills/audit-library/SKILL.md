@@ -53,7 +53,10 @@ calculation`, belong here too. The tool missed them until the groundwork for
 2.1.1, and recognising them raised this bucket from 0 to 39: `background-dots`,
 `background-stripes` and `triangle` doing maths on their sizes, and the utility
 functions `remify`, `fontSizer`, `clearUnit`, `convertToEm` and
-`convertToNumber`. They are F9 and F11 in `todos/fix-plan.md`.
+`convertToNumber`. F9 and F11 in `todos/fix-plan.md` fixed all 39, so the bucket
+is back to zero and should stay there. `test/manifest.spec.js` recognises the
+same two messages, so a recorded rejection that fails with one of them fails the
+suite.
 
 **WARNED ONLY — the build succeeded with a warning.** A warning most pipelines
 never surface. Today all of these are `validateLength` on a value that is not
@@ -77,6 +80,8 @@ keyword argument, a selector or a size in a media condition is right to refuse
 **BROKEN OUTPUT — compiled, but the CSS cannot work.** Always a defect: `var()`
 inside `url()`, `var()` inside a quoted string, or a `/` division Sass left
 unevaluated, such as `var(--x)/2`.
+It listed 13 when it was added and is zero since F8 to F11; the manifest suite
+fails a documented example with the same shapes.
 
 ### False positives this probe has hit before
 

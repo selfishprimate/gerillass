@@ -13,6 +13,8 @@
     ".a { z-index: convertToNumber(\"42\"); }"
   ],
   "rejects": [
-    ".a { --x: #{convertToNumber(42)}; }"
+    ".a { --x: #{convertToNumber(42)}; }",
+    ".a { z-index: convertToNumber(\"4a\"); }",
+    ".a { z-index: convertToNumber(\"\"); }"
   ]
 }
