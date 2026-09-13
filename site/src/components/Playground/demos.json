@@ -1,7 +1,7 @@
 {
   "adaptive": {
     "title": "Adaptive",
-    "description": "The Adaptive Sass mixin helps you set a max-width value on your container elements. It is useful when you want to apply adaptive design concepts to your responsive designs.",
+    "description": "Set a max-width on your container elements with the Adaptive Sass mixin, for layouts that step between fixed widths rather than flowing between them.",
     "scss": "@use \"gerillass\" as *;\n\n.main-container{\n  @include adaptive(2em);\n}\n"
   },
   "after": {
@@ -26,7 +26,7 @@
   },
   "aspect-ratio": {
     "title": "Aspect Ratio",
-    "description": "The Aspect Ratio Sass mixin holds an element to the ratio you give it, and adds what the CSS aspect-ratio property alone leaves out. It replaces the Ratio Box and Responsive Video mixins.",
+    "description": "The Aspect Ratio Sass mixin holds an element to a ratio and adds what the CSS aspect-ratio property leaves out. It replaces Ratio Box and Responsive Video.",
     "scss": "@use \"gerillass\" as *;\n\n.video iframe {\n  @include aspect-ratio(\"16/9\");\n}\n\n.avatar {\n  @include aspect-ratio(\"1:1\", contain);\n}\n\n.panel {\n  @include aspect-ratio(1.5, null);\n}\n"
   },
   "background-dots": {
@@ -41,7 +41,7 @@
   },
   "background-stripes": {
     "title": "Background Stripes",
-    "description": "The Background Stripes Sass mixin allows you to create stylish and colorful background stripes using the repeating-linear-gradient CSS function. You can easily create colorful background lines that are difficult to create with vanilla CSS.",
+    "description": "Create colourful striped backgrounds with the Background Stripes Sass mixin, which writes the repeating-linear-gradient that plain CSS makes fiddly.",
     "scss": "@use \"gerillass\" as *;\n\n.element{\n  @include background-stripes(\n    $color: rgba(blue, 0.4),\n    $thickness: 3px,\n    $rotation: 45deg,\n    $image: \"/images/backgrounds/05.jpg\"\n  );\n}\n"
   },
   "before": {
@@ -56,7 +56,7 @@
   },
   "border-radius": {
     "title": "Border Radius",
-    "description": "The Border Radius Sass mixin helps you round the corners of a selected element using the border-radius CSS property. You can pass one value (with a unit) to style all the corners equally, or use the CSS shorthand to style each corner differently.",
+    "description": "Round an element's corners with the Border Radius Sass mixin. Pass one value for all four corners, or the CSS shorthand to set each corner apart.",
     "scss": "@use \"gerillass\" as *;\n\n.element{\n  @include border-radius(top, 24px);\n}\n"
   },
   "brand-logo": {
@@ -96,17 +96,17 @@
   },
   "container": {
     "title": "Container",
-    "description": "Marks an element as a query container, so container-query can ask about its width instead of the viewport's. The rule that asks has to sit on a descendant: an element is never matched by a @container rule reading its own container, and nothing warns you when it is not.",
+    "description": "The Container Sass mixin marks an element as a query container, so container-query can ask about its width instead of the viewport's.",
     "scss": "@use \"gerillass\" as *;\n\n.card {\n  @include container(\"card\");\n}\n\n.panel {\n  @include container(null, size);\n}\n"
   },
   "container-query": {
     "title": "Container Query",
-    "description": "A @container rule, taking the same argument shapes as breakpoint so the two read alike. Sizes may be a key from $map-for-breakpoints or a raw length, and a length is the common case because a container is usually narrower than the viewport. Nothing matches at all unless an ancestor was declared with the container mixin.",
+    "description": "The Container Query Sass mixin writes a @container rule with the same arguments as breakpoint, so a component answers its container, not the viewport.",
     "scss": "@use \"gerillass\" as *;\n\n.card {\n  @include container(\"card\");\n}\n\n// The query goes on a descendant of the container, never on the\n// container itself. Nothing warns you when it is on the wrong element.\n.card .title {\n  @include container-query(\"min\", 400px) {\n    font-size: 2rem;\n  }\n}\n"
   },
   "counter": {
     "title": "Counter",
-    "description": "The Counter Sass mixin allows you to present your content in a listicle format using CSS counter properties. With Sass and Gerillass it is now very easy to create elements that count automatically.",
+    "description": "Number your content automatically with the Counter Sass mixin, which wraps the CSS counter properties for listicles and step by step layouts.",
     "scss": "@use \"gerillass\" as *;\n\n.listicle-wrapper {\n  @include counter {\n    position: absolute;\n    top: 0;\n    left: 0;\n    font-size: 7em;\n    font-weight: bold;\n    font-style: italic;\n    font-family: \"Jumble\", sans-serif;\n    transform: translateY(-20%);\n    color: rgb(230,230,230);\n    line-height: 1;\n    z-index: -1;\n  };\n  .item {\n    position: relative;\n    padding-left: 50px;\n    &:not(:last-child) {\n        margin-bottom: 3rem;\n    }\n  }\n}\n"
   },
   "ellipsis": {
@@ -131,27 +131,27 @@
   },
   "hide": {
     "title": "Hide",
-    "description": "You can improve web accessibility by hiding elements with the Hide Sass mixin. It hides content visually on a web page while keeping it accessible to assistive technologies such as screen readers.",
+    "description": "Hide an element visually while keeping it available to screen readers, with the Hide Sass mixin. The accessible way to take something out of view.",
     "scss": "@use \"gerillass\" as *;\n\n.element {\n  @include hide(unhide);\n}\n"
   },
   "line-clamp": {
     "title": "Line Clamp",
-    "description": "Truncates text after a number of lines, where ellipsis truncates one. It emits five declarations rather than one because -webkit-line-clamp does nothing on its own: without display: -webkit-box or without -webkit-box-orient: vertical the text is not clamped at all and nothing warns you, and without overflow: hidden the clamped text spills out below the box. The unprefixed line-clamp is emitted too, for when it becomes Baseline.",
+    "description": "Truncate text after a number of lines with the Line Clamp Sass mixin. It writes all five declarations the effect needs, which -webkit-line-clamp does not.",
     "scss": "@use \"gerillass\" as *;\n\n.excerpt {\n  @include line-clamp(3);\n}\n"
   },
   "linear-gradient": {
     "title": "Linear Gradient",
-    "description": "The Linear Gradient Sass mixin helps you generate colorful CSS gradients and combine them with image and text elements. This way, you can create beautiful page components.",
+    "description": "Generate CSS gradients with the Linear Gradient Sass mixin, and layer them over the images and text a page component is built from.",
     "scss": "@use \"gerillass\" as *;\n\n.element{\n  @include linear-gradient(\n    $direction: right,\n    $colors: (#1a2a6c 25%) (#b21f1f 25% 50%) (#fdbb2d 50% 75%) (orange 75% 100%)\n  );\n}\n"
   },
   "loadify": {
     "title": "Loadify",
-    "description": "Loadify Sass mixin is a handy tool that helps you make a page element load with a smooth fade-in effect while the page is loading. It also allows you to create smooth image loading effects.",
+    "description": "Fade a page element in as the page loads with the Loadify Sass mixin, which also gives images a smooth loading effect of their own.",
     "scss": "@use \"gerillass\" as *;\n\n@include loadify(init);\n\n.parent-element {\n  .item {\n    @include only(1) {\n      @include loadify(0.2s, 0.6s);\n    }\n    @include only(2) {\n      @include loadify(0.4s, 0.6s);\n    }\n    @include only(3) {\n      @include loadify(0.6s, 0.6s);\n    }\n  }\n}\n"
   },
   "only": {
     "title": "Only",
-    "description": "The Only Sass mixin helps you target elements based on their position among siblings of the same type (tag name). This mixin uses the :first-of-type, :last-of-type, and :nth-of-type CSS pseudo-classes.",
+    "description": "Target an element by its position among siblings of the same tag with the Only Sass mixin, which writes :first-of-type, :last-of-type and :nth-of-type.",
     "scss": "@use \"gerillass\" as *;\n\n.cards {\n  .card {\n    @include only(2) {\n      background-color: #5bc0bb;\n    }\n  }\n}\n\n.articles {\n  article {\n    @include only(-1) {\n      border-bottom: 0;\n    }\n  }\n}\n\n.gallery {\n  figure {\n    @include only(1, -1) {\n      grid-column: span 2;\n    }\n  }\n}\n"
   },
   "placeholder": {
@@ -161,7 +161,7 @@
   },
   "placeholder-shown": {
     "title": "Placeholder Shown",
-    "description": "The Placeholder Shown Sass mixin helps you style an input or textarea element that is currently displaying placeholder text, using the :placeholder-shown CSS pseudo-class.",
+    "description": "Style an input or textarea while it is showing placeholder text, with the Placeholder Shown Sass mixin and the :placeholder-shown pseudo-class.",
     "scss": "@use \"gerillass\" as *;\n\ninput{\n  @include placeholder-shown{\n    background-color: yellow;\n  }\n}\n"
   },
   "position": {
@@ -176,7 +176,7 @@
   },
   "remove": {
     "title": "Remove",
-    "description": "The Remove Sass mixin helps you set the display CSS property of an element to none. It combines that with CSS media queries to show or hide an element in the document flow at different device widths.",
+    "description": "Set display to none with the Remove Sass mixin, and combine it with media queries to drop an element out of the document flow at chosen widths.",
     "scss": "@use \"gerillass\" as *;\n\n.element{\n  @include remove(small, medium);\n}\n"
   },
   "reset-css": {
@@ -196,12 +196,12 @@
   },
   "responsive-image": {
     "title": "Responsive Image",
-    "description": "The Responsive Image Sass mixin helps you make images responsive and change the default display CSS property value from inline to block, which removes the extra space below them.",
+    "description": "Make an image responsive with the Responsive Image Sass mixin, which also switches display from inline to block and removes the gap underneath.",
     "scss": "@use \"gerillass\" as *;\n\nimg {\n  @include responsive-image;\n}\n"
   },
   "scissors": {
     "title": "Scissors",
-    "description": "The Scissors Sass mixin helps you cut off the corners of an element. It provides an easy one-line method to set the size of the cut and choose the corners you want to apply it to.",
+    "description": "Cut the corners off an element with the Scissors Sass mixin. One line sets the size of the cut and picks which corners it applies to.",
     "scss": "@use \"gerillass\" as *;\n\n.element{\n  height: 200px;\n  display: flex;\n  justify-content: center;\n  background-color: #5bc0bb;\n  @include scissors(0 0 50% 50%);\n  h2 {\n    color: white;\n    font-size: 2.5em; \n    text-align: center;\n  }\n}\n"
   },
   "screen-agent": {
@@ -222,7 +222,7 @@
   "sprite": {
     "title": "Sprite",
     "description": "The Sprite Sass mixin helps you apply background images to the selected elements using the CSS sprite technique.",
-    "scss": "@use \"gerillass\" as *;\n\n.sprite-element{\n  @include sprite(\"sprite.png\") {\n    width: 100px;\n    height: 100px;\n  };\n  &.first {\n    @include sprite(0 0);\n  }\n  &.second {\n    @include sprite(-100px 0)\n  }\n  &.third {\n    @include sprite(-200px 0)\n  }\n  &.fourth {\n    @include sprite(-300px 0)\n  }\n}\n"
+    "scss": "@use \"gerillass\" as *;\n\n.frame {\n  width: 100px;\n  height: 100px;\n  @include sprite(\"/images/docs/sprite.png\");\n}\n\n.frame--1 { @include sprite(0 0); }\n.frame--2 { @include sprite(-100px 0); }\n.frame--3 { @include sprite(-200px 0); }\n.frame--4 { @include sprite(-300px 0); }\n"
   },
   "stretched-link": {
     "title": "Stretched Link",
@@ -236,7 +236,7 @@
   },
   "text-gradient": {
     "title": "Text Gradient",
-    "description": "The Text Gradient Sass mixin (also known as CSS Gradient Text) helps you add a gradient overlay to a text element. It provides a one-line method to set the direction of the gradient line, the color values, and the color stop positions very easily.",
+    "description": "Add a gradient overlay to text with the Text Gradient Sass mixin. One line sets the direction of the gradient, the colours and the colour stops.",
     "scss": "@use \"gerillass\" as *;\n\n.element{\n  @include text-gradient(\n    $direction: top,\n    $colors: (green 0 40%) (blue 40% 60%) (purple 60% 100%) \n  );\n}\n"
   },
   "text-image": {
@@ -251,7 +251,7 @@
   },
   "text-shadow": {
     "title": "Text Shadow",
-    "description": "The Text Shadow Sass mixin helps you add shadows to text elements. It accepts a comma separated list of shadows, or a single shadow value that can optionally be multiplied. It provides an easy one-line method.",
+    "description": "Add shadows to text with the Text Shadow Sass mixin. It takes a comma separated list of shadows, or a single shadow that can be multiplied.",
     "scss": "@use \"gerillass\" as *;\n\n.element{\n  transition: .3s;\n  @include text-shadow(left gold 3px true);\n  &:hover{\n    @include text-shadow(right gold 8px true);\n  }\n  &:active{\n    @include text-shadow(right deepskyblue 8px true);\n  }\n}\n"
   },
   "text-stroke": {

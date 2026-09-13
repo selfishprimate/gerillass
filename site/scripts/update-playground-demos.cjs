@@ -3,8 +3,9 @@
   Regenerates src/components/Playground/demos.json.
 
   Every mixin has a documentation page carrying `scss` blocks that show the
-  mixin in use. This pulls those out of the docs repository, so the playground
-  demonstrates what the documentation demonstrates and stays in step with it.
+  mixin in use. This reads those from the pages under content/docs, so the
+  playground demonstrates what the documentation demonstrates and stays in step
+  with it.
 
   A page works through its mixin: the first example passes one argument, and
   each one after it adds something — the optional arguments, a content block,
@@ -20,7 +21,7 @@
 
   The documentation is not always ahead of the library. A release adds mixins
   before their pages are written, and the playground was missing three of them
-  because of it. So the package's own `gerillass.json` is read as well: it
+  because of it. So the library's own `gerillass.json` is read as well: it
   lists every member, and anything the docs have no page for is taken from
   there instead — the summary for the description, and either an override
   below or the manifest's own fullest example for the snippet. That manifest
@@ -28,23 +29,24 @@
   library's test suite, so it is a sound second source; the docs still win
   wherever they have something to say.
 
-  Usage: node scripts/update-playground-demos.cjs  (needs `gh auth login` once)
+  Usage: node scripts/update-playground-demos.cjs
+
+  It used to fetch the pages from the gerillass-docs repository over `gh api`,
+  parse Hugo's highlight shortcodes, and read the manifest out of an installed
+  copy of the package. Since the site, the documentation and the library moved
+  into one repository, all three are files beside it.
 */
 
-const { execFileSync } = require("child_process");
 const fs = require("fs");
 const path = require("path");
 const sass = require("sass");
 
-const DOCS_REPO = "selfishprimate/gerillass-docs";
-const DOCS_PATH = "content/docs";
-const MANIFEST = path.join(
-  __dirname,
-  "..",
-  "node_modules",
-  "gerillass",
-  "gerillass.json"
-);
+const ROOT = path.join(__dirname, "..", "..");
+const DOCS = path.join(__dirname, "..", "content", "docs");
+const MANIFEST = path.join(ROOT, "gerillass.json");
+/* Where _gerillass.scss lives, so `@use "gerillass"` resolves to the library in
+   this repository rather than a published copy. */
+const LOAD_PATH = path.join(ROOT, "scss");
 const OUTPUT = path.join(
   __dirname,
   "..",
@@ -54,18 +56,9 @@ const OUTPUT = path.join(
   "demos.json"
 );
 
-function gh(endpoint) {
-  return JSON.parse(
-    execFileSync("gh", ["api", endpoint], { encoding: "utf8", maxBuffer: 20e6 })
-  );
-}
-
-function blocks(markdown, language) {
-  const pattern = new RegExp(
-    `\\{\\{<\\s*highlight ${language}\\s*>\\}\\}([\\s\\S]*?)\\{\\{<\\s*/highlight\\s*>\\}\\}`,
-    "g"
-  );
-  return Array.from(markdown.matchAll(pattern)).map((match) =>
+/* The `scss` fences of a page, in order. */
+function blocks(markdown) {
+  return Array.from(markdown.matchAll(/```scss\n([\s\S]*?)```/g)).map((match) =>
     match[1].replace(/^\n+|\s+$/g, "")
   );
 }
@@ -252,9 +245,23 @@ function description(markdown) {
 }
 
 
-const directories = gh(`repos/${DOCS_REPO}/contents/${DOCS_PATH}`).filter(
-  (entry) => entry.type === "dir"
+const manifest = JSON.parse(fs.readFileSync(MANIFEST, "utf8"));
+const mixins = new Set(
+  manifest.members.filter((member) => member.kind === "mixin").map((member) => member.name)
 );
+
+/* A page names the member it documents in <Member name>, which is not always
+   its file name: clear-unit.mdx documents clearUnit. Guides name none. */
+const pages = fs
+  .readdirSync(DOCS)
+  .filter((file) => file.endsWith(".mdx"))
+  .sort()
+  .map((file) => {
+    const markdown = fs.readFileSync(path.join(DOCS, file), "utf8");
+    const member = markdown.match(/<Member name="([^"]+)"/);
+    return { file, markdown, name: member ? member[1] : null };
+  })
+  .filter((page) => page.name && mixins.has(page.name));
 
 /*
   Compiling is the only check worth having. An unknown mixin is an error, but
@@ -264,8 +271,7 @@ const directories = gh(`repos/${DOCS_REPO}/contents/${DOCS_PATH}`).filter(
 */
 function compiles(source) {
   sass.compileString(source, {
-    /* Where the package keeps _gerillass.scss, so `@use "gerillass"` resolves. */
-    loadPaths: [path.join(__dirname, "..", "node_modules", "gerillass", "scss")],
+    loadPaths: [LOAD_PATH],
     logger: sass.Logger.silent,
   });
 }
@@ -282,22 +288,10 @@ const demos = {};
 const skipped = [];
 const fromManifest = [];
 
-directories.forEach((directory) => {
-  const name = directory.name;
-  let markdown;
-  try {
-    const file = gh(
-      `repos/${DOCS_REPO}/contents/${DOCS_PATH}/${name}/index.md`
-    );
-    markdown = Buffer.from(file.content, "base64").toString("utf8");
-  } catch (error) {
-    skipped.push([name, "no index.md"]);
-    return;
-  }
-
+pages.forEach(({ name, markdown }) => {
   /* Blocks that actually call the mixin: some pages open with the markup or
      with the "before" state. */
-  const found = blocks(markdown, "scss")
+  const found = blocks(markdown)
     .filter((block) => new RegExp(`@include\\s+${name}\\b`).test(block))
     .map((block, index) => ({ block, index }))
     .sort((a, b) => b.block.length - a.block.length || b.index - a.index)
@@ -334,12 +328,11 @@ directories.forEach((directory) => {
 });
 
 /*
-  Whatever the docs have not covered yet, from the manifest that ships with the
-  installed package. An override is preferred to the manifest's own examples
+  Whatever the docs have not covered yet, from the manifest at the repository
+  root. An override is preferred to the manifest's own examples
   where one is written for it, because a good demo shows the mixin doing
   something, and a manifest example is often the smallest call that is valid.
 */
-const manifest = JSON.parse(fs.readFileSync(MANIFEST, "utf8"));
 manifest.members
   .filter((member) => member.kind === "mixin" && !demos[member.name])
   .forEach((member) => {
