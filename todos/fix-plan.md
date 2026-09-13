@@ -357,7 +357,7 @@ it adds no public member and the release stays a patch. `isColor`, `tint` and
   }
   @if meta.type-of($value) == "string" {
     $text: string.to-lower-case(string.quote($value));
-    @if list.index("currentcolor" "inherit" "initial" "unset" "revert", $text) {
+    @if $text == "currentcolor" {
       @return true;
     }
     $open: string.index($text, "(");
@@ -391,6 +391,23 @@ work. The version above names the functions instead.
 
 **Changes existing output?** No. A call with a real colour emits the same CSS;
 every `triangle` call in the comparison under Validation was unchanged.
+
+**Status.** Implemented, with one more correction to the sketch. It accepted
+`inherit`, `initial`, `unset` and `revert`, and they compiled, but the mixin
+writes the colour into a `border-color` shorthand beside `transparent`, and a
+CSS-wide keyword is only valid as the whole value. `CSS.supports` in Chrome 152
+returned false for `transparent transparent inherit` and for each of the other
+three, and true for the same shorthand with `currentColor`, `var()`,
+`color-mix()`, `light-dark()` and `env()`. The keywords stay refused.
+
+Three examples went into `meta/triangle.json` and a `var()` case into the
+triangle spec first, and failed. `tint(var(--x), 20%)` and
+`shade(var(--x), 20%)` are now rejects, locking in the library's own message.
+Across 812 calls compiled before and after, no call that compiled changed: 217
+went from an error to CSS, all with the values above, and 336 kept an error but
+now get the new message, which shows `null` instead of empty backticks.
+`isColor`, `tint` and `shade` are untouched, and the documentation examples
+compile to identical output.
 
 **Touches.** `scss/library/_triangle.scss`; `meta/triangle.json` (the examples in
 G2, and the argument's `accepts` text); `test/library/triangle.spec.scss` (a new
