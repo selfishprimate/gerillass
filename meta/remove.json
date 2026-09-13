@@ -22,6 +22,7 @@
     ".a { @include remove(\"min\", \"medium\"); }"
   ],
   "rejects": [
-    ".a { @include remove(a, b, c); }"
+    ".a { @include remove(a, b, c); }",
+    ".a { @include remove(\"max\", var(--narrow)); }"
   ]
 }

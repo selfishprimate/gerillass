@@ -550,6 +550,21 @@ The check has to look inside nested lists: in `breakpoint(between, var(--a) larg
 the custom property sits one level down. A prototype that recursed caught it,
 and still accepted `calc(40em + 1px)` and `between, small large`.
 
+**Status.** Implemented, for `breakpoint`, `remove` (through `breakpoint`),
+`container-query` and `screen-agent`. Five rejects went into `meta/` first and
+failed. The check also finds `var()` inside a calculation, such as
+`calc(var(--x) + 1px)`, and names the offending value in its message. Across
+1014 calls compiled before and after, 330 changed and every one held `var()`:
+322 went from a condition that never matches to the error, and 8 from Sass's
+own "Invalid index" to it. `env()` is left alone, and no snapshot moved.
+
+**Not covered: a `var()` container name.** `container-query(min, 300px, $name:
+var(--x))` still emits `@container var(--x) (min-width: 300px)`. A container
+name has to be an identifier, so this can never match either. It is the same
+defect in the other half of the condition, found while validating this item and
+left out to keep it to sizes. The existing `$name` check accepts it because
+`var(--x)` is an unquoted string.
+
 ### F5 and F6. Moved to 3.0.0
 
 Validation found that both change what renders for calls that work today. They
