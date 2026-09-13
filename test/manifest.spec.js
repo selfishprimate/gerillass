@@ -92,6 +92,10 @@ describe("Manifest", () => {
 // A documented call must also compile without a @warn. The CSS can be right
 // while the build prints a warning on every compile: `position` did that for
 // `null`, the way its own documentation page skips an edge, and passed.
+//
+// And without a /* */ comment. Inside a mixin one is emitted into the user's
+// stylesheet, which is how the Meyer licence note from `reset-css` ended up in
+// projects' compiled CSS. Library comments are `//`.
 describe("Manifest examples", () => {
   for (const member of manifest.members) {
     for (const example of member.examples || []) {
@@ -99,6 +103,7 @@ describe("Manifest examples", () => {
         const warnings = [];
         const result = compile(example, warnings);
         expect(warnings).toEqual([]);
+        expect(result.css).not.toMatch(/\/\*/);
         expect(result.css.length).toBeGreaterThan(0);
         expect(result.css).toMatchSnapshot();
       });

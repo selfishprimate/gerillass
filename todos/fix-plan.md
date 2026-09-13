@@ -563,6 +563,10 @@ of `source-comments.md`: `//` only, everywhere in the library.
 
 **Verify.** `grep -c meyerweb` on a compiled expanded file returns 0.
 
+**Status.** Implemented. The manifest suite now also fails any documented
+example whose CSS contains a `/*` comment, which failed on `reset-css` alone
+before the change.
+
 ### F8. Values that end up in a declaration let a CSS function through
 
 **Problem.** Eight arguments turn a `var()` into CSS that looks right and does

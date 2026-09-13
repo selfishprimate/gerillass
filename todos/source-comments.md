@@ -72,7 +72,9 @@ reason `wiki/` is not allowed to restate the API.
 ## Order
 
 1. The ten members the agent tripped on, each comment naming its trap.
-2. The two block comments in `_reset-css.scss`, turned into `//` or removed.
+2. ~~The two block comments in `_reset-css.scss`, turned into `//` or removed.~~
+   Done as F7 in `fix-plan.md`, with a test that fails on any `/*` in an example's
+   CSS.
 3. The convention, in `CONTRIBUTING.md` and the `/new-mixin` checklist.
 4. The rest of the library as each file is next touched, not in one pass. A
    pass over every file at once is the surest way to produce comments that carry
