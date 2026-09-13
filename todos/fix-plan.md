@@ -453,6 +453,10 @@ goes.
 **Verify.** G1's `null` example passes. `validateLength` has one caller,
 `position`, so nothing else moves.
 
+**Status.** Implemented. Both `null` examples were added to `meta/position.json`
+first and failed G1 on the empty-message warning; they pass after the change,
+with no snapshot moving.
+
 ### F3. `breakpoint` refuses three arguments instead of emitting nothing
 
 **Problem.** A range written with three arguments compiles to nothing, with no

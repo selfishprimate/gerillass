@@ -6,6 +6,13 @@
 @use "sass:string";
 
 @function validateLength($value) {
+  // null means "leave this out": `position` skips an edge given null, as its
+  // documentation shows. It is not a mistake to warn about, and the warning
+  // printed empty backticks, because null interpolates to nothing.
+  @if $value == null {
+    @return null;
+  }
+
   $keywords: ("auto", "inherit", "initial", "unset", "revert", 0);
 
   @if list.index($keywords, $value) {
