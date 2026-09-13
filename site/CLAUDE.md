@@ -23,7 +23,7 @@ always built against the library beside it rather than a published copy.
 ## Commands
 
 ```bash
-npm run dev --prefix site      # dev server on http://localhost:5173
+npm run dev --prefix site      # dev server on http://localhost:7001
 npm run build --prefix site    # production build into site/dist
 npm run preview --prefix site  # serve that build
 ```

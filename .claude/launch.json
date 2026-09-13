@@ -10,7 +10,7 @@
         "--prefix",
         "site"
       ],
-      "port": 5173
+      "port": 7001
     },
     {
       "name": "site-preview",

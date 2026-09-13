@@ -101,5 +101,9 @@ export default defineConfig({
     note there for why vite-react-ssg had to go.
   */
   ssr: { noExternal: ["react-syntax-highlighter"] },
+  // A fixed port, so the dev server is always at the same address. Vite's
+  // default, 5173, is shared by every Vite project on the machine, and with
+  // strictPort a clash fails loudly instead of moving the site to another port.
+  server: { port: 7001, strictPort: true },
   build: { outDir: "dist" },
 });
