@@ -26,6 +26,7 @@
   @if not & {
     @error "`focus-ring` styles the element it is called in, so call it inside a selector, such as `.button { @include focus-ring; }`.";
   }
+
   &:focus-visible {
     outline: $width solid $color;
     outline-offset: $offset;
