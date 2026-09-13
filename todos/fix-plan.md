@@ -1025,6 +1025,31 @@ works, but Parcel's transformer treats `pkgImporter` as a legacy-API option, so
 as `CLAUDE.md` asks for any route claim, then write the section and add Parcel to
 the routes table in `CLAUDE.md`.
 
+**Status.** Done. Reproduced with Parcel 2.16.4 and Dart Sass 1.104.1, against
+`npm pack` of 2.1.0, in twelve separate projects:
+
+| Setup | Result |
+|---|---|
+| `@use "gerillass"`, no configuration | builds |
+| the same, with `"main": "index.js"` in the project | "Can't find stylesheet to import" |
+| `main` pointing at a file that exists, or with `source` set | still fails |
+| `main` with `"targets": { "main": false }` | builds |
+| `main` with `loadPaths` | Sass resolves, then Parcel fails: the `main` target "does not match the compiled bundle type html" |
+| `main` with `packageExports: true` | still fails |
+| `pkg:gerillass`, no importer | fails |
+| `pkg:gerillass`, `pkgImporter` in `.sassrc.json` | fails, and Sass switches to the legacy JS API |
+| `pkg:gerillass`, `NodePackageImporter` in `.sassrc.js` | builds |
+| `loadPaths` in `.sassrc.json`; `packageExports: true`; the `scss/gerillass` subpath | all build |
+| `font-face` with default formats, only `.woff2` on disk | "Failed to resolve './fonts/inter.eot'" |
+| the same with `$file-formats: woff2` | builds |
+
+T3 was right on every point, including that Parcel reads `main` as a library
+target. The runs add that no Sass option gets around it, `loadPaths` and
+`packageExports` included, while `"targets": { "main": false }` does. With
+`quietDeps: true` in `.sassrc.json` the build succeeds and the five `if()`
+deprecations from inside the package disappear. The README section and the
+routes table in `CLAUDE.md` are written from this.
+
 **Changes existing output?** No.
 
 ---
@@ -1547,8 +1572,9 @@ sources, including the separate `src` line for EOT.
 **Touches.** `scss/library/_font-face.scss`; `meta/font-face.json`; the
 documentation page.
 
-**Verify.** T3's Parcel failure has not been reproduced here. The change stands on
-its own, but reproduce the failure before citing it in the changelog.
+**Verify.** T3's Parcel failure is reproduced: with only `inter.woff2` on disk,
+Parcel 2.16.4 fails to resolve `./fonts/inter.eot` from the default formats, and
+builds with `$file-formats: woff2`. See D3.
 
 ### B7. `all-text-inputs` stops matching `[type='color']`
 
@@ -1762,6 +1788,7 @@ What validation changed, each written into its item:
   as members, and B1 to B7.
 - Not measured: the boundary overlap in B1, which follows from the definitions of
   `min-width` and `max-width`; forced-colours behaviour for N1.
-- Not reproduced: the Parcel claims behind D3 and B6, and the VoiceOver claim.
+- Not reproduced: the VoiceOver claim. The Parcel claims behind D3 and B6 were
+  reproduced later, under D3.
 - A prototype is not the implementation. It shows each approach holds; the real
   change still needs its own specs, `meta/` entries and a snapshot diff.

@@ -27,6 +27,7 @@ Hope you’ll enjoy using it!
 - [Installation](#installation)
   - [Using with Vite](#using-with-vite)
   - [Using with webpack](#using-with-webpack)
+  - [Using with Parcel](#using-with-parcel)
   - [Using with Next.js](#using-with-nextjs)
   - [Using with Angular](#using-with-angular)
   - [Using with Gulp](#using-with-gulp)
@@ -93,6 +94,27 @@ Vite resolves the package by name, so there is nothing to configure. This covers
 `sass-loader` also resolves the package by name, with no extra options.
 
     @use 'gerillass' as *;
+
+### Using with Parcel
+
+Parcel resolves the package by name too, so the usual line needs no configuration:
+
+    @use 'gerillass' as *;
+
+**Remove `main` from your project's own `package.json`.** `npm init -y` writes `"main": "index.js"`, and Parcel reads that field as a library build target. With it present an app build fails, and the error names the stylesheet rather than the field: `Can't find stylesheet to import`. No Sass option gets around it. If you need to keep the field, turn that target off instead:
+
+    "targets": { "main": false }
+
+To use a `pkg:` URL, create the importer in a `.sassrc.js`. Setting `pkgImporter` in `.sassrc.json` does not work: Parcel switches Sass to its legacy API for that option, and the import is not found.
+
+    // .sassrc.js
+    const { NodePackageImporter } = require("sass");
+    module.exports = { importers: [new NodePackageImporter()] };
+
+Two more things worth knowing:
+
+- **Pass the font formats you actually have to `font-face`.** It lists five by default, and Parcel resolves every `url()` in the output, so a folder holding only `.woff2` fails with `Failed to resolve './fonts/inter.eot'`. `$file-formats: woff2` fixes it.
+- **`quietDeps` hides the library's own deprecation warnings.** Dart Sass reports its `if()` deprecation from inside the package on every build. A `.sassrc.json` of `{ "quietDeps": true }` silences those and still reports the ones in your own files.
 
 ### Using with Next.js
 
@@ -187,6 +209,7 @@ Including to the project:
 | Angular CLI | 20.3.36 |
 | Gulp / gulp-sass | 5.0.1 / 6.0.1 |
 | Grunt / grunt-sass | 1.6.3 / 4.1.0 |
+| Parcel / @parcel/transformer-sass | 2.16.4 / 2.16.4, with Dart Sass 1.104.1 and Gerillass 2.1.0 |
 
 ## Using Gerillass with an AI coding agent
 

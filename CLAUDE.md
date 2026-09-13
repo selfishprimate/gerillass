@@ -28,7 +28,7 @@ working after any change to `main`, `exports`, or the location of
 | Route | Notes |
 |---|---|
 | `@use "pkg:gerillass"` | needs `NodePackageImporter` or `--pkg-importer=node`; requires `exports` |
-| `@use "gerillass"` | Vite resolves this through `exports`; webpack through `main` |
+| `@use "gerillass"` | Vite resolves this through `exports`; webpack and Parcel through `main`. Parcel fails with "Can't find stylesheet to import" if the **project's own** `package.json` has a `main`, which it takes for a library target |
 | `@use "gerillass/scss/gerillass"` | subpath, needs the `"./*"` wildcard |
 | `loadPaths` / `includePaths` | filesystem-based, unaffected by `exports` — this is what the Gulp and Grunt recipes in the README use |
 
@@ -113,9 +113,9 @@ Techniques that did work, in rough order of usefulness:
    calling `ratio-box`, and a glob pointing at the wrong Vite output directory.
    All three looked like real breakage.
 7. **Name what you did not test, in the same breath as the claim.** No input
-   was found that reaches the `@error` in `_background-image.scss`; Parcel and
-   esbuild were never installed. Saying so is better than letting silence imply
-   coverage.
+   was found that reaches the `@error` in `_background-image.scss`; esbuild was
+   never installed. Parcel was, for the README recipe, against a packed
+   tarball. Saying so is better than letting silence imply coverage.
 
 ## Repo tooling
 
