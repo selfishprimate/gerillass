@@ -26,7 +26,8 @@
     {
       "name": "$size",
       "accepts": [
-        "one length, or two lengths as width then height"
+        "one length, or two lengths as width then height",
+        "var(), env() or a calculation in place of any length"
       ]
     }
   ],
@@ -35,11 +36,13 @@
     ".arrow { @include triangle(\"left\", red); }",
     ".arrow { @include triangle(\"right\", var(--accent), 6px 8px); }",
     ".arrow { @include triangle(\"right\", currentColor); }",
-    ".arrow { @include triangle(\"top\", color-mix(in srgb, red 50%, blue)); }"
+    ".arrow { @include triangle(\"top\", color-mix(in srgb, red 50%, blue)); }",
+    ".arrow { @include triangle(\"bottom\", currentColor, var(--caret-w) var(--caret-h)); }"
   ],
   "rejects": [
     ".caret { @include triangle(sideways); }",
     ".caret { @include triangle(\"top\", notacolor); }",
-    ".caret { @include triangle(\"top\", url(a.png)); }"
+    ".caret { @include triangle(\"top\", url(a.png)); }",
+    ".caret { @include triangle(\"top\", red, nonsense); }"
   ]
 }

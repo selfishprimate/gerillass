@@ -12,13 +12,14 @@
     {
       "name": "$size",
       "accepts": [
-        "dot radius"
+        "dot radius: a length, or var(), env() or a calculation such as calc() or clamp()"
       ]
     },
     {
       "name": "$gutter",
       "accepts": [
-        "spacing between dots"
+        "spacing between dots, in the same forms as $size",
+        "null, the default, for five times $size"
       ]
     },
     {
@@ -38,10 +39,14 @@
   "examples": [
     ".a { @include background-dots; }",
     ".a { @include background-dots(red); }",
-    ".a { @include background-dots(red, 1em, 5em, false); }"
+    ".a { @include background-dots(red, 1em, 5em, false); }",
+    ".a { @include background-dots(red, var(--dot), calc(var(--dot) * 6)); }",
+    ".a { @include background-dots(red, clamp(2px, 0.5vw, 6px)); }"
   ],
   "rejects": [
     ".a { @include background-dots(red, 1em, 5em, maybe); }",
-    ".a { @include background-dots(red, 1em, 5em, true, 42); }"
+    ".a { @include background-dots(red, 1em, 5em, true, 42); }",
+    ".a { @include background-dots(red, nonsense); }",
+    ".a { @include background-dots(red, 1em, nonsense); }"
   ]
 }

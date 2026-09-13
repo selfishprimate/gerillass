@@ -113,4 +113,25 @@
       }
     }
   }
+
+  @include it('A custom property size is halved in calc(), not written as a slash.') {
+    @include assert {
+      @include output {
+        .caret {
+          @include triangle("bottom", black, var(--w) var(--h));
+        }
+      }
+      @include expect {
+        .caret {
+          content: "";
+          height: 0;
+          width: 0;
+          display: inline-block;
+          border-style: solid;
+          border-color: black transparent transparent;
+          border-width: var(--h) calc(var(--w) / 2) 0;
+        }
+      }
+    }
+  }
 }

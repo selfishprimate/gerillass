@@ -12,7 +12,7 @@
     {
       "name": "$thickness",
       "accepts": [
-        "stripe thickness"
+        "stripe thickness: a length, or var(), env() or a calculation such as calc() or clamp()"
       ]
     },
     {
@@ -30,10 +30,12 @@
   ],
   "examples": [
     ".a { @include background-stripes; }",
-    ".a { @include background-stripes(red, 2em, -30deg); }"
+    ".a { @include background-stripes(red, 2em, -30deg); }",
+    ".a { @include background-stripes(red blue, var(--stripe)); }"
   ],
   "rejects": [
     ".a { @include background-stripes(red, 2em, nonsense); }",
-    ".a { @include background-stripes(red, 2em, -45deg, 42); }"
+    ".a { @include background-stripes(red, 2em, -45deg, 42); }",
+    ".a { @include background-stripes(red, nonsense); }"
   ]
 }

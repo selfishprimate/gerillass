@@ -180,6 +180,24 @@ exports[`Manifest examples background-dots: .a { @include background-dots(red, 1
 }"
 `;
 
+exports[`Manifest examples background-dots: .a { @include background-dots(red, clamp(2px, 0.5vw, 6px)); } 1`] = `
+".a {
+  background-image: radial-gradient(red clamp(2px, 0.5vw, 6px), transparent 0), radial-gradient(red clamp(2px, 0.5vw, 6px), transparent 0);
+  background-position: calc(clamp(2px, 0.5vw, 6px) * 5 / 2) calc(clamp(2px, 0.5vw, 6px) * 5 / 2), calc(clamp(2px, 0.5vw, 6px) * 5 * 2) calc(clamp(2px, 0.5vw, 6px) * 5 * 2);
+  background-size: calc(clamp(2px, 0.5vw, 6px) * 5) calc(clamp(2px, 0.5vw, 6px) * 5);
+  background-repeat: repeat;
+}"
+`;
+
+exports[`Manifest examples background-dots: .a { @include background-dots(red, var(--dot), calc(var(--dot) * 6));  1`] = `
+".a {
+  background-image: radial-gradient(red var(--dot), transparent 0), radial-gradient(red var(--dot), transparent 0);
+  background-position: calc(var(--dot) * 6 / 2) calc(var(--dot) * 6 / 2), calc(var(--dot) * 6 * 2) calc(var(--dot) * 6 * 2);
+  background-size: calc(var(--dot) * 6) calc(var(--dot) * 6);
+  background-repeat: repeat;
+}"
+`;
+
 exports[`Manifest examples background-dots: .a { @include background-dots; } 1`] = `
 ".a {
   background-image: radial-gradient(rgba(0, 0, 0, 0.1) 1em, transparent 0), radial-gradient(rgba(0, 0, 0, 0.1) 1em, transparent 0);
@@ -213,6 +231,12 @@ exports[`Manifest examples background-image: .a { @include background-image("/im
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
+}"
+`;
+
+exports[`Manifest examples background-stripes: .a { @include background-stripes(red blue, var(--stripe)); } 1`] = `
+".a {
+  background-image: repeating-linear-gradient(-45deg, red calc(var(--stripe) * 1 - var(--stripe)), red calc(var(--stripe) * 1), blue calc(var(--stripe) * 2 - var(--stripe)), blue calc(var(--stripe) * 2));
 }"
 `;
 
@@ -1338,6 +1362,18 @@ exports[`Manifest examples text-stroke: .a { @include text-stroke; } 1`] = `
 exports[`Manifest examples tint: .a { color: tint(red, 20%); } 1`] = `
 ".a {
   color: #ff3333;
+}"
+`;
+
+exports[`Manifest examples triangle: .arrow { @include triangle("bottom", currentColor, var(--caret-w) var( 1`] = `
+".arrow {
+  content: "";
+  height: 0;
+  width: 0;
+  display: inline-block;
+  border-style: solid;
+  border-color: currentColor transparent transparent;
+  border-width: var(--caret-h) calc(var(--caret-w) / 2) 0;
 }"
 `;
 
