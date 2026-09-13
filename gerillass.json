@@ -471,7 +471,10 @@
         ".a { @include breakpoint(\"min\", \"medium\") { color: red; } }",
         ".a { @include breakpoint(\"between\", \"medium\" \"large\") { color: red; } }"
       ],
-      "rejects": []
+      "rejects": [
+        ".a { @include breakpoint(\"between\", \"medium\", \"large\") { color: red; } }",
+        ".a { @include breakpoint() { color: red; } }"
+      ]
     },
     {
       "name": "breakpointer",

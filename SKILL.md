@@ -76,6 +76,7 @@ a dropped declaration rather than an error.
 | `before` | `.a { @include before(42) { color: red; } }` |
 | `border-box` | `@include border-box(only);` |
 | `border-radius` | `.a { @include border-radius(1px, 2px, 3px); }` |
+| `breakpoint` | `.a { @include breakpoint("between", "medium", "large") { color: red; } }` |
 | `breakpointer` | `.a { @include breakpointer(42); }` |
 | `center` | `.modal { @include center(diagonal); }` |
 | `columnizer` | `.grid { @include columnizer(3, 20px, true, 9); }` |
