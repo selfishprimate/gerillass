@@ -16,8 +16,8 @@ The **Text Image** Sass mixin helps you clip the background image of a selected 
 
 ## Arguments
 
-<Arguments of="text-image" footnote="**Important:** Note that the URL of the image must be passed in quotation marks.">
-  <Argument name="$image" type="string (quoted)">The URL of the clipping image.</Argument>
+<Arguments of="text-image" footnote="**Important:** Pass the URL of the image in quotation marks. A `var()`, `url()`, `image-set()` or gradient is written as it is, without quotes.">
+  <Argument name="$image" type="string (quoted), function">The URL of the clipping image. A value that already is an image, <code>var()</code>, <code>url()</code>, <code>image-set()</code> or a gradient, is written as it is rather than wrapped in <code>url()</code>.</Argument>
 </Arguments>
 
 ## Examples

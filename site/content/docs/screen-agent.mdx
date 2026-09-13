@@ -22,7 +22,7 @@ Suppose you have two types of photos loading on your site: one for normal screen
 ## Arguments
 
 <Arguments of="screen-agent" footnote="String values must be wrapped in quotation marks.">
-  <Argument name="$resolution" type="string,<br/>number (with unit)">Accepts one argument with three possible values that target the screen resolution: <code>1x</code>, <code>2x</code>, and <code>3x</code>. You can also pass a custom numeric value with <code>dpi</code> or <code>dpcm</code> units.</Argument>
+  <Argument name="$resolution" type="string,<br/>number (with unit)">Accepts one argument with three possible values that target the screen resolution: <code>1x</code>, <code>2x</code>, and <code>3x</code>. You can also pass a custom numeric value with <code>dpi</code> or <code>dpcm</code> units. It cannot be a custom property: <code>var()</code> is not evaluated in a <code>@media</code> condition, and the mixin refuses it.</Argument>
 </Arguments>
 
 ## Examples

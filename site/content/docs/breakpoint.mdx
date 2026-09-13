@@ -24,7 +24,7 @@ The **Breakpoint** Sass mixin helps you create scalable media queries and breakp
 
 <Arguments of="breakpoint" footnote="When you use the `between` option you must pass two values for `width`, and they must be separated by a space. See the [examples](#examples) for more.">
   <Argument name="$mode" type="string">Sets the <code>width</code> media feature. Accepts the values <code>only</code>, <code>min</code>, <code>max</code>, and <code>between</code>.</Argument>
-  <Argument name="$value" type="number (with unit)">The width value at which your styles will be applied.</Argument>
+  <Argument name="$value" type="number (with unit)">The width value at which your styles will be applied. It cannot be a custom property: <code>var()</code> is not evaluated in a <code>@media</code> condition, so the rule would never apply, and the mixin refuses it.</Argument>
 </Arguments>
 
 ## Examples

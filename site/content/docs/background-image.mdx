@@ -17,9 +17,9 @@ The **Background Image** Sass mixin allows you to apply background images to the
 ## Arguments
 
 <Arguments of="background-image" footnote="Use `null` if you want to skip an argument. See [the examples](#examples) for more.">
-  <Argument name="$image-url" type="string">The URL of the background image.</Argument>
+  <Argument name="$image-url" type="string, function">The URL of the background image. A value that already is an image, <code>var()</code>, <code>url()</code>, <code>image-set()</code> or a gradient, is written as it is rather than wrapped in <code>url()</code>.</Argument>
   <Argument name="$filter-color" type="color | list">The color or list of colors you want to apply as a filter over the background image. <strong>Multiple color values must be separated by a space.</strong></Argument>
-  <Argument name="$filter-direction" type="string">The direction of the gradient. <strong>It only works when you pass multiple color values for the <code>$filter-color</code> argument.</strong> Accepts the values <code>top</code>, <code>top-right</code>, <code>right</code>, <code>bottom-right</code>, <code>bottom</code>, <code>bottom-left</code>, <code>left</code>, and <code>top-left</code>. The default value is <code>top</code>.</Argument>
+  <Argument name="$filter-direction" type="string">The direction of the gradient. <strong>It only works when you pass multiple color values for the <code>$filter-color</code> argument</strong>, but a value it does not accept is refused with an error whatever the number of colors. Accepts the values <code>top</code>, <code>top-right</code>, <code>right</code>, <code>bottom-right</code>, <code>bottom</code>, <code>bottom-left</code>, <code>left</code>, and <code>top-left</code>. The default value is <code>top</code>.</Argument>
 </Arguments>
 
 ## Examples

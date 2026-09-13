@@ -17,7 +17,7 @@ export const USED_BY = 130;
   The stargazer list is baked into the bundle: Github answers
   "401 Requires authentication" for /stargazers unless the request carries a
   token, and a static site has nowhere safe to keep one. Refresh the snapshot
-  with `node scripts/update-supporters.js`. The star count is still fetched live
+  with `node scripts/update-supporters.cjs`. The star count is still fetched live
   at runtime from the public /repos endpoint, so the number stays honest between
   snapshots.
 */

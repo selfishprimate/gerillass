@@ -10,7 +10,7 @@
   a release it was not built against.
 
   Refresh the stargazer snapshot in the same pass:
-  node scripts/update-supporters.js
+  node scripts/update-supporters.cjs
 */
 import { version } from "../../package.json";
 

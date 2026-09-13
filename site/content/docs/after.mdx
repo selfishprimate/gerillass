@@ -17,7 +17,7 @@ The **After** Sass mixin helps you generate content or a style element after the
 ## Arguments
 
 <Arguments of="after" footnote="When you want to fetch a value using a custom property, the name of the property must start with the 'data-' prefix. See the examples for more.">
-  <Argument name="$content" type="string">You can pass content as a string, or fetch a value using a custom property such as <code>data-content</code>.</Argument>
+  <Argument name="$content" type="string, function">You can pass content as a string, or fetch a value using a custom property such as <code>data-content</code>. A CSS function, <code>var()</code>, <code>attr()</code>, <code>counter()</code> or <code>counters()</code>, is written as it is rather than quoted into text.</Argument>
 </Arguments>
 
 ## Examples

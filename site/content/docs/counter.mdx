@@ -38,8 +38,8 @@ The markup should look like the example below:
 
 <Arguments of="counter" footnote="See the [examples](#examples) to learn how these arguments behave.">
   <Argument name="$counter" type="string">Sets the style of the counter. The default value is <code>decimal</code>. Check out the [links](#related-links) at the end of the article to learn more about counter styles.</Argument>
-  <Argument name="$counter-before" type="string">Adds a string before the counter.</Argument>
-  <Argument name="$counter-after" type="string">Adds a string after the counter.</Argument>
+  <Argument name="$counter-before" type="string, function">Adds a string before the counter. A <code>var()</code>, <code>attr()</code>, <code>counter()</code> or <code>counters()</code> is written as it is.</Argument>
+  <Argument name="$counter-after" type="string, function">Adds a string after the counter. A <code>var()</code>, <code>attr()</code>, <code>counter()</code> or <code>counters()</code> is written as it is.</Argument>
 </Arguments>
 
 ## Examples

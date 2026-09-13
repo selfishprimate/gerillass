@@ -8,7 +8,7 @@
   CLI and bakes the result into the bundle. The star count itself stays live —
   /repos/:owner/:repo is still public.
 
-  Usage: node scripts/update-supporters.js   (needs `gh auth login` once)
+  Usage: node scripts/update-supporters.cjs  (needs `gh auth login` once)
 */
 
 const { execFileSync } = require("child_process");
