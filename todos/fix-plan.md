@@ -1254,6 +1254,19 @@ unchanged.
 Check browser support for `:user-invalid` before the documentation recommends it
 over `:invalid`.
 
+**Status.** Implemented. Both names went into the list, and two examples went
+into `meta/` first and failed. The selector comes out as expected, for example
+`[type=text]:user-invalid`, across the whole list, and the existing states are
+unchanged.
+
+`:user-invalid` was measured before the page recommends it, in Chrome 152. On
+load an empty required field matches `:invalid` straight away and
+`:user-invalid` does not. Focusing it and leaving without typing still does not
+match. An email field with `abc` typed in does not match while focused, and
+matches once left. Pressing Submit makes an untouched empty required field
+match. So it waits for the user, which is the point. Safari and Firefox were not
+tried.
+
 ---
 
 ## 2.2.0: new members
