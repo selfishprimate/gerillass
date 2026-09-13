@@ -5,8 +5,9 @@ from scratch by coding agents with the published package, and every claim in
 their feedback was checked by compiling it, and in a browser where compiling
 could not settle it. This file says what to change, in what order, and why.
 
-Written 13 September 2026 against gerillass 2.1.0. Nothing below has been
-implemented. Figures and line numbers age; re-check them before acting, as
+Written 13 September 2026 against gerillass 2.1.0, and validated the same day:
+see Validation at the end, which moved two items and corrected four. Nothing
+below has been implemented. Figures and line numbers age; re-check them before acting, as
 `CLAUDE.md` asks of everything in `todos/`.
 
 ## How to read an item
@@ -14,7 +15,8 @@ implemented. Figures and line numbers age; re-check them before acting, as
 Every item has the same parts:
 
 - **Problem**: what goes wrong, in the terms of someone calling the mixin.
-- **Example**: the call and what it does today, compiled with Dart Sass 1.104.1.
+- **Example**: the call and what it does today, compiled with Dart Sass 1.103.1,
+  the version this repository installs. The trials ran 1.104.1.
 - **Fix**: the change, with code where the change is code.
 - **Changes existing output?**: whether any call that works today would emit
   different CSS. This decides the release.
@@ -24,7 +26,9 @@ Every item has the same parts:
 **T1**, **T2** and **T3** mark which trial found it: T1 a portfolio (Claude
 Opus 5, Sass CLI), T2 a conference site (Claude Fable 5.1, Vite), T3 a
 bidirectional operations dashboard (model not recorded, Parcel). A finding more
-than one trial reached independently is the strongest signal here.
+than one trial reached independently is the strongest signal here. **probe**
+marks what no trial hit but a sweep of `var(--x)` through every argument found;
+see G4.
 
 ## Overview
 
@@ -33,13 +37,15 @@ than one trial reached independently is the strongest signal here.
 | G1 | Fail the manifest suite when an example warns | groundwork | T1 T2 |
 | G2 | Test values that must be accepted, not only refused | groundwork | T1 T2 T3 |
 | G3 | A `caveats` field for behaviour a signature cannot show | groundwork | T1 T2 T3 |
+| G4 | The audit sees Sass arithmetic errors and broken `var()` output | groundwork | probe |
 | F1 | `triangle` accepts `var()`, `currentColor`, `color-mix()` | 2.1.1 | T1 T2 |
 | F2 | `position` skips `null` without a warning | 2.1.1 | T1 T2 |
 | F3 | `breakpoint` refuses three arguments instead of emitting nothing | 2.1.1 | T1 |
 | F4 | Size conditions refuse `var()`, which can never match | 2.1.1 | T3 |
-| F5 | `aspect-ratio` holds on images with `width`/`height` attributes | 2.1.1 | T3 |
-| F6 | `counter` numbers correctly inside container queries | 2.1.1 | T2 |
 | F7 | `reset-css` stops putting comments in compiled CSS | 2.1.1 | T1 T2 |
+| F8 | Values that end up in a declaration let a CSS function through | 2.1.1 | probe |
+| F9 | Computed sizes work with `var()`, `calc()` and `clamp()` | 2.1.1 | probe |
+| F10 | `background-image` and `font-face` stop dropping values silently | 2.1.1 | probe |
 | D1 | Document the `loadify` module rule | 2.1.1 | T2 |
 | D2 | Correct the `remove` summary and example | 2.1.1 | T2 T3 |
 | D3 | A Parcel section in the README | 2.1.1 | T3 |
@@ -58,6 +64,8 @@ than one trial reached independently is the strongest signal here.
 | B5 | `before` and `after` emit `content: ""` by default | 3.0.0 | T1 |
 | B6 | `font-face` defaults to `woff2` | 3.0.0 | T3 |
 | B7 | `all-text-inputs` stops matching `[type='color']` | 3.0.0 | T3 |
+| B8 | `aspect-ratio` holds on images with `width`/`height` attributes | 3.0.0 | T3 |
+| B9 | `counter` numbers correctly inside container queries | 3.0.0 | T2 |
 
 The order is deliberate. Groundwork first, so each fix lands with a test that
 would have caught the defect. Then the 2.1.1 fixes, which change no output of a
@@ -118,6 +126,9 @@ expect(warnings).toEqual([]);
 
 **Verify.** Add the `null` example above to `meta/position.json`. The suite
 must fail before F2 and pass after it.
+
+**Validated.** None of the 143 examples in `meta/` prints a warning today, so
+turning this on does not fail the suite by itself.
 
 ### G2. Test values that must be accepted, not only refused
 
@@ -211,6 +222,62 @@ traps to someone reading the source; this field is the checked, generated copy.
 
 **Verify.** `SKILL.md` shows the `loadify` caveat, and the suite is green.
 
+### G4. The audit sees Sass arithmetic errors and broken `var()` output
+
+**Problem.** After the trials, `var(--x)` was passed to every argument of the 47
+mixins that take one, and the output was read, not only whether it compiled.
+
+| Result | Mixins |
+|---|---:|
+| `var()` works in every argument | 10 |
+| works in some arguments | 7 |
+| accepted, but the CSS it emits cannot work | 4 |
+| works in no argument | 26 |
+
+Most refusals are correct: a keyword, a selector or a device name cannot come
+from a custom property. What is left falls into four shapes, and `tools/audit.js`
+reports none of them:
+
+1. **Sass's own error instead of the library's.** `background-dots` and
+   `background-stripes` do arithmetic on `$size`, `$gutter` and `$thickness`.
+   Anything that is not a Sass number, `var()`, `calc()` and `clamp()` included,
+   fails inside the mixin. The audit's `nonsense` probe hits this too, but its
+   `INTERNAL` pattern does not contain "Undefined operation", so the result is
+   counted as a proper refusal.
+
+   ```
+   Error: Undefined operation "nonsense * 5".
+      ╷
+   11 │   $gutter: $size * 5,
+   ```
+
+2. **Compiles, emits CSS that cannot work.** `url(var(--x))`,
+   `content: "var(--x)"`, `border-width: var(--x) var(--x)/2 0`. The audit files
+   these under pass-through, which it treats as fine.
+3. **Compiles, drops the value.** `background-image` ignores `$filter-direction`
+   with one colour; `font-face` drops unknown formats. There is still CSS, so it is
+   not SILENT.
+4. **Compiles, emits a condition that never matches.** F4.
+
+**Fix.**
+
+1. Add `Undefined operation` and `can't be used in a calculation` to `INTERNAL`.
+   Expect new UNHELPFUL findings for `background-dots` and `background-stripes`
+   until F9 lands.
+2. Extend the second probe list from G2 with a check on the output, not only the
+   compile: flag CSS containing `url(var(`, `"var(`, or `var(` next to `/` outside
+   a `calc()`, in a new "broken output" bucket.
+3. A dropped value cannot be found from the CSS alone. Cover it with `rejects`
+   from F10 instead.
+
+**Changes existing output?** No.
+
+**Touches.** `tools/audit.js`; the `/audit-library` skill, which describes the
+buckets.
+
+**Verify.** Before F8 to F10: the new buckets list the cases above. After: they are
+empty, apart from what F4 turns into refusals.
+
 ---
 
 ## 2.1.1: fixes that change no working call
@@ -258,10 +325,19 @@ it adds no public member and the release stays a patch. `isColor`, `tint` and
 @use "sass:string";
 
 // A value CSS will take as a colour: a Sass colour, a colour keyword Sass does
-// not know as a colour, or any function, which covers var(), color-mix() and
-// light-dark(). Deliberately looser than isColor, which tint and shade need
-// strict because they do the maths at compile time.
+// not know as a colour, or one of the functions that return a colour. A list
+// passes when every item does, because isColor accepts lists and
+// `triangle(top, red blue)` compiles today. Deliberately looser than isColor,
+// which tint and shade need strict because they do the maths at compile time.
 @function -is-css-color($value) {
+  @if list.length($value) > 1 {
+    @each $item in $value {
+      @if not -is-css-color($item) {
+        @return false;
+      }
+    }
+    @return true;
+  }
   @if meta.type-of($value) == "color" {
     @return true;
   }
@@ -270,7 +346,8 @@ it adds no public member and the release stays a patch. `isColor`, `tint` and
     @if list.index("currentcolor" "inherit" "initial" "unset" "revert", $text) {
       @return true;
     }
-    @if string.index($text, "(") {
+    $open: string.index($text, "(");
+    @if $open and list.index("var" "color-mix" "light-dark" "env", string.slice($text, 1, $open - 1)) {
       @return true;
     }
   }
@@ -287,11 +364,19 @@ message, so a bad value still gets a helpful error:
 }
 ```
 
-This was compiled against the values above: `var(--x)`, `currentColor`,
-`color-mix(in srgb, red 50%, blue)`, `red` and `transparent` pass; `nonsense`
-and `10px` do not.
+Compiled in a copy of the library with this change: `var(--x)`, `currentColor`,
+`color-mix(in srgb, red 50%, blue)`, `light-dark(red, blue)`, `red`,
+`transparent` and the list `red blue` pass; `nonsense`, `10px` and `url(a.png)`
+raise the new message.
 
-**Changes existing output?** No. A call with a real colour emits the same CSS.
+**Two things the first sketch got wrong**, found in validation. It refused a list
+of colours, which `isColor` accepts, so `triangle(top, red blue)` would have gone
+from compiling to raising. And it accepted any value containing `(`, so
+`triangle(right, url(a.png))` would have gone from a refusal to CSS that cannot
+work. The version above names the functions instead.
+
+**Changes existing output?** No. A call with a real colour emits the same CSS;
+every `triangle` call in the comparison under Validation was unchanged.
 
 **Touches.** `scss/library/_triangle.scss`; `meta/triangle.json` (the examples in
 G2, and the argument's `accepts` text); `test/library/triangle.spec.scss` (a new
@@ -385,6 +470,8 @@ emitted nothing and now raises.
 three-argument call as a reject).
 
 **Verify.** The new reject fails with this message and not a Sass internal one.
+Zero arguments are the same silent case today, and the `@else` catches them too;
+both were checked in the prototype.
 
 ### F4. Size conditions refuse `var()`, which can never match
 
@@ -427,112 +514,23 @@ Compiled: `var(--wide)` is caught; `400px` and `"medium"` are not.
 raise instead of emitting a dead rule.
 
 **Touches.** `scss/library/_container-query.scss`, `scss/library/_breakpoint.scss`;
-a reject in `meta/container-query.json` and `meta/breakpoint.json`.
+a reject in `meta/container-query.json` and `meta/breakpoint.json`. The `var()`
+sweep in G4 found two more members with the same output: `remove`, which builds
+on `breakpoint` and inherits the check, and `screen-agent`, whose `$resolution`
+emits `@media (min-resolution: var(--x))` and needs the check of its own.
 
-**Verify.** The container case was measured in a browser. The `@media` case
-rests on the same rule in the specification and has not been measured; check it
-before merging.
+**Verify.** Measured in Chrome 152: `@media (min-width: var(--wide))` and
+`@media (min-resolution: var(--r))` did not apply, while `(min-width: 10px)` did,
+so the `@media` case holds as well as the container one.
 
-### F5. `aspect-ratio` holds on images with `width` and `height` attributes
+The check has to look inside nested lists: in `breakpoint(between, var(--a) large)`
+the custom property sits one level down. A prototype that recursed caught it,
+and still accepted `calc(40em + 1px)` and `between, small large`.
 
-**Problem.** Writing `width` and `height` on an `<img>` is the standard advice
-for avoiding layout shift. The `height` attribute becomes a definite CSS height,
-and with both dimensions definite the browser ignores `aspect-ratio`. The mixin
-sets `width: 100%` and leaves the height alone, so the image renders at its
-attribute height. This is the member's main promise, broken in the common case.
+### F5 and F6. Moved to 3.0.0
 
-`CLAUDE.md` records three measurements behind the 2.0.0 design of this mixin. All
-three used images without the attributes, so this case was never seen.
-
-**Example.** `@include aspect-ratio("4:3")`, a 1600×900 source, a 300px
-container, Chrome 152:
-
-| Markup | Rendered |
-|---|---|
-| `<img class="photo" width="1600" height="900">` | **300 × 900** |
-| `<img class="photo">` | 300 × 225 |
-| with the attributes, plus `height: auto` | 300 × 225 |
-
-**Fix.** Emit `height: auto` beside `width: 100%`:
-
-```scss
-display: block;
-width: 100%;
-height: auto;
-aspect-ratio: validateRatio($ratio);
-border: 0;
-```
-
-and add it to the source comment as the fourth measured gap.
-
-**Changes existing output?** Every call gains one declaration. It changes what
-renders only for an image whose height was coming from its attribute, and there
-the ratio was broken. A height set by hand after the include still wins. That is
-why this is a fix and not a major change, but the output diff is visible, so say
-so in the changelog.
-
-**Touches.** `scss/library/_aspect-ratio.scss`; `test/library/aspect-ratio.spec.scss`
-(all four tests' expected blocks); the manifest snapshots;
-`site/content/docs/aspect-ratio.mdx`; the 2.0.0 measurement table in `CLAUDE.md`.
-
-**Verify.** Rebuild the table above in a browser. The test page is described in
-`agent-trials.md` under trial 3.
-
-### F6. `counter` numbers correctly inside container queries
-
-**Problem.** `container-type: inline-size` applies style containment, which scopes
-counters to the container's subtree. The mixin increments on
-`.counter-item::before`, which is inside that subtree, so when the items are
-containers each one starts a counter of its own. T2 gave up its container
-queries to keep the numbers.
-
-**Example.** Measured in Chromium, three numbered items:
-
-| Setup | Numbers |
-|---|---|
-| no container | 01 02 03 |
-| container on each item, increment on `::before` (today) | 01 01 01 |
-| container on the list | 01 01 01 |
-| reset on the container element itself | 01 01 01 |
-| container on each item, increment on the item itself | **01 02 03** |
-
-**Fix.** Move `counter-increment` from the pseudo-element to the item. The
-`content` stays on `::before`, where the reader's `@content` also goes.
-
-Today:
-
-```scss
-&.counter-start .counter-item::before,
-&.counter-continue .counter-item::before {
-  content: counter(glsCounter);
-  counter-increment: glsCounter;
-  @content;
-}
-```
-
-After:
-
-```scss
-&.counter-start .counter-item,
-&.counter-continue .counter-item {
-  counter-increment: glsCounter;
-}
-&.counter-start .counter-item::before,
-&.counter-continue .counter-item::before {
-  content: counter(glsCounter);
-  @content;
-}
-```
-
-**Changes existing output?** The declaration moves to another rule. A plain list
-numbers exactly as before, measured. The one project it could affect is one that
-suppresses an item's `::before` with `content: none` to skip a number: the item
-would now still be counted. Rare, but name it in the changelog.
-
-**Touches.** `scss/library/_counter.scss`; the manifest snapshot; a new
-`test/library/counter.spec.scss`, since `counter` has no spec today.
-
-**Verify.** The browser table in Firefox and Safari, which have not been tried.
+Validation found that both change what renders for calls that work today. They
+are now B8 and B9, each with a caveat to publish in the meantime.
 
 ### F7. `reset-css` stops putting comments in compiled CSS
 
@@ -550,6 +548,191 @@ changes.
 of `source-comments.md`: `//` only, everywhere in the library.
 
 **Verify.** `grep -c meyerweb` on a compiled expanded file returns 0.
+
+### F8. Values that end up in a declaration let a CSS function through
+
+**Problem.** Eight arguments turn a `var()` into CSS that looks right and does
+nothing, and two refuse a `var()` the property would take.
+
+| Call | Today | Why it fails |
+|---|---|---|
+| `background-image(var(--hero))`, and the image argument of `brand-logo`, `text-image`, `background-dots`, `background-stripes` | `background-image: url(var(--hero))` | `url()` takes no `var()` inside it |
+| `after(var(--label))`, `before(...)` | `content: "var(--label)"` | shows the text `var(--label)` |
+| `counter(var(--prefix), decimal)` | `content: "var(--prefix)" counter(glsCounter, decimal)` | same |
+| `aspect-ratio(var(--ratio))` | error: not a valid ratio | `aspect-ratio: var(--ratio)` is valid CSS |
+| `line-clamp(var(--lines))` | error: not a whole number | `line-clamp: var(--lines)` is valid CSS |
+
+A custom property that holds an image has to hold the whole `url(...)`, so the
+right output for the first row is `background-image: var(--hero)`.
+
+**Fix.** A private check per file for a call to one of a few named functions,
+with the names chosen for what the value becomes:
+
+```scss
+// True for an unquoted call to one of $names, such as var(--x).
+@function -is-css-function($value, $names) {
+  @if meta.type-of($value) != "string" or string.slice(meta.inspect($value), 1, 1) == "\"" {
+    @return false;
+  }
+  $open: string.index($value, "(");
+  @return $open != null and list.index($names, string.to-lower-case(string.slice($value, 1, $open - 1))) != null;
+}
+```
+
+| The value becomes | Names |
+|---|---|
+| `content` | `var`, `attr`, `counter`, `counters` |
+| an image | `var`, `url`, `image-set` and the gradient functions |
+| a ratio or a line count | `var` |
+
+Where it is true, emit the value as it is: `background-image: $image` without
+`url()`, `content: $content` without quotes, and skip the number and ratio checks
+in `line-clamp` and `validateRatio`. A quoted string stays text, so
+`after("var(--x)")` still renders those characters, which is what quoting says.
+
+**Why named functions, not any `(`.** The first sketch accepted anything with a
+parenthesis. In the prototype that turned three refusals into silent, useless CSS:
+`aspect-ratio(url(a.png))`, `line-clamp(url(a.png))` and `triangle(url(a.png))`.
+
+**Not in a utility file.** `tools/build-manifest.js` takes one member per file.
+With the helper placed in `_validate-ratio.scss`, the generated manifest lost
+`validateRatio` and listed `-is-css-function` in its place. Write the check
+inline in `validateRatio`, or teach the parser to skip names starting with `-`.
+
+Measured in Chrome 152: `background-image: url(var(--hero))` computes to `none`,
+while `background-image: var(--hero)` with `--hero: url(...)` loads the image.
+`content: "var(--label)"` renders the characters and `content: var(--label)` the
+value. `aspect-ratio: var(--ratio)` and `line-clamp: var(--lines)` both apply.
+
+**Changes existing output?** Only for calls whose output did not work. The one
+arguable case is `after(var(--x))` rendering the literal text today; nobody
+writes that to get the text.
+
+**Touches.** `scss/library/_background-image.scss`, `_brand-logo.scss`,
+`_text-image.scss`, `_background-dots.scss`, `_background-stripes.scss`,
+`_before.scss`, `_after.scss`,
+`_counter.scss`, `_line-clamp.scss`, `scss/utilities/_validate-ratio.scss`; a
+`var()` example in each `meta/` file; `test/library/after.spec.scss` and
+`aspect-ratio.spec.scss`. The helper appears in several files; if that grates,
+make it a public utility in 2.2.0 instead.
+
+**Verify.** G4's "broken output" bucket is empty for these members.
+
+### F9. Computed sizes work with `var()`, `calc()` and `clamp()`
+
+**Problem.** Three mixins compute with a size, so only a Sass number can pass:
+
+- `background-dots`: `$gutter` defaults to `$size * 5`, and the positions use
+  `math.div($gutter, 2)` and `$gutter * 2`.
+- `background-stripes`: `$thickness * 2` and `$thickness * $i`.
+- `triangle`: `math.div(list.nth($size, 1), 2)`. Here a `var()` does not even
+  fail: it emits `border-width: var(--x) var(--x)/2 0`, which is invalid.
+
+**Example.**
+
+```scss
+.a { @include background-dots(red, 1rem, calc(1rem + 2px)); }
+```
+
+```
+Error: Undefined operation "calc(1rem + 2px) * 2".
+```
+
+**Fix.** Do the arithmetic inside `calc()`. Dart Sass simplifies a calculation
+over plain numbers to a number, so every call that works today emits the same
+CSS, and anything else is left to the browser:
+
+```scss
+$gutter: calc($size * 5)          // was $size * 5
+calc($gutter / 2)                 // was math.div($gutter, 2)
+```
+
+Compiled: `1em`, `10px` and `0.5rem` give `5em`, `50px`, `2.5rem` and `0.5em`,
+`5px`, `0.25rem`, identical to the current expressions. `var(--x)` gives
+`calc(var(--x) * 5)`, and `calc(1rem + 2px)` gives `calc((1rem + 2px) * 5)`.
+
+**The trap.** `calc()` in Sass accepts an unquoted string without complaint:
+`calc(nonsense * 5)` compiles. So check the value first, a number or
+`-is-css-function` from F8, or a typo that raises today would start emitting CSS.
+A colour inside `calc()` does raise, with Sass's message.
+
+**The default `$gutter` has to move.** `$gutter: calc($size * 5)` in the
+signature is evaluated before the body runs, so in the prototype a bad `$size`
+failed there with Sass's own "can't be used in a calculation" and never reached
+the check. Default `$gutter` to `null` and derive it after validating `$size`.
+The CSS is the same, but the signature in `gerillass.json` changes from
+`$gutter: $size * 5` to `$gutter: null`, so the documentation page's argument
+table changes too.
+
+**Changes existing output?** No, for number arguments. Validated in the
+prototype: all eight `triangle` directions with nine sizes, and
+`background-dots` and `background-stripes` across units, gutters, colour counts
+and images, over 600 calls, compiled byte-identical. Sizes that were never
+lengths do change: twelve `triangle` probes such as `nonsense`, `null` and `none`
+emitted a broken `border-width` and now raise.
+
+**Touches.** `scss/library/_background-dots.scss`, `_background-stripes.scss`,
+`_triangle.scss`; `test/library/background-dots.spec.scss` and
+`triangle.spec.scss` (a `var()` case each); a reject for `nonsense` in
+`meta/background-dots.json` and `meta/background-stripes.json`.
+
+**Verify.** Snapshots unchanged; G4 has no UNHELPFUL finding for these members.
+Measured in Chrome 152: `border-width: 10px 10px/2 0` is invalid and the borders
+fall back to 3px, while `calc(10px / 2)` gives 5px. Today's `var()` triangle also
+prints a `math.div()` warning, which the fix removes.
+
+### F10. `background-image` and `font-face` stop dropping values silently
+
+**Problem.** Two arguments are thrown away without a word, the silent failure
+`CLAUDE.md` warns about.
+
+- **`background-image`** reads `$filter-direction` only when `$filter-color` has
+  two or more colours. With one colour any direction is ignored, `45deg` and
+  `nonsense` alike. With two, `nonsense` raises properly.
+- **`font-face`** builds `src` through `fontSource`, which returns nothing for a
+  format it does not know. One unknown format is dropped; if all are unknown,
+  there is no `src` at all.
+
+**Example.**
+
+```scss
+@include font-face("X", "/f/x", $file-formats: nonsense);
+```
+
+```css
+@font-face {
+  font-family: "X";
+  font-style: normal;
+  font-weight: 400;
+}
+```
+
+A font that never loads, and no error. `woff2 nonsense` emits only the `woff2`
+source, also without an error.
+
+**Fix.**
+
+- `background-image`: validate `$filter-direction` before branching on the colour
+  count, with the message the two-colour branch already has. A valid direction
+  with one colour stays harmless: a solid overlay has no direction to show.
+- `font-face`: check every format against `$map-for-font-formats` and raise on
+  the first unknown one, naming the accepted formats.
+
+**Changes existing output?** A call with a misspelled format or direction now
+raises instead of emitting CSS. `woff2 nonsense` did emit a working `src`, so
+name this in the changelog; it is still a fix, since the call said something the
+output ignored.
+
+**Touches.** `scss/library/_background-image.scss`, `scss/library/_font-face.scss`;
+rejects in `meta/background-image.json` and `meta/font-face.json`.
+
+**Verify.** The rejects fail with the library's message. `$file-formats: var(--x)`
+raises too, which is right: a format list is chosen at compile time.
+
+**Validated.** In the prototype a valid direction with one colour still compiles
+unchanged, and 57 probe calls moved from CSS that could not work to the new
+errors. One message needs care: `$file-formats: null` prints empty backticks, so
+name `null` explicitly.
 
 ### D1. Document the `loadify` module rule
 
@@ -672,8 +855,9 @@ would be accepted and emit nothing. Give `triangle` its own list.
 **Touches.** `scss/library/_triangle.scss`; `meta/triangle.json`;
 `test/library/triangle.spec.scss`; the documentation page.
 
-**Verify.** Render all four logical directions under `dir="ltr"` and `dir="rtl"`.
-The CSS above has not been rendered yet.
+**Verify.** Rendered in Chrome 152 for `inline-end`: under `dir="ltr"` the red
+border is on the left, as with today's `right`; under `dir="rtl"` it moves to
+the right and the arrow points left. Render the other three when implementing.
 
 ### A2. Logical corners for `border-radius`
 
@@ -714,7 +898,9 @@ branch is accepted and emits nothing.
 **Touches.** `scss/library/_border-radius.scss`; `meta/border-radius.json`; the
 documentation page.
 
-**Verify.** Render under `dir="ltr"` and `dir="rtl"`.
+**Verify.** Rendered in Chrome 152 for `inline-start`: the top-left and
+bottom-left radii under `dir="ltr"`, the top-right and bottom-right under
+`dir="rtl"`.
 
 ### A3. Logical offsets for `position`
 
@@ -806,9 +992,10 @@ with a weight range and `$font-display`); the documentation page.
 Error: "The argument must be `null` or one of the followings: hover, focus, active, invalid, required, disabled"
 ```
 
-**Fix.** Add both names to the list at the top of `_all-text-inputs.scss`. The
-selector is built by `pseudoSelector`, so nothing else should change; compile both
-before merging to confirm.
+**Fix.** Add both names to the list at the top of `_all-text-inputs.scss`.
+Compiled with both added: `pseudoSelector` builds `[type=text]:focus-visible` and
+`[type=text]:user-invalid` across the whole list, and the existing states are
+unchanged.
 
 **Changes existing output?** No.
 
@@ -899,7 +1086,7 @@ Modernisation in `CLAUDE.md`):
     @if $prefix {
       $property: --#{$prefix}-#{$name};
     }
-    #{$property}: #{$value};
+    #{$property}: #{meta.inspect($value)};
   }
 }
 ```
@@ -915,7 +1102,10 @@ Modernisation in `CLAUDE.md`):
 }
 ```
 
-This sketch has not been compiled; do that first.
+Compiled, with `@use "sass:meta";`. The value goes through `meta.inspect`
+because plain interpolation strips quotes: with `#{$value}`,
+`("Readex Pro", sans-serif)` came out as `Readex Pro, sans-serif`, and a `"→"`
+string would lose its quotes and stop being a string.
 
 **Relation to `theme`.** `CLAUDE.md` lists a decorative `theme` idea
 (`color-scheme` plus `light-dark()`). This member is lower level, and it is what
@@ -1066,8 +1256,13 @@ last row stretch, is a flexbox behaviour.
 `test/library/columnizer.spec.scss`; the manifest snapshot; the documentation
 page; `MIGRATION.md`, which has to name both losses.
 
-**Verify.** Render a 1, 2, 3 column chain in both directions, with and without the
-fill flag. None of this has been rendered yet.
+**Measured** in Chrome 152, three columns with a 30px gutter in a 300px box.
+Today, under `dir="rtl"` the first row ends 30px short of the right edge,
+because `margin-right` sits on the outer side, and two rows of 20px make a box
+100px tall because the last row keeps its bottom margin. The `gap` version is
+flush in both directions and 70px tall.
+
+**Verify.** Render the fill flag and a 1, 2, 3 column chain when implementing.
 
 ### B4. `hide("unhide")` leaves `position` alone
 
@@ -1144,6 +1339,122 @@ is `!default`, so a project that wants the old list can restore it.
 **Touches.** `scss/lists/_list-of-text-inputs.scss`; `meta/all-text-inputs.json`;
 `MIGRATION.md`.
 
+### B8. `aspect-ratio` holds on images with `width` and `height` attributes
+
+**Problem.** Writing `width` and `height` on an `<img>` is the standard advice
+for avoiding layout shift. The `height` attribute becomes a definite CSS height,
+and with both dimensions definite the browser ignores `aspect-ratio`. The mixin
+sets `width: 100%` and leaves the height alone, so the image renders at its
+attribute height. This is the member's main promise, broken in the common case.
+
+`CLAUDE.md` records three measurements behind the 2.0.0 design of this mixin. All
+three used images without the attributes, so this case was never seen.
+
+**Example.** `@include aspect-ratio("4:3")`, a 1600×900 source, a 300px
+container, Chrome 152:
+
+| Markup | Rendered |
+|---|---|
+| `<img class="photo" width="1600" height="900">` | **300 × 900** |
+| `<img class="photo">` | 300 × 225 |
+| with the attributes, plus `height: auto` | 300 × 225 |
+
+**Fix.** Emit `height: auto` beside `width: 100%`:
+
+```scss
+display: block;
+width: 100%;
+height: auto;
+aspect-ratio: validateRatio($ratio);
+border: 0;
+```
+
+and add it to the source comment as the fourth measured gap.
+
+**Changes existing output?** Yes, and validation is why this moved from 2.1.1.
+Every call gains a declaration, and it does not only fix images. A height written
+before the include in the same rule, or in an earlier rule, is now overridden: a
+`<div>` with `height: 400px` and the mixin rendered 300 × 400 and renders
+300 × 225 with the fix, measured in Chrome 152. A height written after the
+include still wins.
+
+The same measurement found the fix helps more than images. An
+`<iframe width="560" height="315">`, which is what a YouTube embed code writes,
+renders 300 × 315 today and 300 × 225 with `height: auto`.
+
+**Until then.** A G3 caveat and a line on the documentation page: on an element
+with a `height` attribute, write `height: auto` after the include.
+
+**Touches.** `scss/library/_aspect-ratio.scss`; `test/library/aspect-ratio.spec.scss`
+(all four tests' expected blocks); the manifest snapshots; `MIGRATION.md`;
+`site/content/docs/aspect-ratio.mdx`; the 2.0.0 measurement table in `CLAUDE.md`.
+
+**Verify.** Re-measured in Chrome 152 during validation, together with the two
+cases above. Firefox and Safari not tried.
+
+### B9. `counter` numbers correctly inside container queries
+
+**Problem.** `container-type: inline-size` applies style containment, which scopes
+counters to the container's subtree. The mixin increments on
+`.counter-item::before`, which is inside that subtree, so when the items are
+containers each one starts a counter of its own. T2 gave up its container
+queries to keep the numbers.
+
+**Example.** Measured in Chromium, three numbered items:
+
+| Setup | Numbers |
+|---|---|
+| no container | 01 02 03 |
+| container on each item, increment on `::before` (today) | 01 01 01 |
+| container on the list | 01 01 01 |
+| reset on the container element itself | 01 01 01 |
+| container on each item, increment on the item itself | **01 02 03** |
+
+**Fix.** Move `counter-increment` from the pseudo-element to the item. The
+`content` stays on `::before`, where the reader's `@content` also goes.
+
+Today:
+
+```scss
+&.counter-start .counter-item::before,
+&.counter-continue .counter-item::before {
+  content: counter(glsCounter);
+  counter-increment: glsCounter;
+  @content;
+}
+```
+
+After:
+
+```scss
+&.counter-start .counter-item,
+&.counter-continue .counter-item {
+  counter-increment: glsCounter;
+}
+&.counter-start .counter-item::before,
+&.counter-continue .counter-item::before {
+  content: counter(glsCounter);
+  @content;
+}
+```
+
+**Changes existing output?** Yes, which is why this moved from 2.1.1. A plain list
+numbers as before. But skipping an item by setting its `::before` to
+`content: none` stops working. Measured in Chrome 152, three items with the
+middle one suppressed read `01, 02` today and `01, 03` with the fix: a
+pseudo-element with no content does not increment, and the item always does.
+That is an old and ordinary way to leave a row unnumbered.
+
+**Until then.** A G3 caveat naming the failure. Putting the container on an
+element inside the item should avoid it, since the counter then sits outside
+the contained subtree, but that has not been measured.
+
+**Touches.** `scss/library/_counter.scss`; the manifest snapshot; a new
+`test/library/counter.spec.scss`, since `counter` has no spec today; `MIGRATION.md`.
+
+**Verify.** The table and the skipped item were re-measured in Chromium during
+validation. Firefox and Safari have not been tried.
+
 ---
 
 ## Needs research before it becomes an item
@@ -1158,25 +1469,73 @@ is `!default`, so a project that wants the old list can restore it.
 - **Members T3 found of little value:** `sizer`, `circle`, `all-buttons`,
   `resizable`, `reset-figure`. Recorded, not acted on. As `CLAUDE.md` puts it for
   utilities, one project not needing a member is no reason to delete it.
-- **`hide` and the global `index()`.** The call is in the source, but compiling
-  `hide(nonsense)` on Dart Sass 1.104.1 printed no deprecation warning.
 
 ## What each release needs besides the code
 
 - **Groundwork:** land G1 to G3 before the fixes, so each fix brings a failing test
   with it.
-- **2.1.1:** a `CHANGELOG.md` entry that names the visible output changes in F5
-  and F6; the full `/release` checklist, including `node tools/check-archive.js`
+- **2.1.1:** a `CHANGELOG.md` entry that names the calls F3, F4, F9 and F10 turn
+  from broken CSS into errors, and the `background-dots` signature change in F9; the full `/release` checklist, including `node tools/check-archive.js`
   and `node tools/check-links.js`; the wiki page.
 - **2.2.0:** the `@warn` from B2; the new members through `/new-mixin`.
-- **3.0.0:** a `MIGRATION.md` section per B item, with CSS before and after. Before
+- **3.0.0:** a `MIGRATION.md` section per B item, B8 and B9 included, with CSS before and after. Before
   publishing, run one trial prompt against a prerelease to see what an agent trips
   on with the new behaviour.
+
+## Validation
+
+Every claim above was checked again the same day, because a plan acted on without
+checking can leave the library worse than it found it. Three methods:
+
+1. **Every example in this file compiled** against the repository's library, and
+   the output compared with what the item says.
+2. **The 2.1.1 fixes implemented in a throwaway copy** of the library, never in
+   `scss/`, and compared with the original:
+   - the full test suite. The only failures were the snapshots and
+     `aspect-ratio` specs the fixes set out to change, and the manifest freshness
+     check for the F9 signature;
+   - 3393 calls compiled against both: every `meta/` example and reject, the
+     smoke test, 30 probe values at every argument of every mixin, and numeric
+     grids for the arithmetic in F9;
+   - `node tools/audit.js` on both.
+3. **Browser measurements** in Chrome 152 for F4, B8, B9, F8, F9, A1, A2 and B3.
+
+The comparison, after the corrections below were made to the prototype:
+
+| Result | Calls |
+|---|---:|
+| identical output | 3144 |
+| CSS that could not work today, an error after | 73 |
+| an error today, working CSS after: `var()`, `calc()` or `currentColor` where CSS takes them | 11 |
+| Sass's own error today, the library's after | 63 |
+| the library's error today, Sass's after | 0 |
+| different CSS: the intended changes in F2, F7, F8, B8 and B9 | 75 |
+
+The audit's SILENT and UNHELPFUL buckets were 0 before and after, and PASSED
+THROUGH fell from 323 to 308.
+
+What validation changed, each written into its item:
+
+- **F5 and F6 moved to 3.0.0**, as B8 and B9: each changes what renders for a call
+  that works today.
+- **F1** would have refused a list of colours and accepted `url()`.
+- **F8** needs named functions, and its helper must not sit in a utility file, or
+  the manifest loses `validateRatio`.
+- **F9** needs `$gutter` to default to `null`.
+- **N3** needs `meta.inspect`, or quoted values lose their quotes.
+- **`hide` and `index()`** is not a problem: `hide(nonsense)` raises the library's
+  own message. Removed from research.
 
 ## Limits
 
 - Three trials, on three project types. The third trial's model was not recorded.
-- Browser measurements were Chrome and Chromium only.
-- Compiled here: the sketches in F1, F2, F4 and B1. Not compiled: N3. Not rendered:
-  the CSS proposed in A1, A2 and B3.
+- Browser measurements were Chrome and Chromium only; nothing was tried in
+  Firefox or Safari.
+- Prototyped: the 2.1.1 fixes, B8, B9 and A5. A1 and A2 were rendered as
+  hand-written CSS, not built as Sass. Not prototyped: G1 to G4, A3, A4, N1 to N3
+  as members, and B1 to B7.
+- Not measured: the boundary overlap in B1, which follows from the definitions of
+  `min-width` and `max-width`; forced-colours behaviour for N1.
 - Not reproduced: the Parcel claims behind D3 and B6, and the VoiceOver claim.
+- A prototype is not the implementation. It shows each approach holds; the real
+  change still needs its own specs, `meta/` entries and a snapshot diff.
