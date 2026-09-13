@@ -40,7 +40,7 @@ reversed in 2.0.0: library partials used to be forbidden from carrying a `@use`
 rule, because a Gulp task concatenated them into one bundle and a `@use` landing
 mid-file made Sass reject the whole thing. That generator is gone.
 
-Validate arguments and fail loudly. 38 of the 47 mixins that take arguments do
+Validate arguments and fail loudly. 39 of the 48 mixins that take arguments do
 this, and the message should name what is acceptable:
 
 ```scss

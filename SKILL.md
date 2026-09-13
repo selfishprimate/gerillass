@@ -5,7 +5,7 @@ description: Use the Gerillass Sass mixin library — loading it, the mixin cata
 
 # Gerillass
 
-A Sass mixin library: 53 mixins and 23 functions that emit CSS from
+A Sass mixin library: 54 mixins and 23 functions that emit CSS from
 semantic declarations. It is Sass source only — there is no runtime and no
 utility classes, so styles live in your stylesheet and your markup stays clean.
 
@@ -84,6 +84,7 @@ a dropped declaration rather than an error.
 | `container` | `.card { @include container("card", sideways); }` |
 | `escape-to-parent` | `.a { @include escape-to-parent(42) { color: red; } }` |
 | `except` | `.a { @include except(#ff0000) { margin: 0; } }` |
+| `focus-ring` | `@include focus-ring;` |
 | `font-face` | `.a { @include font-face("Inter", "/fonts/inter"); }` |
 | `hide` | `.a { @include hide(nonsense); }` |
 | `line-clamp` | `.a { @include line-clamp(0); }` |
@@ -169,6 +170,7 @@ a dropped declaration rather than an error.
 | `ellipsis($width: 100%, $display: inline-block)` | Truncates a single line of text with an ellipsis. |
 | `escape-to-parent($selector: null)` | Re-roots the current selector under another one using @at-root. |
 | `except($params...)` | Selects every sibling except the ones named. |
+| `focus-ring($width: 2px, $offset: 2px, $color: currentColor)` | Draws a keyboard focus ring with outline on :focus-visible, which survives forced-colors mode where a box-shadow ring disappears. |
 | `font-face($font-family, $file-path, $font-style: normal, $font-weight: 400, $file-formats: eot woff2 woff ttf svg)` | Emits an @font-face rule for one family across several file formats. Must be called at the root. |
 | `hide($toggle: "hide")` | Visually hides an element while keeping it available to screen readers, or reverses that. |
 | `line-clamp($lines: 3)` | Truncates text after a number of lines, where ellipsis truncates one. It emits five declarations rather than one because -webkit-line-clamp does nothing on its own: without display: -webkit-box or without -webkit-box-orient: vertical the text is not clamped at all and nothing warns you, and without overflow: hidden the clamped text spills out below the box. The unprefixed line-clamp is emitted too, for when it becomes Baseline. |

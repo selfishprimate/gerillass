@@ -792,6 +792,43 @@
       ]
     },
     {
+      "name": "focus-ring",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$width",
+          "default": "2px",
+          "accepts": [
+            "an outline width, such as 2px"
+          ]
+        },
+        {
+          "name": "$offset",
+          "default": "2px",
+          "accepts": [
+            "a length; negative draws the ring inside the element"
+          ]
+        },
+        {
+          "name": "$color",
+          "default": "currentColor",
+          "accepts": [
+            "any CSS colour, including currentColor and var()"
+          ]
+        }
+      ],
+      "file": "scss/library/_focus-ring.scss",
+      "signature": "focus-ring($width: 2px, $offset: 2px, $color: currentColor)",
+      "summary": "Draws a keyboard focus ring with outline on :focus-visible, which survives forced-colors mode where a box-shadow ring disappears.",
+      "examples": [
+        ".button { @include focus-ring; }",
+        ".card-link { @include focus-ring(3px, 4px, var(--focus)); }"
+      ],
+      "rejects": [
+        "@include focus-ring;"
+      ]
+    },
+    {
       "name": "font-face",
       "kind": "mixin",
       "arguments": [

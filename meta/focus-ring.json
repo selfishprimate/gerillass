@@ -1,0 +1,31 @@
+{
+  "name": "focus-ring",
+  "summary": "Draws a keyboard focus ring with outline on :focus-visible, which survives forced-colors mode where a box-shadow ring disappears.",
+  "arguments": [
+    {
+      "name": "$width",
+      "accepts": [
+        "an outline width, such as 2px"
+      ]
+    },
+    {
+      "name": "$offset",
+      "accepts": [
+        "a length; negative draws the ring inside the element"
+      ]
+    },
+    {
+      "name": "$color",
+      "accepts": [
+        "any CSS colour, including currentColor and var()"
+      ]
+    }
+  ],
+  "examples": [
+    ".button { @include focus-ring; }",
+    ".card-link { @include focus-ring(3px, 4px, var(--focus)); }"
+  ],
+  "rejects": [
+    "@include focus-ring;"
+  ]
+}

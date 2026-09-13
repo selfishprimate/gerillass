@@ -1,0 +1,34 @@
+@charset "UTF-8";
+
+// Draws a focus ring for keyboard users. Two things are usually got wrong by
+// hand, and this writes the version that avoids both.
+//
+// The ring goes on :focus-visible, not :focus. Measured in Chrome 152: a mouse
+// click on a button or a link does not match :focus-visible, so the ring stays
+// out of the way of pointer users, while Tab does match it. Text inputs are the
+// exception and match it on a click too, which is the browser's own choice.
+// Hiding the ring with `:focus { outline: none; }` is the common mistake it
+// replaces: tabbing to that button gave no outline and no shadow at all.
+//
+// The ring is an outline, not a box-shadow. A box-shadow ring looks the same
+// in an ordinary page, but forced-colors mode, as Windows High Contrast is
+// exposed to CSS, sets box-shadow to none and repaints outline-color in a
+// system colour, so a shadow ring vanishes for the users who most need it.
+// That part follows the CSS Color Adjustment specification; it was not
+// measured here, because the browser used could not emulate the mode.
+//
+// Two things measured about the outline itself. It follows border-radius: on a
+// button with a 12px radius the ring is rounded to match. And an ancestor with
+// overflow: hidden clips it: a 2px offset left only the ring's corners showing,
+// while an offset of -4px drew it inside the element, fully visible. Pass a
+// negative $offset where the element sits in a clipping container.
+@mixin focus-ring($width: 2px, $offset: 2px, $color: currentColor) {
+  @if not & {
+    @error "`focus-ring` styles the element it is called in, so call it inside a selector, such as `.button { @include focus-ring; }`.";
+  }
+
+  &:focus-visible {
+    outline: $width solid $color;
+    outline-offset: $offset;
+  }
+}

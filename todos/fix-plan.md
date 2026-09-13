@@ -1296,6 +1296,25 @@ An outline survives.
   element. T3 put its ring on a stretched link's `::before`, so that the ring
   surrounds the whole card the link covers.
 
+**Status.** Written for 2.2.0, as proposed and no larger:
+`focus-ring($width: 2px, $offset: 2px, $color: currentColor)`, an outline on
+`:focus-visible`. It refuses only a call outside a selector. Both open
+questions were settled by measuring, in Chrome 152:
+
+- **No forced-colors branch.** The trap it closes is the ring written as a
+  `box-shadow`, which forced-colors mode sets to `none`, while it repaints an
+  outline in a system colour. That rests on the CSS Color Adjustment
+  specification; the browser could not emulate the mode, so it is not measured.
+- **No form for another element yet.** T3's ring on a stretched link's
+  `::before` would be an argument added later without breaking this call.
+
+Measured: a mouse click on a button or a link does not match `:focus-visible`
+and Tab does; a text input matches on a click too; `:focus { outline: none }`
+leaves a tabbed button with nothing; the outline follows a 12px radius; inside
+`overflow: hidden` a 2px offset leaves only the corners and `-4px` draws the ring
+fully inside. The page, the playground demo and the counts in the docs came
+with it.
+
 ### N2. A reduced-motion guard
 
 **Evidence.** T2 wrote `motion-safe` and T3 `motion-ok`. Both independently made

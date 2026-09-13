@@ -9,7 +9,7 @@ Gerillass is a **pure Sass library** — a toolkit of mixins and functions, in t
 Two consequences follow from this and drive most decisions in the repo:
 
 1. **`package.json` must have no `dependencies`.** Everything (`jest`, `sass`, `sass-true`, `glob`) belongs in `devDependencies`. Consumers get only `.scss` files, so a runtime dependency here forces the entire test toolchain onto every downstream project. This was the cause of 24 Dependabot alerts fixed in v1.3.3 — do not reintroduce it.
-2. **Only `scss/` ships.** `.npmignore` excludes `test`, `assets`, `meta`, `tools`, dotfiles and `*.md`; npm always adds `README.md`, `LICENSE.md` and `package.json` back. Verify with `npm pack --dry-run` before any release (98 files / ~38 kB as of v2.0.0).
+2. **Only `scss/` ships.** `.npmignore` excludes `test`, `assets`, `meta`, `tools`, dotfiles and `*.md`; npm always adds `README.md`, `LICENSE.md` and `package.json` back. Verify with `npm pack --dry-run` before any release (99 files / ~47 kB as of 2.2.0).
 
 Dart Sass only. LibSass/node-sass has been unsupported since v1.3.0.
 
@@ -296,10 +296,10 @@ Four levels, and knowing which one covers a member tells you what you can trust:
 
 | Level | Proves | Coverage |
 |---|---|---|
-| `test/smoke.scss` | the mixin evaluates at all | 53/53 mixins |
-| snapshot of `meta/` examples | the output cannot change unnoticed | 76/76 members |
-| `meta/` rejects | bad input is refused with a real message | 47/76 |
-| sass-true spec in `test/` | the CSS is **correct** | 12/76 |
+| `test/smoke.scss` | the mixin evaluates at all | 54/54 mixins |
+| snapshot of `meta/` examples | the output cannot change unnoticed | 77/77 members |
+| `meta/` rejects | bad input is refused with a real message | 48/77 |
+| sass-true spec in `test/` | the CSS is **correct** | 12/77 |
 
 Only the last one catches an output that was wrong from the start; a snapshot
 records a wrong value as correct. Hand-written specs are therefore reserved for
@@ -535,8 +535,10 @@ order, with the trap each one closes:
    by 70px, while `minmax(min(100%, 20rem), 1fr)` fits at 250px. Forgetting the
    `min()` is what produces horizontal scrolling on phones. Different enough
    from `columnizer`, which is flexbox and wants a column count.
-2. **`focus-ring`.** `:focus-visible` with an offset and a forced-colors
-   fallback. Commonly done wrong by removing the outline altogether.
+2. **`focus-ring`, written for 2.2.0.** An outline on `:focus-visible` with an
+   offset. It needs no forced-colors branch: that mode repaints an outline and
+   drops a box-shadow, which is the ring people usually write instead. The
+   measurements are in its source comment.
 3. **A standalone `prefers-reduced-motion` guard.** The defect it was paired
    with is fixed; the guard mixin itself was never written, and it is the
    smaller half.
