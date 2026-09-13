@@ -219,14 +219,19 @@ A release that changes the documented examples also wants
 should not be a lie. Refresh the stargazer snapshot with
 `node scripts/update-supporters.cjs` in the same pass.
 
-**The demo generator does not run in this repository yet.** Both scripts were
-`.js` files using `require`, which `"type": "module"` in `package.json` turned
-into an error on the first line; they are `.cjs` now, and the stargazer one
-works. The demo one still reads the documentation from the archived
-`gerillass-docs` repository over `gh api`, parses Hugo `{{< highlight >}}`
-shortcodes, and looks for the manifest in `node_modules/gerillass`. None of
-that exists here: the pages are `content/docs/*.mdx` and the manifest is at the
-repository root. Port it before a release that changes a documented example.
+Both scripts were `.js` files using `require`, which `"type": "module"` in
+`package.json` turned into an error on the first line, so they are `.cjs`.
+
+**The demo generator reads this repository.** It used to fetch the pages from
+the archived `gerillass-docs` repository over `gh api`, parse Hugo
+`{{< highlight >}}` shortcodes and look for the manifest in
+`node_modules/gerillass`, none of which exists here. It now reads the `scss`
+fences of `content/docs/*.mdx`, takes the member from each page's
+`<Member name>` rather than its file name, and compiles against the root
+`scss/` and `gerillass.json`. It needs no `gh` login. Ported without changing
+which example it picks: of the 53 demos, 34 came out identical, 18 changed only
+their description, which the pages had rewritten since, and `sprite` took the
+page's example, which points at an image the site serves.
 
 Check the tag exists before pointing the download links at it:
 `git ls-remote --tags https://github.com/selfishprimate/gerillass.git`.

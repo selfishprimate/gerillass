@@ -372,8 +372,8 @@ The security fix only reaches users when the npm package is republished — upda
    `site/src/components/Playground/versions.js` is typed by hand and gets the new
    version once npm has it. Refresh the stargazers with
    `npm run supporters --prefix site`, and check the documentation pages against
-   what changed. `/release` has the full table, including why the playground
-   demo generator cannot run until it is ported to this repository.
+   what changed, and regenerate the playground demos with
+   `npm run playground-demos --prefix site`. `/release` has the full table.
 
 Default branch is `main` (renamed from `master` in v1.3.3). A repository ruleset blocks force-pushes and deletion of the default branch, with no bypass actors — direct pushes are allowed.
 

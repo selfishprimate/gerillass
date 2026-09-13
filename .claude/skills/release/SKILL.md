@@ -134,7 +134,7 @@ the site advertising the old one, or linking to a download that does not exist.
 | Both download buttons | `DOWNLOAD_URL` in the same file, `archive/refs/tags/vX.Y.Z.zip` | the link is a 404 until the tag is pushed, so **deploy the site only after step 4** |
 | Playground version menu | reads the npm registry; `FALLBACK` in `site/src/components/Playground/versions.js` is the seed used when that fails | add the version to `versions` and `latest` **after npm has it** (step 7), not before |
 | Stargazers row | a committed snapshot | `npm run supporters --prefix site` |
-| Playground starter snippets | `demos.json`, generated from the documentation | only when a documented example changed. **The generator cannot run yet**: `site/scripts/update-playground-demos.cjs` still reads the archived `gerillass-docs` repository over `gh api`, its Hugo `{{< highlight >}}` shortcodes, and a manifest under `site/node_modules`. Port it to `site/content/docs/*.mdx` and the root `gerillass.json` before a release that needs it |
+| Playground starter snippets | `demos.json`, generated from `site/content/docs/*.mdx` and the root `gerillass.json` | `npm run playground-demos --prefix site` when a documented example or a page description changed, and whenever a mixin is added |
 | Documentation pages | `site/content/docs/*.mdx` | compile every example against the previous tag and `HEAD`; for each member whose behaviour changed, read its argument table and footnotes for claims that are no longer true |
 | Announcement banner | hand-written | only for a release that breaks something; leave it otherwise |
 
