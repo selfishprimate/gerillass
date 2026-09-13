@@ -1,0 +1,121 @@
+// The expectations are written from what a custom property needs, not copied
+// from the output: a prefix joined with one hyphen, a null left out so that
+// `var(--x, fallback)` still falls back, and a quoted string kept quoted.
+// Measured in Chrome 152: `--arrow: →` gave `content: var(--arrow)` the value
+// none, while `--arrow: "→"` drew the arrow; and `--x: null` is a value, so
+// `color: var(--x, red)` did not take red.
+@use 'sass:math';
+@use 'true' as *;
+@use '../../scss/gerillass' as *;
+
+@include describe('tokens()') {
+  @include it('A prefix is joined to each name with one hyphen.') {
+    @include assert {
+      @include output {
+        :root {
+          @include tokens((bg: #fff, text: #111), color);
+        }
+      }
+      @include expect {
+        :root {
+          --color-bg: #fff;
+          --color-text: #111;
+        }
+      }
+    }
+  }
+
+  @include it('Without a prefix the name is used as it is, and a number works as a name.') {
+    @include assert {
+      @include output {
+        :root {
+          @include tokens((space-1: 0.25rem, 500: #3b82f6));
+        }
+      }
+      @include expect {
+        :root {
+          --space-1: 0.25rem;
+          --500: #3b82f6;
+        }
+      }
+    }
+  }
+
+  @include it('A colour keyword works as a prefix and as a name, since Sass reads blue and red as colours.') {
+    @include assert {
+      @include output {
+        :root {
+          @include tokens((red: #ef4444, 500: #3b82f6), blue);
+        }
+      }
+      @include expect {
+        :root {
+          --blue-red: #ef4444;
+          --blue-500: #3b82f6;
+        }
+      }
+    }
+  }
+
+  @include it('A null value is left out.') {
+    @include assert {
+      @include output {
+        :root {
+          @include tokens((bg: #fff, focus: null), color);
+        }
+      }
+      @include expect {
+        :root {
+          --color-bg: #fff;
+        }
+      }
+    }
+  }
+
+  @include it('Quoted strings keep their quotes, in a list too.') {
+    @include assert {
+      @include output {
+        :root {
+          @include tokens((body: ("Readex Pro", sans-serif), label: "New"), font);
+        }
+      }
+      @include expect {
+        :root {
+          --font-body: "Readex Pro", sans-serif;
+          --font-label: "New";
+        }
+      }
+    }
+  }
+
+  @include it('A colour is written the way Sass writes it in a declaration, without float noise.') {
+    @include assert {
+      @include output {
+        :root {
+          @include tokens((red-500: oklch(0.637 0.237 25.331), ratio: math.div(1, 3)), color);
+        }
+      }
+      @include expect {
+        :root {
+          --color-red-500: oklch(63.7% 0.237 25.331deg);
+          --color-ratio: 0.3333333333;
+        }
+      }
+    }
+  }
+
+  @include it('A value can reference another token.') {
+    @include assert {
+      @include output {
+        [data-theme="dark"] {
+          @include tokens((accent: var(--blue-500)), color);
+        }
+      }
+      @include expect {
+        [data-theme="dark"] {
+          --color-accent: var(--blue-500);
+        }
+      }
+    }
+  }
+}

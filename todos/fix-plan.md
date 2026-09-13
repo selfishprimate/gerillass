@@ -1381,6 +1381,12 @@ some. `loadify` already encodes a subtler form of the same lesson, applying the
 end state instead of switching the animation off. Decide whether that is enough
 to earn a member before writing it. The name is also open.
 
+**Status.** Implemented as `motion-safe`, decided with the user: the direction is
+what earns it. It refuses a call without a block, which would emit nothing. The
+source comment and the documentation page carry the trap, a resting state hidden
+in the base rule, and say plainly what was not measured: both media queries parse
+in Chrome 152, but the reduced-motion setting could not be emulated there.
+
 ### N3. Custom properties from a map
 
 **Evidence.** T2 wrote `tokens($map)` and T3 `_colors($palette)`, both to write a
@@ -1424,6 +1430,27 @@ string would lose its quotes and stop being a string.
 (`color-scheme` plus `light-dark()`). This member is lower level, and it is what
 the trials actually wrote. The three-selector pattern around it could become
 `theme` later. Keep the two separate.
+
+**Status.** Implemented as `tokens`, with the decisions taken with the user: a
+null value is left out, a nested map is refused rather than flattened, so a later
+version can flatten without changing a call that works today. Measured in Chrome
+152 before writing it: `--x: null` is a value, so `var(--x, red)` never fell back;
+without `meta.inspect`, `"→"` lost its quotes and `content: var(--arrow)` computed
+to none; and names holding `.`, `/`, a space or `#` were dropped, while `red`,
+`500`, `0_5` and non-ASCII letters survived. Names and the prefix are therefore
+checked by their characters, not their type, which the documentation page caught:
+the first version refused `tokens($blue, blue)`, because Sass reads `blue` as a
+colour. A sass-true spec covers the prefix, numbers and colour keywords as names,
+null, quotes and a `var()` value. The page's primitive and semantic example was
+measured rendering: the dark card takes only the overridden semantic layer.
+
+One more correction came out of the research for `todos/design-tokens.md`. The
+sketch's `meta.inspect` kept quotes but printed numbers at full precision, so
+`oklch(0.637 0.237 25.331)` came out with a hue of `25.331000000000017deg`. Only
+strings go through `meta.inspect` now, and a list is walked into. 21 kinds of
+value, from colours and `math.div` to font stacks, shadows, slash and bracketed
+lists and `url()`, compared with how Sass writes them in an ordinary declaration:
+all 21 identical. A spec case holds the oklch and `math.div` output.
 
 ### Held back: one trial each
 

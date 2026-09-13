@@ -1,0 +1,28 @@
+@charset "UTF-8";
+
+@use "sass:meta";
+
+// Applies its content only for users who have not asked their system for less
+// motion. Motion is opt-in here rather than switched off afterwards: the usual
+// way round writes the animation and then overrides it under
+// `prefers-reduced-motion: reduce`, and that override has to catch every
+// animation and transition, including the ones added later. Written inside this
+// block, nothing moves for a user who asked for less, without a list to keep.
+//
+// Two agent trials wrote this same wrapper by hand, as `motion-safe` and
+// `motion-ok`. Both media queries were checked to parse in Chrome 152; the
+// reduced-motion setting itself could not be emulated in the browser used.
+//
+// The trap is the resting state. An element hidden in its base rule and
+// revealed by an animation inside the block stays hidden when the block does
+// not apply, which is what `loadify` avoids by applying the end state. Keep the
+// visible state in the base rule and the start of the motion in the keyframes.
+@mixin motion-safe {
+  @if not meta.content-exists() {
+    @error "`motion-safe` wraps the motion you pass it, so call it with a block, such as `.card { @include motion-safe { transition: transform 0.2s; } }`.";
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    @content;
+  }
+}

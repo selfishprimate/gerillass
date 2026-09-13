@@ -80,7 +80,7 @@ on the documentation site since the last release should stop linking to source.
 v2.1.0 shipped with `line-clamp` pointing at a page that did not exist, because
 this step was a loop to copy and it was skipped.
 
-Expect 99 files / ~47 kB as of 2.2.0: everything under `scss/`, the generated
+Expect 101 files / ~53 kB as of 2.2.0: everything under `scss/`, the generated
 `gerillass.json` and `SKILL.md`, plus `README.md`, `LICENSE.md` and
 `package.json`. If `test/`, `meta/`, `tools/`, `yarn.lock` or
 `node_modules` appear, `.npmignore` is broken — stop and fix it.

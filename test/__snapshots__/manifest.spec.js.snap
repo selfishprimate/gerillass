@@ -1153,6 +1153,22 @@ exports[`Manifest examples mapDeepGet: .a { height: mapDeepGet($map-for-tablets,
 }"
 `;
 
+exports[`Manifest examples motion-safe: .card { @include motion-safe { transition: transform 0.2s ease; } } 1`] = `
+"@media (prefers-reduced-motion: no-preference) {
+  .card {
+    transition: transform 0.2s ease;
+  }
+}"
+`;
+
+exports[`Manifest examples motion-safe: @include motion-safe { .spinner { animation: spin 1s linear infinite;  1`] = `
+"@media (prefers-reduced-motion: no-preference) {
+  .spinner {
+    animation: spin 1s linear infinite;
+  }
+}"
+`;
+
 exports[`Manifest examples only: .a { @include only("first") { margin: 0; } } 1`] = `
 ".a:first-of-type {
   margin: 0;
@@ -1580,6 +1596,59 @@ exports[`Manifest examples text-stroke: .a { @include text-stroke; } 1`] = `
 exports[`Manifest examples tint: .a { color: tint(red, 20%); } 1`] = `
 ".a {
   color: #ff3333;
+}"
+`;
+
+exports[`Manifest examples tokens: :root { @include tokens((1: 0.25rem, 2: 0.5rem, 4: 1rem), space); @inc 1`] = `
+":root {
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-4: 1rem;
+  --radius-md: 8px;
+  --radius-full: 9999px;
+}"
+`;
+
+exports[`Manifest examples tokens: :root { @include tokens((bg: #fff, text: #111), color); } 1`] = `
+":root {
+  --color-bg: #fff;
+  --color-text: #111;
+}"
+`;
+
+exports[`Manifest examples tokens: :root { @include tokens((blue-500: #3b82f6, blue-600: #2563eb)); } 1`] = `
+":root {
+  --blue-500: #3b82f6;
+  --blue-600: #2563eb;
+}"
+`;
+
+exports[`Manifest examples tokens: :root { @include tokens((body: ("Readex Pro", sans-serif), label: "New 1`] = `
+":root {
+  --font-body: "Readex Pro", sans-serif;
+  --font-label: "New";
+}"
+`;
+
+exports[`Manifest examples tokens: :root { @include tokens((md: 0 4px 12px rgba(24, 24, 27, 0.08)), shado 1`] = `
+":root {
+  --shadow-md: 0 4px 12px rgba(24, 24, 27, 0.08);
+  --motion-fast: 150ms;
+  --motion-ease: cubic-bezier(0.2, 0, 0, 1);
+}"
+`;
+
+exports[`Manifest examples tokens: :root { @include tokens((red: #ef4444, 500: #3b82f6), blue); } 1`] = `
+":root {
+  --blue-red: #ef4444;
+  --blue-500: #3b82f6;
+}"
+`;
+
+exports[`Manifest examples tokens: [data-theme="dark"] { @include tokens((bg: #09090b, accent: var(--blue 1`] = `
+"[data-theme=dark] {
+  --color-bg: #09090b;
+  --color-accent: var(--blue-500);
 }"
 `;
 

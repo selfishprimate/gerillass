@@ -56,6 +56,7 @@
 .hide { @include hide; }
 .line-clamp { @include line-clamp(3); }
 .linear-gradient { @include linear-gradient("top", red blue); }
+.motion-safe { @include motion-safe { transition: opacity 0.2s; } }
 .only { @include only("first") { color: red; } }
 .placeholder { @include placeholder { color: gray; } }
 .placeholder-shown { @include placeholder-shown { color: gray; } }
@@ -76,4 +77,5 @@
 .text-image { @include text-image("/img/text.png"); }
 .text-shadow { @include text-shadow(bottom-right red 5px); }
 .text-stroke { @include text-stroke; }
+.tokens { @include tokens((bg: #fff, focus: null), color); }
 .triangle { @include triangle; }
