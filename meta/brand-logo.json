@@ -17,12 +17,14 @@
     {
       "name": "$image-url",
       "accepts": [
-        "an image path"
+        "an image path",
+        "var(), url(), image-set() or a gradient, written as they are rather than wrapped in url()"
       ]
     }
   ],
   "examples": [
-    ".logo { @include brand-logo(120px, 40px, \"/img/logo.svg\"); }"
+    ".logo { @include brand-logo(120px, 40px, \"/img/logo.svg\"); }",
+    ".logo { @include brand-logo(120px, 40px, var(--logo)); }"
   ],
   "rejects": []
 }

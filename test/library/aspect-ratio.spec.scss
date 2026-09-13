@@ -81,4 +81,23 @@
       }
     }
   }
+
+  @include it('A custom property is passed through as the ratio.') {
+    @include assert {
+      @include output {
+        .media {
+          @include aspect-ratio(var(--ratio));
+        }
+      }
+      @include expect {
+        .media {
+          display: block;
+          width: 100%;
+          aspect-ratio: var(--ratio);
+          border: 0;
+          object-fit: cover;
+        }
+      }
+    }
+  }
 }

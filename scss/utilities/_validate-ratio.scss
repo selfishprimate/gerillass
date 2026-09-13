@@ -28,6 +28,13 @@
     @return $ratio;
   }
 
+  // var() is resolved by the browser. Checked inline rather than through a
+  // helper function, which tools/build-manifest.js would take for this file's
+  // member in place of validateRatio.
+  @if meta.type-of($ratio) == "string" and string.slice(meta.inspect($ratio), 1, 1) != "\"" and string.index(string.to-lower-case($ratio), "var(") == 1 {
+    @return $ratio;
+  }
+
   @if meta.type-of($ratio) == "string" {
     $separator: null;
     @if string.index($ratio, "/") {

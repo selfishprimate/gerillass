@@ -32,7 +32,8 @@
     {
       "name": "$image",
       "accepts": [
-        "an image path to sit behind the dots"
+        "an image path to sit behind the dots",
+        "var(), url(), image-set() or a gradient, written as they are rather than wrapped in url()"
       ]
     }
   ],
@@ -41,7 +42,8 @@
     ".a { @include background-dots(red); }",
     ".a { @include background-dots(red, 1em, 5em, false); }",
     ".a { @include background-dots(red, var(--dot), calc(var(--dot) * 6)); }",
-    ".a { @include background-dots(red, clamp(2px, 0.5vw, 6px)); }"
+    ".a { @include background-dots(red, clamp(2px, 0.5vw, 6px)); }",
+    ".a { @include background-dots(red, $image: var(--photo)); }"
   ],
   "rejects": [
     ".a { @include background-dots(red, 1em, 5em, maybe); }",

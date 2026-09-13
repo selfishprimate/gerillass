@@ -4,8 +4,28 @@
 @use "sass:map";
 @use "sass:math";
 @use "sass:meta";
+@use "sass:string";
 @use "../library/linear-gradient" as *;
 @use "../maps/map-for-directions" as *;
+
+// An image path goes into url(). A var(), url(), image-set() or gradient is
+// already an image, and wrapping it produced url(var(--x)), which loads nothing.
+@function -image($value) {
+  @if -is-css-function($value, "var" "url" "image-set" "linear-gradient" "radial-gradient" "conic-gradient" "repeating-linear-gradient" "repeating-radial-gradient" "repeating-conic-gradient") {
+    @return $value;
+  }
+  @return url($value);
+}
+
+// True for an unquoted call to one of $names, such as var(--x). A quoted string
+// stays text, so `"var(--x)"` is not a call.
+@function -is-css-function($value, $names) {
+  @if meta.type-of($value) != "string" or string.slice(meta.inspect($value), 1, 1) == "\"" {
+    @return false;
+  }
+  $open: string.index($value, "(");
+  @return $open != null and list.index($names, string.to-lower-case(string.slice($value, 1, $open - 1))) != null;
+}
 
 @mixin background-image(
   $image-url: null,
@@ -22,7 +42,7 @@
     @if $filter-color {
       @if list.length($filter-color) == 1 {
         background-image: linear-gradient(to top, $filter-color, $filter-color),
-          url($image-url);
+          -image($image-url);
       } @else if list.length($filter-color) > 1 {
         $color-list: ();
         @for $i from 1 through list.length($filter-color) {
@@ -34,22 +54,22 @@
                 map.get($map-for-directions, $filter-direction),
                 $color-list
               ),
-              url($image-url);
+              -image($image-url);
           } @else {
             @if meta.type-of($filter-direction) == "number" and list.index("deg", math.unit($filter-direction)) {
               background-image: linear-gradient($filter-direction, $color-list),
-                url($image-url);
+                -image($image-url);
             } @else {
               @error "`#{$filter-direction}` is not a valid $filter-direction. Pass an angle such as `45deg`, or one of: #{map.keys($map-for-directions)}.";
             }
           }
         } @else {
           background-image: linear-gradient(to top, $color-list),
-            url($image-url);
+            -image($image-url);
         }
       }
     } @else {
-      background-image: url($image-url);
+      background-image: -image($image-url);
     }
   } @else {
     position: relative;

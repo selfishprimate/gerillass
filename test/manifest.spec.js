@@ -36,6 +36,8 @@ const compile = (snippet, warnings) =>
 
 const mixins = manifest.members.filter((m) => m.kind === "mixin");
 
+const BROKEN = /url\(\s*["']?var\(|["']var\(|var\([^)]*\)\/\S/;
+
 describe("Manifest", () => {
   it("is up to date with the Sass sources", () => {
     // Throws if the checked-in gerillass.json differs from a fresh build.
@@ -96,6 +98,10 @@ describe("Manifest", () => {
 // And without a /* */ comment. Inside a mixin one is emitted into the user's
 // stylesheet, which is how the Meyer licence note from `reset-css` ended up in
 // projects' compiled CSS. Library comments are `//`.
+//
+// And without CSS that compiles but cannot work: var() inside url() or inside a
+// quoted string, where it is only text, or var() followed by a slash Sass could
+// not divide. tools/audit.js reports the same shapes as BROKEN OUTPUT.
 describe("Manifest examples", () => {
   for (const member of manifest.members) {
     for (const example of member.examples || []) {
@@ -104,6 +110,7 @@ describe("Manifest examples", () => {
         const result = compile(example, warnings);
         expect(warnings).toEqual([]);
         expect(result.css).not.toMatch(/\/\*/);
+        expect(result.css).not.toMatch(BROKEN);
         expect(result.css.length).toBeGreaterThan(0);
         expect(result.css).toMatchSnapshot();
       });

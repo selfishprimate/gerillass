@@ -42,7 +42,8 @@
           "accepts": [
             "a string used as the content value",
             "a data- attribute name, rendered as attr()",
-            "null to write content yourself"
+            "null to write content yourself",
+            "var(), attr(), counter() or counters(), written as they are"
           ]
         }
       ],
@@ -55,7 +56,9 @@
       "examples": [
         ".a { @include after(\"→\") { color: red; } }",
         ".a { @include after(\"data-label\") { color: red; } }",
-        ".a { @include after { content: \"x\"; } }"
+        ".a { @include after { content: \"x\"; } }",
+        ".a { @include after(var(--label)) { color: red; } }",
+        ".a { @include after(attr(data-label)) { color: red; } }"
       ],
       "rejects": [
         ".a { @include after(42) { color: red; } }",
@@ -154,7 +157,8 @@
             "a slash separated string, such as \"16/9\"",
             "a colon separated string, such as \"16:9\"",
             "a number, where 1.5 means 1.5 / 1",
-            "null for the 16/9 default"
+            "null for the 16/9 default",
+            "var(), written as it is"
           ]
         },
         {
@@ -181,12 +185,14 @@
         ".video { @include aspect-ratio(\"16/9\"); }",
         ".tile { @include aspect-ratio(\"1:1\", contain); }",
         ".plain { @include aspect-ratio(1.5, null); }",
-        ".default { @include aspect-ratio; }"
+        ".default { @include aspect-ratio; }",
+        ".a { @include aspect-ratio(var(--ratio)); }"
       ],
       "rejects": [
         ".thumb { @include aspect-ratio(\"16:9\", nonsense); }",
         ".thumb { @include aspect-ratio(16 9); }",
-        ".thumb { @include aspect-ratio(\"sixteen/nine\"); }"
+        ".thumb { @include aspect-ratio(\"sixteen/nine\"); }",
+        ".a { @include aspect-ratio(url(a.png)); }"
       ]
     },
     {
@@ -228,7 +234,8 @@
           "name": "$image",
           "default": "null",
           "accepts": [
-            "an image path to sit behind the dots"
+            "an image path to sit behind the dots",
+            "var(), url(), image-set() or a gradient, written as they are rather than wrapped in url()"
           ]
         }
       ],
@@ -240,7 +247,8 @@
         ".a { @include background-dots(red); }",
         ".a { @include background-dots(red, 1em, 5em, false); }",
         ".a { @include background-dots(red, var(--dot), calc(var(--dot) * 6)); }",
-        ".a { @include background-dots(red, clamp(2px, 0.5vw, 6px)); }"
+        ".a { @include background-dots(red, clamp(2px, 0.5vw, 6px)); }",
+        ".a { @include background-dots(red, $image: var(--photo)); }"
       ],
       "rejects": [
         ".a { @include background-dots(red, 1em, 5em, maybe); }",
@@ -258,7 +266,8 @@
           "default": "null",
           "accepts": [
             "an image path",
-            "null to filter the element itself instead"
+            "null to filter the element itself instead",
+            "var(), url(), image-set() or a gradient, written as they are rather than wrapped in url()"
           ]
         },
         {
@@ -283,7 +292,9 @@
       "examples": [
         ".a { @include background-image(\"/img/a.png\"); }",
         ".a { @include background-image(\"/img/a.png\", rgba(0,0,0,0.5)); }",
-        ".a { @include background-image(\"/img/a.png\", (red, blue), \"top\"); }"
+        ".a { @include background-image(\"/img/a.png\", (red, blue), \"top\"); }",
+        ".a { @include background-image(var(--hero), rgba(0,0,0,0.5)); }",
+        ".a { @include background-image(image-set(\"/img/a.png\" 1x, \"/img/a@2x.png\" 2x)); }"
       ],
       "rejects": [
         ".a { @include background-image(\"/img/a.png\", (red, blue), sideways); }",
@@ -321,7 +332,8 @@
           "name": "$image",
           "default": "null",
           "accepts": [
-            "an image path to sit behind the stripes"
+            "an image path to sit behind the stripes",
+            "var(), url(), image-set() or a gradient, written as they are rather than wrapped in url()"
           ]
         }
       ],
@@ -331,7 +343,8 @@
       "examples": [
         ".a { @include background-stripes; }",
         ".a { @include background-stripes(red, 2em, -30deg); }",
-        ".a { @include background-stripes(red blue, var(--stripe)); }"
+        ".a { @include background-stripes(red blue, var(--stripe)); }",
+        ".a { @include background-stripes(red, 2em, -30deg, var(--photo)); }"
       ],
       "rejects": [
         ".a { @include background-stripes(red, 2em, nonsense); }",
@@ -349,7 +362,8 @@
           "accepts": [
             "a string used as the content value",
             "a data- attribute name, rendered as attr()",
-            "null to write content yourself"
+            "null to write content yourself",
+            "var(), attr(), counter() or counters(), written as they are"
           ]
         }
       ],
@@ -361,7 +375,8 @@
       ],
       "examples": [
         ".a { @include before(\"→\") { color: red; } }",
-        ".a { @include before(\"data-label\") { color: red; } }"
+        ".a { @include before(\"data-label\") { color: red; } }",
+        ".a { @include before(var(--label)) { color: red; } }"
       ],
       "rejects": [
         ".a { @include before(42) { color: red; } }"
@@ -441,7 +456,8 @@
           "name": "$image-url",
           "default": "null",
           "accepts": [
-            "an image path"
+            "an image path",
+            "var(), url(), image-set() or a gradient, written as they are rather than wrapped in url()"
           ]
         }
       ],
@@ -449,7 +465,8 @@
       "signature": "brand-logo($width, $height, $image-url: null)",
       "summary": "Logo box with an image and an accessible stretched link over it.",
       "examples": [
-        ".logo { @include brand-logo(120px, 40px, \"/img/logo.svg\"); }"
+        ".logo { @include brand-logo(120px, 40px, \"/img/logo.svg\"); }",
+        ".logo { @include brand-logo(120px, 40px, var(--logo)); }"
       ],
       "rejects": []
     },
@@ -678,7 +695,8 @@
           "accepts": [
             "a counter style name",
             "a prefix and/or suffix string",
-            "a prefix, a counter style and a suffix"
+            "a prefix, a counter style and a suffix",
+            "var(), attr(), counter() or counters() in place of a prefix or suffix, written as they are"
           ]
         }
       ],
@@ -691,7 +709,8 @@
       "examples": [
         ".list { @include counter(\"decimal\"); }",
         ".list { @include counter(\".\"); }",
-        ".list { @include counter(\"(\", \"decimal\", \")\"); }"
+        ".list { @include counter(\"(\", \"decimal\", \")\"); }",
+        ".list { @include counter(var(--prefix), \"decimal\"); }"
       ],
       "rejects": []
     },
@@ -862,7 +881,8 @@
           "default": "3",
           "accepts": [
             "a whole number of lines, at least 1",
-            "none, to undo a clamp"
+            "none, to undo a clamp",
+            "var(), written as it is"
           ]
         }
       ],
@@ -873,13 +893,15 @@
         ".excerpt { @include line-clamp(3); }",
         ".title { @include line-clamp(2); }",
         ".full { @include line-clamp(none); }",
-        ".default { @include line-clamp; }"
+        ".default { @include line-clamp; }",
+        ".a { @include line-clamp(var(--lines)); }"
       ],
       "rejects": [
         ".a { @include line-clamp(0); }",
         ".a { @include line-clamp(2.5); }",
         ".a { @include line-clamp(3px); }",
-        ".a { @include line-clamp(\"three\"); }"
+        ".a { @include line-clamp(\"three\"); }",
+        ".a { @include line-clamp(url(a.png)); }"
       ]
     },
     {
@@ -1388,7 +1410,8 @@
           "name": "$image",
           "default": "null",
           "accepts": [
-            "an image path"
+            "an image path",
+            "var(), url(), image-set() or a gradient, written as they are rather than wrapped in url()"
           ]
         }
       ],
@@ -1396,7 +1419,8 @@
       "signature": "text-image($image: null)",
       "summary": "Fills the text with an image via background-clip.",
       "examples": [
-        ".a { @include text-image(\"/img/t.png\"); }"
+        ".a { @include text-image(\"/img/t.png\"); }",
+        ".a { @include text-image(var(--texture)); }"
       ],
       "rejects": []
     },
@@ -2088,7 +2112,8 @@
           "accepts": [
             "a string such as \"16/9\" or \"16:9\"",
             "a unitless number",
-            "null for the 16/9 default"
+            "null for the 16/9 default",
+            "var(), returned as it is"
           ]
         }
       ],
@@ -2097,7 +2122,8 @@
       "summary": "Turns an aspect ratio into a value for the CSS aspect-ratio property.",
       "examples": [
         ".a { aspect-ratio: validateRatio(\"16/9\"); }",
-        ".a { aspect-ratio: validateRatio(1.5); }"
+        ".a { aspect-ratio: validateRatio(1.5); }",
+        ".a { aspect-ratio: validateRatio(var(--ratio)); }"
       ],
       "rejects": [
         ".a { aspect-ratio: validateRatio(16 9); }"

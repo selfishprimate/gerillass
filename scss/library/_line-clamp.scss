@@ -1,7 +1,19 @@
 @charset "UTF-8";
 
+@use "sass:list";
 @use "sass:math";
 @use "sass:meta";
+@use "sass:string";
+
+// True for an unquoted call to one of $names, such as var(--x). A quoted string
+// stays text, so `"var(--x)"` is not a call.
+@function -is-css-function($value, $names) {
+  @if meta.type-of($value) != "string" or string.slice(meta.inspect($value), 1, 1) == "\"" {
+    @return false;
+  }
+  $open: string.index($value, "(");
+  @return $open != null and list.index($names, string.to-lower-case(string.slice($value, 1, $open - 1))) != null;
+}
 
 // Truncates text after a number of lines. `ellipsis` does one line; this does
 // several, and needs five declarations rather than one because -webkit-line-clamp
@@ -20,7 +32,8 @@
 // So the standard property is emitted for the future and the prefixed trio is
 // what actually does the work today.
 @mixin line-clamp($lines: 3) {
-  @if $lines != none {
+  // var() is resolved by the browser, so only a literal count is checked.
+  @if $lines != none and not -is-css-function($lines, "var" "env") {
     @if meta.type-of($lines) != "number" or not math.is-unitless($lines) {
       @error "`#{$lines}` is not a valid $lines for `line-clamp`. Pass a whole number of lines, or `none` to undo a clamp.";
     }

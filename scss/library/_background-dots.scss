@@ -4,6 +4,25 @@
 @use "sass:meta";
 @use "sass:string";
 
+// An image path goes into url(). A var(), url(), image-set() or gradient is
+// already an image, and wrapping it produced url(var(--x)), which loads nothing.
+@function -image($value) {
+  @if -is-css-function($value, "var" "url" "image-set" "linear-gradient" "radial-gradient" "conic-gradient" "repeating-linear-gradient" "repeating-radial-gradient" "repeating-conic-gradient") {
+    @return $value;
+  }
+  @return url(string.unquote($value));
+}
+
+// True for an unquoted call to one of $names, such as var(--x). A quoted string
+// stays text, so `"var(--x)"` is not a call.
+@function -is-css-function($value, $names) {
+  @if meta.type-of($value) != "string" or string.slice(meta.inspect($value), 1, 1) == "\"" {
+    @return false;
+  }
+  $open: string.index($value, "(");
+  @return $open != null and list.index($names, string.to-lower-case(string.slice($value, 1, $open - 1))) != null;
+}
+
 // A size Sass can use inside calc(): a number, a calculation such as calc(),
 // min() or clamp(), or var() and env(), which only the browser can resolve.
 // Anything else would pass silently through calc(): `calc(nonsense * 5)`
@@ -82,7 +101,7 @@
       height: 100%;
       top: 0;
       left: 0;
-      background-image: url(string.unquote($image));
+      background-image: -image($image);
       background-repeat: no-repeat;
       background-position: center;
       background-size: cover;

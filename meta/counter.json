@@ -10,14 +10,16 @@
       "accepts": [
         "a counter style name",
         "a prefix and/or suffix string",
-        "a prefix, a counter style and a suffix"
+        "a prefix, a counter style and a suffix",
+        "var(), attr(), counter() or counters() in place of a prefix or suffix, written as they are"
       ]
     }
   ],
   "examples": [
     ".list { @include counter(\"decimal\"); }",
     ".list { @include counter(\".\"); }",
-    ".list { @include counter(\"(\", \"decimal\", \")\"); }"
+    ".list { @include counter(\"(\", \"decimal\", \")\"); }",
+    ".list { @include counter(var(--prefix), \"decimal\"); }"
   ],
   "rejects": []
 }
