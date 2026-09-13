@@ -1241,6 +1241,18 @@ adds `font-display: swap;` to the rule.
 **Touches.** `scss/library/_font-face.scss`; `meta/font-face.json` (an example
 with a weight range and `$font-display`); the documentation page.
 
+**Status.** Implemented, with two corrections to the sketch, both measured in
+Chrome 152 by reading the parsed `@font-face` rule back. A quoted
+`$font-display: "swap"` passed the keyword check and compiled to
+`font-display: "swap"`, which the browser drops, so the value is unquoted. And
+`var(--d)` in the descriptor is dropped as well, so it is refused with a message
+saying why, like the var() path already was. `meta/font-face.json` gained the
+weight range example and two rejects (an unknown keyword, and var()); the
+documentation page gained the argument and a variable font example. 484 existing
+calls compile byte-identical before and after; the audit's SILENT, UNHELPFUL and
+BROKEN buckets stay empty, and REFUSED VALID CSS grows by the three probes on
+`$font-display`, each of which a browser drops too.
+
 ### A5. `focus-visible` and `user-invalid` for `all-text-inputs`
 
 **Problem.** The accepted states are `hover`, `focus`, `active`, `invalid`,
