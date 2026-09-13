@@ -1199,8 +1199,8 @@ exports[`Manifest examples remify: .a { font-size: remify(24px); } 1`] = `
 }"
 `;
 
-exports[`Manifest examples remove: .a { @include remove("medium"); } 1`] = `
-"@media (width: 768px) {
+exports[`Manifest examples remove: .a { @include remove("max", "medium"); } 1`] = `
+"@media (max-width: 768px) {
   .a {
     display: none;
   }
@@ -1209,6 +1209,14 @@ exports[`Manifest examples remove: .a { @include remove("medium"); } 1`] = `
 
 exports[`Manifest examples remove: .a { @include remove("min", "medium"); } 1`] = `
 "@media (min-width: 768px) {
+  .a {
+    display: none;
+  }
+}"
+`;
+
+exports[`Manifest examples remove: .a { @include remove("small", "large"); } 1`] = `
+"@media (min-width: 576px) and (max-width: 991px) {
   .a {
     display: none;
   }

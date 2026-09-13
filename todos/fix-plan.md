@@ -991,6 +991,22 @@ the obvious way to call the mixin, and it is also deliberate:
 caveat, and replace the example with `remove("min", "medium")` and
 `remove("max", "medium")`. Whether the form should exist at all is B2.
 
+**Status.** Done. The caveat landed with G3. The summary in `meta/remove.json`
+now says that one breakpoint on its own hides the element at exactly that
+width, a single pixel, and `SKILL.md` and `llms.txt` carry it. `remove("medium")`
+is gone from the examples, replaced by `max` and a two-breakpoint range beside
+the existing `min`; only its snapshot left the suite.
+
+The documentation page taught the same thing, and is changed too. Its first
+example was `remove(500px)`, captioned as removing the element at that width,
+which compiles to `@media (width: 500px)`. The page now opens on `min` and
+`max`, warns that one width alone is a single pixel, and shows `only` for
+anyone who does want exact width. Every example on it compiles, and the site
+builds.
+
+The same trap is in `breakpoint`'s manifest example, `breakpoint("medium")`,
+which this item did not touch; B2 covers both.
+
 **Changes existing output?** No.
 
 ### D3. A Parcel section in the README

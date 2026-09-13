@@ -49,7 +49,7 @@ Arguments are validated and refused with a message naming what is accepted, so a
 - [placeholder](https://docs.gerillass.com/docs/placeholder/): Styles the placeholder text of an input across vendor prefixes.
 - [position($position: absolute, $offsets: 0)](https://docs.gerillass.com/docs/position/): Sets position and offsets in one call, using shorthand order.
 - [radial-gradient($shape, $position, $colors)](https://docs.gerillass.com/docs/radial-gradient/): Radial gradient background from a shape and a position.
-- [remove($params...)](https://docs.gerillass.com/docs/remove/): Hides an element outright, or only within a breakpoint range.
+- [remove($params...)](https://docs.gerillass.com/docs/remove/): Hides an element outright, or within a media query: from a breakpoint up with min, up to it with max, or between two breakpoints.
 - [reset-css](https://docs.gerillass.com/docs/reset-css/): Meyer reset.
 - [reset-figure](https://docs.gerillass.com/docs/reset-figure/): Removes default figure margins and makes the image inside responsive.
 - [resizable($direction: both, $overflow: auto)](https://docs.gerillass.com/docs/resizable/): Makes an element user-resizable.

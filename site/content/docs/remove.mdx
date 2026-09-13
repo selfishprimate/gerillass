@@ -23,16 +23,16 @@ The **Remove Sass mixin** helps you set the `display` CSS property of an element
 ## Arguments
 
 <Arguments of="remove">
-  <Argument name="$value" type="number (with unit)">Sets the width value at which your styles will be applied.</Argument>
+  <Argument name="$value" type="number (with unit)">The width, or a key from the breakpoint map. On its own it matches that exact width and no other.</Argument>
   <Argument name="$mode" type="string">Sets the <code>width</code> media feature. Accepts the values <code>only</code>, <code>min</code>, <code>max</code>, and <code>between</code>.</Argument>
 </Arguments>
 
 ## Examples
 
-<Example caption="Simply call the mixin and pass the width at which you want the selected element removed from the document layout.">
+<Example caption="Use `min` to remove the element **from a width upwards**, and `max` to remove it **up to a width**. These are the forms you will want most of the time.">
 ```scss
 .element{
-  @include remove(500px);
+  @include remove(min, 1200px);
 }
 ```
 </Example>
@@ -45,10 +45,16 @@ The **Remove Sass mixin** helps you set the `display` CSS property of an element
 ```
 </Example>
 
-<Example caption="You can use the `$mode` option to set the `width` media feature. It accepts the values `only`, `min`, `max`, and `between`.">
+<Hint kind="warning">
+
+**One width on its own is a single pixel.** `remove(500px)` compiles to `@media (width: 500px)`, so the element disappears only when the viewport is exactly 500px wide, and at every other width it stays. To hide it below or above a width, pass `max` or `min` as well.
+
+</Hint>
+
+<Example caption="If you do want that exact width, `only` says so explicitly. It compiles to the same query as a single value.">
 ```scss
 .element{
-  @include remove(min, 1200px);
+  @include remove(only, 500px);
 }
 ```
 </Example>

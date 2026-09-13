@@ -179,7 +179,7 @@ a dropped declaration rather than an error.
 | `placeholder` | Styles the placeholder text of an input across vendor prefixes. |
 | `position($position: absolute, $offsets: 0)` | Sets position and offsets in one call, using shorthand order. |
 | `radial-gradient($shape, $position, $colors)` | Radial gradient background from a shape and a position. |
-| `remove($params...)` | Hides an element outright, or only within a breakpoint range. |
+| `remove($params...)` | Hides an element outright, or within a media query: from a breakpoint up with min, up to it with max, or between two breakpoints. One breakpoint on its own hides the element at exactly that width, a single pixel. |
 | `reset-css` | Meyer reset. Must be called at the root of the stylesheet. |
 | `reset-figure` | Removes default figure margins and makes the image inside responsive. |
 | `resizable($direction: both, $overflow: auto)` | Makes an element user-resizable. |
