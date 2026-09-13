@@ -178,3 +178,26 @@ describe("Manifest rejections", () => {
     }
   }
 });
+
+// A call the library still compiles but warns about: it must print a @warn and
+// still emit its CSS, the same under both names. This is where a form on its
+// way out keeps its coverage, such as `breakpoint("medium")` matching a single
+// pixel until 3.0.0 refuses it.
+describe("Manifest warnings", () => {
+  for (const member of manifest.members) {
+    for (const warn of member.warns || []) {
+      it(`${member.name} warns: ${warn.replace(/\s+/g, " ").slice(0, 60)}`, () => {
+        const warnings = [];
+        const result = compile(warn, warnings);
+        expect(warnings.length).toBeGreaterThan(0);
+        expect(result.css.length).toBeGreaterThan(0);
+        expect(result.css).toMatchSnapshot();
+        if (member.kind === "mixin") {
+          const prefixedWarnings = [];
+          expect(compile(prefixed(warn, member.name), prefixedWarnings).css).toBe(result.css);
+          expect(prefixedWarnings).toEqual(warnings);
+        }
+      });
+    }
+  }
+});

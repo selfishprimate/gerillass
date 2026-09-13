@@ -13,6 +13,8 @@ The same component often has to work in a narrow sidebar and in a wide main colu
 
 It takes the same argument shapes as [Breakpoint](/docs/breakpoint), so the two read alike: a size, two sizes for a range, or `min`, `max`, `only` or `between` followed by a size. Sizes may be a key from `$map-for-breakpoints` or a raw length, and a raw length is the common case here, because a container is usually narrower than the viewport.
 
+A size on its own matches that exact width and no other, `(width: 400px)`, which is a single pixel. The mixin prints a warning for it since 2.2.0, and 3.0.0 will refuse it. Write `only` when that is what you mean.
+
 <Hint kind="danger">
 
 **Put the container on an ancestor of the element you are styling.** This is the one thing to get right, and nothing tells you when you get it wrong. An element is never matched by a `@container` rule that reads its own container. Measured in a browser: a 600px element carrying `container-type: inline-size` did **not** match `@container (min-width: 400px)`, while a child of it did. An element with no container ancestor at all matches nothing. There is no warning in either case; the rule is just never applied.
@@ -24,7 +26,7 @@ It takes the same argument shapes as [Breakpoint](/docs/breakpoint), so the two 
 ## Arguments
 
 <Arguments of="container-query" footnote="$name is passed as a keyword rather than by position, because `container-query(&quot;card&quot;, &quot;medium&quot;)` could not be told apart from `container-query(&quot;min&quot;, &quot;medium&quot;)`.">
-  <Argument name="$params…" type="string, number">Accepts a size, two sizes for a range, or one of <code>min</code>, <code>max</code>, <code>only</code> or <code>between</code> followed by a size. A size cannot be a custom property: <code>var()</code> is not evaluated in a <code>@container</code> condition, so the rule would never apply, and the mixin refuses it.</Argument>
+  <Argument name="$params…" type="string, number">Accepts a size, which matches that exact width only and prints a warning, two sizes for a range, or one of <code>min</code>, <code>max</code>, <code>only</code> or <code>between</code> followed by a size. A size cannot be a custom property: <code>var()</code> is not evaluated in a <code>@container</code> condition, so the rule would never apply, and the mixin refuses it.</Argument>
   <Argument name="$name" type="string">Accepts a container name as a string, to query one named container rather than the nearest one. Pass it as a keyword, <code>$name: "card"</code>.</Argument>
 </Arguments>
 

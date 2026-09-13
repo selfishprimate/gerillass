@@ -33,6 +33,11 @@
   }
   @if list.length($params) == 1 {
     $value: list.nth($params, 1);
+    $width: if(map.has-key($map-for-breakpoints, $value), map.get($map-for-breakpoints, $value), $value);
+    // One argument matches a single pixel, which two agent trials took for
+    // "from this width up". Still emitted, so no stylesheet changes, but said
+    // out loud until 3.0.0 refuses it.
+    @warn "`breakpoint(#{$value})` matches only a viewport exactly #{$width} wide, `(width: #{$width})`. Write `breakpoint(only, #{$value})` for that width, or `breakpoint(min, #{$value})` from it upwards. The one-argument form will be refused in 3.0.0.";
     @if map.has-key($map-for-breakpoints, $value) {
       @media (width: map.get($map-for-breakpoints, $value)) {
         @content;

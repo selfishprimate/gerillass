@@ -183,6 +183,9 @@ point of the design:
   not print a `@warn`
 - every `rejects` entry must actually `@error`, and must fail with the library's
   own message rather than a Sass internal error
+- every `warns` entry must compile, print a `@warn` and match its snapshot,
+  with the same CSS and warnings under its `gls-` name. It holds a form on its
+  way out, such as one-argument `breakpoint`, until a major version refuses it
 - every example runs again under its `gls-` name and must produce byte-identical
   CSS, which is the only thing checking the generated bundle
 - both generated files must match a fresh build, so a stale commit fails CI

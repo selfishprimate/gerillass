@@ -4,11 +4,11 @@
 @use '../../scss/gerillass' as *;
 
 @include describe('remove()') {
-  @include it('Hide the element at a named breakpoint.') {
+  @include it('Hide the element at exactly one named breakpoint width.') {
     @include assert {
       @include output {
         .element {
-          @include remove("medium");
+          @include remove("only", "medium");
         }
       }
       @include expect {

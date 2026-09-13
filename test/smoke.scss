@@ -37,7 +37,7 @@
 .border-box { @include border-box; }
 .border-radius { @include border-radius(10px); }
 .brand-logo { @include brand-logo(100px, 40px, "/img/logo.svg"); }
-.breakpoint { @include breakpoint("medium") { color: red; } }
+.breakpoint { @include breakpoint("only", "medium") { color: red; } }
 .breakpoint-min { @include breakpoint("min", "medium") { color: red; } }
 .breakpoint-max { @include breakpoint("max", "medium") { color: red; } }
 .breakpoint-between { @include breakpoint("between", "medium" "large") { color: red; } }
@@ -61,7 +61,7 @@
 .placeholder-shown { @include placeholder-shown { color: gray; } }
 .position { @include position(absolute, 0 10px); }
 .radial-gradient { @include radial-gradient(circle, "center", red blue); }
-.remove { @include remove("medium"); }
+.remove { @include remove("only", "medium"); }
 .reset-figure { @include reset-figure; }
 .resizable { @include resizable; }
 .responsive-image { @include responsive-image; }
