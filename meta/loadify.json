@@ -1,6 +1,9 @@
 {
   "name": "loadify",
   "summary": "Fades elements in on page load. Call once at the root to set up, then on each element. Under prefers-reduced-motion: reduce the end state is applied directly and no animation runs. Switching the animation off alone would not do, because the element starts invisible and the animation is what reveals it, so the content would stay hidden for good.",
+  "caveats": [
+    "`init` and every call must be in the same module, or the module with the call must `@use` the one that calls `init`. Otherwise Sass fails with \"The target selector was not found\"."
+  ],
   "arguments": [
     {
       "name": "$params",

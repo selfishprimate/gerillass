@@ -1,6 +1,9 @@
 {
   "name": "aspect-ratio",
   "summary": "Holds an element to a ratio and adds what CSS aspect-ratio alone leaves out: object-fit so an image is cropped rather than stretched, and border: 0 so an iframe does not overflow its container by 4px. Apply it to the element itself, not to a wrapper.",
+  "caveats": [
+    "On an element with a `height` attribute, such as `<img width=\"1600\" height=\"900\">` or an embed code's `<iframe>`, the attribute height wins and the ratio is ignored. Write `height: auto` after the include."
+  ],
   "arguments": [
     {
       "name": "$ratio",

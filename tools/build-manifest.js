@@ -144,6 +144,7 @@ function build() {
     const m = meta[member.name];
     if (!m) continue;
     if (m.summary) member.summary = m.summary;
+    if (m.caveats) member.caveats = m.caveats;
     if (m.examples) member.examples = m.examples;
     if (m.rejects) member.rejects = m.rejects;
     if (m.arguments) {

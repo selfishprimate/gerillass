@@ -179,7 +179,8 @@ loop in `/release` because the loop got skipped, and v2.1.0 shipped with
 **What keeps them honest is `test/manifest.spec.js`**, and this is the whole
 point of the design:
 
-- every `examples` entry in `meta/` is compiled **and snapshotted**
+- every `examples` entry in `meta/` is compiled **and snapshotted**, and must
+  not print a `@warn`
 - every `rejects` entry must actually `@error`, and must fail with the library's
   own message rather than a Sass internal error
 - every example runs again under its `gls-` name and must produce byte-identical
@@ -191,6 +192,12 @@ A mixin with no `meta/` entry fails the suite, so metadata is not optional.
 So the manifest cannot claim behaviour the library does not have. When you add
 or change a mixin, write its `meta/` entry in the same commit: the `rejects`
 list is where the mixin's validation gets its test coverage.
+
+One field is not executed: `caveats`, for behaviour a signature cannot show,
+such as `loadify` failing across modules or `breakpoint` with one argument
+matching a single pixel. `build-manifest.js` copies it and `SKILL.md` lists it
+under "Traps a signature does not show". Because nothing checks it, write a
+caveat only from a case you compiled or measured.
 
 ## Architecture
 
@@ -301,7 +308,11 @@ members that compute something — `triangle`, `scissors`, `columnizer`,
 
 `node tools/audit.js` is the fourth thing the suite cannot do: it throws
 arguments nobody wrote a test for at every member and every argument position.
-Its SILENT and UNHELPFUL buckets must stay empty.
+Its SILENT bucket must stay empty. UNHELPFUL must too, and was until the audit
+learned to recognise Sass's arithmetic errors: it now lists 39, which are F9 and
+F11 in `todos/fix-plan.md`. A second sweep passes values CSS does take, such as
+`var(--x)`: REFUSED VALID CSS is a report to read, since a keyword argument is
+right to refuse one, and BROKEN OUTPUT is always a defect, 13 of them today.
 
 ## Conventions
 

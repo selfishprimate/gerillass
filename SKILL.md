@@ -102,6 +102,42 @@ a dropped declaration rather than an error.
 | `text-shadow` | `.a { @include text-shadow(42); }` |
 | `triangle` | `.caret { @include triangle(sideways); }` |
 
+## Traps a signature does not show
+
+**`after`**
+
+- With no argument no `content` is emitted, so the pseudo-element does not render unless the block sets `content`. Pass `""` for an empty one.
+
+**`aspect-ratio`**
+
+- On an element with a `height` attribute, such as `<img width="1600" height="900">` or an embed code's `<iframe>`, the attribute height wins and the ratio is ignored. Write `height: auto` after the include.
+
+**`before`**
+
+- With no argument no `content` is emitted, so the pseudo-element does not render unless the block sets `content`. Pass `""` for an empty one.
+
+**`breakpoint`**
+
+- With one argument the query matches exactly that width, `(width: 768px)`, which is a single pixel. Use `min`, `max` or a range for anything wider.
+- Declarations written after the include, in the same rule, are emitted after the `@media` block and win over it. Write them before the include.
+
+**`container`**
+
+- An element does not match a `@container` query that reads its own container, and nothing warns. Put the `container-query` on a descendant.
+
+**`counter`**
+
+- Numbering restarts on every item, each showing the first number, when the items are size containers (`container-type: inline-size`): containment scopes counters to each item.
+
+**`loadify`**
+
+- `init` and every call must be in the same module, or the module with the call must `@use` the one that calls `init`. Otherwise Sass fails with "The target selector was not found".
+
+**`remove`**
+
+- With one argument the element is hidden at exactly that width, `(width: 768px)`, which is a single pixel. Use `min`, `max` or a range for anything wider.
+- A `display` written after the include, in the same rule, is emitted after the `@media` block and wins over it. Write it before the include.
+
 ## Mixins
 
 | Signature | What it does |

@@ -40,6 +40,17 @@ let lastWarning = null;
 // not open: a space separated list, a bool, a colour, a bare number, a word.
 const PROBES = ["nonsense", "16 9", "true", "#ff0000", "42", '"a b"'];
 
+// The other direction: values modern CSS takes that a mixin might wrongly
+// refuse, or accept and mangle. These feed their own two buckets and none of
+// the four above, because a refusal here is often right -- a keyword argument
+// or a size in a media condition must not take var() -- and a real error is no
+// finding for a bad value but may be one for a valid one.
+const VALID_PROBES = ["var(--x)", "currentColor", "null", "calc(1rem + 2px)"];
+
+// Output that compiled but cannot work: var() inside url(), var() inside a
+// quoted string, and a slash division Sass could not evaluate.
+const BROKEN = /url\(\s*var\(|["']var\(|(var\(--x\)|calc\(1rem \+ 2px\))\/\S/;
+
 function run(snippet) {
   lastWarning = null;
   try {
@@ -54,12 +65,12 @@ function run(snippet) {
 // the caller nothing about what the mixin wanted. Sass's own "Missing argument
 // $name" is excluded on purpose: it names the argument, which is all a caller
 // needs.
-const INTERNAL = /is not a string|Invalid index|\$number: .* is not a number|no element|Undefined (variable|mixin)|expected (a |an )?["'a-z]/i;
+const INTERNAL = /is not a string|Invalid index|\$number: .* is not a number|no element|Undefined (variable|mixin|operation)|can't be used in a calculation|expected (a |an )?["'a-z]/i;
 
 const only = process.argv.slice(2);
 const members = manifest.members.filter((m) => !only.length || only.includes(m.name));
 
-const findings = { silent: [], internal: [], warned: [], passthrough: [] };
+const findings = { silent: [], internal: [], warned: [], passthrough: [], refused: [], broken: [] };
 
 for (const m of members) {
   // A member that takes no arguments has nothing to probe.
@@ -113,7 +124,8 @@ for (const m of members) {
   })();
 
   for (const pos of positions) {
-    for (const probe of PROBES) {
+    for (const probe of [...PROBES, ...VALID_PROBES]) {
+      const valid = VALID_PROBES.includes(probe);
       const target = m.arguments[pos];
       // A variadic argument cannot be named -- `$params: x` would be read as a
       // keyword argument rather than a value -- so it stays positional.
@@ -141,6 +153,17 @@ for (const m of members) {
       }
       const result = run(snippet);
 
+      if (valid) {
+        // Sass's own "Missing argument" is about the filler, not the probe.
+        if (!result.ok && !/Missing argument/.test(result.message)) {
+          findings.refused.push({ mixin: label, message: result.message.slice(0, 90) });
+        } else if (result.ok && BROKEN.test(result.css)) {
+          const at = result.css.split("\n").find((l) => BROKEN.test(l)).trim();
+          findings.broken.push({ mixin: label, css: at.slice(0, 70) });
+        }
+        continue;
+      }
+
       if (!result.ok) {
         if (INTERNAL.test(result.message)) {
           findings.internal.push({ mixin: label, probe, message: result.message.slice(0, 90) });
@@ -158,7 +181,10 @@ const line = (s) => console.log(s);
 
 const nMixins = members.filter((m) => m.kind === "mixin").length;
 const nFns = members.filter((m) => m.kind === "function").length;
-line(`Probed ${nMixins} mixins and ${nFns} functions, every argument position, ${PROBES.length} bad values each.\n`);
+line(
+  `Probed ${nMixins} mixins and ${nFns} functions, every argument position, ` +
+    `${PROBES.length} bad values and ${VALID_PROBES.length} valid CSS values each.\n`
+);
 
 line(`SILENT — produced no CSS and no error (${findings.silent.length})`);
 if (!findings.silent.length) line("  none");
@@ -176,7 +202,17 @@ line(`\nPASSED THROUGH — emitted CSS from a questionable argument (${findings.
 if (!findings.passthrough.length) line("  none");
 for (const f of findings.passthrough) line(`  ${f.mixin}  ${f.css}`);
 
+line(`\nREFUSED VALID CSS — raised on ${VALID_PROBES.join(", ")} (${findings.refused.length})`);
+if (!findings.refused.length) line("  none");
+for (const f of findings.refused) line(`  ${f.mixin}  ${f.message}`);
+
+line(`\nBROKEN OUTPUT — compiled, but the CSS cannot work (${findings.broken.length})`);
+if (!findings.broken.length) line("  none");
+for (const f of findings.broken) line(`  ${f.mixin}  ${f.css}`);
+
 line(
   `\nSilence is always a defect. An unhelpful error is a missing type check. ` +
-    `Pass-through is only a defect when the value cannot be valid CSS -- review, do not assume.`
+    `Pass-through is only a defect when the value cannot be valid CSS -- review, do not assume. ` +
+    `A refused valid value is a defect only where CSS would take it: a keyword or a size in a ` +
+    `media condition is right to refuse var(). Broken output is always a defect.`
 );

@@ -49,6 +49,9 @@
       "file": "scss/library/_after.scss",
       "signature": "after($content: null)",
       "summary": "Styles the ::after pseudo-element. A `data-` argument becomes an attr() content value.",
+      "caveats": [
+        "With no argument no `content` is emitted, so the pseudo-element does not render unless the block sets `content`. Pass `\"\"` for an empty one."
+      ],
       "examples": [
         ".a { @include after(\"→\") { color: red; } }",
         ".a { @include after(\"data-label\") { color: red; } }",
@@ -170,6 +173,9 @@
       "file": "scss/library/_aspect-ratio.scss",
       "signature": "aspect-ratio($ratio: null, $fit: cover)",
       "summary": "Holds an element to a ratio and adds what CSS aspect-ratio alone leaves out: object-fit so an image is cropped rather than stretched, and border: 0 so an iframe does not overflow its container by 4px. Apply it to the element itself, not to a wrapper.",
+      "caveats": [
+        "On an element with a `height` attribute, such as `<img width=\"1600\" height=\"900\">` or an embed code's `<iframe>`, the attribute height wins and the ratio is ignored. Write `height: auto` after the include."
+      ],
       "examples": [
         ".thumb { @include aspect-ratio(\"16:9\"); }",
         ".video { @include aspect-ratio(\"16/9\"); }",
@@ -341,6 +347,9 @@
       "file": "scss/library/_before.scss",
       "signature": "before($content: null)",
       "summary": "Styles the ::before pseudo-element. A `data-` argument becomes an attr() content value.",
+      "caveats": [
+        "With no argument no `content` is emitted, so the pseudo-element does not render unless the block sets `content`. Pass `\"\"` for an empty one."
+      ],
       "examples": [
         ".a { @include before(\"→\") { color: red; } }",
         ".a { @include before(\"data-label\") { color: red; } }"
@@ -453,6 +462,10 @@
       "file": "scss/library/_breakpoint.scss",
       "signature": "breakpoint($params...)",
       "summary": "Media query built from the breakpoint map, or from raw lengths.",
+      "caveats": [
+        "With one argument the query matches exactly that width, `(width: 768px)`, which is a single pixel. Use `min`, `max` or a range for anything wider.",
+        "Declarations written after the include, in the same rule, are emitted after the `@media` block and win over it. Write them before the include."
+      ],
       "examples": [
         ".a { @include breakpoint(\"medium\") { color: red; } }",
         ".a { @include breakpoint(\"min\", \"medium\") { color: red; } }",
@@ -627,6 +640,9 @@
       "file": "scss/library/_container.scss",
       "signature": "container($name: null, $type: inline-size)",
       "summary": "Marks an element as a query container, so container-query can ask about its width instead of the viewport's. The rule that asks has to sit on a descendant: an element is never matched by a @container rule reading its own container, and nothing warns you when it is not.",
+      "caveats": [
+        "An element does not match a `@container` query that reads its own container, and nothing warns. Put the `container-query` on a descendant."
+      ],
       "examples": [
         ".card { @include container(\"card\"); }",
         ".panel { @include container; }",
@@ -654,6 +670,9 @@
       "file": "scss/library/_counter.scss",
       "signature": "counter($params...)",
       "summary": "CSS counter for a list, with optional text before and after the number.",
+      "caveats": [
+        "Numbering restarts on every item, each showing the first number, when the items are size containers (`container-type: inline-size`): containment scopes counters to each item."
+      ],
       "examples": [
         ".list { @include counter(\"decimal\"); }",
         ".list { @include counter(\".\"); }",
@@ -892,6 +911,9 @@
       "file": "scss/library/_loadify.scss",
       "signature": "loadify($params...)",
       "summary": "Fades elements in on page load. Call once at the root to set up, then on each element. Under prefers-reduced-motion: reduce the end state is applied directly and no animation runs. Switching the animation off alone would not do, because the element starts invisible and the animation is what reveals it, so the content would stay hidden for good.",
+      "caveats": [
+        "`init` and every call must be in the same module, or the module with the call must `@use` the one that calls `init`. Otherwise Sass fails with \"The target selector was not found\"."
+      ],
       "examples": [
         "@include loadify(init);\n.a { @include loadify; }",
         "@include loadify;\n.a { @include loadify(0.4s, 1s); }"
@@ -1035,6 +1057,10 @@
       "file": "scss/library/_remove.scss",
       "signature": "remove($params...)",
       "summary": "Hides an element outright, or only within a breakpoint range.",
+      "caveats": [
+        "With one argument the element is hidden at exactly that width, `(width: 768px)`, which is a single pixel. Use `min`, `max` or a range for anything wider.",
+        "A `display` written after the include, in the same rule, is emitted after the `@media` block and wins over it. Write it before the include."
+      ],
       "examples": [
         ".a { @include remove; }",
         ".a { @include remove(\"medium\"); }",
