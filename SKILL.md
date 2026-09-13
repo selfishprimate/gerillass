@@ -150,7 +150,7 @@ a dropped declaration rather than an error.
 | `all-text-inputs($pseudo: null)` | Targets every text-like input at once, optionally in one pseudo-class state. |
 | `antialias($value: null)` | Turns on subpixel-antialiased text smoothing. |
 | `aspect-ratio($ratio: null, $fit: cover)` | Holds an element to a ratio and adds what CSS aspect-ratio alone leaves out: object-fit so an image is cropped rather than stretched, and border: 0 so an iframe does not overflow its container by 4px. Apply it to the element itself, not to a wrapper. |
-| `background-dots($color: null, $size: 1em, $gutter: $size * 5, $diagonal: true, $image: null)` | Repeating dot pattern as a background, optionally over an image. |
+| `background-dots($color: null, $size: 1em, $gutter: null, $diagonal: true, $image: null)` | Repeating dot pattern as a background, optionally over an image. |
 | `background-image($image-url: null, $filter-color: null, $filter-direction: null)` | Background image with an optional colour or gradient filter laid over it. |
 | `background-stripes($color: null, $thickness: 1em, $rotation: -45deg, $image: null)` | Repeating stripe pattern as a background, optionally over an image. |
 | `before($content: null)` | Styles the ::before pseudo-element. A `data-` argument becomes an attr() content value. |

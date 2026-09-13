@@ -38,4 +38,22 @@
       }
     }
   }
+
+  @include it('A custom property size is multiplied in calc(), since Sass cannot.') {
+    @include assert {
+      @include output {
+        .pattern {
+          @include background-dots(red, var(--dot), $diagonal: false);
+        }
+      }
+      @include expect {
+        .pattern {
+          background-image: radial-gradient(red var(--dot), transparent 0);
+          background-position: calc(var(--dot) * 5 / 2) calc(var(--dot) * 5 / 2);
+          background-size: calc(var(--dot) * 5) calc(var(--dot) * 5);
+          background-repeat: repeat;
+        }
+      }
+    }
+  }
 }

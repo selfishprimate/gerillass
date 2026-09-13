@@ -740,6 +740,30 @@ Measured in Chrome 152: `border-width: 10px 10px/2 0` is invalid and the borders
 fall back to 3px, while `calc(10px / 2)` gives 5px. Today's `var()` triangle also
 prints a `math.div()` warning, which the fix removes.
 
+**Status.** Implemented. Examples with `var()`, `calc()` and `clamp()`, `nonsense`
+rejects, and `var()` specs for `background-dots` and `triangle` went in first and
+failed; the one `triangle` example that compiled today had its broken
+`var(--caret-w)/2` recorded as a new snapshot, which the change then corrected.
+
+Across 2119 calls compiled before and after, on Dart Sass 1.103.1 and again on
+1.71.0, the floor the README names, with identical results on both:
+
+- no call whose sizes were all numbers changed its CSS;
+- 112 changed CSS, every one with `var()`, `calc()`, `clamp()`, `min()` or
+  `env()` in a size, from a slash Sass could not divide to `calc()`;
+- 270 went from an error to CSS, all with those same forms;
+- 396 went from CSS to the new error, each with an invalid size or gutter. Two
+  of those gave valid if useless CSS before, and belong in the changelog:
+  `background-dots` with `$size: null` emitted a plain radial gradient, and with
+  `$size: 3rem 2rem` a two-position colour stop, neither of them dots.
+
+The audit's UNHELPFUL bucket fell from 39 to 23, all of them F11's functions,
+and BROKEN OUTPUT from 12 to 10. The documentation pages' 15 examples compile to
+identical CSS. The page's `$gutter ($size * 5)` still describes the behaviour, so
+only the signature in `gerillass.json` changed.
+
+The manifest suite's reject pattern was not widened here; see F11.
+
 ### F10. `background-image` and `font-face` stop dropping values silently
 
 **Problem.** Two arguments are thrown away without a word, the silent failure
@@ -848,6 +872,15 @@ or unusable CSS today. `convertToEm(var(--x))` goes from broken CSS to an error.
 
 **Verify.** `node tools/audit.js` shows none of these five in UNHELPFUL or BROKEN
 OUTPUT. Nothing here has been prototyped yet.
+
+**And the manifest suite's pattern.** `test/manifest.spec.js` decides whether a
+reject failed with the library's own message by matching Sass's internal
+errors, and that pattern still lacks `Undefined operation` and `can't be used
+in a calculation`, which G4 taught the audit. Adding them while working on F9
+failed one existing reject besides F9's own: `aspect-ratio("sixteen/nine")`
+passes today only because `convertToNumber`, called by `validateRatio`, fails
+with `Undefined operation`. So the pattern belongs in this item, after
+`convertToNumber` gets its check, and the `aspect-ratio` reject is its test.
 
 ### D1. Document the `loadify` module rule
 

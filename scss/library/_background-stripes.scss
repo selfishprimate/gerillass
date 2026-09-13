@@ -5,12 +5,32 @@
 @use "sass:meta";
 @use "sass:string";
 
+// A size Sass can use inside calc(): a number, a calculation such as calc(),
+// min() or clamp(), or var() and env(), which only the browser can resolve.
+// Anything else would pass silently through calc(): `calc(nonsense * 5)`
+// compiles.
+@function -is-size($value) {
+  @if meta.type-of($value) == "number" or meta.type-of($value) == "calculation" {
+    @return true;
+  }
+  @if meta.type-of($value) == "string" and string.slice(meta.inspect($value), 1, 1) != "\"" {
+    $open: string.index($value, "(");
+    @return $open != null and list.index("var" "env", string.to-lower-case(string.slice($value, 1, $open - 1))) != null;
+  }
+  @return false;
+}
+
 @mixin background-stripes(
   $color: null,
   $thickness: 1em,
   $rotation: -45deg,
   $image: null
 ) {
+  // The arithmetic below runs in calc() so var() and clamp() work; on plain
+  // lengths Sass simplifies it back to the same number.
+  @if not -is-size($thickness) {
+    @error "`#{meta.inspect($thickness)}` is not a valid $thickness for `background-stripes`. Pass a length, or var(), env() or a calculation such as `clamp()`.";
+  }
   @if meta.type-of($rotation) != "number" {
     @error "`#{$rotation}` is not a valid $rotation for `background-stripes`. Pass an angle such as `-45deg`, or a unitless number which is treated as degrees.";
   }
@@ -26,7 +46,7 @@
         $color 0,
         $color $thickness,
         transparent $thickness,
-        transparent $thickness * 2
+        transparent calc($thickness * 2)
       ) + $get-image;
     @if $image {
       background-position: center;
@@ -39,7 +59,7 @@
         $color 0,
         $color $thickness,
         transparent $thickness,
-        transparent $thickness * 2
+        transparent calc($thickness * 2)
       ) + $get-image;
     @if $image {
       background-position: center;
@@ -50,7 +70,7 @@
     $list: ();
     @for $i from 1 through list.length($color) {
       $index-color: list.nth($color, $i);
-      $style-rule: $index-color ($thickness * $i) - $thickness, $index-color $thickness * $i;
+      $style-rule: $index-color calc($thickness * $i - $thickness), $index-color calc($thickness * $i);
       $list: list.append($list, $style-rule, comma);
     }
     background-image: repeating-linear-gradient($validate-unit, $list) + $get-image;

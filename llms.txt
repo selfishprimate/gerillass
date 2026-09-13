@@ -20,7 +20,7 @@ Arguments are validated and refused with a message naming what is accepted, so a
 - [all-text-inputs($pseudo: null)](https://docs.gerillass.com/docs/all-text-inputs/): Targets every text-like input at once, optionally in one pseudo-class state.
 - [antialias($value: null)](https://docs.gerillass.com/docs/antialias/): Turns on subpixel-antialiased text smoothing.
 - [aspect-ratio($ratio: null, $fit: cover)](https://docs.gerillass.com/docs/aspect-ratio/): Holds an element to a ratio and adds what CSS aspect-ratio alone leaves out: object-fit so an image is cropped rather than stretched, and border: 0 so an iframe does not overflow its container by 4px.
-- [background-dots($color: null, $size: 1em, $gutter: $size * 5, $diagonal: true, $image: null)](https://docs.gerillass.com/docs/background-dots/): Repeating dot pattern as a background, optionally over an image.
+- [background-dots($color: null, $size: 1em, $gutter: null, $diagonal: true, $image: null)](https://docs.gerillass.com/docs/background-dots/): Repeating dot pattern as a background, optionally over an image.
 - [background-image($image-url: null, $filter-color: null, $filter-direction: null)](https://docs.gerillass.com/docs/background-image/): Background image with an optional colour or gradient filter laid over it.
 - [background-stripes($color: null, $thickness: 1em, $rotation: -45deg, $image: null)](https://docs.gerillass.com/docs/background-stripes/): Repeating stripe pattern as a background, optionally over an image.
 - [before($content: null)](https://docs.gerillass.com/docs/before/): Styles the ::before pseudo-element.

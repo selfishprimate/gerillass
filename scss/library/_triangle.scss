@@ -1,10 +1,24 @@
 @charset "UTF-8";
 
 @use "sass:list";
-@use "sass:math";
 @use "sass:meta";
 @use "sass:string";
 @use "../lists/list-of-directions" as *;
+
+// A size Sass can use inside calc(): a number, a calculation such as calc(),
+// min() or clamp(), or var() and env(), which only the browser can resolve.
+// Anything else would pass silently through calc(): `calc(nonsense * 5)`
+// compiles.
+@function -is-size($value) {
+  @if meta.type-of($value) == "number" or meta.type-of($value) == "calculation" {
+    @return true;
+  }
+  @if meta.type-of($value) == "string" and string.slice(meta.inspect($value), 1, 1) != "\"" {
+    $open: string.index($value, "(");
+    @return $open != null and list.index("var" "env", string.to-lower-case(string.slice($value, 1, $open - 1))) != null;
+  }
+  @return false;
+}
 
 // A value CSS will take as a colour: a Sass colour, currentColor, or a function
 // that returns a colour when the browser resolves it. A list passes when every
@@ -46,6 +60,13 @@
 
 @mixin triangle($direction: "bottom", $color: black, $size: 10px 8px) {
   @if list.index($list-of-directions, $direction) {
+    // Halving a size in calc() rather than math.div() keeps var() and clamp()
+    // working instead of emitting `var(--w)/2`, which is not valid CSS.
+    @each $item in $size {
+      @if not -is-size($item) {
+        @error "`#{meta.inspect($size)}` is not a valid $size for `triangle`. Pass one or two lengths, or var(), env() or a calculation in place of either.";
+      }
+    }
     @if not -is-css-color($color) {
       @error "`#{meta.inspect($color)}` is not a valid $color for `triangle`. Pass a colour, `currentColor`, or a CSS function such as `var(--accent)`, `color-mix(...)` or `light-dark(...)`.";
     } @else {
@@ -56,25 +77,25 @@
       border-style: solid;
       @if $direction == "top"{
         border-color: transparent transparent $color;
-        border-width: 0 math.div(list.nth($size, 1), 2) if(list.length($size) == 2, list.nth($size, 2), list.nth($size, 1));
+        border-width: 0 calc(list.nth($size, 1) / 2) if(list.length($size) == 2, list.nth($size, 2), list.nth($size, 1));
       } @else if $direction == "top-right" {
         border-color: transparent $color transparent transparent;
         border-width: 0 list.nth($size, 1) list.nth($size, 1) 0;
       } @else if $direction == "right" {
         border-color: transparent transparent transparent $color;
-        border-width: math.div(if(list.length($size) == 2, list.nth($size, 2), list.nth($size, 1)),  2) 0 math.div(if(list.length($size) == 2, list.nth($size, 2), list.nth($size, 1)), 2) list.nth($size, 1);
+        border-width: calc(if(list.length($size) == 2, list.nth($size, 2), list.nth($size, 1)) / 2) 0 calc(if(list.length($size) == 2, list.nth($size, 2), list.nth($size, 1)) / 2) list.nth($size, 1);
       } @else if $direction == "bottom-right" {
         border-color: transparent transparent $color;
         border-width: 0 0 list.nth($size, 1) list.nth($size, 1);
       } @else if $direction == "bottom" {
         border-color: $color transparent transparent;
-        border-width: if(list.length($size) == 2, list.nth($size, 2), list.nth($size, 1)) math.div(list.nth($size, 1), 2) 0;
+        border-width: if(list.length($size) == 2, list.nth($size, 2), list.nth($size, 1)) calc(list.nth($size, 1) / 2) 0;
       } @else if $direction == "bottom-left" {
         border-color: transparent transparent transparent $color;
         border-width: list.nth($size, 1) 0 0 list.nth($size, 1);
       } @else if $direction == "left" {
         border-color: transparent $color transparent transparent;
-        border-width: math.div(if(list.length($size) == 2, list.nth($size, 2), list.nth($size, 1)), 2) list.nth($size, 1) math.div(if(list.length($size) == 2, list.nth($size, 2), list.nth($size, 1)), 2) 0;
+        border-width: calc(if(list.length($size) == 2, list.nth($size, 2), list.nth($size, 1)) / 2) list.nth($size, 1) calc(if(list.length($size) == 2, list.nth($size, 2), list.nth($size, 1)) / 2) 0;
       } @else if $direction == "top-left" {
         border-color: $color transparent transparent;
         border-width: list.nth($size, 1) list.nth($size, 1) 0 0;

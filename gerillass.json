@@ -205,14 +205,15 @@
           "name": "$size",
           "default": "1em",
           "accepts": [
-            "dot radius"
+            "dot radius: a length, or var(), env() or a calculation such as calc() or clamp()"
           ]
         },
         {
           "name": "$gutter",
-          "default": "$size * 5",
+          "default": "null",
           "accepts": [
-            "spacing between dots"
+            "spacing between dots, in the same forms as $size",
+            "null, the default, for five times $size"
           ]
         },
         {
@@ -232,16 +233,20 @@
         }
       ],
       "file": "scss/library/_background-dots.scss",
-      "signature": "background-dots($color: null, $size: 1em, $gutter: $size * 5, $diagonal: true, $image: null)",
+      "signature": "background-dots($color: null, $size: 1em, $gutter: null, $diagonal: true, $image: null)",
       "summary": "Repeating dot pattern as a background, optionally over an image.",
       "examples": [
         ".a { @include background-dots; }",
         ".a { @include background-dots(red); }",
-        ".a { @include background-dots(red, 1em, 5em, false); }"
+        ".a { @include background-dots(red, 1em, 5em, false); }",
+        ".a { @include background-dots(red, var(--dot), calc(var(--dot) * 6)); }",
+        ".a { @include background-dots(red, clamp(2px, 0.5vw, 6px)); }"
       ],
       "rejects": [
         ".a { @include background-dots(red, 1em, 5em, maybe); }",
-        ".a { @include background-dots(red, 1em, 5em, true, 42); }"
+        ".a { @include background-dots(red, 1em, 5em, true, 42); }",
+        ".a { @include background-dots(red, nonsense); }",
+        ".a { @include background-dots(red, 1em, nonsense); }"
       ]
     },
     {
@@ -302,7 +307,7 @@
           "name": "$thickness",
           "default": "1em",
           "accepts": [
-            "stripe thickness"
+            "stripe thickness: a length, or var(), env() or a calculation such as calc() or clamp()"
           ]
         },
         {
@@ -325,11 +330,13 @@
       "summary": "Repeating stripe pattern as a background, optionally over an image.",
       "examples": [
         ".a { @include background-stripes; }",
-        ".a { @include background-stripes(red, 2em, -30deg); }"
+        ".a { @include background-stripes(red, 2em, -30deg); }",
+        ".a { @include background-stripes(red blue, var(--stripe)); }"
       ],
       "rejects": [
         ".a { @include background-stripes(red, 2em, nonsense); }",
-        ".a { @include background-stripes(red, 2em, -45deg, 42); }"
+        ".a { @include background-stripes(red, 2em, -45deg, 42); }",
+        ".a { @include background-stripes(red, nonsense); }"
       ]
     },
     {
@@ -1513,7 +1520,8 @@
           "name": "$size",
           "default": "10px 8px",
           "accepts": [
-            "one length, or two lengths as width then height"
+            "one length, or two lengths as width then height",
+            "var(), env() or a calculation in place of any length"
           ]
         }
       ],
@@ -1525,12 +1533,14 @@
         ".arrow { @include triangle(\"left\", red); }",
         ".arrow { @include triangle(\"right\", var(--accent), 6px 8px); }",
         ".arrow { @include triangle(\"right\", currentColor); }",
-        ".arrow { @include triangle(\"top\", color-mix(in srgb, red 50%, blue)); }"
+        ".arrow { @include triangle(\"top\", color-mix(in srgb, red 50%, blue)); }",
+        ".arrow { @include triangle(\"bottom\", currentColor, var(--caret-w) var(--caret-h)); }"
       ],
       "rejects": [
         ".caret { @include triangle(sideways); }",
         ".caret { @include triangle(\"top\", notacolor); }",
-        ".caret { @include triangle(\"top\", url(a.png)); }"
+        ".caret { @include triangle(\"top\", url(a.png)); }",
+        ".caret { @include triangle(\"top\", red, nonsense); }"
       ]
     },
     {
