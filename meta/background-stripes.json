@@ -24,14 +24,16 @@
     {
       "name": "$image",
       "accepts": [
-        "an image path to sit behind the stripes"
+        "an image path to sit behind the stripes",
+        "var(), url(), image-set() or a gradient, written as they are rather than wrapped in url()"
       ]
     }
   ],
   "examples": [
     ".a { @include background-stripes; }",
     ".a { @include background-stripes(red, 2em, -30deg); }",
-    ".a { @include background-stripes(red blue, var(--stripe)); }"
+    ".a { @include background-stripes(red blue, var(--stripe)); }",
+    ".a { @include background-stripes(red, 2em, -30deg, var(--photo)); }"
   ],
   "rejects": [
     ".a { @include background-stripes(red, 2em, nonsense); }",

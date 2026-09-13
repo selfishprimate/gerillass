@@ -73,6 +73,20 @@ exports[`Manifest examples after: .a { @include after("→") { color: red; } } 1
 }"
 `;
 
+exports[`Manifest examples after: .a { @include after(attr(data-label)) { color: red; } } 1`] = `
+".a::after {
+  content: attr(data-label);
+  color: red;
+}"
+`;
+
+exports[`Manifest examples after: .a { @include after(var(--label)) { color: red; } } 1`] = `
+".a::after {
+  content: var(--label);
+  color: red;
+}"
+`;
+
 exports[`Manifest examples all-buttons: @include all-buttons { cursor: pointer; } 1`] = `
 "button, [type=button], [type=reset], [type=submit] {
   cursor: pointer;
@@ -110,6 +124,16 @@ exports[`Manifest examples antialias: @include antialias; 1`] = `
 *::after {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}"
+`;
+
+exports[`Manifest examples aspect-ratio: .a { @include aspect-ratio(var(--ratio)); } 1`] = `
+".a {
+  display: block;
+  width: 100%;
+  aspect-ratio: var(--ratio);
+  border: 0;
+  object-fit: cover;
 }"
 `;
 
@@ -168,6 +192,30 @@ exports[`Manifest examples background-dots: .a { @include background-dots(red); 
   background-position: 2.5em 2.5em, 10em 10em;
   background-size: 5em 5em;
   background-repeat: repeat;
+}"
+`;
+
+exports[`Manifest examples background-dots: .a { @include background-dots(red, $image: var(--photo)); } 1`] = `
+".a {
+  background-image: radial-gradient(red 1em, transparent 0), radial-gradient(red 1em, transparent 0);
+  background-position: 2.5em 2.5em, 10em 10em;
+  background-size: 5em 5em;
+  background-repeat: repeat;
+  position: relative;
+}
+.a::before {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-image: var(--photo);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  z-index: -1;
 }"
 `;
 
@@ -234,6 +282,24 @@ exports[`Manifest examples background-image: .a { @include background-image("/im
 }"
 `;
 
+exports[`Manifest examples background-image: .a { @include background-image(image-set("/img/a.png" 1x, "/img/a@2x.p 1`] = `
+".a {
+  background-image: image-set("/img/a.png" 1x, "/img/a@2x.png" 2x);
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}"
+`;
+
+exports[`Manifest examples background-image: .a { @include background-image(var(--hero), rgba(0,0,0,0.5)); } 1`] = `
+".a {
+  background-image: linear-gradient(to top, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), var(--hero);
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}"
+`;
+
 exports[`Manifest examples background-stripes: .a { @include background-stripes(red blue, var(--stripe)); } 1`] = `
 ".a {
   background-image: repeating-linear-gradient(-45deg, red calc(var(--stripe) * 1 - var(--stripe)), red calc(var(--stripe) * 1), blue calc(var(--stripe) * 2 - var(--stripe)), blue calc(var(--stripe) * 2));
@@ -243,6 +309,15 @@ exports[`Manifest examples background-stripes: .a { @include background-stripes(
 exports[`Manifest examples background-stripes: .a { @include background-stripes(red, 2em, -30deg); } 1`] = `
 ".a {
   background-image: repeating-linear-gradient(-30deg, red 0, red 2em, transparent 2em, transparent 4em);
+}"
+`;
+
+exports[`Manifest examples background-stripes: .a { @include background-stripes(red, 2em, -30deg, var(--photo)); } 1`] = `
+".a {
+  background-image: repeating-linear-gradient(-30deg, red 0, red 2em, transparent 2em, transparent 4em), var(--photo);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }"
 `;
 
@@ -263,6 +338,13 @@ exports[`Manifest examples before: .a { @include before("→") { color: red; } }
 "@charset "UTF-8";
 .a::before {
   content: "→";
+  color: red;
+}"
+`;
+
+exports[`Manifest examples before: .a { @include before(var(--label)) { color: red; } } 1`] = `
+".a::before {
+  content: var(--label);
   color: red;
 }"
 `;
@@ -310,6 +392,37 @@ exports[`Manifest examples brand-logo: .logo { @include brand-logo(120px, 40px, 
   width: 120px;
   height: 40px;
   background-image: url("/img/logo.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100%;
+}
+.logo a {
+  display: block;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  text-indent: 100%;
+}
+.logo a::after {
+  content: "";
+  position: absolute;
+  pointer-events: auto;
+  background-color: rgba(0, 0, 0, 0);
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+}"
+`;
+
+exports[`Manifest examples brand-logo: .logo { @include brand-logo(120px, 40px, var(--logo)); } 1`] = `
+".logo {
+  display: inline-block;
+  position: relative;
+  width: 120px;
+  height: 40px;
+  background-image: var(--logo);
   background-position: center;
   background-repeat: no-repeat;
   background-size: 100%;
@@ -682,6 +795,16 @@ exports[`Manifest examples counter: .list { @include counter("decimal"); } 1`] =
 }"
 `;
 
+exports[`Manifest examples counter: .list { @include counter(var(--prefix), "decimal"); } 1`] = `
+".list.counter-start {
+  counter-reset: glsCounter;
+}
+.list.counter-start .counter-item::before, .list.counter-continue .counter-item::before {
+  content: var(--prefix) counter(glsCounter, decimal);
+  counter-increment: glsCounter;
+}"
+`;
+
 exports[`Manifest examples ellipsis: .a { @include ellipsis(200px); } 1`] = `
 ".a {
   display: inline-block;
@@ -842,6 +965,16 @@ exports[`Manifest examples isNumber: .a { z-index: isNumber(5); } 1`] = `
 exports[`Manifest examples isTime: .a { animation-duration: isTime(0.4s); } 1`] = `
 ".a {
   animation-duration: 0.4s;
+}"
+`;
+
+exports[`Manifest examples line-clamp: .a { @include line-clamp(var(--lines)); } 1`] = `
+".a {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--lines);
+  line-clamp: var(--lines);
+  overflow: hidden;
 }"
 `;
 
@@ -1323,6 +1456,18 @@ exports[`Manifest examples text-image: .a { @include text-image("/img/t.png"); }
 }"
 `;
 
+exports[`Manifest examples text-image: .a { @include text-image(var(--texture)); } 1`] = `
+".a {
+  background-image: var(--texture);
+  background-size: cover;
+  background-position: center;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}"
+`;
+
 exports[`Manifest examples text-selection: .a { @include text-selection("only") { background: yellow; } } 1`] = `
 ".a::selection {
   background: yellow;
@@ -1458,6 +1603,12 @@ exports[`Manifest examples validateRatio: .a { aspect-ratio: validateRatio("16/9
 exports[`Manifest examples validateRatio: .a { aspect-ratio: validateRatio(1.5); } 1`] = `
 ".a {
   aspect-ratio: 1.5;
+}"
+`;
+
+exports[`Manifest examples validateRatio: .a { aspect-ratio: validateRatio(var(--ratio)); } 1`] = `
+".a {
+  aspect-ratio: var(--ratio);
 }"
 `;
 

@@ -1,7 +1,19 @@
 @charset "UTF-8";
 
 @use "sass:list";
+@use "sass:meta";
+@use "sass:string";
 @use "../lists/list-of-counter-styles" as *;
+
+// True for an unquoted call to one of $names, such as var(--x). A quoted string
+// stays text, so `"var(--x)"` is not a call.
+@function -is-css-function($value, $names) {
+  @if meta.type-of($value) != "string" or string.slice(meta.inspect($value), 1, 1) == "\"" {
+    @return false;
+  }
+  $open: string.index($value, "(");
+  @return $open != null and list.index($names, string.to-lower-case(string.slice($value, 1, $open - 1))) != null;
+}
 
 @mixin counter($params...) {
   $counter: null;
@@ -33,15 +45,25 @@
     }
   }
 
+  // A prefix or suffix is quoted into text, except a call CSS resolves, which
+  // quoting would turn into the literal characters.
+  $quote-before: '"';
+  $quote-after: '"';
+  @if -is-css-function($counter-before, "var" "attr" "counter" "counters") {
+    $quote-before: "";
+  }
+  @if -is-css-function($counter-after, "var" "attr" "counter" "counters") {
+    $quote-after: "";
+  }
   &.counter-start {
     counter-reset: glsCounter;
   }
   &.counter-start .counter-item::before,
   &.counter-continue .counter-item::before {
-    content: #{if($counter-before, '"' + $counter-before + '"' + " ", null)}counter(
+    content: #{if($counter-before, $quote-before + $counter-before + $quote-before + " ", null)}counter(
         glsCounter#{if($counter, ", " + $counter, null)}
       )
-      #{if($counter-after, " " + '"' + $counter-after + '"', null)};
+      #{if($counter-after, " " + $quote-after + $counter-after + $quote-after, null)};
     counter-increment: glsCounter;
     @content;
   }

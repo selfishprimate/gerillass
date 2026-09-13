@@ -6,7 +6,8 @@
       "name": "$image-url",
       "accepts": [
         "an image path",
-        "null to filter the element itself instead"
+        "null to filter the element itself instead",
+        "var(), url(), image-set() or a gradient, written as they are rather than wrapped in url()"
       ]
     },
     {
@@ -26,7 +27,9 @@
   "examples": [
     ".a { @include background-image(\"/img/a.png\"); }",
     ".a { @include background-image(\"/img/a.png\", rgba(0,0,0,0.5)); }",
-    ".a { @include background-image(\"/img/a.png\", (red, blue), \"top\"); }"
+    ".a { @include background-image(\"/img/a.png\", (red, blue), \"top\"); }",
+    ".a { @include background-image(var(--hero), rgba(0,0,0,0.5)); }",
+    ".a { @include background-image(image-set(\"/img/a.png\" 1x, \"/img/a@2x.png\" 2x)); }"
   ],
   "rejects": [
     ".a { @include background-image(\"/img/a.png\", (red, blue), sideways); }",

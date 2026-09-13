@@ -11,7 +11,8 @@
         "a slash separated string, such as \"16/9\"",
         "a colon separated string, such as \"16:9\"",
         "a number, where 1.5 means 1.5 / 1",
-        "null for the 16/9 default"
+        "null for the 16/9 default",
+        "var(), written as it is"
       ]
     },
     {
@@ -24,11 +25,13 @@
     ".video { @include aspect-ratio(\"16/9\"); }",
     ".tile { @include aspect-ratio(\"1:1\", contain); }",
     ".plain { @include aspect-ratio(1.5, null); }",
-    ".default { @include aspect-ratio; }"
+    ".default { @include aspect-ratio; }",
+    ".a { @include aspect-ratio(var(--ratio)); }"
   ],
   "rejects": [
     ".thumb { @include aspect-ratio(\"16:9\", nonsense); }",
     ".thumb { @include aspect-ratio(16 9); }",
-    ".thumb { @include aspect-ratio(\"sixteen/nine\"); }"
+    ".thumb { @include aspect-ratio(\"sixteen/nine\"); }",
+    ".a { @include aspect-ratio(url(a.png)); }"
   ]
 }

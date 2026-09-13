@@ -37,4 +37,19 @@
       }
     }
   }
+
+  @include it('A custom property is written as the content, not quoted into text.') {
+    @include assert {
+      @include output {
+        .element {
+          @include after(var(--label));
+        }
+      }
+      @include expect {
+        .element::after {
+          content: var(--label);
+        }
+      }
+    }
+  }
 }

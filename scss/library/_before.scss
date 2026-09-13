@@ -1,7 +1,18 @@
 @charset "UTF-8";
 
+@use "sass:list";
 @use "sass:meta";
 @use "sass:string";
+
+// True for an unquoted call to one of $names, such as var(--x). A quoted string
+// stays text, so `"var(--x)"` is not a call.
+@function -is-css-function($value, $names) {
+  @if meta.type-of($value) != "string" or string.slice(meta.inspect($value), 1, 1) == "\"" {
+    @return false;
+  }
+  $open: string.index($value, "(");
+  @return $open != null and list.index($names, string.to-lower-case(string.slice($value, 1, $open - 1))) != null;
+}
 
 @mixin before($content: null) {
   &::before {
@@ -9,6 +20,10 @@
       @content;
     } @else if meta.type-of($content) != "string" {
       @error "`#{$content}` is not a valid $content for `before`. Pass a string to use as the content value, a data- attribute name such as `\"data-label\"` to render it with attr(), or no argument at all and write the content yourself.";
+    } @else if -is-css-function($content, "var" "attr" "counter" "counters") {
+      // Quoting would turn the call into text: content: "var(--label)".
+      content: $content;
+      @content;
     } @else {
       $data: string.slice($content, 1, 5);
       @if $data == "data-" {

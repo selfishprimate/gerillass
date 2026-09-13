@@ -10,13 +10,15 @@
       "accepts": [
         "a string used as the content value",
         "a data- attribute name, rendered as attr()",
-        "null to write content yourself"
+        "null to write content yourself",
+        "var(), attr(), counter() or counters(), written as they are"
       ]
     }
   ],
   "examples": [
     ".a { @include before(\"→\") { color: red; } }",
-    ".a { @include before(\"data-label\") { color: red; } }"
+    ".a { @include before(\"data-label\") { color: red; } }",
+    ".a { @include before(var(--label)) { color: red; } }"
   ],
   "rejects": [
     ".a { @include before(42) { color: red; } }"

@@ -1,6 +1,29 @@
 @charset "UTF-8";
 
+@use "sass:list";
+@use "sass:meta";
+@use "sass:string";
+
 @use "../library/stretched-link" as *;
+
+// An image path goes into url(). A var(), url(), image-set() or gradient is
+// already an image, and wrapping it produced url(var(--x)), which loads nothing.
+@function -image($value) {
+  @if -is-css-function($value, "var" "url" "image-set" "linear-gradient" "radial-gradient" "conic-gradient" "repeating-linear-gradient" "repeating-radial-gradient" "repeating-conic-gradient") {
+    @return $value;
+  }
+  @return url($value);
+}
+
+// True for an unquoted call to one of $names, such as var(--x). A quoted string
+// stays text, so `"var(--x)"` is not a call.
+@function -is-css-function($value, $names) {
+  @if meta.type-of($value) != "string" or string.slice(meta.inspect($value), 1, 1) == "\"" {
+    @return false;
+  }
+  $open: string.index($value, "(");
+  @return $open != null and list.index($names, string.to-lower-case(string.slice($value, 1, $open - 1))) != null;
+}
 
 @mixin brand-logo($width, $height, $image-url: null) {
   display: inline-block;
@@ -8,7 +31,7 @@
   width: $width;
   height: $height;
   @if $image-url {
-    background-image: url($image-url);
+    background-image: -image($image-url);
   }
   background-position: center;
   background-repeat: no-repeat;

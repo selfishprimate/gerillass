@@ -663,6 +663,33 @@ while `background-image: var(--hero)` with `--hero: url(...)` loads the image.
 `content: "var(--label)"` renders the characters and `content: var(--label)` the
 value. `aspect-ratio: var(--ratio)` and `line-clamp: var(--lines)` both apply.
 
+**Status.** Implemented, for all ten: `after`, `before`, `counter`,
+`background-image`, `brand-logo`, `text-image`, `background-dots`,
+`background-stripes`, `aspect-ratio` and `line-clamp`, plus `validateRatio`.
+`line-clamp` takes `env()` as well as `var()`. The check in `validateRatio` is
+written inline, so the manifest keeps the member.
+
+Most of these calls compiled today, so an example alone could not fail first.
+The manifest suite now also fails any example whose CSS holds `var()` inside
+`url()` or a quoted string, or `var()` before an undivided slash, the shapes the
+audit calls BROKEN OUTPUT. Thirteen examples and two specs went in and failed,
+run with `--ci` so the broken output was not written as snapshots.
+
+Across 551 calls compiled before and after, on Dart Sass 1.103.1 and 1.71.0 with
+identical results, 250 changed and every one had a CSS function in its
+arguments: 240 from quoted or `url()`-wrapped text to the function itself, and
+10 from an error to CSS, in `aspect-ratio`, `line-clamp` and `validateRatio`. No
+call went from CSS to an error, and no existing snapshot moved. A quoted
+`"var(--x)"` is still text, and `counter`'s plain prefixes and suffixes keep
+their quotes. The audit's BROKEN OUTPUT fell from 10 to 2, both F11's
+`convertToEm`, and the ten documentation pages' 52 examples compile to
+identical CSS.
+
+**Found on the way, not changed.** `background-image(null, ...)` compiles
+differently on the two Sass versions: 1.71.0 adds `background-position`,
+`background-repeat` and `background-size` to the element, 1.103.1 does not. The
+difference was there before this change, on the same six calls.
+
 **Changes existing output?** Only for calls whose output did not work. The one
 arguable case is `after(var(--x))` rendering the literal text today; nobody
 writes that to get the text.
