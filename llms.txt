@@ -1,6 +1,6 @@
 # Gerillass
 
-> A Sass toolkit of 54 mixins and 23 functions, built to be read by coding agents as well as by people. Every member is described in a machine-readable manifest whose examples and refusals are executed by the test suite, so the documentation cannot drift away from the code.
+> A Sass toolkit of 56 mixins and 23 functions, built to be read by coding agents as well as by people. Every member is described in a machine-readable manifest whose examples and refusals are executed by the test suite, so the documentation cannot drift away from the code.
 
 Gerillass is a pure Sass library. There is no build step and no runtime dependency: the `.scss` sources are the deliverable, and the package installs nothing else. It needs Dart Sass; LibSass and node-sass are not supported. This file describes Gerillass 2.1.1.
 
@@ -45,6 +45,7 @@ Arguments are validated and refused with a message naming what is accepted, so a
 - [line-clamp($lines: 3)](https://docs.gerillass.com/docs/line-clamp/): Truncates text after a number of lines, where ellipsis truncates one.
 - [linear-gradient($direction, $colors)](https://docs.gerillass.com/docs/linear-gradient/): Linear gradient background from a direction name or an angle.
 - [loadify($params...)](https://docs.gerillass.com/docs/loadify/): Fades elements in on page load.
+- [motion-safe](https://docs.gerillass.com/docs/motion-safe/): Wraps its content in @media (prefers-reduced-motion: no-preference), so motion is opt-in: a user who asked their system for less motion gets none of it.
 - [only($params...)](https://docs.gerillass.com/docs/only/): Selects only the siblings named.
 - [placeholder-shown](https://docs.gerillass.com/docs/placeholder-shown/): Styles an input while its placeholder is visible.
 - [placeholder](https://docs.gerillass.com/docs/placeholder/): Styles the placeholder text of an input across vendor prefixes.
@@ -67,6 +68,7 @@ Arguments are validated and refused with a message naming what is accepted, so a
 - [text-selection($value: null)](https://docs.gerillass.com/docs/text-selection/): Styles the ::selection pseudo-element.
 - [text-shadow($params...)](https://docs.gerillass.com/docs/text-shadow/): Layered text shadows built from a direction, a colour and an offset.
 - [text-stroke($fallback-color: black, $color: transparent, $stroke-color: black, $stroke-width: 1px)](https://docs.gerillass.com/docs/text-stroke/): Outlines text using the webkit text-stroke properties.
+- [tokens($map, $prefix: null)](https://docs.gerillass.com/docs/tokens/): Writes a Sass map out as CSS custom properties, for any kind of token: colours, spacing, sizes, radii, type, shadows, durations.
 - [triangle($direction: "bottom", $color: black, $size: 10px 8px)](https://docs.gerillass.com/docs/triangle/): Draws a CSS triangle out of borders, pointing in a given direction.
 
 ## Functions

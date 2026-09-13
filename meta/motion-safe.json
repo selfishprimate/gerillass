@@ -1,0 +1,15 @@
+{
+  "name": "motion-safe",
+  "summary": "Wraps its content in @media (prefers-reduced-motion: no-preference), so motion is opt-in: a user who asked their system for less motion gets none of it.",
+  "caveats": [
+    "Keep the resting state outside the block. An element hidden in its base rule and revealed by an animation inside the block stays hidden for a user who asked for less motion; put the start state in the keyframes instead."
+  ],
+  "arguments": [],
+  "examples": [
+    ".card { @include motion-safe { transition: transform 0.2s ease; } }",
+    "@include motion-safe { .spinner { animation: spin 1s linear infinite; } }"
+  ],
+  "rejects": [
+    ".card { @include motion-safe; }"
+  ]
+}

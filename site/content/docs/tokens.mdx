@@ -1,0 +1,220 @@
+---
+title: "Tokens"
+page_title: "Tokens Sass Mixin"
+page_description: "Write a Sass map out as CSS custom properties with the Tokens Sass mixin: a prefix, null values left out, quoted strings kept, and names a browser would drop refused."
+page_keywords: "Sass map to CSS variables, CSS custom properties Sass, design tokens Sass, Sass tokens mixin, spacing scale CSS variables, theme tokens"
+---
+
+# Tokens
+
+<Member name="tokens">
+
+The **Tokens Sass mixin** writes a Sass map out as CSS custom properties, for any kind of token: colours, spacing, sizes, radii, type, shadows and durations. Keep each scale as a map and emit it once, with a prefix if you want one: `(4: 1rem)` with the prefix `space` becomes `--space-4: 1rem`.
+
+A loop over the map does the same in three lines, and gets three things wrong without a sound. The mixin handles each of them.
+
+</Member>
+
+## When to use it
+
+If the values are a fixed list that nothing else reads, write them as CSS. `:root { --space-4: 1rem; }` is shorter than a map and an include, and this mixin adds nothing to it.
+
+It earns its place when the values already live in Sass for another reason:
+
+- **The same value has to reach somewhere a custom property cannot.** A `@media` condition does not evaluate `var()`: measured in Chrome 152, `(min-width: var(--wide))` did not match even with `--wide` set. Keep the widths in one map, and the custom properties and the media queries come from the same place, so changing one changes both.
+- **One theme is derived from another.** With `map.merge`, the dark map is the light one with the colours that differ replaced, so the ones it shares cannot drift apart.
+- **Other Sass reads the same values.** A scale worked out with `math`, or a map another mixin takes as well, is already a map. Writing it out again as CSS would be a second copy to keep in step.
+
+<Example caption="One map of widths feeds both the custom properties and the media queries, and the dark theme is the light one with two colours changed. The dark rule repeats the border it did not change, which is harmless.">
+```scss
+@use "sass:map";
+@use "gerillass" as *;
+
+$screens: (md: 768px, lg: 1024px);
+$light: (bg: #fafafa, text: #18181b, border: #e4e4e7);
+$dark: map.merge($light, (bg: #09090b, text: #fafafa));
+
+:root {
+  @include tokens($screens, screen);
+  @include tokens($light, color);
+}
+
+[data-theme="dark"] {
+  @include tokens($dark, color);
+}
+
+@each $name, $width in $screens {
+  @media (min-width: $width) {
+    .container {
+      max-width: $width;
+    }
+  }
+}
+```
+</Example>
+
+## What goes wrong in a loop
+
+Measured in Chrome 152, with `#{$name}: #{$value}` in an `@each` loop:
+
+| In the map | What the loop writes | What happens in the browser |
+|---|---|---|
+| `arrow: "→"` | `--arrow: →` | the quotes are gone, and `content: var(--arrow)` computes to `none` |
+| `focus: null` | `--focus: null` | `null` is a value, so `var(--focus, red)` never falls back to red |
+| `space-0.5: 2px` | `--space-0.5: 2px` | the declaration is dropped; so are names holding `/`, a space or `#` |
+
+The mixin keeps the quotes, leaves a `null` out, and refuses a name the browser would drop, saying which character is the problem.
+
+The first two only happen when the values come from Sass: written as plain CSS, a quoted string stays quoted and there is no `null` to write. The third happens either way, and a hand-written `--space-0.5` is dropped just the same.
+
+## Arguments
+
+<Arguments of="tokens" footnote="The mixin writes into the rule it is called in, so call it inside a selector: `:root` for values the whole page shares, or a theme selector to override some of them.">
+  <Argument name="$map" type="map">The names and values. A name can be a word or a number, such as <code>bg</code> or <code>500</code>, using letters, digits, hyphens and underscores. A value can be anything CSS accepts: a colour, a length, a font stack, a shadow, a duration, <code>calc()</code> or <code>clamp()</code>, and <code>var()</code> pointing at another token. A value of <code>null</code> is left out. A nested map is refused.</Argument>
+  <Argument name="$prefix (null)" type="string">Joined to each name with a hyphen. <code>color</code> turns <code>bg</code> into <code>--color-bg</code>.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="One call per scale, each with its own prefix: spacing, radii, font families, text sizes and a shadow. **Every size in the card comes from a custom property.**">
+```scss
+:root {
+  @include tokens((1: 0.25rem, 2: 0.5rem, 3: 0.75rem, 4: 1rem), space);
+  @include tokens((md: 8px, lg: 12px, full: 9999px), radius);
+  @include tokens((sans: ("Inter", system-ui, sans-serif)), font);
+  @include tokens((sm: 0.875rem, lg: 1.125rem), text);
+  @include tokens((md: 0 4px 12px rgba(24, 24, 27, 0.08)), shadow);
+}
+
+.card {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  box-shadow: var(--shadow-md);
+}
+
+.card .title {
+  font-size: var(--text-lg);
+}
+
+.card .pill {
+  justify-self: start;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+}
+```
+```html
+<style>
+  .card { width: 240px; background: #fff; color: #18181b; border: 1px solid #e4e4e7; line-height: 1.4; }
+  .card .title { font-weight: 600; }
+  .card .pill { background: #dcfce7; color: #166534; font-weight: 500; }
+</style>
+<div class="card">
+  <span class="title">Invoice #1042</span>
+  <span>Paid on 12 September.</span>
+  <span class="pill">Paid</span>
+</div>
+```
+</Example>
+
+<Example caption="**Primitives and semantic tokens.** The primitives hold the raw scale and nothing uses them directly. The semantic tokens say what a colour is for and point at a primitive with `var()`. A dark theme then overrides only the semantic layer, and every component follows.">
+```scss
+$zinc: (50: #fafafa, 200: #e4e4e7, 800: #27272a, 900: #18181b);
+$blue: (400: #60a5fa, 600: #2563eb);
+
+:root {
+  @include tokens($zinc, zinc);
+  @include tokens($blue, blue);
+  @include tokens((
+    bg: var(--zinc-50),
+    text: var(--zinc-900),
+    border: var(--zinc-200),
+    accent: var(--blue-600)
+  ), color);
+}
+
+[data-theme="dark"] {
+  @include tokens((
+    bg: var(--zinc-900),
+    text: var(--zinc-50),
+    border: var(--zinc-800),
+    accent: var(--blue-400)
+  ), color);
+}
+
+.card {
+  background: var(--color-bg);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-top: 3px solid var(--color-accent);
+}
+```
+```html
+<style>
+  .row { display: flex; flex-wrap: wrap; gap: 12px; }
+  .card { width: 200px; padding: 16px; border-radius: 10px; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .card strong { display: block; margin-bottom: 4px; }
+</style>
+<div class="row">
+  <div class="card"><strong>Light</strong>The semantic tokens from :root.</div>
+  <div data-theme="dark"><div class="card"><strong>Dark</strong>Only the semantic layer changed.</div></div>
+</div>
+```
+</Example>
+
+<Example caption="Quoted strings keep their quotes, which `content` needs, and a `null` is left out rather than written as a value. **The label comes from `--text-label`.**">
+```scss
+:root {
+  @include tokens((
+    label: "New",
+    arrow: "→",
+    highlight: null
+  ), text);
+}
+
+.tag::before {
+  content: var(--text-label) " ";
+}
+
+.tag::after {
+  content: " " var(--text-arrow);
+}
+```
+```html
+<style>
+  .tag { display: inline-block; padding: 4px 10px; border-radius: 999px; background: #18181b; color: #fafafa; font: 500 13px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; }
+</style>
+<span class="tag">Release notes</span>
+```
+</Example>
+
+## What it refuses
+
+A name the browser would drop, and a nested map, stop the build instead of compiling into CSS that does nothing.
+
+```scss
+:root {
+  @include tokens((space-0.5: 2px), space);
+}
+```
+```text
+Error: `space-0.5` is not a valid token name for `tokens`: a custom property name cannot contain `.`. Use letters, digits, hyphens and underscores, such as `space-0_5`.
+```
+
+```scss
+:root {
+  @include tokens((blue: (500: #3b82f6)), color);
+}
+```
+```text
+Error: `blue` holds a map, which `tokens` does not flatten. Pass each group on its own, such as `@include tokens($blue, blue)` for `$blue: (500: #3b82f6)`.
+```
+
+## Related Links
+
+- [CSS custom properties](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/--*)
+- [CSS var()](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/var)
+- [Using CSS custom properties](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Cascading_variables/Using_custom_properties)

@@ -1030,6 +1030,24 @@
       ]
     },
     {
+      "name": "motion-safe",
+      "kind": "mixin",
+      "arguments": [],
+      "file": "scss/library/_motion-safe.scss",
+      "signature": "motion-safe",
+      "summary": "Wraps its content in @media (prefers-reduced-motion: no-preference), so motion is opt-in: a user who asked their system for less motion gets none of it.",
+      "caveats": [
+        "Keep the resting state outside the block. An element hidden in its base rule and revealed by an animation inside the block stays hidden for a user who asked for less motion; put the start state in the keyframes instead."
+      ],
+      "examples": [
+        ".card { @include motion-safe { transition: transform 0.2s ease; } }",
+        "@include motion-safe { .spinner { animation: spin 1s linear infinite; } }"
+      ],
+      "rejects": [
+        ".card { @include motion-safe; }"
+      ]
+    },
+    {
       "name": "only",
       "kind": "mixin",
       "arguments": [
@@ -1584,6 +1602,48 @@
         ".a { @include text-stroke(black, transparent, red, 2px); }"
       ],
       "rejects": []
+    },
+    {
+      "name": "tokens",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$map",
+          "required": true,
+          "accepts": [
+            "a map of names to values, where a value is any CSS value: a colour, a length, a font stack, a shadow, a duration, calc() or clamp()",
+            "a value of null, which is skipped",
+            "a value that references another token, such as var(--blue-500)"
+          ]
+        },
+        {
+          "name": "$prefix",
+          "default": "null",
+          "accepts": [
+            "null, the default, for no prefix",
+            "a name, joined to each property name with a hyphen"
+          ]
+        }
+      ],
+      "file": "scss/library/_tokens.scss",
+      "signature": "tokens($map, $prefix: null)",
+      "summary": "Writes a Sass map out as CSS custom properties, for any kind of token: colours, spacing, sizes, radii, type, shadows, durations. With the prefix space, (4: 1rem) becomes --space-4: 1rem. A null value is skipped, and a quoted string keeps its quotes.",
+      "examples": [
+        ":root { @include tokens((1: 0.25rem, 2: 0.5rem, 4: 1rem), space); @include tokens((md: 8px, full: 9999px), radius); }",
+        ":root { @include tokens((md: 0 4px 12px rgba(24, 24, 27, 0.08)), shadow); @include tokens((fast: 150ms, ease: cubic-bezier(0.2, 0, 0, 1)), motion); }",
+        ":root { @include tokens((bg: #fff, text: #111), color); }",
+        ":root { @include tokens((blue-500: #3b82f6, blue-600: #2563eb)); }",
+        ":root { @include tokens((red: #ef4444, 500: #3b82f6), blue); }",
+        "[data-theme=\"dark\"] { @include tokens((bg: #09090b, accent: var(--blue-500)), color); }",
+        ":root { @include tokens((body: (\"Readex Pro\", sans-serif), label: \"New\", focus: null), font); }"
+      ],
+      "rejects": [
+        ":root { @include tokens(#fff); }",
+        ":root { @include tokens((brand: (500: #3b82f6)), color); }",
+        ":root { @include tokens((bg: #fff), (color, text)); }",
+        ":root { @include tokens((\"brand color\": #f00)); }",
+        "@include tokens((bg: #fff));"
+      ]
     },
     {
       "name": "triangle",

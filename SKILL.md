@@ -5,7 +5,7 @@ description: Use the Gerillass Sass mixin library — loading it, the mixin cata
 
 # Gerillass
 
-A Sass mixin library: 54 mixins and 23 functions that emit CSS from
+A Sass mixin library: 56 mixins and 23 functions that emit CSS from
 semantic declarations. It is Sass source only — there is no runtime and no
 utility classes, so styles live in your stylesheet and your markup stays clean.
 
@@ -90,6 +90,7 @@ a dropped declaration rather than an error.
 | `line-clamp` | `.a { @include line-clamp(0); }` |
 | `linear-gradient` | `.a { @include linear-gradient(sideways, (red, blue)); }` |
 | `loadify` | `@include loadify(nonsense);` |
+| `motion-safe` | `.card { @include motion-safe; }` |
 | `only` | `.a { @include only(#ff0000) { margin: 0; } }` |
 | `radial-gradient` | `.a { @include radial-gradient(42, "center", (red, blue)); }` |
 | `remove` | `.a { @include remove(a, b, c); }` |
@@ -103,6 +104,7 @@ a dropped declaration rather than an error.
 | `text-gradient` | `.a { @include text-gradient(sideways, (red, blue)); }` |
 | `text-selection` | `.a { @include text-selection(bogus) { background: yellow; } }` |
 | `text-shadow` | `.a { @include text-shadow(42); }` |
+| `tokens` | `:root { @include tokens(#fff); }` |
 | `triangle` | `.caret { @include triangle(sideways); }` |
 
 ## Traps a signature does not show
@@ -139,6 +141,10 @@ a dropped declaration rather than an error.
 **`loadify`**
 
 - `init` and every call must be in the same module, or the module with the call must `@use` the one that calls `init`. Otherwise Sass fails with "The target selector was not found".
+
+**`motion-safe`**
+
+- Keep the resting state outside the block. An element hidden in its base rule and revealed by an animation inside the block stays hidden for a user who asked for less motion; put the start state in the keyframes instead.
 
 **`remove`**
 
@@ -180,6 +186,7 @@ a dropped declaration rather than an error.
 | `line-clamp($lines: 3)` | Truncates text after a number of lines, where ellipsis truncates one. It emits five declarations rather than one because -webkit-line-clamp does nothing on its own: without display: -webkit-box or without -webkit-box-orient: vertical the text is not clamped at all and nothing warns you, and without overflow: hidden the clamped text spills out below the box. The unprefixed line-clamp is emitted too, for when it becomes Baseline. |
 | `linear-gradient($direction, $colors)` | Linear gradient background from a direction name or an angle. |
 | `loadify($params...)` | Fades elements in on page load. Call once at the root to set up, then on each element. Under prefers-reduced-motion: reduce the end state is applied directly and no animation runs. Switching the animation off alone would not do, because the element starts invisible and the animation is what reveals it, so the content would stay hidden for good. |
+| `motion-safe` | Wraps its content in @media (prefers-reduced-motion: no-preference), so motion is opt-in: a user who asked their system for less motion gets none of it. |
 | `only($params...)` | Selects only the siblings named. |
 | `placeholder-shown` | Styles an input while its placeholder is visible. |
 | `placeholder` | Styles the placeholder text of an input across vendor prefixes. |
@@ -202,6 +209,7 @@ a dropped declaration rather than an error.
 | `text-selection($value: null)` | Styles the ::selection pseudo-element. |
 | `text-shadow($params...)` | Layered text shadows built from a direction, a colour and an offset. |
 | `text-stroke($fallback-color: black, $color: transparent, $stroke-color: black, $stroke-width: 1px)` | Outlines text using the webkit text-stroke properties. |
+| `tokens($map, $prefix: null)` | Writes a Sass map out as CSS custom properties, for any kind of token: colours, spacing, sizes, radii, type, shadows, durations. With the prefix space, (4: 1rem) becomes --space-4: 1rem. A null value is skipped, and a quoted string keeps its quotes. |
 | `triangle($direction: "bottom", $color: black, $size: 10px 8px)` | Draws a CSS triangle out of borders, pointing in a given direction. |
 
 ## Functions

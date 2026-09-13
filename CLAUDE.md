@@ -9,7 +9,7 @@ Gerillass is a **pure Sass library** — a toolkit of mixins and functions, in t
 Two consequences follow from this and drive most decisions in the repo:
 
 1. **`package.json` must have no `dependencies`.** Everything (`jest`, `sass`, `sass-true`, `glob`) belongs in `devDependencies`. Consumers get only `.scss` files, so a runtime dependency here forces the entire test toolchain onto every downstream project. This was the cause of 24 Dependabot alerts fixed in v1.3.3 — do not reintroduce it.
-2. **Only `scss/` ships.** `.npmignore` excludes `test`, `assets`, `meta`, `tools`, dotfiles and `*.md`; npm always adds `README.md`, `LICENSE.md` and `package.json` back. Verify with `npm pack --dry-run` before any release (99 files / ~47 kB as of 2.2.0).
+2. **Only `scss/` ships.** `.npmignore` excludes `test`, `assets`, `meta`, `tools`, dotfiles and `*.md`; npm always adds `README.md`, `LICENSE.md` and `package.json` back. Verify with `npm pack --dry-run` before any release (101 files / ~53 kB as of 2.2.0).
 
 Dart Sass only. LibSass/node-sass has been unsupported since v1.3.0.
 
@@ -299,10 +299,10 @@ Four levels, and knowing which one covers a member tells you what you can trust:
 
 | Level | Proves | Coverage |
 |---|---|---|
-| `test/smoke.scss` | the mixin evaluates at all | 54/54 mixins |
-| snapshot of `meta/` examples | the output cannot change unnoticed | 77/77 members |
-| `meta/` rejects | bad input is refused with a real message | 48/77 |
-| sass-true spec in `test/` | the CSS is **correct** | 13/77 |
+| `test/smoke.scss` | the mixin evaluates at all | 56/56 mixins |
+| snapshot of `meta/` examples | the output cannot change unnoticed | 79/79 members |
+| `meta/` rejects | bad input is refused with a real message | 56/79 |
+| sass-true spec in `test/` | the CSS is **correct** | 14/79 |
 
 Only the last one catches an output that was wrong from the start; a snapshot
 records a wrong value as correct. Hand-written specs are therefore reserved for
@@ -463,6 +463,24 @@ be one, once its fix was measured), and gaps in documentation and the manifest.
 It also records which of the agents' claims turned out wrong, and the two prompt
 rules that made trial feedback quick to check: versions from `npm ls`, and a
 compiled snippet for every problem.
+
+### What `design-tokens.md` proposes
+
+Researched 14 September 2026, after `tokens` was written for 2.2.0 and the
+maintainer asked for a primitive and semantic token structure instead of values
+typed by hand. It compares what Tailwind v4, Open Props, Radix Colors and
+Bootstrap 5.3 ship, and records six measurements that constrain any design: a
+semantic token does not follow a primitive overridden lower down, `light-dark()`
+picks light without `color-scheme`, a misspelt `var()` fails silently, a full
+palette is about 1.2 kB gzipped, `@use ... with` replaces a map rather than
+merging, and `oklch()` survives Sass.
+
+The shape it suggests, in order: flatten nested maps in `tokens`, primitive
+scales as mergeable `!default` maps, and a `theme` mixin for the semantic layer.
+What would make it this library's own is two build-time checks nothing else
+performs: a reference to a primitive that does not exist, and a text and
+background pair that fails contrast. It lists the decisions that come first,
+starting with whether to ship a palette at all.
 
 ### What `fix-plan.md` sets out
 

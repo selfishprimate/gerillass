@@ -1,0 +1,102 @@
+---
+title: "Motion Safe"
+page_title: "Motion Safe Sass Mixin"
+page_description: "Make animation opt-in with the Motion Safe Sass mixin: it applies motion only for users who have not asked their system for less, through prefers-reduced-motion."
+page_keywords: "prefers-reduced-motion, reduced motion CSS, Sass reduced motion, motion-safe, accessible animation, CSS transitions accessibility"
+---
+
+# Motion Safe
+
+<Member name="motion-safe">
+
+Some people turn on **reduce motion** in their operating system, because animation on screen gives them dizziness, nausea or a migraine. The **Motion Safe Sass mixin** applies the animation you give it only for everyone else, by writing it inside `@media (prefers-reduced-motion: no-preference)`.
+
+It is one media query, and the point is its direction. Motion written inside the block is opt-in, so a user who asked for less motion never gets it.
+
+</Member>
+
+## Opt in, rather than switch off
+
+The usual way round is to write the animation and then turn it off:
+
+```scss
+.card { transition: transform 0.2s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .card { transition: none; }
+}
+```
+
+That override has to name every animation and every transition on the page, including the ones somebody adds next month, and the one it misses keeps moving. Written the other way, nothing moves unless it is inside the block, so there is no list to keep complete.
+
+<Hint kind="warning">
+
+**Keep the visible state outside the block.** When the block does not apply, only the base rule is left. An element hidden in its base rule, `opacity: 0`, and faded in by an animation inside the block stays invisible for exactly the people who asked for less motion. Put the start of the motion in the keyframes, `from { opacity: 0; }`, and leave the base rule showing the element. [Loadify](/docs/loadify) handles the same case by applying the end state directly.
+
+</Hint>
+
+<Hint kind="info">
+
+The media queries were checked to parse in Chrome 152. The reduced-motion setting itself could not be emulated in the browser used for this page, so turn it on in your own system settings to see the examples below stand still.
+
+</Hint>
+
+## Examples
+
+<Example caption="A transition that only runs for people who have not asked for less motion. **Hover over the card.** With reduce motion turned on, the card still lifts, but at once rather than gliding.">
+```scss
+.card {
+  @include motion-safe {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+}
+```
+```html
+<style>
+  .card { width: 220px; padding: 20px; border: 1px solid #e4e4e7; border-radius: 10px; background: #fff; font: 14px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; cursor: pointer; }
+  .card:hover { transform: translateY(-4px); box-shadow: 0 10px 24px rgba(24, 24, 27, 0.12); }
+  .card strong { display: block; margin-bottom: 4px; }
+</style>
+<div class="card"><strong>Pro plan</strong>Everything in Free, plus unlimited projects.</div>
+```
+</Example>
+
+<Example caption="Called at the root, the block can hold whole rules. The fade starts from `opacity: 0` in the keyframes, not in the base rule, so with reduce motion turned on the badge is simply there.">
+```scss
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+}
+
+@include motion-safe {
+  .badge {
+    animation: fade-in 0.6s ease both;
+  }
+}
+```
+```html
+<style>
+  .badge { display: inline-block; padding: 4px 10px; border-radius: 999px; background: #18181b; color: #fafafa; font: 500 13px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; }
+</style>
+<span class="badge">New release</span>
+```
+</Example>
+
+## What it refuses
+
+Called without a block it has nothing to wrap, and would emit nothing at all, so it stops the build instead.
+
+```scss
+.card {
+  @include motion-safe;
+}
+```
+```text
+Error: `motion-safe` wraps the motion you pass it, so call it with a block, such as `.card { @include motion-safe { transition: transform 0.2s; } }`.
+```
+
+## Related Links
+
+- [Loadify](/docs/loadify)
+- [CSS prefers-reduced-motion](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@media/prefers-reduced-motion)
+- [CSS transition](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/transition)
+- [CSS animation](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/animation)

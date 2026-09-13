@@ -1,4 +1,5 @@
 import { readFileSync, readdirSync } from "node:fs";
+import { dirname } from "node:path";
 import { fileURLToPath, URL } from "node:url";
 import { parse as parseYaml } from "yaml";
 
@@ -120,8 +121,34 @@ export default function docsIndex() {
 
   return {
     name: "gerillass-docs-index",
+    /*
+      A page added or deleted while the dev server runs is an `add` or `unlink`
+      on the watcher, not a change to a file this module imports, so
+      handleHotUpdate below never sees it. Measured when motion-safe and tokens
+      were added: both URLs rendered, and the sidebar listed neither until the
+      server was restarted. A rename is an unlink and an add.
+
+      gerillass.json sits above site/, outside what Vite watches, so it is added
+      to the watcher by hand: a regenerated manifest changes the kind and the
+      summary of every entry.
+
+      Invalidating the module is not enough on its own, since the sidebar has
+      already imported it and nothing asks for it again, so the page reloads.
+    */
     configureServer(s) {
       server = s;
+      server.watcher.add(MANIFEST);
+
+      const refresh = () => {
+        const mod = server.moduleGraph.getModuleById(RESOLVED);
+        if (mod) server.moduleGraph.invalidateModule(mod);
+        server.ws.send({ type: "full-reload" });
+      };
+      const isPage = (file) => dirname(file) === CONTENT && file.endsWith(".mdx");
+
+      server.watcher.on("add", (file) => isPage(file) && refresh());
+      server.watcher.on("unlink", (file) => isPage(file) && refresh());
+      server.watcher.on("change", (file) => file === MANIFEST && refresh());
     },
     resolveId(id) {
       return id === VIRTUAL ? RESOLVED : null;
