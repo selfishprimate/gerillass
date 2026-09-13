@@ -20,8 +20,9 @@ const OLDEST_SUPPORTED = "1.3.0";
 */
 
 export const FALLBACK = {
-  latest: "2.1.0",
+  latest: "2.1.1",
   versions: [
+    "2.1.1",
     "2.1.0",
     "2.0.1",
     "2.0.0",
