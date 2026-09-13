@@ -5,7 +5,11 @@
 @use "../utilities/fill-nulls" as *;
 
 @mixin border-radius($args...) {
-  $list: list.join($list-of-directions, ("cross-left", "cross-right", "all"));
+  // Logical corners are named block side first, inline side second, like the
+  // properties they map to. Every name here needs a branch below: the chain has
+  // no final @else, so a name without one would be accepted and emit nothing.
+  $logical: ("start-start", "start-end", "end-start", "end-end", "inline-start", "inline-end", "block-start", "block-end");
+  $list: list.join(list.join($list-of-directions, ("cross-left", "cross-right", "all")), $logical);
   @if list.length($args) == 1 {
     $value: list.nth($args, 1);
     border-radius: fillNulls($value, space);
@@ -41,6 +45,26 @@
       } @else if $corner == "cross-right" {
         border-top-right-radius: $value;
         border-bottom-left-radius: $value;
+      } @else if $corner == "start-start" {
+        border-start-start-radius: $value;
+      } @else if $corner == "start-end" {
+        border-start-end-radius: $value;
+      } @else if $corner == "end-start" {
+        border-end-start-radius: $value;
+      } @else if $corner == "end-end" {
+        border-end-end-radius: $value;
+      } @else if $corner == "inline-start" {
+        border-start-start-radius: $value;
+        border-end-start-radius: $value;
+      } @else if $corner == "inline-end" {
+        border-start-end-radius: $value;
+        border-end-end-radius: $value;
+      } @else if $corner == "block-start" {
+        border-start-start-radius: $value;
+        border-start-end-radius: $value;
+      } @else if $corner == "block-end" {
+        border-end-start-radius: $value;
+        border-end-end-radius: $value;
       }
     } @else {
       @error "Corner value must be one of the followings: #{$list}.";

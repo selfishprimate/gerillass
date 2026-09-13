@@ -1,0 +1,55 @@
+// A logical corner is named block side first, inline side second, as the CSS
+// properties are: start-end is the corner where the block starts and the line
+// ends. An edge rounds the two corners that touch it. The expectations below are
+// worked out from that, not copied from the output.
+@use 'true' as *;
+@use '../../scss/gerillass' as *;
+
+@include describe('border-radius()') {
+  @include it('A logical corner maps to the one logical radius property.') {
+    @include assert {
+      @include output {
+        .bubble {
+          @include border-radius("start-end", 12px);
+        }
+      }
+      @include expect {
+        .bubble {
+          border-start-end-radius: 12px;
+        }
+      }
+    }
+  }
+
+  @include it('inline-start rounds the two corners on the side where lines start.') {
+    @include assert {
+      @include output {
+        .tab {
+          @include border-radius("inline-start", 8px);
+        }
+      }
+      @include expect {
+        .tab {
+          border-start-start-radius: 8px;
+          border-end-start-radius: 8px;
+        }
+      }
+    }
+  }
+
+  @include it('block-end rounds the two corners on the side where the block ends.') {
+    @include assert {
+      @include output {
+        .card {
+          @include border-radius("block-end", 4px);
+        }
+      }
+      @include expect {
+        .card {
+          border-end-start-radius: 4px;
+          border-end-end-radius: 4px;
+        }
+      }
+    }
+  }
+}

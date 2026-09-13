@@ -421,6 +421,7 @@
           "accepts": [
             "one length for every corner",
             "a corner name plus a length",
+            "a logical corner or edge plus a length: start-start, start-end, end-start, end-end, inline-start, inline-end, block-start or block-end",
             "four lengths: top-left, top-right, bottom-right, bottom-left"
           ]
         }
@@ -431,7 +432,9 @@
       "examples": [
         ".a { @include border-radius(8px); }",
         ".a { @include border-radius(\"top\", 8px); }",
-        ".a { @include border-radius(1px, 2px, 3px, 4px); }"
+        ".a { @include border-radius(1px, 2px, 3px, 4px); }",
+        ".tab { @include border-radius(\"inline-start\", 8px); }",
+        ".bubble { @include border-radius(\"end-end\", 12px); }"
       ],
       "rejects": [
         ".a { @include border-radius(1px, 2px, 3px); }",
@@ -1570,7 +1573,8 @@
             "bottom",
             "bottom-left",
             "left",
-            "top-left"
+            "top-left",
+            "inline-start, inline-end, block-start or block-end, which follow the writing direction"
           ]
         },
         {
@@ -1600,7 +1604,9 @@
         ".arrow { @include triangle(\"right\", var(--accent), 6px 8px); }",
         ".arrow { @include triangle(\"right\", currentColor); }",
         ".arrow { @include triangle(\"top\", color-mix(in srgb, red 50%, blue)); }",
-        ".arrow { @include triangle(\"bottom\", currentColor, var(--caret-w) var(--caret-h)); }"
+        ".arrow { @include triangle(\"bottom\", currentColor, var(--caret-w) var(--caret-h)); }",
+        ".next { @include triangle(\"inline-end\", currentColor, 8px 12px); }",
+        ".sort { @include triangle(\"block-start\", currentColor); }"
       ],
       "rejects": [
         ".caret { @include triangle(sideways); }",

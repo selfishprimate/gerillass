@@ -7,6 +7,7 @@
       "accepts": [
         "one length for every corner",
         "a corner name plus a length",
+        "a logical corner or edge plus a length: start-start, start-end, end-start, end-end, inline-start, inline-end, block-start or block-end",
         "four lengths: top-left, top-right, bottom-right, bottom-left"
       ]
     }
@@ -14,7 +15,9 @@
   "examples": [
     ".a { @include border-radius(8px); }",
     ".a { @include border-radius(\"top\", 8px); }",
-    ".a { @include border-radius(1px, 2px, 3px, 4px); }"
+    ".a { @include border-radius(1px, 2px, 3px, 4px); }",
+    ".tab { @include border-radius(\"inline-start\", 8px); }",
+    ".bubble { @include border-radius(\"end-end\", 12px); }"
   ],
   "rejects": [
     ".a { @include border-radius(1px, 2px, 3px); }",

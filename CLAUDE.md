@@ -299,7 +299,7 @@ Four levels, and knowing which one covers a member tells you what you can trust:
 | `test/smoke.scss` | the mixin evaluates at all | 54/54 mixins |
 | snapshot of `meta/` examples | the output cannot change unnoticed | 77/77 members |
 | `meta/` rejects | bad input is refused with a real message | 48/77 |
-| sass-true spec in `test/` | the CSS is **correct** | 12/77 |
+| sass-true spec in `test/` | the CSS is **correct** | 13/77 |
 
 Only the last one catches an output that was wrong from the start; a snapshot
 records a wrong value as correct. Hand-written specs are therefore reserved for

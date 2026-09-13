@@ -12,7 +12,8 @@
         "bottom",
         "bottom-left",
         "left",
-        "top-left"
+        "top-left",
+        "inline-start, inline-end, block-start or block-end, which follow the writing direction"
       ]
     },
     {
@@ -37,7 +38,9 @@
     ".arrow { @include triangle(\"right\", var(--accent), 6px 8px); }",
     ".arrow { @include triangle(\"right\", currentColor); }",
     ".arrow { @include triangle(\"top\", color-mix(in srgb, red 50%, blue)); }",
-    ".arrow { @include triangle(\"bottom\", currentColor, var(--caret-w) var(--caret-h)); }"
+    ".arrow { @include triangle(\"bottom\", currentColor, var(--caret-w) var(--caret-h)); }",
+    ".next { @include triangle(\"inline-end\", currentColor, 8px 12px); }",
+    ".sort { @include triangle(\"block-start\", currentColor); }"
   ],
   "rejects": [
     ".caret { @include triangle(sideways); }",

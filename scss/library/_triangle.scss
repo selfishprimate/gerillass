@@ -58,8 +58,15 @@
   @return false;
 }
 
+// The logical directions point along the writing direction rather than a fixed
+// side: inline-end is right in a left-to-right page and left in a right-to-left
+// one. They are kept in a list of their own on purpose. $list-of-directions is
+// shared with border-radius, whose corner branches have no final @else, so a
+// keyword added there without a branch would be accepted and emit nothing.
+$-logical-directions: ("inline-start", "inline-end", "block-start", "block-end");
+
 @mixin triangle($direction: "bottom", $color: black, $size: 10px 8px) {
-  @if list.index($list-of-directions, $direction) {
+  @if list.index($list-of-directions, $direction) or list.index($-logical-directions, $direction) {
     // Halving a size in calc() rather than math.div() keeps var() and clamp()
     // working instead of emitting `var(--w)/2`, which is not valid CSS.
     @each $item in $size {
@@ -99,10 +106,41 @@
       } @else if $direction == "top-left" {
         border-color: $color transparent transparent;
         border-width: list.nth($size, 1) list.nth($size, 1) 0 0;
+      } @else {
+        // The same shapes as right, left, bottom and top, drawn with logical
+        // borders so the browser picks the side. The first size is the length
+        // the triangle points along, the second the width across it.
+        $along: list.nth($size, 1);
+        $across: $along;
+        @if list.length($size) == 2 {
+          $across: list.nth($size, 2);
+        }
+        border-color: transparent;
+        @if $direction == "inline-end" {
+          border-inline-start-color: $color;
+          border-block-width: calc($across / 2);
+          border-inline-start-width: $along;
+          border-inline-end-width: 0;
+        } @else if $direction == "inline-start" {
+          border-inline-end-color: $color;
+          border-block-width: calc($across / 2);
+          border-inline-start-width: 0;
+          border-inline-end-width: $along;
+        } @else if $direction == "block-end" {
+          border-block-start-color: $color;
+          border-inline-width: calc($along / 2);
+          border-block-start-width: $across;
+          border-block-end-width: 0;
+        } @else {
+          border-block-end-color: $color;
+          border-inline-width: calc($along / 2);
+          border-block-start-width: 0;
+          border-block-end-width: $across;
+        }
       }
       @content;
     }
   } @else {
-    @error "The argument for direction must be one of the followings: #{$list-of-directions}";
+    @error "The argument for direction must be one of the followings: #{list.join($list-of-directions, $-logical-directions)}";
   }
 }

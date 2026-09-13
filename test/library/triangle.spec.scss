@@ -134,4 +134,53 @@
       }
     }
   }
+
+  @include it('inline-end points toward the end of the line, drawn with logical borders.') {
+    @include assert {
+      @include output {
+        .caret {
+          // the logical twin of right, 8px long and 12px tall
+          @include triangle("inline-end", red, 8px 12px);
+        }
+      }
+      @include expect {
+        .caret {
+          content: "";
+          height: 0;
+          width: 0;
+          display: inline-block;
+          border-style: solid;
+          border-color: transparent;
+          border-inline-start-color: red;
+          border-block-width: 6px;
+          border-inline-start-width: 8px;
+          border-inline-end-width: 0;
+        }
+      }
+    }
+  }
+
+  @include it('block-end points toward the end of the block, the logical twin of bottom.') {
+    @include assert {
+      @include output {
+        .caret {
+          @include triangle("block-end", black, 10px 8px);
+        }
+      }
+      @include expect {
+        .caret {
+          content: "";
+          height: 0;
+          width: 0;
+          display: inline-block;
+          border-style: solid;
+          border-color: transparent;
+          border-block-start-color: black;
+          border-inline-width: 5px;
+          border-block-start-width: 8px;
+          border-block-end-width: 0;
+        }
+      }
+    }
+  }
 }
