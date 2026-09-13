@@ -1092,7 +1092,7 @@
           "variadic": true,
           "accepts": [
             "nothing, to hide it always",
-            "one breakpoint",
+            "one breakpoint, for exactly that width and no other",
             "min or max plus a breakpoint",
             "a start and an end breakpoint"
           ]
@@ -1100,15 +1100,16 @@
       ],
       "file": "scss/library/_remove.scss",
       "signature": "remove($params...)",
-      "summary": "Hides an element outright, or only within a breakpoint range.",
+      "summary": "Hides an element outright, or within a media query: from a breakpoint up with min, up to it with max, or between two breakpoints. One breakpoint on its own hides the element at exactly that width, a single pixel.",
       "caveats": [
         "With one argument the element is hidden at exactly that width, `(width: 768px)`, which is a single pixel. Use `min`, `max` or a range for anything wider.",
         "A `display` written after the include, in the same rule, is emitted after the `@media` block and wins over it. Write it before the include."
       ],
       "examples": [
         ".a { @include remove; }",
-        ".a { @include remove(\"medium\"); }",
-        ".a { @include remove(\"min\", \"medium\"); }"
+        ".a { @include remove(\"min\", \"medium\"); }",
+        ".a { @include remove(\"max\", \"medium\"); }",
+        ".a { @include remove(\"small\", \"large\"); }"
       ],
       "rejects": [
         ".a { @include remove(a, b, c); }",
