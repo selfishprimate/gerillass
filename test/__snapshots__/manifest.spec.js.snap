@@ -397,6 +397,19 @@ exports[`Manifest examples border-radius: .a { @include border-radius(8px); } 1`
 }"
 `;
 
+exports[`Manifest examples border-radius: .bubble { @include border-radius("end-end", 12px); } 1`] = `
+".bubble {
+  border-end-end-radius: 12px;
+}"
+`;
+
+exports[`Manifest examples border-radius: .tab { @include border-radius("inline-start", 8px); } 1`] = `
+".tab {
+  border-start-start-radius: 8px;
+  border-end-start-radius: 8px;
+}"
+`;
+
 exports[`Manifest examples brand-logo: .logo { @include brand-logo(120px, 40px, "/img/logo.svg"); } 1`] = `
 ".logo {
   display: inline-block;
@@ -1613,6 +1626,36 @@ exports[`Manifest examples triangle: .caret { @include triangle("bottom", black,
   border-style: solid;
   border-color: black transparent transparent;
   border-width: 8px 5px 0;
+}"
+`;
+
+exports[`Manifest examples triangle: .next { @include triangle("inline-end", currentColor, 8px 12px); } 1`] = `
+".next {
+  content: "";
+  height: 0;
+  width: 0;
+  display: inline-block;
+  border-style: solid;
+  border-color: transparent;
+  border-inline-start-color: currentColor;
+  border-block-width: 6px;
+  border-inline-start-width: 8px;
+  border-inline-end-width: 0;
+}"
+`;
+
+exports[`Manifest examples triangle: .sort { @include triangle("block-start", currentColor); } 1`] = `
+".sort {
+  content: "";
+  height: 0;
+  width: 0;
+  display: inline-block;
+  border-style: solid;
+  border-color: transparent;
+  border-block-end-color: currentColor;
+  border-inline-width: 5px;
+  border-block-start-width: 0;
+  border-block-end-width: 8px;
 }"
 `;
 

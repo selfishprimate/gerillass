@@ -1110,6 +1110,18 @@ would be accepted and emit nothing. Give `triangle` its own list.
 border is on the left, as with today's `right`; under `dir="rtl"` it moves to
 the right and the arrow points left. Render the other three when implementing.
 
+**Status.** Implemented, with `triangle`'s logical names in a list of its own,
+`$-logical-directions`, so `$list-of-directions` and `border-radius` are untouched
+by it. The first size is the length the triangle points along and the second the
+width across it, as for the physical directions. Examples and two specs went in
+first and failed. Measured in Chrome 152 against a page of compiled output: all
+four logical directions render the same border widths and colours as `right`,
+`left`, `top` and `bottom` under `dir="ltr"`, and `inline-start` and `inline-end`
+render as `left` and `right` swapped under `dir="rtl"`. Across 239
+`triangle` and `border-radius` calls compiled before and after, no physical call
+changed; only the error message for an unknown direction grew the new names.
+Vertical writing modes were not tried.
+
 ### A2. Logical corners for `border-radius`
 
 **Problem.** The corner names (`top-left`, `cross-right` and the rest) are
@@ -1152,6 +1164,12 @@ documentation page.
 **Verify.** Rendered in Chrome 152 for `inline-start`: the top-left and
 bottom-left radii under `dir="ltr"`, the top-right and bottom-right under
 `dir="rtl"`.
+
+**Status.** Implemented, all eight names in the table, each with its own branch,
+which the mixin's own comment now insists on. A new
+`test/library/border-radius.spec.scss` covers a corner and two edges. Measured in
+Chrome 152 on the same page as A1: every logical name renders the same four radii
+as its physical twin under `dir="ltr"`, and the mirrored twin under `dir="rtl"`.
 
 ### A3. Logical offsets for `position`
 

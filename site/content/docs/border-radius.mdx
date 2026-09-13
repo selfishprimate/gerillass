@@ -17,7 +17,7 @@ The **Border Radius** Sass mixin helps you round the corners of a selected eleme
 ## Arguments
 
 <Arguments of="border-radius">
-  <Argument name="$corner" type="string">Lets you choose which corners of an element you want to style. Accepts the following values: <code>top</code>, <code>top-right</code>, <code>right</code>, <code>bottom-right</code>, <code>bottom</code>, <code>bottom-left</code>, <code>left</code>, <code>top-left</code>, <code>cross-left</code>, <code>cross-right</code>, <code>all</code>.</Argument>
+  <Argument name="$corner" type="string">Lets you choose which corners of an element you want to style. Accepts the following values: <code>top</code>, <code>top-right</code>, <code>right</code>, <code>bottom-right</code>, <code>bottom</code>, <code>bottom-left</code>, <code>left</code>, <code>top-left</code>, <code>cross-left</code>, <code>cross-right</code>, <code>all</code>. The logical corners <code>start-start</code>, <code>start-end</code>, <code>end-start</code> and <code>end-end</code>, named block side first, and the logical edges <code>inline-start</code>, <code>inline-end</code>, <code>block-start</code> and <code>block-end</code> follow the writing direction instead.</Argument>
   <Argument name="$value" type="number (with unit)">The size of the border radius that will be applied.</Argument>
 </Arguments>
 
@@ -114,6 +114,18 @@ Just to remind you once more, these are the predefined values you can use to tar
 ```
 ```html
 <div class="element sandbox large" style="background-color:#5bc0bb"></div>
+```
+</Example>
+
+<Example caption="**Logical corners and edges** follow the writing direction. `inline-start` rounds the side where lines begin: the left in a left-to-right layout, the right in a right-to-left one, from the same rule. Measured in Chrome 152, every logical name renders the same radii as its physical twin in both directions.">
+```scss
+.tab {
+  @include border-radius("inline-start", 16px);
+}
+```
+```html
+<div class="tab" dir="ltr" style="height: 48px; margin-bottom: 12px; background: #5bc0bb;"></div>
+<div class="tab" dir="rtl" style="height: 48px; background: #5bc0bb;"></div>
 ```
 </Example>
 
