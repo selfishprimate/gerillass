@@ -433,11 +433,12 @@ are the ones to trust most.
 
 The file sorts the findings by what they would take: fixes that break nothing
 (`isColor` refusing `var()` and `currentColor`, `position` warning on `null`,
-`breakpoint` silent with three arguments, `counter` failing inside a container
-query), behaviour changes that need a major version or an opt-in, and gaps in
-documentation and the manifest. It also records which of the agents' claims
-turned out wrong, and the two prompt rules that made trial feedback quick to
-check: versions from `npm ls`, and a compiled snippet for every problem.
+`breakpoint` silent with three arguments), behaviour changes that need a major
+version or an opt-in (`counter` failing inside a container query turned out to
+be one, once its fix was measured), and gaps in documentation and the manifest.
+It also records which of the agents' claims turned out wrong, and the two prompt
+rules that made trial feedback quick to check: versions from `npm ls`, and a
+compiled snippet for every problem.
 
 ### What `fix-plan.md` sets out
 
@@ -448,6 +449,18 @@ documentation pages it touches. It is ordered by release. Guardrails come
 first, so that every later fix lands with a test that would have caught it,
 then changes that alter no existing output, then additions, and last the
 behaviour changes that need a major version.
+
+It also carries what no trial hit but a sweep of `var(--x)` through every
+argument found: arithmetic that fails with Sass's own error, CSS function values
+that compile into CSS that cannot work, and values dropped without a word
+(G4, F8 to F10).
+
+Every item was then validated: examples compiled, the 2.1.1 fixes prototyped in
+a throwaway copy and compared call by call with the original, and browser
+measurements where CSS behaviour was the question. That moved the `aspect-ratio`
+and `counter` fixes to 3.0.0, because each changes what renders for a call that
+works today, and corrected four sketches. The plan's Validation section has the
+numbers.
 
 Two of the agents' own suggestions are recorded there as wrong, because each
 would have introduced a defect: widening `isColor` to accept `var()` breaks

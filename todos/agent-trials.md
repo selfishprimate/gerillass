@@ -98,8 +98,11 @@ card starts its own counter.
 | **increment on the item itself, `content` still on `::before`** | **01 02 03** |
 
 Moving `counter-increment` from `.counter-item::before` to `.counter-item`
-fixes it and numbered a plain list the same way. Before shipping it: add a
-`meta/` example, and check Firefox and Safari, which were not tested. The
+fixes it and numbered a plain list the same way. It is not free, though:
+validating `fix-plan.md` measured that an item skipped with `content: none` on
+its `::before` is still counted after the move (`01, 03` instead of `01, 02`),
+so the fix is a behaviour change, B9 there. Before shipping it: add a `meta/`
+example, and check Firefox and Safari, which were not tested. The
 test page, to rebuild the table:
 
 ```html
@@ -240,7 +243,7 @@ is the positioning argued for in `verifiable-css-layer.md`.
 
 Trial 3: none of its verified claims was wrong. Its note that `hide` calls the
 global `index()` is true of the source, but compiling `hide(nonsense)` printed
-no deprecation warning here.
+no deprecation warning here and raised the library's own message.
 
 ## Trial 3 in brief
 
