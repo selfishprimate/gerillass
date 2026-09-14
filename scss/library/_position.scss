@@ -1,21 +1,41 @@
 @charset "UTF-8";
 
 @use "sass:list";
+@use "sass:meta";
 @use "../utilities/shorthand-property" as *;
 @use "../utilities/validate-length" as *;
 
-@mixin position($position: absolute, $offsets: 0) {
+// Sets position and its four offsets in shorthand order: top, right, bottom,
+// left, as `margin` and `padding` take them.
+//
+// Pass $logical: true for the offsets that follow the writing direction, the
+// same choice `triangle` and `border-radius` offer with their logical names.
+// The shorthand order stays the same and each position maps to its logical
+// twin: top to inset-block-start, right to inset-inline-end, bottom to
+// inset-block-end, left to inset-inline-start. Measured in Chrome 152: under
+// dir="ltr" each logical offset put the box where its physical twin did, and
+// under dir="rtl" where the mirrored twin did, while a physical `left: 16px`
+// stayed 16px from the left in both. For one offset, writing inset-* by hand is
+// as short; the argument is here so the library behaves the same way
+// everywhere.
+@mixin position($position: absolute, $offsets: 0, $logical: false) {
+  // null is read as false, as a null argument means "not set" across the
+  // library, so a caller can pass a variable that may be unset.
+  @if $logical != true and $logical != false and $logical != null {
+    @error "`#{meta.inspect($logical)}` is not a valid $logical for `position`. Pass true for offsets that follow the writing direction, or false for top, right, bottom and left.";
+  }
+
   $offsets: shorthandProperty($offsets);
-  $positioning-offsets: (
-    top: list.nth($offsets, 1),
-    right: list.nth($offsets, 2),
-    bottom: list.nth($offsets, 3),
-    left: list.nth($offsets, 4),
-  );
+  $edges: top right bottom left;
+  @if $logical {
+    $edges: inset-block-start inset-inline-end inset-block-end inset-inline-start;
+  }
+
   position: $position;
-  @each $offset, $value in $positioning-offsets {
+  @for $i from 1 through 4 {
+    $value: list.nth($offsets, $i);
     @if validateLength($value) {
-      #{$offset}: $value;
+      #{list.nth($edges, $i)}: $value;
     }
   }
 }

@@ -19,6 +19,7 @@ The **Position Sass mixin** provides a one-line method to quickly set both the p
 <Arguments of="position" footnote="To learn more about CSS shorthand properties, check out the links at the end of this page.">
   <Argument name="$position" type="string">Sets the <code>position</code> property of the selected elements. Accepts the CSS values <code>static</code>, <code>relative</code>, <code>fixed</code>, <code>absolute</code>, and <code>sticky</code>. The default value is <code>absolute</code>.</Argument>
   <Argument name="$offsets" type="list">Accepts a list of values to set the offsets of the box edges. It uses the CSS shorthand method. The default value is <code>0</code>. Use <code>null</code> in any position to leave that edge out.</Argument>
+  <Argument name="$logical (false)" type="boolean">Pass <code>true</code> for offsets that follow the writing direction. The shorthand order stays the same, and each value goes to the logical twin of its edge: <code>inset-block-start</code>, <code>inset-inline-end</code>, <code>inset-block-end</code> and <code>inset-inline-start</code>. The same choice <code>triangle</code> and <code>border-radius</code> offer with their logical names. <code>null</code> is read as <code>false</code>.</Argument>
 </Arguments>
 
 ## Examples
@@ -71,7 +72,24 @@ The **Position Sass mixin** provides a one-line method to quickly set both the p
 ```
 </Example>
 
+<Example caption="**Logical offsets** follow the writing direction. `1rem` goes to the start of the line: the left of a left-to-right box and the right of a right-to-left one, from the same rule. Measured in Chrome 152, a physical `left` stayed on the left in both boxes.">
+```scss
+.badge {
+  @include position(absolute, 0.75rem auto auto 0.75rem, $logical: true);
+}
+```
+```html
+<div dir="ltr" style="position: relative; height: 72px; background: #eef2f3; border-radius: 6px; margin-bottom: 8px">
+  <span class="badge" style="padding: 2px 10px; background: #5bc0bb; color: #fff; border-radius: 999px; font: 500 12px/1.6 system-ui, sans-serif">New</span>
+</div>
+<div dir="rtl" lang="ar" style="position: relative; height: 72px; background: #eef2f3; border-radius: 6px">
+  <span class="badge" style="padding: 2px 10px; background: #5bc0bb; color: #fff; border-radius: 999px; font: 500 12px/1.6 system-ui, sans-serif">جديد</span>
+</div>
+```
+</Example>
+
 ## Related Links
 * [CSS Shorthand Properties](https://developer.mozilla.org/en-US/docs/Web/CSS/Shorthand_properties)
+* [CSS inset-inline-start](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/inset-inline-start)
 * [Introduction to CSS Shorthand](https://www.sitepoint.com/introduction-css-shorthand/)
 

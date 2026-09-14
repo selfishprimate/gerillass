@@ -1131,18 +1131,31 @@
             "one to four lengths in shorthand order, or auto/inherit/initial/0",
             "null in any position to leave that edge out"
           ]
+        },
+        {
+          "name": "$logical",
+          "default": "false",
+          "accepts": [
+            "false, the default, for top, right, bottom and left",
+            "null, read as false",
+            "true for inset-block-start, inset-inline-end, inset-block-end and inset-inline-start, which follow the writing direction"
+          ]
         }
       ],
       "file": "scss/library/_position.scss",
-      "signature": "position($position: absolute, $offsets: 0)",
+      "signature": "position($position: absolute, $offsets: 0, $logical: false)",
       "summary": "Sets position and offsets in one call, using shorthand order.",
       "examples": [
         ".a { @include position(absolute, 0); }",
         ".a { @include position(fixed, 0 10px); }",
         ".a { @include position(absolute, null 16px 16px 16px); }",
-        ".a { @include position(absolute, 0 null null 0); }"
+        ".a { @include position(absolute, 0 null null 0); }",
+        ".badge { @include position(absolute, 0 auto auto 1rem, $logical: true); }",
+        ".a { @include position(absolute, 0, $logical: null); }"
       ],
-      "rejects": []
+      "rejects": [
+        ".badge { @include position(absolute, 0, $logical: yes); }"
+      ]
     },
     {
       "name": "radial-gradient",
