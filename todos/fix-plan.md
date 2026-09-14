@@ -1270,6 +1270,27 @@ calls compile byte-identical before and after; the audit's SILENT, UNHELPFUL and
 BROKEN buckets stay empty, and REFUSED VALID CSS grows by the three probes on
 `$font-display`, each of which a browser drops too.
 
+**Follow-up: var() in the family, the style and the weight.** Implemented in
+2.2.0. Measured in Chrome 152 first, a `@font-face` rule dropped
+`font-family: var(--f)`, `font-style: var(--s)`, `font-weight: var(--w)` and
+`font-weight: 100 var(--w)`, and a rule with no family is never used; the mixin
+passed all four through. They now raise. A quoted `"var(--f)"` family was kept by
+the browser as a name, so it is left alone, as a quoted path already was. The
+same measurement found `font-style: "italic"` and `font-weight: "bold"` dropped,
+which is what a quoted argument produced, so a quoted style or weight is now
+written without its quotes; the family keeps them.
+
+A sass-true spec could not hold this: `font-face` refuses to run below the root,
+and sass-true wraps its output block in `.test-output`. Four rejects and a quoted
+example in `meta/font-face.json` hold it instead; the rejects failed first. Of
+6725 calls, 3924 changed and every one was expected: 2632 from CSS to the var()
+error, 564 losing the quotes on the style or weight, and 728 that already failed
+now failing on var() before the format check. The audit's REFUSED VALID CSS went
+from 12 to 15, the var() probe on the three arguments; nothing else moved.
+
+Not done: an unquoted generic or CSS-wide family such as `sans-serif` or
+`inherit`, and `env()` in the family, which the same rule dropped.
+
 ### A5. `focus-visible` and `user-invalid` for `all-text-inputs`
 
 **Problem.** The accepted states are `hover`, `focus`, `active`, `invalid`,

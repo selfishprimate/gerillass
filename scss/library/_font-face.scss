@@ -25,9 +25,24 @@
     // The path is written into url("..."), where var() is only text: the
     // browser would request a file literally named var(--x).woff2.
     @error "`#{$file-path}` is not a valid $file-path for `font-face`. A custom property cannot supply a font path, because the path is written into url() as text. Pass the path as a string.";
+  } @else if string.slice(meta.inspect($font-family), 1, 1) != "\"" and string.index($font-family, "var(") {
+    // Measured in Chrome 152, a @font-face rule dropped `font-family: var(--f)`,
+    // and a rule with no family is never used. A quoted "var(--f)" is only a
+    // name, which the browser kept, so it is left alone like a quoted path.
+    @error "`#{$font-family}` is not a valid $font-family for `font-face`. A custom property cannot supply it, because a @font-face rule drops var() in a descriptor, and without a family the font is never used. Pass the family name as a string, such as `\"Inter\"`.";
   } @else {
     
     $list: ();
+
+    // The same rule dropped `font-style: var(--s)`, `font-weight: var(--w)` and
+    // `font-weight: 100 var(--w)`, so var() is refused anywhere in either,
+    // before $font-style is reinterpreted below.
+    @if string.index(meta.inspect($font-style), "var(") {
+      @error "`#{meta.inspect($font-style)}` is not a valid $font-style for `font-face`. A custom property cannot supply it, because a @font-face rule drops var() in a descriptor. Pass the style itself, such as `italic`.";
+    }
+    @if string.index(meta.inspect($font-weight), "var(") {
+      @error "`#{meta.inspect($font-weight)}` is not a valid $font-weight for `font-face`. A custom property cannot supply it, because a @font-face rule drops var() in a descriptor. Pass the weight itself, such as `700`, or a range such as `160 700`.";
+    }
 
     @if list.index(100 200 300 400 500 600 700 800 900, $font-style) {
       $font-weight: $font-style;
@@ -79,8 +94,20 @@
         $list: list.append($list, fontSource($font-family, $file-path, list.nth($file-formats, $i)), comma);
       }
       src: $list;
-      font-style: $font-style;
-      font-weight: $font-weight;
+      // A quoted keyword is written without its quotes. Measured in Chrome 152,
+      // `font-style: "italic"` and `font-weight: "bold"` were dropped, and this
+      // is what a quoted argument used to produce. The family keeps its quotes,
+      // since there they make it a name.
+      @if meta.type-of($font-style) == "string" {
+        font-style: string.unquote($font-style);
+      } @else {
+        font-style: $font-style;
+      }
+      @if meta.type-of($font-weight) == "string" {
+        font-weight: string.unquote($font-weight);
+      } @else {
+        font-weight: $font-weight;
+      }
       @if $font-display {
         font-display: string.unquote($font-display);
       }
