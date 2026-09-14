@@ -39,6 +39,71 @@
     }
   }
 
+  // The image path is written unquoted, as it always was, unless it holds a
+  // character an unquoted url() cannot: measured in Chrome 152, `url(a b)` was
+  // dropped and `url("a b")` kept and resolved to `a%20b`.
+  @include it('Writes a plain image path unquoted.') {
+    @include assert {
+      @include output {
+        .a { @include background-dots(red, $image: "/img/a.png"); }
+      }
+      @include expect {
+        .a {
+          background-image: radial-gradient(red 1em, transparent 0), radial-gradient(red 1em, transparent 0);
+          background-position: 2.5em 2.5em, 10em 10em;
+          background-size: 5em 5em;
+          background-repeat: repeat;
+          position: relative;
+        }
+        .a::before {
+          content: "";
+          display: block;
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          top: 0;
+          left: 0;
+          background-image: url(/img/a.png);
+          background-repeat: no-repeat;
+          background-position: center;
+          background-size: cover;
+          z-index: -1;
+        }
+      }
+    }
+  }
+
+  @include it('Quotes an image path holding a space.') {
+    @include assert {
+      @include output {
+        .a { @include background-dots(red, $image: "/img/a b.png"); }
+      }
+      @include expect {
+        .a {
+          background-image: radial-gradient(red 1em, transparent 0), radial-gradient(red 1em, transparent 0);
+          background-position: 2.5em 2.5em, 10em 10em;
+          background-size: 5em 5em;
+          background-repeat: repeat;
+          position: relative;
+        }
+        .a::before {
+          content: "";
+          display: block;
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          top: 0;
+          left: 0;
+          background-image: url("/img/a b.png");
+          background-repeat: no-repeat;
+          background-position: center;
+          background-size: cover;
+          z-index: -1;
+        }
+      }
+    }
+  }
+
   @include it('A custom property size is multiplied in calc(), since Sass cannot.') {
     @include assert {
       @include output {

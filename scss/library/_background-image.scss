@@ -23,7 +23,7 @@
     @if $filter-color {
       @if list.length($filter-color) == 1 {
         background-image: linear-gradient(to top, $filter-color, $filter-color),
-          imageValue($image-url);
+          imageValue($image-url, "background-image", "$image-url");
       } @else if list.length($filter-color) > 1 {
         $color-list: ();
         @for $i from 1 through list.length($filter-color) {
@@ -35,22 +35,22 @@
                 map.get($map-for-directions, $filter-direction),
                 $color-list
               ),
-              imageValue($image-url);
+              imageValue($image-url, "background-image", "$image-url");
           } @else {
             @if meta.type-of($filter-direction) == "number" and list.index("deg", math.unit($filter-direction)) {
               background-image: linear-gradient($filter-direction, $color-list),
-                imageValue($image-url);
+                imageValue($image-url, "background-image", "$image-url");
             } @else {
               @error "`#{$filter-direction}` is not a valid $filter-direction. Pass an angle such as `45deg`, or one of: #{map.keys($map-for-directions)}.";
             }
           }
         } @else {
           background-image: linear-gradient(to top, $color-list),
-            imageValue($image-url);
+            imageValue($image-url, "background-image", "$image-url");
         }
       }
     } @else {
-      background-image: imageValue($image-url);
+      background-image: imageValue($image-url, "background-image", "$image-url");
     }
   } @else {
     position: relative;

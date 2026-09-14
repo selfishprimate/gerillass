@@ -4,7 +4,7 @@
 
 @mixin text-image($image: null) {
   @if $image {
-    background-image: imageValue($image);
+    background-image: imageValue($image, "text-image", "$image");
   }
   background-size: cover;
   background-position: center;

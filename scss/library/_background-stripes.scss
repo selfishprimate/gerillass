@@ -25,7 +25,7 @@
     @error "`#{$image}` is not a valid $image for `background-stripes`. Pass an image path as a string.";
   }
   $validate-unit: if(not list.index("deg", math.unit($rotation)), $rotation + deg, $rotation);
-  $get-image: if($image, string.unquote(", ") + imageValue($image, $unquote: true), string.unquote(""));
+  $get-image: if($image, string.unquote(", ") + imageValue($image, "background-stripes", "$image", $unquote: true), string.unquote(""));
   @if not $color {
     $color: rgba(0, 0, 0, 0.1);
     background-image: repeating-linear-gradient(

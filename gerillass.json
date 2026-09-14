@@ -238,7 +238,7 @@
           "name": "$image",
           "default": "null",
           "accepts": [
-            "an image path to sit behind the dots",
+            "an image path to sit behind the dots, written unquoted unless it holds a space, a parenthesis or a quote, which are quoted",
             "var(), url(), image-set() or a gradient, written as they are rather than wrapped in url()"
           ]
         }
@@ -269,7 +269,7 @@
           "name": "$image-url",
           "default": "null",
           "accepts": [
-            "an image path",
+            "an image path, as a string; a list, a number, a colour or a boolean is refused",
             "null to filter the element itself instead",
             "var(), url(), image-set() or a gradient, written as they are rather than wrapped in url()"
           ]
@@ -303,7 +303,9 @@
       "rejects": [
         ".a { @include background-image(\"/img/a.png\", (red, blue), sideways); }",
         ".a { @include background-image(\"/img/a.png\", rgba(0,0,0,0.5), sideways); }",
-        ".a { @include background-image(null, rgba(0,0,0,0.5), sideways); }"
+        ".a { @include background-image(null, rgba(0,0,0,0.5), sideways); }",
+        ".a { @include background-image(16 9); }",
+        ".a { @include background-image(42); }"
       ]
     },
     {
@@ -336,7 +338,7 @@
           "name": "$image",
           "default": "null",
           "accepts": [
-            "an image path to sit behind the stripes",
+            "an image path to sit behind the stripes, written unquoted unless it holds a space, a parenthesis or a quote, which are quoted",
             "var(), url(), image-set() or a gradient, written as they are rather than wrapped in url()"
           ]
         }
@@ -463,7 +465,7 @@
           "name": "$image-url",
           "default": "null",
           "accepts": [
-            "an image path",
+            "an image path, as a string; a list, a number, a colour or a boolean is refused",
             "var(), url(), image-set() or a gradient, written as they are rather than wrapped in url()"
           ]
         }
@@ -475,7 +477,10 @@
         ".logo { @include brand-logo(120px, 40px, \"/img/logo.svg\"); }",
         ".logo { @include brand-logo(120px, 40px, var(--logo)); }"
       ],
-      "rejects": []
+      "rejects": [
+        ".logo { @include brand-logo(120px, 40px, \"/img/a.svg\" \"/img/b.svg\"); }",
+        ".logo { @include brand-logo(120px, 40px, true); }"
+      ]
     },
     {
       "name": "breakpoint",
@@ -1495,7 +1500,7 @@
           "accepts": [
             "an image path ending in .png, .jpg or .svg",
             "a background position",
-            "both, image first"
+            "both, image first, where the image is one path as a string"
           ]
         }
       ],
@@ -1508,7 +1513,9 @@
         ".icon { @include sprite(0 -40px); }"
       ],
       "rejects": [
-        ".icon { @include sprite(\"/img/sprite.txt\"); }"
+        ".icon { @include sprite(\"/img/sprite.txt\"); }",
+        ".icon { @include sprite(\"/img/a.png\" \"/img/b.png\", 0 -40px); }",
+        ".icon { @include sprite(42, 0 -40px); }"
       ]
     },
     {
@@ -1605,7 +1612,7 @@
           "name": "$image",
           "default": "null",
           "accepts": [
-            "an image path",
+            "an image path, as a string; a list, a number, a colour or a boolean is refused",
             "var(), url(), image-set() or a gradient, written as they are rather than wrapped in url()"
           ]
         }
@@ -1617,7 +1624,10 @@
         ".a { @include text-image(\"/img/t.png\"); }",
         ".a { @include text-image(var(--texture)); }"
       ],
-      "rejects": []
+      "rejects": [
+        ".a { @include text-image(16 9); }",
+        ".a { @include text-image(#ff0000); }"
+      ]
     },
     {
       "name": "text-selection",

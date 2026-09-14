@@ -1,0 +1,61 @@
+// background-stripes writes its image path unquoted, as it always has, unless
+// the path holds a character an unquoted url() cannot. Measured in Chrome 152,
+// `url(a b)`, `url(a(1).png)` and `url(a'b.png)` were dropped, while the same
+// paths in quotes were kept and resolved to the file.
+@use 'true' as *;
+@use '../../scss/gerillass' as *;
+
+@include describe('background-stripes()') {
+  @include it('Writes a plain image path unquoted.') {
+    @include assert {
+      @include output {
+        .a { @include background-stripes(red, 2em, -30deg, "/img/a.png"); }
+      }
+      @include expect {
+        .a {
+          background-image: repeating-linear-gradient(-30deg, red 0, red 2em, transparent 2em, transparent 4em), url(/img/a.png);
+          background-position: center;
+          background-repeat: no-repeat;
+          background-size: cover;
+        }
+      }
+    }
+  }
+
+  @include it('Quotes a path holding a space, a parenthesis or a quote.') {
+    @include assert {
+      @include output {
+        .a { @include background-stripes(red, 2em, -30deg, "/img/a b.png"); }
+        .b { @include background-stripes(red, 2em, -30deg, "/img/a(1).png"); }
+        .c { @include background-stripes(red, 2em, -30deg, "/img/it's.png"); }
+        .d { @include background-stripes(red, 2em, -30deg, '/img/a"b.png'); }
+      }
+      @include expect {
+        .a {
+          background-image: repeating-linear-gradient(-30deg, red 0, red 2em, transparent 2em, transparent 4em), url("/img/a b.png");
+          background-position: center;
+          background-repeat: no-repeat;
+          background-size: cover;
+        }
+        .b {
+          background-image: repeating-linear-gradient(-30deg, red 0, red 2em, transparent 2em, transparent 4em), url("/img/a(1).png");
+          background-position: center;
+          background-repeat: no-repeat;
+          background-size: cover;
+        }
+        .c {
+          background-image: repeating-linear-gradient(-30deg, red 0, red 2em, transparent 2em, transparent 4em), url("/img/it's.png");
+          background-position: center;
+          background-repeat: no-repeat;
+          background-size: cover;
+        }
+        .d {
+          background-image: repeating-linear-gradient(-30deg, red 0, red 2em, transparent 2em, transparent 4em), url('/img/a"b.png');
+          background-position: center;
+          background-repeat: no-repeat;
+          background-size: cover;
+        }
+      }
+    }
+  }
+}

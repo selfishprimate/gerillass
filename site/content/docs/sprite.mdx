@@ -88,6 +88,19 @@ the size of one tile, and you need to know it.
 ```
 </Example>
 
+## What it refuses
+
+With two arguments the first has to be one path. Until 2.3.2 it was not checked, so a list went into `url()`, which a browser drops, leaving the element without its sheet.
+
+```scss
+.element {
+  @include sprite("/img/a.png" "/img/b.png", 0 -40px);
+}
+```
+```text
+Error: `"/img/a.png" "/img/b.png"` is not a valid image path for `sprite`: with two arguments the first is one path as a string, and a browser drops a list in `url()`. Pass a path such as `"/img/sprite.png"`, then the position.
+```
+
 ## Related Links
 
 - [Implementing Image Sprites in CSS](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Images/Implementing_image_sprites_in_CSS)

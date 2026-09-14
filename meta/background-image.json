@@ -5,7 +5,7 @@
     {
       "name": "$image-url",
       "accepts": [
-        "an image path",
+        "an image path, as a string; a list, a number, a colour or a boolean is refused",
         "null to filter the element itself instead",
         "var(), url(), image-set() or a gradient, written as they are rather than wrapped in url()"
       ]
@@ -34,6 +34,8 @@
   "rejects": [
     ".a { @include background-image(\"/img/a.png\", (red, blue), sideways); }",
     ".a { @include background-image(\"/img/a.png\", rgba(0,0,0,0.5), sideways); }",
-    ".a { @include background-image(null, rgba(0,0,0,0.5), sideways); }"
+    ".a { @include background-image(null, rgba(0,0,0,0.5), sideways); }",
+    ".a { @include background-image(16 9); }",
+    ".a { @include background-image(42); }"
   ]
 }

@@ -69,7 +69,7 @@
       height: 100%;
       top: 0;
       left: 0;
-      background-image: imageValue($image, $unquote: true);
+      background-image: imageValue($image, "background-dots", "$image", $unquote: true);
       background-repeat: no-repeat;
       background-position: center;
       background-size: cover;

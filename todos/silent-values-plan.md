@@ -447,6 +447,58 @@ Decision 4.
 **Touches.** Five partials, their `meta/` files. `sprite` builds its own
 `url()` and has the same path problem; include it.
 
+**Status.** Done, not released.
+
+*Measured first*, in Chrome 152. Dropped: `url(16 9)`, `url(a b)`,
+`url(a(1).png)`, `url(a'b.png)`. Kept: the same paths in quotes, which
+resolved to the file (`url("a b")` to `a%20b`), and also `url(42)`, `url(true)`
+and `url(#ff0000)`.
+
+*What changed from the plan.* The plan saw one problem per group, and there
+were two. `background-image`, `brand-logo` and `text-image` write
+`url($value)`, which keeps a quoted path's quotes, so a path with a space was
+already fine there; their problem was the kind of value, which they never
+checked. `background-dots` and `background-stripes` checked the kind but
+unquoted the path, so there the space was the problem. `sprite` with one
+argument checks its path; with two it checked nothing.
+
+`imageValue` in `scss/internal/` now takes the mixin and argument names and:
+
+- refuses a list where one image is meant;
+- refuses a number, a colour, a boolean or a calculation, which the first three
+  mixins passed into `url()`;
+- in the two pattern mixins, quotes a path holding a space, a parenthesis or a
+  quote, in single quotes with any single quote escaped when the path holds a
+  double quote, and writes every other path as before.
+
+`sprite` refuses a non-string path in its two-argument form.
+
+*Beyond the report's rule, and said so.* S1 to S3 refused only what compiled
+into CSS the browser drops. Of the 93 calls S4 turns into an error, the old CSS
+of 30 was dropped: the lists and `url(calc(...))`, `url(clamp(...))`,
+`url(min(...))`. The other 63 were kept, as `url(42)`, `url(10deg)`,
+`url(red)`, `url(40em)`, `url(true)`, `url(1)` from `sprite(1, 2)`: valid
+syntax that asks for a file of that name, which is never an image. They are
+refused because an image path is a string, which `background-dots` and
+`background-stripes` already required. If that is judged too strict, the
+non-string check is one `@if` in `_image-value.scss` and can come out without
+touching the rest.
+
+*Verified.* The 16 new rejects (8, bare and prefixed) failed before the change.
+The quoting specs could not even run before it: `url(/img/it's.png)` opened a
+string that broke sass-true's CSS parser, taking the whole Sass suite down,
+which was the defect itself. `npm test` 821 passed after. The compile matrix
+against S3: 7407 calls identical, 93 from CSS to an error, 2 with changed CSS
+(the `"a b"` path in the two pattern mixins, now quoted), none from an error to
+CSS. The five quoted outputs, including a path with both kinds of quote, were
+kept in Chrome and resolved to the right file name. The audit: PASSED THROUGH
+fell from 408 to 390, REFUSED VALID CSS rose from 262 to 265, the three
+`calc(1rem + 2px)` images, whose `url()` the browser drops; SILENT, UNHELPFUL
+and BROKEN OUTPUT stayed at 0. `tools/check-docs.js` now counts `imageValue` as
+validation, so `brand-logo` and `text-image` join the validating mixins, 44 of
+49. Six documentation pages updated, messages copied from a compile, and the
+site builds.
+
 ## S5. The unit bug
 
 **Problem.** `background-stripes` adds `deg` to any `$rotation` whose unit is

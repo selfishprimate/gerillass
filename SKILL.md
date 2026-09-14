@@ -76,6 +76,7 @@ a dropped declaration rather than an error.
 | `before` | `.a { @include before(42) { color: red; } }` |
 | `border-box` | `@include border-box(only);` |
 | `border-radius` | `.a { @include border-radius(1px, 2px, 3px); }` |
+| `brand-logo` | `.logo { @include brand-logo(120px, 40px, "/img/a.svg" "/img/b.svg"); }` |
 | `breakpoint` | `.a { @include breakpoint("between", "medium", "large") { color: red; } }` |
 | `breakpointer` | `.a { @include breakpointer(42); }` |
 | `center` | `.modal { @include center(diagonal); }` |
@@ -105,6 +106,7 @@ a dropped declaration rather than an error.
 | `stretched-link` | `.card a { @include stretched-link(middle); }` |
 | `tablet` | `.a { @include tablet(Surface) { display: none; } }` |
 | `text-gradient` | `.a { @include text-gradient(sideways, (red, blue)); }` |
+| `text-image` | `.a { @include text-image(16 9); }` |
 | `text-selection` | `.a { @include text-selection(bogus) { background: yellow; } }` |
 | `text-shadow` | `.a { @include text-shadow(42); }` |
 | `tokens` | `:root { @include tokens(#fff); }` |

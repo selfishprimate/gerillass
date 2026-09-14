@@ -17,7 +17,7 @@
     {
       "name": "$image-url",
       "accepts": [
-        "an image path",
+        "an image path, as a string; a list, a number, a colour or a boolean is refused",
         "var(), url(), image-set() or a gradient, written as they are rather than wrapped in url()"
       ]
     }
@@ -26,5 +26,8 @@
     ".logo { @include brand-logo(120px, 40px, \"/img/logo.svg\"); }",
     ".logo { @include brand-logo(120px, 40px, var(--logo)); }"
   ],
-  "rejects": []
+  "rejects": [
+    ".logo { @include brand-logo(120px, 40px, \"/img/a.svg\" \"/img/b.svg\"); }",
+    ".logo { @include brand-logo(120px, 40px, true); }"
+  ]
 }

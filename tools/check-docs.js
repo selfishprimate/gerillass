@@ -31,8 +31,10 @@ const utilFiles = list("scss/utilities", /^@function/m);
 const withArgs = libFiles.filter((f) => /^@mixin\s+[\w-]+\s*\(/m.test(read(`scss/library/${f}`)));
 // isCssFunction is left out: it picks a branch, emitting var() as it is rather
 // than quoting it, and refuses nothing. `counter` calls it and validates none of
-// its arguments.
-const validating = withArgs.filter((f) => /@error|\bvalidate[A-Z]|\bis(?!CssFunction\b)[A-Z][a-z]/.test(read(`scss/library/${f}`)));
+// its arguments. imageValue is counted: it refuses a list or a non-string image
+// from scss/internal/, so brand-logo and text-image validate without an @error
+// of their own.
+const validating = withArgs.filter((f) => /@error|\bvalidate[A-Z]|\bis(?!CssFunction\b)[A-Z][a-z]|\bimageValue\(/.test(read(`scss/library/${f}`)));
 
 const specs = [
   ...fs.readdirSync(path.join(ROOT, "test/library")),

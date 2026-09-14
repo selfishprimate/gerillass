@@ -9,7 +9,7 @@
   width: $width;
   height: $height;
   @if $image-url {
-    background-image: imageValue($image-url);
+    background-image: imageValue($image-url, "brand-logo", "$image-url");
   }
   background-position: center;
   background-repeat: no-repeat;

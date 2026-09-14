@@ -20,7 +20,7 @@ The **Background Stripes** Sass mixin allows you to create stylish and colorful 
   <Argument name="$color" type="list">The color or colors of the stripes. By default there is only one color, a translucent black. Accepts one or more color values to create multiple color stops.</Argument>
   <Argument name="$thickness" type="number<br/>(with unit), function">The thickness of the stripes. The default value is <code>1em</code>. Also accepts <code>var()</code>, <code>env()</code>, or a calculation such as <code>calc()</code> or <code>clamp()</code>.</Argument>
   <Argument name="$rotation" type="number<br/>(with deg unit)">The rotation of the stripes. The default value is <code>-45deg</code>. This option lets you create diagonal or straight stripes very easily.</Argument>
-  <Argument name="$image" type="string<br/>(quoted), function">Accepts the URL of an image. This option helps you add an image underneath the stripes to create more stylish design elements. A value that already is an image, <code>var()</code>, <code>url()</code>, <code>image-set()</code> or a gradient, is written as it is rather than wrapped in <code>url()</code>.</Argument>
+  <Argument name="$image" type="string<br/>(quoted), function">Accepts the URL of an image. This option helps you add an image underneath the stripes to create more stylish design elements. A value that already is an image, <code>var()</code>, <code>url()</code>, <code>image-set()</code> or a gradient, is written as it is rather than wrapped in <code>url()</code>. The path is written without quotes unless it holds a space, a parenthesis or a quote, which an unquoted <code>url()</code> cannot: since 2.3.2 those are quoted, where before the browser dropped them.</Argument>
 </Arguments>
 
 ## Examples
@@ -97,6 +97,16 @@ The **Background Stripes** Sass mixin allows you to create stylish and colorful 
 Just play with the values of the given arguments to create more interesting things. **Use your imagination!**
 ```
 </Example>
+
+## Image paths with a space
+
+Measured in Chrome 152, `url(/img/a b.png)`, `url(/img/a(1).png)` and `url(/img/it's.png)` are dropped, while the same paths in quotes load the file. The mixin used to write every path unquoted, so those produced no image. It now quotes them, and only them: a plain path is written as before.
+
+```scss
+.element {
+  @include background-stripes(red, 2em, -30deg, "/img/it's.png");
+}
+```
 
 ## Related Links
 

@@ -24,6 +24,12 @@
   } @else if list.length($params) == 2 {
     $image-url: list.nth($params, 1);
     $position: list.nth($params, 2);
+    // The one-argument form checks its path; this one did not, so a list was
+    // written into url(), which a browser drops, and a number asked for a file
+    // of that name. Measured in Chrome 152: `url(16 9)` was dropped.
+    @if meta.type-of($image-url) != "string" {
+      @error "`#{meta.inspect($image-url)}` is not a valid image path for `sprite`: with two arguments the first is one path as a string, and a browser drops a list in `url()`. Pass a path such as `\"/img/sprite.png\"`, then the position.";
+    }
     display: inline-block;
     background-image: url($image-url);
     background-position: $position;

@@ -24,7 +24,7 @@
     {
       "name": "$image",
       "accepts": [
-        "an image path to sit behind the stripes",
+        "an image path to sit behind the stripes, written unquoted unless it holds a space, a parenthesis or a quote, which are quoted",
         "var(), url(), image-set() or a gradient, written as they are rather than wrapped in url()"
       ]
     }
