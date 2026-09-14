@@ -17,6 +17,10 @@ $-length-units: "px" "cm" "mm" "q" "in" "pt" "pc" "em" "rem" "ex" "rex" "ch" "rc
 // length and a negative resolution never matched; `0dppx` was kept.
 $-resolution-units: "dpi" "dpcm" "dppx" "x";
 
+// Angles, for an oblique `font-style`: `oblique 0.2rad` was kept in a @font-face
+// rule and `oblique 10`, unitless, was dropped.
+$-angle-units: "deg" "grad" "rad" "turn";
+
 // True for a value a @media or @container condition can match: a number in one
 // of the units above, a calculation, or either written as a quoted string, which
 // Sass writes into a condition without its quotes, so `breakpoint(min, "600px")`
@@ -24,12 +28,19 @@ $-resolution-units: "dpi" "dpcm" "dppx" "x";
 // `clamp()`, `min()` and `max()` were all kept, and Sass reduces `calc(10deg)`
 // to a number before it gets here, so that one is checked like any other.
 //
-// $kind is "length" or "resolution". A negative length was kept, since it is
-// valid and simply matches every width or none; a negative resolution was not.
+// $kind is "length" or "resolution" for a condition. A negative length was
+// kept, since it is valid and simply matches every width or none; a negative
+// resolution was not. Two more kinds serve values outside a condition, where a
+// caller rules out a negative itself if the property does: "length-percentage",
+// a length or a percentage, and "angle".
 @function isConditionValue($value, $kind: "length") {
   $units: $-length-units;
   @if $kind == "resolution" {
     $units: $-resolution-units;
+  } @else if $kind == "length-percentage" {
+    $units: list.append($-length-units, "%");
+  } @else if $kind == "angle" {
+    $units: $-angle-units;
   }
 
   @if meta.type-of($value) == "calculation" {
@@ -37,7 +48,7 @@ $-resolution-units: "dpi" "dpcm" "dppx" "x";
   }
   @if meta.type-of($value) == "number" {
     @if math.is-unitless($value) {
-      @return $kind == "length" and $value == 0;
+      @return ($kind == "length" or $kind == "length-percentage") and $value == 0;
     }
     @if $kind == "resolution" and $value < 0 {
       @return false;
@@ -74,7 +85,7 @@ $-resolution-units: "dpi" "dpcm" "dppx" "x";
   }
   @if $unit-start == null {
     // A quoted unitless number: only zero, and only for a length.
-    @return $kind == "length" and not string.index($text, "1") and not string.index($text, "2") and not string.index($text, "3") and not string.index($text, "4") and not string.index($text, "5") and not string.index($text, "6") and not string.index($text, "7") and not string.index($text, "8") and not string.index($text, "9");
+    @return ($kind == "length" or $kind == "length-percentage") and not string.index($text, "1") and not string.index($text, "2") and not string.index($text, "3") and not string.index($text, "4") and not string.index($text, "5") and not string.index($text, "6") and not string.index($text, "7") and not string.index($text, "8") and not string.index($text, "9");
   }
   @if $kind == "resolution" and string.index(string.slice($text, 1, $unit-start - 1), "-") {
     @return false;

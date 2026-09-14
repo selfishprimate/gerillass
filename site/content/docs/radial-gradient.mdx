@@ -25,8 +25,8 @@ Color stop points can be defined with `length` or `percentage` units.
 ## Arguments
 
 <Arguments of="radial-gradient" footnote="**Important:** When you use color stop points together with the color values, each group of values must be wrapped in parentheses and separated by a space. See the <a href='#examples'>examples</a> for more.">
-  <Argument name="$shape" type="string">Sets the shape of the gradient. Accepts the values <code>circle</code> and <code>ellipse</code>. The default value is <code>ellipse</code>. To skip this argument, use <code>null</code>.</Argument>
-  <Argument name="$position" type="string, number">Sets the position of the gradient's shape. Accepts the following values: <code>top</code>, <code>top-right</code>, <code>right</code>, <code>bottom-right</code>, <code>bottom</code>, <code>bottom-left</code>, <code>left</code>, <code>top-left</code>, <code>center</code>, <code>closest-side</code>, <code>farthest-side</code>, <code>closest-corner</code>, <code>farthest-corner</code>.</Argument>
+  <Argument name="$shape" type="string">Sets the shape of the gradient. Accepts the values <code>circle</code> and <code>ellipse</code>, and a size with them as a string: an extent keyword such as <code>"circle closest-side"</code>, one length for a circle such as <code>"circle 10px"</code>, or two lengths or percentages for an ellipse such as <code>"ellipse 10% 20%"</code>. It is required.</Argument>
+  <Argument name="$position" type="string, number">Sets the position of the gradient's shape. Accepts the following values: <code>top</code>, <code>top-right</code>, <code>right</code>, <code>bottom-right</code>, <code>bottom</code>, <code>bottom-left</code>, <code>left</code>, <code>top-left</code>, <code>center</code>, <code>closest-side</code>, <code>farthest-side</code>, <code>closest-corner</code>, <code>farthest-corner</code>. A raw position is written as a string starting with <code>at</code>, such as <code>"at 30% 40%"</code>, and can follow a size, such as <code>"closest-side at top"</code>.</Argument>
   <Argument name="$colors" type="list">Accepts a list of colors, with or without color stop points. You can pass as many color values as you want.</Argument>
 </Arguments>
 
@@ -96,6 +96,21 @@ Using **named arguments** may take a little longer than using **positional argum
 <div class="element sandbox large"></div>
 ```
 </Example>
+
+## What it refuses
+
+A shape or position the browser drops stops the build, and here the browser drops the whole gradient, not one part of it. Until 2.3.2 any string went into `radial-gradient()` as it was. Measured in Chrome 152, these are dropped: a word outside the keywords above, such as `inherit` or `auto`, a percentage or a negative length as a circle's size, the shape named twice, and the logical keywords such as `at x-start`.
+
+```scss
+.element {
+  @include radial-gradient("circle 10%", center, red orange);
+}
+```
+```text
+Error: `circle 10%` is not a valid $shape for `radial-gradient`: one size is a circle's radius, which is a length and not a percentage. A browser drops the whole gradient.
+```
+
+Each argument is checked on its own, so a shape in `$shape` and a size in `$position` that do not fit together, such as `ellipse` with one length, are not caught.
 
 ## Related Links
 * [Radial Gradient](https://developer.mozilla.org/en-US/docs/Web/CSS/radial-gradient)

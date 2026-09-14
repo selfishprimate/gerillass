@@ -5,7 +5,10 @@
     {
       "name": "$position",
       "accepts": [
-        "any CSS position value"
+        "static, relative, absolute, fixed or sticky, in any case, or a vendor keyword such as -webkit-sticky",
+        "a CSS-wide keyword or var()",
+        "null to leave position out",
+        "a quoted keyword is written without its quotes; any other word is refused, because the declaration would be dropped"
       ]
     },
     {
@@ -33,6 +36,9 @@
     ".a { @include position(absolute, 0, $logical: null); }"
   ],
   "rejects": [
-    ".badge { @include position(absolute, 0, $logical: yes); }"
+    ".badge { @include position(absolute, 0, $logical: yes); }",
+    ".a { @include position(huge, 0); }",
+    ".a { @include position(10px, 0); }",
+    ".a { @include position(\"absolute fixed\", 0); }"
   ]
 }

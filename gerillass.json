@@ -770,7 +770,10 @@
           "name": "$display",
           "default": "inline-block",
           "accepts": [
-            "a display value"
+            "a display keyword, or two or three in any order naming at most one outer type, one inner type and list-item, such as inline flex",
+            "a vendor keyword such as -webkit-box, a CSS-wide keyword, or var()",
+            "null to leave display out",
+            "a quoted value is written without its quotes; a combination the browser drops, such as block inline, is refused"
           ]
         }
       ],
@@ -781,7 +784,12 @@
         ".a { @include ellipsis; }",
         ".a { @include ellipsis(200px); }"
       ],
-      "rejects": []
+      "rejects": [
+        ".a { @include ellipsis(100%, huge); }",
+        ".a { @include ellipsis(100%, block inline); }",
+        ".a { @include ellipsis(100%, inline-block flow); }",
+        ".a { @include ellipsis(100%, 10px); }"
+      ]
     },
     {
       "name": "escape-to-parent",
@@ -897,14 +905,17 @@
           "name": "$font-style",
           "default": "normal",
           "accepts": [
-            "normal, italic or oblique, or a weight number"
+            "normal, italic, oblique or auto, or oblique with one or two angles from -90deg to 90deg",
+            "a number from 1 to 1000, which is read as the weight"
           ]
         },
         {
           "name": "$font-weight",
           "default": "400",
           "accepts": [
-            "a weight"
+            "normal, bold, auto, or a number from 1 to 1000",
+            "two numbers for a variable font's range, such as 100 900",
+            "bolder, lighter and the CSS-wide keywords are refused, because a @font-face rule drops them"
           ]
         },
         {
@@ -930,7 +941,9 @@
         "@include font-face(\"Inter\", \"/fonts/inter\");",
         "@include font-face(\"Inter\", \"/fonts/inter\", italic, 700, woff2 woff);",
         "@include font-face(\"Readex Pro\", \"/fonts/readex\", $font-weight: 160 700, $file-formats: woff2, $font-display: swap);",
-        "@include font-face(\"Inter\", \"/fonts/inter\", \"italic\", $font-weight: \"bold\", $file-formats: woff2);"
+        "@include font-face(\"Inter\", \"/fonts/inter\", \"italic\", $font-weight: \"bold\", $file-formats: woff2);",
+        "@include font-face(\"Inter\", \"/fonts/inter\", oblique 10deg 20deg, $font-weight: 450.5, $file-formats: woff2);",
+        "@include font-face(\"Inter\", \"/fonts/inter\", auto, \"100 900\", $file-formats: woff2);"
       ],
       "rejects": [
         ".a { @include font-face(\"Inter\", \"/fonts/inter\"); }",
@@ -948,7 +961,14 @@
         "@include font-face(\"Inter\", \"/fonts/inter\", $font-weight: 100 var(--max-weight), $file-formats: woff2);",
         "@include font-face(sans-serif, \"/fonts/inter\", $file-formats: woff2);",
         "@include font-face(inherit, \"/fonts/inter\", $file-formats: woff2);",
-        "@include font-face(env(--font-family), \"/fonts/inter\", $file-formats: woff2);"
+        "@include font-face(env(--font-family), \"/fonts/inter\", $file-formats: woff2);",
+        "@include font-face(\"Inter\", \"/fonts/inter\", huge, $file-formats: woff2);",
+        "@include font-face(\"Inter\", \"/fonts/inter\", oblique 100deg, $file-formats: woff2);",
+        "@include font-face(\"Inter\", \"/fonts/inter\", inherit, $file-formats: woff2);",
+        "@include font-face(\"Inter\", \"/fonts/inter\", $font-weight: huge, $file-formats: woff2);",
+        "@include font-face(\"Inter\", \"/fonts/inter\", $font-weight: bolder, $file-formats: woff2);",
+        "@include font-face(\"Inter\", \"/fonts/inter\", $font-weight: 0, $file-formats: woff2);",
+        "@include font-face(\"Inter\", \"/fonts/inter\", $font-weight: 100 200 300, $file-formats: woff2);"
       ]
     },
     {
@@ -1149,7 +1169,10 @@
           "name": "$position",
           "default": "absolute",
           "accepts": [
-            "any CSS position value"
+            "static, relative, absolute, fixed or sticky, in any case, or a vendor keyword such as -webkit-sticky",
+            "a CSS-wide keyword or var()",
+            "null to leave position out",
+            "a quoted keyword is written without its quotes; any other word is refused, because the declaration would be dropped"
           ]
         },
         {
@@ -1182,7 +1205,10 @@
         ".a { @include position(absolute, 0, $logical: null); }"
       ],
       "rejects": [
-        ".badge { @include position(absolute, 0, $logical: yes); }"
+        ".badge { @include position(absolute, 0, $logical: yes); }",
+        ".a { @include position(huge, 0); }",
+        ".a { @include position(10px, 0); }",
+        ".a { @include position(\"absolute fixed\", 0); }"
       ]
     },
     {
@@ -1193,7 +1219,9 @@
           "name": "$shape",
           "required": true,
           "accepts": [
-            "circle or ellipse"
+            "circle or ellipse",
+            "with a size as a string: an extent keyword such as \"circle closest-side\", one length for a circle, or two lengths or percentages for an ellipse",
+            "var() or calc()"
           ]
         },
         {
@@ -1201,7 +1229,9 @@
           "required": true,
           "accepts": [
             "a position name such as center or top-left",
-            "a raw CSS position"
+            "an extent keyword such as closest-side",
+            "at followed by a position, as a string, such as \"at 30% 40%\" or \"at left 10px top 20px\", optionally after a size",
+            "a word outside these, such as inherit, is refused, because the whole gradient would be dropped"
           ]
         },
         {
@@ -1220,7 +1250,12 @@
       ],
       "rejects": [
         ".a { @include radial-gradient(42, \"center\", (red, blue)); }",
-        ".a { @include radial-gradient(circle, 42, (red, blue)); }"
+        ".a { @include radial-gradient(circle, 42, (red, blue)); }",
+        ".a { @include radial-gradient(huge, \"center\", (red, blue)); }",
+        ".a { @include radial-gradient(\"circle 10%\", \"center\", (red, blue)); }",
+        ".a { @include radial-gradient(circle, huge, (red, blue)); }",
+        ".a { @include radial-gradient(circle, \"at huge\", (red, blue)); }",
+        ".a { @include radial-gradient(circle, inherit, (red, blue)); }"
       ]
     },
     {
@@ -1298,14 +1333,16 @@
           "name": "$direction",
           "default": "both",
           "accepts": [
-            "a CSS resize value such as both, horizontal, vertical or none"
+            "none, both, horizontal, vertical, block, inline or auto, in any case",
+            "a CSS-wide keyword, var(), or null to leave resize out; a quoted keyword is written without its quotes"
           ]
         },
         {
           "name": "$overflow",
           "default": "auto",
           "accepts": [
-            "a CSS overflow value"
+            "one or two of visible, hidden, clip, scroll, auto and overlay, such as hidden auto",
+            "a CSS-wide keyword on its own, var(), or null to leave overflow out; a quoted value is written without its quotes"
           ]
         }
       ],
@@ -1316,7 +1353,12 @@
         ".a { @include resizable; }",
         ".a { @include resizable(vertical, scroll); }"
       ],
-      "rejects": []
+      "rejects": [
+        ".a { @include resizable(huge); }",
+        ".a { @include resizable(both, huge); }",
+        ".a { @include resizable(both, hidden hidden hidden); }",
+        ".a { @include resizable(both, inherit auto); }"
+      ]
     },
     {
       "name": "responsive-image",

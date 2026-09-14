@@ -1,7 +1,79 @@
 @charset "UTF-8";
 
+@use "sass:list";
+@use "sass:meta";
+@use "sass:string";
+@use "../internal/keyword-value" as *;
+@use "../internal/words" as *;
+
+// The display keywords, sorted by the part of the value each one fills.
+// Measured in Chrome 152, one keyword, or two or three in any order, were kept
+// when they named at most one outer type, one inner type and one list-item:
+// `inline flex`, `flex block`, `block flow list-item`, `list-item inline flow`.
+// These were dropped: two of a kind (`block inline`, `flex grid`,
+// `block block`), `list-item` beside an inner type other than flow or
+// flow-root (`list-item flex`), and a compound keyword such as `inline-block`
+// beside anything. Chrome also dropped `run-in`, the ruby-base family and the
+// -moz- and -ms- boxes; they are in the specification or used by other
+// engines, so they are let through.
+$-outer: "block" "inline" "run-in";
+$-inner: "flow" "flow-root" "table" "flex" "grid" "ruby" "math";
+$-alone: "none" "contents" "inline-block" "inline-table" "inline-flex" "inline-grid" "table-row-group" "table-header-group" "table-footer-group" "table-row" "table-cell" "table-column-group" "table-column" "table-caption" "ruby-base" "ruby-text" "ruby-base-container" "ruby-text-container";
+
+@function -display-problem($display) {
+  $keywords: list.join(list.join(list.join($-outer, $-inner), $-alone), ("list-item",));
+  $problem: keywordProblem($display, $keywords, 3, $vendor: true);
+  @if $problem or $display == null {
+    @return $problem;
+  }
+  $words: wordsOf($display);
+  $outer: 0;
+  $inner: null;
+  $inners: 0;
+  $list-items: 0;
+  @each $word in $words {
+    @if string.index($word, "(") {
+      @return null;
+    }
+    $lower: string.to-lower-case(string.unquote($word));
+    @if list.length($words) > 1 and not list.index($-outer, $lower) and not list.index($-inner, $lower) and $lower != "list-item" {
+      @return "`#{$lower}` only works as the whole value";
+    }
+    @if list.index($-outer, $lower) {
+      $outer: $outer + 1;
+    } @else if list.index($-inner, $lower) {
+      $inners: $inners + 1;
+      $inner: $lower;
+    } @else if $lower == "list-item" {
+      $list-items: $list-items + 1;
+    }
+  }
+  @if $outer > 1 {
+    @return "it names two outer display types; pass one of block, inline or run-in";
+  }
+  @if $inners > 1 {
+    @return "it names two inner display types; pass one of flow, flow-root, table, flex, grid, ruby or math";
+  }
+  @if $list-items > 1 {
+    @return "it names list-item twice";
+  }
+  @if $list-items == 1 and $inner and not list.index("flow" "flow-root", $inner) {
+    @return "`list-item` only goes with flow or flow-root, not `#{$inner}`";
+  }
+  @return null;
+}
+
 @mixin ellipsis($width: 100%, $display: inline-block) {
-  display: $display;
+  $problem: -display-problem($display);
+  @if $problem {
+    @error "`#{meta.inspect($display)}` is not a valid $display for `ellipsis`: #{$problem}. A browser drops the declaration.";
+  }
+  // Written without quotes, since `display: "block"` was dropped.
+  @if meta.type-of($display) == "string" {
+    display: string.unquote($display);
+  } @else {
+    display: $display;
+  }
   max-width: $width;
   text-overflow: ellipsis;
   white-space: nowrap;

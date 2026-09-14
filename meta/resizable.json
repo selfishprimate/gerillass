@@ -5,13 +5,15 @@
     {
       "name": "$direction",
       "accepts": [
-        "a CSS resize value such as both, horizontal, vertical or none"
+        "none, both, horizontal, vertical, block, inline or auto, in any case",
+        "a CSS-wide keyword, var(), or null to leave resize out; a quoted keyword is written without its quotes"
       ]
     },
     {
       "name": "$overflow",
       "accepts": [
-        "a CSS overflow value"
+        "one or two of visible, hidden, clip, scroll, auto and overlay, such as hidden auto",
+        "a CSS-wide keyword on its own, var(), or null to leave overflow out; a quoted value is written without its quotes"
       ]
     }
   ],
@@ -19,5 +21,10 @@
     ".a { @include resizable; }",
     ".a { @include resizable(vertical, scroll); }"
   ],
-  "rejects": []
+  "rejects": [
+    ".a { @include resizable(huge); }",
+    ".a { @include resizable(both, huge); }",
+    ".a { @include resizable(both, hidden hidden hidden); }",
+    ".a { @include resizable(both, inherit auto); }"
+  ]
 }

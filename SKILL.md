@@ -82,6 +82,7 @@ a dropped declaration rather than an error.
 | `columnizer` | `.grid { @include columnizer(3, 20px, true, 9); }` |
 | `container-query` | `.title { @include container-query("min", 400px, 800px) { color: red; } }` |
 | `container` | `.card { @include container("card", sideways); }` |
+| `ellipsis` | `.a { @include ellipsis(100%, huge); }` |
 | `escape-to-parent` | `.a { @include escape-to-parent(42) { color: red; } }` |
 | `except` | `.a { @include except(#ff0000) { margin: 0; } }` |
 | `focus-ring` | `@include focus-ring;` |
@@ -96,6 +97,7 @@ a dropped declaration rather than an error.
 | `radial-gradient` | `.a { @include radial-gradient(42, "center", (red, blue)); }` |
 | `remove` | `.a { @include remove(a, b, c); }` |
 | `reset-css` | `.a { @include reset-css; }` |
+| `resizable` | `.a { @include resizable(huge); }` |
 | `scissors` | `.a { @include scissors(5px 10px); }` |
 | `screen-agent` | `.a { @include screen-agent(var(--density)) { color: red; } }` |
 | `smartphone` | `.a { @include smartphone(Nokia3310) { display: none; } }` |

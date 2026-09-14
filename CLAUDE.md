@@ -9,7 +9,7 @@ Gerillass is a **pure Sass library** — a toolkit of mixins and functions, in t
 Two consequences follow from this and drive most decisions in the repo:
 
 1. **`package.json` must have no `dependencies`.** Everything (`jest`, `sass`, `sass-true`, `glob`) belongs in `devDependencies`. Consumers get only `.scss` files, so a runtime dependency here forces the entire test toolchain onto every downstream project. This was the cause of 24 Dependabot alerts fixed in v1.3.3 — do not reintroduce it.
-2. **Only `scss/` ships.** `.npmignore` excludes `test`, `assets`, `meta`, `tools`, dotfiles and `*.md`; npm always adds `README.md`, `LICENSE.md` and `package.json` back. Verify with `npm pack --dry-run` before any release (108 files / ~56 kB since `scss/internal/` was added).
+2. **Only `scss/` ships.** `.npmignore` excludes `test`, `assets`, `meta`, `tools`, dotfiles and `*.md`; npm always adds `README.md`, `LICENSE.md` and `package.json` back. Verify with `npm pack --dry-run` before any release (110 files / ~57 kB since `scss/internal/` was added).
 
 Dart Sass only. LibSass/node-sass has been unsupported since v1.3.0.
 
@@ -252,7 +252,7 @@ Until 2.0.0 they carried a `__` prefix. It had to go: under `@use`/`@forward` a 
 
 **A utility that nothing in `scss/` calls is not dead code.** `remify`, `convertToEm`, `fontSizer`, `isNumber`, `tint` and `shade` are called by no mixin at all — they are there for users, and removing them would break stylesheets. Never treat "no internal callers" as a reason to delete a member; the library is the smaller half of its own audience.
 
-Mixins validate their input and `@error` with a message that names the accepted values — 40 of the 49 that take arguments do this, mostly inline. Match that style rather than failing silently.
+Mixins validate their input and `@error` with a message that names the accepted values — 42 of the 49 that take arguments do this, mostly inline. Match that style rather than failing silently.
 
 Silent failure is the trap to watch for. A mixin that branches on `type-of` and
 has no `@else` emits nothing at all for an unexpected type, which surfaces as a
@@ -564,8 +564,11 @@ content rather than refusing every string.
 
 S2 followed on the same branch: `only` and `except` refuse a position with a
 unit or a fraction, which makes a selector the browser drops, and `0`, which
-matches or excludes nothing, through `scss/internal/_sibling-index.scss`. S3 to
-S7 are open.
+matches or excludes nothing, through `scss/internal/_sibling-index.scss`. S3
+refused keywords a browser drops in `position`, `ellipsis`, `resizable`,
+`radial-gradient` and `font-face`, through `scss/internal/_keyword-value.scss`
+and grammars private to each mixin, and stopped writing a valid quoted keyword
+with its quotes. S4 to S7 are open.
 
 ### What `fix-plan.md` sets out
 
@@ -613,9 +616,9 @@ Three pieces of work are open, and none is started:
 
 - **`todos/silent-values.md`**: 49 arguments in 28 mixins turn a value a
   browser drops into CSS. Planned in `todos/silent-values-plan.md`, with the
-  six decisions taken. S0, S1 and S2 are done on the `silent-values-plan`
-  branch, unreleased, which completes what the plan puts in 2.3.1; S3, the
-  keywords, opens 2.3.2.
+  six decisions taken. S0 to S3 are done on the `silent-values-plan` branch,
+  unreleased: S0 to S2 are what the plan puts in 2.3.1, and S3 opens 2.3.2.
+  S4, images, is next.
 - **3.0.0**: the B items in `todos/fix-plan.md`, each with a `MIGRATION.md`
   section.
 - **`todos/design-tokens.md`**: a token layer on `tokens`, starting with the
@@ -628,12 +631,14 @@ Three pieces of work are open, and none is started:
   a `var()` gutter work at all. Evaluating the expression would simplify
   `calc(100% / 4)` to `25%` and shorten the output, and would break every call
   whose column count or gutter is a custom property. Verified both ways.
-- **Nine mixins take arguments and validate none of them** — `adaptive`,
-  `brand-logo`, `circle`, `counter`, `ellipsis`, `resizable`,
-  `sizer`, `text-image`, `text-stroke`. This is mostly deliberate: they pass
-  their arguments straight to CSS, which accepts `var()`, `calc()`, `clamp()`
-  and whatever ships next, so a strict check would reject correct code. Revisit
-  only where the shape of the call can be checked without touching the value.
+- **Seven mixins take arguments and validate none of them** — `adaptive`,
+  `brand-logo`, `circle`, `counter`, `sizer`, `text-image`, `text-stroke`.
+  This is mostly deliberate: they pass their arguments straight to CSS, which
+  accepts `var()`, `calc()`, `clamp()` and whatever ships next, so a strict
+  check would reject correct code. Revisit only where the shape of the call can
+  be checked without touching the value. `ellipsis` and `resizable` left this
+  list in S3 of `todos/silent-values-plan.md`: their keyword arguments now
+  check the kind of each word against a measured set and still take `var()`.
 - **`position` warns rather than errors** on a value that is not a length, six
   cases in `node tools/audit.js`. Left as a warning on purpose — see the note
   in `scss/utilities/_validate-length.scss`.

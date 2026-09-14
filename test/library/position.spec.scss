@@ -118,6 +118,35 @@
     }
   }
 
+  // $position refuses a value a browser drops. Measured in Chrome 152, these
+  // were kept: sticky, a vendor keyword (Chrome drops -webkit-sticky, Safari
+  // uses it) and var(); null leaves position out.
+  @include it('Accepts sticky, a vendor keyword, var() and null.') {
+    @include assert {
+      @include output {
+        .a { @include position(sticky, 0); }
+        .b { @include position(-webkit-sticky, 0); }
+        .c { @include position(var(--position), 0); }
+        .d { @include position(null, 0 auto); }
+      }
+      @include expect {
+        .a { position: sticky; top: 0; right: 0; bottom: 0; left: 0; }
+        .b { position: -webkit-sticky; top: 0; right: 0; bottom: 0; left: 0; }
+        .c { position: var(--position); top: 0; right: 0; bottom: 0; left: 0; }
+        .d { top: 0; right: auto; bottom: 0; left: auto; }
+      }
+    }
+  }
+
+  // `position: "sticky"` was dropped in Chrome 152, which is what a quoted
+  // argument used to produce.
+  @include it('Writes a quoted position without its quotes.') {
+    @include assert {
+      @include output { .a { @include position("sticky", 0); } }
+      @include expect { .a { position: sticky; top: 0; right: 0; bottom: 0; left: 0; } }
+    }
+  }
+
   // Measured in Chrome 152: with dir="ltr" each logical offset put the box
   // where its physical twin did, and with dir="rtl" where the mirrored twin
   // did, while a physical left stayed on the left. The shorthand order stays

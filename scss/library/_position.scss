@@ -2,8 +2,10 @@
 
 @use "sass:list";
 @use "sass:meta";
+@use "sass:string";
 @use "../utilities/shorthand-property" as *;
 @use "../utilities/validate-length" as *;
+@use "../internal/keyword-value" as *;
 
 // Sets position and its four offsets in shorthand order: top, right, bottom,
 // left, as `margin` and `padding` take them.
@@ -24,6 +26,14 @@
   @if $logical != true and $logical != false and $logical != null {
     @error "`#{meta.inspect($logical)}` is not a valid $logical for `position`. Pass true for offsets that follow the writing direction, or false for top, right, bottom and left.";
   }
+  // Measured in Chrome 152, `position` kept the five keywords in any case, the
+  // CSS-wide keywords and var(), and dropped anything else, a quoted keyword
+  // included. A vendor keyword is let through: Chrome drops `-webkit-sticky`,
+  // which Safari uses. null leaves position out, as it always has.
+  $problem: keywordProblem($position, "static" "relative" "absolute" "fixed" "sticky", $vendor: true);
+  @if $problem {
+    @error "`#{meta.inspect($position)}` is not a valid $position for `position`: #{$problem}. A browser drops the declaration.";
+  }
 
   $offsets: shorthandProperty($offsets);
   $edges: top right bottom left;
@@ -31,7 +41,12 @@
     $edges: inset-block-start inset-inline-end inset-block-end inset-inline-start;
   }
 
-  position: $position;
+  // Written without quotes, since `position: "sticky"` was dropped.
+  @if meta.type-of($position) == "string" {
+    position: string.unquote($position);
+  } @else {
+    position: $position;
+  }
   @for $i from 1 through 4 {
     $value: list.nth($offsets, $i);
     @if validateLength($value) {

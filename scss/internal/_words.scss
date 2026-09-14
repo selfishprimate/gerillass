@@ -1,0 +1,35 @@
+@charset "UTF-8";
+
+@use "sass:list";
+@use "sass:meta";
+@use "sass:string";
+
+// Shared by the mixins and not public API; see _is-css-function.scss.
+
+// The words of a value, as a space-separated list. A quoted string such as
+// "block flow-root" is split on its spaces, the way the browser reads it once
+// the quotes are gone; a space-separated list gives its items; anything else is
+// one word. Empty words from repeated spaces are skipped.
+@function wordsOf($value) {
+  @if meta.type-of($value) == "list" and list.separator($value) != "comma" {
+    @return $value;
+  }
+  @if meta.type-of($value) != "string" {
+    @return ($value,);
+  }
+  $words: ();
+  $rest: $value;
+  $at: string.index($rest, " ");
+  @while $at {
+    $word: string.slice($rest, 1, $at - 1);
+    @if string.length($word) > 0 {
+      $words: list.append($words, $word);
+    }
+    $rest: string.slice($rest, $at + 1);
+    $at: string.index($rest, " ");
+  }
+  @if string.length($rest) > 0 {
+    $words: list.append($words, $rest);
+  }
+  @return $words;
+}

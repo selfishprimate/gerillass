@@ -359,6 +359,74 @@ valid CSS; measure those widest.
 **Touches.** Six partials, their `meta/` files and pages. `ellipsis` and
 `resizable` leave the list of mixins in `CLAUDE.md` that validate nothing.
 
+**Status.** Done, not released.
+
+*Measured first*, in Chrome 152, 204 values: declarations with `CSS.supports`,
+and the two `@font-face` descriptors by inserting the rule and reading it back,
+which `tools/browser-check.js` learned to do for this (`font-face:` pieces, and
+declarations inside `@font-face` in a compiled file). What each argument keeps
+is written in the source comment above its check, and in short:
+
+- `position`: the five keywords in any case, CSS-wide keywords, `var()`.
+  Chrome drops `-webkit-sticky`, which Safari uses.
+- `display`: one keyword, or two or three in any order naming at most one outer
+  type, one inner type and `list-item`. `block inline`, `flex grid`,
+  `list-item flex` and `inline-block flow` are dropped.
+- `resize`: none, both, horizontal, vertical, block, inline and `auto`, which the
+  plan did not list. `overflow`: one or two keywords, `overlay` included; three
+  are dropped, and so is a CSS-wide keyword beside another.
+- `radial-gradient`: $position that is not a map key is written after the shape
+  without `at`, so it carries a size (`closest-side`, as the page documents), or
+  `at` and a position, or both. Dropped: a percentage or negative length as a
+  circle's size, the shape twice, four keywords after `at`, and the logical
+  `at x-start`.
+- `font-style` in `@font-face`: normal, italic, auto, oblique with up to two
+  angles within 90deg. `font-weight`: normal, bold, auto, 1 to 1000 with
+  fractions and `calc()`, or two numbers. CSS-wide keywords, `bolder`, `lighter`,
+  `0` and `1001` are dropped.
+- A quoted keyword is dropped in all four declarations: `position: "sticky"`.
+
+*The design.* Two more shared files: `scss/internal/_words.scss`, `wordsOf`,
+which replaces the private `-words` in `container` with no change to its
+output, and `_keyword-value.scss`, `keywordProblem`, which checks the kind and
+count of each word, lets any value holding a parenthesis through, takes a
+CSS-wide keyword only on its own, and optionally a vendor-prefixed word.
+`isConditionValue` gained the kinds `length-percentage` and `angle`. The
+grammars used by one mixin each (display, the gradient's size and position,
+the font descriptors) are private to that mixin's file.
+
+Three changes of output, each for a call that did not work: a valid quoted
+keyword is written without its quotes in `position`, `ellipsis` and
+`resizable`, as `font-face` already did; and a number from 1 to 1000 in
+`font-face`'s $font-style is read as the weight, where only the hundreds were,
+so `font-face(..., 450)` stopped writing `font-style: 450`. null still leaves a
+declaration out.
+
+*Found and left alone.* The page said `$shape` defaults to ellipse and can be
+skipped with null; it is required and null is refused, as before, and the page
+now says so. `radial-gradient` checks $shape and $position separately, so
+`ellipse` with one length split across them is not caught. A quoted number in a
+font descriptor is checked for its shape only, since Sass cannot read the text
+as a number: `"1001"` is let through, and the reject uses unquoted
+`oblique 100deg` for that reason.
+
+*Verified.* The 23 new rejects (46 bare and prefixed) and the three quoted
+specs failed before the change; the accepted forms in four new or extended
+specs and two new `font-face` examples passed before and after, the examples
+as snapshots. `npm test` 801 passed. The compile matrix against S2: 7137 calls
+identical, 311 from CSS to an error, all in the eight arguments, 4 with changed
+CSS, and none from an error to CSS. The 4 are `font-face` with $font-style `10`,
+`42`, `1.5` and `2`, now written as the weight. The old CSS of the 311 was
+tested in Chrome 152: every declaration built from a refused argument was
+dropped, 308 pieces; the only ones kept were the declarations those mixins
+always write, such as `overflow: hidden` in `ellipsis`.
+
+The audit: PASSED THROUGH fell from 465 to 408, REFUSED VALID CSS rose from 249
+to 262, all of it `currentColor` and `calc(1rem + 2px)` in keyword arguments,
+where neither is valid; SILENT, UNHELPFUL and BROKEN OUTPUT stayed at 0.
+`validating` in `tools/check-docs.js` is now 42 of 49. The five pages list the
+refusals, with messages copied from a compile, and the site builds.
+
 ## S4. Images
 
 **Problem.** `background-image`, `brand-logo` and `text-image` turn the list

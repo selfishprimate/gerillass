@@ -947,12 +947,30 @@ exports[`Manifest examples font-face: @include font-face("Inter", "/fonts/inter"
 }"
 `;
 
+exports[`Manifest examples font-face: @include font-face("Inter", "/fonts/inter", auto, "100 900", $file-for 1`] = `
+"@font-face {
+  font-family: "Inter";
+  src: url("/fonts/inter.woff2") format("woff2");
+  font-style: auto;
+  font-weight: 100 900;
+}"
+`;
+
 exports[`Manifest examples font-face: @include font-face("Inter", "/fonts/inter", italic, 700, woff2 woff); 1`] = `
 "@font-face {
   font-family: "Inter";
   src: url("/fonts/inter.woff2") format("woff2"), url("/fonts/inter.woff") format("woff");
   font-style: italic;
   font-weight: 700;
+}"
+`;
+
+exports[`Manifest examples font-face: @include font-face("Inter", "/fonts/inter", oblique 10deg 20deg, $font 1`] = `
+"@font-face {
+  font-family: "Inter";
+  src: url("/fonts/inter.woff2") format("woff2");
+  font-style: oblique 10deg 20deg;
+  font-weight: 450.5;
 }"
 `;
 

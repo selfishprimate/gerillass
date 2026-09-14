@@ -12,7 +12,10 @@
 // - a selector, with CSS.supports(selector(...));
 // - a @media condition, with matchMedia: one that neither matches nor has its
 //   `not` form match is parsed and can never apply;
-// - a @container condition the same way, against a real 500px container.
+// - a @container condition the same way, against a real 500px container;
+// - a @font-face descriptor by inserting the rule and reading the value back,
+//   since CSS.supports answers for properties, and `font-style: oblique 10deg`
+//   in a declaration is not the same question as in a @font-face rule.
 //
 // There is no dependency: open the page in Chrome and read the table, or read
 // `window.results` from a script. Nothing here can say whether a value does
@@ -23,8 +26,8 @@
 //   node tools/browser-check.js --serve [port]
 //
 // An input is a .css file, a .scss file compiled against scss/, or a single
-// piece written as type:text, where type is media, container, declaration or
-// selector:
+// piece written as type:text, where type is media, container, declaration,
+// selector or font-face (a descriptor, such as `font-face:font-style: italic`):
 //   node tools/browser-check.js "media:(min-width: huge)" "declaration:width: 10deg"
 //
 // The page is written to .browser-check/index.html unless --out says
@@ -77,11 +80,19 @@ if (!inputs.length) {
 // and does not need to be, because its input always comes from Sass.
 function piecesOf(css, source) {
   const pieces = [];
+  // The preludes of the blocks the current line sits in, so a declaration inside
+  // @font-face is tested as a descriptor.
+  const open = [];
   for (const raw of css.split("\n")) {
     const line = raw.trim();
-    if (!line || line.startsWith("@charset") || line === "}") continue;
+    if (!line || line.startsWith("@charset")) continue;
+    if (line === "}") {
+      open.pop();
+      continue;
+    }
     if (line.endsWith("{")) {
       const prelude = line.slice(0, -1).trim();
+      open.push(prelude);
       const media = prelude.match(/^@media\s+(.+)$/);
       const container = prelude.match(/^@container\s+(?:[^\s(]+\s+)?(.+)$/);
       if (media) pieces.push({ type: "media", text: media[1], source });
@@ -91,7 +102,8 @@ function piecesOf(css, source) {
       }
     } else if (line.endsWith(";")) {
       const colon = line.indexOf(":");
-      if (colon > 0) pieces.push({ type: "declaration", text: line.slice(0, -1), source });
+      const type = open[open.length - 1] === "@font-face" ? "font-face" : "declaration";
+      if (colon > 0) pieces.push({ type, text: line.slice(0, -1), source });
     }
   }
   return pieces;
@@ -99,7 +111,7 @@ function piecesOf(css, source) {
 
 let pieces = [];
 for (const input of inputs) {
-  const piece = input.match(/^(media|container|declaration|selector):(.+)$/s);
+  const piece = input.match(/^(media|container|declaration|selector|font-face):(.+)$/s);
   if (piece) {
     pieces.push({ type: piece[1], text: piece[2].trim(), source: "argument" });
   } else if (input.endsWith(".scss")) {
@@ -175,6 +187,19 @@ function test(piece) {
     const property = piece.text.slice(0, colon).trim();
     const value = piece.text.slice(colon + 1).trim();
     return CSS.supports(property, value) ? "kept" : "dropped";
+  }
+  if (piece.type === "font-face") {
+    // A dropped descriptor reads back as the empty string.
+    const colon = piece.text.indexOf(":");
+    const descriptor = piece.text.slice(0, colon).trim();
+    try {
+      sheet.insertRule("@font-face { font-family: probe; src: url(probe.woff2); " + piece.text + "; }", 0);
+    } catch (e) {
+      return "dropped";
+    }
+    const kept = sheet.cssRules[0].style.getPropertyValue(descriptor).trim() !== "";
+    sheet.deleteRule(0);
+    return kept ? "kept" : "dropped";
   }
   if (piece.type === "selector") {
     return CSS.supports("selector(" + piece.text + ")") ? "kept" : "dropped";

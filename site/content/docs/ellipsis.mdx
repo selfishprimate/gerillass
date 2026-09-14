@@ -18,7 +18,7 @@ The **Ellipsis** Sass mixin helps you truncate text and add an **ellipsis** at t
 
 <Arguments of="ellipsis">
   <Argument name="$width (100%)" type="number <br/>(with unit)">The <code>max-width</code> of the selected element before its text is truncated.</Argument>
-  <Argument name="$display (inline-block)" type="string">Sets the <code>display</code> property of the selected elements. The default value is <code>inline-block</code>.</Argument>
+  <Argument name="$display (inline-block)" type="string">Sets the <code>display</code> property of the selected elements. The default value is <code>inline-block</code>. Accepts a display keyword, or two or three in any order, such as <code>inline flex</code>, as long as they name at most one outer type, one inner type and <code>list-item</code>. A vendor keyword such as <code>-webkit-box</code>, a CSS-wide keyword and <code>var()</code> work too, and <code>null</code> leaves <code>display</code> out.</Argument>
 </Arguments>
 
 ## Examples
@@ -47,6 +47,19 @@ The **Ellipsis** Sass mixin helps you truncate text and add an **ellipsis** at t
 <p class="element">Gerillass is a set of Sass mixins and functions built for people who would rather describe what they want than remember how the browser wants it spelled.</p>
 ```
 </Example>
+
+## What it refuses
+
+A `$display` the browser drops stops the build. Measured in Chrome 152, that is a word that is not a display keyword, and a combination of keywords that names two of a kind, such as `block inline` or `flex grid`. Until 2.3.2 both compiled, and a quoted value such as `"block"` kept its quotes and was dropped as well; it is now written without them.
+
+```scss
+.element {
+  @include ellipsis(100%, block inline);
+}
+```
+```text
+Error: `block inline` is not a valid $display for `ellipsis`: it names two outer display types; pass one of block, inline or run-in. A browser drops the declaration.
+```
 
 ## Related Links
 

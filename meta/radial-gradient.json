@@ -5,14 +5,18 @@
     {
       "name": "$shape",
       "accepts": [
-        "circle or ellipse"
+        "circle or ellipse",
+        "with a size as a string: an extent keyword such as \"circle closest-side\", one length for a circle, or two lengths or percentages for an ellipse",
+        "var() or calc()"
       ]
     },
     {
       "name": "$position",
       "accepts": [
         "a position name such as center or top-left",
-        "a raw CSS position"
+        "an extent keyword such as closest-side",
+        "at followed by a position, as a string, such as \"at 30% 40%\" or \"at left 10px top 20px\", optionally after a size",
+        "a word outside these, such as inherit, is refused, because the whole gradient would be dropped"
       ]
     },
     {
@@ -27,6 +31,11 @@
   ],
   "rejects": [
     ".a { @include radial-gradient(42, \"center\", (red, blue)); }",
-    ".a { @include radial-gradient(circle, 42, (red, blue)); }"
+    ".a { @include radial-gradient(circle, 42, (red, blue)); }",
+    ".a { @include radial-gradient(huge, \"center\", (red, blue)); }",
+    ".a { @include radial-gradient(\"circle 10%\", \"center\", (red, blue)); }",
+    ".a { @include radial-gradient(circle, huge, (red, blue)); }",
+    ".a { @include radial-gradient(circle, \"at huge\", (red, blue)); }",
+    ".a { @include radial-gradient(circle, inherit, (red, blue)); }"
   ]
 }

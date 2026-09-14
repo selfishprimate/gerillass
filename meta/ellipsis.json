@@ -11,7 +11,10 @@
     {
       "name": "$display",
       "accepts": [
-        "a display value"
+        "a display keyword, or two or three in any order naming at most one outer type, one inner type and list-item, such as inline flex",
+        "a vendor keyword such as -webkit-box, a CSS-wide keyword, or var()",
+        "null to leave display out",
+        "a quoted value is written without its quotes; a combination the browser drops, such as block inline, is refused"
       ]
     }
   ],
@@ -19,5 +22,10 @@
     ".a { @include ellipsis; }",
     ".a { @include ellipsis(200px); }"
   ],
-  "rejects": []
+  "rejects": [
+    ".a { @include ellipsis(100%, huge); }",
+    ".a { @include ellipsis(100%, block inline); }",
+    ".a { @include ellipsis(100%, inline-block flow); }",
+    ".a { @include ellipsis(100%, 10px); }"
+  ]
 }
