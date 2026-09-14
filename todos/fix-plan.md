@@ -591,8 +591,18 @@ name, so it matched the opposite of what was asked. `--card`, `-card`, `_card`,
 `c-`, `ünlü`, `auto` and `normal` were kept, and a spec holds them accepted.
 `container` is left alone: `container-name` takes `var()`, `none`, the CSS-wide
 keywords and a list of names, and `container-name: var(--n)` was measured
-matching a query for `card`. It still accepts `and`, `or` and `1card`, which that
-property drops; not done here.
+matching a query for `card`. It still accepted `and`, `or` and `1card`, which that
+property drops; that was done after 2.2.0, below.
+
+**Status of the `container` name.** Measured in Chrome 152, `container-name` was
+dropped for `and`, `or`, `not` and `default` in any case, a name starting with a
+digit or a hyphen and a digit, a name holding `.`, `#` or `!`, a list with any of
+those in it such as `card and`, and `none` or a CSS-wide keyword beside another
+name, such as `NONE card` or `card inherit`. `none` and the
+CSS-wide keywords on their own, several valid names, `-card` and `var()` were
+kept, so those stay accepted. Two rejects went in first and failed. Of 192
+`container` calls across 32 names, three types and both names, the ones that
+changed all went from CSS to the error, and none of the kept names did.
 
 Five rejects went into `meta/container-query.json` first and failed. Of 556 calls
 across both mixins, both names and six query shapes, 252 changed and every one
@@ -876,8 +886,9 @@ Name two groups in the changelog, because they used to give usable output:
 The documentation pages' 15 examples compile to identical CSS, and no snapshot
 moved. `null` formats now read `` `null` `` in the message.
 
-**Not covered.** `var()` in `$font-family`, `$font-style` or `$font-weight` is
-still written into `@font-face`, where custom properties do not apply either.
+**Not covered here, done later.** `var()` in `$font-family`, `$font-style` or
+`$font-weight` was still written into `@font-face`, where custom properties do not
+apply either. It raises since 2.2.0; see the follow-up under A4.
 
 ### F11. Utility functions refuse non-numbers with their own message
 
@@ -1288,8 +1299,18 @@ error, 564 losing the quotes on the style or weight, and 728 that already failed
 now failing on var() before the format check. The audit's REFUSED VALID CSS went
 from 12 to 15, the var() probe on the three arguments; nothing else moved.
 
-Not done: an unquoted generic or CSS-wide family such as `sans-serif` or
+Not done then: an unquoted generic or CSS-wide family such as `sans-serif` or
 `inherit`, and `env()` in the family, which the same rule dropped.
+
+**Status of the generic family.** Done after 2.2.0. Measured in Chrome 152, a
+`@font-face` rule dropped an unquoted `serif`, `sans-serif`, `monospace`,
+`cursive`, `fantasy`, `system-ui`, `math`, `default` or CSS-wide keyword in any
+case, and `env()` and `attr()`, while it kept the same words quoted, multi-word
+names, and `emoji`, `fangsong` and the four `ui-` families unquoted. Those
+dropped ones now raise and ask for a quoted name. Three rejects went in first
+and failed. With the `container` names, 320 calls were compiled before and
+after: 130 changed, every one from CSS to the error for a measured name, and no
+kept name or family was refused. Neither audit moved.
 
 ### A5. `focus-visible` and `user-invalid` for `all-text-inputs`
 

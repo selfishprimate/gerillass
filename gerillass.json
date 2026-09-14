@@ -705,7 +705,9 @@
       ],
       "rejects": [
         ".card { @include container(\"card\", sideways); }",
-        ".card { @include container(42); }"
+        ".card { @include container(42); }",
+        ".card { @include container(\"and\"); }",
+        ".card { @include container(\"1card\"); }"
       ]
     },
     {
@@ -921,7 +923,10 @@
         "@include font-face(var(--font-family), \"/fonts/inter\", $file-formats: woff2);",
         "@include font-face(\"Inter\", \"/fonts/inter\", var(--font-style), $file-formats: woff2);",
         "@include font-face(\"Inter\", \"/fonts/inter\", $font-weight: var(--font-weight), $file-formats: woff2);",
-        "@include font-face(\"Inter\", \"/fonts/inter\", $font-weight: 100 var(--max-weight), $file-formats: woff2);"
+        "@include font-face(\"Inter\", \"/fonts/inter\", $font-weight: 100 var(--max-weight), $file-formats: woff2);",
+        "@include font-face(sans-serif, \"/fonts/inter\", $file-formats: woff2);",
+        "@include font-face(inherit, \"/fonts/inter\", $file-formats: woff2);",
+        "@include font-face(env(--font-family), \"/fonts/inter\", $file-formats: woff2);"
       ]
     },
     {

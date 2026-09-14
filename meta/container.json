@@ -5,8 +5,21 @@
     "An element does not match a `@container` query that reads its own container, and nothing warns. Put the `container-query` on a descendant."
   ],
   "arguments": [
-    { "name": "$name", "accepts": ["a container name as a string, such as \"card\"", "null for an unnamed container"] },
-    { "name": "$type", "accepts": ["inline-size", "size", "normal"] }
+    {
+      "name": "$name",
+      "accepts": [
+        "a container name as a string, such as \"card\"",
+        "null for an unnamed container"
+      ]
+    },
+    {
+      "name": "$type",
+      "accepts": [
+        "inline-size",
+        "size",
+        "normal"
+      ]
+    }
   ],
   "examples": [
     ".card { @include container(\"card\"); }",
@@ -15,6 +28,8 @@
   ],
   "rejects": [
     ".card { @include container(\"card\", sideways); }",
-    ".card { @include container(42); }"
+    ".card { @include container(42); }",
+    ".card { @include container(\"and\"); }",
+    ".card { @include container(\"1card\"); }"
   ]
 }
