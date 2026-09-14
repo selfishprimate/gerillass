@@ -938,6 +938,15 @@ exports[`Manifest examples font-face: @include font-face("Inter", "/fonts/inter"
 }"
 `;
 
+exports[`Manifest examples font-face: @include font-face("Inter", "/fonts/inter", "italic", $font-weight: "b 1`] = `
+"@font-face {
+  font-family: "Inter";
+  src: url("/fonts/inter.woff2") format("woff2");
+  font-style: italic;
+  font-weight: bold;
+}"
+`;
+
 exports[`Manifest examples font-face: @include font-face("Inter", "/fonts/inter", italic, 700, woff2 woff); 1`] = `
 "@font-face {
   font-family: "Inter";
