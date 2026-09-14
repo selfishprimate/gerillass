@@ -16,6 +16,53 @@ import { routes } from "./routes";
 */
 
 /*
+  Reload once when a page's module no longer exists.
+
+  Every deploy renames the files under /assets, since Vite fingerprints them,
+  and removes the old ones. A tab opened before the deploy still asks for the
+  old names, so the next page it navigates to fails to load and React Router
+  shows "Unexpected Application Error: Failed to fetch dynamically imported
+  module". Measured against `vite preview`: a tab on one build, a rebuild with
+  one page changed, then a click to that page gave exactly that screen, and
+  Vite fired `vite:preloadError` with the same message first.
+
+  The address bar still shows the page being left when the event fires, since
+  the router commits a navigation only once the page's module has loaded, so a
+  plain reload put the reader back where they started. The router's pending
+  navigation is the page they asked for, and that is where this goes. On the
+  first load there is no router yet, and the current address is the page.
+
+  Once only. A module that is missing from the new build as well would reload
+  forever, so a second failure within ten seconds is left alone. Measured with
+  the page's module deleted from the build: one reload, and then the page stayed
+  on the HTML the build wrote for it, readable but without scripts, rather than
+  reloading again.
+  sessionStorage can refuse to be read or written, and then the page reloads
+  without the guard, which is still better than the error screen.
+*/
+const RELOADED_AT = "gerillass:reloaded-for-stale-module";
+let router = null;
+
+window.addEventListener("vite:preloadError", (event) => {
+  let last = 0;
+  try {
+    last = Number(sessionStorage.getItem(RELOADED_AT)) || 0;
+  } catch {}
+  if (Date.now() - last < 10000) return;
+
+  try {
+    sessionStorage.setItem(RELOADED_AT, String(Date.now()));
+  } catch {}
+  event.preventDefault();
+  const pending = router?.state.navigation.location;
+  if (pending) {
+    window.location.assign(pending.pathname + pending.search + pending.hash);
+  } else {
+    window.location.reload();
+  }
+});
+
+/*
   Resolve this page's route before hydrating.
 
   Every documentation route is `lazy`, so on a first render the router has no
@@ -43,7 +90,7 @@ async function resolveRoute() {
 async function start() {
   await resolveRoute();
 
-  const router = createBrowserRouter(routes);
+  router = createBrowserRouter(routes);
   const app = (
     <StrictMode>
       <RouterProvider router={router} />
