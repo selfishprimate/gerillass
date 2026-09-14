@@ -496,5 +496,23 @@ $pane-radius: remify(16px);
     &--error {
       color: rgba($secondary-color, 0.9);
     }
+    /*
+      Above the CSS rather than instead of it, so it takes only the room it
+      needs and scrolls past a few lines instead of pushing the output away.
+    */
+    &--warning {
+      flex: none;
+      max-height: remify(160px);
+      border-bottom: 1px solid rgba($secondary-color, 0.1);
+      color: rgba($secondary-color, 0.9);
+      .playground__message__icon {
+        color: $corn;
+      }
+    }
+    &__list {
+      display: grid;
+      gap: remify(8px);
+      min-width: 0;
+    }
   }
 }

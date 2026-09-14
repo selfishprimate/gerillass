@@ -171,15 +171,6 @@ function makeImporter(files) {
 }
 
 /*
-  Warnings from the library are not the visitor's to read: 2.0.0 dropped
-  @import internally, but it still calls Sass's own `if()` in 21 places, which
-  a recent Dart Sass deprecates, and every 1.x release is loud about @import
-  from the first line. All of it belongs to whichever release is loaded rather
-  than to whatever was typed, so the logger swallows it.
-*/
-const quietLogger = { warn() {}, debug() {} };
-
-/*
   Sass colourises the code frame in its error messages with ANSI escapes, which
   only make sense in a terminal. The frame itself is worth keeping — it points
   at the offending line — so strip the escapes rather than the message.
@@ -187,17 +178,54 @@ const quietLogger = { warn() {}, debug() {} };
 // eslint-disable-next-line no-control-regex
 const ANSI = /\u001b\[[0-9;]*m/g;
 
+/*
+  Two kinds of warning reach the logger, and only one is the visitor's.
+
+  Deprecations are not: 2.0.0 dropped @import internally, but it still calls
+  Sass's own `if()` in 21 places, which a recent Dart Sass deprecates, and every
+  1.x release is loud about @import from the first line. All of that belongs to
+  whichever release is loaded rather than to whatever was typed, so it is
+  swallowed.
+
+  A library @warn is: it is written about the call, such as `breakpoint(large)`
+  matching a single pixel, and the playground used to drop it with the rest, so
+  a snippet that a terminal would have warned about compiled here in silence.
+  Those are kept, once each, since a warning inside a loop repeats itself.
+
+  One more message arrives without the deprecation flag and is still Sass's own:
+  "21 repetitive deprecation warnings omitted", the summary of the `if()`
+  warnings above. Measured in the playground on 2.2.1, it came with every
+  snippet that loaded the library and none that did not, so it is matched by
+  its text and dropped with the deprecations it counts.
+*/
+const OMITTED = /repetitive deprecation warnings omitted/i;
+
+function collectingLogger(warnings) {
+  return {
+    warn(message, options) {
+      if (options && options.deprecation) return;
+      const text = String(message).replace(ANSI, "").trim();
+      if (!text || OMITTED.test(text)) return;
+      if (!warnings.includes(text)) warnings.push(text);
+    },
+    debug() {},
+  };
+}
+
+
 /* Which Dart Sass does the compiling, for the page to own up to. */
 export const COMPILER = `Dart Sass ${SASS_VERSION}`;
 
 export async function compile(source, version, style) {
   const [sass, files] = await Promise.all([loadSass(), loadLibrary(version)]);
+  const warnings = [];
   try {
-    return sass.compileString(source, {
+    const { css } = sass.compileString(source, {
       importers: [makeImporter(files)],
-      logger: quietLogger,
+      logger: collectingLogger(warnings),
       style,
-    }).css;
+    });
+    return { css, warnings };
   } catch (error) {
     const message = (error && error.message) || String(error);
     throw new Error(message.replace(ANSI, ""));
