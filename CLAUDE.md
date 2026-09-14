@@ -655,6 +655,46 @@ and lists what is still to test first: Firefox and Safari, skipping an item,
 `::marker` for screen readers, nested lists. Not planned yet, at the
 maintainer's request.
 
+### What `breakpoint-boundaries.md` records
+
+B1 of `fix-plan.md` until 15 September 2026, when the maintainer moved it out
+as a piece of work of its own. `breakpoint` subtracts 1 from a map key at the
+end of a range, on purpose, so adjacent ranges do not overlap at the key. The
+file measures, in Chrome 152 and Safari 26.6.2, where that is not enough: `max`
+and `container-query` overlap at the key, half-pixel viewports in Chrome and
+fractional container widths fall into the 1px gap, and a rem map loses 16px. It
+records the prototype of ending just under the key in its own unit (`.98` in
+px, `.99` otherwise), the defect that prototype has with the unitless
+`xsmall: 0`, the finding that Chrome compares boundaries with about 1/64px of
+tolerance while Safari compares exactly, and the choices still open: whether
+`max` changes, and subtraction or range syntax for `@container`. Not planned
+yet, at the maintainer's request.
+
+### What the 3.0.0 files record
+
+Six more files came out of `fix-plan.md` on 15 September 2026, B3 to B8, with
+`breakpoint-boundaries.md` and `counter-modernisation.md` above. Each describes
+what the member compiles to today, the problem the agent trials found, the
+proposal, what it would change for existing users, what was measured, and what
+still has to be tested. None is planned, and the maintainer's instruction is to
+examine and test each on its own.
+
+- `columnizer-gap.md`: gutters as `gap` instead of margins and an
+  `:nth-child` reset, and no universal `box-sizing`. Reviewing it found that
+  `columnizer(var(--cols), 20px)` fails with Sass's own `Expected "n"`.
+- `hide-unhide-position.md`: `unhide` stops writing `position: static`, which
+  breaks the skip-link pattern, and `clip` goes. Not measured.
+- `before-after-default-content.md`: `content: ""` by default, since a
+  pseudo-element without `content` does not render. Not measured; the risk is
+  overriding content set elsewhere.
+- `font-face-woff2-default.md`: default formats down to `woff2`. The Parcel
+  failure is reproduced; format support is not checked.
+- `all-text-inputs-list.md`: `[type=color]` out of the list, `select` open,
+  and `[type=datetime]`, removed from HTML, questioned. Not measured.
+- `aspect-ratio-height-auto.md`: `height: auto`, since a `height` attribute
+  defeats `aspect-ratio`. Measured in Chrome only, including the override of an
+  earlier `height`.
+
 ### What `fix-plan.md` sets out
 
 The findings of the agent trials turned into work. For each problem: what goes
@@ -686,9 +726,13 @@ and emit nothing.
 **Where it stands.** Every item up to 2.3.0 is done and released: the
 groundwork and fixes in 2.1.1, the additions and new members in 2.2.0, two
 follow-up refusals in 2.2.1, and `position`'s `$logical` (A3) in 2.3.0. What is
-left is the 3.0.0 group: B1, the second half of B2 (the one-argument form
-raising instead of warning), and B3 to B9. The status of every item, with what
-was measured, is written under it.
+was the 3.0.0 group, and nothing of it is left in the file. On 15 September
+2026 the maintainer moved every remaining item to its own file in `todos/`, to
+be examined and tested one at a time rather than as a batch (see **What the
+3.0.0 files record**), and dropped B2's second half: the one-argument breakpoint
+keeps its 2.2.0 warning and is not refused, since its CSS is valid and matches
+that one width. The status of every done item, with what was measured, is
+written under it.
 
 ## Pending work
 
@@ -707,8 +751,11 @@ Three pieces of work are open, and none is started:
   would have shipped a false refusal fixed afterwards, such as `only(3n)`. The
   documentation pages say 2.3.1 wherever they name the version a change came
   in.
-- **3.0.0**: the B items in `todos/fix-plan.md`, each with a `MIGRATION.md`
-  section.
+- **3.0.0**: eight behaviour changes, each in its own file in `todos/` and
+  each to be tested and decided on its own before any is planned: breakpoint
+  boundaries, `columnizer` on `gap`, `hide("unhide")`, a default `content` for
+  `before`/`after`, `font-face` formats, `all-text-inputs`, `aspect-ratio` with
+  a `height` attribute, and `counter`. Each needs a `MIGRATION.md` section.
 - **`todos/design-tokens.md`**: a token layer on `tokens`, starting with the
   decision whether to ship a palette.
 

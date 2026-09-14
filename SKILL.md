@@ -132,12 +132,12 @@ a dropped declaration rather than an error.
 
 **`breakpoint`**
 
-- With one argument the query matches exactly that width, `(width: 768px)`, which is a single pixel, and the mixin prints a warning. Write `only` for that width, or `min`, `max` or a range for anything wider. 3.0.0 will refuse the one-argument form.
+- With one argument the query matches exactly that width, `(width: 768px)`, which is a single pixel, and the mixin prints a warning. Write `only` for that width, or `min`, `max` or a range for anything wider.
 - Declarations written after the include, in the same rule, are emitted after the `@media` block and win over it. Write them before the include.
 
 **`container-query`**
 
-- A size on its own matches exactly that width, `(width: 400px)`, which is a single pixel, and the mixin prints a warning. Write `only` for that width, or `min`, `max` or a range for anything wider. 3.0.0 will refuse the one-argument form.
+- A size on its own matches exactly that width, `(width: 400px)`, which is a single pixel, and the mixin prints a warning. Write `only` for that width, or `min`, `max` or a range for anything wider.
 
 **`container`**
 
@@ -165,7 +165,7 @@ a dropped declaration rather than an error.
 
 **`remove`**
 
-- With one argument the element is hidden at exactly that width, `(width: 768px)`, which is a single pixel, and the mixin prints a warning. Write `only` for that width, or `min`, `max` or a range for anything wider. 3.0.0 will refuse the one-argument form.
+- With one argument the element is hidden at exactly that width, `(width: 768px)`, which is a single pixel, and the mixin prints a warning. Write `only` for that width, or `min`, `max` or a range for anything wider.
 - A `display` written after the include, in the same rule, is emitted after the `@media` block and wins over it. Write it before the include.
 
 ## Mixins

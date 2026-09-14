@@ -180,9 +180,9 @@ describe("Manifest rejections", () => {
 });
 
 // A call the library still compiles but warns about: it must print a @warn and
-// still emit its CSS, the same under both names. This is where a form on its
-// way out keeps its coverage, such as `breakpoint("medium")` matching a single
-// pixel until 3.0.0 refuses it.
+// still emit its CSS, the same under both names. This is where a form that works but is easy to
+// misread keeps its coverage, such as `breakpoint("medium")` matching a single
+// pixel.
 describe("Manifest warnings", () => {
   for (const member of manifest.members) {
     for (const warn of member.warns || []) {

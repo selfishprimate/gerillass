@@ -7,6 +7,7 @@ import DocPage from "pages/Docs";
 import { Navigate } from "react-router-dom";
 import { pages } from "content/pages";
 import { suffixFor } from "content/sections";
+import { loadModule } from "./staleModule";
 
 /*
   The routes as data rather than JSX, so both halves of the app can walk the
@@ -49,7 +50,8 @@ const contentRoutes = pages
   .map(({ section, path, load }) => ({
     path,
     lazy: async () => {
-      const { default: Page, frontmatter } = await load();
+      // Through loadModule, so a page renamed by a deploy reloads instead of failing.
+      const { default: Page, frontmatter } = await loadModule(load);
       const Template = TEMPLATES[section];
       /*
         The suffix a title ends with belongs to the section rather than to the

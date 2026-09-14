@@ -63,7 +63,8 @@ never surface. What is left here is of two kinds, both on purpose. One is
 `validateLength` called on its own with a value that is not a length: the
 function is public, and making it strict is what used to reject `var(--gap)`.
 The other is the one-argument form of `breakpoint`, `container-query` and
-`remove`, which warns until 3.0.0 refuses it (B2 in `todos/fix-plan.md`). `position`
+`remove`, which matches one width and warns rather than raising, by the
+maintainer's decision of 15 September 2026. `position`
 used to reach it for six of these; since S7 of `todos/silent-values-plan.md`
 it checks its offsets itself and raises.
 
