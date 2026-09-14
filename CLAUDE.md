@@ -482,6 +482,23 @@ performs: a reference to a primitive that does not exist, and a text and
 background pair that fails contrast. It lists the decisions that come first,
 starting with whether to ship a palette at all.
 
+### What `silent-values.md` records
+
+Measured 14 September 2026, after a breakpoint name missing from the map turned
+out to compile straight into the query, `@media (width: huge)`. Every argument of every mixin was called with nine
+values nobody passes on purpose, and the CSS that compiled was tested in Chrome
+152: 312 of 774 calls produced CSS the browser drops or can never match, across
+49 arguments in 28 mixins, and only 31 of them warned. It sorts them by what goes
+wrong (conditions that never match, selectors the browser refuses, keywords,
+lengths, colours, images, one unit bug) and lists the 20 arguments that already
+refuse every bad value.
+
+It proposes checking the kind of a value rather than its content, so `var()`,
+`calc()` and the rest stay accepted, which is how the nine deliberately
+unvalidated mixins can be revisited. Each check has to be written from the
+property's measured value set, and it suggests starting with the conditions,
+where `validateBreakpoint` is the single cause.
+
 ### What `fix-plan.md` sets out
 
 The findings of the agent trials turned into work. For each problem: what goes
