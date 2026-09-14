@@ -1,6 +1,52 @@
 # Change Log
 _Change is the essence._
 
+## 2.2.0
+
+Three new mixins, logical directions, and two states a form needs. A handful of
+calls that compiled into CSS a browser drops now raise instead; they are listed
+at the end. No call that produced working CSS changes its output.
+
+- **Added:** `focus-ring`, an outline on `:focus-visible` with a width, an
+  offset and a colour. A mouse click on a button or a link does not show it,
+  and the Tab key does. It is an outline rather than a `box-shadow`, which
+  forced-colors mode removes.
+- **Added:** `motion-safe`, which applies its content only inside
+  `@media (prefers-reduced-motion: no-preference)`. Motion is opt-in, so a user
+  who asked their system for less gets none of it, with no override list to
+  keep complete.
+- **Added:** `tokens`, which writes a Sass map out as custom properties with an
+  optional prefix, for any kind of token: colours, spacing, radii, type,
+  shadows. A `null` is left out, a quoted string keeps its quotes, and a name a
+  browser would drop, such as `space-0.5`, is refused. For a fixed list nothing
+  else reads, plain CSS is still simpler; the documentation page says when the
+  mixin helps.
+- **Added:** logical directions. `triangle` takes `inline-start`, `inline-end`,
+  `block-start` and `block-end`, and `border-radius` the corners `start-start`,
+  `start-end`, `end-start` and `end-end` and the same four edges. They follow
+  the writing direction, so `inline-end` points right on a left-to-right page
+  and left on a right-to-left one.
+- **Added:** `all-text-inputs` accepts `focus-visible` and `user-invalid`.
+  `:user-invalid` waits for the user, where `:invalid` marks an empty required
+  field as an error as soon as the page loads.
+- **Added:** `font-face` takes `$font-display`, written only when it is given.
+- **Updated:** `breakpoint`, `remove` and `container-query` print a warning
+  when called with one argument. That form matches a single pixel,
+  `(width: 768px)`, and 3.0.0 will refuse it. Write `only` for that exact width,
+  or `min` from it upwards. The CSS is unchanged.
+- **Updated:** `gerillass.json` lists calls that compile with a warning under
+  `warns`, beside `examples` and `rejects`.
+- **Fixed:** `font-face` writes a quoted `$font-style` or `$font-weight`, such
+  as `"italic"` or `"bold"`, without its quotes. A browser dropped the
+  descriptor with them.
+- **Note:** some calls that used to compile now raise, because a browser drops
+  what they produced. Check for these before upgrading:
+  - `container-query` with a `$name` of `var()`, `none`, `and`, `or`, `not`,
+    `default`, a CSS-wide keyword, a name holding a space, or a name starting
+    with a digit. `not` used to turn the query into its opposite.
+  - `font-face` with `var()` in `$font-family`, `$font-style` or
+    `$font-weight`. A quoted family name is still accepted.
+
 ## 2.1.1
 
 Fixes only. Most of them close a case that compiled to CSS that could not work,
