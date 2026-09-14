@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { Link } from 'react-router-dom';
-import Images from 'assets/images';
 import './examples.scss';
 
 import CodeBlock from 'components/CodeBlock';
@@ -16,8 +15,10 @@ class Examples extends Component {
 
         <div className="examples__figure">
           <img
-            src={Images.face_thinking}
-            alt="How to use Gerillass Sass library?"
+            src="/images/mascot/scenes/what-gerillass-is-about.png"
+            alt="Now let's see what Gerillass is about!"
+            width="1344"
+            height="1170"
           />
         </div>
 

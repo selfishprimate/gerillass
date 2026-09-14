@@ -32,27 +32,24 @@
     z-index: 1;
     @include background-image("/images/ornaments/ornament-04.svg");
   }
+  // The mascot and its speech bubble are one drawing, so the figure is only
+  // the image: no circle behind the face and no separate bubble. The head is
+  // not in the middle of the drawing, so the figure is shifted by where it is
+  // instead: measured from the PNG, the head is centred at 35.75% of the
+  // image's width and ends at 96.8% of its height. That centres the head on
+  // the page. The visible top edge is the wave in ::before, which rises above
+  // the section's box, so the head is lifted a further 1rem to rest on it.
   &__figure {
     position: absolute;
     top: 0;
     left: 50%;
-    background-color: $secondary-color;
-    transform: translateX(-50%) translateY(-100%);
-    @include circle(9rem);
-    padding: $global-space;
-    &::before {
-      content: "";
-      display: block;
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 12em;
-      height: 9em;
-      transform: translateX(55%) translateY(-70%);
-      @include background-image("/images/speech-bubbles/examples.svg");
-    }
+    width: 18rem;
+    transform: translateX(-35.75%) translateY(calc(-95% - 1rem));
+    z-index: 2;
     img {
-      @include responsive-image;
+      display: block;
+      width: 100%;
+      height: auto;
     }
   }
 
