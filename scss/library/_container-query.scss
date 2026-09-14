@@ -82,8 +82,8 @@ $-forbidden-in-name: "." "," "/" "#" ":" ";" "(" ")" "[" "]" "{" "}" "!" "@" "$"
     // what validateBreakpoint did, so a working call writes the same condition.
     $width: conditionWidth($value, "container-query", "@container");
     $condition: "(width: #{$width})";
-    // A single pixel, as in `breakpoint`; still emitted until 3.0.0 refuses it.
-    @warn "`container-query(#{$value})` matches only a container exactly #{$width} wide, `(width: #{$width})`. Write `container-query(only, #{$value})` for that width, or `container-query(min, #{$value})` from it upwards. The one-argument form will be refused in 3.0.0.";
+    // A single pixel, as in `breakpoint`; still emitted, with a warning.
+    @warn "`container-query(#{$value})` matches only a container exactly #{$width} wide, `(width: #{$width})`. Write `container-query(only, #{$value})` for that width, or `container-query(min, #{$value})` from it upwards.";
   } @else if $count == 2 {
     $mode: list.nth($params, 1);
     @if not list.index("only" "min" "max" "between", $mode) {

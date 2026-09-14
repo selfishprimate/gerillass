@@ -539,7 +539,7 @@
       "signature": "breakpoint($params...)",
       "summary": "Media query built from the breakpoint map, or from raw lengths.",
       "caveats": [
-        "With one argument the query matches exactly that width, `(width: 768px)`, which is a single pixel, and the mixin prints a warning. Write `only` for that width, or `min`, `max` or a range for anything wider. 3.0.0 will refuse the one-argument form.",
+        "With one argument the query matches exactly that width, `(width: 768px)`, which is a single pixel, and the mixin prints a warning. Write `only` for that width, or `min`, `max` or a range for anything wider.",
         "Declarations written after the include, in the same rule, are emitted after the `@media` block and win over it. Write them before the include."
       ],
       "examples": [
@@ -707,7 +707,7 @@
       "signature": "container-query($params...)",
       "summary": "A @container rule, taking the same argument shapes as breakpoint so the two read alike. Sizes may be a key from $map-for-breakpoints or a raw length, and a length is the common case because a container is usually narrower than the viewport. Nothing matches at all unless an ancestor was declared with the container mixin.",
       "caveats": [
-        "A size on its own matches exactly that width, `(width: 400px)`, which is a single pixel, and the mixin prints a warning. Write `only` for that width, or `min`, `max` or a range for anything wider. 3.0.0 will refuse the one-argument form."
+        "A size on its own matches exactly that width, `(width: 400px)`, which is a single pixel, and the mixin prints a warning. Write `only` for that width, or `min`, `max` or a range for anything wider."
       ],
       "examples": [
         ".title { @include container-query(\"min\", 400px) { font-size: 2rem; } }",
@@ -1376,7 +1376,7 @@
       "signature": "remove($params...)",
       "summary": "Hides an element outright, or within a media query: from a breakpoint up with min, up to it with max, or between two breakpoints. One breakpoint on its own hides the element at exactly that width, a single pixel, and prints a warning: pass only for that.",
       "caveats": [
-        "With one argument the element is hidden at exactly that width, `(width: 768px)`, which is a single pixel, and the mixin prints a warning. Write `only` for that width, or `min`, `max` or a range for anything wider. 3.0.0 will refuse the one-argument form.",
+        "With one argument the element is hidden at exactly that width, `(width: 768px)`, which is a single pixel, and the mixin prints a warning. Write `only` for that width, or `min`, `max` or a range for anything wider.",
         "A `display` written after the include, in the same rule, is emitted after the `@media` block and wins over it. Write it before the include."
       ],
       "examples": [

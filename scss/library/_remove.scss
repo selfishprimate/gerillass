@@ -13,7 +13,7 @@
     @include breakpoint(only, $value) {
       display: none;
     }
-    @warn "`remove(#{$value})` hides the element only at a viewport exactly that wide, a single pixel. Write `remove(only, #{$value})` for that width, or `remove(min, #{$value})` from it upwards. The one-argument form will be refused in 3.0.0.";
+    @warn "`remove(#{$value})` hides the element only at a viewport exactly that wide, a single pixel. Write `remove(only, #{$value})` for that width, or `remove(min, #{$value})` from it upwards.";
   } @else if list.length($params) == 2 {
     @if list.index("min" "max", list.nth($params, 1)) {
       $mode: list.nth($params, 1);

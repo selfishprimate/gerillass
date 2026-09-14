@@ -23,9 +23,9 @@
     // refused rather than described as a single pixel.
     $width: conditionWidth($value, "breakpoint");
     // One argument matches a single pixel, which two agent trials took for
-    // "from this width up". Still emitted, so no stylesheet changes, but said
-    // out loud until 3.0.0 refuses it.
-    @warn "`breakpoint(#{$value})` matches only a viewport exactly #{$width} wide, `(width: #{$width})`. Write `breakpoint(only, #{$value})` for that width, or `breakpoint(min, #{$value})` from it upwards. The one-argument form will be refused in 3.0.0.";
+    // "from this width up". Still emitted, and said out loud,
+    // but not refused: the CSS is valid and matches that one width.
+    @warn "`breakpoint(#{$value})` matches only a viewport exactly #{$width} wide, `(width: #{$width})`. Write `breakpoint(only, #{$value})` for that width, or `breakpoint(min, #{$value})` from it upwards.";
     @if map.has-key($map-for-breakpoints, $value) {
       @media (width: map.get($map-for-breakpoints, $value)) {
         @content;
