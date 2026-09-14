@@ -21,6 +21,12 @@
   ],
   "rejects": [
     ".a { @include border-radius(1px, 2px, 3px); }",
-    ".a { @include border-radius(nonsense, 5px); }"
+    ".a { @include border-radius(nonsense, 5px); }",
+    ".a { @include border-radius(-4px); }",
+    ".a { @include border-radius(auto); }",
+    ".a { @include border-radius(10deg); }",
+    ".a { @include border-radius(1px 2px 3px 4px 5px); }",
+    ".a { @include border-radius(\"top\", 1px 2px 3px); }",
+    ".a { @include border-radius(1px, 2px, -3px, 4px); }"
   ]
 }

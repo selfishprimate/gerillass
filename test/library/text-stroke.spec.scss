@@ -26,4 +26,21 @@
       @include expect { .a { -webkit-text-fill-color: red; -webkit-text-stroke-color: rgb(from red r g b); -webkit-text-stroke-width: 1px; } }
     }
   }
+
+  // -webkit-text-stroke-width kept thin, medium and thick, 0 and a CSS-wide
+  // keyword in Chrome 152, and dropped a percentage and a negative width.
+  @include it('Accepts a width keyword, 0 and a CSS-wide keyword as the stroke width.') {
+    @include assert {
+      @include output {
+        .a { @include text-stroke(black, transparent, red, thin); }
+        .b { @include text-stroke(black, transparent, red, inherit); }
+        .c { @include text-stroke(black, transparent, red, 0); }
+      }
+      @include expect {
+        .a { color: black; -webkit-text-fill-color: transparent; -webkit-text-stroke-color: red; -webkit-text-stroke-width: thin; }
+        .b { color: black; -webkit-text-fill-color: transparent; -webkit-text-stroke-color: red; -webkit-text-stroke-width: inherit; }
+        .c { color: black; -webkit-text-fill-color: transparent; -webkit-text-stroke-color: red; -webkit-text-stroke-width: 0; }
+      }
+    }
+  }
 }

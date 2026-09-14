@@ -30,6 +30,23 @@ $-system-colors: "canvas" "canvastext" "linktext" "visitedtext" "activetext" "bu
 $-functions: "var" "env" "attr" "rgb" "rgba" "hsl" "hsla" "hwb" "lab" "lch" "oklab" "oklch" "color" "color-mix" "light-dark" "contrast-color" "device-cmyk";
 $-css-wide: "inherit" "initial" "unset" "revert" "revert-layer";
 
+// The CSS named colours and transparent, for a colour that reaches the check as
+// an unquoted string rather than as a Sass colour.
+$-named-colors: "transparent" "aliceblue" "antiquewhite" "aqua" "aquamarine" "azure" "beige" "bisque" "black" "blanchedalmond" "blue" "blueviolet" "brown" "burlywood" "cadetblue" "chartreuse" "chocolate" "coral" "cornflowerblue" "cornsilk" "crimson" "cyan" "darkblue" "darkcyan" "darkgoldenrod" "darkgray" "darkgreen" "darkgrey" "darkkhaki" "darkmagenta" "darkolivegreen" "darkorange" "darkorchid" "darkred" "darksalmon" "darkseagreen" "darkslateblue" "darkslategray" "darkslategrey" "darkturquoise" "darkviolet" "deeppink" "deepskyblue" "dimgray" "dimgrey" "dodgerblue" "firebrick" "floralwhite" "forestgreen" "fuchsia" "gainsboro" "ghostwhite" "gold" "goldenrod" "gray" "green" "greenyellow" "grey" "honeydew" "hotpink" "indianred" "indigo" "ivory" "khaki" "lavender" "lavenderblush" "lawngreen" "lemonchiffon" "lightblue" "lightcoral" "lightcyan" "lightgoldenrodyellow" "lightgray" "lightgreen" "lightgrey" "lightpink" "lightsalmon" "lightseagreen" "lightskyblue" "lightslategray" "lightslategrey" "lightsteelblue" "lightyellow" "lime" "limegreen" "linen" "magenta" "maroon" "mediumaquamarine" "mediumblue" "mediumorchid" "mediumpurple" "mediumseagreen" "mediumslateblue" "mediumspringgreen" "mediumturquoise" "mediumvioletred" "midnightblue" "mintcream" "mistyrose" "moccasin" "navajowhite" "navy" "oldlace" "olive" "olivedrab" "orange" "orangered" "orchid" "palegoldenrod" "palegreen" "paleturquoise" "palevioletred" "papayawhip" "peachpuff" "peru" "pink" "plum" "powderblue" "purple" "rebeccapurple" "red" "rosybrown" "royalblue" "saddlebrown" "salmon" "sandybrown" "seagreen" "seashell" "sienna" "silver" "skyblue" "slateblue" "slategray" "slategrey" "snow" "springgreen" "steelblue" "tan" "teal" "thistle" "tomato" "turquoise" "violet" "wheat" "white" "whitesmoke" "yellow" "yellowgreen";
+
+// A hex colour written as text: # and then 3, 4, 6 or 8 hex digits.
+@function -is-hex($text) {
+  @if string.index($text, "#") != 1 or not list.index(4 5 7 9, string.length($text)) {
+    @return false;
+  }
+  @for $i from 2 through string.length($text) {
+    @if not string.index("0123456789abcdef", string.slice($text, $i, $i)) {
+      @return false;
+    }
+  }
+  @return true;
+}
+
 // Returns what is wrong with $value as one colour, or null when a browser keeps
 // it. null itself is the caller's to decide, since it means a default in some
 // mixins and leaving a declaration out in others.
@@ -55,6 +72,12 @@ $-css-wide: "inherit" "initial" "unset" "revert" "revert-layer";
     @return "`#{string.slice($value, 1, $open - 1)}()` is not a colour function";
   }
   @if $lower == "currentcolor" or list.index($-system-colors, $lower) {
+    @return null;
+  }
+  // Interpolation, such as `#{$name}` or `#{$hex}`, gives an unquoted string
+  // rather than a colour, and it is written into the CSS as it reads, so a
+  // named or hex colour in one works exactly as the colour itself does.
+  @if list.index($-named-colors, $lower) or -is-hex($lower) {
     @return null;
   }
   // Vendor colours are named rather than matched by prefix. Measured in Chrome

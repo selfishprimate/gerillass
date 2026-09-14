@@ -5,6 +5,7 @@
 @use "../lists/list-of-directions" as *;
 @use "../internal/is-size" as *;
 @use "../internal/color-problem" as *;
+@use "../internal/length-problem" as *;
 
 // The logical directions point along the writing direction rather than a fixed
 // side: inline-end is right in a left-to-right page and left in a right-to-left
@@ -20,6 +21,13 @@ $-logical-directions: ("inline-start", "inline-end", "block-start", "block-end")
     @each $item in $size {
       @if not isSize($item) {
         @error "`#{meta.inspect($size)}` is not a valid $size for `triangle`. Pass one or two lengths, or var(), env() or a calculation in place of either.";
+      }
+      // The sizes land in border-width, which in Chrome 152 dropped a
+      // percentage, a negative width and a unit that is not a length. isSize
+      // above takes any number, since it only guards calc().
+      $problem: lengthProblem($item, $percent: false, $negative: false);
+      @if $problem {
+        @error "`#{meta.inspect($size)}` is not a valid $size for `triangle`: #{$problem}. A browser drops the border widths, so no triangle is drawn.";
       }
     }
     // The colour is checked by colorProblem in scss/internal/, each item of a

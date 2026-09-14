@@ -20,7 +20,7 @@ The **Text Stroke Sass mixin** helps you add a stroke to a text element and styl
   <Argument name="$color" type="color">Sets the color of the text. The default value is transparent. Each of the three colours takes a colour, <code>currentColor</code>, a system colour, a function such as <code>var()</code> or <code>light-dark()</code>, or a CSS-wide keyword, and <code>null</code> leaves its declaration out.</Argument>
   <Argument name="$stroke-color" type="color">Sets the stroke color of the text. The default value is black.</Argument>
   <Argument name="$fallback-color" type="color">This option is for browsers that do not support text stroke. It prevents the text from disappearing entirely in those browsers. The default value is black.</Argument>
-  <Argument name="$stroke-width" type="number (with unit)">Sets the width of the stroke. You can also pass the string values <code>thin</code>, <code>medium</code>, and <code>thick</code>.</Argument>
+  <Argument name="$stroke-width" type="number (with unit)">Sets the width of the stroke. You can also pass the string values <code>thin</code>, <code>medium</code>, and <code>thick</code>, a CSS-wide keyword, <code>var()</code> or a maths function. Not a percentage or a negative width.</Argument>
 </Arguments>
 
 ## Examples
@@ -63,6 +63,17 @@ A colour the browser drops stops the build. Until 2.3.3 each argument was writte
 ```
 ```text
 Error: `"red"` is not a valid $color for `text-stroke`: a colour in quotes is text, not a colour. A browser drops the declaration. Pass a colour such as `black`, `currentColor`, or a function such as `var(--stroke)`.
+```
+
+A stroke width the browser drops stops the build as well: measured in Chrome 152, a percentage, a negative width and a word other than `thin`, `medium`, `thick` or a CSS-wide keyword. Until 2.3.4 these compiled.
+
+```scss
+.element {
+  @include text-stroke(black, transparent, red, -1px);
+}
+```
+```text
+Error: `-1px` is not a valid $stroke-width for `text-stroke`: a length below zero does not work here. A browser drops the declaration.
 ```
 
 ## Related Links

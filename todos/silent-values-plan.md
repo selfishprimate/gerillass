@@ -690,9 +690,29 @@ and a CSS-wide keyword; `max-width` keeps `none` instead of `auto` and drops
 `calc-size()`. `null` stays accepted, as before. The sweep over 2594 calls
 changed no CSS that compiled before and refused 529 calls; the old CSS of
 those was tested in Chrome, and the only declarations it kept held `var()`,
-which a browser accepts while parsing whatever surrounds it. Chunks 2 to 4
-(`focus-ring`, `text-stroke`, `border-radius`, `triangle`; the backgrounds,
-`scissors`, `sprite`, `columnizer`, `adaptive`; `position`) are not started.
+which a browser accepts while parsing whatever surrounds it.
+
+Chunk 2 is done: `focus-ring`'s `$width` and `$offset`, `text-stroke`'s
+`$stroke-width`, `triangle`'s `$size` through `lengthProblem`, and
+`border-radius` through a private radii check. Chrome 152 kept, for
+`border-radius`, one to four radii and a slash between two sets; for a corner's
+own property one or two radii and no slash; for an outline or border width a
+length, 0 and thin, medium or thick, never a percentage or a negative;
+and for `outline-offset` a negative length and a CSS-wide keyword. The sweep
+gained the corner and four-radius forms of `border-radius`, changed no CSS that
+compiled before, and refused 657 calls.
+
+A sweep with interpolated values, such as `#{40}px` and `#{red}`, found two
+false refusals the literal values had hidden. `lengthProblem` refused a length
+built by interpolation, which gives an unquoted string, so `sizer(#{40}px)`
+broke in chunk 1; and `colorProblem` from S6 refused a colour name or hex
+written the same way, in ten arguments. Both now read the string's content.
+Every interpolated call on the branch was then compiled against the literal it
+spells: none raises where its literal compiles, except `validateBreakpoint` with
+a word, which is the S1 decision.
+
+Chunks 3 and 4 (the backgrounds, `scissors`, `sprite`, `columnizer`,
+`adaptive`; `position`) are not started.
 
 ---
 

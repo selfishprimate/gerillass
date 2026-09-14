@@ -24,7 +24,7 @@ The **Triangle** Sass mixin helps you generate triangles using the `::before` or
 <Arguments of="triangle" footnote="When you pass `top`, `right`, `bottom`, `left` or one of the four logical directions for the **`$direction`** argument, you can pass two values to resize the triangle. **The first value controls the width of the triangle and the second controls the height.**">
   <Argument name="$direction" type="string">Sets the direction of the triangle. Accepts the values <code>top</code>, <code>top-right</code>, <code>right</code>, <code>bottom-right</code>, <code>bottom</code>, <code>bottom-left</code>, <code>left</code>, and <code>top-left</code>. The logical directions <code>inline-start</code>, <code>inline-end</code>, <code>block-start</code> and <code>block-end</code> follow the writing direction instead: <code>inline-end</code> points right on a left-to-right page and left on a right-to-left one.</Argument>
   <Argument name="$color" type="color, keyword, function">The color of the triangle. Accepts a Sass color, <code>currentColor</code>, a system color such as <code>Canvas</code>, or a function the browser resolves to a color, such as <code>var()</code>, <code>color-mix()</code>, <code>light-dark()</code>, <code>contrast-color()</code> or <code>rgb(from ...)</code>. Until 2.3.3 only four functions were accepted, and a system color or <code>contrast-color()</code> was refused, although a border keeps both. <code>inherit</code>, <code>initial</code>, <code>unset</code> and <code>revert</code> are refused, because the color is written into a <code>border-color</code> shorthand beside <code>transparent</code>, where a browser rejects them.</Argument>
-  <Argument name="$size" type="number (with unit), function">The size of the triangle. Multiple values must be separated by a space. Each value can also be <code>var()</code>, <code>env()</code>, or a calculation such as <code>calc()</code> or <code>clamp()</code>.</Argument>
+  <Argument name="$size" type="number (with unit), function">The size of the triangle. Multiple values must be separated by a space. Each value can also be <code>var()</code>, <code>env()</code>, or a calculation such as <code>calc()</code> or <code>clamp()</code>. Not a percentage or a negative length, which <code>border-width</code> drops.</Argument>
 </Arguments>
 
 ## Examples
@@ -108,6 +108,19 @@ The **Triangle** Sass mixin helps you generate triangles using the `::before` or
 <p dir="rtl" lang="ar"><span class="next">التالي</span></p>
 ```
 </Example>
+
+## What it refuses
+
+A size the browser drops stops the build. The sizes are written into `border-width`, which in Chrome 152 drops a percentage and a negative width, so the triangle is not drawn. Until 2.3.4 both compiled; a word or a unitless number was already refused.
+
+```scss
+.caret {
+  @include triangle("top", red, 5%);
+}
+```
+```text
+Error: `5%` is not a valid $size for `triangle`: a percentage does not work here. A browser drops the border widths, so no triangle is drawn.
+```
 
 ## Related Links
 

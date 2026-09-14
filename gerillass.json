@@ -456,7 +456,13 @@
       ],
       "rejects": [
         ".a { @include border-radius(1px, 2px, 3px); }",
-        ".a { @include border-radius(nonsense, 5px); }"
+        ".a { @include border-radius(nonsense, 5px); }",
+        ".a { @include border-radius(-4px); }",
+        ".a { @include border-radius(auto); }",
+        ".a { @include border-radius(10deg); }",
+        ".a { @include border-radius(1px 2px 3px 4px 5px); }",
+        ".a { @include border-radius(\"top\", 1px 2px 3px); }",
+        ".a { @include border-radius(1px, 2px, -3px, 4px); }"
       ]
     },
     {
@@ -923,7 +929,12 @@
         ".button { @include focus-ring(2px, 2px, huge); }",
         ".button { @include focus-ring(2px, 2px, \"red\"); }",
         ".button { @include focus-ring(2px, 2px, 10px); }",
-        ".button { @include focus-ring(2px, 2px, inherit); }"
+        ".button { @include focus-ring(2px, 2px, inherit); }",
+        ".button { @include focus-ring(huge); }",
+        ".button { @include focus-ring(5%); }",
+        ".button { @include focus-ring(-2px); }",
+        ".button { @include focus-ring(2px, 5%); }",
+        ".button { @include focus-ring(2px, thin); }"
       ]
     },
     {
@@ -1788,7 +1799,11 @@
         ".a { @include text-stroke(huge); }",
         ".a { @include text-stroke(black, \"red\"); }",
         ".a { @include text-stroke(black, transparent, 10px); }",
-        ".a { @include text-stroke(black, transparent, red blue); }"
+        ".a { @include text-stroke(black, transparent, red blue); }",
+        ".a { @include text-stroke(black, transparent, red, huge); }",
+        ".a { @include text-stroke(black, transparent, red, 5%); }",
+        ".a { @include text-stroke(black, transparent, red, -1px); }",
+        ".a { @include text-stroke(black, transparent, red, 2); }"
       ]
     },
     {
@@ -1890,7 +1905,12 @@
         ".caret { @include triangle(\"top\", notacolor); }",
         ".caret { @include triangle(\"top\", url(a.png)); }",
         ".caret { @include triangle(\"top\", red, nonsense); }",
-        ".caret { @include triangle(\"top\", -webkit-fill-available); }"
+        ".caret { @include triangle(\"top\", -webkit-fill-available); }",
+        ".caret { @include triangle(\"top\", red, 5%); }",
+        ".caret { @include triangle(\"top\", red, -10px); }",
+        ".caret { @include triangle(\"top\", red, thin); }",
+        ".caret { @include triangle(\"top\", red, 10); }",
+        ".caret { @include triangle(\"top\", red, 10px 10deg); }"
       ]
     },
     {

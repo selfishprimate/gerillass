@@ -37,6 +37,10 @@
     ".a { @include text-stroke(huge); }",
     ".a { @include text-stroke(black, \"red\"); }",
     ".a { @include text-stroke(black, transparent, 10px); }",
-    ".a { @include text-stroke(black, transparent, red blue); }"
+    ".a { @include text-stroke(black, transparent, red blue); }",
+    ".a { @include text-stroke(black, transparent, red, huge); }",
+    ".a { @include text-stroke(black, transparent, red, 5%); }",
+    ".a { @include text-stroke(black, transparent, red, -1px); }",
+    ".a { @include text-stroke(black, transparent, red, 2); }"
   ]
 }

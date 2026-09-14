@@ -199,4 +199,28 @@
       }
     }
   }
+
+  // The sizes land in border-width, which in Chrome 152 kept a length and a
+  // calculation and dropped a percentage, a negative width and a unitless
+  // number. calc() halves them, so thin, medium and thick do not work either.
+  @include it('Accepts an em size and a calculation with var() in it.') {
+    @include assert {
+      @include output {
+        .caret {
+          @include triangle("bottom", black, 0.5em calc(var(--h) + 2px));
+        }
+      }
+      @include expect {
+        .caret {
+          content: "";
+          height: 0;
+          width: 0;
+          display: inline-block;
+          border-style: solid;
+          border-color: black transparent transparent;
+          border-width: calc(var(--h) + 2px) 0.25em 0;
+        }
+      }
+    }
+  }
 }

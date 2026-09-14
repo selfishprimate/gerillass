@@ -35,4 +35,19 @@
       }
     }
   }
+
+  // Interpolation gives an unquoted string, not a number, and it is written
+  // into the CSS as it reads. `sizer(#{40}px)` worked on main and was refused
+  // for a while on this branch, so it is pinned here.
+  @include it('Accepts a length built by interpolation.') {
+    @include assert {
+      @include output {
+        $n: 40;
+        .a { @include sizer(#{$n}px, #{"50%"}); }
+      }
+      @include expect {
+        .a { width: 40px; height: 50%; }
+      }
+    }
+  }
 }

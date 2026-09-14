@@ -59,11 +59,11 @@ $-css-wide: "inherit" "initial" "unset" "revert" "revert-layer";
   @if meta.type-of($value) != "string" {
     @return "it is not a length";
   }
+  $kind: "length";
+  @if $percent {
+    $kind: "length-percentage";
+  }
   @if string.slice(meta.inspect($value), 1, 1) == "\"" {
-    $kind: "length";
-    @if $percent {
-      $kind: "length-percentage";
-    }
     @if $quoted and isConditionValue($value, $kind) {
       @return null;
     }
@@ -77,6 +77,20 @@ $-css-wide: "inherit" "initial" "unset" "revert" "revert-layer";
       @return null;
     }
     @return "`#{$name}()` does not give a length here";
+  }
+  @if string.index($lower, " ") {
+    @return "it is several values where one length is meant";
+  }
+  // Interpolation, such as `#{$n}px`, gives an unquoted string rather than a
+  // number, and it is written into the CSS as it reads, so its content decides.
+  @if isConditionValue($value, $kind) {
+    @if not $negative and string.index($lower, "-") == 1 {
+      @return "a length below zero does not work here";
+    }
+    @return null;
+  }
+  @if string.index($lower, "%") and isConditionValue($value, "length-percentage") {
+    @return "a percentage does not work here";
   }
   @if list.index($keywords, $lower) {
     @return null;

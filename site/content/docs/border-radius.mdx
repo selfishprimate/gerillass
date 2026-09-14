@@ -18,7 +18,7 @@ The **Border Radius** Sass mixin helps you round the corners of a selected eleme
 
 <Arguments of="border-radius">
   <Argument name="$corner" type="string">Lets you choose which corners of an element you want to style. Accepts the following values: <code>top</code>, <code>top-right</code>, <code>right</code>, <code>bottom-right</code>, <code>bottom</code>, <code>bottom-left</code>, <code>left</code>, <code>top-left</code>, <code>cross-left</code>, <code>cross-right</code>, <code>all</code>. The logical corners <code>start-start</code>, <code>start-end</code>, <code>end-start</code> and <code>end-end</code>, named block side first, and the logical edges <code>inline-start</code>, <code>inline-end</code>, <code>block-start</code> and <code>block-end</code> follow the writing direction instead.</Argument>
-  <Argument name="$value" type="number (with unit)">The size of the border radius that will be applied.</Argument>
+  <Argument name="$value" type="number (with unit)">The size of the border radius that will be applied. Accepts a length, a percentage, <code>var()</code> or a maths function. Alone, one radius for every corner can be up to four radii and a slash, as the <code>border-radius</code> property takes; after a corner name, or as one of four radii, it is one radius or two for an elliptical corner. A CSS-wide keyword works as the whole value.</Argument>
 </Arguments>
 
 ## Examples
@@ -128,6 +128,19 @@ Just to remind you once more, these are the predefined values you can use to tar
 <div class="tab" dir="rtl" style="height: 48px; background: #5bc0bb;"></div>
 ```
 </Example>
+
+## What it refuses
+
+A radius the browser drops stops the build. Measured in Chrome 152, `border-radius` and the corner properties drop a negative radius, a word such as `auto`, a unit that is not a length, and more radii than they take: four for the whole box, two for one corner. Until 2.3.4 these compiled.
+
+```scss
+.element {
+  @include border-radius(auto);
+}
+```
+```text
+Error: `auto` is not a valid radius for `border-radius`: it is not a length. A browser drops the declaration.
+```
 
 ## Related Links
 

@@ -41,8 +41,8 @@ Measured in Chrome 152, on buttons, a link and a text input:
 ## Arguments
 
 <Arguments of="focus-ring" footnote="The values are written straight into `outline` and `outline-offset`, so anything CSS accepts there works, including `var()`.">
-  <Argument name="$width (2px)" type="number (with unit)">The thickness of the ring.</Argument>
-  <Argument name="$offset (2px)" type="number (with unit)">The gap between the element and the ring. A negative value draws the ring inside the element.</Argument>
+  <Argument name="$width (2px)" type="number (with unit)">The thickness of the ring. Accepts a length, <code>thin</code>, <code>medium</code>, <code>thick</code>, <code>var()</code> or a maths function such as <code>calc()</code>. Not a percentage.</Argument>
+  <Argument name="$offset (2px)" type="number (with unit)">The gap between the element and the ring. A negative value draws the ring inside the element. Accepts a length, a CSS-wide keyword, <code>var()</code> or a maths function. Not a percentage.</Argument>
   <Argument name="$color (currentColor)" type="color">The colour of the ring. The default follows the text colour of the element, which is right for text and outlined controls and wrong for a filled button with light text, where the ring would come out white. Pass a colour there: a colour, <code>currentColor</code>, a system colour such as <code>Highlight</code>, or a function such as <code>var()</code> or <code>color-mix()</code>.</Argument>
 </Arguments>
 
@@ -155,6 +155,17 @@ A colour the outline drops stops the build, because a dropped outline means no r
 ```
 ```text
 Error: `inherit` is not a valid $color for `focus-ring`: a CSS-wide keyword only works as a whole declaration, not inside this value. A browser drops the outline, so no ring is drawn. Pass a colour such as `#1a73e8`, `currentColor`, or a function such as `var(--focus)`.
+```
+
+A width or offset the browser drops stops the build too. Measured in Chrome 152, the outline drops a percentage, a negative width and a word other than `thin`, `medium` or `thick`, and `outline-offset` drops a percentage and any word but a CSS-wide keyword. Until 2.3.4 these compiled.
+
+```scss
+.element {
+  @include focus-ring(5%);
+}
+```
+```text
+Error: `5%` is not a valid $width for `focus-ring`: a percentage does not work here. A browser drops the outline, so no ring is drawn.
 ```
 
 ## Related Links

@@ -95,6 +95,7 @@ timestamp, a reading of the source — and every one was wrong:
 | `ratio-box` branches on `type-of == string` | a string is the correct argument | a list was accepted too, and silently produced a ratio box with no ratio |
 | `$filter-color` is documented as a colour | refuse anything that is not a colour | with no `$image-url` it is an `::after` layer's `background`, where a gradient, `url()` or `paint()` is a working overlay that main compiled |
 | the compile matrix showed no working call refused | the new check refuses nothing valid | the matrix never tried `3n` or `paint()`; `only(3n)` and a `paint()` overlay both worked on main and were refused |
+| the sweep of ~130 value kinds showed no working call refused | the length and colour checks refuse nothing valid | every value in it was a literal; `sizer(#{40}px)` and `focus-ring(2px, 2px, #{red})` worked on main and were refused, because interpolation gives a string, not a number or a colour |
 
 Techniques that did work, in rough order of usefulness:
 
@@ -134,7 +135,8 @@ added, do all of this and report it:
    fallback, `env()`, `attr()`, maths functions with `var()` inside, every
    CSS-wide keyword, upper-case and vendor keywords, colour functions,
    gradients, `url()`, `image-set()`, `paint()`, quoted forms of valid values,
-   lists, and An+B forms such as `3n`. A value kind missing from the list is
+   values built by interpolation such as `#{$n}px` and `#{$name}`, which reach
+   a check as unquoted strings, lists, and An+B forms such as `3n`. A value kind missing from the list is
    never tested, which is how both rows above slipped through.
 2. **Test the output in a browser.** For every call whose CSS changes, and
    every call that starts or stops raising, test the old and the new CSS in
@@ -623,7 +625,14 @@ each new refusal tested in Chrome. It found `only(3n)` refused since S2,
 `-webkit-fill-available` as a colour; all three are fixed. The lesson it
 records: the matrix only proves what its value list contains, so a new check
 needs probes of every value kind the argument can land beside. S7, lengths, is
-open.
+in four chunks through `scss/internal/_length-problem.scss`. Chunk 1 checks the
+sizes of `sizer`, `circle`, `brand-logo` and `ellipsis`; chunk 2 the widths
+and offset of `focus-ring`, `text-stroke`'s stroke width, `triangle`'s size and
+`border-radius`. A sweep with interpolated values then found that
+`lengthProblem` and S6's `colorProblem` refused `#{40}px` and `#{red}`, which
+reach a check as unquoted strings; both now read the string. Chunks 3 and 4,
+the backgrounds, `scissors`, `sprite`, `columnizer`, `adaptive` and
+`position`, are open.
 
 ### What `fix-plan.md` sets out
 
@@ -671,9 +680,10 @@ Three pieces of work are open, and none is started:
 
 - **`todos/silent-values.md`**: 49 arguments in 28 mixins turn a value a
   browser drops into CSS. Planned in `todos/silent-values-plan.md`, with the
-  six decisions taken. S0 to S5 are done on the `silent-values-plan` branch,
+  six decisions taken. S0 to S6 are done on the `silent-values-plan` branch,
   unreleased: S0 to S2 are what the plan puts in 2.3.1, S3 to S5 complete
-  2.3.2, and S6 is 2.3.3. S7, lengths, is the last item and is 2.3.4.
+  2.3.2, and S6 is 2.3.3. S7, lengths, is the last item and is 2.3.4; its
+  first two of four chunks are done.
 - **3.0.0**: the B items in `todos/fix-plan.md`, each with a `MIGRATION.md`
   section.
 - **`todos/design-tokens.md`**: a token layer on `tokens`, starting with the

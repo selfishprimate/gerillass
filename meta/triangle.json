@@ -49,6 +49,11 @@
     ".caret { @include triangle(\"top\", notacolor); }",
     ".caret { @include triangle(\"top\", url(a.png)); }",
     ".caret { @include triangle(\"top\", red, nonsense); }",
-    ".caret { @include triangle(\"top\", -webkit-fill-available); }"
+    ".caret { @include triangle(\"top\", -webkit-fill-available); }",
+    ".caret { @include triangle(\"top\", red, 5%); }",
+    ".caret { @include triangle(\"top\", red, -10px); }",
+    ".caret { @include triangle(\"top\", red, thin); }",
+    ".caret { @include triangle(\"top\", red, 10); }",
+    ".caret { @include triangle(\"top\", red, 10px 10deg); }"
   ]
 }

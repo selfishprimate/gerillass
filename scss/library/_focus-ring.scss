@@ -2,6 +2,7 @@
 
 @use "sass:meta";
 @use "../internal/color-problem" as *;
+@use "../internal/length-problem" as *;
 
 // Draws a focus ring for keyboard users. Two things are usually got wrong by
 // hand, and this writes the version that avoids both.
@@ -36,6 +37,22 @@
     $problem: colorProblem($color);
     @if $problem {
       @error "`#{meta.inspect($color)}` is not a valid $color for `focus-ring`: #{$problem}. A browser drops the outline, so no ring is drawn. Pass a colour such as `#1a73e8`, `currentColor`, or a function such as `var(--focus)`.";
+    }
+  }
+  // The width goes into the same shorthand, which in Chrome 152 kept a length,
+  // 0 and thin, medium or thick, and dropped a percentage, a negative width and
+  // a CSS-wide keyword. The offset is a declaration of its own: it kept a
+  // negative length and a CSS-wide keyword, and dropped a percentage and thin.
+  @if $width != null {
+    $problem: lengthProblem($width, $percent: false, $negative: false, $keywords: "thin" "medium" "thick");
+    @if $problem {
+      @error "`#{meta.inspect($width)}` is not a valid $width for `focus-ring`: #{$problem}. A browser drops the outline, so no ring is drawn.";
+    }
+  }
+  @if $offset != null {
+    $problem: lengthProblem($offset, $percent: false, $css-wide: true);
+    @if $problem {
+      @error "`#{meta.inspect($offset)}` is not a valid $offset for `focus-ring`: #{$problem}. A browser drops the declaration.";
     }
   }
 

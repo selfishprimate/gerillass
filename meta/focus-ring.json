@@ -31,6 +31,11 @@
     ".button { @include focus-ring(2px, 2px, huge); }",
     ".button { @include focus-ring(2px, 2px, \"red\"); }",
     ".button { @include focus-ring(2px, 2px, 10px); }",
-    ".button { @include focus-ring(2px, 2px, inherit); }"
+    ".button { @include focus-ring(2px, 2px, inherit); }",
+    ".button { @include focus-ring(huge); }",
+    ".button { @include focus-ring(5%); }",
+    ".button { @include focus-ring(-2px); }",
+    ".button { @include focus-ring(2px, 5%); }",
+    ".button { @include focus-ring(2px, thin); }"
   ]
 }

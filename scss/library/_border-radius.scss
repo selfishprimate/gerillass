@@ -1,8 +1,77 @@
 @charset "UTF-8";
 
 @use "sass:list";
+@use "sass:meta";
+@use "sass:string";
 @use "../lists/list-of-directions" as *;
 @use "../utilities/fill-nulls" as *;
+@use "../internal/length-problem" as *;
+
+// The parts of $text between the separator, empty parts left out.
+@function -split($text, $separator) {
+  $parts: ();
+  $at: string.index($text, $separator);
+  @while $at {
+    @if $at > 1 {
+      $parts: list.append($parts, string.unquote(string.slice($text, 1, $at - 1)));
+    }
+    $text: string.slice($text, $at + 1);
+    $at: string.index($text, $separator);
+  }
+  @if string.length($text) > 0 {
+    $parts: list.append($parts, string.unquote($text));
+  }
+  @return $parts;
+}
+
+// What is wrong with $value as the radii of one declaration, or null. Measured
+// in Chrome 152: border-radius kept one to four radii, and a slash between two
+// such sets; a corner's own property kept one or two radii and no slash. Both
+// kept a length, 0, a percentage and a CSS-wide keyword alone, and dropped a
+// negative radius, a keyword such as auto, and more radii than that.
+// Interpolation, as in `#{$a}/#{$b}`, gives the same value as a string, so a
+// string is read by its parts. null is a corner left out, as fillNulls has it.
+@function -radii-problem($value, $max, $slash: false) {
+  @if $value == null {
+    @return null;
+  }
+  $is-text: meta.type-of($value) == "string" and string.slice(meta.inspect($value), 1, 1) != "\"" and not string.index($value, "(");
+  @if ($is-text and string.index($value, "/")) or (meta.type-of($value) == "list" and list.separator($value) == "slash") {
+    $sets: $value;
+    @if $is-text {
+      $sets: -split($value, "/");
+    }
+    @if not $slash {
+      @return "a slash only works in the one-argument form, between two sets of radii";
+    }
+    @if list.length($sets) != 2 {
+      @return "a slash goes between exactly two sets of radii";
+    }
+    @each $set in $sets {
+      $problem: -radii-problem($set, $max);
+      @if $problem {
+        @return $problem;
+      }
+    }
+    @return null;
+  }
+  $radii: $value;
+  @if $is-text and string.index($value, " ") {
+    $radii: -split($value, " ");
+  }
+  @if list.length($radii) > $max {
+    @return "it is #{list.length($radii)} radii where at most #{$max} are meant";
+  }
+  @each $radius in $radii {
+    @if $radius != null {
+      $problem: lengthProblem($radius, $negative: false, $css-wide: list.length($radii) == 1);
+      @if $problem {
+        @return $problem;
+      }
+    }
+  }
+  @return null;
+}
 
 @mixin border-radius($args...) {
   // Logical corners are named block side first, inline side second, like the
@@ -12,11 +81,19 @@
   $list: list.join(list.join($list-of-directions, ("cross-left", "cross-right", "all")), $logical);
   @if list.length($args) == 1 {
     $value: list.nth($args, 1);
+    $problem: -radii-problem($value, 4, $slash: true);
+    @if $problem {
+      @error "`#{meta.inspect($value)}` is not a valid radius for `border-radius`: #{$problem}. A browser drops the declaration.";
+    }
     border-radius: fillNulls($value, space);
   } @else if list.length($args) == 2 {
     $corner: list.nth($args, 1);
     $value: list.nth($args, 2);
     @if list.index($list, $corner) {
+      $problem: -radii-problem($value, 2);
+      @if $problem {
+        @error "`#{meta.inspect($value)}` is not a valid radius for `border-radius`: #{$problem}. A browser drops the declaration.";
+      }
       @if $corner == "top" {
         border-top-left-radius: $value;
         border-top-right-radius: $value;
@@ -70,6 +147,12 @@
       @error "Corner value must be one of the followings: #{$list}.";
     }
   } @else if list.length($args) == 4 {
+    @each $value in $args {
+      $problem: -radii-problem($value, 2);
+      @if $problem {
+        @error "`#{meta.inspect($value)}` is not a valid radius for `border-radius`: #{$problem}. A browser drops the declaration.";
+      }
+    }
     $args: fillNulls($args, space, true);
     border-top-left-radius: list.nth($args, 1);
     border-top-right-radius: list.nth($args, 2);

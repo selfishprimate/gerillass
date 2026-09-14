@@ -2,6 +2,7 @@
 
 @use "sass:meta";
 @use "../internal/color-problem" as *;
+@use "../internal/length-problem" as *;
 
 // Each colour is a declaration of its own, where Chrome 152 kept a CSS-wide
 // keyword and dropped a word that is not a colour, a quoted colour, a length and
@@ -24,6 +25,15 @@
       @if $problem {
         @error "`#{meta.inspect($value)}` is not a valid #{$name} for `text-stroke`: #{$problem}. A browser drops the declaration. Pass a colour such as `black`, `currentColor`, or a function such as `var(--stroke)`.";
       }
+    }
+  }
+  // -webkit-text-stroke-width kept a length, 0, thin, medium or thick and a
+  // CSS-wide keyword in Chrome 152, and dropped a percentage and a negative
+  // width.
+  @if $stroke-width != null {
+    $problem: lengthProblem($stroke-width, $percent: false, $negative: false, $keywords: "thin" "medium" "thick", $css-wide: true);
+    @if $problem {
+      @error "`#{meta.inspect($stroke-width)}` is not a valid $stroke-width for `text-stroke`: #{$problem}. A browser drops the declaration.";
     }
   }
   color: $fallback-color;
