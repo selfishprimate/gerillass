@@ -1831,6 +1831,12 @@ cases above. Firefox and Safari not tried.
 
 ### B9. `counter` numbers correctly inside container queries
 
+**Status.** Superseded by `todos/counter-modernisation.md`, measured on
+14 September 2026. The fix below holds for containers on the items, but the
+measurement never tried `counter-continue` or a container on the list wrapper,
+where nothing but an explicit start number continues the count. The maintainer
+asked to test and evaluate a class-free redesign before planning it.
+
 **Problem.** `container-type: inline-size` applies style containment, which scopes
 counters to the container's subtree. The mixin increments on
 `.counter-item::before`, which is inside that subtree, so when the items are

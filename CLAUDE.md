@@ -641,6 +641,20 @@ browser drops instead of warning through `validateLength`, which had warned
 about working values such as `AUTO` and stayed silent for `10deg`. S7, and with
 it the plan, is done and unreleased.
 
+### What `counter-modernisation.md` records
+
+Measured 14 September 2026, when the maintainer asked whether B9 in
+`fix-plan.md` had been tested against `counter-continue`. It had not. Seventeen
+cases in Chrome 152 show B9's fix works for containers on the items and keeps
+continuing lists working, but no method continues a count across list wrappers
+that are themselves containers, a native `<ol start>` included, except an
+explicit start number with `counter-set` on the first item. The classes only
+select; continuing comes from a counter's sibling scope. The file sketches a
+class-free `counter` with `$continue`, `$start` and `$name`, a 3.0.0 change,
+and lists what is still to test first: Firefox and Safari, skipping an item,
+`::marker` for screen readers, nested lists. Not planned yet, at the
+maintainer's request.
+
 ### What `fix-plan.md` sets out
 
 The findings of the agent trials turned into work. For each problem: what goes
