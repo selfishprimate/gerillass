@@ -1,6 +1,29 @@
 # Change Log
 _Change is the essence._
 
+## 2.2.1
+
+Two fixes. Each closes a case that compiled into CSS a browser drops without a
+word. No call that produced working CSS changes its output; the calls that now
+raise are listed at the end.
+
+- **Fixed:** `container` refuses a `$name` a browser drops from
+  `container-name`: `and`, `or`, `not` and `default` in any case, a name
+  starting with a digit or with a hyphen and a digit, a name holding a
+  character such as `.` or `#`, and `none` or a CSS-wide keyword beside
+  another name. The browser dropped the whole declaration, even when a valid
+  name stood next to the bad one. `none` and the CSS-wide keywords on their own,
+  several valid names and `var()` are still accepted.
+- **Fixed:** `font-face` refuses an unquoted generic family or keyword as
+  `$font-family`, such as `sans-serif`, `serif`, `system-ui` or `inherit`, and
+  `env()` or `attr()`. A `@font-face` rule dropped the family, and without one
+  the font is never used. Quote the name if a font really is called that.
+  `emoji`, `fangsong` and the `ui-` families are still accepted unquoted.
+- **Note:** some calls that used to compile now raise, because a browser drops
+  what they produced. Check for these before upgrading:
+  - `container` with one of the names above
+  - `font-face` with one of the unquoted families above
+
 ## 2.2.0
 
 Three new mixins, logical directions, and two states a form needs. A handful of
