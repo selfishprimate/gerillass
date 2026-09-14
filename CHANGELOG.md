@@ -1,6 +1,18 @@
 # Change Log
 _Change is the essence._
 
+## 2.3.0
+
+One addition. Nothing breaks, and no existing call changes its output.
+
+- **Added:** `position` takes `$logical`. With `$logical: true` the same
+  shorthand writes `inset-block-start`, `inset-inline-end`, `inset-block-end`
+  and `inset-inline-start`, so offsets follow the writing direction: in a
+  right-to-left page an offset meant for the start of the line lands on the
+  right. It is the same choice `triangle` and `border-radius` already offer
+  with their logical names. The default is `false`, `null` is read as `false`,
+  and any other value raises.
+
 ## 2.2.1
 
 Two fixes. Each closes a case that compiled into CSS a browser drops without a
