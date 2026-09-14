@@ -1,9 +1,17 @@
 @charset "UTF-8";
 
 @use "../library/stretched-link" as *;
+@use "sass:meta";
 @use "../internal/image-value" as *;
+@use "../internal/length-problem" as *;
 
 @mixin brand-logo($width, $height, $image-url: null) {
+  @each $name, $value in ("$width": $width, "$height": $height) {
+    $problem: sizeProblem($value);
+    @if $problem {
+      @error "`#{meta.inspect($value)}` is not a valid #{$name} for `brand-logo`: #{$problem}. A browser drops the declaration.";
+    }
+  }
   display: inline-block;
   position: relative;
   width: $width;

@@ -17,8 +17,8 @@ The **Sizer Sass mixin** helps you size elements with one statement (or two). Si
 ## Arguments
 
 <Arguments of="sizer">
-  <Argument name="$width" type="number (with unit),<br/>string">Sets the width of the selected elements.</Argument>
-  <Argument name="$height" type="number (with unit),<br/>string">Sets the height of the selected elements. The default value is the <code>$width</code> value.</Argument>
+  <Argument name="$width" type="number (with unit),<br/>string">Sets the width of the selected elements. Accepts a length or a percentage, <code>auto</code>, <code>min-content</code>, <code>max-content</code>, <code>fit-content</code>, <code>stretch</code>, a CSS-wide keyword, <code>var()</code>, a maths function such as <code>calc()</code>, <code>anchor-size()</code> and <code>calc-size()</code>.</Argument>
+  <Argument name="$height" type="number (with unit),<br/>string">Sets the height of the selected elements. The default value is the <code>$width</code> value. Accepts the same values as <code>$width</code>.</Argument>
 </Arguments>
 
 ## Examples
@@ -55,6 +55,19 @@ The **Sizer Sass mixin** helps you size elements with one statement (or two). Si
 <div class="element" style="background: #5bc0bb">Height comes from the content, so this box is as tall as this sentence needs it to be.</div>
 ```
 </Example>
+
+## What it refuses
+
+A width or height the browser drops stops the build. Measured in Chrome 152, that is a word that is not a sizing keyword, a unitless number other than `0`, a unit that is not a length such as `deg`, a negative length, a length in quotes, and two values where one is meant. Until 2.3.4 all of these compiled, and the browser dropped the declaration without a word.
+
+```scss
+.element {
+  @include sizer(400px, huge);
+}
+```
+```text
+Error: `huge` is not a valid $height for `sizer`: it is not a length or one of: min-content, max-content, fit-content, stretch, -webkit-fill-available, -moz-available, auto. A browser drops the declaration.
+```
 
 ## Related Links
 

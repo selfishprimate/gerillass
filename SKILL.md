@@ -80,6 +80,7 @@ a dropped declaration rather than an error.
 | `breakpoint` | `.a { @include breakpoint("between", "medium", "large") { color: red; } }` |
 | `breakpointer` | `.a { @include breakpointer(42); }` |
 | `center` | `.modal { @include center(diagonal); }` |
+| `circle` | `.dot { @include circle(huge); }` |
 | `columnizer` | `.grid { @include columnizer(3, 20px, true, 9); }` |
 | `container-query` | `.title { @include container-query("min", 400px, 800px) { color: red; } }` |
 | `container` | `.card { @include container("card", sideways); }` |
@@ -101,6 +102,7 @@ a dropped declaration rather than an error.
 | `resizable` | `.a { @include resizable(huge); }` |
 | `scissors` | `.a { @include scissors(5px 10px); }` |
 | `screen-agent` | `.a { @include screen-agent(var(--density)) { color: red; } }` |
+| `sizer` | `.a { @include sizer(huge); }` |
 | `smartphone` | `.a { @include smartphone(Nokia3310) { display: none; } }` |
 | `sprite` | `.icon { @include sprite("/img/sprite.txt"); }` |
 | `stretched-link` | `.card a { @include stretched-link(middle); }` |

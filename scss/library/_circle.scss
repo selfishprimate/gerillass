@@ -1,6 +1,13 @@
 @charset "UTF-8";
 
+@use "sass:meta";
+@use "../internal/length-problem" as *;
+
 @mixin circle($size) {
+  $problem: sizeProblem($size);
+  @if $problem {
+    @error "`#{meta.inspect($size)}` is not a valid $size for `circle`: #{$problem}. A browser drops the width and height.";
+  }
   width: $size;
   height: $size;
   display: inline-block;

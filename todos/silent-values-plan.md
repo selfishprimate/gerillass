@@ -681,6 +681,19 @@ wide enough. This is where that risk is largest.
 the list in `CLAUDE.md`. If the release grows too large, split it: sizes first,
 then the backgrounds, shapes and `position`.
 
+**Status.** Split into four chunks. Chunk 1, the sizes, is done: `sizer`,
+`circle`, `brand-logo` and `ellipsis`'s `$width` check through `sizeProblem`
+in `scss/internal/_length-problem.scss`, on top of the shared `lengthProblem`.
+The keyword sets come from Chrome 152: width and height keep the intrinsic
+keywords, `stretch`, `-webkit-fill-available`, `anchor-size()`, `calc-size()`
+and a CSS-wide keyword; `max-width` keeps `none` instead of `auto` and drops
+`calc-size()`. `null` stays accepted, as before. The sweep over 2594 calls
+changed no CSS that compiled before and refused 529 calls; the old CSS of
+those was tested in Chrome, and the only declarations it kept held `var()`,
+which a browser accepts while parsing whatever surrounds it. Chunks 2 to 4
+(`focus-ring`, `text-stroke`, `border-radius`, `triangle`; the backgrounds,
+`scissors`, `sprite`, `columnizer`, `adaptive`; `position`) are not started.
+
 ---
 
 ## The false-refusal sweep

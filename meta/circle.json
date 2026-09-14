@@ -12,5 +12,9 @@
   "examples": [
     ".dot { @include circle(24px); }"
   ],
-  "rejects": []
+  "rejects": [
+    ".dot { @include circle(huge); }",
+    ".dot { @include circle(24); }",
+    ".dot { @include circle(-24px); }"
+  ]
 }

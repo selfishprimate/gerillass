@@ -26,6 +26,10 @@
     ".a { @include ellipsis(100%, huge); }",
     ".a { @include ellipsis(100%, block inline); }",
     ".a { @include ellipsis(100%, inline-block flow); }",
-    ".a { @include ellipsis(100%, 10px); }"
+    ".a { @include ellipsis(100%, 10px); }",
+    ".a { @include ellipsis(huge); }",
+    ".a { @include ellipsis(auto); }",
+    ".a { @include ellipsis(-10px); }",
+    ".a { @include ellipsis(200); }"
   ]
 }

@@ -17,7 +17,7 @@ The **Ellipsis** Sass mixin helps you truncate text and add an **ellipsis** at t
 ## Arguments
 
 <Arguments of="ellipsis">
-  <Argument name="$width (100%)" type="number <br/>(with unit)">The <code>max-width</code> of the selected element before its text is truncated.</Argument>
+  <Argument name="$width (100%)" type="number <br/>(with unit)">The <code>max-width</code> of the selected element before its text is truncated. Accepts a length or a percentage, <code>none</code>, <code>min-content</code>, <code>max-content</code>, <code>fit-content</code>, <code>stretch</code>, a CSS-wide keyword, <code>var()</code>, a maths function such as <code>min()</code>, and <code>anchor-size()</code>. Not <code>auto</code>, which <code>max-width</code> does not take.</Argument>
   <Argument name="$display (inline-block)" type="string">Sets the <code>display</code> property of the selected elements. The default value is <code>inline-block</code>. Accepts a display keyword, or two or three in any order, such as <code>inline flex</code>, as long as they name at most one outer type, one inner type and <code>list-item</code>. A vendor keyword such as <code>-webkit-box</code>, a CSS-wide keyword and <code>var()</code> work too, and <code>null</code> leaves <code>display</code> out.</Argument>
 </Arguments>
 
@@ -59,6 +59,17 @@ A `$display` the browser drops stops the build. Measured in Chrome 152, that is 
 ```
 ```text
 Error: `block inline` is not a valid $display for `ellipsis`: it names two outer display types; pass one of block, inline or run-in. A browser drops the declaration.
+```
+
+A `$width` the browser drops stops the build as well. Measured in Chrome 152, `max-width` drops `auto`, a word that is not a sizing keyword, a unitless number other than `0`, a negative length and a length in quotes. Until 2.3.4 these compiled, and the element was left with no width limit.
+
+```scss
+.element {
+  @include ellipsis(auto);
+}
+```
+```text
+Error: `auto` is not a valid $width for `ellipsis`, which sets max-width: it is not a length or one of: min-content, max-content, fit-content, stretch, -webkit-fill-available, -moz-available, none. A browser drops the declaration.
 ```
 
 ## Related Links

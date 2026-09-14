@@ -495,7 +495,10 @@
       ],
       "rejects": [
         ".logo { @include brand-logo(120px, 40px, \"/img/a.svg\" \"/img/b.svg\"); }",
-        ".logo { @include brand-logo(120px, 40px, true); }"
+        ".logo { @include brand-logo(120px, 40px, true); }",
+        ".logo { @include brand-logo(huge, 40px); }",
+        ".logo { @include brand-logo(120px, 10deg); }",
+        ".logo { @include brand-logo(\"120px\", 40px); }"
       ]
     },
     {
@@ -613,7 +616,11 @@
       "examples": [
         ".dot { @include circle(24px); }"
       ],
-      "rejects": []
+      "rejects": [
+        ".dot { @include circle(huge); }",
+        ".dot { @include circle(24); }",
+        ".dot { @include circle(-24px); }"
+      ]
     },
     {
       "name": "clearfix",
@@ -809,7 +816,11 @@
         ".a { @include ellipsis(100%, huge); }",
         ".a { @include ellipsis(100%, block inline); }",
         ".a { @include ellipsis(100%, inline-block flow); }",
-        ".a { @include ellipsis(100%, 10px); }"
+        ".a { @include ellipsis(100%, 10px); }",
+        ".a { @include ellipsis(huge); }",
+        ".a { @include ellipsis(auto); }",
+        ".a { @include ellipsis(-10px); }",
+        ".a { @include ellipsis(200); }"
       ]
     },
     {
@@ -1501,7 +1512,13 @@
         ".a { @include sizer(40px); }",
         ".a { @include sizer(120px, 40px); }"
       ],
-      "rejects": []
+      "rejects": [
+        ".a { @include sizer(huge); }",
+        ".a { @include sizer(40); }",
+        ".a { @include sizer(120px, 10deg); }",
+        ".a { @include sizer(-40px); }",
+        ".a { @include sizer(\"40px\"); }"
+      ]
     },
     {
       "name": "smartphone",

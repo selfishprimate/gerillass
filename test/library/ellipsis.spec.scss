@@ -24,6 +24,24 @@
     }
   }
 
+  // $width goes into max-width, which in Chrome 152 kept none, min() and the
+  // intrinsic keywords, and dropped auto, a negative length and a unitless
+  // number. -moz-available is Firefox's keyword, let through on purpose.
+  @include it('Accepts none, a maths function and a vendor keyword as the width.') {
+    @include assert {
+      @include output {
+        .a { @include ellipsis(none); }
+        .b { @include ellipsis(min(100%, 20rem)); }
+        .c { @include ellipsis(-moz-available); }
+      }
+      @include expect {
+        .a { display: inline-block; max-width: none; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; word-wrap: normal; }
+        .b { display: inline-block; max-width: min(100%, 20rem); text-overflow: ellipsis; white-space: nowrap; overflow: hidden; word-wrap: normal; }
+        .c { display: inline-block; max-width: -moz-available; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; word-wrap: normal; }
+      }
+    }
+  }
+
   @include it('Leaves display out for null.') {
     @include assert {
       @include output { .a { @include ellipsis(100%, null); } }

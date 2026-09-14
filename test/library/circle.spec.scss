@@ -1,0 +1,20 @@
+// circle refuses a size the browser drops. These must keep compiling to the
+// same declarations: a container unit and var(), both kept by width in
+// Chrome 152.
+@use 'true' as *;
+@use '../../scss/gerillass' as *;
+
+@include describe('circle()') {
+  @include it('Accepts a container unit and var().') {
+    @include assert {
+      @include output {
+        .a { @include circle(10cqi); }
+        .b { @include circle(var(--size)); }
+      }
+      @include expect {
+        .a { width: 10cqi; height: 10cqi; display: inline-block; border-radius: 100%; }
+        .b { width: var(--size); height: var(--size); display: inline-block; border-radius: 100%; }
+      }
+    }
+  }
+}

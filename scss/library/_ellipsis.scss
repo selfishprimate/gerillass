@@ -4,6 +4,7 @@
 @use "sass:meta";
 @use "sass:string";
 @use "../internal/keyword-value" as *;
+@use "../internal/length-problem" as *;
 @use "../internal/words" as *;
 
 // The display keywords, sorted by the part of the value each one fills.
@@ -67,6 +68,10 @@ $-alone: "none" "contents" "inline-block" "inline-table" "inline-flex" "inline-g
   $problem: -display-problem($display);
   @if $problem {
     @error "`#{meta.inspect($display)}` is not a valid $display for `ellipsis`: #{$problem}. A browser drops the declaration.";
+  }
+  $problem: sizeProblem($width, $max: true);
+  @if $problem {
+    @error "`#{meta.inspect($width)}` is not a valid $width for `ellipsis`, which sets max-width: #{$problem}. A browser drops the declaration.";
   }
   // Written without quotes, since `display: "block"` was dropped.
   @if meta.type-of($display) == "string" {
