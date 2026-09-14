@@ -34,7 +34,7 @@ const withArgs = libFiles.filter((f) => /^@mixin\s+[\w-]+\s*\(/m.test(read(`scss
 // its arguments. imageValue is counted: it refuses a list or a non-string image
 // from scss/internal/, so brand-logo and text-image validate without an @error
 // of their own.
-const validating = withArgs.filter((f) => /@error|\bvalidate[A-Z]|\bis(?!CssFunction\b)[A-Z][a-z]|\bimageValue\(/.test(read(`scss/library/${f}`)));
+const validating = withArgs.filter((f) => /@error|\bvalidate[A-Z]|\bis(?!CssFunction\b)[A-Z][a-z]|\bimageValue\(|\bcolor(Stops)?Problem\(/.test(read(`scss/library/${f}`)));
 
 const specs = [
   ...fs.readdirSync(path.join(ROOT, "test/library")),

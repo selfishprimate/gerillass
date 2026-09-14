@@ -5,7 +5,7 @@
     {
       "name": "$color",
       "accepts": [
-        "one colour, or several for a multi-stripe pattern",
+        "one colour, or several for a multi-stripe pattern, each a colour, currentColor, a system colour or a function such as var() or color-mix()",
         "null for a translucent black"
       ]
     },
@@ -42,6 +42,8 @@
     ".a { @include background-stripes(red, 2em, -45deg, 42); }",
     ".a { @include background-stripes(red, nonsense); }",
     ".a { @include background-stripes(red, 2em, -10px); }",
-    ".a { @include background-stripes(red, 2em, 10%); }"
+    ".a { @include background-stripes(red, 2em, 10%); }",
+    ".a { @include background-stripes(huge); }",
+    ".a { @include background-stripes(red \"blue\"); }"
   ]
 }

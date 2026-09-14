@@ -13,7 +13,9 @@
     {
       "name": "$filter-color",
       "accepts": [
-        "one colour, or several for a gradient"
+        "one colour, or several colour stops for a gradient, in the forms linear-gradient takes",
+        "with $image-url null, an image as the overlay layer too: a gradient, url(), image-set() or var()",
+        "a word that is not a colour, a quoted colour, a length and a CSS-wide keyword are refused"
       ]
     },
     {
@@ -36,6 +38,11 @@
     ".a { @include background-image(\"/img/a.png\", rgba(0,0,0,0.5), sideways); }",
     ".a { @include background-image(null, rgba(0,0,0,0.5), sideways); }",
     ".a { @include background-image(16 9); }",
-    ".a { @include background-image(42); }"
+    ".a { @include background-image(42); }",
+    ".a { @include background-image(\"/img/a.png\", huge); }",
+    ".a { @include background-image(\"/img/a.png\", (red, 10%)); }",
+    ".a { @include background-image(null, 10px); }",
+    ".a { @include background-image(null, inherit); }",
+    ".a { @include background-image(\"/img/a.png\", linear-gradient(to top, black, transparent)); }"
   ]
 }

@@ -29,6 +29,13 @@
     }
   }
 
+  @include it('Accepts colour stops with two positions.') {
+    @include assert {
+      @include output { .a { @include radial-gradient(circle, center, (darkslateblue 0 10%) (white 10% 20%)); } }
+      @include expect { .a { background: radial-gradient(circle at center, darkslateblue 0 10%, white 10% 20%); } }
+    }
+  }
+
   @include it('Accepts var() and keywords in any case.') {
     @include assert {
       @include output {

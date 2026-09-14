@@ -30,6 +30,19 @@
     }
   }
 
+  @include it('Accepts currentColor and a colour function as stripe colours.') {
+    @include assert {
+      @include output {
+        .a { @include background-stripes(currentColor color-mix(in srgb, red, blue)); }
+      }
+      @include expect {
+        .a {
+          background-image: repeating-linear-gradient(-45deg, currentColor 0em, currentColor 1em, color-mix(in srgb, red, blue) 1em, color-mix(in srgb, red, blue) 2em);
+        }
+      }
+    }
+  }
+
   @include it('Writes a plain image path unquoted.') {
     @include assert {
       @include output {

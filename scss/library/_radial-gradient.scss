@@ -7,6 +7,7 @@
 @use "../maps/map-for-positions" as *;
 @use "../internal/is-condition-value" as *;
 @use "../internal/words" as *;
+@use "../internal/color-stops-problem" as *;
 
 // The mixin writes `radial-gradient($shape $position, ...)`, so $shape carries
 // the shape and may carry a size, and a $position that is not a key from
@@ -164,6 +165,10 @@ $-places: "left" "center" "right" "top" "bottom";
   $problem: -position-problem($position);
   @if $problem {
     @error "`#{$position}` is not a valid $position for `radial-gradient`: #{$problem}. A browser drops the whole gradient.";
+  }
+  $problem: colorStopsProblem($colors);
+  @if $problem {
+    @error "`#{meta.inspect($colors)}` is not a valid $colors for `radial-gradient`: #{$problem}. A browser drops the whole gradient.";
   }
   @for $i from 1 through list.length($colors) {
     $list: list.append($list, list.nth($colors, $i), comma);

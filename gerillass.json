@@ -207,7 +207,7 @@
           "name": "$color",
           "default": "null",
           "accepts": [
-            "one colour, or two for the diagonal variant",
+            "one colour, or two for the diagonal variant, each a colour, currentColor, a system colour or a function such as var() or light-dark()",
             "null for a translucent black"
           ]
         },
@@ -258,7 +258,10 @@
         ".a { @include background-dots(red, 1em, 5em, maybe); }",
         ".a { @include background-dots(red, 1em, 5em, true, 42); }",
         ".a { @include background-dots(red, nonsense); }",
-        ".a { @include background-dots(red, 1em, nonsense); }"
+        ".a { @include background-dots(red, 1em, nonsense); }",
+        ".a { @include background-dots(huge); }",
+        ".a { @include background-dots(red 10px); }",
+        ".a { @include background-dots(inherit); }"
       ]
     },
     {
@@ -278,7 +281,9 @@
           "name": "$filter-color",
           "default": "null",
           "accepts": [
-            "one colour, or several for a gradient"
+            "one colour, or several colour stops for a gradient, in the forms linear-gradient takes",
+            "with $image-url null, an image as the overlay layer too: a gradient, url(), image-set() or var()",
+            "a word that is not a colour, a quoted colour, a length and a CSS-wide keyword are refused"
           ]
         },
         {
@@ -305,7 +310,12 @@
         ".a { @include background-image(\"/img/a.png\", rgba(0,0,0,0.5), sideways); }",
         ".a { @include background-image(null, rgba(0,0,0,0.5), sideways); }",
         ".a { @include background-image(16 9); }",
-        ".a { @include background-image(42); }"
+        ".a { @include background-image(42); }",
+        ".a { @include background-image(\"/img/a.png\", huge); }",
+        ".a { @include background-image(\"/img/a.png\", (red, 10%)); }",
+        ".a { @include background-image(null, 10px); }",
+        ".a { @include background-image(null, inherit); }",
+        ".a { @include background-image(\"/img/a.png\", linear-gradient(to top, black, transparent)); }"
       ]
     },
     {
@@ -316,7 +326,7 @@
           "name": "$color",
           "default": "null",
           "accepts": [
-            "one colour, or several for a multi-stripe pattern",
+            "one colour, or several for a multi-stripe pattern, each a colour, currentColor, a system colour or a function such as var() or color-mix()",
             "null for a translucent black"
           ]
         },
@@ -359,7 +369,9 @@
         ".a { @include background-stripes(red, 2em, -45deg, 42); }",
         ".a { @include background-stripes(red, nonsense); }",
         ".a { @include background-stripes(red, 2em, -10px); }",
-        ".a { @include background-stripes(red, 2em, 10%); }"
+        ".a { @include background-stripes(red, 2em, 10%); }",
+        ".a { @include background-stripes(huge); }",
+        ".a { @include background-stripes(red \"blue\"); }"
       ]
     },
     {
@@ -877,7 +889,8 @@
           "name": "$color",
           "default": "currentColor",
           "accepts": [
-            "any CSS colour, including currentColor and var()"
+            "a colour, currentColor, a system colour such as Highlight, or a function such as var() or color-mix()",
+            "a word that is not a colour, a quoted colour, a length and a CSS-wide keyword are refused, because the outline would be dropped"
           ]
         }
       ],
@@ -889,7 +902,11 @@
         ".card-link { @include focus-ring(3px, 4px, var(--focus)); }"
       ],
       "rejects": [
-        "@include focus-ring;"
+        "@include focus-ring;",
+        ".button { @include focus-ring(2px, 2px, huge); }",
+        ".button { @include focus-ring(2px, 2px, \"red\"); }",
+        ".button { @include focus-ring(2px, 2px, 10px); }",
+        ".button { @include focus-ring(2px, 2px, inherit); }"
       ]
     },
     {
@@ -1052,7 +1069,10 @@
           "name": "$colors",
           "required": true,
           "accepts": [
-            "two or more colours"
+            "one or more colour stops: a colour, or a colour with one or two positions, such as (red 0 10%) (blue 10% 100%)",
+            "a position on its own between two colours, as a hint, such as (red, 30%, blue)",
+            "var() for a stop or the whole list",
+            "a word that is not a colour, a position first or last, two positions in a row, three positions in a stop and null are refused, because the gradient would be dropped"
           ]
         }
       ],
@@ -1065,7 +1085,14 @@
       ],
       "rejects": [
         ".a { @include linear-gradient(sideways, (red, blue)); }",
-        ".a { @include linear-gradient(true, (red, blue)); }"
+        ".a { @include linear-gradient(true, (red, blue)); }",
+        ".a { @include linear-gradient(\"top\", (huge, blue)); }",
+        ".a { @include linear-gradient(\"top\", (inherit, blue)); }",
+        ".a { @include linear-gradient(\"top\", (red, 10%)); }",
+        ".a { @include linear-gradient(\"top\", (10%, red, blue)); }",
+        ".a { @include linear-gradient(\"top\", (red, 30%, 40%, blue)); }",
+        ".a { @include linear-gradient(\"top\", (red 10% 20% 30%, blue)); }",
+        ".a { @include linear-gradient(\"top\", null); }"
       ]
     },
     {
@@ -1247,7 +1274,8 @@
           "name": "$colors",
           "required": true,
           "accepts": [
-            "two or more colours"
+            "one or more colour stops, in the same forms as linear-gradient: a colour with up to two positions, a position between two colours, or var()",
+            "a stop the browser drops is refused, because the whole gradient would be dropped"
           ]
         }
       ],
@@ -1264,7 +1292,9 @@
         ".a { @include radial-gradient(\"circle 10%\", \"center\", (red, blue)); }",
         ".a { @include radial-gradient(circle, huge, (red, blue)); }",
         ".a { @include radial-gradient(circle, \"at huge\", (red, blue)); }",
-        ".a { @include radial-gradient(circle, inherit, (red, blue)); }"
+        ".a { @include radial-gradient(circle, inherit, (red, blue)); }",
+        ".a { @include radial-gradient(circle, \"center\", (huge, blue)); }",
+        ".a { @include radial-gradient(circle, \"center\", (red, blue, 90%)); }"
       ]
     },
     {
@@ -1594,7 +1624,8 @@
           "name": "$colors",
           "required": true,
           "accepts": [
-            "two or more colours"
+            "one or more colour stops, in the same forms as linear-gradient: a colour with up to two positions, a position between two colours, or var()",
+            "a stop the browser drops is refused, because the gradient and the transparent text would go with it"
           ]
         }
       ],
@@ -1605,7 +1636,9 @@
         ".a { @include text-gradient(\"top\", (red, blue)); }"
       ],
       "rejects": [
-        ".a { @include text-gradient(sideways, (red, blue)); }"
+        ".a { @include text-gradient(sideways, (red, blue)); }",
+        ".a { @include text-gradient(\"top\", (huge, blue)); }",
+        ".a { @include text-gradient(\"top\", (\"red\", blue)); }"
       ]
     },
     {
@@ -1688,14 +1721,16 @@
           "name": "$fallback-color",
           "default": "black",
           "accepts": [
-            "a colour for browsers without text-stroke"
+            "a colour for browsers without text-stroke",
+            "each colour accepts a colour, currentColor, a system colour, a function such as var() or light-dark(), a CSS-wide keyword, or null to leave its declaration out"
           ]
         },
         {
           "name": "$color",
           "default": "transparent",
           "accepts": [
-            "the text fill colour"
+            "the text fill colour",
+            "a word that is not a colour, a quoted colour, a length or two colours are refused"
           ]
         },
         {
@@ -1720,7 +1755,12 @@
         ".a { @include text-stroke; }",
         ".a { @include text-stroke(black, transparent, red, 2px); }"
       ],
-      "rejects": []
+      "rejects": [
+        ".a { @include text-stroke(huge); }",
+        ".a { @include text-stroke(black, \"red\"); }",
+        ".a { @include text-stroke(black, transparent, 10px); }",
+        ".a { @include text-stroke(black, transparent, red blue); }"
+      ]
     },
     {
       "name": "tokens",
@@ -1789,7 +1829,9 @@
           "accepts": [
             "a Sass colour, such as red, #333 or oklch(70% 0.1 200)",
             "currentColor",
-            "var(), color-mix() or light-dark(), which CSS resolves"
+            "a system colour such as Canvas",
+            "var(), color-mix(), light-dark(), contrast-color() or rgb(from ...), which CSS resolves",
+            "a CSS-wide keyword is refused, because it is invalid inside the border-color shorthand"
           ]
         },
         {
@@ -1818,7 +1860,8 @@
         ".caret { @include triangle(sideways); }",
         ".caret { @include triangle(\"top\", notacolor); }",
         ".caret { @include triangle(\"top\", url(a.png)); }",
-        ".caret { @include triangle(\"top\", red, nonsense); }"
+        ".caret { @include triangle(\"top\", red, nonsense); }",
+        ".caret { @include triangle(\"top\", -webkit-fill-available); }"
       ]
     },
     {

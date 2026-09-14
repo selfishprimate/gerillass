@@ -1,5 +1,8 @@
 @charset "UTF-8";
 
+@use "sass:meta";
+@use "../internal/color-problem" as *;
+
 // Draws a focus ring for keyboard users. Two things are usually got wrong by
 // hand, and this writes the version that avoids both.
 //
@@ -25,6 +28,15 @@
 @mixin focus-ring($width: 2px, $offset: 2px, $color: currentColor) {
   @if not & {
     @error "`focus-ring` styles the element it is called in, so call it inside a selector, such as `.button { @include focus-ring; }`.";
+  }
+  // The colour goes into the outline shorthand, where Chrome 152 dropped a word
+  // that is not a colour, a quoted colour, a length and a CSS-wide keyword, so
+  // the ring was not drawn at all. null leaves the colour to the browser.
+  @if $color != null {
+    $problem: colorProblem($color);
+    @if $problem {
+      @error "`#{meta.inspect($color)}` is not a valid $color for `focus-ring`: #{$problem}. A browser drops the outline, so no ring is drawn. Pass a colour such as `#1a73e8`, `currentColor`, or a function such as `var(--focus)`.";
+    }
   }
 
   &:focus-visible {

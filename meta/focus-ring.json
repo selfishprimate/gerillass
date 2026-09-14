@@ -17,7 +17,8 @@
     {
       "name": "$color",
       "accepts": [
-        "any CSS colour, including currentColor and var()"
+        "a colour, currentColor, a system colour such as Highlight, or a function such as var() or color-mix()",
+        "a word that is not a colour, a quoted colour, a length and a CSS-wide keyword are refused, because the outline would be dropped"
       ]
     }
   ],
@@ -26,6 +27,10 @@
     ".card-link { @include focus-ring(3px, 4px, var(--focus)); }"
   ],
   "rejects": [
-    "@include focus-ring;"
+    "@include focus-ring;",
+    ".button { @include focus-ring(2px, 2px, huge); }",
+    ".button { @include focus-ring(2px, 2px, \"red\"); }",
+    ".button { @include focus-ring(2px, 2px, 10px); }",
+    ".button { @include focus-ring(2px, 2px, inherit); }"
   ]
 }

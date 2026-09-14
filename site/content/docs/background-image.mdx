@@ -18,7 +18,7 @@ The **Background Image** Sass mixin allows you to apply background images to the
 
 <Arguments of="background-image" footnote="Use `null` if you want to skip an argument. See [the examples](#examples) for more.">
   <Argument name="$image-url" type="string, function">The URL of the background image, as a string. A value that already is an image, <code>var()</code>, <code>url()</code>, <code>image-set()</code> or a gradient, is written as it is rather than wrapped in <code>url()</code>. A list, a number, a colour or a boolean is refused.</Argument>
-  <Argument name="$filter-color" type="color | list">The color or list of colors you want to apply as a filter over the background image. <strong>Multiple color values must be separated by a space.</strong></Argument>
+  <Argument name="$filter-color" type="color | list">The color or list of colors you want to apply as a filter over the background image. <strong>Multiple color values must be separated by a space.</strong> Several colours are the stops of a gradient and take the forms <a href="/docs/linear-gradient">Linear Gradient</a> takes. When <code>$image-url</code> is <code>null</code> and the image is set in the markup, the filter is a layer over it, so it can also be an image: a <code>linear-gradient()</code> for a scrim, a <code>radial-gradient()</code> for a vignette, or a <code>url()</code> for a pattern.</Argument>
   <Argument name="$filter-direction" type="string">The direction of the gradient. <strong>It only works when you pass multiple color values for the <code>$filter-color</code> argument</strong>, but a value it does not accept is refused with an error whatever the number of colors. Accepts the values <code>top</code>, <code>top-right</code>, <code>right</code>, <code>bottom-right</code>, <code>bottom</code>, <code>bottom-left</code>, <code>left</code>, and <code>top-left</code>. The default value is <code>top</code>.</Argument>
 </Arguments>
 
@@ -125,6 +125,17 @@ An image that is not one path stops the build. Until 2.3.2 anything went into `u
 ```
 ```text
 Error: `16 9` is not a valid $image-url for `background-image`: it is a list where one image is meant, and a browser drops `url()` with a list in it. Pass one path as a string, such as `"/img/hero.png"`.
+```
+
+A filter colour that is not a colour is refused too, since 2.3.3. Measured in Chrome 152, a word drops the filter, and a length written into `background` is read as a position rather than a colour.
+
+```scss
+.element {
+  @include background-image("/img/a.png", huge);
+}
+```
+```text
+Error: `huge` is not a valid $filter-color for `background-image`: it is not a colour. Pass a colour, such as `rgba(0, 0, 0, 0.5)`, or several for a gradient.
 ```
 
 ## Related Links

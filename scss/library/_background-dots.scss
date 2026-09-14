@@ -5,6 +5,7 @@
 @use "sass:string";
 @use "../internal/is-size" as *;
 @use "../internal/image-value" as *;
+@use "../internal/color-problem" as *;
 
 @mixin background-dots(
   $color: null,
@@ -31,6 +32,18 @@
   }
   @if $diagonal != true and $diagonal != false {
     @error "`#{$diagonal}` is not a valid $diagonal for `background-dots`. Pass `true` or `false`.";
+  }
+  // Each colour goes into a radial gradient as `radial-gradient($color $size,
+  // ...)`. Measured in Chrome 152, a word or a quoted colour there drops the
+  // gradient, and a length is read as the gradient's size instead, so neither
+  // draws the dots meant; see scss/internal/_color-problem.scss.
+  @if $color != null {
+    @each $item in $color {
+      $problem: colorProblem($item);
+      @if $problem {
+        @error "`#{meta.inspect($item)}` is not a valid colour in $color for `background-dots`: #{$problem}. Pass one colour, or two for the diagonal variant, such as `red` or `var(--dot)`.";
+      }
+    }
   }
   @if not $color {
     $color: rgba(0, 0, 0, 0.1);

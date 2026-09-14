@@ -109,6 +109,7 @@ a dropped declaration rather than an error.
 | `text-image` | `.a { @include text-image(16 9); }` |
 | `text-selection` | `.a { @include text-selection(bogus) { background: yellow; } }` |
 | `text-shadow` | `.a { @include text-shadow(42); }` |
+| `text-stroke` | `.a { @include text-stroke(huge); }` |
 | `tokens` | `:root { @include tokens(#fff); }` |
 | `triangle` | `.caret { @include triangle(sideways); }` |
 

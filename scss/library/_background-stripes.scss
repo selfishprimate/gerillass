@@ -6,6 +6,7 @@
 @use "sass:string";
 @use "../internal/is-size" as *;
 @use "../internal/image-value" as *;
+@use "../internal/color-problem" as *;
 
 @mixin background-stripes(
   $color: null,
@@ -29,6 +30,16 @@
   // became `-10pxdeg`, both dropped. Measured in Chrome 152, a gradient kept
   // deg, grad, rad and turn in any case (`10DEG`, `0.25TURN`) and a unitless 0,
   // and dropped a unitless 45, `-10px` and `10%`.
+  // Each colour becomes a stripe in a repeating gradient, where a word or a
+  // quoted colour drops the whole pattern; see scss/internal/_color-problem.scss.
+  @if $color != null {
+    @each $item in $color {
+      $problem: colorProblem($item);
+      @if $problem {
+        @error "`#{meta.inspect($item)}` is not a valid colour in $color for `background-stripes`: #{$problem}. Pass one colour or several, such as `red` or `red var(--stripe)`.";
+      }
+    }
+  }
   $validate-unit: $rotation;
   @if math.is-unitless($rotation) {
     $validate-unit: $rotation + deg;

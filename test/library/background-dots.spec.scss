@@ -104,6 +104,24 @@
     }
   }
 
+  // Measured in Chrome 152, a radial gradient kept light-dark() and a system
+  // colour as its colour.
+  @include it('Accepts colour functions and system colours for the two dot colours.') {
+    @include assert {
+      @include output {
+        .a { @include background-dots(light-dark(black, white) Canvas); }
+      }
+      @include expect {
+        .a {
+          background-image: radial-gradient(light-dark(black, white) 1em, transparent 0), radial-gradient(Canvas 1em, transparent 0);
+          background-position: 2.5em 2.5em, 10em 10em;
+          background-size: 5em 5em;
+          background-repeat: repeat;
+        }
+      }
+    }
+  }
+
   @include it('A custom property size is multiplied in calc(), since Sass cannot.') {
     @include assert {
       @include output {

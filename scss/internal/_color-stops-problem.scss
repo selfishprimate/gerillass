@@ -1,0 +1,94 @@
+@charset "UTF-8";
+
+@use "sass:list";
+@use "sass:meta";
+@use "sass:string";
+@use "color-problem" as *;
+@use "is-condition-value" as *;
+
+// Shared by the mixins and not public API; see _is-css-function.scss.
+
+// Returns what is wrong with a list of gradient colour stops, or null. The items
+// are read the way the mixins write them, one per comma in the gradient.
+// Measured in Chrome 152 in linear-gradient():
+//
+// - kept: a colour on its own, even a single one (`linear-gradient(to top,
+//   red)`), a colour with one or two positions (`red 0 10%`), a position between
+//   two colours as a hint (`red, 30%, blue`), and var() as a whole stop;
+// - dropped: a position first or last, two positions in a row, a colour with
+//   three positions, a position that is not a length or a percentage
+//   (`red 10deg`), a colour and another colour in one stop (`red 10% blue`), and
+//   anything colorProblem refuses, CSS-wide keywords included.
+
+// True for a value a stop takes as a position: a length, a percentage, 0 or a
+// calculation.
+@function -is-position($value) {
+  @return isConditionValue($value, "length-percentage");
+}
+
+// True for var(), env() or attr(), which may stand for a whole stop or a list of
+// them, so nothing around it can be judged.
+@function -is-substitution($value) {
+  @if meta.type-of($value) != "string" or string.slice(meta.inspect($value), 1, 1) == "\"" {
+    @return false;
+  }
+  $lower: string.to-lower-case($value);
+  @return string.index($lower, "var(") == 1 or string.index($lower, "env(") == 1 or string.index($lower, "attr(") == 1;
+}
+
+@function colorStopsProblem($colors) {
+  @if $colors == null or list.length($colors) == 0 {
+    @return "a gradient needs at least one colour";
+  }
+  $count: list.length($colors);
+  $previous: null;
+  $colors-seen: 0;
+  @for $i from 1 through $count {
+    $item: list.nth($colors, $i);
+    $kind: null;
+    @if -is-substitution($item) {
+      $kind: "substitution";
+    } @else if meta.type-of($item) != "list" and -is-position($item) {
+      $kind: "hint";
+    } @else if meta.type-of($item) == "list" and list.length($item) > 1 {
+      $problem: colorProblem(list.nth($item, 1));
+      @if $problem {
+        @return "`#{meta.inspect($item)}` does not start with a colour: #{$problem}";
+      }
+      @if list.length($item) > 3 {
+        @return "`#{meta.inspect($item)}` has more than two positions, and a colour stop takes at most two";
+      }
+      @for $j from 2 through list.length($item) {
+        @if not -is-position(list.nth($item, $j)) and not -is-substitution(list.nth($item, $j)) {
+          @return "in `#{meta.inspect($item)}`, `#{meta.inspect(list.nth($item, $j))}` is not a position; a stop is a colour followed by up to two lengths or percentages";
+        }
+      }
+      $kind: "stop";
+    } @else {
+      $problem: colorProblem($item);
+      @if $problem {
+        @return "`#{meta.inspect($item)}` is not a colour stop: #{$problem}";
+      }
+      $kind: "stop";
+    }
+
+    @if $kind == "hint" {
+      @if $i == 1 {
+        @return "it starts with the position `#{meta.inspect($item)}`; a position on its own goes between two colours";
+      }
+      @if $i == $count {
+        @return "it ends with the position `#{meta.inspect($item)}`; a position on its own goes between two colours";
+      }
+      @if $previous == "hint" {
+        @return "it has two positions in a row; a position on its own goes between two colours";
+      }
+    } @else {
+      $colors-seen: $colors-seen + 1;
+    }
+    $previous: $kind;
+  }
+  @if $colors-seen == 0 {
+    @return "a gradient needs at least one colour";
+  }
+  @return null;
+}

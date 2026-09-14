@@ -1,0 +1,20 @@
+// focus-ring refuses a colour the outline shorthand drops. These must keep
+// compiling to the same ring, each measured in Chrome 152 as a colour
+// `outline: 2px solid ...` keeps: a colour function and a system colour.
+@use 'true' as *;
+@use '../../scss/gerillass' as *;
+
+@include describe('focus-ring()') {
+  @include it('Accepts colour functions and system colours.') {
+    @include assert {
+      @include output {
+        .a { @include focus-ring(2px, 2px, color-mix(in srgb, currentColor 60%, transparent)); }
+        .b { @include focus-ring(2px, 2px, Highlight); }
+      }
+      @include expect {
+        .a:focus-visible { outline: 2px solid color-mix(in srgb, currentColor 60%, transparent); outline-offset: 2px; }
+        .b:focus-visible { outline: 2px solid Highlight; outline-offset: 2px; }
+      }
+    }
+  }
+}

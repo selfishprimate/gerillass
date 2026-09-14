@@ -1,0 +1,76 @@
+@charset "UTF-8";
+
+@use "sass:list";
+@use "sass:meta";
+@use "sass:string";
+
+// Shared by the mixins and not public API; see _is-css-function.scss.
+
+// What a browser keeps as a colour, measured in Chrome 152 in `color`,
+// `-webkit-text-stroke-color`, `outline: 2px solid ...`, `background` and a
+// gradient's colour stop:
+//
+// - kept: a colour Sass knows (red, #333, rgba(), hsl(), oklch(), color()),
+//   currentColor in any case, every system colour, deprecated ones included
+//   (Canvas, AccentColor, ActiveBorder), a vendor colour such as -webkit-link,
+//   var() and env(), and the colour functions Sass leaves as text: rgb() with
+//   var() in it, rgb(from ...), color-mix(), light-dark() and contrast-color();
+// - dropped: a word that is none of those (huge, auto, none), a quoted colour,
+//   a length, a number, calc(), and two colours side by side;
+// - CSS-wide keywords were kept in a declaration of their own and dropped inside
+//   `outline` and inside a gradient, so $css-wide says which this is.
+//
+// device-cmyk() is in the specification and Chrome drops it; it is let through,
+// as `run-in` is for display, because refusing it would refuse valid CSS once a
+// browser ships it.
+//
+// Deliberately looser than isColor, which stays strict because tint and shade
+// pass its result to color.mix, and that needs a real Sass colour.
+$-system-colors: "canvas" "canvastext" "linktext" "visitedtext" "activetext" "buttonface" "buttontext" "buttonborder" "field" "fieldtext" "highlight" "highlighttext" "selecteditem" "selecteditemtext" "mark" "marktext" "graytext" "accentcolor" "accentcolortext" "activeborder" "activecaption" "appworkspace" "background" "buttonhighlight" "buttonshadow" "captiontext" "inactiveborder" "inactivecaption" "inactivecaptiontext" "infobackground" "infotext" "menu" "menutext" "scrollbar" "threeddarkshadow" "threedface" "threedhighlight" "threedlightshadow" "threedshadow" "window" "windowframe" "windowtext";
+$-functions: "var" "env" "attr" "rgb" "rgba" "hsl" "hsla" "hwb" "lab" "lch" "oklab" "oklch" "color" "color-mix" "light-dark" "contrast-color" "device-cmyk";
+$-css-wide: "inherit" "initial" "unset" "revert" "revert-layer";
+
+// Returns what is wrong with $value as one colour, or null when a browser keeps
+// it. null itself is the caller's to decide, since it means a default in some
+// mixins and leaving a declaration out in others.
+@function colorProblem($value, $css-wide: false) {
+  @if meta.type-of($value) == "color" {
+    @return null;
+  }
+  @if meta.type-of($value) == "list" and list.length($value) > 1 {
+    @return "it is several values where one colour is meant";
+  }
+  @if meta.type-of($value) != "string" {
+    @return "it is not a colour";
+  }
+  @if string.slice(meta.inspect($value), 1, 1) == "\"" {
+    @return "a colour in quotes is text, not a colour";
+  }
+  $lower: string.to-lower-case($value);
+  $open: string.index($lower, "(");
+  @if $open {
+    @if list.index($-functions, string.slice($lower, 1, $open - 1)) {
+      @return null;
+    }
+    @return "`#{string.slice($value, 1, $open - 1)}()` is not a colour function";
+  }
+  @if $lower == "currentcolor" or list.index($-system-colors, $lower) {
+    @return null;
+  }
+  // Vendor colours are named rather than matched by prefix. Measured in Chrome
+  // 152, `-webkit-link` and `-webkit-activelink` were kept as colours while
+  // `-webkit-fill-available`, `-webkit-box` and `-webkit-text` were dropped, and
+  // the prefix rule this replaced had let those through. `-webkit-focus-ring-color`
+  // is Safari's, and `-moz-` colours are Firefox's; neither could be measured
+  // here, so they are let through rather than refused unseen.
+  @if list.index("-webkit-link" "-webkit-activelink" "-webkit-focus-ring-color", $lower) or string.index($lower, "-moz-") == 1 {
+    @return null;
+  }
+  @if list.index($-css-wide, $lower) {
+    @if $css-wide {
+      @return null;
+    }
+    @return "a CSS-wide keyword only works as a whole declaration, not inside this value";
+  }
+  @return "it is not a colour";
+}

@@ -1,0 +1,29 @@
+// text-stroke refuses a colour a browser drops. These must keep compiling to the
+// same declarations, each measured in Chrome 152 as a colour the browser keeps
+// in color and -webkit-text-stroke-color: system colours, a CSS-wide keyword,
+// which a whole declaration takes, currentColor, light-dark() and a relative
+// colour, and null to leave a declaration out.
+@use 'true' as *;
+@use '../../scss/gerillass' as *;
+
+@include describe('text-stroke()') {
+  @include it('Accepts system colours and colour functions.') {
+    @include assert {
+      @include output {
+        .a { @include text-stroke(Canvas, transparent, AccentColor, 2px); }
+        .b { @include text-stroke(inherit, currentColor, light-dark(black, white)); }
+      }
+      @include expect {
+        .a { color: Canvas; -webkit-text-fill-color: transparent; -webkit-text-stroke-color: AccentColor; -webkit-text-stroke-width: 2px; }
+        .b { color: inherit; -webkit-text-fill-color: currentColor; -webkit-text-stroke-color: light-dark(black, white); -webkit-text-stroke-width: 1px; }
+      }
+    }
+  }
+
+  @include it('Leaves a colour out for null.') {
+    @include assert {
+      @include output { .a { @include text-stroke(null, red, rgb(from red r g b)); } }
+      @include expect { .a { -webkit-text-fill-color: red; -webkit-text-stroke-color: rgb(from red r g b); -webkit-text-stroke-width: 1px; } }
+    }
+  }
+}

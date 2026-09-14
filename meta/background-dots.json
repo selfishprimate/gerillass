@@ -5,7 +5,7 @@
     {
       "name": "$color",
       "accepts": [
-        "one colour, or two for the diagonal variant",
+        "one colour, or two for the diagonal variant, each a colour, currentColor, a system colour or a function such as var() or light-dark()",
         "null for a translucent black"
       ]
     },
@@ -49,6 +49,9 @@
     ".a { @include background-dots(red, 1em, 5em, maybe); }",
     ".a { @include background-dots(red, 1em, 5em, true, 42); }",
     ".a { @include background-dots(red, nonsense); }",
-    ".a { @include background-dots(red, 1em, nonsense); }"
+    ".a { @include background-dots(red, 1em, nonsense); }",
+    ".a { @include background-dots(huge); }",
+    ".a { @include background-dots(red 10px); }",
+    ".a { @include background-dots(inherit); }"
   ]
 }

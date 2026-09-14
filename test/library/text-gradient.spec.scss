@@ -1,0 +1,21 @@
+// text-gradient refuses colour stops the browser drops. This must keep compiling
+// to the same gradient: an oklch() colour and var(), both kept in Chrome 152.
+@use 'true' as *;
+@use '../../scss/gerillass' as *;
+
+@include describe('text-gradient()') {
+  @include it('Accepts a colour function and var().') {
+    @include assert {
+      @include output { .a { @include text-gradient("top", oklch(70% 0.1 200) var(--end)); } }
+      @include expect {
+        .a {
+          background: linear-gradient(to top, oklch(70% 0.1 200deg), var(--end));
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          color: transparent;
+        }
+      }
+    }
+  }
+}
