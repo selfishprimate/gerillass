@@ -177,7 +177,7 @@
   "position": {
     "title": "Position",
     "description": "The Position Sass mixin provides a one-line method to quickly set both the position and the offset properties of a selected element.",
-    "scss": "@use \"gerillass\" as *;\n\n.element{\n  @include position(absolute, null 16px 16px 16px);\n}\n"
+    "scss": "@use \"gerillass\" as *;\n\n.badge {\n  @include position(absolute, 0.75rem auto auto 0.75rem, $logical: true);\n}\n"
   },
   "radial-gradient": {
     "title": "Radial Gradient",
