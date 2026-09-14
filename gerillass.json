@@ -659,7 +659,12 @@
       "rejects": [
         ".title { @include container-query(\"min\", 400px, 800px) { color: red; } }",
         ".title { @include container-query(\"min\", 400px, $name: 42) { color: red; } }",
-        ".title { @include container-query(\"min\", var(--wide)) { color: red; } }"
+        ".title { @include container-query(\"min\", var(--wide)) { color: red; } }",
+        ".title { @include container-query(\"min\", 400px, $name: var(--container)) { color: red; } }",
+        ".title { @include container-query(\"min\", 400px, $name: \"none\") { color: red; } }",
+        ".title { @include container-query(\"min\", 400px, $name: \"not\") { color: red; } }",
+        ".title { @include container-query(\"min\", 400px, $name: \"my card\") { color: red; } }",
+        ".title { @include container-query(\"min\", 400px, $name: \"1card\") { color: red; } }"
       ],
       "warns": [
         ".title { @include container-query(400px) { color: red; } }"

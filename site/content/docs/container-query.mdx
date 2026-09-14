@@ -27,7 +27,7 @@ A size on its own matches that exact width and no other, `(width: 400px)`, which
 
 <Arguments of="container-query" footnote="$name is passed as a keyword rather than by position, because `container-query(&quot;card&quot;, &quot;medium&quot;)` could not be told apart from `container-query(&quot;min&quot;, &quot;medium&quot;)`.">
   <Argument name="$params…" type="string, number">Accepts a size, which matches that exact width only and prints a warning, two sizes for a range, or one of <code>min</code>, <code>max</code>, <code>only</code> or <code>between</code> followed by a size. A size cannot be a custom property: <code>var()</code> is not evaluated in a <code>@container</code> condition, so the rule would never apply, and the mixin refuses it.</Argument>
-  <Argument name="$name" type="string">Accepts a container name as a string, to query one named container rather than the nearest one. Pass it as a keyword, <code>$name: "card"</code>.</Argument>
+  <Argument name="$name" type="string">Accepts a container name as a string, to query one named container rather than the nearest one. Pass it as a keyword, <code>$name: "card"</code>. It has to be one name a browser keeps in an <code>@container</code> rule, so <code>var()</code>, <code>none</code>, <code>and</code>, <code>or</code>, <code>not</code>, <code>default</code>, a CSS-wide keyword, a name with a space and a name starting with a digit are refused. Measured in Chrome 152, each of them dropped the rule, and <code>not</code> turned the query into its opposite.</Argument>
 </Arguments>
 
 ## Examples
@@ -124,6 +124,19 @@ Error: `container-query` takes one or two arguments, and was given 3. Pass a siz
 ```
 ```text
 Error: `42` is not a valid $name for `container-query`. Pass a container name as a string, such as `"card"`.
+```
+
+A name from a custom property is refused too. The query needs the name itself, even where the container takes its name from `var()`, which the [Container](/docs/container) mixin allows.
+
+```scss
+.title {
+  @include container-query("min", 400px, $name: var(--container)) {
+    color: red;
+  }
+}
+```
+```text
+Error: `var(--container)` is not a valid $name for `container-query`: a custom property is not evaluated in a @container condition, so the rule would never apply. Pass the name itself, such as `"card"`; the `container` mixin can still take its name from a custom property.
 ```
 
 ## Related Links

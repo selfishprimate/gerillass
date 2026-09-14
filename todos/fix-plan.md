@@ -582,6 +582,23 @@ defect in the other half of the condition, found while validating this item and
 left out to keep it to sizes. The existing `$name` check accepts it because
 `var(--x)` is an unquoted string.
 
+**Status of the container name.** Implemented in 2.2.0, and wider than `var()`.
+Measured in Chrome 152 before writing the check, an `@container` rule was dropped
+for `var(--n)`, `none`, `and`, `or`, `default`, the CSS-wide keywords, a name
+with a space, a name starting with a digit or a hyphen and a digit, and names
+holding `.`, `#` or `!`, in any case. `not` was kept as a negated query with no
+name, so it matched the opposite of what was asked. `--card`, `-card`, `_card`,
+`c-`, `ünlü`, `auto` and `normal` were kept, and a spec holds them accepted.
+`container` is left alone: `container-name` takes `var()`, `none`, the CSS-wide
+keywords and a list of names, and `container-name: var(--n)` was measured
+matching a query for `card`. It still accepts `and`, `or` and `1card`, which that
+property drops; not done here.
+
+Five rejects went into `meta/container-query.json` first and failed. Of 556 calls
+across both mixins, both names and six query shapes, 252 changed and every one
+went from CSS to the error, for exactly the names above. An empty name still
+compiles to an unnamed query, as it always did, since that works.
+
 ### F5 and F6. Moved to 3.0.0
 
 Validation found that both change what renders for calls that work today. They
