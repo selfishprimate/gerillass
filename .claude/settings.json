@@ -31,6 +31,18 @@
           }
         ]
       }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PROJECT_DIR:-.}/.claude/hooks/check-docs-current.sh\"",
+            "timeout": 120,
+            "statusMessage": "Checking the docs kept up with the branch"
+          }
+        ]
+      }
     ]
   }
 }

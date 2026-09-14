@@ -138,14 +138,31 @@ made, plus the workflows that are easy to half-finish:
   moved. It only bites once `package.json` is ahead of the last tag; between
   releases the next version has no number yet, so it reports what is pending
   and exits clean.
+- **`hooks/check-docs-current.sh`** — a `Stop` hook, so it runs when a turn
+  ends rather than after an edit, over everything the branch has changed against
+  `origin/main`, however it was changed. It rebuilds `gerillass.json`,
+  `SKILL.md` and `llms.txt` when `scss/` or `meta/` changed and blocks if they
+  were stale, runs `tools/check-docs.js`, and when the API, `meta/`, `todos/`,
+  the tooling, the skills, the docs pages, the wiki or `package.json` changed
+  without CLAUDE.md changing, keeps the turn going once with the sections that
+  usually need it. Saying nothing needs to change is a valid answer; it does not
+  repeat for the same set of files.
 - **`/release`, `/new-mixin`, `/sass-test`, `/audit-library`** — the release
   checklist, the add-a-member checklist, the sass-true conventions, and the
   adversarial sweep over every mixin (`tools/audit.js`).
 
-All four hooks are `PostToolUse` on `Write|Edit` and exit 2 (blocking) on
-failure. **They only fire for edits made through the editor** — a file changed
-by a shell command does not trigger them. Run `npm run manifest` by hand after
-scripted edits.
+The first four hooks are `PostToolUse` on `Write|Edit` and exit 2 (blocking)
+on failure. **They only fire for edits made through the editor**, and a file
+changed by a shell command does not trigger them, which is how CLAUDE.md once
+fell two releases behind. `check-docs-current.sh` exists for that gap. Run
+`npm run manifest` by hand after scripted edits all the same.
+
+**Keep this file and the skills current in the same branch as the change.**
+When work adds or changes a member, finishes a `todos/` item, ships a release
+or changes the tooling, update the sentences here that describe it (counts,
+Pending work, the `todos/` sections, Repo tooling) and any `.claude/skills/`
+file that quotes it, in that branch, not afterwards. A stale CLAUDE.md is what
+the next session starts from.
 
 ## The manifest and the skill
 

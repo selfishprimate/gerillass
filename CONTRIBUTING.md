@@ -146,7 +146,7 @@ Four commands are available as slash commands:
 | `/audit-library` | sweeping the whole library before a release |
 | `/release` | version, changelog, tag, GitHub release, npm publish |
 
-**What runs automatically.** Three hooks fire after a file is edited: they refuse a `package.json` that declares runtime dependencies, rebuild `gerillass.json` and `SKILL.md`, and check that the counts quoted in the documentation still match the repository. They only fire for edits made through the editor — if you change files with a shell command, run `npm run manifest` yourself.
+**What runs automatically.** Four hooks fire after a file is edited through the editor: they refuse a `package.json` that declares runtime dependencies, rebuild `gerillass.json` and `SKILL.md`, check that the counts quoted in the documentation still match the repository, and refuse a release without its wiki page. One more runs when Claude Code finishes a turn, over everything the branch changed however it was changed, and asks for CLAUDE.md to be updated when the work it describes moved. If you change files with a shell command outside Claude Code, run `npm run manifest` and `node tools/check-docs.js` yourself.
 
 **One rule if you use an agent.** Do not let it claim something it has not run. This library is published and has real users; a wrong claim either ships a defect or deletes something someone depends on. `CLAUDE.md` has a section on this with the mistakes that have actually been made here.
 
