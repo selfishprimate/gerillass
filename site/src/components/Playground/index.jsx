@@ -260,6 +260,7 @@ class Playground extends Component {
       version: opening && opening.version ? opening.version : null,
       versions: FALLBACK.versions,
       css: "",
+      warnings: [],
       error: null,
       isCompiling: true,
       copied: null,
@@ -416,8 +417,8 @@ class Playground extends Component {
     };
 
     compile(source, version, OUTPUT_STYLE).then(
-      (css) => settle({ css, error: null }),
-      (error) => settle({ error: error.message || String(error) }),
+      ({ css, warnings }) => settle({ css, warnings, error: null }),
+      (error) => settle({ warnings: [], error: error.message || String(error) }),
     );
   }
 
@@ -493,7 +494,7 @@ class Playground extends Component {
     */
     this.dropStaleLink();
     this.setState(
-      { source: BLANK_SNIPPET, css: "", error: null, mixin: "" },
+      { source: BLANK_SNIPPET, css: "", warnings: [], error: null, mixin: "" },
       () => {
         this.compile();
         if (this.editor) {
@@ -512,7 +513,7 @@ class Playground extends Component {
        with the library already loaded. */
     this.dropStaleLink();
     this.setState(
-      { mixin, source: demo ? demo.scss : BLANK_SNIPPET, css: "", error: null },
+      { mixin, source: demo ? demo.scss : BLANK_SNIPPET, css: "", warnings: [], error: null },
       this.compile,
     );
   }
@@ -536,7 +537,7 @@ class Playground extends Component {
   }
 
   renderOutput() {
-    const { css, error, isCompiling, version } = this.state;
+    const { css, warnings, error, isCompiling, version } = this.state;
 
     if (error) {
       return (
@@ -553,12 +554,31 @@ class Playground extends Component {
         </div>
       );
     }
+    /*
+      A warning sits above the CSS rather than in its place: the CSS still
+      compiled, and the warning is about what it will do.
+    */
     return (
-      <CodeMirror
-        value={css}
-        options={OUTPUT_OPTIONS}
-        onBeforeChange={() => {}}
-      />
+      <>
+        {warnings.length > 0 && (
+          <div
+            className="playground__message playground__message--warning"
+            role="status"
+          >
+            <AlertIcon size={18} className="playground__message__icon" />
+            <div className="playground__message__list">
+              {warnings.map((warning) => (
+                <pre key={warning}>{warning}</pre>
+              ))}
+            </div>
+          </div>
+        )}
+        <CodeMirror
+          value={css}
+          options={OUTPUT_OPTIONS}
+          onBeforeChange={() => {}}
+        />
+      </>
     );
   }
 
@@ -566,6 +586,7 @@ class Playground extends Component {
     const {
       source,
       css,
+      warnings,
       version,
       versions,
       isCompiling,
@@ -579,7 +600,10 @@ class Playground extends Component {
     /* Only the mixins this release ships and the docs have an example for. */
     const demoable = mixins.filter((item) => DEMOS[item.name]);
     const bytes = css ? new Blob([css]).size : 0;
-    const status = isCompiling ? "compiling…" : error ? "error" : `${bytes} B`;
+    const warned = warnings.length
+      ? ` · ${warnings.length} ${warnings.length === 1 ? "warning" : "warnings"}`
+      : "";
+    const status = isCompiling ? "compiling…" : error ? "error" : `${bytes} B${warned}`;
 
     return ReactDOM.createPortal(
       <AnimatePresence onExitComplete={this.finishClose}>
