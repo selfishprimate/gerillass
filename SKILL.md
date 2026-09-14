@@ -144,6 +144,10 @@ a dropped declaration rather than an error.
 
 - Numbering restarts on every item, each showing the first number, when the items are size containers (`container-type: inline-size`): containment scopes counters to each item.
 
+**`except`**
+
+- An+B with an offset cannot be passed as a number: Sass does the arithmetic, so `except(2n+1)` becomes `3n` and excludes every third element, not the odd ones. Use `odd` or `even`, or a coefficient alone such as `3n`.
+
 **`loadify`**
 
 - `init` and every call must be in the same module, or the module with the call must `@use` the one that calls `init`. Otherwise Sass fails with "The target selector was not found".
@@ -151,6 +155,10 @@ a dropped declaration rather than an error.
 **`motion-safe`**
 
 - Keep the resting state outside the block. An element hidden in its base rule and revealed by an animation inside the block stays hidden for a user who asked for less motion; put the start state in the keyframes instead.
+
+**`only`**
+
+- An+B with an offset cannot be passed as a number: Sass does the arithmetic, so `only(2n+1)` becomes `3n` and selects every third element, not the odd ones. Use `odd` or `even`, or a coefficient alone such as `3n`.
 
 **`remove`**
 

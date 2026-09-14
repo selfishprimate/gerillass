@@ -21,6 +21,21 @@
     }
   }
 
+  // Measured in Chrome 152, :nth-of-type(3n) is valid and matched two of six
+  // siblings; main compiled only(3n) to it, and S2 refused it by mistake.
+  @include it('Accepts a coefficient of n, counting from the end when negative.') {
+    @include assert {
+      @include output {
+        .a { @include only(3n) { color: red; } }
+        .b { @include only(-3n) { color: red; } }
+      }
+      @include expect {
+        .a:nth-of-type(3n) { color: red; }
+        .b:nth-last-of-type(3n) { color: red; }
+      }
+    }
+  }
+
   @include it('Accepts a large position.') {
     @include assert {
       @include output { .a { @include only(99999) { color: red; } } }

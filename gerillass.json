@@ -843,6 +843,7 @@
           "variadic": true,
           "accepts": [
             "a positive or negative index, a whole number other than 0; a unit or a fraction makes a selector the browser drops, and 0 excludes nothing, so both are refused",
+            "a multiple of n such as 3n, to exclude every third element; an offset such as 2n+1 is computed by Sass first and arrives as 3n",
             "first, last, odd or even",
             "a selector such as .foo",
             "several indexes, all of them numbers"
@@ -852,10 +853,14 @@
       "file": "scss/library/_except.scss",
       "signature": "except($params...)",
       "summary": "Selects every sibling except the ones named.",
+      "caveats": [
+        "An+B with an offset cannot be passed as a number: Sass does the arithmetic, so `except(2n+1)` becomes `3n` and excludes every third element, not the odd ones. Use `odd` or `even`, or a coefficient alone such as `3n`."
+      ],
       "examples": [
         ".a { @include except(\"first\") { margin: 0; } }",
         ".a { @include except(2) { margin: 0; } }",
-        ".a { @include except(1, 3) { margin: 0; } }"
+        ".a { @include except(1, 3) { margin: 0; } }",
+        ".a { @include except(3n) { margin: 0; } }"
       ],
       "rejects": [
         ".a { @include except(#ff0000) { margin: 0; } }",
@@ -863,6 +868,7 @@
         ".a { @include except(-10px) { margin: 0; } }",
         ".a { @include except(1.5) { margin: 0; } }",
         ".a { @include except(0) { margin: 0; } }",
+        ".a { @include except(0n) { margin: 0; } }",
         ".a { @include except(1, 10deg) { margin: 0; } }",
         ".a { @include except(2, \"first\") { margin: 0; } }"
       ]
@@ -1149,6 +1155,7 @@
           "variadic": true,
           "accepts": [
             "a positive or negative index, a whole number other than 0; a unit or a fraction makes a selector the browser drops, and 0 matches nothing, so both are refused",
+            "a multiple of n such as 3n, for every third element; an offset such as 2n+1 is computed by Sass first and arrives as 3n",
             "first, last, odd or even",
             "a selector such as .foo",
             "several indexes, all of them numbers"
@@ -1158,10 +1165,14 @@
       "file": "scss/library/_only.scss",
       "signature": "only($params...)",
       "summary": "Selects only the siblings named.",
+      "caveats": [
+        "An+B with an offset cannot be passed as a number: Sass does the arithmetic, so `only(2n+1)` becomes `3n` and selects every third element, not the odd ones. Use `odd` or `even`, or a coefficient alone such as `3n`."
+      ],
       "examples": [
         ".a { @include only(\"first\") { margin: 0; } }",
         ".a { @include only(-1) { margin: 0; } }",
-        ".a { @include only(1, 3) { margin: 0; } }"
+        ".a { @include only(1, 3) { margin: 0; } }",
+        ".a { @include only(3n) { margin: 0; } }"
       ],
       "rejects": [
         ".a { @include only(#ff0000) { margin: 0; } }",
@@ -1169,6 +1180,7 @@
         ".a { @include only(-10px) { margin: 0; } }",
         ".a { @include only(1.5) { margin: 0; } }",
         ".a { @include only(0) { margin: 0; } }",
+        ".a { @include only(0n) { margin: 0; } }",
         ".a { @include only(1, 10deg) { margin: 0; } }",
         ".a { @include only(2, \"first\") { margin: 0; } }"
       ]

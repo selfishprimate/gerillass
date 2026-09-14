@@ -27,13 +27,21 @@
     }
     @return null;
   }
-  @if not math.is-unitless($value) {
-    @return "a position is a whole number without a unit, and `:nth-of-type(#{math.abs($value)})` is an invalid selector, so the browser would drop the rule. Pass a number such as `2`, or `-2` to count from the end";
+  // A multiple of n, such as `3n`, reaches here as a number whose unit is n.
+  // Measured in Chrome 152, :nth-of-type(3n) is valid and matched two of six
+  // siblings, and main compiled only(3n) to it, so it is accepted. Its
+  // coefficient is checked like a position: `1.5n` was dropped and `0n`
+  // matched nothing.
+  $coefficient: $value;
+  @if math.unit($value) == "n" {
+    $coefficient: math.div($value, 1n);
+  } @else if not math.is-unitless($value) {
+    @return "a position is a whole number such as `2`, or a multiple of n such as `3n`, and `:nth-of-type(#{math.abs($value)})` is an invalid selector, so the browser would drop the rule. Pass a number such as `2`, or `-2` to count from the end";
   }
-  @if math.round($value) != $value {
+  @if math.round($coefficient) != $coefficient {
     @return "a position is a whole number, and `:nth-of-type(#{math.abs($value)})` is an invalid selector, so the browser would drop the rule. Pass a number such as `2`, or `-2` to count from the end";
   }
-  @if $value == 0 {
+  @if $coefficient == 0 {
     @if $mixin == "except" {
       @return "positions count from 1, so `:not(:nth-of-type(0))` excludes nothing. Pass `1` for the first, or `-1` for the last";
     }

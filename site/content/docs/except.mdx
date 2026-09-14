@@ -288,6 +288,8 @@ A position has to be a whole number. Until 2.3.1 anything numeric went into the 
 Error: `1.5` is not a valid position for `except`: a position is a whole number, and `:nth-of-type(1.5)` is an invalid selector, so the browser would drop the rule. Pass a number such as `2`, or `-2` to count from the end.
 ```
 
+A multiple of `n` is a position too: `except(3n)` writes `:not(:nth-of-type(3n))` and leaves out every third element. An offset cannot be added, because Sass does the arithmetic first: `except(2n+1)` arrives as `3n`. For odd or even elements, pass `odd` or `even`.
+
 `0` is valid CSS but excludes nothing, because positions count from 1.
 
 ```scss

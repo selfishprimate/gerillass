@@ -9,7 +9,7 @@ Gerillass is a **pure Sass library** — a toolkit of mixins and functions, in t
 Two consequences follow from this and drive most decisions in the repo:
 
 1. **`package.json` must have no `dependencies`.** Everything (`jest`, `sass`, `sass-true`, `glob`) belongs in `devDependencies`. Consumers get only `.scss` files, so a runtime dependency here forces the entire test toolchain onto every downstream project. This was the cause of 24 Dependabot alerts fixed in v1.3.3 — do not reintroduce it.
-2. **Only `scss/` ships.** `.npmignore` excludes `test`, `assets`, `meta`, `tools`, dotfiles and `*.md`; npm always adds `README.md`, `LICENSE.md` and `package.json` back. Verify with `npm pack --dry-run` before any release (110 files / ~57 kB since `scss/internal/` was added).
+2. **Only `scss/` ships.** `.npmignore` excludes `test`, `assets`, `meta`, `tools`, dotfiles and `*.md`; npm always adds `README.md`, `LICENSE.md` and `package.json` back. Verify with `npm pack --dry-run` before any release (112 files / ~58 kB since `scss/internal/` was added).
 
 Dart Sass only. LibSass/node-sass has been unsupported since v1.3.0.
 
@@ -252,7 +252,7 @@ Until 2.0.0 they carried a `__` prefix. It had to go: under `@use`/`@forward` a 
 
 **A utility that nothing in `scss/` calls is not dead code.** `remify`, `convertToEm`, `fontSizer`, `isNumber`, `tint` and `shade` are called by no mixin at all — they are there for users, and removing them would break stylesheets. Never treat "no internal callers" as a reason to delete a member; the library is the smaller half of its own audience.
 
-Mixins validate their input and `@error` with a message that names the accepted values — 44 of the 49 that take arguments do this, mostly inline. Match that style rather than failing silently.
+Mixins validate their input and `@error` with a message that names the accepted values — 45 of the 49 that take arguments do this, mostly inline. Match that style rather than failing silently.
 
 Silent failure is the trap to watch for. A mixin that branches on `type-of` and
 has no `@else` emits nothing at all for an unexpected type, which surfaces as a
@@ -573,7 +573,21 @@ with its quotes. S4 made `imageValue` refuse a list or a non-string image in
 space, a parenthesis or a quote in `background-dots` and `background-stripes`,
 and made `sprite` check its path with two arguments. S5 stopped
 `background-stripes` appending `deg` to a rotation in another unit, so `turn`,
-`rad` and `grad` work and a length raises. S6 and S7 are open.
+`rad` and `grad` work and a length raises. S6 checked the ten colour arguments
+through `scss/internal/_color-problem.scss` and `_color-stops-problem.scss`,
+which replace `triangle`'s private helper and widen what it accepts to system
+colours and `contrast-color()`. One exception was found by building the case
+rather than reading the docs: `background-image` with no `$image-url` writes
+the filter as an `::after` layer's `background`, so a gradient or `url()` there
+is a real overlay and stays accepted. A false-refusal sweep followed, recorded
+in the plan: every changed argument called with valid CSS kinds the compile
+matrix never tried, compiled on `main` and on the branch, with the old CSS of
+each new refusal tested in Chrome. It found `only(3n)` refused since S2,
+`paint()` refused or wrapped in `url()`, and S6 accepting
+`-webkit-fill-available` as a colour; all three are fixed. The lesson it
+records: the matrix only proves what its value list contains, so a new check
+needs probes of every value kind the argument can land beside. S7, lengths, is
+open.
 
 ### What `fix-plan.md` sets out
 
@@ -622,8 +636,8 @@ Three pieces of work are open, and none is started:
 - **`todos/silent-values.md`**: 49 arguments in 28 mixins turn a value a
   browser drops into CSS. Planned in `todos/silent-values-plan.md`, with the
   six decisions taken. S0 to S5 are done on the `silent-values-plan` branch,
-  unreleased: S0 to S2 are what the plan puts in 2.3.1, and S3 to S5 complete
-  2.3.2. S6, colours, is next and is 2.3.3.
+  unreleased: S0 to S2 are what the plan puts in 2.3.1, S3 to S5 complete
+  2.3.2, and S6 is 2.3.3. S7, lengths, is the last item and is 2.3.4.
 - **3.0.0**: the B items in `todos/fix-plan.md`, each with a `MIGRATION.md`
   section.
 - **`todos/design-tokens.md`**: a token layer on `tokens`, starting with the
@@ -636,8 +650,8 @@ Three pieces of work are open, and none is started:
   a `var()` gutter work at all. Evaluating the expression would simplify
   `calc(100% / 4)` to `25%` and shorten the output, and would break every call
   whose column count or gutter is a custom property. Verified both ways.
-- **Five mixins take arguments and validate none of them** — `adaptive`,
-  `circle`, `counter`, `sizer`, `text-stroke`.
+- **Four mixins take arguments and validate none of them** — `adaptive`,
+  `circle`, `counter`, `sizer`.
   This is mostly deliberate: they pass their arguments straight to CSS, which
   accepts `var()`, `calc()`, `clamp()` and whatever ships next, so a strict
   check would reject correct code. Revisit only where the shape of the call can
@@ -646,6 +660,8 @@ Three pieces of work are open, and none is started:
   check the kind of each word against a measured set and still take `var()`.
   `brand-logo` and `text-image` left it in S4, when `imageValue` in
   `scss/internal/` began refusing a list or a non-string image for them.
+  `text-stroke` left it in S6, when its three colours began to be checked by
+  `colorProblem`.
 - **`position` warns rather than errors** on a value that is not a length, six
   cases in `node tools/audit.js`. Left as a warning on purpose — see the note
   in `scss/utilities/_validate-length.scss`.

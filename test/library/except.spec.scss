@@ -25,6 +25,13 @@
     }
   }
 
+  @include it('Accepts a coefficient of n.') {
+    @include assert {
+      @include output { .a { @include except(3n) { color: red; } } }
+      @include expect { .a:not(:nth-of-type(3n)) { color: red; } }
+    }
+  }
+
   @include it('Keeps keywords and selectors as they were.') {
     @include assert {
       @include output {

@@ -576,6 +576,69 @@ check follows that shape.
 **Touches.** Seven partials, `_triangle.scss` for the move, their `meta/` files
 and pages. `text-stroke` leaves the list in `CLAUDE.md`.
 
+**Status.** Done, not released.
+
+*Measured first*, in Chrome 152, 43 candidate values in six contexts (a
+declaration of its own, `outline: 2px solid`, `background`, a linear-gradient
+stop, the radial gradient `background-dots` writes) and 16 stop forms. Kept:
+colours Sass knows, `currentColor` in any case, every system colour, deprecated
+ones included, `-webkit-link`, `var()`, `env()`, and `rgb()` with `var()`,
+`rgb(from ...)`, `color-mix()`, `light-dark()`, `contrast-color()`. CSS-wide
+keywords were kept in a declaration of their own and dropped inside `outline`
+and gradients. Dropped everywhere: a word, a quoted colour, two colours side by
+side, `device-cmyk()`. A single stop was kept, a hint only between two colours,
+a stop with at most two positions.
+
+*The design.* Two shared files, `scss/internal/_color-problem.scss` and
+`_color-stops-problem.scss`, replace `triangle`'s private helper. `isColor` is
+unchanged. `device-cmyk()` is let through, as `run-in` was in S3, because the
+specification has it. `text-stroke` takes CSS-wide keywords, the other colour
+arguments do not. null keeps its meaning everywhere except a gradient's
+`$colors`, where it wrote `linear-gradient(to top, )` and is now refused.
+
+*Also accepted now.* `triangle` took only four named functions, so it refused a
+system colour and `contrast-color()`, which a border keeps; it accepts them now.
+No call in the compile matrix used either, so the matrix shows no call going
+from an error to CSS; the triangle spec covers it.
+
+*A defect in the first version, found and fixed.* Checked against what the
+mixin does rather than what its page documents: with no `$image-url` the image
+sits in the markup and `$filter-color` is written as an `::after` layer's
+`background`, where an image is as valid as a colour. Built as a page over an
+image in a style attribute, in Chrome 152, S5's output for a
+`linear-gradient()` drew a scrim, a `radial-gradient()` a vignette, and a
+`url()` a pattern. The first version of S6 refused all three, which broke
+working calls; the compile matrix did not catch it because none of its values
+was a gradient. `background-image` now accepts a gradient, `url()`,
+`image-set()` or `var()` as the filter when there is no `$image-url`, with
+output identical to S5, and a spec covers it. The same page showed what stays
+refused there: `inherit` made the layer inherit the element's own background and
+drew the same image over itself, and `10px` or `left` left the layer empty.
+With an image the filter goes inside `linear-gradient()`, and a gradient there
+dropped the whole declaration, image included, so it is refused.
+
+*Beyond the report's rule, and said so.* Of the declarations the refused calls
+wrote from the colour arguments, the large majority were dropped. What was kept
+did nothing a colour was meant to: in `background-dots` a length or `circle` is
+read as the gradient's size and leaves only a transparent stop, so no dots are
+drawn; in `background-image` with no image, `background: 10px`, `left` or `top`
+is an empty layer and `inherit` repeats the image. `text-stroke`'s unchanged
+default declarations were also kept beside a refused one.
+
+*Verified.* The 54 new rejects (27, bare and prefixed) failed before the change.
+The `triangle` spec stopped the Sass suite before the change, since sass-true
+raised on `triangle("top", Canvas)`; a scratch runner that runs each spec file
+alone showed every other new spec passing before the change. `npm test` 891
+passed after the change, and 897 after the overlay fix. The compile matrix
+against S5, rerun after that fix: 7053 identical, 469 from CSS to an error, all
+in the ten colour arguments, nothing else changed; the first run had 470, the
+difference being `background-image` with a `url()` filter and no image, which is
+accepted again. The audit: PASSED
+THROUGH fell from 389 to 309; REFUSED VALID CSS rose from 265 to 278, ten
+`calc(1rem + 2px)` colours and three null gradient lists, none of them valid
+there; the gating buckets stayed at 0. Nine documentation pages updated, every
+quoted message matched against a compile, and the site builds.
+
 ---
 
 ## S7. Lengths
@@ -619,6 +682,66 @@ the list in `CLAUDE.md`. If the release grows too large, split it: sizes first,
 then the backgrounds, shapes and `position`.
 
 ---
+
+## The false-refusal sweep
+
+Run on 14 September 2026 after S6, when a refusal in `background-image` turned
+out to break a working overlay, to answer how many more of S1 to S6 did the
+same. The compile matrix could not have found them: it probes every argument
+with the same 53 values, and a valid kind missing from that list is never
+tried.
+
+*Method.* Every argument the plan changed, 30 in 23 members, was called with
+about 130 valid CSS values of kinds the matrix lacks: `var()` with a fallback,
+`env()`, `attr()`, maths functions with `var()` inside, every CSS-wide keyword,
+upper-case keywords, vendor keywords, colour functions, `max-content` and
+`fit-content()`, `.5em`, `+10px`, gradients, `url()`, `image-set()`, `paint()`,
+`cross-fade()`, `element()`, quoted valid values, lists, and An+B forms. Each
+call was compiled on `main` at d538217, before any of this work, and on the
+branch. The old CSS of every call that compiled on `main` and raises now,
+1936 distinct pieces, was tested in Chrome 152, and every piece the browser
+kept was traced back to its call and judged by what the mixin does with it.
+The scripts stayed in the scratchpad, as the compile matrix did.
+
+*What it found.* Three defects, all fixed on this branch:
+
+- **S2 refused `only(3n)` and `except(3n)`.** `3n` reaches the mixin as a
+  number with the unit n, `main` compiled it to `:nth-of-type(3n)`, and in
+  Chrome that selector is valid and matched two of six siblings. A coefficient
+  of n is now accepted; `0n` matched nothing and `1.5n` was dropped, so both
+  stay refused. A trap the fix cannot remove is recorded as a caveat: Sass does
+  the arithmetic, so `only(2n+1)` arrives as `3n`, which `main` also compiled
+  without a word.
+- **S6 refused `paint()` as `background-image`'s overlay**, along with the
+  gradients and `url()` already fixed there, and S4's `imageValue` had always
+  wrapped `paint()`, `element()` and `cross-fade()` in `url()`, which loads
+  nothing. Both lists now name those functions and `image()`; `paint()`,
+  `image()` and `-webkit-cross-fade()` were kept as images in Chrome, the rest
+  are in the specification or other engines.
+- **S6 accepted any vendor-prefixed word as a colour**, so
+  `triangle(top, -webkit-fill-available)` went from an error to CSS the browser
+  drops, a silent value the plan had introduced. Vendor colours are now named:
+  `-webkit-link` and `-webkit-activelink`, kept in Chrome, and Safari's
+  `-webkit-focus-ring-color` and Firefox's `-moz-` colours, which could not be
+  measured here.
+
+*What it cleared.* After the fixes, every piece the browser kept belonged to a
+refusal already decided: a colour argument given `calc()` with `var()` in it
+(kept only because a browser accepts any value holding `var()` at parse time),
+a length read as a gradient's size, `url(42)`, an empty overlay layer, `0` as a
+position, a list where one value is meant, and the declarations a mixin writes
+unchanged beside the refused one. One narrow over-acceptance remains:
+`attr(... type(<length>))` passes as a colour, since Sass cannot read the type
+it asks for.
+
+*Verified.* The new examples, rejects and specs failed before the fixes, and
+`npm test` passed 910 after. The compile matrix against the S6 run before them:
+7532 calls identical, none from CSS to an error or back, no CSS changed, and 48
+messages changed, all the unit message in `only` and `except`, which now names
+`3n`. The sweep on the branch afterwards: `only` and `except` refuse one call
+fewer each, `background-image`'s filter two fewer, each colour argument one
+more (`-webkit-fill-available`), and the old CSS of every remaining refusal
+fell in the categories above.
 
 ## Every item, the same checklist
 
