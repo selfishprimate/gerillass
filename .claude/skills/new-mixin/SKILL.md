@@ -5,9 +5,10 @@ description: Scaffold a new Gerillass mixin or utility function with the project
 
 # Add a member to the Gerillass library
 
-Six steps. Two of them fail loudly if you skip them — the manifest suite checks
-that a new mixin has metadata and a smoke-test call. The other four fail
-silently, which is worse. Do all of them.
+Eight steps. Two of them fail loudly if you skip them: the manifest suite checks
+that a new mixin has metadata and a smoke-test call. The others fail silently,
+which is worse. Do all of them, and step 7 in particular: it is a rule in
+`CLAUDE.md`, not a suggestion.
 
 ## 1. Pick the layer
 
@@ -19,8 +20,8 @@ silently, which is worse. Do all of them.
 | keyed config | `scss/maps/` | `$map-for-…`, with `!default` |
 
 One member per file, and **the filename must match the member name** —
-`_border-radius.scss` holds `@mixin border-radius`. This holds for all 53
-existing mixins and 22 utilities; do not be the exception.
+`_border-radius.scss` holds `@mixin border-radius`. This holds for all 56
+existing mixins and 23 utilities; do not be the exception.
 
 ## 2. Write the file
 
@@ -56,11 +57,16 @@ Check the type before calling anything that throws on the wrong one —
 about its own parameter (`$n: Invalid index 2 for a list with 1 elements`)
 instead of yours.
 
-Do **not** validate a value that is passed straight through to CSS. CSS accepts
-an open-ended set there: `var()`, `calc()`, `clamp()`, `env()`, `unset` and
-whatever ships next. A strict check rejects correct code — `validateLength`
-used to warn about `var(--gap)` for exactly this reason. Validate the shape of
-the call (arity, which keyword, which type) and leave the values alone.
+Do **not** validate a value by guessing what CSS takes. CSS accepts an
+open-ended set: `var()`, `calc()`, `clamp()`, `env()`, `unset` and whatever
+ships next. A strict check rejects correct code, and `validateLength` used to warn
+about `var(--gap)` for exactly this reason. Validate the shape of the call
+(arity, which keyword, which type), and check the kind of a value only against
+a set measured in a browser, reusing the checks in `scss/internal/`
+(`keywordProblem`, `colorProblem`, `colorStopsProblem`, `isConditionValue`,
+`imageValue`), which were written that way. Measure where the value lands in
+this mixin's output, too: the same value can be wrong in one property and a
+working use in another.
 
 Reuse the existing utilities rather than reimplementing them — `isColor`,
 `isNumber`, `isTime` for type guards; `validateLength`,
@@ -147,7 +153,25 @@ output. It does not say the output was right to begin with. If your mixin
 computes anything — arithmetic, a percentage, a polygon, a shorthand order —
 write a real assertion with `/sass-test` as well.
 
-## 7. Confirm
+## 7. Test it in a browser and compare
+
+The documentation and the test suite only cover what someone wrote down. Before
+calling the member done, follow **The rule for changing or adding a member** in
+`CLAUDE.md`:
+
+- measure in Chrome, with `tools/browser-check.js`, the values each property
+  keeps before writing a check, and compare what the mixin renders with the
+  same CSS written by hand;
+- compile a wide set of calls, well beyond the examples (`var()` with a
+  fallback, maths functions, CSS-wide and vendor keywords, colour functions,
+  gradients, `url()`, `paint()`, quoted values, lists), and test the output of
+  each in the browser;
+- for a change to an existing member, compile those calls before and after and
+  diff them, and justify every call that starts raising by showing its old CSS
+  did nothing, building the case where the browser kept it;
+- write down what was not covered.
+
+## 8. Confirm
 
 ```bash
 npm test

@@ -93,6 +93,8 @@ timestamp, a reading of the source — and every one was wrong:
 | no mixin calls these six utilities | dead code, delete them | documented public API; `remify` has its own docs page |
 | eyeglass unpublished since June 2022 | dead package, drop the config | ~6800 downloads/month; the real fault was its importer breaking on any `@import` |
 | `ratio-box` branches on `type-of == string` | a string is the correct argument | a list was accepted too, and silently produced a ratio box with no ratio |
+| `$filter-color` is documented as a colour | refuse anything that is not a colour | with no `$image-url` it is an `::after` layer's `background`, where a gradient, `url()` or `paint()` is a working overlay that main compiled |
+| the compile matrix showed no working call refused | the new check refuses nothing valid | the matrix never tried `3n` or `paint()`; `only(3n)` and a `paint()` overlay both worked on main and were refused |
 
 Techniques that did work, in rough order of usefulness:
 
@@ -117,6 +119,40 @@ Techniques that did work, in rough order of usefulness:
    was found that reaches the `@error` in `_background-image.scss`; esbuild was
    never installed. Parcel was, for the README recipe, against a packed
    tarball. Saying so is better than letting silence imply coverage.
+
+### The rule for changing or adding a member
+
+**Documentation is not the test.** The maintainer made this a rule on
+14 September 2026, after the two rows above: a page cannot show every use, and
+a use it does not show still works in someone's stylesheet. Whenever a change
+touches a mixin or function, a new check included, and whenever a member is
+added, do all of this and report it:
+
+1. **Compare before and after on calls, not on the docs.** Compile the same
+   calls against the code before the change and after it, and diff. The calls
+   go well beyond the documented examples: `var()` with and without a
+   fallback, `env()`, `attr()`, maths functions with `var()` inside, every
+   CSS-wide keyword, upper-case and vendor keywords, colour functions,
+   gradients, `url()`, `image-set()`, `paint()`, quoted forms of valid values,
+   lists, and An+B forms such as `3n`. A value kind missing from the list is
+   never tested, which is how both rows above slipped through.
+2. **Test the output in a browser.** For every call whose CSS changes, and
+   every call that starts or stops raising, test the old and the new CSS in
+   Chrome with `tools/browser-check.js`. An error is justified only when the
+   old CSS was dropped, never matched, or demonstrably did nothing.
+3. **When the browser kept it, build the case.** Look at where the value lands
+   in the emitted CSS, write the markup a user would have, and look at the
+   result. Decide by what the mixin does with the value, not by whether the
+   documentation mentions it.
+4. **For a new member, measure first and compare after.** Measure the value set
+   of each property in the browser before writing any check, and compare what
+   the mixin renders with the same CSS written by hand.
+5. **Say what was not covered**: browsers not tried, value kinds not probed,
+   cases that could not be built.
+
+The compile comparison and the sweep of value kinds used for this in
+`todos/silent-values-plan.md` still live outside the repository; see the plan's
+sections on the compile matrix and the false-refusal sweep for what they did.
 
 ## Repo tooling
 
