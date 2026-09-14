@@ -138,14 +138,31 @@ made, plus the workflows that are easy to half-finish:
   moved. It only bites once `package.json` is ahead of the last tag; between
   releases the next version has no number yet, so it reports what is pending
   and exits clean.
+- **`hooks/check-docs-current.sh`** — a `Stop` hook, so it runs when a turn
+  ends rather than after an edit, over everything the branch has changed against
+  `origin/main`, however it was changed. It rebuilds `gerillass.json`,
+  `SKILL.md` and `llms.txt` when `scss/` or `meta/` changed and blocks if they
+  were stale, runs `tools/check-docs.js`, and when the API, `meta/`, `todos/`,
+  the tooling, the skills, the docs pages, the wiki or `package.json` changed
+  without CLAUDE.md changing, keeps the turn going once with the sections that
+  usually need it. Saying nothing needs to change is a valid answer; it does not
+  repeat for the same set of files.
 - **`/release`, `/new-mixin`, `/sass-test`, `/audit-library`** — the release
   checklist, the add-a-member checklist, the sass-true conventions, and the
   adversarial sweep over every mixin (`tools/audit.js`).
 
-All four hooks are `PostToolUse` on `Write|Edit` and exit 2 (blocking) on
-failure. **They only fire for edits made through the editor** — a file changed
-by a shell command does not trigger them. Run `npm run manifest` by hand after
-scripted edits.
+The first four hooks are `PostToolUse` on `Write|Edit` and exit 2 (blocking)
+on failure. **They only fire for edits made through the editor**, and a file
+changed by a shell command does not trigger them, which is how CLAUDE.md once
+fell two releases behind. `check-docs-current.sh` exists for that gap. Run
+`npm run manifest` by hand after scripted edits all the same.
+
+**Keep this file and the skills current in the same branch as the change.**
+When work adds or changes a member, finishes a `todos/` item, ships a release
+or changes the tooling, update the sentences here that describe it (counts,
+Pending work, the `todos/` sections, Repo tooling) and any `.claude/skills/`
+file that quotes it, in that branch, not afterwards. A stale CLAUDE.md is what
+the next session starts from.
 
 ## The manifest and the skill
 
@@ -211,7 +228,7 @@ Four layers, loaded in dependency order by `scss/_gerillass.scss`. The order is 
 | 1 | `scss/lists/` | flat value lists (`$list-of-buttons`) | `list-of-` prefix, `!default` |
 | 2 | `scss/maps/` | keyed config (`$map-for-breakpoints`) | `map-for-` prefix, `!default` |
 | 3 | `scss/utilities/` | 23 helper **functions** | `camelCase` |
-| 4 | `scss/library/` | 53 **mixins** — the bulk of the API | `kebab-case` |
+| 4 | `scss/library/` | 56 **mixins** — the bulk of the API | `kebab-case` |
 
 `_gerillass.scss` lists every partial explicitly. **A new file is invisible until you add its `@import` line there**, in the correct layer block.
 
@@ -221,7 +238,7 @@ Until 2.0.0 they carried a `__` prefix. It had to go: under `@use`/`@forward` a 
 
 **A utility that nothing in `scss/` calls is not dead code.** `remify`, `convertToEm`, `fontSizer`, `isNumber`, `tint` and `shade` are called by no mixin at all — they are there for users, and removing them would break stylesheets. Never treat "no internal callers" as a reason to delete a member; the library is the smaller half of its own audience.
 
-Mixins validate their input and `@error` with a message that names the accepted values — 38 of the 47 that take arguments do this, mostly inline. Match that style rather than failing silently.
+Mixins validate their input and `@error` with a message that names the accepted values — 40 of the 49 that take arguments do this, mostly inline. Match that style rather than failing silently.
 
 Silent failure is the trap to watch for. A mixin that branches on `type-of` and
 has no `@else` emits nothing at all for an unexpected type, which surfaces as a
@@ -425,9 +442,9 @@ What it suggests doing, in its own order:
 3. **Build `gerillass_compile`.** This is the MCP item under Modernisation, the
    one version of that idea that earns its place, and the research found the
    space empty. The report suggests a CLI first, since it needs no install.
-4. **`focus-ring` and the reduced-motion guard**, already listed under New
-   members worth adding. The report adds outside evidence for both, from the
-   literature on AI-generated UI being inaccessible by default.
+4. **`focus-ring` and the reduced-motion guard.** Both shipped in 2.2.0, as
+   `focus-ring` and `motion-safe`. The report added outside evidence for both,
+   from the literature on AI-generated UI being inaccessible by default.
 
 And what it argues against: investing further in `llms.txt`, whose measured
 effect is contested; and putting the manifest behind a protocol that only
@@ -527,10 +544,29 @@ would have introduced a defect: widening `isColor` to accept `var()` breaks
 logical keywords to the shared direction list makes `border-radius` accept them
 and emit nothing.
 
+**Where it stands.** Every item up to 2.3.0 is done and released: the
+groundwork and fixes in 2.1.1, the additions and new members in 2.2.0, two
+follow-up refusals in 2.2.1, and `position`'s `$logical` (A3) in 2.3.0. What is
+left is the 3.0.0 group: B1, the second half of B2 (the one-argument form
+raising instead of warning), and B3 to B9. The status of every item, with what
+was measured, is written under it.
+
 ## Pending work
 
 Known and deliberately deferred, roughly in the order it makes sense to pick up.
-Verified as of v2.1.0.
+Verified as of v2.3.0.
+
+### Next
+
+Three pieces of work are ready to be planned, and none is started:
+
+- **`todos/silent-values.md`**: 49 arguments in 28 mixins turn a value a
+  browser drops into CSS. The suggested first step is the conditions behind
+  `validateBreakpoint`.
+- **3.0.0**: the B items in `todos/fix-plan.md`, each with a `MIGRATION.md`
+  section.
+- **`todos/design-tokens.md`**: a token layer on `tokens`, starting with the
+  decision whether to ship a palette.
 
 ### Small, non-breaking
 
@@ -563,31 +599,27 @@ insets, `auto-fit` grids, anchor positioning, `@scope`, view transitions and
 scrollbar styling. The `clamp(` and `anchor` matches in `scss/` are a comment
 and the `<a>` pseudo-class list, not the features.
 
-**Four of the seven have shipped.** `container-query`, `fluid` and
-`line-clamp` are in, and `loadify` respects `prefers-reduced-motion` now, which
-was the accessibility defect the fourth entry existed for. What is left, in
-order, with the trap each one closes:
+**Six of the seven have shipped.** `container-query`, `fluid` and
+`line-clamp` are in, `loadify` respects `prefers-reduced-motion`, which was the
+accessibility defect the fourth entry existed for, and 2.2.0 added `focus-ring`
+(an outline on `:focus-visible`, measured in its source comment) and
+`motion-safe`, the standalone reduced-motion guard. What is left, with the trap
+each one closes:
 
 1. **`auto-grid`.** Verified in a browser: in a 250px container,
    `repeat(auto-fit, minmax(20rem, 1fr))` lays out a 320px column and overflows
    by 70px, while `minmax(min(100%, 20rem), 1fr)` fits at 250px. Forgetting the
    `min()` is what produces horizontal scrolling on phones. Different enough
    from `columnizer`, which is flexbox and wants a column count.
-2. **`focus-ring`, written for 2.2.0.** An outline on `:focus-visible` with an
-   offset. It needs no forced-colors branch: that mode repaints an outline and
-   drops a box-shadow, which is the ring people usually write instead. The
-   measurements are in its source comment.
-3. **A standalone `prefers-reduced-motion` guard.** The defect it was paired
-   with is fixed; the guard mixin itself was never written, and it is the
-   smaller half.
-4. **Decorative, in the spirit of `background-dots` and `scissors`:** `glass`
+2. **Decorative, in the spirit of `background-dots` and `scissors`:** `glass`
    (`backdrop-filter` with a `@supports` fallback, which is unreadable without
    it), `edge-fade` (`mask-image` on a scroll container), `theme`
    (`color-scheme` plus `light-dark()`, where forgetting the first makes the
-   second silently pick light).
+   second silently pick light). `theme` is now part of the token layer in
+   `todos/design-tokens.md`.
 
-The first two are the ones that close a real defect. The rest are decorative
-and can wait for a release that wants them.
+`auto-grid` is the one that closes a real defect. The rest are decorative and
+can wait for a release that wants them.
 
 **What one costs.** A member is seven places, not one: the partial in
 `scss/library/`, its line in that folder's `_index.scss`, a `meta/` entry
