@@ -8,12 +8,15 @@ import ScrollToTop from 'components/ScrollToTop';
 import Analytics from 'components/Analytics';
 
 import 'assets/scss/App.scss';
+import { loadModule } from './staleModule';
 
 /*
   The playground carries an editor the rest of the site has no use for, so it
-  loads on its own route rather than in everybody's first request.
+  loads on its own route rather than in everybody's first request. Through
+  loadModule, so a chunk renamed by a deploy reloads the page instead of
+  reaching the error boundary.
 */
-const Playground = lazy(() => import('pages/Playground'));
+const Playground = lazy(() => loadModule(() => import('pages/Playground')));
 
 /*
   The editor's chunk loads on demand, and what should be on screen while it
