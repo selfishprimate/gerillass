@@ -59,10 +59,11 @@ same two messages, so a recorded rejection that fails with one of them fails the
 suite.
 
 **WARNED ONLY — the build succeeded with a warning.** A warning most pipelines
-never surface. Today all of these are `validateLength` on a value that is not
-a length, six of them reached through `position`, and they stay warnings on
-purpose: that function cannot be certain, and making it strict is what used to
-reject `var(--gap)`.
+never surface. What is left here is `validateLength` called on its own with a
+value that is not a length, which stays a warning on purpose: the function is
+public, and making it strict is what used to reject `var(--gap)`. `position`
+used to reach it for six of these; since S7 of `todos/silent-values-plan.md`
+it checks its offsets itself and raises.
 
 **PASSED THROUGH — emitted CSS from a questionable argument.** Read these; do not
 act on the count. Some are correct — `after(nonsense)` really should emit

@@ -18,7 +18,7 @@ The **Position Sass mixin** provides a one-line method to quickly set both the p
 
 <Arguments of="position" footnote="To learn more about CSS shorthand properties, check out the links at the end of this page.">
   <Argument name="$position" type="string">Sets the <code>position</code> property of the selected elements. Accepts the CSS values <code>static</code>, <code>relative</code>, <code>fixed</code>, <code>absolute</code>, and <code>sticky</code>, in any case, a vendor keyword such as <code>-webkit-sticky</code>, a CSS-wide keyword, or <code>var()</code>. The default value is <code>absolute</code>, and <code>null</code> leaves <code>position</code> out. A quoted keyword is written without its quotes.</Argument>
-  <Argument name="$offsets" type="list">Accepts a list of values to set the offsets of the box edges. It uses the CSS shorthand method. The default value is <code>0</code>. Use <code>null</code> in any position to leave that edge out.</Argument>
+  <Argument name="$offsets" type="list">Accepts a list of values to set the offsets of the box edges. It uses the CSS shorthand method. The default value is <code>0</code>. Use <code>null</code> in any position to leave that edge out. Each is a length, a percentage, <code>auto</code>, a CSS-wide keyword, <code>var()</code>, a maths function, <code>anchor()</code> or <code>anchor-size()</code>.</Argument>
   <Argument name="$logical (false)" type="boolean">Pass <code>true</code> for offsets that follow the writing direction. The shorthand order stays the same, and each value goes to the logical twin of its edge: <code>inset-block-start</code>, <code>inset-inline-end</code>, <code>inset-block-end</code> and <code>inset-inline-start</code>. The same choice <code>triangle</code> and <code>border-radius</code> offer with their logical names. <code>null</code> is read as <code>false</code>.</Argument>
 </Arguments>
 
@@ -99,6 +99,17 @@ A `$position` the browser drops stops the build. Until 2.3.2 any word went into 
 ```
 ```text
 Error: `huge` is not a valid $position for `position`: it is not one of: static, relative, absolute, fixed, sticky. A browser drops the declaration.
+```
+
+An offset the browser drops stops the build too. Measured in Chrome 152, `top`, `left` and the `inset-*` properties drop a word other than `auto` or a CSS-wide keyword, a unitless number other than `0`, a unit that is not a length, a colour, an image and a quoted length. Until 2.3.4 these compiled, some with a warning and some without, and the warning also fired for working values such as `AUTO` and `revert-layer`; it is gone.
+
+```scss
+.element {
+  @include position(absolute, 0 10deg);
+}
+```
+```text
+Error: `10deg` is not a valid offset for `position`: `deg` is not a length unit. A browser drops the declaration.
 ```
 
 ## Related Links

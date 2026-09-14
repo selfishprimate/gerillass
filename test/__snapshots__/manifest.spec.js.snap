@@ -1281,6 +1281,16 @@ exports[`Manifest examples placeholder-shown: .field { @include placeholder-show
 }"
 `;
 
+exports[`Manifest examples position: .a { @include position(absolute, #{16}px AUTO revert-layer); } 1`] = `
+".a {
+  position: absolute;
+  top: 16px;
+  right: AUTO;
+  bottom: revert-layer;
+  left: AUTO;
+}"
+`;
+
 exports[`Manifest examples position: .a { @include position(absolute, 0 null null 0); } 1`] = `
 ".a {
   position: absolute;
@@ -1335,6 +1345,14 @@ exports[`Manifest examples position: .badge { @include position(absolute, 0 auto
   inset-inline-end: auto;
   inset-block-end: auto;
   inset-inline-start: 1rem;
+}"
+`;
+
+exports[`Manifest examples position: .tip { @include position(absolute, anchor(bottom) null null anchor(lef 1`] = `
+".tip {
+  position: absolute;
+  top: anchor(bottom);
+  left: anchor(left);
 }"
 `;
 

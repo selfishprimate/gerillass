@@ -636,7 +636,10 @@ position, `columnizer`'s count and gutter and `adaptive`'s gutter, with value
 sets measured by testing every compiled sweep call's own CSS in Chrome. It
 turned two broken calls into working ones instead of refusing them:
 `adaptive(0)` and `columnizer(3, 0)` now write `0px`, since a unitless 0 inside
-their `calc()` was dropped. Chunk 4, `position`, is open.
+their `calc()` was dropped. Chunk 4 made `position` raise on an offset a
+browser drops instead of warning through `validateLength`, which had warned
+about working values such as `AUTO` and stayed silent for `10deg`. S7, and with
+it the plan, is done and unreleased.
 
 ### What `fix-plan.md` sets out
 
@@ -686,8 +689,8 @@ Three pieces of work are open, and none is started:
   browser drops into CSS. Planned in `todos/silent-values-plan.md`, with the
   six decisions taken. S0 to S6 are done on the `silent-values-plan` branch,
   unreleased: S0 to S2 are what the plan puts in 2.3.1, S3 to S5 complete
-  2.3.2, and S6 is 2.3.3. S7, lengths, is the last item and is 2.3.4; three
-  of its four chunks are done, and `position` is left.
+  2.3.2, and S6 is 2.3.3. S7, lengths, is the last item and is 2.3.4, and
+  it is done too. What is left is releasing it.
 - **3.0.0**: the B items in `todos/fix-plan.md`, each with a `MIGRATION.md`
   section.
 - **`todos/design-tokens.md`**: a token layer on `tokens`, starting with the
@@ -713,9 +716,12 @@ Three pieces of work are open, and none is started:
   `colorProblem`. `circle` and `sizer` left it in S7, when `sizeProblem` began
   refusing a width or height a browser drops, and `adaptive` in S7's third
   chunk, when its gutter began to be checked.
-- **`position` warns rather than errors** on a value that is not a length, six
-  cases in `node tools/audit.js`. Left as a warning on purpose — see the note
-  in `scss/utilities/_validate-length.scss`.
+- **`validateLength` warns rather than errors** on a value that is not a
+  length, and stays that way on purpose: it is public, and a caller may want a
+  warning. `position` used to route its offsets through it, which warned about
+  working values such as `AUTO` and said nothing about `10deg`; since S7 of
+  `todos/silent-values-plan.md` it checks them itself and raises, decision 3 of
+  that plan.
 
 ### New members worth adding
 

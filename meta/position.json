@@ -33,12 +33,20 @@
     ".a { @include position(absolute, null 16px 16px 16px); }",
     ".a { @include position(absolute, 0 null null 0); }",
     ".badge { @include position(absolute, 0 auto auto 1rem, $logical: true); }",
-    ".a { @include position(absolute, 0, $logical: null); }"
+    ".a { @include position(absolute, 0, $logical: null); }",
+    ".a { @include position(absolute, #{16}px AUTO revert-layer); }",
+    ".tip { @include position(absolute, anchor(bottom) null null anchor(left)); }"
   ],
   "rejects": [
     ".badge { @include position(absolute, 0, $logical: yes); }",
     ".a { @include position(huge, 0); }",
     ".a { @include position(10px, 0); }",
-    ".a { @include position(\"absolute fixed\", 0); }"
+    ".a { @include position(\"absolute fixed\", 0); }",
+    ".a { @include position(absolute, 5); }",
+    ".a { @include position(absolute, 0 10deg); }",
+    ".a { @include position(absolute, none); }",
+    ".a { @include position(absolute, red); }",
+    ".a { @include position(absolute, \"10px\"); }",
+    ".a { @include position(absolute, url(a.png)); }"
   ]
 }

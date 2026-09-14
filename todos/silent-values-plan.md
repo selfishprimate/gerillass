@@ -744,7 +744,18 @@ Interpolated values still raise where main already refused them, in
 `columnizer`'s gutter: `isSize` and `isGutter` let only numbers into Sass's
 calc(), where a string fails. That is not a regression and was left.
 
-Chunk 4, `position`, is not started.
+Chunk 4 is done, and with it S7. `position` checks each offset through
+`lengthProblem` and raises, decision 3; it no longer calls `validateLength`,
+which is unchanged and still warns for callers of its own. Measured from the
+mixin's own output in Chrome 152, an offset keeps a length, a negative length,
+a percentage, 0, auto and a CSS-wide keyword in any case, var(), maths
+functions, and, measured separately in `top` and the `inset-*` properties,
+anchor() and anchor-size(). Before, 83 of the 147 sweep calls warned: 9 of
+those were working values such as `AUTO`, `revert-layer` and `#{16}px`, and 22
+broken calls, such as `10deg` and `url()`, did not warn at all. Now no call
+warns, 96 raise, and the old CSS of those was tested in Chrome: the only
+declarations it kept held `var()`, or were the `auto` beside an offset it
+dropped. `node tools/audit.js position` has an empty WARNED ONLY bucket.
 
 ---
 

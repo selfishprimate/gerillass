@@ -205,4 +205,22 @@
       }
     }
   }
+
+  // Each offset is a declaration of its own, which in Chrome 152 kept auto and
+  // a CSS-wide keyword in any case, a negative length, a percentage,
+  // anchor-size() and a length built by interpolation. validateLength warned
+  // about several of these; position no longer calls it.
+  @include it('Accepts upper-case keywords, anchor-size() and an interpolated length.') {
+    @include assert {
+      @include output {
+        $n: 16;
+        .a { @include position(absolute, AUTO revert-layer -10% anchor-size(width)); }
+        .b { @include position(absolute, #{$n}px); }
+      }
+      @include expect {
+        .a { position: absolute; top: AUTO; right: revert-layer; bottom: -10%; left: anchor-size(width); }
+        .b { position: absolute; top: 16px; right: 16px; bottom: 16px; left: 16px; }
+      }
+    }
+  }
 }
