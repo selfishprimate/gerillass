@@ -44,6 +44,8 @@
     ".a { @include background-stripes(red, 2em, -10px); }",
     ".a { @include background-stripes(red, 2em, 10%); }",
     ".a { @include background-stripes(huge); }",
-    ".a { @include background-stripes(red \"blue\"); }"
+    ".a { @include background-stripes(red \"blue\"); }",
+    ".a { @include background-stripes(red, 10deg); }",
+    ".a { @include background-stripes(red, 2); }"
   ]
 }

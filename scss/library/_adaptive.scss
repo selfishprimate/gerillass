@@ -1,9 +1,26 @@
 @charset "UTF-8";
 
 @use "sass:map";
+@use "sass:math";
+@use "sass:meta";
+@use "sass:string";
 @use "../maps/map-for-breakpoints" as *;
+@use "../internal/length-problem" as *;
 
 @mixin adaptive($gutter: 30px) {
+  // The gutter is subtracted twice inside calc(), which in Chrome 152 kept a
+  // length, a percentage, a negative length and var(), and dropped the
+  // max-width for a word, a CSS-wide keyword, a unitless number and a unit that
+  // is not a length. A quoted length works, since it is interpolated.
+  $problem: lengthProblem($gutter, $functions: ("anchor-size",), $quoted: true);
+  @if $problem {
+    @error "`#{meta.inspect($gutter)}` is not a valid $gutter for `adaptive`: #{$problem}. A browser drops the max-width at every breakpoint.";
+  }
+  // A unitless 0 made `calc(576px - 0 * 2)`, a length minus a number, which was
+  // dropped; 0px is kept.
+  @if (meta.type-of($gutter) == "number" and math.is-unitless($gutter)) or (meta.type-of($gutter) == "string" and string.unquote($gutter) == string.unquote("0")) {
+    $gutter: 0px;
+  }
   $actual-breakpoints: map.remove($map-for-breakpoints, "xsmall");
   margin: 0 auto;
   @each $item, $value in $actual-breakpoints {

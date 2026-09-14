@@ -290,7 +290,7 @@ Until 2.0.0 they carried a `__` prefix. It had to go: under `@use`/`@forward` a 
 
 **A utility that nothing in `scss/` calls is not dead code.** `remify`, `convertToEm`, `fontSizer`, `isNumber`, `tint` and `shade` are called by no mixin at all — they are there for users, and removing them would break stylesheets. Never treat "no internal callers" as a reason to delete a member; the library is the smaller half of its own audience.
 
-Mixins validate their input and `@error` with a message that names the accepted values — 47 of the 49 that take arguments do this, mostly inline. Match that style rather than failing silently.
+Mixins validate their input and `@error` with a message that names the accepted values — 48 of the 49 that take arguments do this, mostly inline. Match that style rather than failing silently.
 
 Silent failure is the trap to watch for. A mixin that branches on `type-of` and
 has no `@else` emits nothing at all for an unexpected type, which surfaces as a
@@ -371,7 +371,7 @@ Four levels, and knowing which one covers a member tells you what you can trust:
 | `test/smoke.scss` | the mixin evaluates at all | 56/56 mixins |
 | snapshot of `meta/` examples | the output cannot change unnoticed | 79/79 members |
 | `meta/` rejects | bad input is refused with a real message | 58/79 |
-| sass-true spec in `test/` | the CSS is **correct** | 21/79 |
+| sass-true spec in `test/` | the CSS is **correct** | 23/79 |
 
 Only the last one catches an output that was wrong from the start; a snapshot
 records a wrong value as correct. Hand-written specs are therefore reserved for
@@ -630,9 +630,13 @@ sizes of `sizer`, `circle`, `brand-logo` and `ellipsis`; chunk 2 the widths
 and offset of `focus-ring`, `text-stroke`'s stroke width, `triangle`'s size and
 `border-radius`. A sweep with interpolated values then found that
 `lengthProblem` and S6's `colorProblem` refused `#{40}px` and `#{red}`, which
-reach a check as unquoted strings; both now read the string. Chunks 3 and 4,
-the backgrounds, `scissors`, `sprite`, `columnizer`, `adaptive` and
-`position`, are open.
+reach a check as unquoted strings; both now read the string. Chunk 3 checks
+the backgrounds' sizes, `scissors` through `validateScissors`, `sprite`'s
+position, `columnizer`'s count and gutter and `adaptive`'s gutter, with value
+sets measured by testing every compiled sweep call's own CSS in Chrome. It
+turned two broken calls into working ones instead of refusing them:
+`adaptive(0)` and `columnizer(3, 0)` now write `0px`, since a unitless 0 inside
+their `calc()` was dropped. Chunk 4, `position`, is open.
 
 ### What `fix-plan.md` sets out
 
@@ -682,8 +686,8 @@ Three pieces of work are open, and none is started:
   browser drops into CSS. Planned in `todos/silent-values-plan.md`, with the
   six decisions taken. S0 to S6 are done on the `silent-values-plan` branch,
   unreleased: S0 to S2 are what the plan puts in 2.3.1, S3 to S5 complete
-  2.3.2, and S6 is 2.3.3. S7, lengths, is the last item and is 2.3.4; its
-  first two of four chunks are done.
+  2.3.2, and S6 is 2.3.3. S7, lengths, is the last item and is 2.3.4; three
+  of its four chunks are done, and `position` is left.
 - **3.0.0**: the B items in `todos/fix-plan.md`, each with a `MIGRATION.md`
   section.
 - **`todos/design-tokens.md`**: a token layer on `tokens`, starting with the
@@ -696,8 +700,7 @@ Three pieces of work are open, and none is started:
   a `var()` gutter work at all. Evaluating the expression would simplify
   `calc(100% / 4)` to `25%` and shorten the output, and would break every call
   whose column count or gutter is a custom property. Verified both ways.
-- **Two mixins take arguments and validate none of them** — `adaptive` and
-  `counter`.
+- **One mixin takes arguments and validates none of them** — `counter`.
   This is mostly deliberate: they pass their arguments straight to CSS, which
   accepts `var()`, `calc()`, `clamp()` and whatever ships next, so a strict
   check would reject correct code. Revisit only where the shape of the call can
@@ -708,7 +711,8 @@ Three pieces of work are open, and none is started:
   `scss/internal/` began refusing a list or a non-string image for them.
   `text-stroke` left it in S6, when its three colours began to be checked by
   `colorProblem`. `circle` and `sizer` left it in S7, when `sizeProblem` began
-  refusing a width or height a browser drops.
+  refusing a width or height a browser drops, and `adaptive` in S7's third
+  chunk, when its gutter began to be checked.
 - **`position` warns rather than errors** on a value that is not a length, six
   cases in `node tools/audit.js`. Left as a warning on purpose — see the note
   in `scss/utilities/_validate-length.scss`.

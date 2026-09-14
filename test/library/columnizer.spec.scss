@@ -108,4 +108,41 @@
       }
     }
   }
+
+  // A unitless 0 gutter went into calc() as `(3 - 1) * 0`, which multiplies to
+  // a number rather than a length, and Chrome 152 dropped the flex-basis. It is
+  // written as 0px, which the browser keeps.
+  @include it('A gutter of 0 is written as 0px so calc() keeps a length.') {
+    @include assert {
+      @include output {
+        .grid {
+          @include columnizer(3, 0);
+        }
+      }
+      @include expect {
+        .grid {
+          display: flex;
+          flex-wrap: wrap;
+        }
+        .grid, .grid::before, .grid::after,
+        .grid *,
+        .grid *::before,
+        .grid *::after {
+          box-sizing: border-box;
+        }
+        .grid > * {
+          flex-grow: 0;
+          flex-shrink: 0;
+          flex-basis: string.unquote("calc((100% - (3 - 1) * 0px) / 3)");
+          margin-bottom: 0px;
+        }
+        .grid > *:not(:last-child) {
+          margin-right: 0px;
+        }
+        .grid > *:nth-child(3n) {
+          margin-right: 0;
+        }
+      }
+    }
+  }
 }

@@ -30,7 +30,12 @@
         ".wrap { @include adaptive; }",
         ".wrap { @include adaptive(16px); }"
       ],
-      "rejects": []
+      "rejects": [
+        ".wrap { @include adaptive(auto); }",
+        ".wrap { @include adaptive(16); }",
+        ".wrap { @include adaptive(10deg); }",
+        ".wrap { @include adaptive(10px 20px); }"
+      ]
     },
     {
       "name": "after",
@@ -261,7 +266,11 @@
         ".a { @include background-dots(red, 1em, nonsense); }",
         ".a { @include background-dots(huge); }",
         ".a { @include background-dots(red 10px); }",
-        ".a { @include background-dots(inherit); }"
+        ".a { @include background-dots(inherit); }",
+        ".a { @include background-dots(red, -1em); }",
+        ".a { @include background-dots(red, 10deg); }",
+        ".a { @include background-dots(red, 2); }",
+        ".a { @include background-dots(red, 1em, -5em); }"
       ]
     },
     {
@@ -371,7 +380,9 @@
         ".a { @include background-stripes(red, 2em, -10px); }",
         ".a { @include background-stripes(red, 2em, 10%); }",
         ".a { @include background-stripes(huge); }",
-        ".a { @include background-stripes(red \"blue\"); }"
+        ".a { @include background-stripes(red \"blue\"); }",
+        ".a { @include background-stripes(red, 10deg); }",
+        ".a { @include background-stripes(red, 2); }"
       ]
     },
     {
@@ -663,11 +674,17 @@
         ".grid { @include columnizer(3, 20px); }",
         ".grid { @include columnizer(3, 20px, true); }",
         ".grid { @include columnizer(3, var(--gap)); }",
-        ".grid { @include columnizer(var(--cols)); }"
+        ".grid { @include columnizer(var(--cols)); }",
+        ".grid { @include columnizer(#{3}, 0); }"
       ],
       "rejects": [
         ".grid { @include columnizer(3, 20px, true, 9); }",
-        ".grid { @include columnizer(3, nonsense); }"
+        ".grid { @include columnizer(3, nonsense); }",
+        ".grid { @include columnizer(3px); }",
+        ".grid { @include columnizer(auto); }",
+        ".grid { @include columnizer(3, 10deg); }",
+        ".grid { @include columnizer(3, 2); }",
+        ".grid { @include columnizer(3, red, true); }"
       ]
     },
     {
@@ -1467,7 +1484,9 @@
       ],
       "rejects": [
         ".a { @include scissors(5px 10px); }",
-        ".a { @include scissors(nonsense); }"
+        ".a { @include scissors(nonsense); }",
+        ".a { @include scissors(10deg); }",
+        ".a { @include scissors(4px 8px 12px 1x); }"
       ]
     },
     {
@@ -1589,7 +1608,12 @@
       "rejects": [
         ".icon { @include sprite(\"/img/sprite.txt\"); }",
         ".icon { @include sprite(\"/img/a.png\" \"/img/b.png\", 0 -40px); }",
-        ".icon { @include sprite(42, 0 -40px); }"
+        ".icon { @include sprite(42, 0 -40px); }",
+        ".icon { @include sprite(0 red); }",
+        ".icon { @include sprite(\"/img/sprite.png\", 10deg); }",
+        ".icon { @include sprite(\"/img/sprite.png\", 1); }",
+        ".icon { @include sprite(\"/img/sprite.png\", 10px 20px 30px 40px); }",
+        ".icon { @include sprite(\"/img/sprite.png\", auto); }"
       ]
     },
     {

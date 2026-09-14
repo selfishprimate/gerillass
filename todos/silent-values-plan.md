@@ -711,8 +711,40 @@ Every interpolated call on the branch was then compiled against the literal it
 spells: none raises where its literal compiles, except `validateBreakpoint` with
 a word, which is the S1 decision.
 
-Chunks 3 and 4 (the backgrounds, `scissors`, `sprite`, `columnizer`,
-`adaptive`; `position`) are not started.
+Chunk 3 is done. Its value sets were measured from the mixins' own output: every
+call in the sweep that compiled was split into pieces and tested in Chrome 152,
+so each set below is what the emitted CSS kept, not what the property takes on
+its own.
+
+- `background-dots` `$size` and `$gutter`: a length, 0 and a percentage; not a
+  negative length, a unitless number or another unit.
+- `background-stripes` `$thickness`: the same, and a negative length, which a
+  colour stop keeps.
+- `scissors`, through `validateScissors`: a unit that is not a length is
+  refused; a unitless number is still read as pixels.
+- `sprite`'s position: one to four lengths, percentages or place keywords, three
+  or four only with a keyword, and a CSS-wide keyword alone.
+- `columnizer`'s count: a unitless number, or var(), env() or attr(), alone or
+  inside maths; its gutter a length or a percentage, now checked in the
+  three-argument form too.
+- `adaptive`'s gutter: a length, a percentage or a negative length, and a
+  quoted length, which is interpolated.
+
+Two calls that compiled into dropped CSS now work instead of raising:
+`adaptive(0)` wrote `calc(576px - 0 * 2)` and `columnizer(3, 0)` wrote
+`(3 - 1) * 0`, a number where calc() needs a length; both write `0px`. Those
+are the only three outputs in the sweep that changed. The sweep gained
+`columnizer`'s gutter and `sprite`'s position after a path, refused 467 calls,
+and the old CSS of those was tested in Chrome: the only ones it kept held
+`var()`, apart from `columnizer(#{0})`, an interpolated count, which is now
+accepted and pinned as an example.
+
+Interpolated values still raise where main already refused them, in
+`background-dots`, `background-stripes`, `scissors`, `triangle` and
+`columnizer`'s gutter: `isSize` and `isGutter` let only numbers into Sass's
+calc(), where a string fails. That is not a regression and was left.
+
+Chunk 4, `position`, is not started.
 
 ---
 

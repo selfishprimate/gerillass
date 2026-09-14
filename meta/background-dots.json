@@ -52,6 +52,10 @@
     ".a { @include background-dots(red, 1em, nonsense); }",
     ".a { @include background-dots(huge); }",
     ".a { @include background-dots(red 10px); }",
-    ".a { @include background-dots(inherit); }"
+    ".a { @include background-dots(inherit); }",
+    ".a { @include background-dots(red, -1em); }",
+    ".a { @include background-dots(red, 10deg); }",
+    ".a { @include background-dots(red, 2); }",
+    ".a { @include background-dots(red, 1em, -5em); }"
   ]
 }

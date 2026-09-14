@@ -596,6 +596,31 @@ exports[`Manifest examples clearfix: .row { @include clearfix; } 1`] = `
 }"
 `;
 
+exports[`Manifest examples columnizer: .grid { @include columnizer(#{3}, 0); } 1`] = `
+".grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+.grid, .grid::before, .grid::after,
+.grid *,
+.grid *::before,
+.grid *::after {
+  box-sizing: border-box;
+}
+.grid > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: calc((100% - (3 - 1) * 0px) / 3);
+  margin-bottom: 0px;
+}
+.grid > *:not(:last-child) {
+  margin-right: 0px;
+}
+.grid > *:nth-child(3n) {
+  margin-right: 0;
+}"
+`;
+
 exports[`Manifest examples columnizer: .grid { @include columnizer(3); } 1`] = `
 ".grid {
   display: flex;

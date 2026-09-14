@@ -3,6 +3,55 @@
 @use "sass:list";
 @use "sass:meta";
 @use "sass:string";
+@use "../internal/length-problem" as *;
+
+$-places: "left" "center" "right" "top" "bottom";
+
+// What is wrong with $position as a background-position, or null. Measured in
+// Chrome 152, background-position kept one or two lengths, percentages or
+// place keywords, keywords with offsets such as `left 10px top 5px`, var(),
+// maths functions and a CSS-wide keyword alone. It dropped a unitless number
+// other than 0, a unit that is not a length, any other word or colour, an image,
+// and three or four lengths with no keyword. Interpolation, as in
+// `#{$x}px #{$y}px`, gives the same value as strings, so each part is read.
+@function -position-problem($position) {
+  $parts: $position;
+  @if meta.type-of($position) == "string" and string.slice(meta.inspect($position), 1, 1) != "\"" and not string.index($position, "(") and string.index($position, " ") {
+    $parts: ();
+    $text: $position;
+    $at: string.index($text, " ");
+    @while $at {
+      @if $at > 1 {
+        $parts: list.append($parts, string.unquote(string.slice($text, 1, $at - 1)));
+      }
+      $text: string.slice($text, $at + 1);
+      $at: string.index($text, " ");
+    }
+    $parts: list.append($parts, string.unquote($text));
+  } @else if meta.type-of($position) != "list" {
+    $parts: ($position,);
+  }
+  @if list.length($parts) > 4 {
+    @return "a background position takes at most four values";
+  }
+  $keywords: 0;
+  @each $part in $parts {
+    @if meta.type-of($part) == "string" and list.index($-places, string.to-lower-case($part)) {
+      $keywords: $keywords + 1;
+    } @else {
+      $problem: lengthProblem($part, $css-wide: list.length($parts) == 1);
+      @if $problem == "it is not a length" {
+        @return "`#{meta.inspect($part)}` is not a length or one of left, center, right, top or bottom";
+      } @else if $problem {
+        @return "in `#{meta.inspect($part)}`, #{$problem}";
+      }
+    }
+  }
+  @if list.length($parts) > 2 and $keywords == 0 {
+    @return "three or four values need place keywords, such as `left 10px top 5px`";
+  }
+  @return null;
+}
 
 @mixin sprite($params...) {
   @if list.length($params) == 1 {
@@ -19,6 +68,10 @@
       }
     } @else {
       $position: list.nth($params, 1);
+      $problem: -position-problem($position);
+      @if $problem {
+        @error "`#{meta.inspect($position)}` is not a valid position for `sprite`: #{$problem}. A browser drops the declaration.";
+      }
       background-position: $position;
     }
   } @else if list.length($params) == 2 {
@@ -29,6 +82,12 @@
     // of that name. Measured in Chrome 152: `url(16 9)` was dropped.
     @if meta.type-of($image-url) != "string" {
       @error "`#{meta.inspect($image-url)}` is not a valid image path for `sprite`: with two arguments the first is one path as a string, and a browser drops a list in `url()`. Pass a path such as `\"/img/sprite.png\"`, then the position.";
+    }
+    @if $position != null {
+      $problem: -position-problem($position);
+      @if $problem {
+        @error "`#{meta.inspect($position)}` is not a valid position for `sprite`: #{$problem}. A browser drops the declaration.";
+      }
     }
     display: inline-block;
     background-image: url($image-url);

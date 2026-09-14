@@ -19,6 +19,11 @@
   "rejects": [
     ".icon { @include sprite(\"/img/sprite.txt\"); }",
     ".icon { @include sprite(\"/img/a.png\" \"/img/b.png\", 0 -40px); }",
-    ".icon { @include sprite(42, 0 -40px); }"
+    ".icon { @include sprite(42, 0 -40px); }",
+    ".icon { @include sprite(0 red); }",
+    ".icon { @include sprite(\"/img/sprite.png\", 10deg); }",
+    ".icon { @include sprite(\"/img/sprite.png\", 1); }",
+    ".icon { @include sprite(\"/img/sprite.png\", 10px 20px 30px 40px); }",
+    ".icon { @include sprite(\"/img/sprite.png\", auto); }"
   ]
 }

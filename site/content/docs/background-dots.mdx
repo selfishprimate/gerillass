@@ -18,7 +18,7 @@ The **Background Dots** Sass mixin allows you to easily create a stylish dotted 
 
 <Arguments of="background-dots" footnote="Using two separate color values together is only possible when the `$diagonal` option is true. See the examples for more.">
   <Argument name="$color" type="list">The color or colors of the dots. Accepts no more than two color values. By default there is only one color, a translucent black. Each is a colour, <code>currentColor</code>, a system colour, or a function such as <code>var()</code> or <code>light-dark()</code>.</Argument>
-  <Argument name="$size (1em)" type="number (with unit), function">The size of the dots. The default value is <code>1em</code>. Also accepts <code>var()</code>, <code>env()</code>, or a calculation such as <code>calc()</code> or <code>clamp()</code>.</Argument>
+  <Argument name="$size (1em)" type="number (with unit), function">The size of the dots. The default value is <code>1em</code>. Also accepts a percentage, <code>var()</code>, <code>env()</code>, or a calculation such as <code>calc()</code> or <code>clamp()</code>. Not a negative size.</Argument>
   <Argument name="$gutter ($size * 5)" type="number (with unit), function">The size of the space between the dots. The default value is <code>$size * 5</code>, which means <code>5em</code>. Accepts the same forms as <code>$size</code>.</Argument>
   <Argument name="$diagonal (true)" type="boolean">This option lets you set the line order of the dots. The default value is <code>true</code>.</Argument>
   <Argument name="$image" type="string (quoted), function">Accepts the URL of an image. This option helps you add an image underneath the dots to create more stylish design elements. A value that already is an image, <code>var()</code>, <code>url()</code>, <code>image-set()</code> or a gradient, is written as it is rather than wrapped in <code>url()</code>. The path is written without quotes unless it holds a space, a parenthesis or a quote, which an unquoted <code>url()</code> cannot: since 2.3.2 those are quoted, where before the browser dropped them.</Argument>
@@ -122,6 +122,17 @@ A dot colour that is not a colour stops the build. Measured in Chrome 152, a wor
 ```
 ```text
 Error: `10px` is not a valid colour in $color for `background-dots`: it is not a colour. Pass one colour, or two for the diagonal variant, such as `red` or `var(--dot)`.
+```
+
+A size or gutter the browser drops stops the build too. Measured in Chrome 152, the gradient and `background-size` drop a negative length, a unitless number other than `0` and a unit that is not a length. Until 2.3.4 these compiled.
+
+```scss
+.element {
+  @include background-dots(red, -1em);
+}
+```
+```text
+Error: `-1em` is not a valid $size for `background-dots`: a length below zero does not work here. A browser drops the pattern.
 ```
 
 ## Image paths with a space

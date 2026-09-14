@@ -139,4 +139,31 @@
       }
     }
   }
+
+  // The size is a colour stop's position and the gutter a background size,
+  // which in Chrome 152 kept a percentage and a viewport unit and dropped a
+  // negative length, a unitless number other than 0 and a unit that is not a
+  // length.
+  @include it('Accepts a percentage size and a viewport-unit gutter.') {
+    @include assert {
+      @include output {
+        .a { @include background-dots(red, 10%, $diagonal: false); }
+        .b { @include background-dots(red, 2px, 3vw, false); }
+      }
+      @include expect {
+        .a {
+          background-image: radial-gradient(red 10%, transparent 0);
+          background-position: 25% 25%;
+          background-size: 50% 50%;
+          background-repeat: repeat;
+        }
+        .b {
+          background-image: radial-gradient(red 2px, transparent 0);
+          background-position: 1.5vw 1.5vw;
+          background-size: 3vw 3vw;
+          background-repeat: repeat;
+        }
+      }
+    }
+  }
 }

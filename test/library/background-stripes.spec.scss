@@ -95,4 +95,20 @@
       }
     }
   }
+
+  // The thickness is a colour stop's position, which in Chrome 152 kept a
+  // percentage and a negative length, and dropped a unitless number other than
+  // 0 and a unit that is not a length.
+  @include it('Accepts a percentage and a negative thickness.') {
+    @include assert {
+      @include output {
+        .a { @include background-stripes(red, 5%); }
+        .b { @include background-stripes(red, -1em); }
+      }
+      @include expect {
+        .a { background-image: repeating-linear-gradient(-45deg, red 0, red 5%, transparent 5%, transparent 10%); }
+        .b { background-image: repeating-linear-gradient(-45deg, red 0, red -1em, transparent -1em, transparent -2em); }
+      }
+    }
+  }
 }

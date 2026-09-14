@@ -65,6 +65,7 @@ a dropped declaration rather than an error.
 
 | Mixin | Rejects, for example |
 |---|---|
+| `adaptive` | `.wrap { @include adaptive(auto); }` |
 | `after` | `.a { @include after(42) { color: red; } }` |
 | `all-buttons` | `@include all-buttons(nonsense) { color: red; }` |
 | `all-text-inputs` | `@include all-text-inputs(nonsense) { color: red; }` |

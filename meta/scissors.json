@@ -16,6 +16,8 @@
   ],
   "rejects": [
     ".a { @include scissors(5px 10px); }",
-    ".a { @include scissors(nonsense); }"
+    ".a { @include scissors(nonsense); }",
+    ".a { @include scissors(10deg); }",
+    ".a { @include scissors(4px 8px 12px 1x); }"
   ]
 }

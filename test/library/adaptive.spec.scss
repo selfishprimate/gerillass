@@ -1,0 +1,40 @@
+// adaptive writes its gutter into calc() at every breakpoint. Measured in
+// Chrome 152, a unitless 0 there, `calc(576px - 0 * 2)`, subtracts a number
+// from a length and the max-width is dropped, so 0 is written as 0px. A length,
+// a percentage and var() were kept. The calc() is written by interpolation, so
+// the expectations are unquoted strings: Sass would reduce them otherwise.
+@use 'sass:string';
+@use 'true' as *;
+@use '../../scss/gerillass' as *;
+
+@include describe('adaptive()') {
+  @include it('A gutter of 0 is written as 0px so calc() keeps a length.') {
+    @include assert {
+      @include output {
+        .wrap { @include adaptive(0); }
+      }
+      @include expect {
+        .wrap { margin: 0 auto; }
+        @media (min-width: 576px) { .wrap { max-width: string.unquote("calc(576px - 0px * 2)"); } }
+        @media (min-width: 768px) { .wrap { max-width: string.unquote("calc(768px - 0px * 2)"); } }
+        @media (min-width: 992px) { .wrap { max-width: string.unquote("calc(992px - 0px * 2)"); } }
+        @media (min-width: 1200px) { .wrap { max-width: string.unquote("calc(1200px - 0px * 2)"); } }
+      }
+    }
+  }
+
+  @include it('Accepts var() as the gutter.') {
+    @include assert {
+      @include output {
+        .wrap { @include adaptive(var(--gutter)); }
+      }
+      @include expect {
+        .wrap { margin: 0 auto; }
+        @media (min-width: 576px) { .wrap { max-width: string.unquote("calc(576px - var(--gutter) * 2)"); } }
+        @media (min-width: 768px) { .wrap { max-width: string.unquote("calc(768px - var(--gutter) * 2)"); } }
+        @media (min-width: 992px) { .wrap { max-width: string.unquote("calc(992px - var(--gutter) * 2)"); } }
+        @media (min-width: 1200px) { .wrap { max-width: string.unquote("calc(1200px - var(--gutter) * 2)"); } }
+      }
+    }
+  }
+}

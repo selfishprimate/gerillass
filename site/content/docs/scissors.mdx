@@ -23,7 +23,7 @@ The **first** value selects the `top-left` corner, the **second** the `top-right
 ## Arguments
 
 <Arguments of="scissors" footnote="You can use `0` or `null` to skip styling the related corner.">
-  <Argument name="$corners" type="number (with unit)">Accepts one or four values. The values must be separated by a space. Use the <code>null</code> value to <strong>skip</strong> a corner of the box.</Argument>
+  <Argument name="$corners" type="number (with unit)">Accepts one or four values. The values must be separated by a space. Use the <code>null</code> value to <strong>skip</strong> a corner of the box. Each is a length, a percentage, or a unitless number, which is read as pixels.</Argument>
 </Arguments>
 
 ## Examples
@@ -90,6 +90,19 @@ For some reason, your design component might look different, but I'm sure you ge
 </div>
 ```
 </Example>
+
+## What it refuses
+
+A corner size in a unit that is not a length stops the build. Each size becomes a `polygon()` coordinate, and measured in Chrome 152 a unit such as `deg` or `x` there drops the whole `clip-path`. Until 2.3.4 it compiled.
+
+```scss
+.element {
+  @include scissors(10deg);
+}
+```
+```text
+Error: `10deg` is not a valid corner size: `deg` is not a length unit, and a browser drops the clip-path. Pass a length such as `12px`, or a unitless number which is treated as pixels.
+```
 
 ## Related Links
 

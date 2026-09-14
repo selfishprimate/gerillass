@@ -7,6 +7,7 @@
 @use "../internal/is-size" as *;
 @use "../internal/image-value" as *;
 @use "../internal/color-problem" as *;
+@use "../internal/length-problem" as *;
 
 @mixin background-stripes(
   $color: null,
@@ -18,6 +19,13 @@
   // lengths Sass simplifies it back to the same number.
   @if not isSize($thickness) {
     @error "`#{meta.inspect($thickness)}` is not a valid $thickness for `background-stripes`. Pass a length, or var(), env() or a calculation such as `clamp()`.";
+  }
+  // isSize takes any number. The thickness is a colour stop's position, which
+  // in Chrome 152 kept a percentage and a negative length and dropped a unitless
+  // number other than 0 and a unit that is not a length.
+  $thickness-problem: lengthProblem($thickness);
+  @if $thickness-problem {
+    @error "`#{meta.inspect($thickness)}` is not a valid $thickness for `background-stripes`: #{$thickness-problem}. A browser drops the gradient.";
   }
   @if meta.type-of($rotation) != "number" {
     @error "`#{$rotation}` is not a valid $rotation for `background-stripes`. Pass an angle such as `-45deg`, or a unitless number which is treated as degrees.";

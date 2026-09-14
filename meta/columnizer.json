@@ -17,10 +17,16 @@
     ".grid { @include columnizer(3, 20px); }",
     ".grid { @include columnizer(3, 20px, true); }",
     ".grid { @include columnizer(3, var(--gap)); }",
-    ".grid { @include columnizer(var(--cols)); }"
+    ".grid { @include columnizer(var(--cols)); }",
+    ".grid { @include columnizer(#{3}, 0); }"
   ],
   "rejects": [
     ".grid { @include columnizer(3, 20px, true, 9); }",
-    ".grid { @include columnizer(3, nonsense); }"
+    ".grid { @include columnizer(3, nonsense); }",
+    ".grid { @include columnizer(3px); }",
+    ".grid { @include columnizer(auto); }",
+    ".grid { @include columnizer(3, 10deg); }",
+    ".grid { @include columnizer(3, 2); }",
+    ".grid { @include columnizer(3, red, true); }"
   ]
 }
