@@ -34,6 +34,27 @@
       @include expect { @container card (min-width: 400px) { .a { color: red; } } }
     }
   }
+
+  // Measured in Chrome 152, an @container rule kept these names: a dashed
+  // identifier, non-ASCII letters, an underscore, and `auto` and `normal`,
+  // which are keywords elsewhere but not reserved here. The name check must
+  // not refuse them.
+  @include it('Accepts any identifier a browser keeps as a container name.') {
+    @include assert {
+      @include output {
+        .a { @include container-query("min", 400px, $name: "--card") { color: red; } }
+        .b { @include container-query("min", 400px, $name: "ünlü") { color: red; } }
+        .c { @include container-query("min", 400px, $name: "card_2") { color: red; } }
+        .d { @include container-query("min", 400px, $name: "auto") { color: red; } }
+      }
+      @include expect {
+        @container --card (min-width: 400px) { .a { color: red; } }
+        @container ünlü (min-width: 400px) { .b { color: red; } }
+        @container card_2 (min-width: 400px) { .c { color: red; } }
+        @container auto (min-width: 400px) { .d { color: red; } }
+      }
+    }
+  }
 }
 
 @include describe('container()') {

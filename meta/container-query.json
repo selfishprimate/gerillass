@@ -24,7 +24,12 @@
   "rejects": [
     ".title { @include container-query(\"min\", 400px, 800px) { color: red; } }",
     ".title { @include container-query(\"min\", 400px, $name: 42) { color: red; } }",
-    ".title { @include container-query(\"min\", var(--wide)) { color: red; } }"
+    ".title { @include container-query(\"min\", var(--wide)) { color: red; } }",
+    ".title { @include container-query(\"min\", 400px, $name: var(--container)) { color: red; } }",
+    ".title { @include container-query(\"min\", 400px, $name: \"none\") { color: red; } }",
+    ".title { @include container-query(\"min\", 400px, $name: \"not\") { color: red; } }",
+    ".title { @include container-query(\"min\", 400px, $name: \"my card\") { color: red; } }",
+    ".title { @include container-query(\"min\", 400px, $name: \"1card\") { color: red; } }"
   ],
   "caveats": [
     "A size on its own matches exactly that width, `(width: 400px)`, which is a single pixel, and the mixin prints a warning. Write `only` for that width, or `min`, `max` or a range for anything wider. 3.0.0 will refuse the one-argument form."

@@ -26,6 +26,45 @@
   @return null;
 }
 
+// Characters and names a browser will not keep as the name in an @container
+// rule. Measured in Chrome 152, the rule was dropped for `var(--n)`, `none`,
+// `and`, `or`, `default`, `inherit`, `initial`, `unset`, `revert`,
+// `revert-layer`, `my card`, `1card`, `-1card`, `a.b`, `#card` and `card!`,
+// in any case. `not` was worse: the rule was kept with no name, as a negated
+// query, so it matched the opposite of what was asked. `--card`, `-card`,
+// `_card`, `c-`, `ünlü`, `auto` and `normal` were kept.
+$-reserved-names: "none" "and" "or" "not" "default" "inherit" "initial" "unset" "revert" "revert-layer";
+$-forbidden-in-name: "." "," "/" "#" ":" ";" "(" ")" "[" "]" "{" "}" "!" "@" "$" "%" "^" "&" "*" "+" "=" "<" ">" "?" "\\" "|" "~" "`" "'" "\"";
+
+@function -name-problem($name) {
+  // An empty name has always compiled to an unnamed query, which works, so it
+  // is left alone rather than refused.
+  $text: "#{$name}";
+  @if string.length($text) == 0 {
+    @return null;
+  }
+  @if string.index($text, "var(") {
+    @return "a custom property is not evaluated in a @container condition, so the rule would never apply. Pass the name itself, such as `\"card\"`; the `container` mixin can still take its name from a custom property";
+  }
+  @if string.index($text, " ") {
+    @return "a query names one container. Pass one name, such as `\"card\"`";
+  }
+  @if list.index($-reserved-names, string.to-lower-case($text)) {
+    @return "`none`, `and`, `or`, `not`, `default` and the CSS-wide keywords are reserved there. A browser drops the rule, and reads `not` as negating the query instead. Pass another name, such as `\"card\"`";
+  }
+  $first: string.slice($text, 1, 1);
+  $second: string.slice($text, 2, 2);
+  @if string.index("0123456789", $first) or ($first == "-" and string.length($text) > 1 and string.index("0123456789", $second)) {
+    @return "a container name cannot start with a digit, or with a hyphen and a digit. Pass a name such as `\"card\"`";
+  }
+  @each $character in $-forbidden-in-name {
+    @if string.index($text, $character) {
+      @return "a container name cannot contain `#{$character}`. Use letters, digits, hyphens and underscores";
+    }
+  }
+  @return null;
+}
+
 // A @container rule, taking the same argument shapes as `breakpoint` so the two
 // read alike. Sizes may be a key from $map-for-breakpoints or a raw length; a
 // container is usually narrower than the viewport, so a length is the common
@@ -41,6 +80,12 @@
 
   @if $name != null and meta.type-of($name) != "string" {
     @error "`#{$name}` is not a valid $name for `container-query`. Pass a container name as a string, such as `\"card\"`.";
+  }
+  @if $name != null {
+    $problem: -name-problem($name);
+    @if $problem {
+      @error "`#{$name}` is not a valid $name for `container-query`: #{$problem}.";
+    }
   }
 
   $custom-property: -custom-property-in($params);
