@@ -50,7 +50,7 @@ The **Ellipsis** Sass mixin helps you truncate text and add an **ellipsis** at t
 
 ## What it refuses
 
-A `$display` the browser drops stops the build. Measured in Chrome 152, that is a word that is not a display keyword, and a combination of keywords that names two of a kind, such as `block inline` or `flex grid`. Until 2.3.2 both compiled, and a quoted value such as `"block"` kept its quotes and was dropped as well; it is now written without them.
+A `$display` the browser drops stops the build. Measured in Chrome 152, that is a word that is not a display keyword, and a combination of keywords that names two of a kind, such as `block inline` or `flex grid`. Until 2.3.1 both compiled, and a quoted value such as `"block"` kept its quotes and was dropped as well; it is now written without them.
 
 ```scss
 .element {
@@ -61,7 +61,7 @@ A `$display` the browser drops stops the build. Measured in Chrome 152, that is 
 Error: `block inline` is not a valid $display for `ellipsis`: it names two outer display types; pass one of block, inline or run-in. A browser drops the declaration.
 ```
 
-A `$width` the browser drops stops the build as well. Measured in Chrome 152, `max-width` drops `auto`, a word that is not a sizing keyword, a unitless number other than `0`, a negative length and a length in quotes. Until 2.3.4 these compiled, and the element was left with no width limit.
+A `$width` the browser drops stops the build as well. Measured in Chrome 152, `max-width` drops `auto`, a word that is not a sizing keyword, a unitless number other than `0`, a negative length and a length in quotes. Until 2.3.1 these compiled, and the element was left with no width limit.
 
 ```scss
 .element {

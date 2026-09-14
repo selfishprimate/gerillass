@@ -46,7 +46,7 @@ The **Text Image** Sass mixin helps you clip the background image of a selected 
 
 ## What it refuses
 
-An image that is not one path stops the build. Until 2.3.2 anything went into `url()`, and here that matters more than elsewhere: the mixin makes the text transparent, so an image that does not load leaves no visible text at all. Measured in Chrome 152, a list such as `url(16 9)` is dropped.
+An image that is not one path stops the build. Until 2.3.1 anything went into `url()`, and here that matters more than elsewhere: the mixin makes the text transparent, so an image that does not load leaves no visible text at all. Measured in Chrome 152, a list such as `url(16 9)` is dropped.
 
 ```scss
 .element {

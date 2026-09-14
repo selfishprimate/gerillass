@@ -1,6 +1,51 @@
 # Change Log
 _Change is the essence._
 
+## 2.3.1
+
+Calls that compiled into CSS a browser drops, or into a media or container
+condition that can never match, now stop the build with a message naming what
+the argument takes. Every new refusal was checked in Chrome 152 against the CSS
+the same call produced on 2.3.0, and an error was added only where that CSS was
+dropped or did nothing. `var()`, `calc()` and the other CSS functions are still
+accepted. Two calls that produced broken CSS now produce working CSS instead.
+
+- **Fixed:** `breakpoint`, `remove`, `container-query` and `screen-agent`
+  refuse a size no condition can match, such as a word that is not a breakpoint
+  key, a percentage or an angle. `validateBreakpoint` refuses a word that is
+  not a key in `$map-for-breakpoints`, and still returns lengths, percentages,
+  functions, sizing keywords and `null` as they are.
+- **Fixed:** `only` and `except` refuse a position with a unit, a fraction or
+  `0`, which the browser drops or which matches nothing. `3n` is accepted.
+- **Fixed:** `position`, `ellipsis`, `resizable`, `radial-gradient` and
+  `font-face` refuse keywords the browser drops, and write a valid quoted
+  keyword, such as `"sticky"`, without its quotes.
+- **Fixed:** `background-image`, `brand-logo` and `text-image` refuse a list or
+  a non-string image. `background-dots` and `background-stripes` quote an image
+  path holding a space, a parenthesis or a quote, which the browser dropped
+  unquoted. `sprite` checks its path in the two-argument form too.
+- **Fixed:** `background-stripes` no longer turns `0.25turn` into
+  `0.25turndeg`. An angle in `grad`, `rad` or `turn` is written as it is, and a
+  unit that is not an angle raises.
+- **Fixed:** the colour arguments of `focus-ring`, `text-stroke`, `triangle`,
+  `linear-gradient`, `text-gradient`, `radial-gradient`, `background-image`,
+  `background-dots` and `background-stripes` refuse a value that is not a
+  colour. System colours such as `Canvas` and `contrast-color()`, which
+  `triangle` used to refuse, are accepted.
+- **Fixed:** lengths are checked against what each property keeps in `sizer`,
+  `circle`, `brand-logo`, `ellipsis`, `focus-ring`, `text-stroke`, `triangle`,
+  `border-radius`, `background-dots`, `background-stripes`, `scissors` (through
+  `validateScissors`), `sprite`, `columnizer` and `adaptive`: for example a
+  negative width, `5%` as an outline width, `auto` as a `max-width`, or `10deg`
+  wherever a length goes.
+- **Fixed:** `adaptive(0)` wrote `calc(576px - 0 * 2)` and `columnizer(3, 0)`
+  wrote `(3 - 1) * 0`, a number where `calc()` needs a length, and the browser
+  dropped both. They now write `0px`.
+- **Updated:** `position` raises on an offset the browser drops instead of
+  warning through `validateLength`. That warning also fired for working values
+  such as `AUTO` and `revert-layer`, and said nothing about `10deg` or `url()`.
+  `validateLength` itself still warns.
+
 ## 2.3.0
 
 One addition. Nothing breaks, and no existing call changes its output.

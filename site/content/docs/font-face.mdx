@@ -128,7 +128,7 @@ If you don't have all the font varieties, or you have a font you want to convert
 
 ## What it refuses
 
-A style or a weight that a `@font-face` rule drops stops the build. Measured in Chrome 152 by inserting the rule and reading it back, the rule keeps the values listed under Arguments and drops the rest, such as `bolder`, `inherit`, `0` or an oblique angle past 90 degrees. Until 2.3.2 they compiled, and the font was then matched with the browser's default for that descriptor instead.
+A style or a weight that a `@font-face` rule drops stops the build. Measured in Chrome 152 by inserting the rule and reading it back, the rule keeps the values listed under Arguments and drops the rest, such as `bolder`, `inherit`, `0` or an oblique angle past 90 degrees. Until 2.3.1 they compiled, and the font was then matched with the browser's default for that descriptor instead.
 
 ```scss
 @include font-face("Fanwood Text", "fonts/fanwood-text/fanwood-text-regular", $font-weight: bolder);

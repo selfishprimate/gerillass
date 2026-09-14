@@ -146,7 +146,7 @@ Measured in Chrome 152, on buttons, a link and a text input:
 
 ## What it refuses
 
-A colour the outline drops stops the build, because a dropped outline means no ring at all, which is the failure this mixin exists to prevent. Measured in Chrome 152, `outline: 2px solid` drops a word that is not a colour, a quoted colour, a length, and a CSS-wide keyword, which only works as a whole declaration. Until 2.3.3 each of those compiled.
+A colour the outline drops stops the build, because a dropped outline means no ring at all, which is the failure this mixin exists to prevent. Measured in Chrome 152, `outline: 2px solid` drops a word that is not a colour, a quoted colour, a length, and a CSS-wide keyword, which only works as a whole declaration. Until 2.3.1 each of those compiled.
 
 ```scss
 .element {
@@ -157,7 +157,7 @@ A colour the outline drops stops the build, because a dropped outline means no r
 Error: `inherit` is not a valid $color for `focus-ring`: a CSS-wide keyword only works as a whole declaration, not inside this value. A browser drops the outline, so no ring is drawn. Pass a colour such as `#1a73e8`, `currentColor`, or a function such as `var(--focus)`.
 ```
 
-A width or offset the browser drops stops the build too. Measured in Chrome 152, the outline drops a percentage, a negative width and a word other than `thin`, `medium` or `thick`, and `outline-offset` drops a percentage and any word but a CSS-wide keyword. Until 2.3.4 these compiled.
+A width or offset the browser drops stops the build too. Measured in Chrome 152, the outline drops a percentage, a negative width and a word other than `thin`, `medium` or `thick`, and `outline-offset` drops a percentage and any word but a CSS-wide keyword. Until 2.3.1 these compiled.
 
 ```scss
 .element {

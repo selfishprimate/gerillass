@@ -116,7 +116,7 @@ Let's try it with a title placed inside the selected element to see it in action
 
 ## What it refuses
 
-An image that is not one path stops the build. Until 2.3.2 anything went into `url()`: measured in Chrome 152, a list such as `url(16 9)` is dropped, and `url(42)` or `url(true)` is kept but asks for a file of that name, which is never the image meant.
+An image that is not one path stops the build. Until 2.3.1 anything went into `url()`: measured in Chrome 152, a list such as `url(16 9)` is dropped, and `url(42)` or `url(true)` is kept but asks for a file of that name, which is never the image meant.
 
 ```scss
 .element {
@@ -127,7 +127,7 @@ An image that is not one path stops the build. Until 2.3.2 anything went into `u
 Error: `16 9` is not a valid $image-url for `background-image`: it is a list where one image is meant, and a browser drops `url()` with a list in it. Pass one path as a string, such as `"/img/hero.png"`.
 ```
 
-A filter colour that is not a colour is refused too, since 2.3.3. Measured in Chrome 152, a word drops the filter, and a length written into `background` is read as a position rather than a colour.
+A filter colour that is not a colour is refused too, since 2.3.1. Measured in Chrome 152, a word drops the filter, and a length written into `background` is read as a position rather than a colour.
 
 ```scss
 .element {

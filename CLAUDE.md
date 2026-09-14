@@ -687,10 +687,12 @@ Three pieces of work are open, and none is started:
 
 - **`todos/silent-values.md`**: 49 arguments in 28 mixins turn a value a
   browser drops into CSS. Planned in `todos/silent-values-plan.md`, with the
-  six decisions taken. S0 to S6 are done on the `silent-values-plan` branch,
-  unreleased: S0 to S2 are what the plan puts in 2.3.1, S3 to S5 complete
-  2.3.2, and S6 is 2.3.3. S7, lengths, is the last item and is 2.3.4, and
-  it is done too. What is left is releasing it.
+  six decisions taken. S0 to S7 are done on the `silent-values-plan` branch
+  and ship together as 2.3.1, not as the four patch releases the plan
+  proposed: fixes to early steps landed in later commits, so tagging each step
+  would have shipped a false refusal fixed afterwards, such as `only(3n)`. The
+  documentation pages say 2.3.1 wherever they name the version a change came
+  in.
 - **3.0.0**: the B items in `todos/fix-plan.md`, each with a `MIGRATION.md`
   section.
 - **`todos/design-tokens.md`**: a token layer on `tokens`, starting with the

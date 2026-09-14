@@ -90,7 +90,7 @@ The **Position Sass mixin** provides a one-line method to quickly set both the p
 
 ## What it refuses
 
-A `$position` the browser drops stops the build. Until 2.3.2 any word went into the declaration as it was, and measured in Chrome 152, `position: huge` is dropped, so the offsets land on a box that was never positioned. So was a quoted keyword: `position("sticky")` wrote `position: "sticky"`, which now comes out without its quotes.
+A `$position` the browser drops stops the build. Until 2.3.1 any word went into the declaration as it was, and measured in Chrome 152, `position: huge` is dropped, so the offsets land on a box that was never positioned. So was a quoted keyword: `position("sticky")` wrote `position: "sticky"`, which now comes out without its quotes.
 
 ```scss
 .element {
@@ -101,7 +101,7 @@ A `$position` the browser drops stops the build. Until 2.3.2 any word went into 
 Error: `huge` is not a valid $position for `position`: it is not one of: static, relative, absolute, fixed, sticky. A browser drops the declaration.
 ```
 
-An offset the browser drops stops the build too. Measured in Chrome 152, `top`, `left` and the `inset-*` properties drop a word other than `auto` or a CSS-wide keyword, a unitless number other than `0`, a unit that is not a length, a colour, an image and a quoted length. Until 2.3.4 these compiled, some with a warning and some without, and the warning also fired for working values such as `AUTO` and `revert-layer`; it is gone.
+An offset the browser drops stops the build too. Measured in Chrome 152, `top`, `left` and the `inset-*` properties drop a word other than `auto` or a CSS-wide keyword, a unitless number other than `0`, a unit that is not a length, a colour, an image and a quoted length. Until 2.3.1 these compiled, some with a warning and some without, and the warning also fired for working values such as `AUTO` and `revert-layer`; it is gone.
 
 ```scss
 .element {

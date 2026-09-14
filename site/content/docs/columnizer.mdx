@@ -223,7 +223,7 @@ The **Columnizer** Sass mixin helps you **create evenly divided hypothetical col
 
 ## What it refuses
 
-A column count or gutter the browser drops stops the build. Measured in Chrome 152, `calc(100% / 3px)` drops the column width, and so does a gutter that is unitless, a word, or a unit that is not a length. Until 2.3.4 these compiled. A gutter of `0` used to be one of them, `(3 - 1) * 0` being a number rather than a length, and is now written as `0px`.
+A column count or gutter the browser drops stops the build. Measured in Chrome 152, `calc(100% / 3px)` drops the column width, and so does a gutter that is unitless, a word, or a unit that is not a length. Until 2.3.1 these compiled. A gutter of `0` used to be one of them, `(3 - 1) * 0` being a number rather than a length, and is now written as `0px`.
 
 ```scss
 .grid {

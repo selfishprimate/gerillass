@@ -99,7 +99,7 @@ Using **named arguments** may take a little longer than using **positional argum
 
 ## What it refuses
 
-A shape or position the browser drops stops the build, and here the browser drops the whole gradient, not one part of it. Until 2.3.2 any string went into `radial-gradient()` as it was. Measured in Chrome 152, these are dropped: a word outside the keywords above, such as `inherit` or `auto`, a percentage or a negative length as a circle's size, the shape named twice, and the logical keywords such as `at x-start`.
+A shape or position the browser drops stops the build, and here the browser drops the whole gradient, not one part of it. Until 2.3.1 any string went into `radial-gradient()` as it was. Measured in Chrome 152, these are dropped: a word outside the keywords above, such as `inherit` or `auto`, a percentage or a negative length as a circle's size, the shape named twice, and the logical keywords such as `at x-start`.
 
 ```scss
 .element {
@@ -110,7 +110,7 @@ A shape or position the browser drops stops the build, and here the browser drop
 Error: `circle 10%` is not a valid $shape for `radial-gradient`: one size is a circle's radius, which is a length and not a percentage. A browser drops the whole gradient.
 ```
 
-The colour stops are checked the same way as in [Linear Gradient](/docs/linear-gradient), since 2.3.3.
+The colour stops are checked the same way as in [Linear Gradient](/docs/linear-gradient), since 2.3.1.
 
 ```scss
 .element {

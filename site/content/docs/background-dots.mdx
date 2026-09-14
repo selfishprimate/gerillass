@@ -21,7 +21,7 @@ The **Background Dots** Sass mixin allows you to easily create a stylish dotted 
   <Argument name="$size (1em)" type="number (with unit), function">The size of the dots. The default value is <code>1em</code>. Also accepts a percentage, <code>var()</code>, <code>env()</code>, or a calculation such as <code>calc()</code> or <code>clamp()</code>. Not a negative size.</Argument>
   <Argument name="$gutter ($size * 5)" type="number (with unit), function">The size of the space between the dots. The default value is <code>$size * 5</code>, which means <code>5em</code>. Accepts the same forms as <code>$size</code>.</Argument>
   <Argument name="$diagonal (true)" type="boolean">This option lets you set the line order of the dots. The default value is <code>true</code>.</Argument>
-  <Argument name="$image" type="string (quoted), function">Accepts the URL of an image. This option helps you add an image underneath the dots to create more stylish design elements. A value that already is an image, <code>var()</code>, <code>url()</code>, <code>image-set()</code> or a gradient, is written as it is rather than wrapped in <code>url()</code>. The path is written without quotes unless it holds a space, a parenthesis or a quote, which an unquoted <code>url()</code> cannot: since 2.3.2 those are quoted, where before the browser dropped them.</Argument>
+  <Argument name="$image" type="string (quoted), function">Accepts the URL of an image. This option helps you add an image underneath the dots to create more stylish design elements. A value that already is an image, <code>var()</code>, <code>url()</code>, <code>image-set()</code> or a gradient, is written as it is rather than wrapped in <code>url()</code>. The path is written without quotes unless it holds a space, a parenthesis or a quote, which an unquoted <code>url()</code> cannot: since 2.3.1 those are quoted, where before the browser dropped them.</Argument>
 </Arguments>
 
 ## Examples
@@ -113,7 +113,7 @@ The **Background Dots** Sass mixin allows you to easily create a stylish dotted 
 
 ## What it refuses
 
-A dot colour that is not a colour stops the build. Measured in Chrome 152, a word or a quoted colour drops the gradient, and a length is worse: `radial-gradient(10px 1em, transparent 0)` is kept, with `10px` read as the gradient's size, so the dots come out wrong without a word. Until 2.3.3 both compiled.
+A dot colour that is not a colour stops the build. Measured in Chrome 152, a word or a quoted colour drops the gradient, and a length is worse: `radial-gradient(10px 1em, transparent 0)` is kept, with `10px` read as the gradient's size, so the dots come out wrong without a word. Until 2.3.1 both compiled.
 
 ```scss
 .element {
@@ -124,7 +124,7 @@ A dot colour that is not a colour stops the build. Measured in Chrome 152, a wor
 Error: `10px` is not a valid colour in $color for `background-dots`: it is not a colour. Pass one colour, or two for the diagonal variant, such as `red` or `var(--dot)`.
 ```
 
-A size or gutter the browser drops stops the build too. Measured in Chrome 152, the gradient and `background-size` drop a negative length, a unitless number other than `0` and a unit that is not a length. Until 2.3.4 these compiled.
+A size or gutter the browser drops stops the build too. Measured in Chrome 152, the gradient and `background-size` drop a negative length, a unitless number other than `0` and a unit that is not a length. Until 2.3.1 these compiled.
 
 ```scss
 .element {
