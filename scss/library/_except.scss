@@ -3,6 +3,7 @@
 @use "sass:list";
 @use "sass:meta";
 @use "sass:string";
+@use "../internal/sibling-index" as *;
 
 @mixin except($params...) {
   @if list.length($params) == 0 {
@@ -10,6 +11,12 @@
   } @else if list.length($params) == 1 {
     $value: list.nth($params, 1);
     @if meta.type-of($value) == "number" {
+      // A unit or a fraction makes a selector the browser drops, and 0 excludes
+      // nothing; see scss/internal/_sibling-index.scss.
+      $problem: siblingIndexProblem($value, "except");
+      @if $problem {
+        @error "`#{meta.inspect($value)}` is not a valid position for `except`: #{$problem}.";
+      }
       @if $value < 0 {
         &:not(:nth-last-of-type(#{$value * -1})) {
           @content;
@@ -45,6 +52,14 @@
       @error "`#{$value}` is not a valid argument for `except`. Pass a positive or negative number, one of `first`, `last`, `odd`, `even`, or a selector such as `.foo`.";
     }
   } @else if list.length($params) > 1 {
+    // Every item is checked first. A word used to fail with Sass's own
+    // `Undefined operation`, and one bad position dropped the whole rule.
+    @each $item in $params {
+      $problem: siblingIndexProblem($item, "except", true);
+      @if $problem {
+        @error "`#{meta.inspect($item)}` is not a valid position for `except`: #{$problem}.";
+      }
+    }
     $items: "";
     @for $i from 1 through list.length($params) {
       $items: $items + if(list.nth($params, $i) < 0, string.unquote(":not(:nth-last-of-type(#{list.nth($params, $i) * -1}))"), string.unquote(":not(:nth-of-type(#{list.nth($params, $i)}))"));

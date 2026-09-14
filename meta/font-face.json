@@ -17,13 +17,16 @@
     {
       "name": "$font-style",
       "accepts": [
-        "normal, italic or oblique, or a weight number"
+        "normal, italic, oblique or auto, or oblique with one or two angles from -90deg to 90deg",
+        "a number from 1 to 1000, which is read as the weight"
       ]
     },
     {
       "name": "$font-weight",
       "accepts": [
-        "a weight"
+        "normal, bold, auto, or a number from 1 to 1000",
+        "two numbers for a variable font's range, such as 100 900",
+        "bolder, lighter and the CSS-wide keywords are refused, because a @font-face rule drops them"
       ]
     },
     {
@@ -44,7 +47,9 @@
     "@include font-face(\"Inter\", \"/fonts/inter\");",
     "@include font-face(\"Inter\", \"/fonts/inter\", italic, 700, woff2 woff);",
     "@include font-face(\"Readex Pro\", \"/fonts/readex\", $font-weight: 160 700, $file-formats: woff2, $font-display: swap);",
-    "@include font-face(\"Inter\", \"/fonts/inter\", \"italic\", $font-weight: \"bold\", $file-formats: woff2);"
+    "@include font-face(\"Inter\", \"/fonts/inter\", \"italic\", $font-weight: \"bold\", $file-formats: woff2);",
+    "@include font-face(\"Inter\", \"/fonts/inter\", oblique 10deg 20deg, $font-weight: 450.5, $file-formats: woff2);",
+    "@include font-face(\"Inter\", \"/fonts/inter\", auto, \"100 900\", $file-formats: woff2);"
   ],
   "rejects": [
     ".a { @include font-face(\"Inter\", \"/fonts/inter\"); }",
@@ -62,6 +67,13 @@
     "@include font-face(\"Inter\", \"/fonts/inter\", $font-weight: 100 var(--max-weight), $file-formats: woff2);",
     "@include font-face(sans-serif, \"/fonts/inter\", $file-formats: woff2);",
     "@include font-face(inherit, \"/fonts/inter\", $file-formats: woff2);",
-    "@include font-face(env(--font-family), \"/fonts/inter\", $file-formats: woff2);"
+    "@include font-face(env(--font-family), \"/fonts/inter\", $file-formats: woff2);",
+    "@include font-face(\"Inter\", \"/fonts/inter\", huge, $file-formats: woff2);",
+    "@include font-face(\"Inter\", \"/fonts/inter\", oblique 100deg, $file-formats: woff2);",
+    "@include font-face(\"Inter\", \"/fonts/inter\", inherit, $file-formats: woff2);",
+    "@include font-face(\"Inter\", \"/fonts/inter\", $font-weight: huge, $file-formats: woff2);",
+    "@include font-face(\"Inter\", \"/fonts/inter\", $font-weight: bolder, $file-formats: woff2);",
+    "@include font-face(\"Inter\", \"/fonts/inter\", $font-weight: 0, $file-formats: woff2);",
+    "@include font-face(\"Inter\", \"/fonts/inter\", $font-weight: 100 200 300, $file-formats: woff2);"
   ]
 }

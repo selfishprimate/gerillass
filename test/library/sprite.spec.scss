@@ -1,0 +1,33 @@
+// sprite refuses a background position the browser drops. These must keep
+// compiling to the same declarations, each measured in Chrome 152 as a
+// background-position the browser keeps: keywords with offsets, a CSS-wide
+// keyword, and lengths built by interpolation.
+@use 'true' as *;
+@use '../../scss/gerillass' as *;
+
+@include describe('sprite()') {
+  @include it('Accepts keywords with offsets and a CSS-wide keyword as the position.') {
+    @include assert {
+      @include output {
+        .a { @include sprite("/img/s.png", left 10px top 5px); }
+        .b { @include sprite("/img/s.png", inherit); }
+      }
+      @include expect {
+        .a { display: inline-block; background-image: url("/img/s.png"); background-position: left 10px top 5px; background-repeat: no-repeat; }
+        .b { display: inline-block; background-image: url("/img/s.png"); background-position: inherit; background-repeat: no-repeat; }
+      }
+    }
+  }
+
+  @include it('Accepts a position built by interpolation.') {
+    @include assert {
+      @include output {
+        $x: 40;
+        .a { @include sprite(#{$x}px #{-$x}px); }
+      }
+      @include expect {
+        .a { background-position: 40px -40px; }
+      }
+    }
+  }
+}

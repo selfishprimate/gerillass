@@ -26,7 +26,10 @@
   ],
   "rejects": [
     ".a { @include remove(a, b, c); }",
-    ".a { @include remove(\"max\", var(--narrow)); }"
+    ".a { @include remove(\"max\", var(--narrow)); }",
+    ".a { @include remove(\"huge\"); }",
+    ".a { @include remove(\"min\", \"huge\"); }",
+    ".a { @include remove(\"huge\", \"large\"); }"
   ],
   "warns": [
     ".a { @include remove(\"medium\"); }"

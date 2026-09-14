@@ -2,10 +2,113 @@
 
 @use "sass:list";
 @use "sass:map";
+@use "sass:math";
 @use "sass:meta";
 @use "sass:string";
 @use "../maps/map-for-font-formats" as *;
 @use "../utilities/font-source" as *;
+@use "../internal/is-condition-value" as *;
+@use "../internal/words" as *;
+
+// What a @font-face rule keeps in `font-style` and `font-weight`, measured in
+// Chrome 152 by inserting the rule and reading the descriptor back, in any
+// case. font-style kept normal, italic, auto, oblique, and oblique with one or
+// two angles from -90deg to 90deg (`oblique 10deg 20deg`, `oblique 0.2rad`),
+// and dropped a CSS-wide keyword, `oblique 100deg`, an angle without a unit
+// and a weight such as `400`. font-weight kept normal, bold, auto, a number
+// from 1 to 1000 (`450`, `400.5`, `calc(400 + 100)`) and two numbers as a range
+// in either order, and dropped bolder and lighter, a CSS-wide keyword, 0, 1001,
+// three numbers, and a keyword beside a number or another keyword.
+//
+// A quoted value is split on its spaces and checked word by word, but Sass
+// cannot turn the text of a number into one, so a quoted number is checked for
+// its shape and not its range: "1001" and "oblique 100deg" are let through.
+
+// A quoted or unquoted number, without a unit, for a weight.
+@function -is-weight-number($word) {
+  @if meta.type-of($word) == "number" {
+    @return math.is-unitless($word) and $word >= 1 and $word <= 1000;
+  }
+  @if meta.type-of($word) != "string" {
+    @return false;
+  }
+  $text: string.unquote($word);
+  $nonzero: false;
+  @for $i from 1 through string.length($text) {
+    $character: string.slice($text, $i, $i);
+    @if not string.index("0123456789.", $character) {
+      @return false;
+    }
+    @if string.index("123456789", $character) {
+      $nonzero: true;
+    }
+  }
+  @return $nonzero;
+}
+
+@function -weight-problem($weight) {
+  @if $weight == null or meta.type-of($weight) == "calculation" {
+    @return null;
+  }
+  $words: wordsOf($weight);
+  @if list.length($words) > 2 {
+    @return "a weight is one value, or two numbers for a range such as `100 900`";
+  }
+  @if list.length($words) == 1 {
+    $word: list.nth($words, 1);
+    @if meta.type-of($word) == "string" and list.index("normal" "bold" "auto", string.to-lower-case(string.unquote($word))) {
+      @return null;
+    }
+    @if -is-weight-number($word) {
+      @return null;
+    }
+    @return "a weight is normal, bold, auto or a number from 1 to 1000; bolder, lighter and the CSS-wide keywords are dropped";
+  }
+  @each $word in $words {
+    @if not -is-weight-number($word) {
+      @return "a range is two numbers from 1 to 1000, such as `100 900`";
+    }
+  }
+  @return null;
+}
+
+@function -style-problem($style) {
+  @if $style == null {
+    @return null;
+  }
+  $words: wordsOf($style);
+  $first: list.nth($words, 1);
+  $keyword: null;
+  @if meta.type-of($first) == "string" {
+    $keyword: string.to-lower-case(string.unquote($first));
+  }
+  @if list.index("normal" "italic" "auto", $keyword) {
+    @if list.length($words) > 1 {
+      @return "`#{$keyword}` takes nothing after it; only oblique takes angles";
+    }
+    @return null;
+  }
+  @if $keyword != "oblique" {
+    @return "a style is normal, italic, oblique or auto; the CSS-wide keywords are dropped";
+  }
+  @if list.length($words) > 3 {
+    @return "oblique takes at most two angles";
+  }
+  @for $i from 2 through list.length($words) {
+    $angle: list.nth($words, $i);
+    @if meta.type-of($angle) == "number" {
+      @if not isConditionValue($angle, "angle") {
+        @return "`#{$angle}` is not an angle; pass one such as `10deg`";
+      }
+      @if $angle < -90deg or $angle > 90deg {
+        @return "an oblique angle is between -90deg and 90deg";
+      }
+    } @else if not isConditionValue($angle, "angle") {
+      @return "`#{$angle}` is not an angle; pass one such as `10deg`";
+    }
+  }
+  @return null;
+}
 
 @mixin font-face(
   $font-family,
@@ -51,7 +154,10 @@
       @error "`#{meta.inspect($font-weight)}` is not a valid $font-weight for `font-face`. A custom property cannot supply it, because a @font-face rule drops var() in a descriptor. Pass the weight itself, such as `700`, or a range such as `160 700`.";
     }
 
-    @if list.index(100 200 300 400 500 600 700 800 900, $font-style) {
+    // A number in $font-style is a weight. Only the hundreds used to be read
+    // that way, so `font-face("I", "/f/i", 450)` wrote `font-style: 450`, which
+    // a @font-face rule drops; any weight a rule keeps, 1 to 1000, is read so.
+    @if meta.type-of($font-style) == "number" and math.is-unitless($font-style) and $font-style >= 1 and $font-style <= 1000 {
       $font-weight: $font-style;
       $font-style: normal;
     } @else if not
@@ -69,6 +175,16 @@
           $font-style: normal;
         }
       }
+    }
+
+    // Checked after the reinterpretation above, on the values that are written.
+    $problem: -style-problem($font-style);
+    @if $problem {
+      @error "`#{meta.inspect($font-style)}` is not a valid $font-style for `font-face`: #{$problem}. A @font-face rule drops the descriptor.";
+    }
+    $problem: -weight-problem($font-weight);
+    @if $problem {
+      @error "`#{meta.inspect($font-weight)}` is not a valid $font-weight for `font-face`: #{$problem}. A @font-face rule drops the descriptor.";
     }
 
     // $font-display comes last so the reinterpretation of $font-style above is

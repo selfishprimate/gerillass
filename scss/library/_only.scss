@@ -3,6 +3,7 @@
 @use "sass:list";
 @use "sass:meta";
 @use "sass:string";
+@use "../internal/sibling-index" as *;
 
 @mixin only($params...) {
   @if list.length($params) == 0 {
@@ -10,6 +11,12 @@
   } @else if list.length($params) == 1 {
     $value: list.nth($params, 1);
     @if meta.type-of($value) == "number" {
+      // A unit or a fraction makes a selector the browser drops, and 0 matches
+      // nothing; see scss/internal/_sibling-index.scss.
+      $problem: siblingIndexProblem($value, "only");
+      @if $problem {
+        @error "`#{meta.inspect($value)}` is not a valid position for `only`: #{$problem}.";
+      }
       @if $value < 0 {
         &:nth-last-of-type(#{$value * -1}) {
           @content;
@@ -46,6 +53,15 @@
       @error "`#{$value}` is not a valid argument for `only`. Pass a positive or negative number, one of `first`, `last`, `odd`, `even`, or a selector such as `.foo`.";
     }
   } @else if list.length($params) > 1 {
+    // Every item is checked first. A word used to fail with Sass's own
+    // `Undefined operation`, and one bad position emptied the whole selector
+    // list, taking the good positions with it.
+    @each $item in $params {
+      $problem: siblingIndexProblem($item, "only", true);
+      @if $problem {
+        @error "`#{meta.inspect($item)}` is not a valid position for `only`: #{$problem}.";
+      }
+    }
     $list: ();
     @for $i from 1 through list.length($params) {
       $list: list.append($list, if(list.nth($params, $i) < 0, string.unquote("&:nth-last-of-type(#{list.nth($params, $i) * -1})"), string.unquote("&:nth-of-type(#{list.nth($params, $i)})")), comma);

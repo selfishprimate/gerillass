@@ -2,38 +2,26 @@
 
 @use "sass:list";
 @use "sass:map";
-@use "sass:meta";
-@use "sass:string";
 @use "../maps/map-for-breakpoints" as *;
 @use "../utilities/validate-breakpoint" as *;
+@use "../internal/custom-property-in" as *;
+@use "../internal/condition-width" as *;
 
-// Returns the first value in $value that holds var(), looking inside lists and
-// calculations, or null. Custom properties are not evaluated in a @media or
-// @container condition, so a rule built from one never applies, and nothing
-// warns. Measured in Chrome 152: `(min-width: var(--wide))` did not match with
-// `--wide: 200px`, while `(min-width: 200px)` did.
-@function -custom-property-in($value) {
-  @each $item in $value {
-    @if meta.type-of($item) == "list" or meta.type-of($item) == "arglist" {
-      $found: -custom-property-in($item);
-      @if $found {
-        @return $found;
-      }
-    } @else if string.index(meta.inspect($item), "var(") {
-      @return $item;
-    }
-  }
-  @return null;
-}
-
+// Every size goes through conditionWidth before a query is written, so a size no
+// width condition can match raises instead of compiling into one. The queries
+// themselves are written as they always were, and the checks in the branches
+// below are called only for the error they raise, so a call that worked writes
+// the same CSS.
 @mixin breakpoint($params...) {
-  $custom-property: -custom-property-in($params);
+  $custom-property: customPropertyIn($params);
   @if $custom-property {
     @error "`#{$custom-property}` cannot be used in a breakpoint: custom properties are not evaluated in a @media condition, so the rule would never apply. Pass a length or a key from $map-for-breakpoints.";
   }
   @if list.length($params) == 1 {
     $value: list.nth($params, 1);
-    $width: if(map.has-key($map-for-breakpoints, $value), map.get($map-for-breakpoints, $value), $value);
+    // Checked before the warning below, so a size that is wrong outright is
+    // refused rather than described as a single pixel.
+    $width: conditionWidth($value, "breakpoint");
     // One argument matches a single pixel, which two agent trials took for
     // "from this width up". Still emitted, so no stylesheet changes, but said
     // out loud until 3.0.0 refuses it.
@@ -51,12 +39,16 @@
     @if not list.index("only" "min" "max" "between", list.nth($params, 1)) {
       $start: list.nth($params, 1);
       $end: list.nth($params, 2);
+      $checked: conditionWidth($start, "breakpoint") conditionWidth($end, "breakpoint");
       @media (min-width: #{validateBreakpoint($start)}) and (max-width: #{if(map.has-key($map-for-breakpoints, $end), validateBreakpoint($end) - 1, $end)}) {
         @content;
       }
     } @else {
       $mode: list.nth($params, 1);
       $value: list.nth($params, 2);
+      @if $mode != "between" {
+        $checked: conditionWidth($value, "breakpoint");
+      }
       @if $mode == "only" {
         @if map.has-key($map-for-breakpoints, $value) {
           @media (width: map.get($map-for-breakpoints, $value)) {
@@ -90,6 +82,7 @@
       } @else if $mode == "between" {
         $start: list.nth($value, 1);
         $end: list.nth($value, 2);
+        $checked: conditionWidth($start, "breakpoint") conditionWidth($end, "breakpoint");
         @media (min-width: #{validateBreakpoint($start)}) and (max-width: #{if(map.has-key($map-for-breakpoints, $end), validateBreakpoint($end) - 1, $end)}) {
           @content;
         }

@@ -19,5 +19,11 @@
     ".a { @include sizer(40px); }",
     ".a { @include sizer(120px, 40px); }"
   ],
-  "rejects": []
+  "rejects": [
+    ".a { @include sizer(huge); }",
+    ".a { @include sizer(40); }",
+    ".a { @include sizer(120px, 10deg); }",
+    ".a { @include sizer(-40px); }",
+    ".a { @include sizer(\"40px\"); }"
+  ]
 }

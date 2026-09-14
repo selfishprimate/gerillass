@@ -23,8 +23,8 @@ The **Resizable** Sass mixin helps you make an element resizable in both the hor
 ## Arguments
 
 <Arguments of="resizable">
-  <Argument name="$direction" type="string">Sets the direction of the <code>resize</code> property. Accepts the values <code>both</code>, <code>horizontal</code>, <code>vertical</code>, and <code>none</code>. The default value is <code>both</code>.</Argument>
-  <Argument name="$overflow" type="string">Sets the <code>overflow</code> property. The default value is <code>auto</code>.</Argument>
+  <Argument name="$direction" type="string">Sets the direction of the <code>resize</code> property. Accepts the values <code>both</code>, <code>horizontal</code>, <code>vertical</code>, <code>none</code>, and the logical <code>block</code> and <code>inline</code>, or <code>auto</code>. The default value is <code>both</code>.</Argument>
+  <Argument name="$overflow" type="string">Sets the <code>overflow</code> property: one or two of <code>visible</code>, <code>hidden</code>, <code>clip</code>, <code>scroll</code>, <code>auto</code> and <code>overlay</code>, such as <code>hidden auto</code>. The default value is <code>auto</code>. Both arguments take a CSS-wide keyword on its own and <code>var()</code>, and <code>null</code> leaves the declaration out.</Argument>
 </Arguments>
 
 ## Examples
@@ -45,6 +45,19 @@ A tiny icon will appear in the lower right corner of the box below. Grab it and 
 <div class="element sandbox small" style="background-image: repeating-linear-gradient(-45deg, crimson 0, crimson 1em, pink 1em, pink 2em)"></div>
 ```
 </Example>
+
+## What it refuses
+
+A value the browser drops stops the build. Measured in Chrome 152, that is a word outside the keywords above, three overflow values, and a CSS-wide keyword beside another value. Until 2.3.1 each compiled into a declaration that did nothing, and a quoted keyword kept its quotes, which the browser drops too; it is now written without them.
+
+```scss
+.element {
+  @include resizable(both, inherit auto);
+}
+```
+```text
+Error: `inherit auto` is not a valid $overflow for `resizable`: `inherit` only works as the whole value. A browser drops the declaration.
+```
 
 ## Related Links
 

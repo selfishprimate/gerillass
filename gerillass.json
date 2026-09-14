@@ -1,6 +1,6 @@
 {
   "name": "gerillass",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "description": "Gerillass is an open-source toolkit that contains a set of Sass mixins to help designers and developers to create better, faster and consistent user interfaces.",
   "homepage": "https://gerillass.com",
   "documentation": "https://docs.gerillass.com",
@@ -30,7 +30,12 @@
         ".wrap { @include adaptive; }",
         ".wrap { @include adaptive(16px); }"
       ],
-      "rejects": []
+      "rejects": [
+        ".wrap { @include adaptive(auto); }",
+        ".wrap { @include adaptive(16); }",
+        ".wrap { @include adaptive(10deg); }",
+        ".wrap { @include adaptive(10px 20px); }"
+      ]
     },
     {
       "name": "after",
@@ -207,7 +212,7 @@
           "name": "$color",
           "default": "null",
           "accepts": [
-            "one colour, or two for the diagonal variant",
+            "one colour, or two for the diagonal variant, each a colour, currentColor, a system colour or a function such as var() or light-dark()",
             "null for a translucent black"
           ]
         },
@@ -238,7 +243,7 @@
           "name": "$image",
           "default": "null",
           "accepts": [
-            "an image path to sit behind the dots",
+            "an image path to sit behind the dots, written unquoted unless it holds a space, a parenthesis or a quote, which are quoted",
             "var(), url(), image-set() or a gradient, written as they are rather than wrapped in url()"
           ]
         }
@@ -258,7 +263,14 @@
         ".a { @include background-dots(red, 1em, 5em, maybe); }",
         ".a { @include background-dots(red, 1em, 5em, true, 42); }",
         ".a { @include background-dots(red, nonsense); }",
-        ".a { @include background-dots(red, 1em, nonsense); }"
+        ".a { @include background-dots(red, 1em, nonsense); }",
+        ".a { @include background-dots(huge); }",
+        ".a { @include background-dots(red 10px); }",
+        ".a { @include background-dots(inherit); }",
+        ".a { @include background-dots(red, -1em); }",
+        ".a { @include background-dots(red, 10deg); }",
+        ".a { @include background-dots(red, 2); }",
+        ".a { @include background-dots(red, 1em, -5em); }"
       ]
     },
     {
@@ -269,7 +281,7 @@
           "name": "$image-url",
           "default": "null",
           "accepts": [
-            "an image path",
+            "an image path, as a string; a list, a number, a colour or a boolean is refused",
             "null to filter the element itself instead",
             "var(), url(), image-set() or a gradient, written as they are rather than wrapped in url()"
           ]
@@ -278,7 +290,9 @@
           "name": "$filter-color",
           "default": "null",
           "accepts": [
-            "one colour, or several for a gradient"
+            "one colour, or several colour stops for a gradient, in the forms linear-gradient takes",
+            "with $image-url null, an image as the overlay layer too: a gradient, url(), image-set() or var()",
+            "a word that is not a colour, a quoted colour, a length and a CSS-wide keyword are refused"
           ]
         },
         {
@@ -303,7 +317,14 @@
       "rejects": [
         ".a { @include background-image(\"/img/a.png\", (red, blue), sideways); }",
         ".a { @include background-image(\"/img/a.png\", rgba(0,0,0,0.5), sideways); }",
-        ".a { @include background-image(null, rgba(0,0,0,0.5), sideways); }"
+        ".a { @include background-image(null, rgba(0,0,0,0.5), sideways); }",
+        ".a { @include background-image(16 9); }",
+        ".a { @include background-image(42); }",
+        ".a { @include background-image(\"/img/a.png\", huge); }",
+        ".a { @include background-image(\"/img/a.png\", (red, 10%)); }",
+        ".a { @include background-image(null, 10px); }",
+        ".a { @include background-image(null, inherit); }",
+        ".a { @include background-image(\"/img/a.png\", linear-gradient(to top, black, transparent)); }"
       ]
     },
     {
@@ -314,7 +335,7 @@
           "name": "$color",
           "default": "null",
           "accepts": [
-            "one colour, or several for a multi-stripe pattern",
+            "one colour, or several for a multi-stripe pattern, each a colour, currentColor, a system colour or a function such as var() or color-mix()",
             "null for a translucent black"
           ]
         },
@@ -329,14 +350,16 @@
           "name": "$rotation",
           "default": "-45deg",
           "accepts": [
-            "an angle; a unitless number is treated as degrees"
+            "an angle in deg, grad, rad or turn, in any case, written as it is",
+            "a unitless number, which is treated as degrees",
+            "any other unit, such as px or %, is refused, because the gradient would be dropped"
           ]
         },
         {
           "name": "$image",
           "default": "null",
           "accepts": [
-            "an image path to sit behind the stripes",
+            "an image path to sit behind the stripes, written unquoted unless it holds a space, a parenthesis or a quote, which are quoted",
             "var(), url(), image-set() or a gradient, written as they are rather than wrapped in url()"
           ]
         }
@@ -353,7 +376,13 @@
       "rejects": [
         ".a { @include background-stripes(red, 2em, nonsense); }",
         ".a { @include background-stripes(red, 2em, -45deg, 42); }",
-        ".a { @include background-stripes(red, nonsense); }"
+        ".a { @include background-stripes(red, nonsense); }",
+        ".a { @include background-stripes(red, 2em, -10px); }",
+        ".a { @include background-stripes(red, 2em, 10%); }",
+        ".a { @include background-stripes(huge); }",
+        ".a { @include background-stripes(red \"blue\"); }",
+        ".a { @include background-stripes(red, 10deg); }",
+        ".a { @include background-stripes(red, 2); }"
       ]
     },
     {
@@ -438,7 +467,13 @@
       ],
       "rejects": [
         ".a { @include border-radius(1px, 2px, 3px); }",
-        ".a { @include border-radius(nonsense, 5px); }"
+        ".a { @include border-radius(nonsense, 5px); }",
+        ".a { @include border-radius(-4px); }",
+        ".a { @include border-radius(auto); }",
+        ".a { @include border-radius(10deg); }",
+        ".a { @include border-radius(1px 2px 3px 4px 5px); }",
+        ".a { @include border-radius(\"top\", 1px 2px 3px); }",
+        ".a { @include border-radius(1px, 2px, -3px, 4px); }"
       ]
     },
     {
@@ -463,7 +498,7 @@
           "name": "$image-url",
           "default": "null",
           "accepts": [
-            "an image path",
+            "an image path, as a string; a list, a number, a colour or a boolean is refused",
             "var(), url(), image-set() or a gradient, written as they are rather than wrapped in url()"
           ]
         }
@@ -475,7 +510,13 @@
         ".logo { @include brand-logo(120px, 40px, \"/img/logo.svg\"); }",
         ".logo { @include brand-logo(120px, 40px, var(--logo)); }"
       ],
-      "rejects": []
+      "rejects": [
+        ".logo { @include brand-logo(120px, 40px, \"/img/a.svg\" \"/img/b.svg\"); }",
+        ".logo { @include brand-logo(120px, 40px, true); }",
+        ".logo { @include brand-logo(huge, 40px); }",
+        ".logo { @include brand-logo(120px, 10deg); }",
+        ".logo { @include brand-logo(\"120px\", 40px); }"
+      ]
     },
     {
       "name": "breakpoint",
@@ -489,7 +530,8 @@
             "only plus a breakpoint, for exactly that width",
             "min or max plus a breakpoint",
             "between plus two breakpoints",
-            "a start and an end value"
+            "a start and an end value",
+            "a breakpoint is a key from $map-for-breakpoints, or a length in any unit a width condition takes, 0 or a calculation; a percentage, a bare number, another unit and a word that is not a key are refused, because the query would never match"
           ]
         }
       ],
@@ -509,7 +551,16 @@
         ".a { @include breakpoint(\"between\", \"medium\", \"large\") { color: red; } }",
         ".a { @include breakpoint() { color: red; } }",
         ".a { @include breakpoint(\"min\", var(--wide)) { color: red; } }",
-        ".a { @include breakpoint(\"between\", var(--start) \"large\") { color: red; } }"
+        ".a { @include breakpoint(\"between\", var(--start) \"large\") { color: red; } }",
+        ".a { @include breakpoint(\"huge\") { color: red; } }",
+        ".a { @include breakpoint(\"min\", \"huge\") { color: red; } }",
+        ".a { @include breakpoint(\"min\", \"MEDIUM\") { color: red; } }",
+        ".a { @include breakpoint(\"between\", \"small\" \"huge\") { color: red; } }",
+        ".a { @include breakpoint(\"huge\", \"large\") { color: red; } }",
+        ".a { @include breakpoint(\"small\", \"huge\") { color: red; } }",
+        ".a { @include breakpoint(\"min\", 10deg) { color: red; } }",
+        ".a { @include breakpoint(\"max\", 50%) { color: red; } }",
+        ".a { @include breakpoint(\"only\", 768) { color: red; } }"
       ],
       "warns": [
         ".a { @include breakpoint(\"medium\") { color: red; } }"
@@ -582,7 +633,11 @@
       "examples": [
         ".dot { @include circle(24px); }"
       ],
-      "rejects": []
+      "rejects": [
+        ".dot { @include circle(huge); }",
+        ".dot { @include circle(24); }",
+        ".dot { @include circle(-24px); }"
+      ]
     },
     {
       "name": "clearfix",
@@ -619,11 +674,17 @@
         ".grid { @include columnizer(3, 20px); }",
         ".grid { @include columnizer(3, 20px, true); }",
         ".grid { @include columnizer(3, var(--gap)); }",
-        ".grid { @include columnizer(var(--cols)); }"
+        ".grid { @include columnizer(var(--cols)); }",
+        ".grid { @include columnizer(#{3}, 0); }"
       ],
       "rejects": [
         ".grid { @include columnizer(3, 20px, true, 9); }",
-        ".grid { @include columnizer(3, nonsense); }"
+        ".grid { @include columnizer(3, nonsense); }",
+        ".grid { @include columnizer(3px); }",
+        ".grid { @include columnizer(auto); }",
+        ".grid { @include columnizer(3, 10deg); }",
+        ".grid { @include columnizer(3, 2); }",
+        ".grid { @include columnizer(3, red, true); }"
       ]
     },
     {
@@ -637,6 +698,7 @@
             "a size, for exactly that width, which prints a warning: write only instead",
             "two sizes for a range",
             "one of min, max, only or between followed by a size",
+            "a size is a key from $map-for-breakpoints, or a length in any unit a width condition takes, 0 or a calculation; a percentage, a bare number, another unit and a word that is not a key are refused, because the query would never match",
             "$name as a keyword, to query one named container"
           ]
         }
@@ -664,7 +726,12 @@
         ".title { @include container-query(\"min\", 400px, $name: \"none\") { color: red; } }",
         ".title { @include container-query(\"min\", 400px, $name: \"not\") { color: red; } }",
         ".title { @include container-query(\"min\", 400px, $name: \"my card\") { color: red; } }",
-        ".title { @include container-query(\"min\", 400px, $name: \"1card\") { color: red; } }"
+        ".title { @include container-query(\"min\", 400px, $name: \"1card\") { color: red; } }",
+        ".title { @include container-query(\"huge\") { color: red; } }",
+        ".title { @include container-query(\"min\", \"huge\") { color: red; } }",
+        ".title { @include container-query(\"max\", 400) { color: red; } }",
+        ".title { @include container-query(\"between\", 300px 10deg) { color: red; } }",
+        ".title { @include container-query(300px, 50%) { color: red; } }"
       ],
       "warns": [
         ".title { @include container-query(400px) { color: red; } }"
@@ -754,7 +821,10 @@
           "name": "$display",
           "default": "inline-block",
           "accepts": [
-            "a display value"
+            "a display keyword, or two or three in any order naming at most one outer type, one inner type and list-item, such as inline flex",
+            "a vendor keyword such as -webkit-box, a CSS-wide keyword, or var()",
+            "null to leave display out",
+            "a quoted value is written without its quotes; a combination the browser drops, such as block inline, is refused"
           ]
         }
       ],
@@ -765,7 +835,16 @@
         ".a { @include ellipsis; }",
         ".a { @include ellipsis(200px); }"
       ],
-      "rejects": []
+      "rejects": [
+        ".a { @include ellipsis(100%, huge); }",
+        ".a { @include ellipsis(100%, block inline); }",
+        ".a { @include ellipsis(100%, inline-block flow); }",
+        ".a { @include ellipsis(100%, 10px); }",
+        ".a { @include ellipsis(huge); }",
+        ".a { @include ellipsis(auto); }",
+        ".a { @include ellipsis(-10px); }",
+        ".a { @include ellipsis(200); }"
+      ]
     },
     {
       "name": "escape-to-parent",
@@ -797,23 +876,35 @@
           "name": "$params",
           "variadic": true,
           "accepts": [
-            "a positive or negative index",
+            "a positive or negative index, a whole number other than 0; a unit or a fraction makes a selector the browser drops, and 0 excludes nothing, so both are refused",
+            "a multiple of n such as 3n, to exclude every third element; an offset such as 2n+1 is computed by Sass first and arrives as 3n",
             "first, last, odd or even",
             "a selector such as .foo",
-            "several indexes"
+            "several indexes, all of them numbers"
           ]
         }
       ],
       "file": "scss/library/_except.scss",
       "signature": "except($params...)",
       "summary": "Selects every sibling except the ones named.",
+      "caveats": [
+        "An+B with an offset cannot be passed as a number: Sass does the arithmetic, so `except(2n+1)` becomes `3n` and excludes every third element, not the odd ones. Use `odd` or `even`, or a coefficient alone such as `3n`."
+      ],
       "examples": [
         ".a { @include except(\"first\") { margin: 0; } }",
         ".a { @include except(2) { margin: 0; } }",
-        ".a { @include except(1, 3) { margin: 0; } }"
+        ".a { @include except(1, 3) { margin: 0; } }",
+        ".a { @include except(3n) { margin: 0; } }"
       ],
       "rejects": [
-        ".a { @include except(#ff0000) { margin: 0; } }"
+        ".a { @include except(#ff0000) { margin: 0; } }",
+        ".a { @include except(10deg) { margin: 0; } }",
+        ".a { @include except(-10px) { margin: 0; } }",
+        ".a { @include except(1.5) { margin: 0; } }",
+        ".a { @include except(0) { margin: 0; } }",
+        ".a { @include except(0n) { margin: 0; } }",
+        ".a { @include except(1, 10deg) { margin: 0; } }",
+        ".a { @include except(2, \"first\") { margin: 0; } }"
       ]
     },
     {
@@ -838,7 +929,8 @@
           "name": "$color",
           "default": "currentColor",
           "accepts": [
-            "any CSS colour, including currentColor and var()"
+            "a colour, currentColor, a system colour such as Highlight, or a function such as var() or color-mix()",
+            "a word that is not a colour, a quoted colour, a length and a CSS-wide keyword are refused, because the outline would be dropped"
           ]
         }
       ],
@@ -850,7 +942,16 @@
         ".card-link { @include focus-ring(3px, 4px, var(--focus)); }"
       ],
       "rejects": [
-        "@include focus-ring;"
+        "@include focus-ring;",
+        ".button { @include focus-ring(2px, 2px, huge); }",
+        ".button { @include focus-ring(2px, 2px, \"red\"); }",
+        ".button { @include focus-ring(2px, 2px, 10px); }",
+        ".button { @include focus-ring(2px, 2px, inherit); }",
+        ".button { @include focus-ring(huge); }",
+        ".button { @include focus-ring(5%); }",
+        ".button { @include focus-ring(-2px); }",
+        ".button { @include focus-ring(2px, 5%); }",
+        ".button { @include focus-ring(2px, thin); }"
       ]
     },
     {
@@ -875,14 +976,17 @@
           "name": "$font-style",
           "default": "normal",
           "accepts": [
-            "normal, italic or oblique, or a weight number"
+            "normal, italic, oblique or auto, or oblique with one or two angles from -90deg to 90deg",
+            "a number from 1 to 1000, which is read as the weight"
           ]
         },
         {
           "name": "$font-weight",
           "default": "400",
           "accepts": [
-            "a weight"
+            "normal, bold, auto, or a number from 1 to 1000",
+            "two numbers for a variable font's range, such as 100 900",
+            "bolder, lighter and the CSS-wide keywords are refused, because a @font-face rule drops them"
           ]
         },
         {
@@ -908,7 +1012,9 @@
         "@include font-face(\"Inter\", \"/fonts/inter\");",
         "@include font-face(\"Inter\", \"/fonts/inter\", italic, 700, woff2 woff);",
         "@include font-face(\"Readex Pro\", \"/fonts/readex\", $font-weight: 160 700, $file-formats: woff2, $font-display: swap);",
-        "@include font-face(\"Inter\", \"/fonts/inter\", \"italic\", $font-weight: \"bold\", $file-formats: woff2);"
+        "@include font-face(\"Inter\", \"/fonts/inter\", \"italic\", $font-weight: \"bold\", $file-formats: woff2);",
+        "@include font-face(\"Inter\", \"/fonts/inter\", oblique 10deg 20deg, $font-weight: 450.5, $file-formats: woff2);",
+        "@include font-face(\"Inter\", \"/fonts/inter\", auto, \"100 900\", $file-formats: woff2);"
       ],
       "rejects": [
         ".a { @include font-face(\"Inter\", \"/fonts/inter\"); }",
@@ -926,7 +1032,14 @@
         "@include font-face(\"Inter\", \"/fonts/inter\", $font-weight: 100 var(--max-weight), $file-formats: woff2);",
         "@include font-face(sans-serif, \"/fonts/inter\", $file-formats: woff2);",
         "@include font-face(inherit, \"/fonts/inter\", $file-formats: woff2);",
-        "@include font-face(env(--font-family), \"/fonts/inter\", $file-formats: woff2);"
+        "@include font-face(env(--font-family), \"/fonts/inter\", $file-formats: woff2);",
+        "@include font-face(\"Inter\", \"/fonts/inter\", huge, $file-formats: woff2);",
+        "@include font-face(\"Inter\", \"/fonts/inter\", oblique 100deg, $file-formats: woff2);",
+        "@include font-face(\"Inter\", \"/fonts/inter\", inherit, $file-formats: woff2);",
+        "@include font-face(\"Inter\", \"/fonts/inter\", $font-weight: huge, $file-formats: woff2);",
+        "@include font-face(\"Inter\", \"/fonts/inter\", $font-weight: bolder, $file-formats: woff2);",
+        "@include font-face(\"Inter\", \"/fonts/inter\", $font-weight: 0, $file-formats: woff2);",
+        "@include font-face(\"Inter\", \"/fonts/inter\", $font-weight: 100 200 300, $file-formats: woff2);"
       ]
     },
     {
@@ -1001,7 +1114,10 @@
           "name": "$colors",
           "required": true,
           "accepts": [
-            "two or more colours"
+            "one or more colour stops: a colour, or a colour with one or two positions, such as (red 0 10%) (blue 10% 100%)",
+            "a position on its own between two colours, as a hint, such as (red, 30%, blue)",
+            "var() for a stop or the whole list",
+            "a word that is not a colour, a position first or last, two positions in a row, three positions in a stop and null are refused, because the gradient would be dropped"
           ]
         }
       ],
@@ -1014,7 +1130,14 @@
       ],
       "rejects": [
         ".a { @include linear-gradient(sideways, (red, blue)); }",
-        ".a { @include linear-gradient(true, (red, blue)); }"
+        ".a { @include linear-gradient(true, (red, blue)); }",
+        ".a { @include linear-gradient(\"top\", (huge, blue)); }",
+        ".a { @include linear-gradient(\"top\", (inherit, blue)); }",
+        ".a { @include linear-gradient(\"top\", (red, 10%)); }",
+        ".a { @include linear-gradient(\"top\", (10%, red, blue)); }",
+        ".a { @include linear-gradient(\"top\", (red, 30%, 40%, blue)); }",
+        ".a { @include linear-gradient(\"top\", (red 10% 20% 30%, blue)); }",
+        ".a { @include linear-gradient(\"top\", null); }"
       ]
     },
     {
@@ -1070,23 +1193,35 @@
           "name": "$params",
           "variadic": true,
           "accepts": [
-            "a positive or negative index",
+            "a positive or negative index, a whole number other than 0; a unit or a fraction makes a selector the browser drops, and 0 matches nothing, so both are refused",
+            "a multiple of n such as 3n, for every third element; an offset such as 2n+1 is computed by Sass first and arrives as 3n",
             "first, last, odd or even",
             "a selector such as .foo",
-            "several indexes"
+            "several indexes, all of them numbers"
           ]
         }
       ],
       "file": "scss/library/_only.scss",
       "signature": "only($params...)",
       "summary": "Selects only the siblings named.",
+      "caveats": [
+        "An+B with an offset cannot be passed as a number: Sass does the arithmetic, so `only(2n+1)` becomes `3n` and selects every third element, not the odd ones. Use `odd` or `even`, or a coefficient alone such as `3n`."
+      ],
       "examples": [
         ".a { @include only(\"first\") { margin: 0; } }",
         ".a { @include only(-1) { margin: 0; } }",
-        ".a { @include only(1, 3) { margin: 0; } }"
+        ".a { @include only(1, 3) { margin: 0; } }",
+        ".a { @include only(3n) { margin: 0; } }"
       ],
       "rejects": [
-        ".a { @include only(#ff0000) { margin: 0; } }"
+        ".a { @include only(#ff0000) { margin: 0; } }",
+        ".a { @include only(10deg) { margin: 0; } }",
+        ".a { @include only(-10px) { margin: 0; } }",
+        ".a { @include only(1.5) { margin: 0; } }",
+        ".a { @include only(0) { margin: 0; } }",
+        ".a { @include only(0n) { margin: 0; } }",
+        ".a { @include only(1, 10deg) { margin: 0; } }",
+        ".a { @include only(2, \"first\") { margin: 0; } }"
       ]
     },
     {
@@ -1121,7 +1256,10 @@
           "name": "$position",
           "default": "absolute",
           "accepts": [
-            "any CSS position value"
+            "static, relative, absolute, fixed or sticky, in any case, or a vendor keyword such as -webkit-sticky",
+            "a CSS-wide keyword or var()",
+            "null to leave position out",
+            "a quoted keyword is written without its quotes; any other word is refused, because the declaration would be dropped"
           ]
         },
         {
@@ -1151,10 +1289,21 @@
         ".a { @include position(absolute, null 16px 16px 16px); }",
         ".a { @include position(absolute, 0 null null 0); }",
         ".badge { @include position(absolute, 0 auto auto 1rem, $logical: true); }",
-        ".a { @include position(absolute, 0, $logical: null); }"
+        ".a { @include position(absolute, 0, $logical: null); }",
+        ".a { @include position(absolute, #{16}px AUTO revert-layer); }",
+        ".tip { @include position(absolute, anchor(bottom) null null anchor(left)); }"
       ],
       "rejects": [
-        ".badge { @include position(absolute, 0, $logical: yes); }"
+        ".badge { @include position(absolute, 0, $logical: yes); }",
+        ".a { @include position(huge, 0); }",
+        ".a { @include position(10px, 0); }",
+        ".a { @include position(\"absolute fixed\", 0); }",
+        ".a { @include position(absolute, 5); }",
+        ".a { @include position(absolute, 0 10deg); }",
+        ".a { @include position(absolute, none); }",
+        ".a { @include position(absolute, red); }",
+        ".a { @include position(absolute, \"10px\"); }",
+        ".a { @include position(absolute, url(a.png)); }"
       ]
     },
     {
@@ -1165,7 +1314,9 @@
           "name": "$shape",
           "required": true,
           "accepts": [
-            "circle or ellipse"
+            "circle or ellipse",
+            "with a size as a string: an extent keyword such as \"circle closest-side\", one length for a circle, or two lengths or percentages for an ellipse",
+            "var() or calc()"
           ]
         },
         {
@@ -1173,14 +1324,17 @@
           "required": true,
           "accepts": [
             "a position name such as center or top-left",
-            "a raw CSS position"
+            "an extent keyword such as closest-side",
+            "at followed by a position, as a string, such as \"at 30% 40%\" or \"at left 10px top 20px\", optionally after a size",
+            "a word outside these, such as inherit, is refused, because the whole gradient would be dropped"
           ]
         },
         {
           "name": "$colors",
           "required": true,
           "accepts": [
-            "two or more colours"
+            "one or more colour stops, in the same forms as linear-gradient: a colour with up to two positions, a position between two colours, or var()",
+            "a stop the browser drops is refused, because the whole gradient would be dropped"
           ]
         }
       ],
@@ -1192,7 +1346,14 @@
       ],
       "rejects": [
         ".a { @include radial-gradient(42, \"center\", (red, blue)); }",
-        ".a { @include radial-gradient(circle, 42, (red, blue)); }"
+        ".a { @include radial-gradient(circle, 42, (red, blue)); }",
+        ".a { @include radial-gradient(huge, \"center\", (red, blue)); }",
+        ".a { @include radial-gradient(\"circle 10%\", \"center\", (red, blue)); }",
+        ".a { @include radial-gradient(circle, huge, (red, blue)); }",
+        ".a { @include radial-gradient(circle, \"at huge\", (red, blue)); }",
+        ".a { @include radial-gradient(circle, inherit, (red, blue)); }",
+        ".a { @include radial-gradient(circle, \"center\", (huge, blue)); }",
+        ".a { @include radial-gradient(circle, \"center\", (red, blue, 90%)); }"
       ]
     },
     {
@@ -1227,7 +1388,10 @@
       ],
       "rejects": [
         ".a { @include remove(a, b, c); }",
-        ".a { @include remove(\"max\", var(--narrow)); }"
+        ".a { @include remove(\"max\", var(--narrow)); }",
+        ".a { @include remove(\"huge\"); }",
+        ".a { @include remove(\"min\", \"huge\"); }",
+        ".a { @include remove(\"huge\", \"large\"); }"
       ],
       "warns": [
         ".a { @include remove(\"medium\"); }"
@@ -1267,14 +1431,16 @@
           "name": "$direction",
           "default": "both",
           "accepts": [
-            "a CSS resize value such as both, horizontal, vertical or none"
+            "none, both, horizontal, vertical, block, inline or auto, in any case",
+            "a CSS-wide keyword, var(), or null to leave resize out; a quoted keyword is written without its quotes"
           ]
         },
         {
           "name": "$overflow",
           "default": "auto",
           "accepts": [
-            "a CSS overflow value"
+            "one or two of visible, hidden, clip, scroll, auto and overlay, such as hidden auto",
+            "a CSS-wide keyword on its own, var(), or null to leave overflow out; a quoted value is written without its quotes"
           ]
         }
       ],
@@ -1285,7 +1451,12 @@
         ".a { @include resizable; }",
         ".a { @include resizable(vertical, scroll); }"
       ],
-      "rejects": []
+      "rejects": [
+        ".a { @include resizable(huge); }",
+        ".a { @include resizable(both, huge); }",
+        ".a { @include resizable(both, hidden hidden hidden); }",
+        ".a { @include resizable(both, inherit auto); }"
+      ]
     },
     {
       "name": "responsive-image",
@@ -1321,7 +1492,9 @@
       ],
       "rejects": [
         ".a { @include scissors(5px 10px); }",
-        ".a { @include scissors(nonsense); }"
+        ".a { @include scissors(nonsense); }",
+        ".a { @include scissors(10deg); }",
+        ".a { @include scissors(4px 8px 12px 1x); }"
       ]
     },
     {
@@ -1333,7 +1506,7 @@
           "required": true,
           "accepts": [
             "1x, 2x or 3x",
-            "a raw resolution such as 120dpi"
+            "a raw resolution in dpi, dpcm, dppx or x, such as 120dpi, or a calculation; a bare number, a length and a negative resolution are refused, because the query would never match"
           ]
         }
       ],
@@ -1344,7 +1517,11 @@
         ".a { @include screen-agent(\"2x\") { background-image: url(\"/img/a@2x.png\"); } }"
       ],
       "rejects": [
-        ".a { @include screen-agent(var(--density)) { color: red; } }"
+        ".a { @include screen-agent(var(--density)) { color: red; } }",
+        ".a { @include screen-agent(\"huge\") { color: red; } }",
+        ".a { @include screen-agent(2) { color: red; } }",
+        ".a { @include screen-agent(10px) { color: red; } }",
+        ".a { @include screen-agent(-1dppx) { color: red; } }"
       ]
     },
     {
@@ -1373,7 +1550,13 @@
         ".a { @include sizer(40px); }",
         ".a { @include sizer(120px, 40px); }"
       ],
-      "rejects": []
+      "rejects": [
+        ".a { @include sizer(huge); }",
+        ".a { @include sizer(40); }",
+        ".a { @include sizer(120px, 10deg); }",
+        ".a { @include sizer(-40px); }",
+        ".a { @include sizer(\"40px\"); }"
+      ]
     },
     {
       "name": "smartphone",
@@ -1418,7 +1601,7 @@
           "accepts": [
             "an image path ending in .png, .jpg or .svg",
             "a background position",
-            "both, image first"
+            "both, image first, where the image is one path as a string"
           ]
         }
       ],
@@ -1431,7 +1614,14 @@
         ".icon { @include sprite(0 -40px); }"
       ],
       "rejects": [
-        ".icon { @include sprite(\"/img/sprite.txt\"); }"
+        ".icon { @include sprite(\"/img/sprite.txt\"); }",
+        ".icon { @include sprite(\"/img/a.png\" \"/img/b.png\", 0 -40px); }",
+        ".icon { @include sprite(42, 0 -40px); }",
+        ".icon { @include sprite(0 red); }",
+        ".icon { @include sprite(\"/img/sprite.png\", 10deg); }",
+        ".icon { @include sprite(\"/img/sprite.png\", 1); }",
+        ".icon { @include sprite(\"/img/sprite.png\", 10px 20px 30px 40px); }",
+        ".icon { @include sprite(\"/img/sprite.png\", auto); }"
       ]
     },
     {
@@ -1506,7 +1696,8 @@
           "name": "$colors",
           "required": true,
           "accepts": [
-            "two or more colours"
+            "one or more colour stops, in the same forms as linear-gradient: a colour with up to two positions, a position between two colours, or var()",
+            "a stop the browser drops is refused, because the gradient and the transparent text would go with it"
           ]
         }
       ],
@@ -1517,7 +1708,9 @@
         ".a { @include text-gradient(\"top\", (red, blue)); }"
       ],
       "rejects": [
-        ".a { @include text-gradient(sideways, (red, blue)); }"
+        ".a { @include text-gradient(sideways, (red, blue)); }",
+        ".a { @include text-gradient(\"top\", (huge, blue)); }",
+        ".a { @include text-gradient(\"top\", (\"red\", blue)); }"
       ]
     },
     {
@@ -1528,7 +1721,7 @@
           "name": "$image",
           "default": "null",
           "accepts": [
-            "an image path",
+            "an image path, as a string; a list, a number, a colour or a boolean is refused",
             "var(), url(), image-set() or a gradient, written as they are rather than wrapped in url()"
           ]
         }
@@ -1540,7 +1733,10 @@
         ".a { @include text-image(\"/img/t.png\"); }",
         ".a { @include text-image(var(--texture)); }"
       ],
-      "rejects": []
+      "rejects": [
+        ".a { @include text-image(16 9); }",
+        ".a { @include text-image(#ff0000); }"
+      ]
     },
     {
       "name": "text-selection",
@@ -1597,14 +1793,16 @@
           "name": "$fallback-color",
           "default": "black",
           "accepts": [
-            "a colour for browsers without text-stroke"
+            "a colour for browsers without text-stroke",
+            "each colour accepts a colour, currentColor, a system colour, a function such as var() or light-dark(), a CSS-wide keyword, or null to leave its declaration out"
           ]
         },
         {
           "name": "$color",
           "default": "transparent",
           "accepts": [
-            "the text fill colour"
+            "the text fill colour",
+            "a word that is not a colour, a quoted colour, a length or two colours are refused"
           ]
         },
         {
@@ -1629,7 +1827,16 @@
         ".a { @include text-stroke; }",
         ".a { @include text-stroke(black, transparent, red, 2px); }"
       ],
-      "rejects": []
+      "rejects": [
+        ".a { @include text-stroke(huge); }",
+        ".a { @include text-stroke(black, \"red\"); }",
+        ".a { @include text-stroke(black, transparent, 10px); }",
+        ".a { @include text-stroke(black, transparent, red blue); }",
+        ".a { @include text-stroke(black, transparent, red, huge); }",
+        ".a { @include text-stroke(black, transparent, red, 5%); }",
+        ".a { @include text-stroke(black, transparent, red, -1px); }",
+        ".a { @include text-stroke(black, transparent, red, 2); }"
+      ]
     },
     {
       "name": "tokens",
@@ -1698,7 +1905,9 @@
           "accepts": [
             "a Sass colour, such as red, #333 or oklch(70% 0.1 200)",
             "currentColor",
-            "var(), color-mix() or light-dark(), which CSS resolves"
+            "a system colour such as Canvas",
+            "var(), color-mix(), light-dark(), contrast-color() or rgb(from ...), which CSS resolves",
+            "a CSS-wide keyword is refused, because it is invalid inside the border-color shorthand"
           ]
         },
         {
@@ -1727,7 +1936,13 @@
         ".caret { @include triangle(sideways); }",
         ".caret { @include triangle(\"top\", notacolor); }",
         ".caret { @include triangle(\"top\", url(a.png)); }",
-        ".caret { @include triangle(\"top\", red, nonsense); }"
+        ".caret { @include triangle(\"top\", red, nonsense); }",
+        ".caret { @include triangle(\"top\", -webkit-fill-available); }",
+        ".caret { @include triangle(\"top\", red, 5%); }",
+        ".caret { @include triangle(\"top\", red, -10px); }",
+        ".caret { @include triangle(\"top\", red, thin); }",
+        ".caret { @include triangle(\"top\", red, 10); }",
+        ".caret { @include triangle(\"top\", red, 10px 10deg); }"
       ]
     },
     {
@@ -2246,17 +2461,21 @@
           "name": "$value",
           "required": true,
           "accepts": [
-            "a key from $map-for-breakpoints, or a raw length"
+            "a key from $map-for-breakpoints",
+            "a length, a percentage or a CSS function such as var() or min(), returned as it is"
           ]
         }
       ],
       "file": "scss/utilities/_validate-breakpoint.scss",
       "signature": "validateBreakpoint($value)",
-      "summary": "Resolves a breakpoint name to its width, passing other values through.",
+      "summary": "Resolves a breakpoint name to its width, passing a length, a percentage or a CSS function through, and refusing a word that is not a key.",
       "examples": [
         ".a { width: validateBreakpoint(\"medium\"); }"
       ],
-      "rejects": []
+      "rejects": [
+        ".a { width: validateBreakpoint(\"huge\"); }",
+        ".a { width: validateBreakpoint(\"small\" \"medium\"); }"
+      ]
     },
     {
       "name": "validateLength",

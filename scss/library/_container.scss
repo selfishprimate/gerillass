@@ -3,6 +3,7 @@
 @use "sass:list";
 @use "sass:meta";
 @use "sass:string";
+@use "../internal/words" as *;
 
 // What a browser will not keep in `container-name`. Measured in Chrome 152, the
 // declaration was dropped for `and`, `or`, `not` and `default` in any case, a
@@ -16,30 +17,12 @@ $-reserved-names: "and" "or" "not" "default";
 $-alone-names: "none" "inherit" "initial" "unset" "revert" "revert-layer";
 $-forbidden-in-name: "." "," "/" "#" ":" ";" "(" ")" "[" "]" "{" "}" "!" "@" "$" "%" "^" "&" "*" "+" "=" "<" ">" "?" "\\" "|" "~" "`" "'" "\"";
 
-@function -words($text) {
-  $words: ();
-  $rest: $text;
-  $at: string.index($rest, " ");
-  @while $at {
-    $word: string.slice($rest, 1, $at - 1);
-    @if string.length($word) > 0 {
-      $words: list.append($words, $word);
-    }
-    $rest: string.slice($rest, $at + 1);
-    $at: string.index($rest, " ");
-  }
-  @if string.length($rest) > 0 {
-    $words: list.append($words, $rest);
-  }
-  @return $words;
-}
-
 @function -name-problem($name) {
   $text: "#{$name}";
   @if string.index($text, "var(") {
     @return null;
   }
-  $words: -words($text);
+  $words: wordsOf($text);
   @each $word in $words {
     $lower: string.to-lower-case($word);
     @if list.index($-alone-names, $lower) and list.length($words) > 1 {

@@ -59,10 +59,13 @@ same two messages, so a recorded rejection that fails with one of them fails the
 suite.
 
 **WARNED ONLY — the build succeeded with a warning.** A warning most pipelines
-never surface. Today all of these are `validateLength` on a value that is not
-a length, six of them reached through `position`, and they stay warnings on
-purpose: that function cannot be certain, and making it strict is what used to
-reject `var(--gap)`.
+never surface. What is left here is of two kinds, both on purpose. One is
+`validateLength` called on its own with a value that is not a length: the
+function is public, and making it strict is what used to reject `var(--gap)`.
+The other is the one-argument form of `breakpoint`, `container-query` and
+`remove`, which warns until 3.0.0 refuses it (B2 in `todos/fix-plan.md`). `position`
+used to reach it for six of these; since S7 of `todos/silent-values-plan.md`
+it checks its offsets itself and raises.
 
 **PASSED THROUGH — emitted CSS from a questionable argument.** Read these; do not
 act on the count. Some are correct — `after(nonsense)` really should emit
@@ -158,7 +161,7 @@ their own but reject bad input through `validateRatio`, so a plain grep for
 npm pack --dry-run
 ```
 
-Expect 101 files. `meta/` and `tools/` must not appear; `gerillass.json` and
+Expect 113 files. `meta/` and `tools/` must not appear; `gerillass.json` and
 `SKILL.md` must. For a release-grade audit, install the tarball somewhere else
 and compile against it — `.npmignore` and the `exports` map mean the working
 tree and the published package are not the same thing.

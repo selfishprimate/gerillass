@@ -1,0 +1,94 @@
+@charset "UTF-8";
+
+@use "sass:list";
+@use "sass:math";
+@use "sass:meta";
+@use "sass:string";
+
+// Shared by the mixins and not public API; see _is-css-function.scss.
+
+// Every length unit a width condition kept in Chrome 152, in @media and
+// @container alike and in any case: `(min-width: 10PX)` matched. `x`, `dppx`,
+// `fr`, `s`, `%` and a made-up unit never matched, and neither did a unitless
+// number other than 0.
+$-length-units: "px" "cm" "mm" "q" "in" "pt" "pc" "em" "rem" "ex" "rex" "ch" "rch" "cap" "rcap" "ic" "ric" "lh" "rlh" "vw" "vh" "vi" "vb" "vmin" "vmax" "svw" "svh" "svi" "svb" "svmin" "svmax" "lvw" "lvh" "lvi" "lvb" "lvmin" "lvmax" "dvw" "dvh" "dvi" "dvb" "dvmin" "dvmax" "cqw" "cqh" "cqi" "cqb" "cqmin" "cqmax";
+
+// The units a resolution condition kept, also in any case. A unitless number, a
+// length and a negative resolution never matched; `0dppx` was kept.
+$-resolution-units: "dpi" "dpcm" "dppx" "x";
+
+// Angles, for an oblique `font-style`: `oblique 0.2rad` was kept in a @font-face
+// rule and `oblique 10`, unitless, was dropped.
+$-angle-units: "deg" "grad" "rad" "turn";
+
+// True for a value a @media or @container condition can match: a number in one
+// of the units above, a calculation, or either written as a quoted string, which
+// Sass writes into a condition without its quotes, so `breakpoint(min, "600px")`
+// has always worked. A calculation is taken on trust: `calc(30em + 1px)`,
+// `clamp()`, `min()` and `max()` were all kept, and Sass reduces `calc(10deg)`
+// to a number before it gets here, so that one is checked like any other.
+//
+// $kind is "length" or "resolution" for a condition. A negative length was
+// kept, since it is valid and simply matches every width or none; a negative
+// resolution was not. Two more kinds serve values outside a condition, where a
+// caller rules out a negative itself if the property does: "length-percentage",
+// a length or a percentage, and "angle".
+@function isConditionValue($value, $kind: "length") {
+  $units: $-length-units;
+  @if $kind == "resolution" {
+    $units: $-resolution-units;
+  } @else if $kind == "length-percentage" {
+    $units: list.append($-length-units, "%");
+  } @else if $kind == "angle" {
+    $units: $-angle-units;
+  }
+
+  @if meta.type-of($value) == "calculation" {
+    @return true;
+  }
+  @if meta.type-of($value) == "number" {
+    @if math.is-unitless($value) {
+      @return ($kind == "length" or $kind == "length-percentage") and $value == 0;
+    }
+    @if $kind == "resolution" and $value < 0 {
+      @return false;
+    }
+    @return list.index($units, string.to-lower-case(math.unit($value))) != null;
+  }
+  @if meta.type-of($value) != "string" {
+    @return false;
+  }
+
+  $text: string.to-lower-case(string.unquote($value));
+  @each $function in "calc(" "clamp(" "min(" "max(" {
+    @if string.index($text, $function) == 1 {
+      @return true;
+    }
+  }
+
+  // A quoted length, such as "600px": the number runs up to the first
+  // character that cannot be part of one, and the rest is the unit.
+  $unit-start: null;
+  $digits: 0;
+  @for $i from 1 through string.length($text) {
+    $character: string.slice($text, $i, $i);
+    @if $unit-start == null {
+      @if string.index("0123456789", $character) {
+        $digits: $digits + 1;
+      } @else if not string.index(".+-", $character) {
+        $unit-start: $i;
+      }
+    }
+  }
+  @if $digits == 0 {
+    @return false;
+  }
+  @if $unit-start == null {
+    // A quoted unitless number: only zero, and only for a length.
+    @return ($kind == "length" or $kind == "length-percentage") and not string.index($text, "1") and not string.index($text, "2") and not string.index($text, "3") and not string.index($text, "4") and not string.index($text, "5") and not string.index($text, "6") and not string.index($text, "7") and not string.index($text, "8") and not string.index($text, "9");
+  }
+  @if $kind == "resolution" and string.index(string.slice($text, 1, $unit-start - 1), "-") {
+    @return false;
+  }
+  @return list.index($units, string.slice($text, $unit-start)) != null;
+}

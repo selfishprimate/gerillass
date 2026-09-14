@@ -1,0 +1,68 @@
+@charset "UTF-8";
+
+@use "sass:meta";
+@use "sass:string";
+@use "is-css-function" as *;
+
+// Shared by the mixins and not public API; see _is-css-function.scss.
+
+// An image path goes into url(). A var(), url(), image-set() or gradient is
+// already an image, and wrapping it produced url(var(--x)), which loads nothing.
+//
+// $unquote is there because the copies this replaced differed:
+// background-dots and background-stripes wrote `url(a.png)`, the other three
+// `url("a.png")`. Both load the same file, and keeping each as it was means no
+// stylesheet changes.
+//
+// What it refuses, measured in Chrome 152:
+//
+// - a list where one image is meant: `url(16 9)` was dropped;
+// - a number, a colour or a boolean: `url(42)`, `url(#ff0000)` and `url(true)`
+//   are kept, but ask for a file named 42, a fragment of the page, or a file
+//   named true, which is never the image meant. background-dots and
+//   background-stripes refused these already.
+//
+// And an unquoted path is quoted when it has to be: `url(a b)`, `url(a(1).png)`
+// and `url(a'b.png)` were dropped, while the same paths in quotes were kept and
+// `url("a b")` resolved to `a%20b`. Every other path is written as before.
+@function imageValue($value, $mixin, $argument, $unquote: false) {
+  // paint(), image() and -webkit-cross-fade() were kept as images in Chrome
+  // 152 and used to be wrapped into url(paint(...)), which loads nothing;
+  // cross-fade(), element() and -moz-element() are in the specification or
+  // other engines.
+  @if isCssFunction($value, "var" "url" "image-set" "linear-gradient" "radial-gradient" "conic-gradient" "repeating-linear-gradient" "repeating-radial-gradient" "repeating-conic-gradient" "paint" "image" "cross-fade" "-webkit-cross-fade" "element" "-moz-element") {
+    @return $value;
+  }
+  @if meta.type-of($value) == "list" or meta.type-of($value) == "arglist" or meta.type-of($value) == "map" {
+    @error "`#{meta.inspect($value)}` is not a valid #{$argument} for `#{$mixin}`: it is a list where one image is meant, and a browser drops `url()` with a list in it. Pass one path as a string, such as `\"/img/hero.png\"`.";
+  }
+  @if meta.type-of($value) != "string" {
+    @error "`#{meta.inspect($value)}` is not a valid #{$argument} for `#{$mixin}`: an image path is a string, and `url(#{meta.inspect($value)})` asks for a file of that name, which is never the image. Pass a path as a string, such as `\"/img/hero.png\"`, or var() or a gradient.";
+  }
+  @if not $unquote {
+    @return url($value);
+  }
+  $text: string.unquote($value);
+  @if not (string.index($text, " ") or string.index($text, "(") or string.index($text, ")") or string.index($text, "'") or string.index($text, "\"")) {
+    @return url(string.unquote($value));
+  }
+  @if string.index($text, "\"") {
+    @return string.unquote("url('#{-escaped-single-quotes($text)}')");
+  }
+  @return string.unquote("url(\"#{$text}\")");
+}
+
+// A path holding a double quote goes into single quotes, so any single quote in
+// it is escaped.
+@function -escaped-single-quotes($text) {
+  $result: "";
+  @for $i from 1 through string.length($text) {
+    $character: string.slice($text, $i, $i);
+    @if $character == "'" {
+      $result: $result + "\\'";
+    } @else {
+      $result: $result + $character;
+    }
+  }
+  @return $result;
+}

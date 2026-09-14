@@ -22,9 +22,9 @@ This is a **Gerillass** technique for **image replacement**. There are other met
 ## Arguments
 
 <Arguments of="brand-logo">
-  <Argument name="$width" type="number (with unit)">Sets the width value of the logo image.</Argument>
-  <Argument name="$height" type="number (with unit)">Sets the height value of the logo image.</Argument>
-  <Argument name="$image-url" type="string, function">Sets the URL of the logo image. Works best with absolute URLs. This argument is optional, so you can also specify the image with the style attribute. A value that already is an image, <code>var()</code>, <code>url()</code>, <code>image-set()</code> or a gradient, is written as it is rather than wrapped in <code>url()</code>.</Argument>
+  <Argument name="$width" type="number (with unit)">Sets the width value of the logo image. Accepts what <a href="/docs/sizer">Sizer</a> accepts: a length or a percentage, a sizing keyword, a CSS-wide keyword, <code>var()</code> or a maths function.</Argument>
+  <Argument name="$height" type="number (with unit)">Sets the height value of the logo image. Accepts the same values as <code>$width</code>.</Argument>
+  <Argument name="$image-url" type="string, function">Sets the URL of the logo image. Works best with absolute URLs. This argument is optional, so you can also specify the image with the style attribute. A value that already is an image, <code>var()</code>, <code>url()</code>, <code>image-set()</code> or a gradient, is written as it is rather than wrapped in <code>url()</code>. A list, a number, a colour or a boolean is refused.</Argument>
 </Arguments>
 
 ## Examples
@@ -79,6 +79,30 @@ Note that the `background-image` declaration has disappeared from the generated 
 </h1>
 ```
 </Example>
+
+## What it refuses
+
+An image that is not one path stops the build. Until 2.3.1 anything went into `url()`: measured in Chrome 152, a list is dropped, and `url(true)` is kept but asks for a file named true, so the logo box stayed empty either way.
+
+```scss
+.brand-logo {
+  @include brand-logo(120px, 40px, true);
+}
+```
+```text
+Error: `true` is not a valid $image-url for `brand-logo`: an image path is a string, and `url(true)` asks for a file of that name, which is never the image. Pass a path as a string, such as `"/img/hero.png"`, or var() or a gradient.
+```
+
+A width or height the browser drops stops the build too, the same values [Sizer](/docs/sizer) refuses. Until 2.3.1 they compiled, and the browser dropped the declaration without a word.
+
+```scss
+.brand-logo {
+  @include brand-logo(120px, 10deg);
+}
+```
+```text
+Error: `10deg` is not a valid $height for `brand-logo`: `deg` is not a length unit. A browser drops the declaration.
+```
 
 ## Related Links
 * [Nine Techniques for CSS Image Replacement](https://css-tricks.com/css-image-replacement/)

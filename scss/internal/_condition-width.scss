@@ -1,0 +1,22 @@
+@charset "UTF-8";
+
+@use "sass:meta";
+@use "../utilities/validate-breakpoint" as *;
+@use "is-condition-value" as *;
+
+// Shared by the mixins and not public API; see _is-css-function.scss.
+
+// Resolves a size for a width condition and refuses one no condition can match.
+// validateBreakpoint turns a key into its width and refuses a word that is not a
+// key; it passes a percentage or a bare number through, because a declaration
+// takes them. A width condition does not: `(min-width: 50%)` and
+// `(min-width: 768)` never matched in Chrome 152, so they are refused here.
+// Returns the same value validateBreakpoint does, so a call that worked writes
+// the same query.
+@function conditionWidth($value, $mixin, $at-rule: "@media") {
+  $width: validateBreakpoint($value);
+  @if not isConditionValue($width, "length") {
+    @error "`#{meta.inspect($value)}` cannot be used as a size in `#{$mixin}`: a width condition takes a length, and one written with `#{meta.inspect($width)}` would never match in #{$at-rule}. Pass a length such as `600px`, `40em` or `calc(30em + 1px)`, or a key from $map-for-breakpoints.";
+  }
+  @return $width;
+}

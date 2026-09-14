@@ -1,0 +1,53 @@
+// sizer refuses a width or height the browser drops. These must keep compiling
+// to the same declarations, each measured in Chrome 152 as one width and height
+// keep: the sizing keywords, a vendor keyword, anchor-size() and calc-size(), a
+// percentage, var() and a CSS-wide keyword.
+@use 'true' as *;
+@use '../../scss/gerillass' as *;
+
+@include describe('sizer()') {
+  @include it('Accepts the sizing keywords and a vendor keyword.') {
+    @include assert {
+      @include output {
+        .a { @include sizer(auto, stretch); }
+        .b { @include sizer(fit-content, -webkit-fill-available); }
+        .c { @include sizer(min-content, max-content); }
+      }
+      @include expect {
+        .a { width: auto; height: stretch; }
+        .b { width: fit-content; height: -webkit-fill-available; }
+        .c { width: min-content; height: max-content; }
+      }
+    }
+  }
+
+  @include it('Accepts sizing functions, a percentage, var() and a CSS-wide keyword.') {
+    @include assert {
+      @include output {
+        .a { @include sizer(anchor-size(width), calc-size(auto, size)); }
+        .b { @include sizer(50%, var(--h)); }
+        .c { @include sizer(inherit); }
+      }
+      @include expect {
+        .a { width: anchor-size(width); height: calc-size(auto, size); }
+        .b { width: 50%; height: var(--h); }
+        .c { width: inherit; height: inherit; }
+      }
+    }
+  }
+
+  // Interpolation gives an unquoted string, not a number, and it is written
+  // into the CSS as it reads. `sizer(#{40}px)` worked on main and was refused
+  // for a while on this branch, so it is pinned here.
+  @include it('Accepts a length built by interpolation.') {
+    @include assert {
+      @include output {
+        $n: 40;
+        .a { @include sizer(#{$n}px, #{"50%"}); }
+      }
+      @include expect {
+        .a { width: 40px; height: 50%; }
+      }
+    }
+  }
+}

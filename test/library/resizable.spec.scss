@@ -1,0 +1,37 @@
+// resizable refuses a $direction or $overflow a browser drops. These must keep
+// compiling to the same CSS, each measured in Chrome 152 as a value the browser
+// keeps: the logical and auto directions, two overflow values, overlay and
+// var(). A quoted value is written without its quotes, because
+// `resize: "both"` and `overflow: "hidden"` were dropped.
+@use 'true' as *;
+@use '../../scss/gerillass' as *;
+
+@include describe('resizable()') {
+  @include it('Accepts logical directions, two overflow values and var().') {
+    @include assert {
+      @include output {
+        .a { @include resizable(block, hidden auto); }
+        .b { @include resizable(vertical, var(--overflow)); }
+        .c { @include resizable(auto, overlay); }
+      }
+      @include expect {
+        .a { resize: block; overflow: hidden auto; max-width: 100%; }
+        .b { resize: vertical; overflow: var(--overflow); max-width: 100%; }
+        .c { resize: auto; overflow: overlay; max-width: 100%; }
+      }
+    }
+  }
+
+  @include it('Writes quoted values without their quotes.') {
+    @include assert {
+      @include output {
+        .a { @include resizable("vertical", "scroll"); }
+        .b { @include resizable(none, "clip clip"); }
+      }
+      @include expect {
+        .a { resize: vertical; overflow: scroll; max-width: 100%; }
+        .b { resize: none; overflow: clip clip; max-width: 100%; }
+      }
+    }
+  }
+}

@@ -1,30 +1,11 @@
 @charset "UTF-8";
 
-@use "sass:list";
 @use "sass:meta";
-@use "sass:string";
-
-// Returns the first value in $value that holds var(), looking inside lists and
-// calculations, or null. Custom properties are not evaluated in a @media or
-// @container condition, so a rule built from one never applies, and nothing
-// warns. Measured in Chrome 152: `(min-width: var(--wide))` did not match with
-// `--wide: 200px`, while `(min-width: 200px)` did.
-@function -custom-property-in($value) {
-  @each $item in $value {
-    @if meta.type-of($item) == "list" or meta.type-of($item) == "arglist" {
-      $found: -custom-property-in($item);
-      @if $found {
-        @return $found;
-      }
-    } @else if string.index(meta.inspect($item), "var(") {
-      @return $item;
-    }
-  }
-  @return null;
-}
+@use "../internal/custom-property-in" as *;
+@use "../internal/is-condition-value" as *;
 
 @mixin screen-agent($resolution) {
-  $custom-property: -custom-property-in($resolution);
+  $custom-property: customPropertyIn($resolution);
   @if $custom-property {
     @error "`#{$custom-property}` cannot be used as a resolution: custom properties are not evaluated in a @media condition, so the rule would never apply. Pass `1x`, `2x`, `3x` or a resolution such as `2dppx`.";
   }
@@ -41,6 +22,11 @@
       @content;
     }
   } @else {
+    // Measured in Chrome 152, `(min-resolution: huge)`, `(min-resolution: 2)`,
+    // `(min-resolution: 10px)` and `(min-resolution: -1dppx)` never match.
+    @if not isConditionValue($resolution, "resolution") {
+      @error "`#{meta.inspect($resolution)}` is not a valid $resolution for `screen-agent`: `(min-resolution: #{meta.inspect($resolution)})` would never match. Pass `1x`, `2x`, `3x`, or a resolution such as `2dppx`, `192dpi` or `38dpcm`.";
+    }
     @media (min-resolution: #{$resolution}) {
       @content;
     }

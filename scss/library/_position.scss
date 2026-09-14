@@ -2,8 +2,10 @@
 
 @use "sass:list";
 @use "sass:meta";
+@use "sass:string";
 @use "../utilities/shorthand-property" as *;
-@use "../utilities/validate-length" as *;
+@use "../internal/keyword-value" as *;
+@use "../internal/length-problem" as *;
 
 // Sets position and its four offsets in shorthand order: top, right, bottom,
 // left, as `margin` and `padding` take them.
@@ -24,17 +26,46 @@
   @if $logical != true and $logical != false and $logical != null {
     @error "`#{meta.inspect($logical)}` is not a valid $logical for `position`. Pass true for offsets that follow the writing direction, or false for top, right, bottom and left.";
   }
+  // Measured in Chrome 152, `position` kept the five keywords in any case, the
+  // CSS-wide keywords and var(), and dropped anything else, a quoted keyword
+  // included. A vendor keyword is let through: Chrome drops `-webkit-sticky`,
+  // which Safari uses. null leaves position out, as it always has.
+  $problem: keywordProblem($position, "static" "relative" "absolute" "fixed" "sticky", $vendor: true);
+  @if $problem {
+    @error "`#{meta.inspect($position)}` is not a valid $position for `position`: #{$problem}. A browser drops the declaration.";
+  }
 
   $offsets: shorthandProperty($offsets);
+  // Each offset is a declaration of its own. Measured in Chrome 152, top, left
+  // and the inset-* properties kept a length, a negative length, a percentage,
+  // 0, auto and a CSS-wide keyword in any case, var(), maths functions, anchor()
+  // and anchor-size(), and dropped any other word, a unitless number, a unit
+  // that is not a length, a colour, an image and a quoted length. This used to
+  // go through validateLength, which only warns, and warned about working
+  // values such as AUTO and revert-layer while saying nothing about 10deg or
+  // url(); validateLength itself is unchanged, for callers who want a warning.
+  @each $value in $offsets {
+    @if $value != null {
+      $problem: lengthProblem($value, $keywords: ("auto",), $functions: "anchor" "anchor-size", $css-wide: true);
+      @if $problem {
+        @error "`#{meta.inspect($value)}` is not a valid offset for `position`: #{$problem}. A browser drops the declaration.";
+      }
+    }
+  }
   $edges: top right bottom left;
   @if $logical {
     $edges: inset-block-start inset-inline-end inset-block-end inset-inline-start;
   }
 
-  position: $position;
+  // Written without quotes, since `position: "sticky"` was dropped.
+  @if meta.type-of($position) == "string" {
+    position: string.unquote($position);
+  } @else {
+    position: $position;
+  }
   @for $i from 1 through 4 {
     $value: list.nth($offsets, $i);
-    @if validateLength($value) {
+    @if $value != null {
       #{list.nth($edges, $i)}: $value;
     }
   }

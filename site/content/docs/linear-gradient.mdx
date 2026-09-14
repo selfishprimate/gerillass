@@ -26,7 +26,7 @@ Color stop points can be defined with `length` or `percentage` units.
 
 <Arguments of="linear-gradient" footnote="**Important:** When you use color stop points together with the color values, each group of values must be wrapped in parentheses and separated by a space. See the <a href='#examples'>examples</a> for more.">
   <Argument name="$direction" type="string, number">Sets the direction of the gradient line. Accepts the string values <code>top</code>, <code>top-right</code>, <code>right</code>, <code>bottom-right</code>, <code>bottom</code>, <code>bottom-left</code>, <code>left</code>, and <code>top-left</code>. You can also pass a custom value as a number followed by a <code>deg</code> unit.</Argument>
-  <Argument name="$colors" type="list">Accepts a list of colors, with or without color stop points. You can pass as many color values as you want.</Argument>
+  <Argument name="$colors" type="list">Accepts a list of colors, with or without color stop points. You can pass as many color values as you want. A stop is a colour followed by up to two positions, and a position on its own between two colours is a hint, such as <code>(red, 30%, blue)</code>. <code>var()</code> works for a stop or the whole list.</Argument>
 </Arguments>
 
 ## Examples
@@ -83,6 +83,19 @@ Color stop points can be defined with `length` or `percentage` units.
 <div class="element sandbox large"></div>
 ```
 </Example>
+
+## What it refuses
+
+A colour stop the browser drops stops the build, because the browser drops the whole gradient with it. Measured in Chrome 152: a word that is not a colour, a quoted colour, a CSS-wide keyword, a position first or last, two positions in a row, a stop with three positions, and a position that is not a length or a percentage. Until 2.3.1 each of those compiled.
+
+```scss
+.element {
+  @include linear-gradient("top", (red, 10%));
+}
+```
+```text
+Error: `red, 10%` is not a valid $colors for `linear-gradient`: it ends with the position `10%`; a position on its own goes between two colours. A browser drops the whole gradient.
+```
 
 ## Related Links
 * [Using CSS Gradients](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Images/Using_CSS_gradients)

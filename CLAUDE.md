@@ -9,7 +9,7 @@ Gerillass is a **pure Sass library** — a toolkit of mixins and functions, in t
 Two consequences follow from this and drive most decisions in the repo:
 
 1. **`package.json` must have no `dependencies`.** Everything (`jest`, `sass`, `sass-true`, `glob`) belongs in `devDependencies`. Consumers get only `.scss` files, so a runtime dependency here forces the entire test toolchain onto every downstream project. This was the cause of 24 Dependabot alerts fixed in v1.3.3 — do not reintroduce it.
-2. **Only `scss/` ships.** `.npmignore` excludes `test`, `assets`, `meta`, `tools`, dotfiles and `*.md`; npm always adds `README.md`, `LICENSE.md` and `package.json` back. Verify with `npm pack --dry-run` before any release (101 files / ~55 kB as of 2.2.0).
+2. **Only `scss/` ships.** `.npmignore` excludes `test`, `assets`, `meta`, `tools`, dotfiles and `*.md`; npm always adds `README.md`, `LICENSE.md` and `package.json` back. Verify with `npm pack --dry-run` before any release (113 files / ~58 kB since `scss/internal/` was added).
 
 Dart Sass only. LibSass/node-sass has been unsupported since v1.3.0.
 
@@ -56,6 +56,7 @@ npm test                          # Jest: sass-true specs, the smoke test, and t
 npx jest -t "mapDeepGet()"      # single test, filtered by the describe/it name
 npm run manifest                  # regenerate gerillass.json and SKILL.md (see below)
 node tools/audit.js               # adversarial sweep: bad arguments at every mixin
+node tools/browser-check.js ...   # a page asking the browser whether CSS is kept (see below)
 node tools/check-archive.js       # what a GitHub release's source zip would contain
 npm pack --dry-run                # inspect exactly what would be published
 yarn audit                        # must stay at zero across all severities
@@ -92,6 +93,9 @@ timestamp, a reading of the source — and every one was wrong:
 | no mixin calls these six utilities | dead code, delete them | documented public API; `remify` has its own docs page |
 | eyeglass unpublished since June 2022 | dead package, drop the config | ~6800 downloads/month; the real fault was its importer breaking on any `@import` |
 | `ratio-box` branches on `type-of == string` | a string is the correct argument | a list was accepted too, and silently produced a ratio box with no ratio |
+| `$filter-color` is documented as a colour | refuse anything that is not a colour | with no `$image-url` it is an `::after` layer's `background`, where a gradient, `url()` or `paint()` is a working overlay that main compiled |
+| the compile matrix showed no working call refused | the new check refuses nothing valid | the matrix never tried `3n` or `paint()`; `only(3n)` and a `paint()` overlay both worked on main and were refused |
+| the sweep of ~130 value kinds showed no working call refused | the length and colour checks refuse nothing valid | every value in it was a literal; `sizer(#{40}px)` and `focus-ring(2px, 2px, #{red})` worked on main and were refused, because interpolation gives a string, not a number or a colour |
 
 Techniques that did work, in rough order of usefulness:
 
@@ -116,6 +120,41 @@ Techniques that did work, in rough order of usefulness:
    was found that reaches the `@error` in `_background-image.scss`; esbuild was
    never installed. Parcel was, for the README recipe, against a packed
    tarball. Saying so is better than letting silence imply coverage.
+
+### The rule for changing or adding a member
+
+**Documentation is not the test.** The maintainer made this a rule on
+14 September 2026, after the two rows above: a page cannot show every use, and
+a use it does not show still works in someone's stylesheet. Whenever a change
+touches a mixin or function, a new check included, and whenever a member is
+added, do all of this and report it:
+
+1. **Compare before and after on calls, not on the docs.** Compile the same
+   calls against the code before the change and after it, and diff. The calls
+   go well beyond the documented examples: `var()` with and without a
+   fallback, `env()`, `attr()`, maths functions with `var()` inside, every
+   CSS-wide keyword, upper-case and vendor keywords, colour functions,
+   gradients, `url()`, `image-set()`, `paint()`, quoted forms of valid values,
+   values built by interpolation such as `#{$n}px` and `#{$name}`, which reach
+   a check as unquoted strings, lists, and An+B forms such as `3n`. A value kind missing from the list is
+   never tested, which is how both rows above slipped through.
+2. **Test the output in a browser.** For every call whose CSS changes, and
+   every call that starts or stops raising, test the old and the new CSS in
+   Chrome with `tools/browser-check.js`. An error is justified only when the
+   old CSS was dropped, never matched, or demonstrably did nothing.
+3. **When the browser kept it, build the case.** Look at where the value lands
+   in the emitted CSS, write the markup a user would have, and look at the
+   result. Decide by what the mixin does with the value, not by whether the
+   documentation mentions it.
+4. **For a new member, measure first and compare after.** Measure the value set
+   of each property in the browser before writing any check, and compare what
+   the mixin renders with the same CSS written by hand.
+5. **Say what was not covered**: browsers not tried, value kinds not probed,
+   cases that could not be built.
+
+The compile comparison and the sweep of value kinds used for this in
+`todos/silent-values-plan.md` still live outside the repository; see the plan's
+sections on the compile matrix and the false-refusal sweep for what they did.
 
 ## Repo tooling
 
@@ -232,13 +271,26 @@ Four layers, loaded in dependency order by `scss/_gerillass.scss`. The order is 
 
 `_gerillass.scss` lists every partial explicitly. **A new file is invisible until you add its `@import` line there**, in the correct layer block.
 
+A fifth folder sits outside the layers on purpose. `scss/internal/` holds checks
+the mixins share, such as `isCssFunction` and `customPropertyIn`, and has no
+`_index.scss`, so nothing forwards it and a user cannot reach it: through
+`@use "gerillass" as *` or `@import` a call to one renders as literal CSS, and
+through a namespace it is an undefined function. It exists because a private
+`-helper` is private to its own file, which left the same function copied into
+up to nine partials. A partial loads what it needs with
+`@use "../internal/is-css-function" as *`. The manifest and
+`tools/check-docs.js` read only `library/` and `utilities/`, so an internal
+function is neither API nor counted, and its name must not start with `-` or
+`_`. Added for the plan in `todos/silent-values-plan.md`, where the move is
+recorded as a verified no-op on 7382 compiled calls.
+
 Functions are `camelCase`, mixins are `kebab-case`, and that is what keeps them apart at a call site — together with `@include`, which a mixin always needs and a function never has. Utilities are public API and users call them directly; `remify` has its own page in the docs.
 
 Until 2.0.0 they carried a `__` prefix. It had to go: under `@use`/`@forward` a member whose name starts with `_` is **private to its own file**, so every utility became unreachable, and through `@use ... as *` it failed silently, rendering as literal CSS. Three could not simply drop the prefix — `darken` and `lighten` would shadow the Sass built-ins with different results, and `null` is a keyword — so they are `shade`, `tint` and `fillNulls`. Utilities cluster around three jobs: type guards (`isColor`, `isNumber`, `isTime`), validators that `@warn`/`@error` and return (`validateLength`, `validateBreakpoint`, `validateRatio`, `validateScissors`), and converters (`remify`, `pixelify`, `convertToEm`, `fontSizer`, `tint`, `shade`, `shorthandProperty`).
 
 **A utility that nothing in `scss/` calls is not dead code.** `remify`, `convertToEm`, `fontSizer`, `isNumber`, `tint` and `shade` are called by no mixin at all — they are there for users, and removing them would break stylesheets. Never treat "no internal callers" as a reason to delete a member; the library is the smaller half of its own audience.
 
-Mixins validate their input and `@error` with a message that names the accepted values — 40 of the 49 that take arguments do this, mostly inline. Match that style rather than failing silently.
+Mixins validate their input and `@error` with a message that names the accepted values — 48 of the 49 that take arguments do this, mostly inline. Match that style rather than failing silently.
 
 Silent failure is the trap to watch for. A mixin that branches on `type-of` and
 has no `@else` emits nothing at all for an unexpected type, which surfaces as a
@@ -318,13 +370,20 @@ Four levels, and knowing which one covers a member tells you what you can trust:
 |---|---|---|
 | `test/smoke.scss` | the mixin evaluates at all | 56/56 mixins |
 | snapshot of `meta/` examples | the output cannot change unnoticed | 79/79 members |
-| `meta/` rejects | bad input is refused with a real message | 56/79 |
-| sass-true spec in `test/` | the CSS is **correct** | 14/79 |
+| `meta/` rejects | bad input is refused with a real message | 58/79 |
+| sass-true spec in `test/` | the CSS is **correct** | 23/79 |
 
 Only the last one catches an output that was wrong from the start; a snapshot
 records a wrong value as correct. Hand-written specs are therefore reserved for
 members that compute something — `triangle`, `scissors`, `columnizer`,
 `position`, `background-dots`, `aspect-ratio`, `container-query`. Use `/sass-test`.
+
+A spec has a second use once a member starts refusing values: it pins the
+values that must stay accepted. `breakpoint`, `screen-agent` and
+`validateBreakpoint` gained specs that way in S1 of
+`todos/silent-values-plan.md`, and `only` and `except` in S2, each listing forms measured as working in a
+browser, such as a quoted `"600px"` and `calc()`, so a check written too
+strictly fails the suite instead of breaking a stylesheet.
 
 `node tools/audit.js` is the fourth thing the suite cannot do: it throws
 arguments nobody wrote a test for at every member and every argument position.
@@ -516,6 +575,72 @@ unvalidated mixins can be revisited. Each check has to be written from the
 property's measured value set, and it suggests starting with the conditions,
 where `validateBreakpoint` is the single cause.
 
+### What `silent-values-plan.md` sets out
+
+Written 14 September 2026, the report above turned into work in the shape of
+`fix-plan.md`. It opens with six decisions for the maintainer, then S0 to S7:
+groundwork, conditions and selectors for 2.3.1, keywords, images and the unit
+bug for 2.3.2, colours for 2.3.3 and lengths for 2.3.4.
+
+The maintainer took all six recommendations. **S0 and S1 are done on the
+`silent-values-plan` branch and not yet released**; the status under each item
+has the measurements. S0 moved the private helper copies into `scss/internal/`
+(see Architecture), added `huge`, `10deg` and `-10px` to the audit, and added
+`tools/browser-check.js`. S1 made `breakpoint`, `remove`, `container-query`
+and `screen-agent` refuse a size no condition can match, through
+`scss/internal/_condition-width.scss` and `_is-condition-value.scss`, and made
+`validateBreakpoint` refuse a word that is not a key.
+
+Two things S1 found that the plan did not expect. `validateBreakpoint` is
+called in declarations too, as its documentation page shows, so the
+condition-only rules (no percentage, no bare number) went into the internal
+check rather than the public function, and the function still returns
+percentages, CSS functions, the sizing keywords and `null` unchanged. And a
+quoted length such as `breakpoint(min, "600px")` has always worked, because
+Sass writes it into the condition unquoted, so the check reads the string's
+content rather than refusing every string.
+
+S2 followed on the same branch: `only` and `except` refuse a position with a
+unit or a fraction, which makes a selector the browser drops, and `0`, which
+matches or excludes nothing, through `scss/internal/_sibling-index.scss`. S3
+refused keywords a browser drops in `position`, `ellipsis`, `resizable`,
+`radial-gradient` and `font-face`, through `scss/internal/_keyword-value.scss`
+and grammars private to each mixin, and stopped writing a valid quoted keyword
+with its quotes. S4 made `imageValue` refuse a list or a non-string image in
+`background-image`, `brand-logo` and `text-image`, and quote a path holding a
+space, a parenthesis or a quote in `background-dots` and `background-stripes`,
+and made `sprite` check its path with two arguments. S5 stopped
+`background-stripes` appending `deg` to a rotation in another unit, so `turn`,
+`rad` and `grad` work and a length raises. S6 checked the ten colour arguments
+through `scss/internal/_color-problem.scss` and `_color-stops-problem.scss`,
+which replace `triangle`'s private helper and widen what it accepts to system
+colours and `contrast-color()`. One exception was found by building the case
+rather than reading the docs: `background-image` with no `$image-url` writes
+the filter as an `::after` layer's `background`, so a gradient or `url()` there
+is a real overlay and stays accepted. A false-refusal sweep followed, recorded
+in the plan: every changed argument called with valid CSS kinds the compile
+matrix never tried, compiled on `main` and on the branch, with the old CSS of
+each new refusal tested in Chrome. It found `only(3n)` refused since S2,
+`paint()` refused or wrapped in `url()`, and S6 accepting
+`-webkit-fill-available` as a colour; all three are fixed. The lesson it
+records: the matrix only proves what its value list contains, so a new check
+needs probes of every value kind the argument can land beside. S7, lengths, is
+in four chunks through `scss/internal/_length-problem.scss`. Chunk 1 checks the
+sizes of `sizer`, `circle`, `brand-logo` and `ellipsis`; chunk 2 the widths
+and offset of `focus-ring`, `text-stroke`'s stroke width, `triangle`'s size and
+`border-radius`. A sweep with interpolated values then found that
+`lengthProblem` and S6's `colorProblem` refused `#{40}px` and `#{red}`, which
+reach a check as unquoted strings; both now read the string. Chunk 3 checks
+the backgrounds' sizes, `scissors` through `validateScissors`, `sprite`'s
+position, `columnizer`'s count and gutter and `adaptive`'s gutter, with value
+sets measured by testing every compiled sweep call's own CSS in Chrome. It
+turned two broken calls into working ones instead of refusing them:
+`adaptive(0)` and `columnizer(3, 0)` now write `0px`, since a unitless 0 inside
+their `calc()` was dropped. Chunk 4 made `position` raise on an offset a
+browser drops instead of warning through `validateLength`, which had warned
+about working values such as `AUTO` and stayed silent for `10deg`. S7, and with
+it the plan, is done and unreleased.
+
 ### What `fix-plan.md` sets out
 
 The findings of the agent trials turned into work. For each problem: what goes
@@ -558,11 +683,16 @@ Verified as of v2.3.0.
 
 ### Next
 
-Three pieces of work are ready to be planned, and none is started:
+Three pieces of work are open, and none is started:
 
 - **`todos/silent-values.md`**: 49 arguments in 28 mixins turn a value a
-  browser drops into CSS. The suggested first step is the conditions behind
-  `validateBreakpoint`.
+  browser drops into CSS. Planned in `todos/silent-values-plan.md`, with the
+  six decisions taken. S0 to S7 are done on the `silent-values-plan` branch
+  and ship together as 2.3.1, not as the four patch releases the plan
+  proposed: fixes to early steps landed in later commits, so tagging each step
+  would have shipped a false refusal fixed afterwards, such as `only(3n)`. The
+  documentation pages say 2.3.1 wherever they name the version a change came
+  in.
 - **3.0.0**: the B items in `todos/fix-plan.md`, each with a `MIGRATION.md`
   section.
 - **`todos/design-tokens.md`**: a token layer on `tokens`, starting with the
@@ -575,15 +705,25 @@ Three pieces of work are ready to be planned, and none is started:
   a `var()` gutter work at all. Evaluating the expression would simplify
   `calc(100% / 4)` to `25%` and shorten the output, and would break every call
   whose column count or gutter is a custom property. Verified both ways.
-- **Nine mixins take arguments and validate none of them** — `adaptive`,
-  `brand-logo`, `circle`, `counter`, `ellipsis`, `resizable`,
-  `sizer`, `text-image`, `text-stroke`. This is mostly deliberate: they pass
-  their arguments straight to CSS, which accepts `var()`, `calc()`, `clamp()`
-  and whatever ships next, so a strict check would reject correct code. Revisit
-  only where the shape of the call can be checked without touching the value.
-- **`position` warns rather than errors** on a value that is not a length, six
-  cases in `node tools/audit.js`. Left as a warning on purpose — see the note
-  in `scss/utilities/_validate-length.scss`.
+- **One mixin takes arguments and validates none of them** — `counter`.
+  This is mostly deliberate: they pass their arguments straight to CSS, which
+  accepts `var()`, `calc()`, `clamp()` and whatever ships next, so a strict
+  check would reject correct code. Revisit only where the shape of the call can
+  be checked without touching the value. `ellipsis` and `resizable` left this
+  list in S3 of `todos/silent-values-plan.md`: their keyword arguments now
+  check the kind of each word against a measured set and still take `var()`.
+  `brand-logo` and `text-image` left it in S4, when `imageValue` in
+  `scss/internal/` began refusing a list or a non-string image for them.
+  `text-stroke` left it in S6, when its three colours began to be checked by
+  `colorProblem`. `circle` and `sizer` left it in S7, when `sizeProblem` began
+  refusing a width or height a browser drops, and `adaptive` in S7's third
+  chunk, when its gutter began to be checked.
+- **`validateLength` warns rather than errors** on a value that is not a
+  length, and stays that way on purpose: it is public, and a caller may want a
+  warning. `position` used to route its offsets through it, which warned about
+  working values such as `AUTO` and said nothing about `10deg`; since S7 of
+  `todos/silent-values-plan.md` it checks them itself and raises, decision 3 of
+  that plan.
 
 ### New members worth adding
 
@@ -638,9 +778,13 @@ that still supports older toolchains.
 
 ### Modernisation
 
-- **Sass is deprecating its own `if()`, and the library calls it 21 times.**
-  Dart Sass 1.104 prints 25 `if-function` warnings compiling Gerillass (5 shown,
-  20 omitted); 1.91 prints none. Two fixes look obvious and both are wrong,
+- **Sass is deprecating its own `if()`, and the library calls it 20 times.**
+  Compiling `test/smoke.scss`, Dart Sass prints 24 `if-function` warnings (5
+  shown, 19 omitted); 1.91 prints none. Counted on `main` at d538217 the same
+  way, outside comments, it was 22 calls and 26 warnings, so the 21 and 25 this
+  line used to give were already stale. `todos/silent-values-plan.md` removed
+  two while fixing what each guarded: S1 in `breakpoint` and S5 in
+  `background-stripes`, both now an `@if`. Two fixes look obvious and both are wrong,
   verified:
 
   1. The replacement syntax is `if(sass($cond): $a; else: $b)`. It compiles on
@@ -653,7 +797,7 @@ that still supports older toolchains.
      helper turns a working call into `Invalid index 2 for a list with 1
      elements`.
 
-  So all 21 sites need reading individually, and the ones inside interpolation
+  So all 20 sites need reading individually, and the ones inside interpolation
   need restructuring rather than substitution. Removal is not until Sass 3.0.0,
   so this is not urgent, but it is the last thing between the library and a
   clean compile.

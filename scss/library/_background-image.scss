@@ -4,28 +4,12 @@
 @use "sass:map";
 @use "sass:math";
 @use "sass:meta";
-@use "sass:string";
 @use "../library/linear-gradient" as *;
 @use "../maps/map-for-directions" as *;
-
-// An image path goes into url(). A var(), url(), image-set() or gradient is
-// already an image, and wrapping it produced url(var(--x)), which loads nothing.
-@function -image($value) {
-  @if -is-css-function($value, "var" "url" "image-set" "linear-gradient" "radial-gradient" "conic-gradient" "repeating-linear-gradient" "repeating-radial-gradient" "repeating-conic-gradient") {
-    @return $value;
-  }
-  @return url($value);
-}
-
-// True for an unquoted call to one of $names, such as var(--x). A quoted string
-// stays text, so `"var(--x)"` is not a call.
-@function -is-css-function($value, $names) {
-  @if meta.type-of($value) != "string" or string.slice(meta.inspect($value), 1, 1) == "\"" {
-    @return false;
-  }
-  $open: string.index($value, "(");
-  @return $open != null and list.index($names, string.to-lower-case(string.slice($value, 1, $open - 1))) != null;
-}
+@use "../internal/image-value" as *;
+@use "../internal/color-problem" as *;
+@use "../internal/color-stops-problem" as *;
+@use "../internal/is-css-function" as *;
 
 @mixin background-image(
   $image-url: null,
@@ -38,11 +22,39 @@
   @if $filter-direction and not map.has-key($map-for-directions, $filter-direction) and not (meta.type-of($filter-direction) == "number" and math.unit($filter-direction) == "deg") {
     @error "`#{$filter-direction}` is not a valid $filter-direction. Pass an angle such as `45deg`, or one of: #{map.keys($map-for-directions)}.";
   }
+  // One filter colour is written into `linear-gradient(to top, $c, $c)` over an
+  // image, or into `background` when there is none; several are the stops of a
+  // gradient. Measured in Chrome 152, a word or a quoted colour drops either, and
+  // a length in `background` is read as a position, so none of them is a filter.
+  // CSS-wide keywords are refused, since they drop the gradient.
+  // With no $image-url the image sits in the markup and the filter is written
+  // as an ::after layer's `background`, where an image is as valid as a colour.
+  // Measured in Chrome 152 over an image in a style attribute, a
+  // linear-gradient drew a scrim, a radial-gradient a vignette and url() a
+  // pattern, so those are accepted there. `inherit` drew the same image over
+  // itself and `10px` an empty layer, so they stay refused. With an image the
+  // filter goes inside linear-gradient(), where a gradient dropped the whole
+  // declaration, image included.
+  // paint(), image() and -webkit-cross-fade() were kept as images in Chrome 152;
+  // cross-fade(), element() and -moz-element() are in the specification or other
+  // engines and are let through on the same grounds.
+  $overlay-image: not $image-url and isCssFunction($filter-color, "url" "image-set" "var" "linear-gradient" "radial-gradient" "conic-gradient" "repeating-linear-gradient" "repeating-radial-gradient" "repeating-conic-gradient" "paint" "image" "cross-fade" "-webkit-cross-fade" "element" "-moz-element");
+  @if $filter-color != null and not $overlay-image {
+    $problem: null;
+    @if list.length($filter-color) == 1 {
+      $problem: colorProblem($filter-color);
+    } @else {
+      $problem: colorStopsProblem($filter-color);
+    }
+    @if $problem {
+      @error "`#{meta.inspect($filter-color)}` is not a valid $filter-color for `background-image`: #{$problem}. Pass a colour, such as `rgba(0, 0, 0, 0.5)`, or several for a gradient.";
+    }
+  }
   @if $image-url {
     @if $filter-color {
       @if list.length($filter-color) == 1 {
         background-image: linear-gradient(to top, $filter-color, $filter-color),
-          -image($image-url);
+          imageValue($image-url, "background-image", "$image-url");
       } @else if list.length($filter-color) > 1 {
         $color-list: ();
         @for $i from 1 through list.length($filter-color) {
@@ -54,22 +66,22 @@
                 map.get($map-for-directions, $filter-direction),
                 $color-list
               ),
-              -image($image-url);
+              imageValue($image-url, "background-image", "$image-url");
           } @else {
             @if meta.type-of($filter-direction) == "number" and list.index("deg", math.unit($filter-direction)) {
               background-image: linear-gradient($filter-direction, $color-list),
-                -image($image-url);
+                imageValue($image-url, "background-image", "$image-url");
             } @else {
               @error "`#{$filter-direction}` is not a valid $filter-direction. Pass an angle such as `45deg`, or one of: #{map.keys($map-for-directions)}.";
             }
           }
         } @else {
           background-image: linear-gradient(to top, $color-list),
-            -image($image-url);
+            imageValue($image-url, "background-image", "$image-url");
         }
       }
     } @else {
-      background-image: -image($image-url);
+      background-image: imageValue($image-url, "background-image", "$image-url");
     }
   } @else {
     position: relative;

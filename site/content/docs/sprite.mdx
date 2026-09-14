@@ -18,7 +18,7 @@ The **Sprite** Sass mixin helps you apply background images to the selected elem
 
 <Arguments of="sprite" footnote="To learn more about the `background-position` property values, check out the [links](#related-links) at the end of the page.">
   <Argument name="$image-url" type="string">The URL of the sprite image. <strong>Important:</strong> Don't forget that the image link must be either absolute or relative to the generated CSS file.</Argument>
-  <Argument name="$position" type="number | string">Sets the position of the <code>background-image</code>. <strong>Multiple values must be separated by a space.</strong></Argument>
+  <Argument name="$position" type="number | string">Sets the position of the <code>background-image</code>. <strong>Multiple values must be separated by a space.</strong> Each is a length, a percentage, <code>left</code>, <code>center</code>, <code>right</code>, <code>top</code>, <code>bottom</code>, <code>var()</code> or a maths function; a CSS-wide keyword works alone.</Argument>
 </Arguments>
 
 ## Examples
@@ -87,6 +87,30 @@ the size of one tile, and you need to know it.
 <div class="element"></div>
 ```
 </Example>
+
+## What it refuses
+
+With two arguments the first has to be one path. Until 2.3.1 it was not checked, so a list went into `url()`, which a browser drops, leaving the element without its sheet.
+
+```scss
+.element {
+  @include sprite("/img/a.png" "/img/b.png", 0 -40px);
+}
+```
+```text
+Error: `"/img/a.png" "/img/b.png"` is not a valid image path for `sprite`: with two arguments the first is one path as a string, and a browser drops a list in `url()`. Pass a path such as `"/img/sprite.png"`, then the position.
+```
+
+A position the browser drops stops the build too. Measured in Chrome 152, `background-position` drops a word other than `left`, `center`, `right`, `top` or `bottom`, a unitless number other than `0`, a unit that is not a length, and three or four lengths with no keyword. Until 2.3.1 these compiled, and the browser dropped the declaration without a word.
+
+```scss
+.element {
+  @include sprite("/img/sprite.png", auto);
+}
+```
+```text
+Error: `auto` is not a valid position for `sprite`: `auto` is not a length or one of left, center, right, top or bottom. A browser drops the declaration.
+```
 
 ## Related Links
 

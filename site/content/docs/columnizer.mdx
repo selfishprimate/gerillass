@@ -24,8 +24,8 @@ The **Columnizer** Sass mixin helps you **create evenly divided hypothetical col
 ## Arguments
 
 <Arguments of="columnizer">
-  <Argument name="$columns" type="number">Sets the number of the hypothetical columns.</Argument>
-  <Argument name="$gutter" type="number (with unit)">Sets the value of the space between the columns.</Argument>
+  <Argument name="$columns" type="number">Sets the number of the hypothetical columns. A number without a unit, or <code>var()</code>, <code>env()</code> or <code>attr()</code>.</Argument>
+  <Argument name="$gutter" type="number (with unit)">Sets the value of the space between the columns. A length, a percentage, <code>var()</code> or a maths function. <code>0</code> is written as <code>0px</code>, because the gutter is multiplied inside <code>calc()</code>.</Argument>
   <Argument name="$fill" type="boolean">Lets the orphans fill the remaining gap at the end of the list. This argument is optional and <strong>should always come last</strong>. The default value is <code>false</code>.</Argument>
 </Arguments>
 
@@ -220,6 +220,19 @@ The **Columnizer** Sass mixin helps you **create evenly divided hypothetical col
 </div>
 ```
 </Example>
+
+## What it refuses
+
+A column count or gutter the browser drops stops the build. Measured in Chrome 152, `calc(100% / 3px)` drops the column width, and so does a gutter that is unitless, a word, or a unit that is not a length. Until 2.3.1 these compiled. A gutter of `0` used to be one of them, `(3 - 1) * 0` being a number rather than a length, and is now written as `0px`.
+
+```scss
+.grid {
+  @include columnizer(3px);
+}
+```
+```text
+Error: `3px` is not a valid column count for `columnizer`: a column count has no unit. A browser drops the column width.
+```
 
 ## Related Links
 

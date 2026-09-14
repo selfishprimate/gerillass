@@ -1,0 +1,58 @@
+// ellipsis refuses a $display a browser drops. These must keep compiling to the
+// same CSS, each measured in Chrome 152 as a display value the browser keeps: a
+// two-word form, a vendor keyword, list-item, var(), and null to leave display
+// out. A quoted value is written without its quotes, because
+// `display: "block flow-root"` was dropped.
+@use 'true' as *;
+@use '../../scss/gerillass' as *;
+
+@include describe('ellipsis()') {
+  @include it('Accepts a two-word display, a vendor keyword and var().') {
+    @include assert {
+      @include output {
+        .a { @include ellipsis(100%, inline flex); }
+        .b { @include ellipsis(100%, -webkit-box); }
+        .c { @include ellipsis(100%, list-item); }
+        .d { @include ellipsis(100%, var(--display)); }
+      }
+      @include expect {
+        .a { display: inline flex; max-width: 100%; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; word-wrap: normal; }
+        .b { display: -webkit-box; max-width: 100%; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; word-wrap: normal; }
+        .c { display: list-item; max-width: 100%; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; word-wrap: normal; }
+        .d { display: var(--display); max-width: 100%; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; word-wrap: normal; }
+      }
+    }
+  }
+
+  // $width goes into max-width, which in Chrome 152 kept none, min() and the
+  // intrinsic keywords, and dropped auto, a negative length and a unitless
+  // number. -moz-available is Firefox's keyword, let through on purpose.
+  @include it('Accepts none, a maths function and a vendor keyword as the width.') {
+    @include assert {
+      @include output {
+        .a { @include ellipsis(none); }
+        .b { @include ellipsis(min(100%, 20rem)); }
+        .c { @include ellipsis(-moz-available); }
+      }
+      @include expect {
+        .a { display: inline-block; max-width: none; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; word-wrap: normal; }
+        .b { display: inline-block; max-width: min(100%, 20rem); text-overflow: ellipsis; white-space: nowrap; overflow: hidden; word-wrap: normal; }
+        .c { display: inline-block; max-width: -moz-available; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; word-wrap: normal; }
+      }
+    }
+  }
+
+  @include it('Leaves display out for null.') {
+    @include assert {
+      @include output { .a { @include ellipsis(100%, null); } }
+      @include expect { .a { max-width: 100%; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; word-wrap: normal; } }
+    }
+  }
+
+  @include it('Writes a quoted display without its quotes.') {
+    @include assert {
+      @include output { .a { @include ellipsis(100%, "block flow-root"); } }
+      @include expect { .a { display: block flow-root; max-width: 100%; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; word-wrap: normal; } }
+    }
+  }
+}

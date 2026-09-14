@@ -126,6 +126,19 @@ Error: `container-query` takes one or two arguments, and was given 3. Pass a siz
 Error: `42` is not a valid $name for `container-query`. Pass a container name as a string, such as `"card"`.
 ```
 
+A size no width condition can match is refused, as it is in [Breakpoint](/docs/breakpoint): a name missing from the map, a percentage, a bare number, or a unit that is not a length. Each used to compile into an `@container` rule that never applies. Container units such as `cqi` are lengths and are accepted.
+
+```scss
+.title {
+  @include container-query("min", 50%) {
+    color: red;
+  }
+}
+```
+```text
+Error: `50%` cannot be used as a size in `container-query`: a width condition takes a length, and one written with `50%` would never match in @container. Pass a length such as `600px`, `40em` or `calc(30em + 1px)`, or a key from $map-for-breakpoints.
+```
+
 A name from a custom property is refused too. The query needs the name itself, even where the container takes its name from `var()`, which the [Container](/docs/container) mixin allows.
 
 ```scss

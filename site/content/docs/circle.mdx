@@ -17,7 +17,7 @@ The **Circle** Sass mixin helps you easily create perfect circle shapes.
 ## Arguments
 
 <Arguments of="circle">
-  <Argument name="$size" type="number (with unit)">The size of the circle.</Argument>
+  <Argument name="$size" type="number (with unit)">The size of the circle, used for both the width and the height. Accepts what <a href="/docs/sizer">Sizer</a> accepts: a length or a percentage, a sizing keyword, a CSS-wide keyword, <code>var()</code> or a maths function.</Argument>
 </Arguments>
 
 ## Examples
@@ -32,6 +32,19 @@ The **Circle** Sass mixin helps you easily create perfect circle shapes.
 <div class="element" style="background: #5bc0bb"></div>
 ```
 </Example>
+
+## What it refuses
+
+A size the browser drops stops the build. Measured in Chrome 152, that is a word that is not a sizing keyword, a unitless number other than `0`, a unit that is not a length, a negative length and a length in quotes. Until 2.3.1 these compiled into a width and height the browser dropped without a word.
+
+```scss
+.element {
+  @include circle(24);
+}
+```
+```text
+Error: `24` is not a valid $size for `circle`: a unitless number is not a length; add a unit, such as `24px`. A browser drops the width and height.
+```
 
 ## Related Links
 

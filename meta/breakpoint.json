@@ -13,7 +13,8 @@
         "only plus a breakpoint, for exactly that width",
         "min or max plus a breakpoint",
         "between plus two breakpoints",
-        "a start and an end value"
+        "a start and an end value",
+        "a breakpoint is a key from $map-for-breakpoints, or a length in any unit a width condition takes, 0 or a calculation; a percentage, a bare number, another unit and a word that is not a key are refused, because the query would never match"
       ]
     }
   ],
@@ -26,7 +27,16 @@
     ".a { @include breakpoint(\"between\", \"medium\", \"large\") { color: red; } }",
     ".a { @include breakpoint() { color: red; } }",
     ".a { @include breakpoint(\"min\", var(--wide)) { color: red; } }",
-    ".a { @include breakpoint(\"between\", var(--start) \"large\") { color: red; } }"
+    ".a { @include breakpoint(\"between\", var(--start) \"large\") { color: red; } }",
+    ".a { @include breakpoint(\"huge\") { color: red; } }",
+    ".a { @include breakpoint(\"min\", \"huge\") { color: red; } }",
+    ".a { @include breakpoint(\"min\", \"MEDIUM\") { color: red; } }",
+    ".a { @include breakpoint(\"between\", \"small\" \"huge\") { color: red; } }",
+    ".a { @include breakpoint(\"huge\", \"large\") { color: red; } }",
+    ".a { @include breakpoint(\"small\", \"huge\") { color: red; } }",
+    ".a { @include breakpoint(\"min\", 10deg) { color: red; } }",
+    ".a { @include breakpoint(\"max\", 50%) { color: red; } }",
+    ".a { @include breakpoint(\"only\", 768) { color: red; } }"
   ],
   "warns": [
     ".a { @include breakpoint(\"medium\") { color: red; } }"

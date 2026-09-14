@@ -1,0 +1,127 @@
+@charset "UTF-8";
+
+@use "sass:list";
+@use "sass:math";
+@use "sass:meta";
+@use "sass:string";
+@use "is-condition-value" as *;
+
+// Shared by the mixins and not public API; see _is-css-function.scss.
+
+// Maths functions a browser resolves to a length, and the substitutions whose
+// value only the browser knows. Sass reduces most maths on plain numbers before
+// they get here (`round(10.5px, 1px)` arrives as 11px), so these are the forms
+// it leaves as text.
+$-functions: "var" "env" "attr" "calc" "clamp" "min" "max" "round" "abs" "sign" "mod" "rem" "hypot" "sqrt" "pow" "exp" "log";
+$-css-wide: "inherit" "initial" "unset" "revert" "revert-layer";
+
+// Returns what is wrong with $value as one length for a property, or null when
+// a browser keeps it. Each caller passes what its property takes, measured in
+// Chrome 152 (see todos/silent-values-plan.md, S7):
+//
+// - $percent: whether a percentage works (width yes, outline-width no);
+// - $negative: whether a negative length works (outline-offset yes, width no);
+// - $keywords: the words the property takes, such as auto or thin;
+// - $functions: sizing functions beyond maths, such as anchor-size;
+// - $css-wide: whether a CSS-wide keyword works, which is only as a whole
+//   declaration;
+// - $quoted: whether a quoted length works, which is only where the mixin
+//   interpolates it; written raw, `width: "10px"` is dropped.
+//
+// A unitless 0 is accepted; a caller whose output breaks on it handles it.
+// A calculation is taken on trust, since Sass keeps it only when it cannot
+// reduce it.
+@function lengthProblem($value, $percent: true, $negative: true, $keywords: (), $functions: (), $css-wide: false, $quoted: false) {
+  @if meta.type-of($value) == "calculation" {
+    @return null;
+  }
+  @if meta.type-of($value) == "list" and list.length($value) > 1 {
+    @return "it is several values where one length is meant";
+  }
+  @if meta.type-of($value) == "number" {
+    @if math.is-unitless($value) {
+      @if $value == 0 {
+        @return null;
+      }
+      @return "a unitless number is not a length; add a unit, such as `#{$value}px`";
+    }
+    @if math.unit($value) == "%" and not $percent {
+      @return "a percentage does not work here";
+    }
+    @if not isConditionValue($value, "length-percentage") {
+      @return "`#{math.unit($value)}` is not a length unit";
+    }
+    @if not $negative and $value < 0 {
+      @return "a length below zero does not work here";
+    }
+    @return null;
+  }
+  @if meta.type-of($value) != "string" {
+    @return "it is not a length";
+  }
+  $kind: "length";
+  @if $percent {
+    $kind: "length-percentage";
+  }
+  @if string.slice(meta.inspect($value), 1, 1) == "\"" {
+    @if $quoted and isConditionValue($value, $kind) {
+      @return null;
+    }
+    @return "a length in quotes is text here; write it without quotes";
+  }
+  $lower: string.to-lower-case($value);
+  $open: string.index($lower, "(");
+  @if $open {
+    $name: string.slice($lower, 1, $open - 1);
+    @if list.index($-functions, $name) or list.index($functions, $name) {
+      @return null;
+    }
+    @return "`#{$name}()` does not give a length here";
+  }
+  @if string.index($lower, " ") {
+    @return "it is several values where one length is meant";
+  }
+  // Interpolation, such as `#{$n}px`, gives an unquoted string rather than a
+  // number, and it is written into the CSS as it reads, so its content decides.
+  @if isConditionValue($value, $kind) {
+    @if not $negative and string.index($lower, "-") == 1 {
+      @return "a length below zero does not work here";
+    }
+    @return null;
+  }
+  @if string.index($lower, "%") and isConditionValue($value, "length-percentage") {
+    @return "a percentage does not work here";
+  }
+  @if list.index($keywords, $lower) {
+    @return null;
+  }
+  @if list.index($-css-wide, $lower) {
+    @if $css-wide {
+      @return null;
+    }
+    @return "a CSS-wide keyword only works as a whole declaration, not here";
+  }
+  @if list.length($keywords) > 0 {
+    @return "it is not a length or one of: #{list.join($keywords, (), $separator: comma)}";
+  }
+  @return "it is not a length";
+}
+
+// lengthProblem for a width or height, and for max-width with $max. Measured in
+// Chrome 152: width and height keep the intrinsic keywords, stretch,
+// -webkit-fill-available, anchor-size(), calc-size() and a CSS-wide keyword;
+// max-width keeps none where width keeps auto, and drops calc-size(). Both drop
+// a negative length. -moz-available is Firefox's spelling of stretch; Chrome
+// drops it, and it is let through like the other vendor keywords.
+//
+// null is accepted, since Sass leaves the declaration out, as it always has.
+@function sizeProblem($value, $max: false) {
+  @if $value == null {
+    @return null;
+  }
+  $keywords: "min-content" "max-content" "fit-content" "stretch" "-webkit-fill-available" "-moz-available";
+  @if $max {
+    @return lengthProblem($value, $negative: false, $keywords: list.append($keywords, "none"), $functions: ("anchor-size",), $css-wide: true);
+  }
+  @return lengthProblem($value, $negative: false, $keywords: list.append($keywords, "auto"), $functions: "anchor-size" "calc-size", $css-wide: true);
+}

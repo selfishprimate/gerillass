@@ -65,6 +65,7 @@ a dropped declaration rather than an error.
 
 | Mixin | Rejects, for example |
 |---|---|
+| `adaptive` | `.wrap { @include adaptive(auto); }` |
 | `after` | `.a { @include after(42) { color: red; } }` |
 | `all-buttons` | `@include all-buttons(nonsense) { color: red; }` |
 | `all-text-inputs` | `@include all-text-inputs(nonsense) { color: red; }` |
@@ -76,12 +77,15 @@ a dropped declaration rather than an error.
 | `before` | `.a { @include before(42) { color: red; } }` |
 | `border-box` | `@include border-box(only);` |
 | `border-radius` | `.a { @include border-radius(1px, 2px, 3px); }` |
+| `brand-logo` | `.logo { @include brand-logo(120px, 40px, "/img/a.svg" "/img/b.svg"); }` |
 | `breakpoint` | `.a { @include breakpoint("between", "medium", "large") { color: red; } }` |
 | `breakpointer` | `.a { @include breakpointer(42); }` |
 | `center` | `.modal { @include center(diagonal); }` |
+| `circle` | `.dot { @include circle(huge); }` |
 | `columnizer` | `.grid { @include columnizer(3, 20px, true, 9); }` |
 | `container-query` | `.title { @include container-query("min", 400px, 800px) { color: red; } }` |
 | `container` | `.card { @include container("card", sideways); }` |
+| `ellipsis` | `.a { @include ellipsis(100%, huge); }` |
 | `escape-to-parent` | `.a { @include escape-to-parent(42) { color: red; } }` |
 | `except` | `.a { @include except(#ff0000) { margin: 0; } }` |
 | `focus-ring` | `@include focus-ring;` |
@@ -96,15 +100,19 @@ a dropped declaration rather than an error.
 | `radial-gradient` | `.a { @include radial-gradient(42, "center", (red, blue)); }` |
 | `remove` | `.a { @include remove(a, b, c); }` |
 | `reset-css` | `.a { @include reset-css; }` |
+| `resizable` | `.a { @include resizable(huge); }` |
 | `scissors` | `.a { @include scissors(5px 10px); }` |
 | `screen-agent` | `.a { @include screen-agent(var(--density)) { color: red; } }` |
+| `sizer` | `.a { @include sizer(huge); }` |
 | `smartphone` | `.a { @include smartphone(Nokia3310) { display: none; } }` |
 | `sprite` | `.icon { @include sprite("/img/sprite.txt"); }` |
 | `stretched-link` | `.card a { @include stretched-link(middle); }` |
 | `tablet` | `.a { @include tablet(Surface) { display: none; } }` |
 | `text-gradient` | `.a { @include text-gradient(sideways, (red, blue)); }` |
+| `text-image` | `.a { @include text-image(16 9); }` |
 | `text-selection` | `.a { @include text-selection(bogus) { background: yellow; } }` |
 | `text-shadow` | `.a { @include text-shadow(42); }` |
+| `text-stroke` | `.a { @include text-stroke(huge); }` |
 | `tokens` | `:root { @include tokens(#fff); }` |
 | `triangle` | `.caret { @include triangle(sideways); }` |
 
@@ -139,6 +147,10 @@ a dropped declaration rather than an error.
 
 - Numbering restarts on every item, each showing the first number, when the items are size containers (`container-type: inline-size`): containment scopes counters to each item.
 
+**`except`**
+
+- An+B with an offset cannot be passed as a number: Sass does the arithmetic, so `except(2n+1)` becomes `3n` and excludes every third element, not the odd ones. Use `odd` or `even`, or a coefficient alone such as `3n`.
+
 **`loadify`**
 
 - `init` and every call must be in the same module, or the module with the call must `@use` the one that calls `init`. Otherwise Sass fails with "The target selector was not found".
@@ -146,6 +158,10 @@ a dropped declaration rather than an error.
 **`motion-safe`**
 
 - Keep the resting state outside the block. An element hidden in its base rule and revealed by an animation inside the block stays hidden for a user who asked for less motion; put the start state in the keyframes instead.
+
+**`only`**
+
+- An+B with an offset cannot be passed as a number: Sass does the arithmetic, so `only(2n+1)` becomes `3n` and selects every third element, not the odd ones. Use `odd` or `even`, or a coefficient alone such as `3n`.
 
 **`remove`**
 
@@ -239,7 +255,7 @@ and camelCase is what tells them apart from the kebab-case mixins above.
 | `shade($color, $percentage)` | Mixes a colour towards black by a percentage. |
 | `shorthandProperty($value)` | Expands one to four values into the four-value CSS shorthand order. |
 | `tint($color, $percentage)` | Mixes a colour towards white by a percentage. |
-| `validateBreakpoint($value)` | Resolves a breakpoint name to its width, passing other values through. |
+| `validateBreakpoint($value)` | Resolves a breakpoint name to its width, passing a length, a percentage or a CSS function through, and refusing a word that is not a key. |
 | `validateLength($value)` | Returns the value if it is a length or one of auto, inherit, initial, 0. Returns null quietly for null, so a caller can skip a value. |
 | `validateRatio($ratio)` | Turns an aspect ratio into a value for the CSS aspect-ratio property. |
 | `validateScissors($value)` | Normalises corner values for the scissors mixin, adding px where missing. |

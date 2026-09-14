@@ -1,0 +1,54 @@
+// focus-ring refuses a colour the outline shorthand drops. These must keep
+// compiling to the same ring, each measured in Chrome 152 as a colour
+// `outline: 2px solid ...` keeps: a colour function and a system colour.
+@use 'true' as *;
+@use '../../scss/gerillass' as *;
+
+@include describe('focus-ring()') {
+  @include it('Accepts colour functions and system colours.') {
+    @include assert {
+      @include output {
+        .a { @include focus-ring(2px, 2px, color-mix(in srgb, currentColor 60%, transparent)); }
+        .b { @include focus-ring(2px, 2px, Highlight); }
+      }
+      @include expect {
+        .a:focus-visible { outline: 2px solid color-mix(in srgb, currentColor 60%, transparent); outline-offset: 2px; }
+        .b:focus-visible { outline: 2px solid Highlight; outline-offset: 2px; }
+      }
+    }
+  }
+
+  // The width goes into the outline shorthand, which in Chrome 152 kept thin,
+  // medium and thick and dropped a percentage and a negative width. The offset
+  // is a declaration of its own, which kept a negative length and a CSS-wide
+  // keyword.
+  @include it('Accepts a width keyword, a negative offset, var() and a CSS-wide offset.') {
+    @include assert {
+      @include output {
+        .a { @include focus-ring(thin, -4px); }
+        .b { @include focus-ring(var(--w), inherit); }
+      }
+      @include expect {
+        .a:focus-visible { outline: thin solid currentColor; outline-offset: -4px; }
+        .b:focus-visible { outline: var(--w) solid currentColor; outline-offset: inherit; }
+      }
+    }
+  }
+
+  // Interpolation gives an unquoted string, not a colour, and it is written
+  // into the CSS as it reads. `focus-ring(2px, 2px, #{red})` worked on main and
+  // was refused for a while on this branch, so it is pinned here.
+  @include it('Accepts a colour name or hex built by interpolation.') {
+    @include assert {
+      @include output {
+        $name: red;
+        .a { @include focus-ring(2px, 2px, #{$name}); }
+        .b { @include focus-ring(2px, 2px, #{"#1a73e8"}); }
+      }
+      @include expect {
+        .a:focus-visible { outline: 2px solid red; outline-offset: 2px; }
+        .b:focus-visible { outline: 2px solid #1a73e8; outline-offset: 2px; }
+      }
+    }
+  }
+}

@@ -12,7 +12,8 @@
     {
       "name": "$colors",
       "accepts": [
-        "two or more colours"
+        "one or more colour stops, in the same forms as linear-gradient: a colour with up to two positions, a position between two colours, or var()",
+        "a stop the browser drops is refused, because the gradient and the transparent text would go with it"
       ]
     }
   ],
@@ -20,6 +21,8 @@
     ".a { @include text-gradient(\"top\", (red, blue)); }"
   ],
   "rejects": [
-    ".a { @include text-gradient(sideways, (red, blue)); }"
+    ".a { @include text-gradient(sideways, (red, blue)); }",
+    ".a { @include text-gradient(\"top\", (huge, blue)); }",
+    ".a { @include text-gradient(\"top\", (\"red\", blue)); }"
   ]
 }

@@ -1,0 +1,34 @@
+// screen-agent refuses a resolution that can never match. These must keep
+// compiling to the same query, each measured in Chrome 152 as a condition the
+// browser keeps: a quoted resolution, a fractional one, dpcm, zero, and the x
+// unit in capitals.
+@use 'true' as *;
+@use '../../scss/gerillass' as *;
+
+@include describe('screen-agent()') {
+  @include it('Maps 2x to 192dpi.') {
+    @include assert {
+      @include output { .a { @include screen-agent("2x") { color: red; } } }
+      @include expect { @media (min-resolution: 192dpi) { .a { color: red; } } }
+    }
+  }
+
+  @include it('Accepts any resolution a browser keeps.') {
+    @include assert {
+      @include output {
+        .a { @include screen-agent("2dppx") { color: red; } }
+        .b { @include screen-agent(1.5dppx) { color: red; } }
+        .c { @include screen-agent(38dpcm) { color: red; } }
+        .d { @include screen-agent(0dppx) { color: red; } }
+        .e { @include screen-agent(2X) { color: red; } }
+      }
+      @include expect {
+        @media (min-resolution: 2dppx) { .a { color: red; } }
+        @media (min-resolution: 1.5dppx) { .b { color: red; } }
+        @media (min-resolution: 38dpcm) { .c { color: red; } }
+        @media (min-resolution: 0dppx) { .d { color: red; } }
+        @media (min-resolution: 2X) { .e { color: red; } }
+      }
+    }
+  }
+}

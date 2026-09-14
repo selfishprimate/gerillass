@@ -1,0 +1,90 @@
+// background-image refuses a filter colour the browser drops or reads as
+// something other than a colour. These must keep compiling to the same filter:
+// a system colour and a list of stops with positions, both kept in Chrome 152.
+@use 'true' as *;
+@use '../../scss/gerillass' as *;
+
+@include describe('background-image()') {
+  // With no $image-url the image sits in the markup and the filter is an
+  // ::after layer's `background`, so an image fits there as well as a colour.
+  // Measured in Chrome 152 over an image set in a style attribute: a
+  // linear-gradient drew a scrim that darkens the bottom, a radial-gradient a
+  // vignette, and url() a pattern over the image.
+  @include it('Accepts an image as the overlay when the image is in the markup.') {
+    @include assert {
+      @include output {
+        .a { @include background-image(null, linear-gradient(to top, rgba(0, 0, 0, 0.85), transparent)); }
+      }
+      @include expect {
+        .a { position: relative; }
+        .a::after {
+          content: "";
+          display: block;
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(to top, rgba(0, 0, 0, 0.85), transparent);
+        }
+        .a > * { position: relative; z-index: 1; }
+        .a { background-position: center center; background-repeat: no-repeat; background-size: cover; }
+      }
+    }
+  }
+
+  // paint() and -webkit-cross-fade() were kept as images in Chrome 152.
+  @include it('Accepts paint() as the overlay.') {
+    @include assert {
+      @include output { .a { @include background-image(null, paint(grain)); } }
+      @include expect {
+        .a { position: relative; }
+        .a::after { content: ""; display: block; position: absolute; left: 0; top: 0; width: 100%; height: 100%; background: paint(grain); }
+        .a > * { position: relative; z-index: 1; }
+        .a { background-position: center center; background-repeat: no-repeat; background-size: cover; }
+      }
+    }
+  }
+
+  @include it('Accepts url() and radial-gradient() as the overlay too.') {
+    @include assert {
+      @include output {
+        .a { @include background-image(null, url("/img/dots.svg")); }
+        .b { @include background-image(null, radial-gradient(circle, transparent 40%, rgba(0, 0, 0, 0.8))); }
+      }
+      @include expect {
+        .a { position: relative; }
+        .a::after { content: ""; display: block; position: absolute; left: 0; top: 0; width: 100%; height: 100%; background: url("/img/dots.svg"); }
+        .a > * { position: relative; z-index: 1; }
+        .a { background-position: center center; background-repeat: no-repeat; background-size: cover; }
+        .b { position: relative; }
+        .b::after { content: ""; display: block; position: absolute; left: 0; top: 0; width: 100%; height: 100%; background: radial-gradient(circle, transparent 40%, rgba(0, 0, 0, 0.8)); }
+        .b > * { position: relative; z-index: 1; }
+        .b { background-position: center center; background-repeat: no-repeat; background-size: cover; }
+      }
+    }
+  }
+
+  @include it('Accepts a system colour and stops with positions as the filter.') {
+    @include assert {
+      @include output {
+        .a { @include background-image("/img/a.png", CanvasText); }
+        .b { @include background-image("/img/a.png", (red 0, transparent 50%)); }
+      }
+      @include expect {
+        .a {
+          background-image: linear-gradient(to top, CanvasText, CanvasText), url("/img/a.png");
+          background-position: center center;
+          background-repeat: no-repeat;
+          background-size: cover;
+        }
+        .b {
+          background-image: linear-gradient(to top, red 0, transparent 50%), url("/img/a.png");
+          background-position: center center;
+          background-repeat: no-repeat;
+          background-size: cover;
+        }
+      }
+    }
+  }
+}

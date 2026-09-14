@@ -77,4 +77,30 @@
       }
     }
   }
+
+  // A polygon() coordinate kept a percentage and a negative length in Chrome
+  // 152, and dropped a unit that is not a length, such as deg or x.
+  @include it('Accepts a percentage corner.') {
+    @include assert {
+      @include output {
+        .card {
+          @include scissors(10%);
+        }
+      }
+      @include expect {
+        .card {
+          clip-path: polygon(
+            0 10%,
+            10% 0,
+            #{"calc(100% - 10%)"} 0,
+            100% 10%,
+            100% #{"calc(100% - 10%)"},
+            #{"calc(100% - 10%)"} 100%,
+            10% 100%,
+            0 #{"calc(100% - 10%)"}
+          );
+        }
+      }
+    }
+  }
 }

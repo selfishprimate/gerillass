@@ -28,7 +28,7 @@ The **Adaptive Sass mixin** gives you the fastest and most consistent way to app
 ## Arguments
 
 <Arguments of="adaptive" footnote="Apply this mixin to the container element of your layout, then narrow or widen your browser window to test it!">
-  <Argument name="$gutter" type="number (with unit)">Accepts one value and applies it to all the breakpoints. The default value is <code>30px</code>.</Argument>
+  <Argument name="$gutter" type="number (with unit)">Accepts one value and applies it to all the breakpoints. The default value is <code>30px</code>. A length, a percentage, a negative length, <code>var()</code> or a maths function. <code>0</code> is written as <code>0px</code>, because the gutter is subtracted inside <code>calc()</code>.</Argument>
 </Arguments>
 
 ## Examples
@@ -54,6 +54,19 @@ The **Adaptive Sass mixin** gives you the fastest and most consistent way to app
 <div class="main-container" style="background: #5bc0bb; color: white; padding: 16px">The gutter keeps this much room from each edge on a narrow screen.</div>
 ```
 </Example>
+
+## What it refuses
+
+A gutter the browser drops stops the build. It is subtracted inside `calc()` at every breakpoint, and measured in Chrome 152 a word, a CSS-wide keyword, a unitless number and a unit that is not a length each drop the `max-width`, leaving the container at full width. Until 2.3.1 these compiled. `adaptive(0)` used to be one of them, `calc(576px - 0 * 2)`, and is now written with `0px`.
+
+```scss
+.main-container {
+  @include adaptive(auto);
+}
+```
+```text
+Error: `auto` is not a valid $gutter for `adaptive`: it is not a length. A browser drops the max-width at every breakpoint.
+```
 
 ## Related Links
 

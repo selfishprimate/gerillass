@@ -114,6 +114,22 @@
     }
   }
 
+  // Measured in Chrome 152, a border colour kept a system colour and
+  // contrast-color(); both were refused here until the colour check was shared
+  // in scss/internal/.
+  @include it('A system colour and contrast-color() are accepted as the colour.') {
+    @include assert {
+      @include output {
+        .a { @include triangle("top", Canvas, 10px 8px); }
+        .b { @include triangle("top", contrast-color(red), 10px 8px); }
+      }
+      @include expect {
+        .a { content: ""; height: 0; width: 0; display: inline-block; border-style: solid; border-color: transparent transparent Canvas; border-width: 0 5px 8px; }
+        .b { content: ""; height: 0; width: 0; display: inline-block; border-style: solid; border-color: transparent transparent contrast-color(red); border-width: 0 5px 8px; }
+      }
+    }
+  }
+
   @include it('A custom property size is halved in calc(), not written as a slash.') {
     @include assert {
       @include output {
@@ -179,6 +195,30 @@
           border-inline-width: 5px;
           border-block-start-width: 8px;
           border-block-end-width: 0;
+        }
+      }
+    }
+  }
+
+  // The sizes land in border-width, which in Chrome 152 kept a length and a
+  // calculation and dropped a percentage, a negative width and a unitless
+  // number. calc() halves them, so thin, medium and thick do not work either.
+  @include it('Accepts an em size and a calculation with var() in it.') {
+    @include assert {
+      @include output {
+        .caret {
+          @include triangle("bottom", black, 0.5em calc(var(--h) + 2px));
+        }
+      }
+      @include expect {
+        .caret {
+          content: "";
+          height: 0;
+          width: 0;
+          display: inline-block;
+          border-style: solid;
+          border-color: black transparent transparent;
+          border-width: calc(var(--h) + 2px) 0.25em 0;
         }
       }
     }

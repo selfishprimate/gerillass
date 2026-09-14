@@ -1,7 +1,34 @@
 @charset "UTF-8";
 
+@use "sass:meta";
+@use "sass:string";
+@use "../internal/keyword-value" as *;
+
+// Measured in Chrome 152, `resize` kept none, both, horizontal, vertical, block,
+// inline and auto, and `overflow` one or two of visible, hidden, clip, scroll,
+// auto and overlay, all in any case, with the CSS-wide keywords on their own and
+// var(). Both dropped a quoted keyword, three overflow values, and a CSS-wide
+// keyword beside another, such as `overflow: inherit auto`. null leaves the
+// declaration out, as it always has.
 @mixin resizable($direction: both, $overflow: auto) {
-  resize: $direction;
-  overflow: $overflow;
+  $problem: keywordProblem($direction, "none" "both" "horizontal" "vertical" "block" "inline" "auto");
+  @if $problem {
+    @error "`#{meta.inspect($direction)}` is not a valid $direction for `resizable`: #{$problem}. A browser drops the declaration.";
+  }
+  $problem: keywordProblem($overflow, "visible" "hidden" "clip" "scroll" "auto" "overlay", 2);
+  @if $problem {
+    @error "`#{meta.inspect($overflow)}` is not a valid $overflow for `resizable`: #{$problem}. A browser drops the declaration.";
+  }
+  // Written without quotes, since `resize: "both"` was dropped.
+  @if meta.type-of($direction) == "string" {
+    resize: string.unquote($direction);
+  } @else {
+    resize: $direction;
+  }
+  @if meta.type-of($overflow) == "string" {
+    overflow: string.unquote($overflow);
+  } @else {
+    overflow: $overflow;
+  }
   max-width: 100%;
 }

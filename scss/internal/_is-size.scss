@@ -1,0 +1,22 @@
+@charset "UTF-8";
+
+@use "sass:list";
+@use "sass:meta";
+@use "sass:string";
+
+// Shared by the mixins and not public API; see _is-css-function.scss.
+
+// A size Sass can use inside calc(): a number, a calculation such as calc(),
+// min() or clamp(), or var() and env(), which only the browser can resolve.
+// Anything else would pass silently through calc(): `calc(nonsense * 5)`
+// compiles.
+@function isSize($value) {
+  @if meta.type-of($value) == "number" or meta.type-of($value) == "calculation" {
+    @return true;
+  }
+  @if meta.type-of($value) == "string" and string.slice(meta.inspect($value), 1, 1) != "\"" {
+    $open: string.index($value, "(");
+    @return $open != null and list.index("var" "env", string.to-lower-case(string.slice($value, 1, $open - 1))) != null;
+  }
+  @return false;
+}

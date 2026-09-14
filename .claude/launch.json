@@ -22,6 +22,16 @@
         "site"
       ],
       "port": 4173
+    },
+    {
+      "name": "browser-check",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "tools/browser-check.js",
+        "--serve",
+        "7002"
+      ],
+      "port": 7002
     }
   ]
 }

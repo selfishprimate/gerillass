@@ -4,40 +4,10 @@
 @use "sass:math";
 @use "sass:meta";
 @use "sass:string";
-
-// An image path goes into url(). A var(), url(), image-set() or gradient is
-// already an image, and wrapping it produced url(var(--x)), which loads nothing.
-@function -image($value) {
-  @if -is-css-function($value, "var" "url" "image-set" "linear-gradient" "radial-gradient" "conic-gradient" "repeating-linear-gradient" "repeating-radial-gradient" "repeating-conic-gradient") {
-    @return $value;
-  }
-  @return url(string.unquote($value));
-}
-
-// True for an unquoted call to one of $names, such as var(--x). A quoted string
-// stays text, so `"var(--x)"` is not a call.
-@function -is-css-function($value, $names) {
-  @if meta.type-of($value) != "string" or string.slice(meta.inspect($value), 1, 1) == "\"" {
-    @return false;
-  }
-  $open: string.index($value, "(");
-  @return $open != null and list.index($names, string.to-lower-case(string.slice($value, 1, $open - 1))) != null;
-}
-
-// A size Sass can use inside calc(): a number, a calculation such as calc(),
-// min() or clamp(), or var() and env(), which only the browser can resolve.
-// Anything else would pass silently through calc(): `calc(nonsense * 5)`
-// compiles.
-@function -is-size($value) {
-  @if meta.type-of($value) == "number" or meta.type-of($value) == "calculation" {
-    @return true;
-  }
-  @if meta.type-of($value) == "string" and string.slice(meta.inspect($value), 1, 1) != "\"" {
-    $open: string.index($value, "(");
-    @return $open != null and list.index("var" "env", string.to-lower-case(string.slice($value, 1, $open - 1))) != null;
-  }
-  @return false;
-}
+@use "../internal/is-size" as *;
+@use "../internal/image-value" as *;
+@use "../internal/color-problem" as *;
+@use "../internal/length-problem" as *;
 
 @mixin background-stripes(
   $color: null,
@@ -47,8 +17,15 @@
 ) {
   // The arithmetic below runs in calc() so var() and clamp() work; on plain
   // lengths Sass simplifies it back to the same number.
-  @if not -is-size($thickness) {
+  @if not isSize($thickness) {
     @error "`#{meta.inspect($thickness)}` is not a valid $thickness for `background-stripes`. Pass a length, or var(), env() or a calculation such as `clamp()`.";
+  }
+  // isSize takes any number. The thickness is a colour stop's position, which
+  // in Chrome 152 kept a percentage and a negative length and dropped a unitless
+  // number other than 0 and a unit that is not a length.
+  $thickness-problem: lengthProblem($thickness);
+  @if $thickness-problem {
+    @error "`#{meta.inspect($thickness)}` is not a valid $thickness for `background-stripes`: #{$thickness-problem}. A browser drops the gradient.";
   }
   @if meta.type-of($rotation) != "number" {
     @error "`#{$rotation}` is not a valid $rotation for `background-stripes`. Pass an angle such as `-45deg`, or a unitless number which is treated as degrees.";
@@ -56,8 +33,28 @@
   @if $image != null and meta.type-of($image) != "string" {
     @error "`#{$image}` is not a valid $image for `background-stripes`. Pass an image path as a string.";
   }
-  $validate-unit: if(not list.index("deg", math.unit($rotation)), $rotation + deg, $rotation);
-  $get-image: if($image, string.unquote(", ") + -image($image), string.unquote(""));
+  // A unitless rotation is read as degrees. `deg` used to be added to any unit
+  // that was not deg, so a valid `0.25turn` became `0.25turndeg` and `-10px`
+  // became `-10pxdeg`, both dropped. Measured in Chrome 152, a gradient kept
+  // deg, grad, rad and turn in any case (`10DEG`, `0.25TURN`) and a unitless 0,
+  // and dropped a unitless 45, `-10px` and `10%`.
+  // Each colour becomes a stripe in a repeating gradient, where a word or a
+  // quoted colour drops the whole pattern; see scss/internal/_color-problem.scss.
+  @if $color != null {
+    @each $item in $color {
+      $problem: colorProblem($item);
+      @if $problem {
+        @error "`#{meta.inspect($item)}` is not a valid colour in $color for `background-stripes`: #{$problem}. Pass one colour or several, such as `red` or `red var(--stripe)`.";
+      }
+    }
+  }
+  $validate-unit: $rotation;
+  @if math.is-unitless($rotation) {
+    $validate-unit: $rotation + deg;
+  } @else if not list.index("deg" "grad" "rad" "turn", string.to-lower-case(math.unit($rotation))) {
+    @error "`#{meta.inspect($rotation)}` is not a valid $rotation for `background-stripes`: `#{math.unit($rotation)}` is not an angle unit, and a browser drops the gradient. Pass an angle in deg, grad, rad or turn, such as `-45deg`, or a unitless number, which is read as degrees.";
+  }
+  $get-image: if($image, string.unquote(", ") + imageValue($image, "background-stripes", "$image", $unquote: true), string.unquote(""));
   @if not $color {
     $color: rgba(0, 0, 0, 0.1);
     background-image: repeating-linear-gradient(

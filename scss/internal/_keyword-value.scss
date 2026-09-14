@@ -1,0 +1,76 @@
+@charset "UTF-8";
+
+@use "sass:list";
+@use "sass:meta";
+@use "sass:string";
+@use "words" as *;
+
+// Shared by the mixins and not public API; see _is-css-function.scss.
+
+$-css-wide: "inherit" "initial" "unset" "revert" "revert-layer";
+
+// Returns what is wrong with $value as a keyword value, or null when it is fine.
+// It checks the kind of each word, not whether the words make sense together;
+// a mixin whose property has a grammar, such as display, checks that itself.
+//
+// - null is fine: the declaration is left out, as it always was.
+// - Any word holding a parenthesis makes the whole value fine when $functions is
+//   true. var(), env() and calc() are resolved by the browser, and a value such
+//   as `var(--x) auto` cannot be judged here. In a @font-face descriptor, which
+//   drops var(), the caller passes false.
+// - Up to $max-words words, each one of $keywords in any case; `STICKY` and
+//   `BOTH` were kept in Chrome 152.
+// - A CSS-wide keyword only on its own: `overflow: inherit auto` was dropped.
+// - A vendor-prefixed word when $vendor is true. Chrome drops `-webkit-sticky`
+//   and `-moz-box`, but other engines use them, so refusing one could break a
+//   stylesheet written for Safari.
+@function keywordProblem($value, $keywords, $max-words: 1, $functions: true, $vendor: false) {
+  @if $value == null {
+    @return null;
+  }
+  @if meta.type-of($value) == "list" and list.separator($value) == "comma" {
+    @return "it takes a space-separated value, not a comma-separated list";
+  }
+  $words: wordsOf($value);
+  @if list.length($words) == 0 {
+    @return "it is empty";
+  }
+  @each $word in $words {
+    @if meta.type-of($word) == "string" and string.index($word, "(") {
+      @if $functions {
+        @return null;
+      }
+      @return "a function cannot supply it here";
+    }
+  }
+  @if list.length($words) > $max-words {
+    @if $max-words == 1 {
+      @return "it takes one keyword, and got #{list.length($words)}";
+    }
+    @return "it takes at most #{$max-words} keywords, and got #{list.length($words)}";
+  }
+  $expected: list.join($keywords, (), $separator: comma);
+  @each $word in $words {
+    @if meta.type-of($word) != "string" {
+      @if list.length($words) == 1 {
+        @return "it takes a keyword, one of: #{$expected}";
+      }
+      @return "`#{meta.inspect($word)}` is not a keyword; pass words from: #{$expected}";
+    }
+    $lower: string.to-lower-case(string.unquote($word));
+    @if list.index($-css-wide, $lower) {
+      @if list.length($words) > 1 {
+        @return "`#{$lower}` only works as the whole value";
+      }
+    } @else if not list.index($keywords, $lower) {
+      $prefixed: string.index($lower, "-webkit-") == 1 or string.index($lower, "-moz-") == 1 or string.index($lower, "-ms-") == 1 or string.index($lower, "-o-") == 1;
+      @if not ($vendor and $prefixed) {
+        @if list.length($words) == 1 {
+          @return "it is not one of: #{$expected}";
+        }
+        @return "`#{$lower}` is not one of: #{$expected}";
+      }
+    }
+  }
+  @return null;
+}

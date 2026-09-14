@@ -21,7 +21,9 @@
       "accepts": [
         "a Sass colour, such as red, #333 or oklch(70% 0.1 200)",
         "currentColor",
-        "var(), color-mix() or light-dark(), which CSS resolves"
+        "a system colour such as Canvas",
+        "var(), color-mix(), light-dark(), contrast-color() or rgb(from ...), which CSS resolves",
+        "a CSS-wide keyword is refused, because it is invalid inside the border-color shorthand"
       ]
     },
     {
@@ -46,6 +48,12 @@
     ".caret { @include triangle(sideways); }",
     ".caret { @include triangle(\"top\", notacolor); }",
     ".caret { @include triangle(\"top\", url(a.png)); }",
-    ".caret { @include triangle(\"top\", red, nonsense); }"
+    ".caret { @include triangle(\"top\", red, nonsense); }",
+    ".caret { @include triangle(\"top\", -webkit-fill-available); }",
+    ".caret { @include triangle(\"top\", red, 5%); }",
+    ".caret { @include triangle(\"top\", red, -10px); }",
+    ".caret { @include triangle(\"top\", red, thin); }",
+    ".caret { @include triangle(\"top\", red, 10); }",
+    ".caret { @include triangle(\"top\", red, 10px 10deg); }"
   ]
 }

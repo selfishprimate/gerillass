@@ -52,4 +52,38 @@
       }
     }
   }
+
+  // Measured in Chrome 152: the shorthand kept one to four radii, a slash
+  // between two such sets, a percentage and a CSS-wide keyword; a corner's own
+  // property kept one or two radii, the second making the corner elliptical.
+  // A negative radius, a keyword such as auto and a fifth radius were dropped.
+  @include it('Accepts several radii, a slash, a percentage and a CSS-wide keyword.') {
+    @include assert {
+      @include output {
+        .a { @include border-radius(10px 20px); }
+        .b { @include border-radius(#{10px}/#{20px}); }
+        .c { @include border-radius(50%); }
+        .d { @include border-radius(inherit); }
+      }
+      @include expect {
+        .a { border-radius: 10px 20px; }
+        .b { border-radius: 10px/20px; }
+        .c { border-radius: 50%; }
+        .d { border-radius: inherit; }
+      }
+    }
+  }
+
+  @include it('Accepts an elliptical corner, and null to leave one corner out.') {
+    @include assert {
+      @include output {
+        .a { @include border-radius("top", 10px 20px); }
+        .b { @include border-radius(1px 2px, null, 3px, var(--r)); }
+      }
+      @include expect {
+        .a { border-top-left-radius: 10px 20px; border-top-right-radius: 10px 20px; }
+        .b { border-top-left-radius: 1px 2px; border-bottom-right-radius: 3px; border-bottom-left-radius: var(--r); }
+      }
+    }
+  }
 }

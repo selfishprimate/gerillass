@@ -8,6 +8,7 @@
         "a size, for exactly that width, which prints a warning: write only instead",
         "two sizes for a range",
         "one of min, max, only or between followed by a size",
+        "a size is a key from $map-for-breakpoints, or a length in any unit a width condition takes, 0 or a calculation; a percentage, a bare number, another unit and a word that is not a key are refused, because the query would never match",
         "$name as a keyword, to query one named container"
       ]
     }
@@ -29,7 +30,12 @@
     ".title { @include container-query(\"min\", 400px, $name: \"none\") { color: red; } }",
     ".title { @include container-query(\"min\", 400px, $name: \"not\") { color: red; } }",
     ".title { @include container-query(\"min\", 400px, $name: \"my card\") { color: red; } }",
-    ".title { @include container-query(\"min\", 400px, $name: \"1card\") { color: red; } }"
+    ".title { @include container-query(\"min\", 400px, $name: \"1card\") { color: red; } }",
+    ".title { @include container-query(\"huge\") { color: red; } }",
+    ".title { @include container-query(\"min\", \"huge\") { color: red; } }",
+    ".title { @include container-query(\"max\", 400) { color: red; } }",
+    ".title { @include container-query(\"between\", 300px 10deg) { color: red; } }",
+    ".title { @include container-query(300px, 50%) { color: red; } }"
   ],
   "caveats": [
     "A size on its own matches exactly that width, `(width: 400px)`, which is a single pixel, and the mixin prints a warning. Write `only` for that width, or `min`, `max` or a range for anything wider. 3.0.0 will refuse the one-argument form."

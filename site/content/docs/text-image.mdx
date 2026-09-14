@@ -17,7 +17,7 @@ The **Text Image** Sass mixin helps you clip the background image of a selected 
 ## Arguments
 
 <Arguments of="text-image" footnote="**Important:** Pass the URL of the image in quotation marks. A `var()`, `url()`, `image-set()` or gradient is written as it is, without quotes.">
-  <Argument name="$image" type="string (quoted), function">The URL of the clipping image. A value that already is an image, <code>var()</code>, <code>url()</code>, <code>image-set()</code> or a gradient, is written as it is rather than wrapped in <code>url()</code>.</Argument>
+  <Argument name="$image" type="string (quoted), function">The URL of the clipping image. A value that already is an image, <code>var()</code>, <code>url()</code>, <code>image-set()</code> or a gradient, is written as it is rather than wrapped in <code>url()</code>. A list, a number, a colour or a boolean is refused.</Argument>
 </Arguments>
 
 ## Examples
@@ -43,6 +43,19 @@ The **Text Image** Sass mixin helps you clip the background image of a selected 
 <h2 class="element sandbox text" style="background-image: url(/images/backgrounds/02.jpg)">Text Image is Awesome!</h2>
 ```
 </Example>
+
+## What it refuses
+
+An image that is not one path stops the build. Until 2.3.1 anything went into `url()`, and here that matters more than elsewhere: the mixin makes the text transparent, so an image that does not load leaves no visible text at all. Measured in Chrome 152, a list such as `url(16 9)` is dropped.
+
+```scss
+.element {
+  @include text-image(16 9);
+}
+```
+```text
+Error: `16 9` is not a valid $image for `text-image`: it is a list where one image is meant, and a browser drops `url()` with a list in it. Pass one path as a string, such as `"/img/hero.png"`.
+```
 
 ## Related Links
 

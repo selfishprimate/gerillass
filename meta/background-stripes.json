@@ -5,7 +5,7 @@
     {
       "name": "$color",
       "accepts": [
-        "one colour, or several for a multi-stripe pattern",
+        "one colour, or several for a multi-stripe pattern, each a colour, currentColor, a system colour or a function such as var() or color-mix()",
         "null for a translucent black"
       ]
     },
@@ -18,13 +18,15 @@
     {
       "name": "$rotation",
       "accepts": [
-        "an angle; a unitless number is treated as degrees"
+        "an angle in deg, grad, rad or turn, in any case, written as it is",
+        "a unitless number, which is treated as degrees",
+        "any other unit, such as px or %, is refused, because the gradient would be dropped"
       ]
     },
     {
       "name": "$image",
       "accepts": [
-        "an image path to sit behind the stripes",
+        "an image path to sit behind the stripes, written unquoted unless it holds a space, a parenthesis or a quote, which are quoted",
         "var(), url(), image-set() or a gradient, written as they are rather than wrapped in url()"
       ]
     }
@@ -38,6 +40,12 @@
   "rejects": [
     ".a { @include background-stripes(red, 2em, nonsense); }",
     ".a { @include background-stripes(red, 2em, -45deg, 42); }",
-    ".a { @include background-stripes(red, nonsense); }"
+    ".a { @include background-stripes(red, nonsense); }",
+    ".a { @include background-stripes(red, 2em, -10px); }",
+    ".a { @include background-stripes(red, 2em, 10%); }",
+    ".a { @include background-stripes(huge); }",
+    ".a { @include background-stripes(red \"blue\"); }",
+    ".a { @include background-stripes(red, 10deg); }",
+    ".a { @include background-stripes(red, 2); }"
   ]
 }

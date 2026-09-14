@@ -17,10 +17,10 @@ The **Background Stripes** Sass mixin allows you to create stylish and colorful 
 ## Arguments
 
 <Arguments of="background-stripes" footnote="Multiple color values must be separated by a space (e.g. `$color: red blue green`).">
-  <Argument name="$color" type="list">The color or colors of the stripes. By default there is only one color, a translucent black. Accepts one or more color values to create multiple color stops.</Argument>
-  <Argument name="$thickness" type="number<br/>(with unit), function">The thickness of the stripes. The default value is <code>1em</code>. Also accepts <code>var()</code>, <code>env()</code>, or a calculation such as <code>calc()</code> or <code>clamp()</code>.</Argument>
-  <Argument name="$rotation" type="number<br/>(with deg unit)">The rotation of the stripes. The default value is <code>-45deg</code>. This option lets you create diagonal or straight stripes very easily.</Argument>
-  <Argument name="$image" type="string<br/>(quoted), function">Accepts the URL of an image. This option helps you add an image underneath the stripes to create more stylish design elements. A value that already is an image, <code>var()</code>, <code>url()</code>, <code>image-set()</code> or a gradient, is written as it is rather than wrapped in <code>url()</code>.</Argument>
+  <Argument name="$color" type="list">The color or colors of the stripes. By default there is only one color, a translucent black. Accepts one or more color values to create multiple color stops. Each is a colour, <code>currentColor</code>, a system colour, or a function such as <code>var()</code> or <code>color-mix()</code>.</Argument>
+  <Argument name="$thickness" type="number<br/>(with unit), function">The thickness of the stripes. The default value is <code>1em</code>. Also accepts a percentage, a negative length, <code>var()</code>, <code>env()</code>, or a calculation such as <code>calc()</code> or <code>clamp()</code>.</Argument>
+  <Argument name="$rotation" type="number<br/>(with deg unit)">The rotation of the stripes. The default value is <code>-45deg</code>. This option lets you create diagonal or straight stripes very easily. Accepts an angle in <code>deg</code>, <code>grad</code>, <code>rad</code> or <code>turn</code>, such as <code>0.25turn</code>, or a unitless number, which is read as degrees. Any other unit is refused.</Argument>
+  <Argument name="$image" type="string<br/>(quoted), function">Accepts the URL of an image. This option helps you add an image underneath the stripes to create more stylish design elements. A value that already is an image, <code>var()</code>, <code>url()</code>, <code>image-set()</code> or a gradient, is written as it is rather than wrapped in <code>url()</code>. The path is written without quotes unless it holds a space, a parenthesis or a quote, which an unquoted <code>url()</code> cannot: since 2.3.1 those are quoted, where before the browser dropped them.</Argument>
 </Arguments>
 
 ## Examples
@@ -97,6 +97,51 @@ The **Background Stripes** Sass mixin allows you to create stylish and colorful 
 Just play with the values of the given arguments to create more interesting things. **Use your imagination!**
 ```
 </Example>
+
+## What it refuses
+
+A `$rotation` whose unit is not an angle stops the build. Until 2.3.1 the mixin added `deg` to any unit that was not `deg`, so `-10px` became `-10pxdeg` and a valid `0.25turn` became `0.25turndeg`, and measured in Chrome 152 the browser dropped both gradients. An angle in `grad`, `rad` or `turn` is now written as it is.
+
+```scss
+.element {
+  @include background-stripes(red, 2em, -10px);
+}
+```
+```text
+Error: `-10px` is not a valid $rotation for `background-stripes`: `px` is not an angle unit, and a browser drops the gradient. Pass an angle in deg, grad, rad or turn, such as `-45deg`, or a unitless number, which is read as degrees.
+```
+
+A stripe colour that is not a colour is refused too, since 2.3.1: a word or a quoted colour drops the whole pattern.
+
+```scss
+.element {
+  @include background-stripes(red "blue");
+}
+```
+```text
+Error: `"blue"` is not a valid colour in $color for `background-stripes`: a colour in quotes is text, not a colour. Pass one colour or several, such as `red` or `red var(--stripe)`.
+```
+
+A thickness the gradient drops is refused as well, since 2.3.1: measured in Chrome 152, a unitless number other than `0` and a unit that is not a length.
+
+```scss
+.element {
+  @include background-stripes(red, 2);
+}
+```
+```text
+Error: `2` is not a valid $thickness for `background-stripes`: a unitless number is not a length; add a unit, such as `2px`. A browser drops the gradient.
+```
+
+## Image paths with a space
+
+Measured in Chrome 152, `url(/img/a b.png)`, `url(/img/a(1).png)` and `url(/img/it's.png)` are dropped, while the same paths in quotes load the file. The mixin used to write every path unquoted, so those produced no image. It now quotes them, and only them: a plain path is written as before.
+
+```scss
+.element {
+  @include background-stripes(red, 2em, -30deg, "/img/it's.png");
+}
+```
 
 ## Related Links
 

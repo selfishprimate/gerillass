@@ -596,6 +596,31 @@ exports[`Manifest examples clearfix: .row { @include clearfix; } 1`] = `
 }"
 `;
 
+exports[`Manifest examples columnizer: .grid { @include columnizer(#{3}, 0); } 1`] = `
+".grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+.grid, .grid::before, .grid::after,
+.grid *,
+.grid *::before,
+.grid *::after {
+  box-sizing: border-box;
+}
+.grid > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: calc((100% - (3 - 1) * 0px) / 3);
+  margin-bottom: 0px;
+}
+.grid > *:not(:last-child) {
+  margin-right: 0px;
+}
+.grid > *:nth-child(3n) {
+  margin-right: 0;
+}"
+`;
+
 exports[`Manifest examples columnizer: .grid { @include columnizer(3); } 1`] = `
 ".grid {
   display: flex;
@@ -884,6 +909,12 @@ exports[`Manifest examples except: .a { @include except(2) { margin: 0; } } 1`] 
 }"
 `;
 
+exports[`Manifest examples except: .a { @include except(3n) { margin: 0; } } 1`] = `
+".a:not(:nth-of-type(3n)) {
+  margin: 0;
+}"
+`;
+
 exports[`Manifest examples fillNulls: .a { margin: fillNulls(1px null 3px null, space); } 1`] = `
 ".a {
   margin: 1px 0 3px 0;
@@ -947,12 +978,30 @@ exports[`Manifest examples font-face: @include font-face("Inter", "/fonts/inter"
 }"
 `;
 
+exports[`Manifest examples font-face: @include font-face("Inter", "/fonts/inter", auto, "100 900", $file-for 1`] = `
+"@font-face {
+  font-family: "Inter";
+  src: url("/fonts/inter.woff2") format("woff2");
+  font-style: auto;
+  font-weight: 100 900;
+}"
+`;
+
 exports[`Manifest examples font-face: @include font-face("Inter", "/fonts/inter", italic, 700, woff2 woff); 1`] = `
 "@font-face {
   font-family: "Inter";
   src: url("/fonts/inter.woff2") format("woff2"), url("/fonts/inter.woff") format("woff");
   font-style: italic;
   font-weight: 700;
+}"
+`;
+
+exports[`Manifest examples font-face: @include font-face("Inter", "/fonts/inter", oblique 10deg 20deg, $font 1`] = `
+"@font-face {
+  font-family: "Inter";
+  src: url("/fonts/inter.woff2") format("woff2");
+  font-style: oblique 10deg 20deg;
+  font-weight: 450.5;
 }"
 `;
 
@@ -1196,6 +1245,12 @@ exports[`Manifest examples only: .a { @include only(1, 3) { margin: 0; } } 1`] =
 }"
 `;
 
+exports[`Manifest examples only: .a { @include only(3n) { margin: 0; } } 1`] = `
+".a:nth-of-type(3n) {
+  margin: 0;
+}"
+`;
+
 exports[`Manifest examples pixelify: .a { width: pixelify(24); } 1`] = `
 ".a {
   width: 24px;
@@ -1223,6 +1278,16 @@ exports[`Manifest examples placeholder: .field { @include placeholder { color: g
 exports[`Manifest examples placeholder-shown: .field { @include placeholder-shown { border-color: gray; } } 1`] = `
 ".field:placeholder-shown {
   border-color: gray;
+}"
+`;
+
+exports[`Manifest examples position: .a { @include position(absolute, #{16}px AUTO revert-layer); } 1`] = `
+".a {
+  position: absolute;
+  top: 16px;
+  right: AUTO;
+  bottom: revert-layer;
+  left: AUTO;
 }"
 `;
 
@@ -1280,6 +1345,14 @@ exports[`Manifest examples position: .badge { @include position(absolute, 0 auto
   inset-inline-end: auto;
   inset-block-end: auto;
   inset-inline-start: 1rem;
+}"
+`;
+
+exports[`Manifest examples position: .tip { @include position(absolute, anchor(bottom) null null anchor(lef 1`] = `
+".tip {
+  position: absolute;
+  top: anchor(bottom);
+  left: anchor(left);
 }"
 `;
 

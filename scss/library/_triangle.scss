@@ -2,61 +2,10 @@
 
 @use "sass:list";
 @use "sass:meta";
-@use "sass:string";
 @use "../lists/list-of-directions" as *;
-
-// A size Sass can use inside calc(): a number, a calculation such as calc(),
-// min() or clamp(), or var() and env(), which only the browser can resolve.
-// Anything else would pass silently through calc(): `calc(nonsense * 5)`
-// compiles.
-@function -is-size($value) {
-  @if meta.type-of($value) == "number" or meta.type-of($value) == "calculation" {
-    @return true;
-  }
-  @if meta.type-of($value) == "string" and string.slice(meta.inspect($value), 1, 1) != "\"" {
-    $open: string.index($value, "(");
-    @return $open != null and list.index("var" "env", string.to-lower-case(string.slice($value, 1, $open - 1))) != null;
-  }
-  @return false;
-}
-
-// A value CSS will take as a colour: a Sass colour, currentColor, or a function
-// that returns a colour when the browser resolves it. A list passes when every
-// item does, as it did through isColor.
-//
-// inherit, initial, unset and revert are left out on purpose. The mixin writes
-// the colour into a border-color shorthand beside `transparent`, and a CSS-wide
-// keyword is only valid as the whole value: `transparent transparent inherit`
-// is rejected by the browser. Checked with CSS.supports in Chrome 152.
-//
-// Deliberately looser than isColor, which stays strict because tint and shade
-// pass its result to color.mix, and that needs a real Sass colour. A border
-// colour does not. The functions are named rather than "anything with a
-// parenthesis", which would let url() through as a colour.
-@function -is-css-color($value) {
-  @if list.length($value) > 1 {
-    @each $item in $value {
-      @if not -is-css-color($item) {
-        @return false;
-      }
-    }
-    @return true;
-  }
-  @if meta.type-of($value) == "color" {
-    @return true;
-  }
-  @if meta.type-of($value) == "string" and string.slice(meta.inspect($value), 1, 1) != "\"" {
-    $text: string.to-lower-case($value);
-    @if $text == "currentcolor" {
-      @return true;
-    }
-    $open: string.index($text, "(");
-    @if $open and list.index("var" "color-mix" "light-dark" "env", string.slice($text, 1, $open - 1)) {
-      @return true;
-    }
-  }
-  @return false;
-}
+@use "../internal/is-size" as *;
+@use "../internal/color-problem" as *;
+@use "../internal/length-problem" as *;
 
 // The logical directions point along the writing direction rather than a fixed
 // side: inline-end is right in a left-to-right page and left in a right-to-left
@@ -70,11 +19,31 @@ $-logical-directions: ("inline-start", "inline-end", "block-start", "block-end")
     // Halving a size in calc() rather than math.div() keeps var() and clamp()
     // working instead of emitting `var(--w)/2`, which is not valid CSS.
     @each $item in $size {
-      @if not -is-size($item) {
+      @if not isSize($item) {
         @error "`#{meta.inspect($size)}` is not a valid $size for `triangle`. Pass one or two lengths, or var(), env() or a calculation in place of either.";
       }
+      // The sizes land in border-width, which in Chrome 152 dropped a
+      // percentage, a negative width and a unit that is not a length. isSize
+      // above takes any number, since it only guards calc().
+      $problem: lengthProblem($item, $percent: false, $negative: false);
+      @if $problem {
+        @error "`#{meta.inspect($size)}` is not a valid $size for `triangle`: #{$problem}. A browser drops the border widths, so no triangle is drawn.";
+      }
     }
-    @if not -is-css-color($color) {
+    // The colour is checked by colorProblem in scss/internal/, each item of a
+    // list on its own, as isColor used to accept a list. CSS-wide keywords stay
+    // refused: the mixin writes the colour into a border-color shorthand beside
+    // `transparent`, and a CSS-wide keyword is only valid as the whole value, so
+    // `transparent transparent inherit` was rejected in Chrome 152. The check
+    // used to name four functions; system colours such as Canvas and
+    // contrast-color(), which a border keeps, were refused until it was shared.
+    $color-problem: null;
+    @each $item in $color {
+      @if not $color-problem {
+        $color-problem: colorProblem($item);
+      }
+    }
+    @if $color-problem {
       @error "`#{meta.inspect($color)}` is not a valid $color for `triangle`. Pass a colour, `currentColor`, or a CSS function such as `var(--accent)`, `color-mix(...)` or `light-dark(...)`.";
     } @else {
       content: "";
