@@ -4,6 +4,63 @@
 @use "sass:meta";
 @use "sass:string";
 
+// What a browser will not keep in `container-name`. Measured in Chrome 152, the
+// declaration was dropped for `and`, `or`, `not` and `default` in any case, a
+// name starting with a digit or a hyphen and a digit, and a name holding `.`,
+// `#` or `!`; and for a list with any one of those in it, such as `card and`,
+// and for `none` or a CSS-wide keyword beside another name, such as `NONE card`
+// or `card inherit`. `none`, `inherit`, `revert` and the other CSS-wide
+// keywords were kept on their own, as were several valid names,
+// `-card`, and `var()`, which a container can take its name from.
+$-reserved-names: "and" "or" "not" "default";
+$-alone-names: "none" "inherit" "initial" "unset" "revert" "revert-layer";
+$-forbidden-in-name: "." "," "/" "#" ":" ";" "(" ")" "[" "]" "{" "}" "!" "@" "$" "%" "^" "&" "*" "+" "=" "<" ">" "?" "\\" "|" "~" "`" "'" "\"";
+
+@function -words($text) {
+  $words: ();
+  $rest: $text;
+  $at: string.index($rest, " ");
+  @while $at {
+    $word: string.slice($rest, 1, $at - 1);
+    @if string.length($word) > 0 {
+      $words: list.append($words, $word);
+    }
+    $rest: string.slice($rest, $at + 1);
+    $at: string.index($rest, " ");
+  }
+  @if string.length($rest) > 0 {
+    $words: list.append($words, $rest);
+  }
+  @return $words;
+}
+
+@function -name-problem($name) {
+  $text: "#{$name}";
+  @if string.index($text, "var(") {
+    @return null;
+  }
+  $words: -words($text);
+  @each $word in $words {
+    $lower: string.to-lower-case($word);
+    @if list.index($-alone-names, $lower) and list.length($words) > 1 {
+      @return "`#{$word}` only works as the whole value, not beside another name";
+    }
+    @if list.index($-reserved-names, $lower) {
+      @return "`and`, `or`, `not` and `default` cannot name a container";
+    }
+    $first: string.slice($word, 1, 1);
+    @if string.index("0123456789", $first) or ($first == "-" and string.length($word) > 1 and string.index("0123456789", string.slice($word, 2, 2))) {
+      @return "a container name cannot start with a digit, or with a hyphen and a digit";
+    }
+    @each $character in $-forbidden-in-name {
+      @if string.index($word, $character) {
+        @return "a container name cannot contain `#{$character}`";
+      }
+    }
+  }
+  @return null;
+}
+
 // Marks an element as a query container, so `container-query` can ask about its
 // width instead of the viewport's.
 //
@@ -18,6 +75,12 @@
   }
   @if $name != null and meta.type-of($name) != "string" {
     @error "`#{$name}` is not a valid $name for `container`. Pass a name as a string, such as `\"card\"`, or no name at all.";
+  }
+  @if $name != null {
+    $problem: -name-problem($name);
+    @if $problem {
+      @error "`#{$name}` is not a valid $name for `container`: #{$problem}, and a browser drops the whole declaration. Pass a name such as `\"card\"`.";
+    }
   }
   container-type: $type;
   @if $name {

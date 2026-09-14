@@ -30,6 +30,13 @@
     // and a rule with no family is never used. A quoted "var(--f)" is only a
     // name, which the browser kept, so it is left alone like a quoted path.
     @error "`#{$font-family}` is not a valid $font-family for `font-face`. A custom property cannot supply it, because a @font-face rule drops var() in a descriptor, and without a family the font is never used. Pass the family name as a string, such as `\"Inter\"`.";
+  } @else if string.slice(meta.inspect($font-family), 1, 1) != "\"" and (list.index("serif" "sans-serif" "monospace" "cursive" "fantasy" "system-ui" "math" "inherit" "initial" "unset" "revert" "revert-layer" "default", string.to-lower-case($font-family)) or string.index($font-family, "env(") or string.index($font-family, "attr(")) {
+    // Measured in Chrome 152, a @font-face rule dropped an unquoted `serif`,
+    // `sans-serif`, `monospace`, `cursive`, `fantasy`, `system-ui`, `math`,
+    // `default` or CSS-wide keyword, in any case, and `env()` and `attr()`. The
+    // same words quoted are names and were kept, as were `emoji`, `fangsong` and
+    // the `ui-` families unquoted.
+    @error "`#{$font-family}` is not a valid $font-family for `font-face`. A @font-face rule drops a generic family, a CSS-wide keyword or a function as its family, and without a family the font is never used. Pass the family name as a quoted string, such as `\"Inter\"`.";
   } @else {
     
     $list: ();
