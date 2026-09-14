@@ -6,6 +6,30 @@
 @use '../../scss/gerillass' as *;
 
 @include describe('background-stripes()') {
+  // $rotation gains `deg` only when it has no unit. It used to be added to any
+  // unit that was not deg, so a valid `0.25turn` became `0.25turndeg`, which a
+  // browser drops.
+  @include it('Writes an angle in any unit as it is, and a unitless number in degrees.') {
+    @include assert {
+      @include output {
+        .a { @include background-stripes(red, 1em, 0.25turn); }
+        .b { @include background-stripes(red, 1em, 1rad); }
+        .c { @include background-stripes(red, 1em, 100grad); }
+        .d { @include background-stripes(red, 1em, 45); }
+        .e { @include background-stripes(red, 1em, -45deg); }
+        .f { @include background-stripes(red, 1em, 10DEG); }
+      }
+      @include expect {
+        .a { background-image: repeating-linear-gradient(0.25turn, red 0, red 1em, transparent 1em, transparent 2em); }
+        .b { background-image: repeating-linear-gradient(1rad, red 0, red 1em, transparent 1em, transparent 2em); }
+        .c { background-image: repeating-linear-gradient(100grad, red 0, red 1em, transparent 1em, transparent 2em); }
+        .d { background-image: repeating-linear-gradient(45deg, red 0, red 1em, transparent 1em, transparent 2em); }
+        .e { background-image: repeating-linear-gradient(-45deg, red 0, red 1em, transparent 1em, transparent 2em); }
+        .f { background-image: repeating-linear-gradient(10DEG, red 0, red 1em, transparent 1em, transparent 2em); }
+      }
+    }
+  }
+
   @include it('Writes a plain image path unquoted.') {
     @include assert {
       @include output {

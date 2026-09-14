@@ -571,7 +571,9 @@ and grammars private to each mixin, and stopped writing a valid quoted keyword
 with its quotes. S4 made `imageValue` refuse a list or a non-string image in
 `background-image`, `brand-logo` and `text-image`, and quote a path holding a
 space, a parenthesis or a quote in `background-dots` and `background-stripes`,
-and made `sprite` check its path with two arguments. S5 to S7 are open.
+and made `sprite` check its path with two arguments. S5 stopped
+`background-stripes` appending `deg` to a rotation in another unit, so `turn`,
+`rad` and `grad` work and a length raises. S6 and S7 are open.
 
 ### What `fix-plan.md` sets out
 
@@ -619,10 +621,9 @@ Three pieces of work are open, and none is started:
 
 - **`todos/silent-values.md`**: 49 arguments in 28 mixins turn a value a
   browser drops into CSS. Planned in `todos/silent-values-plan.md`, with the
-  six decisions taken. S0 to S4 are done on the `silent-values-plan` branch,
-  unreleased: S0 to S2 are what the plan puts in 2.3.1, and S3 and S4 are
-  in 2.3.2. S5, the `-10pxdeg` unit bug in `background-stripes`, is next and
-  closes 2.3.2.
+  six decisions taken. S0 to S5 are done on the `silent-values-plan` branch,
+  unreleased: S0 to S2 are what the plan puts in 2.3.1, and S3 to S5 complete
+  2.3.2. S6, colours, is next and is 2.3.3.
 - **3.0.0**: the B items in `todos/fix-plan.md`, each with a `MIGRATION.md`
   section.
 - **`todos/design-tokens.md`**: a token layer on `tokens`, starting with the
@@ -702,9 +703,13 @@ that still supports older toolchains.
 
 ### Modernisation
 
-- **Sass is deprecating its own `if()`, and the library calls it 21 times.**
-  Dart Sass 1.104 prints 25 `if-function` warnings compiling Gerillass (5 shown,
-  20 omitted); 1.91 prints none. Two fixes look obvious and both are wrong,
+- **Sass is deprecating its own `if()`, and the library calls it 20 times.**
+  Compiling `test/smoke.scss`, Dart Sass prints 24 `if-function` warnings (5
+  shown, 19 omitted); 1.91 prints none. Counted on `main` at d538217 the same
+  way, outside comments, it was 22 calls and 26 warnings, so the 21 and 25 this
+  line used to give were already stale. `todos/silent-values-plan.md` removed
+  two while fixing what each guarded: S1 in `breakpoint` and S5 in
+  `background-stripes`, both now an `@if`. Two fixes look obvious and both are wrong,
   verified:
 
   1. The replacement syntax is `if(sass($cond): $a; else: $b)`. It compiles on
@@ -717,7 +722,7 @@ that still supports older toolchains.
      helper turns a working call into `Invalid index 2 for a list with 1
      elements`.
 
-  So all 21 sites need reading individually, and the ones inside interpolation
+  So all 20 sites need reading individually, and the ones inside interpolation
   need restructuring rather than substitution. Removal is not until Sass 3.0.0,
   so this is not urgent, but it is the last thing between the library and a
   clean compile.

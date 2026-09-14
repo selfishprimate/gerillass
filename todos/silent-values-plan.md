@@ -511,6 +511,34 @@ not `deg`: `-10px` becomes `-10pxdeg`, and the valid `0.25turn` becomes
 **Changes existing output?** Only calls that were broken: a `turn`, `rad` or
 `grad` rotation starts working.
 
+**Status.** Done, not released.
+
+*Measured first*, in Chrome 152, 26 values in `repeating-linear-gradient`.
+Kept: `-45deg`, `0.25turn`, `1rad`, `100grad`, units in any case (`10DEG`,
+`0.25TURN`), a unitless `0`, `calc()` and `var()`. Dropped: a unitless `45`,
+`-10px`, `10%`, and every form with `deg` appended to another unit
+(`0.25turndeg`, `10DEGdeg`, `-10pxdeg`).
+
+*The change.* A unitless number still gains `deg`, which a unitless 45 needs.
+`deg`, `grad`, `rad` and `turn` are written as they are, compared in lower
+case. Any other unit raises. The `if()` that did the old conversion became an
+`@if`, one fewer call to the deprecated function; `CLAUDE.md` now gives the
+measured count, 20 calls and 24 warnings, against 22 and 26 on `main`.
+
+*Found and left alone.* `var()` is refused as a rotation by the existing type
+check, though a gradient keeps `repeating-linear-gradient(var(--r), ...)`. That
+is refused valid CSS, not a silent value, like the gradient directions noted
+below.
+
+*Verified.* The 4 new rejects (2, bare and prefixed) and the angle spec failed
+before the change. `npm test` 826 passed after. The compile matrix against S4:
+7503 calls identical, 13 from CSS to an error, all non-angle units, 2 with
+changed CSS, `1turn` and `0.5rad`, none from an error to CSS. In Chrome all 13
+old gradients were dropped, the old `1turndeg` and `0.5raddeg` were dropped,
+and the new `1turn` and `0.5rad` were kept. The audit's PASSED THROUGH fell
+from 390 to 389, the gating buckets stayed at 0. The page lists the refusal,
+with the message copied from a compile, and the site builds.
+
 **Found on the way, not in this plan.** `linear-gradient` and `text-gradient`
 refuse a `$direction` in `turn` or `rad`, which CSS takes. That is refused
 valid CSS, not a silent value.

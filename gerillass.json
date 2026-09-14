@@ -331,7 +331,9 @@
           "name": "$rotation",
           "default": "-45deg",
           "accepts": [
-            "an angle; a unitless number is treated as degrees"
+            "an angle in deg, grad, rad or turn, in any case, written as it is",
+            "a unitless number, which is treated as degrees",
+            "any other unit, such as px or %, is refused, because the gradient would be dropped"
           ]
         },
         {
@@ -355,7 +357,9 @@
       "rejects": [
         ".a { @include background-stripes(red, 2em, nonsense); }",
         ".a { @include background-stripes(red, 2em, -45deg, 42); }",
-        ".a { @include background-stripes(red, nonsense); }"
+        ".a { @include background-stripes(red, nonsense); }",
+        ".a { @include background-stripes(red, 2em, -10px); }",
+        ".a { @include background-stripes(red, 2em, 10%); }"
       ]
     },
     {
