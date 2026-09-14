@@ -1,16 +1,20 @@
 {
   "name": "validateBreakpoint",
-  "summary": "Resolves a breakpoint name to its width, passing other values through.",
+  "summary": "Resolves a breakpoint name to its width, passing a length, a percentage or a CSS function through, and refusing a word that is not a key.",
   "arguments": [
     {
       "name": "$value",
       "accepts": [
-        "a key from $map-for-breakpoints, or a raw length"
+        "a key from $map-for-breakpoints",
+        "a length, a percentage or a CSS function such as var() or min(), returned as it is"
       ]
     }
   ],
   "examples": [
     ".a { width: validateBreakpoint(\"medium\"); }"
   ],
-  "rejects": []
+  "rejects": [
+    ".a { width: validateBreakpoint(\"huge\"); }",
+    ".a { width: validateBreakpoint(\"small\" \"medium\"); }"
+  ]
 }

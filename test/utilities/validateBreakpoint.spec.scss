@@ -1,0 +1,47 @@
+// validateBreakpoint is also called in declarations, as its documentation page
+// shows with `max-width: validateBreakpoint("large")`, so it refuses only a word
+// that is not a key. A percentage or a CSS function is valid there and must
+// pass through; the condition mixins refuse those themselves.
+@use 'true' as *;
+@use '../../scss/gerillass' as *;
+
+@include describe('validateBreakpoint()') {
+  @include it('Return the width of a key.') {
+    @include assert-equal(validateBreakpoint("medium"), 768px);
+  }
+  @include it('Return a length untouched.') {
+    @include assert-equal(validateBreakpoint(40em), 40em);
+  }
+  @include it('Return null, so a declaration built from it is left out.') {
+    @include assert-equal(validateBreakpoint(null), null);
+  }
+  @include it('Return a percentage untouched, for a declaration.') {
+    @include assert-equal(validateBreakpoint(80%), 80%);
+  }
+  @include it('Return a sizing keyword untouched, for a declaration.') {
+    @include assert {
+      @include output {
+        .a { max-width: validateBreakpoint(none); }
+        .b { width: validateBreakpoint(fit-content); }
+        .c { width: validateBreakpoint(inherit); }
+      }
+      @include expect {
+        .a { max-width: none; }
+        .b { width: fit-content; }
+        .c { width: inherit; }
+      }
+    }
+  }
+  @include it('Return a CSS function untouched, for a declaration.') {
+    @include assert {
+      @include output {
+        .a { width: validateBreakpoint(var(--w)); }
+        .b { width: validateBreakpoint(min(100%, 40rem)); }
+      }
+      @include expect {
+        .a { width: var(--w); }
+        .b { width: min(100%, 40rem); }
+      }
+    }
+  }
+}

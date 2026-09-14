@@ -4,21 +4,7 @@
 @use "sass:meta";
 @use "sass:string";
 @use "../lists/list-of-directions" as *;
-
-// A size Sass can use inside calc(): a number, a calculation such as calc(),
-// min() or clamp(), or var() and env(), which only the browser can resolve.
-// Anything else would pass silently through calc(): `calc(nonsense * 5)`
-// compiles.
-@function -is-size($value) {
-  @if meta.type-of($value) == "number" or meta.type-of($value) == "calculation" {
-    @return true;
-  }
-  @if meta.type-of($value) == "string" and string.slice(meta.inspect($value), 1, 1) != "\"" {
-    $open: string.index($value, "(");
-    @return $open != null and list.index("var" "env", string.to-lower-case(string.slice($value, 1, $open - 1))) != null;
-  }
-  @return false;
-}
+@use "../internal/is-size" as *;
 
 // A value CSS will take as a colour: a Sass colour, currentColor, or a function
 // that returns a colour when the browser resolves it. A list passes when every
@@ -70,7 +56,7 @@ $-logical-directions: ("inline-start", "inline-end", "block-start", "block-end")
     // Halving a size in calc() rather than math.div() keeps var() and clamp()
     // working instead of emitting `var(--w)/2`, which is not valid CSS.
     @each $item in $size {
-      @if not -is-size($item) {
+      @if not isSize($item) {
         @error "`#{meta.inspect($size)}` is not a valid $size for `triangle`. Pass one or two lengths, or var(), env() or a calculation in place of either.";
       }
     }

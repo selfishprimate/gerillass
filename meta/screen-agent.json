@@ -6,7 +6,7 @@
       "name": "$resolution",
       "accepts": [
         "1x, 2x or 3x",
-        "a raw resolution such as 120dpi"
+        "a raw resolution in dpi, dpcm, dppx or x, such as 120dpi, or a calculation; a bare number, a length and a negative resolution are refused, because the query would never match"
       ]
     }
   ],
@@ -14,6 +14,10 @@
     ".a { @include screen-agent(\"2x\") { background-image: url(\"/img/a@2x.png\"); } }"
   ],
   "rejects": [
-    ".a { @include screen-agent(var(--density)) { color: red; } }"
+    ".a { @include screen-agent(var(--density)) { color: red; } }",
+    ".a { @include screen-agent(\"huge\") { color: red; } }",
+    ".a { @include screen-agent(2) { color: red; } }",
+    ".a { @include screen-agent(10px) { color: red; } }",
+    ".a { @include screen-agent(-1dppx) { color: red; } }"
   ]
 }

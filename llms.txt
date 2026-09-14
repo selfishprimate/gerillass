@@ -92,7 +92,7 @@ Arguments are validated and refused with a message naming what is accepted, so a
 - [shade($color, $percentage)](https://docs.gerillass.com/docs/shade/): Mixes a colour towards black by a percentage.
 - [shorthandProperty($value)](https://docs.gerillass.com/docs/shorthand-property/): Expands one to four values into the four-value CSS shorthand order.
 - [tint($color, $percentage)](https://docs.gerillass.com/docs/tint/): Mixes a colour towards white by a percentage.
-- [validateBreakpoint($value)](https://docs.gerillass.com/docs/validate-breakpoint/): Resolves a breakpoint name to its width, passing other values through.
+- [validateBreakpoint($value)](https://docs.gerillass.com/docs/validate-breakpoint/): Resolves a breakpoint name to its width, passing a length, a percentage or a CSS function through, and refusing a word that is not a key.
 - [validateLength($value)](https://docs.gerillass.com/docs/validate-length/): Returns the value if it is a length or one of auto, inherit, initial, 0.
 - [validateRatio($ratio)](https://docs.gerillass.com/docs/validate-ratio/): Turns an aspect ratio into a value for the CSS aspect-ratio property.
 - [validateScissors($value)](https://docs.gerillass.com/docs/validate-scissors/): Normalises corner values for the scissors mixin, adding px where missing.

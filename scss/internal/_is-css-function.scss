@@ -1,0 +1,21 @@
+@charset "UTF-8";
+
+@use "sass:list";
+@use "sass:meta";
+@use "sass:string";
+
+// scss/internal/ holds checks the mixins share. No _index.scss forwards it, so
+// a user cannot reach these functions and they are not public API: through
+// `@use "gerillass" as *` or `@import` a call to one renders as literal CSS,
+// and through a namespace it is an undefined function. Their names must not
+// start with `-` or `_`, which would make them private to their own file.
+
+// True for an unquoted call to one of $names, such as var(--x). A quoted string
+// stays text, so `"var(--x)"` is not a call.
+@function isCssFunction($value, $names) {
+  @if meta.type-of($value) != "string" or string.slice(meta.inspect($value), 1, 1) == "\"" {
+    @return false;
+  }
+  $open: string.index($value, "(");
+  @return $open != null and list.index($names, string.to-lower-case(string.slice($value, 1, $open - 1))) != null;
+}

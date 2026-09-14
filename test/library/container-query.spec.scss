@@ -28,6 +28,21 @@
     }
   }
 
+  // A size that can never match is refused; these were measured in Chrome 152
+  // as conditions an @container rule keeps, and must not be.
+  @include it('Accepts a quoted length, container units and a calculation.') {
+    @include assert {
+      @include output {
+        .a { @include container-query("min", "400px") { color: red; } }
+        .b { @include container-query("between", 20cqi calc(40em - 1px)) { color: red; } }
+      }
+      @include expect {
+        @container (min-width: 400px) { .a { color: red; } }
+        @container (min-width: 20cqi) and (max-width: calc(40em - 1px)) { .b { color: red; } }
+      }
+    }
+  }
+
   @include it('Queries one named container when $name is given.') {
     @include assert {
       @include output { .a { @include container-query("min", 400px, $name: "card") { color: red; } } }

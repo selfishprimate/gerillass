@@ -489,7 +489,8 @@
             "only plus a breakpoint, for exactly that width",
             "min or max plus a breakpoint",
             "between plus two breakpoints",
-            "a start and an end value"
+            "a start and an end value",
+            "a breakpoint is a key from $map-for-breakpoints, or a length in any unit a width condition takes, 0 or a calculation; a percentage, a bare number, another unit and a word that is not a key are refused, because the query would never match"
           ]
         }
       ],
@@ -509,7 +510,16 @@
         ".a { @include breakpoint(\"between\", \"medium\", \"large\") { color: red; } }",
         ".a { @include breakpoint() { color: red; } }",
         ".a { @include breakpoint(\"min\", var(--wide)) { color: red; } }",
-        ".a { @include breakpoint(\"between\", var(--start) \"large\") { color: red; } }"
+        ".a { @include breakpoint(\"between\", var(--start) \"large\") { color: red; } }",
+        ".a { @include breakpoint(\"huge\") { color: red; } }",
+        ".a { @include breakpoint(\"min\", \"huge\") { color: red; } }",
+        ".a { @include breakpoint(\"min\", \"MEDIUM\") { color: red; } }",
+        ".a { @include breakpoint(\"between\", \"small\" \"huge\") { color: red; } }",
+        ".a { @include breakpoint(\"huge\", \"large\") { color: red; } }",
+        ".a { @include breakpoint(\"small\", \"huge\") { color: red; } }",
+        ".a { @include breakpoint(\"min\", 10deg) { color: red; } }",
+        ".a { @include breakpoint(\"max\", 50%) { color: red; } }",
+        ".a { @include breakpoint(\"only\", 768) { color: red; } }"
       ],
       "warns": [
         ".a { @include breakpoint(\"medium\") { color: red; } }"
@@ -637,6 +647,7 @@
             "a size, for exactly that width, which prints a warning: write only instead",
             "two sizes for a range",
             "one of min, max, only or between followed by a size",
+            "a size is a key from $map-for-breakpoints, or a length in any unit a width condition takes, 0 or a calculation; a percentage, a bare number, another unit and a word that is not a key are refused, because the query would never match",
             "$name as a keyword, to query one named container"
           ]
         }
@@ -664,7 +675,12 @@
         ".title { @include container-query(\"min\", 400px, $name: \"none\") { color: red; } }",
         ".title { @include container-query(\"min\", 400px, $name: \"not\") { color: red; } }",
         ".title { @include container-query(\"min\", 400px, $name: \"my card\") { color: red; } }",
-        ".title { @include container-query(\"min\", 400px, $name: \"1card\") { color: red; } }"
+        ".title { @include container-query(\"min\", 400px, $name: \"1card\") { color: red; } }",
+        ".title { @include container-query(\"huge\") { color: red; } }",
+        ".title { @include container-query(\"min\", \"huge\") { color: red; } }",
+        ".title { @include container-query(\"max\", 400) { color: red; } }",
+        ".title { @include container-query(\"between\", 300px 10deg) { color: red; } }",
+        ".title { @include container-query(300px, 50%) { color: red; } }"
       ],
       "warns": [
         ".title { @include container-query(400px) { color: red; } }"
@@ -1227,7 +1243,10 @@
       ],
       "rejects": [
         ".a { @include remove(a, b, c); }",
-        ".a { @include remove(\"max\", var(--narrow)); }"
+        ".a { @include remove(\"max\", var(--narrow)); }",
+        ".a { @include remove(\"huge\"); }",
+        ".a { @include remove(\"min\", \"huge\"); }",
+        ".a { @include remove(\"huge\", \"large\"); }"
       ],
       "warns": [
         ".a { @include remove(\"medium\"); }"
@@ -1333,7 +1352,7 @@
           "required": true,
           "accepts": [
             "1x, 2x or 3x",
-            "a raw resolution such as 120dpi"
+            "a raw resolution in dpi, dpcm, dppx or x, such as 120dpi, or a calculation; a bare number, a length and a negative resolution are refused, because the query would never match"
           ]
         }
       ],
@@ -1344,7 +1363,11 @@
         ".a { @include screen-agent(\"2x\") { background-image: url(\"/img/a@2x.png\"); } }"
       ],
       "rejects": [
-        ".a { @include screen-agent(var(--density)) { color: red; } }"
+        ".a { @include screen-agent(var(--density)) { color: red; } }",
+        ".a { @include screen-agent(\"huge\") { color: red; } }",
+        ".a { @include screen-agent(2) { color: red; } }",
+        ".a { @include screen-agent(10px) { color: red; } }",
+        ".a { @include screen-agent(-1dppx) { color: red; } }"
       ]
     },
     {
@@ -2246,17 +2269,21 @@
           "name": "$value",
           "required": true,
           "accepts": [
-            "a key from $map-for-breakpoints, or a raw length"
+            "a key from $map-for-breakpoints",
+            "a length, a percentage or a CSS function such as var() or min(), returned as it is"
           ]
         }
       ],
       "file": "scss/utilities/_validate-breakpoint.scss",
       "signature": "validateBreakpoint($value)",
-      "summary": "Resolves a breakpoint name to its width, passing other values through.",
+      "summary": "Resolves a breakpoint name to its width, passing a length, a percentage or a CSS function through, and refusing a word that is not a key.",
       "examples": [
         ".a { width: validateBreakpoint(\"medium\"); }"
       ],
-      "rejects": []
+      "rejects": [
+        ".a { width: validateBreakpoint(\"huge\"); }",
+        ".a { width: validateBreakpoint(\"small\" \"medium\"); }"
+      ]
     },
     {
       "name": "validateLength",

@@ -1,0 +1,62 @@
+// breakpoint refuses a size that can never match, such as a word that is not
+// a key or a length in the wrong unit. These are the forms that must keep
+// compiling to the same query, each measured in Chrome 152 as a condition the
+// browser keeps: a quoted length, which Sass writes unquoted, a calculation,
+// zero, a viewport, container or font unit, a negative length, and a key and a
+// length mixed in a range.
+@use 'true' as *;
+@use '../../scss/gerillass' as *;
+
+@include describe('breakpoint()') {
+  @include it('Accepts a length written as a quoted string.') {
+    @include assert {
+      @include output { .a { @include breakpoint("min", "600px") { color: red; } } }
+      @include expect { @media (min-width: 600px) { .a { color: red; } } }
+    }
+  }
+
+  @include it('Accepts calc() and clamp().') {
+    @include assert {
+      @include output {
+        .a { @include breakpoint("min", calc(30em + 1px)) { color: red; } }
+        .b { @include breakpoint("max", clamp(20rem, 50vw, 40rem)) { color: red; } }
+      }
+      @include expect {
+        @media (min-width: calc(30em + 1px)) { .a { color: red; } }
+        @media (max-width: clamp(20rem, 50vw, 40rem)) { .b { color: red; } }
+      }
+    }
+  }
+
+  @include it('Accepts zero, relative units and a negative length.') {
+    @include assert {
+      @include output {
+        .a { @include breakpoint("min", 0) { color: red; } }
+        .b { @include breakpoint("min", 50vw) { color: red; } }
+        .c { @include breakpoint("only", 10cqi) { color: red; } }
+        .d { @include breakpoint("max", -10px) { color: red; } }
+      }
+      @include expect {
+        @media (min-width: 0) { .a { color: red; } }
+        @media (min-width: 50vw) { .b { color: red; } }
+        @media (width: 10cqi) { .c { color: red; } }
+        @media (max-width: -10px) { .d { color: red; } }
+      }
+    }
+  }
+
+  @include it('Mixes a key and a length in a range, and takes one off a key end.') {
+    @include assert {
+      @include output {
+        .a { @include breakpoint("between", "small" 1200px) { color: red; } }
+        .b { @include breakpoint("small", "large") { color: red; } }
+        .c { @include breakpoint("between", "30em" "60em") { color: red; } }
+      }
+      @include expect {
+        @media (min-width: 576px) and (max-width: 1200px) { .a { color: red; } }
+        @media (min-width: 576px) and (max-width: 991px) { .b { color: red; } }
+        @media (min-width: 30em) and (max-width: 60em) { .c { color: red; } }
+      }
+    }
+  }
+}

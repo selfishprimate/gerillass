@@ -38,7 +38,10 @@ let lastWarning = null;
 
 // Values chosen because they are what a caller reaches for when the docs are
 // not open: a space separated list, a bool, a colour, a bare number, a word.
-const PROBES = ["nonsense", "16 9", "true", "#ff0000", "42", '"a b"'];
+// `huge`, `10deg` and `-10px` came from todos/silent-values.md, which found
+// that the first six missed most of what compiles into CSS a browser drops: a
+// word that is not a breakpoint, a number with the wrong unit, a negative size.
+const PROBES = ["nonsense", "16 9", "true", "#ff0000", "42", '"a b"', "huge", "10deg", "-10px"];
 
 // The other direction: values modern CSS takes that a mixin might wrongly
 // refuse, or accept and mangle. These feed their own two buckets and none of

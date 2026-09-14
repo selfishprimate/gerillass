@@ -1,7 +1,7 @@
 ---
 title: "Validate Breakpoint"
 page_title: "Validate Breakpoint Sass Function"
-page_description: "Resolves a breakpoint name to its width, passing other values through."
+page_description: "Resolves a breakpoint name to its width, passes a length or a CSS function through, and refuses a word that is not a breakpoint."
 page_keywords: "Gerillass validateBreakpoint, Sass validateBreakpoint, Sass Functions, SCSS Functions, Sass Utility Functions, Gerillass Utilities"
 ---
 
@@ -9,14 +9,14 @@ page_keywords: "Gerillass validateBreakpoint, Sass validateBreakpoint, Sass Func
 
 <Member name="validateBreakpoint">
 
-Resolves a breakpoint name to its width, passing other values through.
+Resolves a breakpoint name to its width. Anything else that could be a size comes back as it is, because the function is also used in declarations, where a percentage or a CSS function is valid. `null` comes back as `null`, so a declaration built from it is left out.
 
 </Member>
 
 ## Arguments
 
 <Arguments of="validateBreakpoint">
-  <Argument name="$value" type="string | number">Accepts a key from $map-for-breakpoints, or a raw length.</Argument>
+  <Argument name="$value" type="string | number">Accepts a key from <code>$map-for-breakpoints</code>, a length, a percentage, or a CSS function such as <code>var()</code> or <code>min()</code>.</Argument>
 </Arguments>
 
 ## Examples
@@ -29,6 +29,19 @@ Resolves a breakpoint name to its width, passing other values through.
 }
 ```
 </Example>
+
+## What it refuses
+
+A word that is not a key, and a list. Until 2.3.1 a word came back unchanged and a list gave its first item, so a name missing from the map, or spelt in another case, compiled into CSS that did nothing.
+
+```scss
+.container {
+  max-width: validateBreakpoint("huge");
+}
+```
+```text
+Error: `huge` is not a breakpoint. $map-for-breakpoints has xsmall, small, medium, large, xlarge; pass one of those, or a length such as `600px`.
+```
 
 ## Related Links
 

@@ -24,7 +24,7 @@ The **Breakpoint** Sass mixin helps you create scalable media queries and breakp
 
 <Arguments of="breakpoint" footnote="When you use the `between` option you must pass two values for `width`, and they must be separated by a space. See the [examples](#examples) for more.">
   <Argument name="$mode" type="string">Sets the <code>width</code> media feature. Accepts the values <code>only</code>, <code>min</code>, <code>max</code>, and <code>between</code>.</Argument>
-  <Argument name="$value" type="number (with unit)">The width value at which your styles will be applied. It cannot be a custom property: <code>var()</code> is not evaluated in a <code>@media</code> condition, so the rule would never apply, and the mixin refuses it.</Argument>
+  <Argument name="$value" type="number (with unit)">The width value at which your styles will be applied: a key from the breakpoint map, or a length in any unit a width condition takes, such as <code>px</code>, <code>em</code>, <code>vw</code> or <code>cqi</code>, including <code>0</code> and <code>calc()</code>. A percentage, a bare number, another unit and a word that is not a key are refused, because the query they produce never matches. It cannot be a custom property either: <code>var()</code> is not evaluated in a <code>@media</code> condition, so the rule would never apply, and the mixin refuses it.</Argument>
 </Arguments>
 
 ## Examples
@@ -141,6 +141,36 @@ The values can be either custom numbers (with a unit) or predefined values.
 }
 ```
 </Example>
+
+## What it refuses
+
+A size no width condition can match stops the build. Until 2.3.1 these compiled: a name missing from the map went into the query as it was, so `breakpoint(min, huge)` wrote `@media (min-width: huge)`, which a browser keeps and never applies, with nothing to say so. Measured in Chrome 152, the same was true of a percentage, a bare number such as `768`, and a unit that is not a length.
+
+```scss
+.element {
+  @include breakpoint(min, huge) {
+    color: red;
+  }
+}
+```
+```text
+Error: `huge` is not a breakpoint. $map-for-breakpoints has xsmall, small, medium, large, xlarge; pass one of those, or a length such as `600px`.
+```
+
+The names are case-sensitive, so `"MEDIUM"` is refused the same way.
+
+```scss
+.element {
+  @include breakpoint(max, 50%) {
+    color: red;
+  }
+}
+```
+```text
+Error: `50%` cannot be used as a size in `breakpoint`: a width condition takes a length, and one written with `50%` would never match in @media. Pass a length such as `600px`, `40em` or `calc(30em + 1px)`, or a key from $map-for-breakpoints.
+```
+
+A length written as a string, `breakpoint(min, "600px")`, still works, as it always has.
 
 ## Related Links
 

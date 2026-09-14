@@ -2,14 +2,40 @@
 
 @use "sass:list";
 @use "sass:map";
+@use "sass:meta";
+@use "sass:string";
 @use "../maps/map-for-breakpoints" as *;
 
+// Returns the width of a key from $map-for-breakpoints, and anything else as it
+// is: a declaration takes a percentage or a CSS function, and the condition
+// mixins check their own sizes through scss/internal/_condition-width.scss.
+//
+// What it refuses is what cannot be a breakpoint anywhere. A word that is not a
+// key used to come back unchanged, so `breakpoint(min, huge)` compiled to
+// `@media (min-width: huge)`, which never matches, without a word; the keys are
+// case-sensitive, so `"MEDIUM"` did the same. A list used to give its first
+// item, because the loop here returned on its first pass.
+//
+// null comes back as null, as it always did, so `width: validateBreakpoint(null)`
+// still leaves the declaration out. The condition mixins refuse it themselves.
 @function validateBreakpoint($value) {
-  @for $i from 1 through list.length($value) {
-    @if map.has-key($map-for-breakpoints, $value) {
-      @return map.get($map-for-breakpoints, list.nth($value, $i));
-    } @else {
-      @return list.nth($value, $i);
-    }
+  @if $value == null {
+    @return null;
   }
+  @if map.has-key($map-for-breakpoints, $value) {
+    @return map.get($map-for-breakpoints, $value);
+  }
+  @if list.length($value) > 1 {
+    @error "`#{meta.inspect($value)}` is not a breakpoint. Pass one key from $map-for-breakpoints or one length; a range is written with `between`, such as `breakpoint(between, small large)`.";
+  }
+  // A quoted length such as "600px" starts with a digit, a dot or a sign, and a
+  // CSS function holds a parenthesis. Of the words, the sizing keywords stay
+  // accepted, because `max-width: validateBreakpoint(none)` is valid CSS; a
+  // condition mixin still refuses them through conditionWidth. Anything else is
+  // a word that cannot be a breakpoint.
+  $sizing-keywords: "auto" "none" "min-content" "max-content" "fit-content" "stretch" "inherit" "initial" "unset" "revert" "revert-layer";
+  @if meta.type-of($value) == "string" and not list.index($sizing-keywords, string.to-lower-case($value)) and not string.index($value, "(") and not string.index("0123456789.+-", string.slice($value, 1, 1)) {
+    @error "`#{$value}` is not a breakpoint. $map-for-breakpoints has #{map.keys($map-for-breakpoints)}; pass one of those, or a length such as `600px`.";
+  }
+  @return $value;
 }

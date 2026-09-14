@@ -1,0 +1,23 @@
+@charset "UTF-8";
+
+@use "sass:string";
+@use "is-css-function" as *;
+
+// Shared by the mixins and not public API; see _is-css-function.scss.
+
+// An image path goes into url(). A var(), url(), image-set() or gradient is
+// already an image, and wrapping it produced url(var(--x)), which loads nothing.
+//
+// $unquote is there because the copies this replaced differed:
+// background-dots and background-stripes wrote `url(a.png)`, the other three
+// `url("a.png")`. Both load the same file, and keeping each as it was means no
+// stylesheet changes.
+@function imageValue($value, $unquote: false) {
+  @if isCssFunction($value, "var" "url" "image-set" "linear-gradient" "radial-gradient" "conic-gradient" "repeating-linear-gradient" "repeating-radial-gradient" "repeating-conic-gradient") {
+    @return $value;
+  }
+  @if $unquote {
+    @return url(string.unquote($value));
+  }
+  @return url($value);
+}

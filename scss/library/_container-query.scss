@@ -5,26 +5,8 @@
 @use "sass:meta";
 @use "sass:string";
 @use "../maps/map-for-breakpoints" as *;
-@use "../utilities/validate-breakpoint" as *;
-
-// Returns the first value in $value that holds var(), looking inside lists and
-// calculations, or null. Custom properties are not evaluated in a @media or
-// @container condition, so a rule built from one never applies, and nothing
-// warns. Measured in Chrome 152: `(min-width: var(--wide))` did not match with
-// `--wide: 200px`, while `(min-width: 200px)` did.
-@function -custom-property-in($value) {
-  @each $item in $value {
-    @if meta.type-of($item) == "list" or meta.type-of($item) == "arglist" {
-      $found: -custom-property-in($item);
-      @if $found {
-        @return $found;
-      }
-    } @else if string.index(meta.inspect($item), "var(") {
-      @return $item;
-    }
-  }
-  @return null;
-}
+@use "../internal/custom-property-in" as *;
+@use "../internal/condition-width" as *;
 
 // Characters and names a browser will not keep as the name in an @container
 // rule. Measured in Chrome 152, the rule was dropped for `var(--n)`, `none`,
@@ -88,7 +70,7 @@ $-forbidden-in-name: "." "," "/" "#" ":" ";" "(" ")" "[" "]" "{" "}" "!" "@" "$"
     }
   }
 
-  $custom-property: -custom-property-in($params);
+  $custom-property: customPropertyIn($params);
   @if $custom-property {
     @error "`#{$custom-property}` cannot be used in a container query: custom properties are not evaluated in a @container condition, so the rule would never apply. Pass a length or a key from $map-for-breakpoints.";
   }
@@ -96,7 +78,9 @@ $-forbidden-in-name: "." "," "/" "#" ":" ";" "(" ")" "[" "]" "{" "}" "!" "@" "$"
 
   @if $count == 1 {
     $value: list.nth($params, 1);
-    $width: validateBreakpoint($value);
+    // Checked before the warning, as in `breakpoint`. conditionWidth returns
+    // what validateBreakpoint did, so a working call writes the same condition.
+    $width: conditionWidth($value, "container-query", "@container");
     $condition: "(width: #{$width})";
     // A single pixel, as in `breakpoint`; still emitted until 3.0.0 refuses it.
     @warn "`container-query(#{$value})` matches only a container exactly #{$width} wide, `(width: #{$width})`. Write `container-query(only, #{$value})` for that width, or `container-query(min, #{$value})` from it upwards. The one-argument form will be refused in 3.0.0.";
@@ -104,19 +88,19 @@ $-forbidden-in-name: "." "," "/" "#" ":" ";" "(" ")" "[" "]" "{" "}" "!" "@" "$"
     $mode: list.nth($params, 1);
     @if not list.index("only" "min" "max" "between", $mode) {
       // Two bare sizes mean a range, as they do in `breakpoint`.
-      $condition: "(min-width: #{validateBreakpoint($mode)}) and (max-width: #{validateBreakpoint(list.nth($params, 2))})";
+      $condition: "(min-width: #{conditionWidth($mode, "container-query", "@container")}) and (max-width: #{conditionWidth(list.nth($params, 2), "container-query", "@container")})";
     } @else {
       $value: list.nth($params, 2);
       @if $mode == "only" {
-        $condition: "(width: #{validateBreakpoint($value)})";
+        $condition: "(width: #{conditionWidth($value, "container-query", "@container")})";
       } @else if $mode == "min" {
-        $condition: "(min-width: #{validateBreakpoint($value)})";
+        $condition: "(min-width: #{conditionWidth($value, "container-query", "@container")})";
       } @else if $mode == "max" {
-        $condition: "(max-width: #{validateBreakpoint($value)})";
+        $condition: "(max-width: #{conditionWidth($value, "container-query", "@container")})";
       } @else {
         $start: list.nth($value, 1);
         $end: list.nth($value, 2);
-        $condition: "(min-width: #{validateBreakpoint($start)}) and (max-width: #{validateBreakpoint($end)})";
+        $condition: "(min-width: #{conditionWidth($start, "container-query", "@container")}) and (max-width: #{conditionWidth($end, "container-query", "@container")})";
       }
     }
   } @else {

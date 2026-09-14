@@ -9,7 +9,7 @@ Gerillass is a **pure Sass library** — a toolkit of mixins and functions, in t
 Two consequences follow from this and drive most decisions in the repo:
 
 1. **`package.json` must have no `dependencies`.** Everything (`jest`, `sass`, `sass-true`, `glob`) belongs in `devDependencies`. Consumers get only `.scss` files, so a runtime dependency here forces the entire test toolchain onto every downstream project. This was the cause of 24 Dependabot alerts fixed in v1.3.3 — do not reintroduce it.
-2. **Only `scss/` ships.** `.npmignore` excludes `test`, `assets`, `meta`, `tools`, dotfiles and `*.md`; npm always adds `README.md`, `LICENSE.md` and `package.json` back. Verify with `npm pack --dry-run` before any release (101 files / ~55 kB as of 2.2.0).
+2. **Only `scss/` ships.** `.npmignore` excludes `test`, `assets`, `meta`, `tools`, dotfiles and `*.md`; npm always adds `README.md`, `LICENSE.md` and `package.json` back. Verify with `npm pack --dry-run` before any release (107 files / ~56 kB since `scss/internal/` was added).
 
 Dart Sass only. LibSass/node-sass has been unsupported since v1.3.0.
 
@@ -56,6 +56,7 @@ npm test                          # Jest: sass-true specs, the smoke test, and t
 npx jest -t "mapDeepGet()"      # single test, filtered by the describe/it name
 npm run manifest                  # regenerate gerillass.json and SKILL.md (see below)
 node tools/audit.js               # adversarial sweep: bad arguments at every mixin
+node tools/browser-check.js ...   # a page asking the browser whether CSS is kept (see below)
 node tools/check-archive.js       # what a GitHub release's source zip would contain
 npm pack --dry-run                # inspect exactly what would be published
 yarn audit                        # must stay at zero across all severities
@@ -232,6 +233,19 @@ Four layers, loaded in dependency order by `scss/_gerillass.scss`. The order is 
 
 `_gerillass.scss` lists every partial explicitly. **A new file is invisible until you add its `@import` line there**, in the correct layer block.
 
+A fifth folder sits outside the layers on purpose. `scss/internal/` holds checks
+the mixins share, such as `isCssFunction` and `customPropertyIn`, and has no
+`_index.scss`, so nothing forwards it and a user cannot reach it: through
+`@use "gerillass" as *` or `@import` a call to one renders as literal CSS, and
+through a namespace it is an undefined function. It exists because a private
+`-helper` is private to its own file, which left the same function copied into
+up to nine partials. A partial loads what it needs with
+`@use "../internal/is-css-function" as *`. The manifest and
+`tools/check-docs.js` read only `library/` and `utilities/`, so an internal
+function is neither API nor counted, and its name must not start with `-` or
+`_`. Added for the plan in `todos/silent-values-plan.md`, where the move is
+recorded as a verified no-op on 7382 compiled calls.
+
 Functions are `camelCase`, mixins are `kebab-case`, and that is what keeps them apart at a call site — together with `@include`, which a mixin always needs and a function never has. Utilities are public API and users call them directly; `remify` has its own page in the docs.
 
 Until 2.0.0 they carried a `__` prefix. It had to go: under `@use`/`@forward` a member whose name starts with `_` is **private to its own file**, so every utility became unreachable, and through `@use ... as *` it failed silently, rendering as literal CSS. Three could not simply drop the prefix — `darken` and `lighten` would shadow the Sass built-ins with different results, and `null` is a keyword — so they are `shade`, `tint` and `fillNulls`. Utilities cluster around three jobs: type guards (`isColor`, `isNumber`, `isTime`), validators that `@warn`/`@error` and return (`validateLength`, `validateBreakpoint`, `validateRatio`, `validateScissors`), and converters (`remify`, `pixelify`, `convertToEm`, `fontSizer`, `tint`, `shade`, `shorthandProperty`).
@@ -318,13 +332,20 @@ Four levels, and knowing which one covers a member tells you what you can trust:
 |---|---|---|
 | `test/smoke.scss` | the mixin evaluates at all | 56/56 mixins |
 | snapshot of `meta/` examples | the output cannot change unnoticed | 79/79 members |
-| `meta/` rejects | bad input is refused with a real message | 56/79 |
-| sass-true spec in `test/` | the CSS is **correct** | 14/79 |
+| `meta/` rejects | bad input is refused with a real message | 58/79 |
+| sass-true spec in `test/` | the CSS is **correct** | 17/79 |
 
 Only the last one catches an output that was wrong from the start; a snapshot
 records a wrong value as correct. Hand-written specs are therefore reserved for
 members that compute something — `triangle`, `scissors`, `columnizer`,
 `position`, `background-dots`, `aspect-ratio`, `container-query`. Use `/sass-test`.
+
+A spec has a second use once a member starts refusing values: it pins the
+values that must stay accepted. `breakpoint`, `screen-agent` and
+`validateBreakpoint` gained specs that way in S1 of
+`todos/silent-values-plan.md`, each listing forms measured as working in a
+browser, such as a quoted `"600px"` and `calc()`, so a check written too
+strictly fails the suite instead of breaking a stylesheet.
 
 `node tools/audit.js` is the fourth thing the suite cannot do: it throws
 arguments nobody wrote a test for at every member and every argument position.
@@ -516,6 +537,33 @@ unvalidated mixins can be revisited. Each check has to be written from the
 property's measured value set, and it suggests starting with the conditions,
 where `validateBreakpoint` is the single cause.
 
+### What `silent-values-plan.md` sets out
+
+Written 14 September 2026, the report above turned into work in the shape of
+`fix-plan.md`. It opens with six decisions for the maintainer, then S0 to S7:
+groundwork, conditions and selectors for 2.3.1, keywords, images and the unit
+bug for 2.3.2, colours for 2.3.3 and lengths for 2.3.4.
+
+The maintainer took all six recommendations. **S0 and S1 are done on the
+`silent-values-plan` branch and not yet released**; the status under each item
+has the measurements. S0 moved the private helper copies into `scss/internal/`
+(see Architecture), added `huge`, `10deg` and `-10px` to the audit, and added
+`tools/browser-check.js`. S1 made `breakpoint`, `remove`, `container-query`
+and `screen-agent` refuse a size no condition can match, through
+`scss/internal/_condition-width.scss` and `_is-condition-value.scss`, and made
+`validateBreakpoint` refuse a word that is not a key.
+
+Two things S1 found that the plan did not expect. `validateBreakpoint` is
+called in declarations too, as its documentation page shows, so the
+condition-only rules (no percentage, no bare number) went into the internal
+check rather than the public function, and the function still returns
+percentages, CSS functions, the sizing keywords and `null` unchanged. And a
+quoted length such as `breakpoint(min, "600px")` has always worked, because
+Sass writes it into the condition unquoted, so the check reads the string's
+content rather than refusing every string.
+
+S2 to S7 are open.
+
 ### What `fix-plan.md` sets out
 
 The findings of the agent trials turned into work. For each problem: what goes
@@ -558,11 +606,13 @@ Verified as of v2.3.0.
 
 ### Next
 
-Three pieces of work are ready to be planned, and none is started:
+Three pieces of work are open, and none is started:
 
 - **`todos/silent-values.md`**: 49 arguments in 28 mixins turn a value a
-  browser drops into CSS. The suggested first step is the conditions behind
-  `validateBreakpoint`.
+  browser drops into CSS. Planned in `todos/silent-values-plan.md`, with the
+  six decisions taken. S0 and S1 are done on the `silent-values-plan` branch,
+  unreleased; S2, the selectors in `only` and `except`, is next, and the plan
+  puts it in the same 2.3.1 release.
 - **3.0.0**: the B items in `todos/fix-plan.md`, each with a `MIGRATION.md`
   section.
 - **`todos/design-tokens.md`**: a token layer on `tokens`, starting with the
