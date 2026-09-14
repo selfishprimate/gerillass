@@ -58,15 +58,6 @@ see G4.
 | N1 | New member: `focus-ring` | 2.2.0 | T1 T2 T3 |
 | N2 | New member: a reduced-motion guard | 2.2.0 | T2 T3 |
 | N3 | New member: custom properties from a map | 2.2.0 | T2 T3 |
-| B1 | One boundary rule for `breakpoint` and `container-query` | 3.0.0 | T1 T2 T3 |
-| B2 | Retire the one-argument exact-width form | 3.0.0 | T2 T3 |
-| B3 | `columnizer` on `gap`, without margins or universal `box-sizing` | 3.0.0 | T1 T2 T3 |
-| B4 | `hide("unhide")` leaves `position` alone | 3.0.0 | T2 T3 |
-| B5 | `before` and `after` emit `content: ""` by default | 3.0.0 | T1 |
-| B6 | `font-face` defaults to `woff2` | 3.0.0 | T3 |
-| B7 | `all-text-inputs` stops matching `[type='color']` | 3.0.0 | T3 |
-| B8 | `aspect-ratio` holds on images with `width`/`height` attributes | 3.0.0 | T3 |
-| B9 | `counter` numbers correctly inside container queries | 3.0.0 | T2 |
 
 The order is deliberate. Groundwork first, so each fix lands with a test that
 would have caught the defect. Then the 2.1.1 fixes, which change no output of a
@@ -611,8 +602,8 @@ compiles to an unnamed query, as it always did, since that works.
 
 ### F5 and F6. Moved to 3.0.0
 
-Validation found that both change what renders for calls that work today. They
-are now B8 and B9, each with a caveat to publish in the meantime.
+Validation found that both change what renders for calls that work today. They became B8 and B9, which now live in `todos/aspect-ratio-height-auto.md` and
+`todos/counter-modernisation.md`.
 
 ### F7. `reset-css` stops putting comments in compiled CSS
 
@@ -1017,7 +1008,7 @@ the obvious way to call the mixin, and it is also deliberate:
 
 **Fix, now.** Say what the one-argument form does, in the summary and in a G3
 caveat, and replace the example with `remove("min", "medium")` and
-`remove("max", "medium")`. Whether the form should exist at all is B2.
+`remove("max", "medium")`. The form stays, with a warning since 2.2.0: on 15 September 2026 the maintainer decided not to refuse it, since its CSS is valid and matches that one width.
 
 **Status.** Done. The caveat landed with G3. The summary in `meta/remove.json`
 now says that one breakpoint on its own hides the element at exactly that
@@ -1033,7 +1024,7 @@ anyone who does want exact width. Every example on it compiles, and the site
 builds.
 
 The same trap is in `breakpoint`'s manifest example, `breakpoint("medium")`,
-which this item did not touch; B2 covers both.
+which this item did not touch; the 2.2.0 warning covers both.
 
 **Changes existing output?** No.
 
@@ -1544,360 +1535,6 @@ Each of these changes CSS that a working call emits today. Ship them together in
 one major release, each with a `MIGRATION.md` section showing the CSS before and
 after.
 
-### B1. One boundary rule for `breakpoint` and `container-query`
-
-**Problem.** The same breakpoint ends in different places depending on how it is
-written, in three ways:
-
-1. **`max` includes the breakpoint.** `breakpoint(max, large)` is
-   `max-width: 992px` and `breakpoint(min, large)` is `min-width: 992px`, so at
-   exactly 992px both match. T1 hand-wrote `991.98px`; T2 wrote
-   `breakpoint("xsmall", "large")` to reach `991px`. (T1 T2)
-2. **The two mixins disagree.** A range ends at `max-width: 767px` in
-   `breakpoint(small, medium)` and at `max-width: 768px` in
-   `container-query(small, medium)`. `breakpoint` subtracts 1; `container-query`
-   subtracts nothing. (T3)
-3. **The subtraction ignores the unit.** With a rem map, `breakpoint(small, medium)`
-   ends at `max-width: 47rem` for a `48rem` key, a 16px gap where neither range
-   nor `min` matches. (T3)
-
-**Fix.** For keys from the map, end `max` and every range just under the key, in
-the key's own unit, in both mixins:
-
-```scss
-@function -range-end($value) {
-  @if math.unit($value) == "px" {
-    @return $value - 0.02;
-  }
-  @return $value - 0.01;
-}
-```
-
-Compiled: `768px` gives `767.98px`, `48rem` gives `47.99rem`, `48em` gives
-`47.99em`. A raw length passed by the caller is left exactly as written, so
-`container-query(300px, 500px)` and its spec do not change.
-
-| Call | Today | After |
-|---|---|---|
-| `breakpoint(max, large)` | `max-width: 992px` | `max-width: 991.98px` |
-| `breakpoint(medium, large)` | `max-width: 991px` | `max-width: 991.98px` |
-| `container-query(small, medium)` | `max-width: 768px` | `max-width: 767.98px` |
-| `breakpoint(small, medium)`, rem map | `max-width: 47rem` | `max-width: 47.99rem` |
-
-**Why it is major.** `breakpoint(max, large)` stops matching at exactly 992px.
-Anyone whose layout depended on that pixel sees a change.
-
-**The alternative.** Range syntax, `(width < 992px)`, removes the fractional gap
-entirely instead of shrinking it. Container queries are a reasonable place to
-adopt it. For `@media`, check browser support against the library's audience
-before choosing it over the subtraction.
-
-**Touches.** `scss/library/_breakpoint.scss`, `scss/library/_container-query.scss`,
-and `remove`, which builds on `breakpoint`; the manifest snapshots; the
-`breakpoint`, `remove` and `container-query` documentation pages; `MIGRATION.md`.
-
-### B2. Retire the one-argument exact-width form
-
-**Problem.** `breakpoint("medium")`, `remove("medium")` and `container-query(768px)`
-match one pixel width, `(width: 768px)`. It is deliberate and tested, and it is
-almost never what the caller meant. T2 and T3 both flagged it, and D2 records the
-manifest example that teaches it. An explicit spelling already exists and says
-what it does: `breakpoint(only, medium)`.
-
-**Fix.** Do not reinterpret one argument as `min`: that would silently change every
-existing call. Instead:
-
-- **2.2.0:** a `@warn` on the one-argument form, pointing to `only`. Update the
-  manifest examples first, or G1 fails them.
-- **3.0.0:** the one-argument form raises, with the same pointer.
-
-**Changes existing output?** Not in 2.2.0, which only warns. In 3.0.0 such a call
-raises instead of emitting CSS.
-
-**Touches.** `scss/library/_breakpoint.scss`, `scss/library/_remove.scss`,
-`scss/library/_container-query.scss`; the first test in
-`test/library/remove.spec.scss`; the manifest examples; the documentation pages.
-
-**Status.** The 2.2.0 half is implemented, for all three members. Each
-one-argument call still emits the same query and now prints a `@warn` naming
-the `only` and `min` spellings and 3.0.0. `remove` calls `breakpoint(only, …)`
-inside, which compiles to the same query, so its warning names `remove` and is
-printed once. A call with var() still raises its error with no warning before it.
-
-`meta/` gained a `warns` list, checked by a new "Manifest warnings" block in
-`test/manifest.spec.js`: the call must print a `@warn`, its CSS is snapshotted,
-and the `gls-` name must give the same CSS and the same warnings. The one-argument
-`breakpoint` example became `only`, whose snapshot is identical to the one it
-replaced; `remove` and `container-query` gained an `only` example. The smoke file
-and the first `remove` spec use `only` too, so the suite prints no warning.
-
-788 calls across the three members, both names, at the root and nested, compile
-to identical CSS before and after. 112 of them are one-argument calls that
-compile, and each prints exactly one warning; no other call prints one. The
-audit's SILENT, UNHELPFUL and BROKEN buckets stay empty. Its WARNED ONLY bucket
-went from 0 to 6 per member: nonsense values such as `breakpoint(true)`, which
-compiled to `(width: true)` without a word before and now at least warn. The
-3.0.0 half refuses them.
-
-### B3. `columnizer` on `gap`, without margins or universal `box-sizing`
-
-**Problem.** Every trial hit this member in some way:
-
-- It sets `box-sizing` on every descendant, `.g *`, not only on the columns, and
-  repeats that block in each breakpoint where it is called. (T1 T2 T3)
-- Its gutters are margins, so combined with `gap` the columns overflow. T1 and T2
-  both added `gap: 0` before calling it. (T1 T2)
-- The margin is `margin-right`, which sits on the outer edge in right-to-left.
-  (T3)
-- The last row carries a bottom margin, and `display: flex` is repeated in every
-  call. (T2)
-
-**Example.** `@include columnizer(2, 32px)` inside a breakpoint emits:
-
-```css
-.f { display: flex; flex-wrap: wrap; }
-.f, .f::before, .f::after,
-.f *, .f *::before, .f *::after { box-sizing: border-box; }
-.f > * {
-  flex-grow: 0;
-  flex-shrink: 0;
-  flex-basis: calc((100% - (2 - 1) * 32px) / 2);
-  margin-bottom: 32px;
-}
-.f > *:not(:last-child) { margin-right: 32px; }
-.f > *:nth-child(2n) { margin-right: 0; }
-```
-
-**Fix.** `gap` does what the margins and the `:nth-child` reset were imitating,
-has no side, and adds nothing below the last row:
-
-```css
-.f { display: flex; flex-wrap: wrap; gap: 32px; }
-.f > * {
-  box-sizing: border-box;
-  flex: 0 0 calc((100% - (2 - 1) * 32px) / 2);
-}
-```
-
-With the fill flag, `flex-grow` becomes 1. A mobile-first chain of calls then
-overrides only `gap` and `flex-basis`.
-
-**Why stay on flexbox.** Grid would be shorter, but the fill flag, which lets the
-last row stretch, is a flexbox behaviour.
-
-**Changes existing output?** Substantially. The descendants of the container lose
-`box-sizing: border-box`, and the columns lose their margins.
-
-**Touches.** `scss/library/_columnizer.scss`; all three tests in
-`test/library/columnizer.spec.scss`; the manifest snapshot; the documentation
-page; `MIGRATION.md`, which has to name both losses.
-
-**Measured** in Chrome 152, three columns with a 30px gutter in a 300px box.
-Today, under `dir="rtl"` the first row ends 30px short of the right edge,
-because `margin-right` sits on the outer side, and two rows of 20px make a box
-100px tall because the last row keeps its bottom margin. The `gap` version is
-flush in both directions and 70px tall.
-
-**Verify.** Render the fill flag and a 1, 2, 3 column chain when implementing.
-
-### B4. `hide("unhide")` leaves `position` alone
-
-**Problem.** Revealing a hidden element on focus, the skip-link pattern, is what
-`unhide` is for. It writes `position: static`, which drops the revealed link into
-the page flow and pushes the content down. T2 and T3 both wrote `position: fixed`
-again after the call.
-
-**Fix.** Remove `position: static` from `unhide`; the caller decides the position.
-In the same change, drop the deprecated `clip` from the hidden state, since
-`clip-path` beside it already does the work. T3 called it harmless dead weight.
-
-**Changes existing output?** Yes, a declaration disappears from each state.
-
-**Touches.** `scss/library/_hide.scss`; `meta/hide.json`; the documentation page.
-
-### B5. `before` and `after` emit `content: ""` by default
-
-**Problem.** Called with no argument, the mixins emit no `content`, so the
-pseudo-element does not render. T1 did this four times in one session. It is
-deliberate, and it is stated only in an error message, which a caller sees only
-after passing something invalid. T2 and T3 avoided it by writing `content: ""`
-themselves.
-
-**Example.**
-
-```scss
-.a { @include after { color: red; } }   // renders nothing
-.b { @include after("") { color: red; } } // renders
-```
-
-**Fix.** Make `""` the default. Keep `null` as the way to say "I write the
-content myself".
-
-**Changes existing output?** Yes. A call with no argument starts rendering a
-pseudo-element. A project that relied on the empty default, for instance styling
-a `::after` that another rule gives its content, may see that content overridden,
-depending on source order.
-
-**Touches.** `scss/library/_before.scss`, `scss/library/_after.scss`;
-`test/library/after.spec.scss`, whose two tests pass arguments and are unaffected
-(add one for the default); `meta/before.json` and `meta/after.json`.
-
-### B6. `font-face` defaults to `woff2`
-
-**Problem.** The default formats are `eot woff2 woff ttf svg`, so a call that names
-no formats emits five sources, two of them for formats no current browser loads. A
-bundler that resolves every `url()` fails when only the `.woff2` exists; T3 hit
-that with Parcel.
-
-**Fix.** Default to `woff2`.
-
-**Changes existing output?** Yes. A call relying on the default loses the other
-sources, including the separate `src` line for EOT.
-
-**Touches.** `scss/library/_font-face.scss`; `meta/font-face.json`; the
-documentation page.
-
-**Verify.** T3's Parcel failure is reproduced: with only `inter.woff2` on disk,
-Parcel 2.16.4 fails to resolve `./fonts/inter.eot` from the default formats, and
-builds with `$file-formats: woff2`. See D3.
-
-### B7. `all-text-inputs` stops matching `[type='color']`
-
-**Problem.** The list includes `[type='color']`, which should not get text-input
-styling, and omits `select`, which T3 notes almost always wants it.
-
-**Fix.** Remove `[type='color']`. Do not quietly add `select`, which is not a text
-input: a separate list, or a documented pairing, is clearer. That decision is
-open.
-
-**Changes existing output?** Yes, the selector list shrinks. `$list-of-text-inputs`
-is `!default`, so a project that wants the old list can restore it.
-
-**Touches.** `scss/lists/_list-of-text-inputs.scss`; `meta/all-text-inputs.json`;
-`MIGRATION.md`.
-
-### B8. `aspect-ratio` holds on images with `width` and `height` attributes
-
-**Problem.** Writing `width` and `height` on an `<img>` is the standard advice
-for avoiding layout shift. The `height` attribute becomes a definite CSS height,
-and with both dimensions definite the browser ignores `aspect-ratio`. The mixin
-sets `width: 100%` and leaves the height alone, so the image renders at its
-attribute height. This is the member's main promise, broken in the common case.
-
-`CLAUDE.md` records three measurements behind the 2.0.0 design of this mixin. All
-three used images without the attributes, so this case was never seen.
-
-**Example.** `@include aspect-ratio("4:3")`, a 1600×900 source, a 300px
-container, Chrome 152:
-
-| Markup | Rendered |
-|---|---|
-| `<img class="photo" width="1600" height="900">` | **300 × 900** |
-| `<img class="photo">` | 300 × 225 |
-| with the attributes, plus `height: auto` | 300 × 225 |
-
-**Fix.** Emit `height: auto` beside `width: 100%`:
-
-```scss
-display: block;
-width: 100%;
-height: auto;
-aspect-ratio: validateRatio($ratio);
-border: 0;
-```
-
-and add it to the source comment as the fourth measured gap.
-
-**Changes existing output?** Yes, and validation is why this moved from 2.1.1.
-Every call gains a declaration, and it does not only fix images. A height written
-before the include in the same rule, or in an earlier rule, is now overridden: a
-`<div>` with `height: 400px` and the mixin rendered 300 × 400 and renders
-300 × 225 with the fix, measured in Chrome 152. A height written after the
-include still wins.
-
-The same measurement found the fix helps more than images. An
-`<iframe width="560" height="315">`, which is what a YouTube embed code writes,
-renders 300 × 315 today and 300 × 225 with `height: auto`.
-
-**Until then.** A G3 caveat and a line on the documentation page: on an element
-with a `height` attribute, write `height: auto` after the include.
-
-**Touches.** `scss/library/_aspect-ratio.scss`; `test/library/aspect-ratio.spec.scss`
-(all four tests' expected blocks); the manifest snapshots; `MIGRATION.md`;
-`site/content/docs/aspect-ratio.mdx`; the 2.0.0 measurement table in `CLAUDE.md`.
-
-**Verify.** Re-measured in Chrome 152 during validation, together with the two
-cases above. Firefox and Safari not tried.
-
-### B9. `counter` numbers correctly inside container queries
-
-**Status.** Superseded by `todos/counter-modernisation.md`, measured on
-14 September 2026. The fix below holds for containers on the items, but the
-measurement never tried `counter-continue` or a container on the list wrapper,
-where nothing but an explicit start number continues the count. The maintainer
-asked to test and evaluate a class-free redesign before planning it.
-
-**Problem.** `container-type: inline-size` applies style containment, which scopes
-counters to the container's subtree. The mixin increments on
-`.counter-item::before`, which is inside that subtree, so when the items are
-containers each one starts a counter of its own. T2 gave up its container
-queries to keep the numbers.
-
-**Example.** Measured in Chromium, three numbered items:
-
-| Setup | Numbers |
-|---|---|
-| no container | 01 02 03 |
-| container on each item, increment on `::before` (today) | 01 01 01 |
-| container on the list | 01 01 01 |
-| reset on the container element itself | 01 01 01 |
-| container on each item, increment on the item itself | **01 02 03** |
-
-**Fix.** Move `counter-increment` from the pseudo-element to the item. The
-`content` stays on `::before`, where the reader's `@content` also goes.
-
-Today:
-
-```scss
-&.counter-start .counter-item::before,
-&.counter-continue .counter-item::before {
-  content: counter(glsCounter);
-  counter-increment: glsCounter;
-  @content;
-}
-```
-
-After:
-
-```scss
-&.counter-start .counter-item,
-&.counter-continue .counter-item {
-  counter-increment: glsCounter;
-}
-&.counter-start .counter-item::before,
-&.counter-continue .counter-item::before {
-  content: counter(glsCounter);
-  @content;
-}
-```
-
-**Changes existing output?** Yes, which is why this moved from 2.1.1. A plain list
-numbers as before. But skipping an item by setting its `::before` to
-`content: none` stops working. Measured in Chrome 152, three items with the
-middle one suppressed read `01, 02` today and `01, 03` with the fix: a
-pseudo-element with no content does not increment, and the item always does.
-That is an old and ordinary way to leave a row unnumbered.
-
-**Until then.** A G3 caveat naming the failure. Putting the container on an
-element inside the item should avoid it, since the counter then sits outside
-the contained subtree, but that has not been measured.
-
-**Touches.** `scss/library/_counter.scss`; the manifest snapshot; a new
-`test/library/counter.spec.scss`, since `counter` has no spec today; `MIGRATION.md`.
-
-**Verify.** The table and the skipped item were re-measured in Chromium during
-validation. Firefox and Safari have not been tried.
-
 ---
 
 ## Needs research before it becomes an item
@@ -1920,12 +1557,22 @@ validation. Firefox and Safari have not been tried.
 - **2.1.1:** a `CHANGELOG.md` entry that names the calls F3, F4, F9 and F10 turn
   from broken CSS into errors, and the `background-dots` signature change in F9; the full `/release` checklist, including `node tools/check-archive.js`
   and `node tools/check-links.js`; the wiki page.
-- **2.2.0:** the `@warn` from B2; the new members through `/new-mixin`.
-- **3.0.0:** a `MIGRATION.md` section per B item, B8 and B9 included, with CSS before and after. Before
-  publishing, run one trial prompt against a prerelease to see what an agent trips
-  on with the new behaviour.
+- **2.2.0:** the `@warn` on one-argument breakpoints; the new members through `/new-mixin`.
+- **3.0.0:** nothing is left here. Every B item moved to its own file in `todos/`
+  on 15 September 2026, to be examined and tested one at a time, and each still
+  needs a `MIGRATION.md` section with CSS before and after when it is planned.
+  Before publishing a major version, run one trial prompt against a prerelease to
+  see what an agent trips on with the new behaviour.
 
 ## Validation
+
+The B items named in this section and the next have since left this file, on
+15 September 2026: B1 to `todos/breakpoint-boundaries.md`, B3 to
+`todos/columnizer-gap.md`, B4 to `todos/hide-unhide-position.md`, B5 to
+`todos/before-after-default-content.md`, B6 to `todos/font-face-woff2-default.md`,
+B7 to `todos/all-text-inputs-list.md`, B8 to `todos/aspect-ratio-height-auto.md`
+and B9 to `todos/counter-modernisation.md`. B2 was dropped: the one-argument
+breakpoint keeps its 2.2.0 warning and is not refused.
 
 Every claim above was checked again the same day, because a plan acted on without
 checking can leave the library worse than it found it. Three methods:
@@ -1976,9 +1623,9 @@ What validation changed, each written into its item:
   Firefox or Safari.
 - Prototyped: the 2.1.1 fixes, B8, B9 and A5. A1 and A2 were rendered as
   hand-written CSS, not built as Sass. Not prototyped: G1 to G4, A3, A4, N1 to N3
-  as members, and B1 to B7.
-- Not measured: the boundary overlap in B1, which follows from the definitions of
-  `min-width` and `max-width`; forced-colours behaviour for N1.
+  as members, and B3 to B7, now in their own files in `todos/`. B1 moved to
+  `todos/breakpoint-boundaries.md`, where it was later prototyped and measured.
+- Not measured: forced-colours behaviour for N1.
 - Not reproduced: the VoiceOver claim. The Parcel claims behind D3 and B6 were
   reproduced later, under D3.
 - A prototype is not the implementation. It shows each approach holds; the real
