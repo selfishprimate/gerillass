@@ -17,7 +17,7 @@
   "all-text-inputs": {
     "title": "All Text Inputs",
     "description": "The All Text Inputs Sass mixin helps you target all the text-based HTML input elements in the DOM, so you can easily apply your style rules.",
-    "scss": "@use \"gerillass\" as *;\n\n.element {\n  @include all-text-inputs(required) {\n    background-color: orange;\n    color: white;\n  };\n}\n"
+    "scss": "@use \"gerillass\" as *;\n\n.element {\n  @include all-text-inputs(user-invalid) {\n    border-color: crimson;\n    background-color: #fff5f5;\n  };\n}\n"
   },
   "antialias": {
     "title": "Antialias",
@@ -154,6 +154,11 @@
     "description": "Fade a page element in as the page loads with the Loadify Sass mixin, which also gives images a smooth loading effect of their own.",
     "scss": "@use \"gerillass\" as *;\n\n@include loadify(init);\n\n.parent-element {\n  .item {\n    @include only(1) {\n      @include loadify(0.2s, 0.6s);\n    }\n    @include only(2) {\n      @include loadify(0.4s, 0.6s);\n    }\n    @include only(3) {\n      @include loadify(0.6s, 0.6s);\n    }\n  }\n}\n"
   },
+  "motion-safe": {
+    "title": "Motion Safe",
+    "description": "Make animation opt-in with the Motion Safe Sass mixin: it applies motion only for users who have not asked their system for less, through prefers-reduced-motion.",
+    "scss": "@use \"gerillass\" as *;\n\n@keyframes fade-in {\n  from { opacity: 0; transform: translateY(6px); }\n}\n\n@include motion-safe {\n  .badge {\n    animation: fade-in 0.6s ease both;\n  }\n}\n"
+  },
   "only": {
     "title": "Only",
     "description": "Target an element by its position among siblings of the same tag with the Only Sass mixin, which writes :first-of-type, :last-of-type and :nth-of-type.",
@@ -263,6 +268,11 @@
     "title": "Text Stroke",
     "description": "The Text Stroke Sass mixin helps you add a stroke to a text element and style it very easily.",
     "scss": "@use \"gerillass\" as *;\n\n.element {\n  @include text-stroke(\n    $color: azure,\n    $stroke-color: cadetblue,\n    $fallback-color: cadetblue,\n    $stroke-width: 1px\n  );\n}\n"
+  },
+  "tokens": {
+    "title": "Tokens",
+    "description": "Write a Sass map out as CSS custom properties with the Tokens Sass mixin: a prefix, null values left out, quoted strings kept, and names a browser would drop refused.",
+    "scss": "@use \"gerillass\" as *;\n\n:root {\n  @include tokens((1: 0.25rem, 2: 0.5rem, 3: 0.75rem, 4: 1rem), space);\n  @include tokens((md: 8px, lg: 12px, full: 9999px), radius);\n  @include tokens((sans: (\"Inter\", system-ui, sans-serif)), font);\n  @include tokens((sm: 0.875rem, lg: 1.125rem), text);\n  @include tokens((md: 0 4px 12px rgba(24, 24, 27, 0.08)), shadow);\n}\n\n.card {\n  display: grid;\n  gap: var(--space-2);\n  padding: var(--space-4);\n  border-radius: var(--radius-lg);\n  font-family: var(--font-sans);\n  font-size: var(--text-sm);\n  box-shadow: var(--shadow-md);\n}\n\n.card .title {\n  font-size: var(--text-lg);\n}\n\n.card .pill {\n  justify-self: start;\n  padding: var(--space-1) var(--space-3);\n  border-radius: var(--radius-full);\n}\n"
   },
   "triangle": {
     "title": "Triangle",
