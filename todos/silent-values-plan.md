@@ -288,6 +288,46 @@ library's message instead of Sass's.
 **Touches.** `scss/library/_only.scss`, `_except.scss`; `rejects` in both
 `meta/` files; both documentation pages.
 
+**Status.** Done, not released.
+
+*Measured first*, in Chrome 152, 68 selectors and the matching of eleven on
+six siblings. `:nth-of-type()` with any unit (`10deg`, `10px`, `10%`), a
+fraction (`1.5`, `0.5`), `1e3` written as such, a word or `var()` is an invalid
+selector and the rule is dropped; in a selector list one of them drops the
+rest, so `only(1, 10deg)` styled nothing. A whole number was kept, negative,
+`+3` and `99999` included. `:nth-of-type(0)` is valid and matched none of the
+six, and `:not(:nth-of-type(0))` all six. So `0` is refused too: `only(0)`
+selects nothing and `except(0)` excludes nothing, the same test S1 applied to a
+condition that never matches.
+
+*The design.* The check is shared from `scss/internal/_sibling-index.scss`,
+which returns what is wrong or null. With one argument only a number is
+checked, so `first`, `odd`, `.foo` and a suffix such as `"-active"` keep their
+meaning. With several, every item must be a position, and a word now gets the
+library's message instead of Sass's `Undefined operation "min < 0"`, which the
+audit never saw because it probes a variadic mixin with one value. The
+selectors are written by the same code as before.
+
+*Found and left alone.* A bare word on its own is appended to the selector:
+`only(huge)` writes `.probehuge` and `except(huge)` writes `:not(huge)`. Both
+are valid selectors, and the first is how a suffix is passed, so it is not a
+value a browser drops. `var()` fails with Sass's own `expected selector`, and
+an unquoted `.foo` with `Expected digit`, both before the mixin can see the
+value.
+
+*Verified.* The 24 new rejects (12, bare and prefixed) failed before and pass
+after; new specs for both mixins passed before and after. `npm test` 741
+passed. The compile matrix against S1: 7336 calls identical, 42 from CSS to an
+error, 50 with a new message, and none from an error to CSS, with changed CSS or
+with changed warnings. The 50 are all several-argument calls that failed with
+Sass's `Undefined operation` and now fail with the library's message, 25 in
+each mixin. The old CSS of the 42 was tested in Chrome 152: 40 selectors were
+invalid and dropped, and the other two were `:nth-of-type(0)` and
+`:not(:nth-of-type(0))`, which match nothing and exclude nothing. The audit's
+PASSED THROUGH fell from 469 to 465, its other buckets unchanged. Both
+documentation pages list the refusals, with messages copied from a compile,
+and the site builds.
+
 ---
 
 ## S3. Keywords

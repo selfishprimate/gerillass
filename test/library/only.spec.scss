@@ -1,0 +1,45 @@
+// only refuses a position the browser drops or that matches nothing: a unit, a
+// fraction, or 0. These must keep compiling to the same selectors, each
+// measured in Chrome 152 as one the browser keeps: a whole number, a negative
+// one counted from the end, a large one, a keyword, and a selector or suffix
+// passed as a string.
+@use 'true' as *;
+@use '../../scss/gerillass' as *;
+
+@include describe('only()') {
+  @include it('Counts a negative position from the end.') {
+    @include assert {
+      @include output { .a { @include only(-3) { color: red; } } }
+      @include expect { .a:nth-last-of-type(3) { color: red; } }
+    }
+  }
+
+  @include it('Joins several positions into a selector list.') {
+    @include assert {
+      @include output { .a { @include only(1, -2) { color: red; } } }
+      @include expect { .a:nth-of-type(1), .a:nth-last-of-type(2) { color: red; } }
+    }
+  }
+
+  @include it('Accepts a large position.') {
+    @include assert {
+      @include output { .a { @include only(99999) { color: red; } } }
+      @include expect { .a:nth-of-type(99999) { color: red; } }
+    }
+  }
+
+  @include it('Keeps keywords, selectors and suffixes as they were.') {
+    @include assert {
+      @include output {
+        .a { @include only(odd) { color: red; } }
+        .b { @include only(".foo") { color: red; } }
+        .c { @include only("-active") { color: red; } }
+      }
+      @include expect {
+        .a:nth-of-type(odd) { color: red; }
+        .b.foo { color: red; }
+        .c-active { color: red; }
+      }
+    }
+  }
+}

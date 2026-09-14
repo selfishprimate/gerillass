@@ -1,0 +1,43 @@
+@charset "UTF-8";
+
+@use "sass:math";
+@use "sass:meta";
+
+// Shared by the mixins and not public API; see _is-css-function.scss.
+
+// Returns what is wrong with $value as a sibling position for `only` or
+// `except`, or null when it is a whole number other than 0. Measured in Chrome
+// 152 on six siblings:
+//
+// - a number with any unit or a fraction, `:nth-of-type(10deg)`,
+//   `:nth-of-type(10px)`, `:nth-of-type(1.5)`, is an invalid selector, and the
+//   browser drops the whole rule. In a selector list that takes every other
+//   selector with it: `.a:nth-of-type(1), .a:nth-of-type(10deg)` was dropped.
+// - `:nth-of-type(0)` is valid and matched none of the six, and
+//   `:not(:nth-of-type(0))` matched all six, since positions count from 1.
+// - a negative number, `+3` and `99999` were kept; `only` and `except` turn a
+//   negative position into :nth-last-of-type.
+//
+// $several is true when the value is one of several arguments, where only
+// positions are taken; alone, a word is a keyword or a selector.
+@function siblingIndexProblem($value, $mixin, $several: false) {
+  @if meta.type-of($value) != "number" {
+    @if $several {
+      @return "several arguments are all positions, whole numbers such as `1` or `-2`. Pass a keyword such as `first`, or a selector such as `.foo`, on its own";
+    }
+    @return null;
+  }
+  @if not math.is-unitless($value) {
+    @return "a position is a whole number without a unit, and `:nth-of-type(#{math.abs($value)})` is an invalid selector, so the browser would drop the rule. Pass a number such as `2`, or `-2` to count from the end";
+  }
+  @if math.round($value) != $value {
+    @return "a position is a whole number, and `:nth-of-type(#{math.abs($value)})` is an invalid selector, so the browser would drop the rule. Pass a number such as `2`, or `-2` to count from the end";
+  }
+  @if $value == 0 {
+    @if $mixin == "except" {
+      @return "positions count from 1, so `:not(:nth-of-type(0))` excludes nothing. Pass `1` for the first, or `-1` for the last";
+    }
+    @return "positions count from 1, so `:nth-of-type(0)` matches nothing. Pass `1` for the first, or `-1` for the last";
+  }
+  @return null;
+}

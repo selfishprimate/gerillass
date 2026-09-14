@@ -1,0 +1,40 @@
+// except refuses a position the browser drops or that excludes nothing: a
+// unit, a fraction, or 0. These must keep compiling to the same selectors,
+// each measured in Chrome 152 as one the browser keeps.
+@use 'true' as *;
+@use '../../scss/gerillass' as *;
+
+@include describe('except()') {
+  @include it('Excludes one position.') {
+    @include assert {
+      @include output { .a { @include except(3) { color: red; } } }
+      @include expect { .a:not(:nth-of-type(3)) { color: red; } }
+    }
+  }
+
+  @include it('Chains several positions, counting negative ones from the end.') {
+    @include assert {
+      @include output {
+        .a { @include except(-2, -4) { color: red; } }
+        .b { @include except(1, -1) { color: red; } }
+      }
+      @include expect {
+        .a:not(:nth-last-of-type(2)):not(:nth-last-of-type(4)) { color: red; }
+        .b:not(:nth-of-type(1)):not(:nth-last-of-type(1)) { color: red; }
+      }
+    }
+  }
+
+  @include it('Keeps keywords and selectors as they were.') {
+    @include assert {
+      @include output {
+        .a { @include except(last) { color: red; } }
+        .b { @include except(".exclude") { color: red; } }
+      }
+      @include expect {
+        .a:not(:last-of-type) { color: red; }
+        .b:not(.exclude) { color: red; }
+      }
+    }
+  }
+}

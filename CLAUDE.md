@@ -9,7 +9,7 @@ Gerillass is a **pure Sass library** — a toolkit of mixins and functions, in t
 Two consequences follow from this and drive most decisions in the repo:
 
 1. **`package.json` must have no `dependencies`.** Everything (`jest`, `sass`, `sass-true`, `glob`) belongs in `devDependencies`. Consumers get only `.scss` files, so a runtime dependency here forces the entire test toolchain onto every downstream project. This was the cause of 24 Dependabot alerts fixed in v1.3.3 — do not reintroduce it.
-2. **Only `scss/` ships.** `.npmignore` excludes `test`, `assets`, `meta`, `tools`, dotfiles and `*.md`; npm always adds `README.md`, `LICENSE.md` and `package.json` back. Verify with `npm pack --dry-run` before any release (107 files / ~56 kB since `scss/internal/` was added).
+2. **Only `scss/` ships.** `.npmignore` excludes `test`, `assets`, `meta`, `tools`, dotfiles and `*.md`; npm always adds `README.md`, `LICENSE.md` and `package.json` back. Verify with `npm pack --dry-run` before any release (108 files / ~56 kB since `scss/internal/` was added).
 
 Dart Sass only. LibSass/node-sass has been unsupported since v1.3.0.
 
@@ -333,7 +333,7 @@ Four levels, and knowing which one covers a member tells you what you can trust:
 | `test/smoke.scss` | the mixin evaluates at all | 56/56 mixins |
 | snapshot of `meta/` examples | the output cannot change unnoticed | 79/79 members |
 | `meta/` rejects | bad input is refused with a real message | 58/79 |
-| sass-true spec in `test/` | the CSS is **correct** | 17/79 |
+| sass-true spec in `test/` | the CSS is **correct** | 19/79 |
 
 Only the last one catches an output that was wrong from the start; a snapshot
 records a wrong value as correct. Hand-written specs are therefore reserved for
@@ -343,7 +343,7 @@ members that compute something — `triangle`, `scissors`, `columnizer`,
 A spec has a second use once a member starts refusing values: it pins the
 values that must stay accepted. `breakpoint`, `screen-agent` and
 `validateBreakpoint` gained specs that way in S1 of
-`todos/silent-values-plan.md`, each listing forms measured as working in a
+`todos/silent-values-plan.md`, and `only` and `except` in S2, each listing forms measured as working in a
 browser, such as a quoted `"600px"` and `calc()`, so a check written too
 strictly fails the suite instead of breaking a stylesheet.
 
@@ -562,7 +562,10 @@ quoted length such as `breakpoint(min, "600px")` has always worked, because
 Sass writes it into the condition unquoted, so the check reads the string's
 content rather than refusing every string.
 
-S2 to S7 are open.
+S2 followed on the same branch: `only` and `except` refuse a position with a
+unit or a fraction, which makes a selector the browser drops, and `0`, which
+matches or excludes nothing, through `scss/internal/_sibling-index.scss`. S3 to
+S7 are open.
 
 ### What `fix-plan.md` sets out
 
@@ -610,9 +613,9 @@ Three pieces of work are open, and none is started:
 
 - **`todos/silent-values.md`**: 49 arguments in 28 mixins turn a value a
   browser drops into CSS. Planned in `todos/silent-values-plan.md`, with the
-  six decisions taken. S0 and S1 are done on the `silent-values-plan` branch,
-  unreleased; S2, the selectors in `only` and `except`, is next, and the plan
-  puts it in the same 2.3.1 release.
+  six decisions taken. S0, S1 and S2 are done on the `silent-values-plan`
+  branch, unreleased, which completes what the plan puts in 2.3.1; S3, the
+  keywords, opens 2.3.2.
 - **3.0.0**: the B items in `todos/fix-plan.md`, each with a `MIGRATION.md`
   section.
 - **`todos/design-tokens.md`**: a token layer on `tokens`, starting with the

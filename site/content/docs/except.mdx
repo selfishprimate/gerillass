@@ -23,7 +23,7 @@ You can pass a **string** value to target elements by their `id`, `class`, or `p
 
 <Arguments of="except" footnote="**Important:** Passing multiple arguments only works with numeric values, and the values must be separated by commas.">
   <Argument name="$params…" type="string">The pseudo-class, class, or id selector. Accepts <code>first</code>, <code>last</code>, <code>odd</code>, <code>even</code>, and class or id selectors.</Argument>
-  <Argument name="$params…" type="number">The index number of the element in the list. You can also make multiple selections.</Argument>
+  <Argument name="$params…" type="number">The index number of the element in the list, a whole number counted from 1, or from the end when negative. You can also make multiple selections. A number with a unit, a fraction and <code>0</code> are refused.</Argument>
 </Arguments>
 
 ## Examples
@@ -272,6 +272,34 @@ When you pass arguments for the `id` or `class` attributes of the items, don't f
 </div>
 ```
 </Example>
+
+## What it refuses
+
+A position has to be a whole number. Until 2.3.1 anything numeric went into the selector as it was, and measured in Chrome 152, `:not(:nth-of-type(1.5))` is an invalid selector, so the browser drops the whole rule and nothing is styled.
+
+```scss
+.list-item {
+  @include except(1.5) {
+    color: red;
+  }
+}
+```
+```text
+Error: `1.5` is not a valid position for `except`: a position is a whole number, and `:nth-of-type(1.5)` is an invalid selector, so the browser would drop the rule. Pass a number such as `2`, or `-2` to count from the end.
+```
+
+`0` is valid CSS but excludes nothing, because positions count from 1.
+
+```scss
+.list-item {
+  @include except(0) {
+    color: red;
+  }
+}
+```
+```text
+Error: `0` is not a valid position for `except`: positions count from 1, so `:not(:nth-of-type(0))` excludes nothing. Pass `1` for the first, or `-1` for the last.
+```
 
 ## Related Links
 
