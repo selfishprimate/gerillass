@@ -1,4 +1,3 @@
-import { StrictMode } from "react";
 import { hydrateRoot, createRoot } from "react-dom/client";
 import { createBrowserRouter, matchRoutes, RouterProvider } from "react-router-dom";
 
@@ -91,11 +90,18 @@ async function start() {
   await resolveRoute();
 
   router = createBrowserRouter(routes);
-  const app = (
-    <StrictMode>
-      <RouterProvider router={router} />
-    </StrictMode>
-  );
+  /*
+    No StrictMode. In development it mounts every component, unmounts it and
+    mounts it again, and react-codemirror2 does not take its first editor out
+    of the page on that unmount. The playground ended up with two editors
+    stacked in each box: measured on the dev server, four CodeMirror instances
+    where the page has two, and typing into the visible source editor changed
+    the hidden copy below it instead, so the playground could not be typed in
+    at all. A production build never double mounts, and there the same page had
+    two editors and took typing, which is why only localhost showed it. The
+    server render in entry-server.jsx never used StrictMode either.
+  */
+  const app = <RouterProvider router={router} />;
 
   const container = document.getElementById("root");
 

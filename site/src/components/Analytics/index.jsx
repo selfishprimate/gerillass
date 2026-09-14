@@ -52,7 +52,9 @@ function Analytics() {
       StrictMode runs an effect twice on mount in development, so the first
       page of every local session was reported twice and localhost data goes
       into the same property as everything else. Remembering the last path
-      reported drops the repeat.
+      reported drops the repeat. StrictMode is off since the playground's
+      editors broke under it (see src/index.jsx); the guard stays, because it
+      costs nothing and turning StrictMode back on would bring the repeat back.
 
       It cannot swallow a real one: the effect only runs again when the path
       changes, and arriving back at a page after visiting another sets this to
