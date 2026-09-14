@@ -1244,6 +1244,16 @@ exports[`Manifest examples position: .a { @include position(absolute, 0); } 1`] 
 }"
 `;
 
+exports[`Manifest examples position: .a { @include position(absolute, 0, $logical: null); } 1`] = `
+".a {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}"
+`;
+
 exports[`Manifest examples position: .a { @include position(absolute, null 16px 16px 16px); } 1`] = `
 ".a {
   position: absolute;
@@ -1260,6 +1270,16 @@ exports[`Manifest examples position: .a { @include position(fixed, 0 10px); } 1`
   right: 10px;
   bottom: 0;
   left: 10px;
+}"
+`;
+
+exports[`Manifest examples position: .badge { @include position(absolute, 0 auto auto 1rem, $logical: true) 1`] = `
+".badge {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-end: auto;
+  inset-block-end: auto;
+  inset-inline-start: 1rem;
 }"
 `;
 

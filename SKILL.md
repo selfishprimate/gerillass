@@ -92,6 +92,7 @@ a dropped declaration rather than an error.
 | `loadify` | `@include loadify(nonsense);` |
 | `motion-safe` | `.card { @include motion-safe; }` |
 | `only` | `.a { @include only(#ff0000) { margin: 0; } }` |
+| `position` | `.badge { @include position(absolute, 0, $logical: yes); }` |
 | `radial-gradient` | `.a { @include radial-gradient(42, "center", (red, blue)); }` |
 | `remove` | `.a { @include remove(a, b, c); }` |
 | `reset-css` | `.a { @include reset-css; }` |
@@ -190,7 +191,7 @@ a dropped declaration rather than an error.
 | `only($params...)` | Selects only the siblings named. |
 | `placeholder-shown` | Styles an input while its placeholder is visible. |
 | `placeholder` | Styles the placeholder text of an input across vendor prefixes. |
-| `position($position: absolute, $offsets: 0)` | Sets position and offsets in one call, using shorthand order. |
+| `position($position: absolute, $offsets: 0, $logical: false)` | Sets position and offsets in one call, using shorthand order. |
 | `radial-gradient($shape, $position, $colors)` | Radial gradient background from a shape and a position. |
 | `remove($params...)` | Hides an element outright, or within a media query: from a breakpoint up with min, up to it with max, or between two breakpoints. One breakpoint on its own hides the element at exactly that width, a single pixel, and prints a warning: pass only for that. |
 | `reset-css` | Meyer reset. Must be called at the root of the stylesheet. |

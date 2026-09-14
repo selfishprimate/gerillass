@@ -117,4 +117,63 @@
       }
     }
   }
+
+  // Measured in Chrome 152: with dir="ltr" each logical offset put the box
+  // where its physical twin did, and with dir="rtl" where the mirrored twin
+  // did, while a physical left stayed on the left. The shorthand order stays
+  // top, right, bottom, left, so each position maps to its logical twin.
+  @include it('With $logical, four offsets map to their logical twins in shorthand order.') {
+    @include assert {
+      @include output {
+        .badge {
+          @include position(absolute, 0 auto auto 1rem, $logical: true);
+        }
+      }
+      @include expect {
+        .badge {
+          position: absolute;
+          inset-block-start: 0;
+          inset-inline-end: auto;
+          inset-block-end: auto;
+          inset-inline-start: 1rem;
+        }
+      }
+    }
+  }
+
+  @include it('With $logical, a null offset leaves that logical edge out.') {
+    @include assert {
+      @include output {
+        .panel {
+          @include position(fixed, null 16px 16px null, $logical: true);
+        }
+      }
+      @include expect {
+        .panel {
+          position: fixed;
+          inset-inline-end: 16px;
+          inset-block-end: 16px;
+        }
+      }
+    }
+  }
+
+  @include it('With $logical, one offset applies to all four logical edges.') {
+    @include assert {
+      @include output {
+        .overlay {
+          @include position(absolute, 0, $logical: true);
+        }
+      }
+      @include expect {
+        .overlay {
+          position: absolute;
+          inset-block-start: 0;
+          inset-inline-end: 0;
+          inset-block-end: 0;
+          inset-inline-start: 0;
+        }
+      }
+    }
+  }
 }

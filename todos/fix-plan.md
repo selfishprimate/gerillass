@@ -1231,6 +1231,22 @@ maps to its logical twin:
 **Touches.** `scss/library/_position.scss`; `meta/position.json`;
 `test/library/position.spec.scss`.
 
+**Status.** Implemented after 2.2.1, at the maintainer's call: the value is not
+saved typing but consistency with `triangle` and `border-radius`, since a
+library that behaves the same way in every member is easier to learn. As
+sketched, a `$logical` argument, false by default, with each shorthand position
+mapped to its logical twin. `null` is read as false, as a null argument means
+not set elsewhere in the library; anything else raises. Measured in Chrome 152
+before writing it: under `dir="ltr"` `inset-block-start` and
+`inset-inline-start` put a box where `top` and `left` did, for one offset and
+for four, and under `dir="rtl"` where the mirrored physical offsets did, while
+a physical `left: 16px` stayed 16px from the left in both. Three sass-true
+specs and a reject went in first and failed. 484 existing calls, across seven
+positions, twenty offset shapes, both names and nesting, compile to the same
+CSS and the same warnings. The audit gains the `$logical` probes: `var()`,
+`currentColor` and `calc()` are refused, which is right for a switch, and
+`true` passes through.
+
 ### A4. `$font-display` for `font-face`
 
 **Problem.** Every modern `@font-face` wants a `font-display`, and the mixin has
