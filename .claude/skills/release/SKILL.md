@@ -190,6 +190,39 @@ maintainer to run this themselves:
 npm publish --otp=<code>
 ```
 
+## 6b. Publish to RubyGems
+
+The gem is the same release: `gerillass.gemspec` reads its version from
+`package.json`, so there is nothing to bump. It ships `scss/`, `gerillass.json`,
+`SKILL.md`, `lib/`, `LICENSE.md` and `README.md` and has no runtime
+dependencies. Run `npm run manifest` first, as for npm: the two agent files are
+committed build output and the gem takes them as they are.
+
+Build it outside the repository, so no `.gem` is left at the root, and check
+what is in it before pushing:
+
+```bash
+out="$(mktemp -d)"
+gem build gerillass.gemspec --output "$out/gerillass-X.Y.Z.gem"
+ruby -e 'require "rubygems/package"; s = Gem::Package.new(ARGV[0]).spec
+  puts s.version, s.runtime_dependencies.inspect, s.files.size,
+       s.files.reject { |f| f.start_with?("scss/") }' "$out/gerillass-X.Y.Z.gem"
+```
+
+Expect `X.Y.Z`, `[]`, one file per `scss/` partial plus seven, and those seven
+being `gerillass.json`, `SKILL.md`, `LICENSE.md`, `README.md` and the three
+files under `lib/`.
+
+The macOS system Ruby is too old for the integrations; use Homebrew's
+(`/opt/homebrew/opt/ruby/bin`). The gemspec is kept to ASCII on purpose: RubyGems
+reads it in the locale's encoding and a literal non-ASCII character fails to
+load. `rubygems_mfa_required` is set, so the push needs a one-time code, and
+signing in (`gem signin`) is the maintainer's to do. Tell them to run:
+
+```bash
+gem push "$out/gerillass-X.Y.Z.gem" --otp=<code>
+```
+
 ## 7. Verify what actually shipped
 
 npm reports "may take a few minutes to become available", so the registry lags

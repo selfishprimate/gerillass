@@ -133,7 +133,7 @@ Its **SILENT** and **UNHELPFUL ERROR** buckets should be empty. If your change p
 
 The repository is set up so that a coding agent can work here without guessing, and you are welcome to use one.
 
-**What ships for agents.** `gerillass.json` describes every member — signature, accepted values, examples, refusals — and `SKILL.md` is a written guide generated from it. Both are in the published package, so an agent working in *your* project can read them out of `node_modules/gerillass/`.
+**What ships for agents.** `gerillass.json` describes every member — signature, accepted values, examples, refusals — and `SKILL.md` is a written guide generated from it. Both are in the npm package and in the gem, so an agent working in *your* project can read them out of `node_modules/gerillass/`, or, in a Ruby project, out of the gem's folder, which `bundle info gerillass --path` prints.
 
 **What is here for contributors.** `.claude/` holds instructions for [Claude Code](https://claude.com/claude-code), which is what this setup was built and tested against. Other agents can read `CLAUDE.md` directly; it is plain Markdown and describes the architecture, the traps and the conventions.
 

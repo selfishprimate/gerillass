@@ -169,6 +169,7 @@ function build() {
       packageImporter: '@use "pkg:gerillass" as *;',
       bundler: '@use "gerillass" as *;',
       loadPath: '@use "gerillass" as *;  // with loadPaths: ["node_modules/gerillass/scss"]',
+      rubygems: '@use "gerillass" as *;  // the gerillass gem: Rails and Jekyll need no setup; plain Ruby passes Gerillass.load_path',
     },
     members,
   };

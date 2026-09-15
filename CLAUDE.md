@@ -4,12 +4,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this project is
 
-Gerillass is a **pure Sass library** — a toolkit of mixins and functions, in the spirit of Bourbon/Scut. There is no build step that produces CSS or JS: the `.scss` sources under `scss/` *are* the deliverable, and npm publishes them verbatim. Docs live at https://docs.gerillass.com; the site repo is separate.
+Gerillass is a **pure Sass library** — a toolkit of mixins and functions, in the spirit of Bourbon/Scut. There is no build step that produces CSS or JS: the `.scss` sources under `scss/` *are* the deliverable, and npm and RubyGems both publish them verbatim. Docs live at https://docs.gerillass.com; the site repo is separate.
 
 Two consequences follow from this and drive most decisions in the repo:
 
 1. **`package.json` must have no `dependencies`.** Everything (`jest`, `sass`, `sass-true`, `glob`) belongs in `devDependencies`. Consumers get only `.scss` files, so a runtime dependency here forces the entire test toolchain onto every downstream project. This was the cause of 24 Dependabot alerts fixed in v1.3.3 — do not reintroduce it.
 2. **Only `scss/` ships.** `.npmignore` excludes `test`, `assets`, `meta`, `tools`, dotfiles and `*.md`; npm always adds `README.md`, `LICENSE.md` and `package.json` back. Verify with `npm pack --dry-run` before any release (113 files / ~58 kB since `scss/internal/` was added).
+3. **The gem is the same library, not a port.** `gerillass.gemspec` ships `scss/`, `gerillass.json` and `SKILL.md`, plus `lib/`, `LICENSE.md` and `README.md`, reads its version from `package.json`, and has no runtime dependencies. `lib/` only tells Rails, Jekyll or a plain `sass-embedded` compile where `scss/` is. `.npmignore` keeps `lib`, the gemspec and `*.gem` out of the npm package. Keep the gemspec ASCII: RubyGems reads it in the locale's encoding, and a literal non-ASCII character fails to load.
 
 Dart Sass only. LibSass/node-sass has been unsupported since v1.3.0.
 
@@ -31,6 +32,19 @@ working after any change to `main`, `exports`, or the location of
 | `@use "gerillass"` | Vite resolves this through `exports`; webpack and Parcel through `main`. Parcel fails with "Can't find stylesheet to import" if the **project's own** `package.json` has a `main`, which it takes for a library target |
 | `@use "gerillass/scss/gerillass"` | subpath, needs the `"./*"` wildcard |
 | `loadPaths` / `includePaths` | filesystem-based, unaffected by `exports` — this is what the Gulp and Grunt recipes in the README use |
+
+The gem has routes of its own. Each was verified by compiling the same snippet
+in a throwaway project on Ruby 4.0.1, with the gem by local path, and diffing the
+CSS against Dart Sass's own output; all matched. Each Sass setup reads load
+paths from a different place, which is why `lib/gerillass/engine.rb` has three
+branches:
+
+| Route | Notes |
+|---|---|
+| Rails, `dartsass-rails` (Propshaft) | `--load-path` appended to `config.dartsass.build_options` after initialization, so an app assigning its own options keeps it. Not `config.assets.paths`: Propshaft copies everything on it into `public/assets`, which published all 109 sources, and its `excluded_paths` also removes the folder from the list dartsass-rails reads |
+| Rails, `dartsass-sprockets` | appended to `config.sass.load_paths`, which is read on every compile. Appending to `config.assets.paths` after initialization missed the environment sprockets-rails had already built |
+| Jekyll | `lib/gerillass/jekyll.rb` adds the folder to `sass.load_paths` in a `:site, :after_init` hook. Tested with the gem in the `:jekyll_plugins` group; `plugins:` in `_config.yml` was not |
+| plain Ruby | `Sass.compile(..., load_paths: [Gerillass.load_path])` with `sass-embedded` |
 
 **eyeglass metadata is inert.** The `eyeglass` block and the `eyeglass-module`
 keyword are still there, but eyeglass 3.0.3 (June 2022, unmaintained) is broken
@@ -443,7 +457,7 @@ The security fix only reaches users when the npm package is republished — upda
 2. Add a `CHANGELOG.md` entry at the top, using the existing `- **Security:** / **Added:** / **Updated:** / **Removed:** / **Fixed:**` bullet style.
 3. Commit, then `git tag -a vX.Y.Z -m "vX.Y.Z"` — tags are `vX.Y.Z`, no dot after `v`.
 4. Push branch and tag, then `gh release create vX.Y.Z --latest --notes-file ...`.
-5. `npm publish`. The account has 2FA enabled, so this needs `--otp=<code>` and must be run by the maintainer.
+5. `npm publish`. The account has 2FA enabled, so this needs `--otp=<code>` and must be run by the maintainer. Then the gem, built outside the repository and pushed by the maintainer with their own one-time code: `gem build gerillass.gemspec --output <dir>/gerillass-X.Y.Z.gem` and `gem push <that file> --otp=<code>`. `/release` step 6b has the checks to run on the built gem first.
 6. Update the site, which names the version in several places. The header badge
    and both download buttons follow `package.json` through `site/src/release.js`,
    but the download link is a 404 until the tag exists, so the site deploys after

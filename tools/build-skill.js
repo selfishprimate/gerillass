@@ -71,7 +71,17 @@ Anything else, by pointing a load path at \`node_modules/gerillass/scss\`:
 @use "gerillass" as *;
 \`\`\`
 
-Dart Sass only. LibSass and node-sass are not supported.
+In a Ruby project, from the \`gerillass\` gem. Rails with \`dartsass-rails\` or
+\`dartsass-sprockets\`, and Jekyll with the gem in its \`:jekyll_plugins\` group,
+need no configuration. Plain Ruby passes the folder to \`sass-embedded\` with
+\`load_paths: [Gerillass.load_path]\`. Then:
+
+\`\`\`scss
+${manifest.load.rubygems}
+\`\`\`
+
+Dart Sass only. LibSass and node-sass are not supported, which rules out
+\`sass-rails\` and \`sassc-rails\` in Ruby.
 
 ## Two names for every mixin
 
