@@ -67,6 +67,55 @@
     }
   }
 
+  /*
+    npm, Yarn or RubyGems, in the code block's bar where its label was. The
+    buttons keep the label's type, 10px capitals with wide tracking, so the bar
+    reads the same; the capitals come from CSS, and the markup keeps each name
+    as its project writes it, which is what a screen reader reads. The label's
+    0.45 opacity is lifted here and moved onto each button, so the chosen one
+    can be fully lit.
+  */
+  .code-block__label {
+    opacity: 1;
+  }
+
+  &__switch {
+    display: inline-flex;
+    gap: remify(2px);
+    padding: remify(2px);
+    border-radius: remify(7px);
+    background-color: rgba($secondary-color, 0.06);
+
+    button {
+      padding: remify(3px) remify(8px);
+      font: inherit;
+      line-height: 1.4;
+      letter-spacing: inherit;
+      text-transform: uppercase;
+      color: $secondary-color;
+      background: transparent;
+      border: 0;
+      border-radius: remify(6px);
+      cursor: pointer;
+      opacity: 0.45;
+      transition: $global-transition;
+
+      &:hover {
+        opacity: 0.8;
+      }
+
+      &[aria-pressed="true"] {
+        opacity: 1;
+        background-color: rgba($secondary-color, 0.14);
+      }
+
+      &:focus-visible {
+        outline: remify(2px) solid rgba($secondary-color, 0.6);
+        outline-offset: remify(1px);
+      }
+    }
+  }
+
   &__hint {
     margin: 0;
     font-size: remify(14px);
