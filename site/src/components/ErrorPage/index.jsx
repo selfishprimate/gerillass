@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
+import Announcement from "components/Announcement";
 import Header from "components/Header";
 import SiteFooter from "components/SiteFooter";
 import PageContent from "components/PageContent";
@@ -10,8 +11,9 @@ import "components/NotFound/not-found.scss";
 
 /*
   What renders when a page throws, in place of React Router's bare
-  "Unexpected Application Error". It is the 404's frame and layout, because a
-  page with no header reads as a broken site rather than a broken page.
+  "Unexpected Application Error". It is the 404's frame and layout, the
+  announcement band included, because a page with no header reads as a broken
+  site rather than a broken page.
 
   It sits on the root route, so it replaces the whole shell rather than the
   outlet inside it. A wrapper route without a path would have kept the shell,
@@ -48,6 +50,7 @@ function ErrorPage() {
 
   return (
     <HomeTemplate
+      top={<Announcement />}
       header={<Header />}
       content={
         <PageContent className="content not-found">
