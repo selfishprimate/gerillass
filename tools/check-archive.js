@@ -40,6 +40,10 @@ const EXPECTED = [
   "gerillass.json",
   "SKILL.md",
   "llms.txt",
+  // The RubyGems package: its spec, and the Ruby that tells Rails, Jekyll or
+  // a plain Sass compile where scss/ is.
+  "gerillass.gemspec",
+  "lib",
 
   // Documents a user or a contributor reads.
   "README.md",

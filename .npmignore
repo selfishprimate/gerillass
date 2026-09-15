@@ -7,6 +7,7 @@ assets
 gulpfile.js
 node_modules
 gerillass.gemspec
+*.gem
 meta
 tools
 !SKILL.md
