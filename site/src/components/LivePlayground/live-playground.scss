@@ -1,0 +1,201 @@
+@import "assets/scss/abstract";
+
+@keyframes live-playground-caret {
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes live-playground-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/*
+  The section that replaced "What they say?", on the same ground: the snow
+  colour with the large alabaster circles, carried across unchanged.
+*/
+.live-playground {
+  position: relative;
+  background-color: $secondary-color;
+  /*
+    $reach is cancelled by the negative margin, so it costs no height: it lets
+    the circles carry on under the footer instead of stopping at this section's
+    last line. 15rem is the circle's own radius. $gap is the real room between
+    the last line and the foot of the page.
+  */
+  $reach: 15rem;
+  $gap: 4rem;
+  padding: 8rem 2rem ($reach + $gap);
+  margin-bottom: -$reach;
+  @include background-dots(rgba($alabaster, 1), 15rem);
+  @include breakpoint(min, xlarge) {
+    padding-top: 12rem;
+    /*
+      The mixin derives both positions from $gutter with x and y equal. These
+      two have x and y apart, which no single $gutter produces, so the
+      placement is set here and the mixin keeps the rest.
+    */
+    @include background-dots(rgba($alabaster, 1), 20rem, 105rem);
+    background-position: 46rem 56rem, 200rem 225rem;
+  }
+
+  /*
+    The mascot opens the section, above the title. Its width and height
+    attributes reserve the room before the image arrives, so the lazy load
+    does not push the panes down.
+
+    It is pulled up past the section's own top padding and a few rem further,
+    so its top rests over the section above. Each margin is that padding plus
+    the overlap, which is why it changes where the padding does. z-index keeps
+    it over the ornament Examples hangs below itself at z-index 1.
+  */
+  &__figure {
+    position: relative;
+    z-index: 2;
+    width: 16rem;
+    max-width: 100%;
+    /* Less on a phone, where the section above ends in a line of text. */
+    margin: -10rem auto 2rem;
+    @include breakpoint(min, large) {
+      width: 22rem;
+      margin-top: -11rem;
+    }
+    @include breakpoint(min, xlarge) {
+      margin-top: -15rem;
+    }
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  /*
+    A fixed height rather than the full playground's whole screen: tall enough
+    for a demo to read without scrolling, short enough to stay a section.
+  */
+  /*
+    The panes sit outside .section__inner and line up with the header, which
+    is the width of .content. The section is stretched past that by 2, 3 or
+    4rem and padded back in by 2rem, so the margin left to take up is the
+    stretch minus the padding: 0, 1rem, 2rem.
+  */
+  &__panes {
+    display: grid;
+    grid-gap: $global-space;
+    margin: 0 0 remify(16px);
+    @include breakpoint(min, small) {
+      margin-right: 1rem;
+      margin-left: 1rem;
+    }
+    @include breakpoint(min, large) {
+      margin-right: 2rem;
+      margin-left: 2rem;
+    }
+    .playground__editor {
+      height: remify(360px);
+      /* Rounder than the full playground's 16px, which fills a screen. */
+      border-radius: remify(24px);
+    }
+    @include breakpoint(min, medium) {
+      grid-template-columns: 1fr 1fr;
+      grid-gap: $global-space * 1.5;
+      .playground__editor {
+        height: remify(440px);
+      }
+    }
+  }
+
+  /*
+    The site colours every hovered link $accent-color, and a primary button's
+    hover background is that same colour, so the label would vanish green on
+    green. The 404 page's buttons needed the same fix.
+  */
+  .section__cta__button:hover {
+    color: $secondary-color;
+  }
+
+  /*
+    Under the panes, set like the full playground's footer line: small and
+    quiet, since it answers a question rather than asking to be read. It takes
+    over the 3rem the panes used to leave above the button.
+  */
+  &__note {
+    margin: 0 0 3rem;
+    text-align: center;
+    font-size: remify(13px);
+    letter-spacing: normal;
+    opacity: 0.5;
+  }
+
+  /*
+    The typed code, drawn without an editor, so it restates the editor's
+    metrics: the mono face, 14px on 1.6, and a gutter of line numbers. The cm-*
+    colours come from playground.scss, which scopes them to .playground__editor.
+  */
+  &__code {
+    flex: 1 1 auto;
+    min-height: 0;
+    margin: 0;
+    padding: remify(18px) remify(24px) remify(24px) remify(8px);
+    overflow: hidden;
+    font-family: $tertiary-font-family;
+    font-size: remify(14px);
+    line-height: 1.6;
+    letter-spacing: normal;
+    white-space: pre-wrap;
+    color: $secondary-color;
+  }
+
+  &__line {
+    display: flex;
+    > span:last-child {
+      min-width: 0;
+    }
+  }
+
+  &__gutter {
+    flex: none;
+    width: remify(32px);
+    padding-right: remify(12px);
+    text-align: right;
+    color: rgba($secondary-color, 0.3);
+    user-select: none;
+  }
+
+  /*
+    The pretend compile: a ring in the cursor's lime, centred in the CSS pane
+    where the output is about to be. Only the Showcase draws it, and it does
+    not with reduced motion, so it needs no guard of its own.
+  */
+  &__loader {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
+  }
+
+  &__spinner {
+    width: remify(28px);
+    height: remify(28px);
+    border: remify(3px) solid rgba($secondary-color, 0.15);
+    border-top-color: $lime;
+    border-radius: 50%;
+    animation: live-playground-spin 0.8s linear infinite;
+  }
+
+  /* The editor's cursor colour, blinking the way a text field's does. */
+  &__caret {
+    display: inline-block;
+    width: remify(2px);
+    height: 1.2em;
+    margin-left: 1px;
+    vertical-align: text-bottom;
+    background-color: $lime;
+    animation: live-playground-caret 1s steps(1) infinite;
+  }
+
+}

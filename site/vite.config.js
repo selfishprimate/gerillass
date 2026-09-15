@@ -2,6 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import svgr from "vite-plugin-svgr";
 import sassExample from "./plugins/sass-example.js";
+import livePlaygroundDemos from "./plugins/live-playground-demos.js";
 import docsIndex from "./plugins/docs-index.js";
 import docsRedirects from "./plugins/docs-redirects.js";
 import mdx from "@mdx-js/rollup";
@@ -56,6 +57,7 @@ export default defineConfig({
     react({ include: /\.(jsx|js|mdx|md|tsx|ts)$/ }),
     svgr(),
     sassExample(),
+    livePlaygroundDemos(),
     docsIndex(),
     docsRedirects(),
   ],
