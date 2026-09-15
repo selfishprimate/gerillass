@@ -791,11 +791,128 @@ Reach for `components/Icons` inside a cluster that has to look like one set:
 the palette's footer needs a search, an up-down and a return, and the font has
 only one of the three.
 
+## The home page
+
+Hero, Featured, Install, Benefits, Examples, Testimonial. Examples' wave and
+mascot rise out of its own box into the section above it, and the footer rises
+10rem into the section above it, so moving a section changes the spacing of
+its neighbours. That happened several times while this order was settled;
+measure the joints after any reorder rather than trusting the paddings.
+
+### Install
+
+`components/Install` shows the installation page's own command,
+`npm install gerillass --save-dev`, in the site's `CodeBlock`, so it has the
+same copy button as the documentation.
+
+**The space above and below it is equal, measured text to text**, from the last
+line of the section above to the block, and from the hint to the first line of
+Benefits. Two things make that awkward. `_typography.scss` sets the root to 90%
+below medium, and Benefits' own top padding (6rem, 8rem from large) is already
+larger than the space above Install. So Install has no bottom padding and a
+negative bottom margin per range: -2.25rem below medium, -0.375rem from medium,
+-1.875rem from large. Measured: 101.5px above and 101.4px below at 1440px and
+1024px, 93.5 and 93.4 at 800px and 768px, 56.8 and 56.9 at 600px and 375px.
+Change either section's padding and those three numbers need measuring again.
+
+### Hand-drawn shapes
+
+The buttons and the install block are cut to shapes that look drawn by hand.
+Three separate mechanisms, each chosen for a reason:
+
+- **Large buttons: a mask, not a background.** Every `.button` in
+  `_buttons.scss` has a `::before` layer behind its label, masked to
+  `public/images/shapes/button-large-filled.svg` or `-outlined.svg` and painted
+  with `--button-shape`, which each variant and each hover sets. The drawing's
+  colour is baked into its file, so as a background it could not follow the
+  hover colours. The masks are copies of `public/images/buttons/btn-large-*`
+  with `viewBox="0 0 85 30"` and `preserveAspectRatio="none"`, which the
+  originals lack, so one drawing stretches to any button. Button sizes and text
+  colours were compared before and after and did not change; hover was checked
+  for filled and outlined primary. The `secondary` variant is used nowhere and
+  its hover was not tested, and the footer invitation's button was not
+  checked because it does not render on the home page.
+- **Featured's Star, Fork and Discussions: backgrounds.** They use the small
+  drawings as they are (`btn-small-outlined`, filled on hover and for
+  Discussions); those files carry `#222c25`, a shade darker than
+  `$primary-color`. The lines joining them are the fiddly part. An outlined
+  button is hollow, so a line that goes past the drawn outline shows inside it,
+  and one that stops short leaves a hairline. Measured at mid height, where the
+  line sits: the outline is about 1.6px thick, and the drawings end 1.1px to
+  2.1px inside their boxes. The lengths in `featured.scss` put each end 0.7px to
+  0.8px into the outline it meets. **Changing a label or the 3px margin changes
+  the boxes, and the lines need measuring again.**
+- **The install block: a mask per shape.** `code-block-wide.svg` (720x102) and
+  `code-block-narrow.svg` (317x95), switched below medium. One drawing
+  stretched across both flattened its corners. The clearance was measured by
+  drawing each mask onto a canvas at the block's real size and sampling it at
+  the corners of the copy button, the label and the command: all inside.
+
+A mask image that fails to load masks the whole element away, per the CSS
+Masking spec (not tested here), which is why every mask lives in `public/`,
+same-origin. The policy's `img-src 'self'` covers them; the deployed header was
+not tested against a mask.
+
+The hero's buttons are as wide as their labels. Stacked below medium they share
+the wider one's width (`width: fit-content` on the column) and are centred;
+from medium they sit side by side, still centred; from large, where the hero
+itself turns into a row at 992px, they start under the heading.
+
+### The error page
+
+A page that throws renders `components/ErrorPage` instead of React Router's
+bare "Unexpected Application Error". It is the 404's frame, the announcement
+band included.
+
+It is the `errorElement` of the **root** route in `routes.jsx`, so it replaces
+the whole shell. A path-less wrapper route would have kept the shell, but
+`scripts/prerender.mjs` builds each file name from `route.path`, and a wrapper
+without one would have written its children under `/undefined`.
+
+On the dev server it navigates to the same address after every hot update, since
+an error boundary only resets on navigation. Tested: a module broken on purpose
+showed the page, and restoring it brought the home page back without a reload.
+`/error-test` throws on purpose to show the page; it is added only when
+`import.meta.env.DEV`, and a build writes no `error-test.html` and lists none in
+the sitemap. If `Header` itself threw, the error page would throw too and the
+router's own screen would show; that was not tried.
+
+### Testing in the browser pane, two traps
+
+- **When the pane is not on screen, the page reports itself hidden**, the same
+  trap described under Analytics. `IntersectionObserver` never fires, so
+  anything that loads or animates as it nears the viewport stays paused, and
+  screenshots come back blank or unscrolled. The pane's `zoom` action is not
+  supported either. For a close look, clone the element into `body` and give
+  the clone CSS `zoom`: `position: fixed` inside the page's transformed wrapper
+  attaches to that wrapper rather than the screen.
+- **Resize, then reload.** Emulating a width under 768px and resizing to a
+  desktop width without reloading kept the phone's 14.4px root, and buttons
+  measured narrower than they are. Every measurement above was taken on a fresh
+  load at its width.
+
 ## Dormant code — do not assume it is live
 
 `src/pages/Contact` (no route), `components/Invitations/TopInvitation` (never
 imported), `components/ProductHunt` (import commented out in `Home`), and
 `src/assets/scss/abstract/_extends.scss` (empty, not imported).
+
+`components/LivePlayground` is parked, not dead: a section that types a mixin's
+Sass out on the left and writes the CSS it compiles to on the right, cycling
+through six demos. Its import and its element are commented out in `Home`, and
+it comes back by uncommenting both. What to know before it does:
+
+- `plugins/live-playground-demos.js`, still registered in `vite.config.js`,
+  compiles the demos from the playground's `demos.json` while the site builds,
+  so the section never loads Dart Sass (measured: `sass.dart.js` stayed in the
+  full playground's chunk) and a demo that stops compiling fails the build.
+- **It imports `codemirror/lib/codemirror.css` before `playground.scss`, and
+  that order matters beyond the section.** With the section in the home page's
+  bundle and that line missing, the full playground loaded CodeMirror's default
+  theme after `playground.scss` and its editors showed blue, red and green.
+- Its layout was tuned for sitting directly after Examples: its mascot overlaps
+  Examples by a set amount, and on a phone it came within 15px of Examples'
+  text. The design was left unfinished.
 
 `src/pages/About` is gone, and `templates/BlogTemplate` with it since nothing
 else used it. It was routed and live, rendering "This is the content! This is
