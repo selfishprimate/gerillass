@@ -3,7 +3,8 @@ import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
 import { zenburn } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
 /*
-  The light build, with the eight languages this site writes.
+  The light build, with the nine languages this site writes. `ruby` is the
+  newest, for the Rails, Jekyll and plain Ruby recipes on the installation page.
 
   The default export carries every language highlight.js has -- erlang,
   fortran, matlab, verilog and a hundred and eighty others were all in the
@@ -22,6 +23,7 @@ import javascript from "react-syntax-highlighter/dist/esm/languages/hljs/javascr
 import json from "react-syntax-highlighter/dist/esm/languages/hljs/json";
 import nix from "react-syntax-highlighter/dist/esm/languages/hljs/nix";
 import plaintext from "react-syntax-highlighter/dist/esm/languages/hljs/plaintext";
+import ruby from "react-syntax-highlighter/dist/esm/languages/hljs/ruby";
 import scss from "react-syntax-highlighter/dist/esm/languages/hljs/scss";
 import xml from "react-syntax-highlighter/dist/esm/languages/hljs/xml";
 
@@ -32,6 +34,7 @@ for (const [name, language] of [
   ["json", json],
   ["nix", nix],
   ["plaintext", plaintext],
+  ["ruby", ruby],
   ["scss", scss],
   ["xml", xml],
 ]) {

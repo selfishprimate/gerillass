@@ -32,6 +32,7 @@ Hope you’ll enjoy using it!
   - [Using with Angular](#using-with-angular)
   - [Using with Gulp](#using-with-gulp)
   - [Using with Grunt](#using-with-grunt)
+  - [Using with Ruby: Rails, Jekyll, or plain Sass](#using-with-ruby-rails-jekyll-or-plain-sass)
   - [Cloning the Repository from Github](#cloning-the-repository-from-github)
   - [Versions these examples were tested with](#versions-these-examples-were-tested-with)
 - [Using Gerillass with an AI coding agent](#using-gerillass-with-an-ai-coding-agent)
@@ -184,6 +185,35 @@ Then:
 
     @use 'gerillass' as *;
 
+### Using with Ruby: Rails, Jekyll, or plain Sass
+
+Gerillass is also a gem. It installs the same Sass files and nothing else: no runtime dependencies, because each kind of project already brings its own Dart Sass. It needs Dart Sass; the LibSass-based `sass-rails` and `sassc-rails` cannot compile it.
+
+    bundle add gerillass
+
+**Rails.** With `dartsass-rails` on Propshaft, the Rails 8 default, or `dartsass-sprockets` on Sprockets, there is nothing to configure: the gem hands the library's folder to Sass, and none of its files end up in `public/assets`. Then, in `app/assets/stylesheets/application.scss`:
+
+    @use 'gerillass' as *;
+
+**Jekyll.** Put the gem in the plugins group of your `Gemfile`:
+
+    group :jekyll_plugins do
+      gem "gerillass"
+    end
+
+Then, in a stylesheet with front matter such as `assets/css/main.scss`:
+
+    ---
+    ---
+    @use 'gerillass' as *;
+
+**Plain Ruby.** Pass the library's folder to `sass-embedded` yourself:
+
+    require "sass-embedded"
+    require "gerillass"
+
+    Sass.compile("style.scss", load_paths: [Gerillass.load_path])
+
 ### Cloning the repository from Github
 
 You can clone the repository into your local computer from Github.
@@ -210,10 +240,15 @@ Including to the project:
 | Gulp / gulp-sass | 5.0.1 / 6.0.1 |
 | Grunt / grunt-sass | 1.6.3 / 4.1.0 |
 | Parcel / @parcel/transformer-sass | 2.16.4 / 2.16.4, with Dart Sass 1.104.1 and Gerillass 2.1.0 |
+| Ruby / Rails | 4.0.1 / 8.1.3.1 |
+| Propshaft / dartsass-rails | 1.3.2 / 0.5.1 |
+| sprockets-rails / dartsass-sprockets | 3.5.2 / 3.2.1 |
+| Jekyll / jekyll-sass-converter | 4.4.1 / 3.1.0 |
+| sass-embedded (Ruby) | 1.104.1 |
 
 ## Using Gerillass with an AI coding agent
 
-A library this size has no training data behind it, so an agent asked to use Gerillass will guess at the argument forms and get them wrong. Two files ship with the package to stop that. Both live inside the installed package, so an agent working in your project can read them straight out of `node_modules/gerillass/`.
+A library this size has no training data behind it, so an agent asked to use Gerillass will guess at the argument forms and get them wrong. Two files ship with the package to stop that. Both live inside the installed package, so an agent working in your project can read them straight out of `node_modules/gerillass/`, or, in a Ruby project, out of the gem's folder, which `bundle info gerillass --path` prints.
 
 **`gerillass.json`** describes every mixin and function: its signature, what each argument accepts, examples that compile, and inputs that are refused.
 
@@ -223,6 +258,10 @@ A library this size has no training data behind it, so an agent asked to use Ger
 
     mkdir -p .claude/skills/gerillass
     cp node_modules/gerillass/SKILL.md .claude/skills/gerillass/
+
+In a Ruby project, copy it from the gem instead:
+
+    cp "$(bundle info gerillass --path)/SKILL.md" .claude/skills/gerillass/
 
 Otherwise, point your agent at the file and it will read it as plain Markdown.
 

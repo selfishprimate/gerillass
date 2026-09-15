@@ -76,7 +76,7 @@ const build = () => `# Gerillass
 
 Gerillass is a pure Sass library. There is no build step and no runtime dependency: the \`.scss\` sources are the deliverable, and the package installs nothing else. It needs Dart Sass; LibSass and node-sass are not supported. This file describes Gerillass ${manifest.version}.
 
-Load it with \`${manifest.load.bundler}\` under a bundler, or \`${manifest.load.packageImporter}\` with the Dart Sass package importer.
+Load it with \`${manifest.load.bundler}\` under a bundler, or \`${manifest.load.packageImporter}\` with the Dart Sass package importer. It is also a Ruby gem, \`gerillass\`: Rails with dartsass-rails or dartsass-sprockets, and Jekyll, need no configuration, and plain Ruby passes \`Gerillass.load_path\` to sass-embedded.
 
 Every mixin answers to two names, bare and prefixed: \`@include circle(50px)\` and \`@include ${manifest.prefix}circle(50px)\` are the same mixin and produce identical CSS. The prefix exists to avoid collisions with other libraries. You can also namespace the whole library instead, with \`@use "gerillass" as gls;\` and \`@include gls.circle(50px)\`.
 
@@ -94,9 +94,9 @@ ${functions.map(link).join("\n")}
 
 ## Optional
 
-- [gerillass.json](${BLOB}/gerillass.json): the full machine-readable API. Every member with its signature, what each argument accepts, examples that compile, and the inputs it refuses. Ships inside the installed package at \`node_modules/gerillass/gerillass.json\`.
-- [SKILL.md](${BLOB}/SKILL.md): the same material written as an agent skill, generated from the manifest. Ships in the package.
-- [README](${BLOB}/README.md): installation for Vite, webpack, Next.js, Angular, Gulp and Grunt, and how to point an agent at the two files above.
+- [gerillass.json](${BLOB}/gerillass.json): the full machine-readable API. Every member with its signature, what each argument accepts, examples that compile, and the inputs it refuses. Ships inside the installed package at \`node_modules/gerillass/gerillass.json\`, and at the root of the gem, whose folder \`bundle info gerillass --path\` prints.
+- [SKILL.md](${BLOB}/SKILL.md): the same material written as an agent skill, generated from the manifest. Ships in the npm package and in the gem.
+- [README](${BLOB}/README.md): installation for Vite, webpack, Next.js, Angular, Gulp, Grunt, Rails and Jekyll, and how to point an agent at the two files above.
 - [MIGRATION.md](${BLOB}/MIGRATION.md): upgrading a project from 1.x to 2.0.0. The utility functions were renamed and two mixins were replaced.
 - [CHANGELOG](${BLOB}/CHANGELOG.md): what changed in every release.
 - [Source repository](${REPO}): the \`.scss\` sources, which are short and readable.

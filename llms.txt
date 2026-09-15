@@ -4,7 +4,7 @@
 
 Gerillass is a pure Sass library. There is no build step and no runtime dependency: the `.scss` sources are the deliverable, and the package installs nothing else. It needs Dart Sass; LibSass and node-sass are not supported. This file describes Gerillass 2.3.1.
 
-Load it with `@use "gerillass" as *;` under a bundler, or `@use "pkg:gerillass" as *;` with the Dart Sass package importer.
+Load it with `@use "gerillass" as *;` under a bundler, or `@use "pkg:gerillass" as *;` with the Dart Sass package importer. It is also a Ruby gem, `gerillass`: Rails with dartsass-rails or dartsass-sprockets, and Jekyll, need no configuration, and plain Ruby passes `Gerillass.load_path` to sass-embedded.
 
 Every mixin answers to two names, bare and prefixed: `@include circle(50px)` and `@include gls-circle(50px)` are the same mixin and produce identical CSS. The prefix exists to avoid collisions with other libraries. You can also namespace the whole library instead, with `@use "gerillass" as gls;` and `@include gls.circle(50px)`.
 
@@ -99,9 +99,9 @@ Arguments are validated and refused with a message naming what is accepted, so a
 
 ## Optional
 
-- [gerillass.json](https://github.com/selfishprimate/gerillass/blob/main/gerillass.json): the full machine-readable API. Every member with its signature, what each argument accepts, examples that compile, and the inputs it refuses. Ships inside the installed package at `node_modules/gerillass/gerillass.json`.
-- [SKILL.md](https://github.com/selfishprimate/gerillass/blob/main/SKILL.md): the same material written as an agent skill, generated from the manifest. Ships in the package.
-- [README](https://github.com/selfishprimate/gerillass/blob/main/README.md): installation for Vite, webpack, Next.js, Angular, Gulp and Grunt, and how to point an agent at the two files above.
+- [gerillass.json](https://github.com/selfishprimate/gerillass/blob/main/gerillass.json): the full machine-readable API. Every member with its signature, what each argument accepts, examples that compile, and the inputs it refuses. Ships inside the installed package at `node_modules/gerillass/gerillass.json`, and at the root of the gem, whose folder `bundle info gerillass --path` prints.
+- [SKILL.md](https://github.com/selfishprimate/gerillass/blob/main/SKILL.md): the same material written as an agent skill, generated from the manifest. Ships in the npm package and in the gem.
+- [README](https://github.com/selfishprimate/gerillass/blob/main/README.md): installation for Vite, webpack, Next.js, Angular, Gulp, Grunt, Rails and Jekyll, and how to point an agent at the two files above.
 - [MIGRATION.md](https://github.com/selfishprimate/gerillass/blob/main/MIGRATION.md): upgrading a project from 1.x to 2.0.0. The utility functions were renamed and two mixins were replaced.
 - [CHANGELOG](https://github.com/selfishprimate/gerillass/blob/main/CHANGELOG.md): what changed in every release.
 - [Source repository](https://github.com/selfishprimate/gerillass): the `.scss` sources, which are short and readable.
