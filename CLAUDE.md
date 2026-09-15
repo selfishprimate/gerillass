@@ -33,9 +33,12 @@ working after any change to `main`, `exports`, or the location of
 | `@use "gerillass/scss/gerillass"` | subpath, needs the `"./*"` wildcard |
 | `loadPaths` / `includePaths` | filesystem-based, unaffected by `exports` — this is what the Gulp and Grunt recipes in the README use |
 
-The gem has routes of its own. Each was verified by compiling the same snippet
-in a throwaway project on Ruby 4.0.1, with the gem by local path, and diffing the
-CSS against Dart Sass's own output; all matched. Each Sass setup reads load
+The gem has routes of its own. Each was verified on Ruby 4.0.1 with gem 2.3.1
+installed from RubyGems in a fresh project: every manifest example, its `gls-`
+form and every `warns` entry, 366 stylesheets, compiled through the route and
+diffed against Dart Sass's output from the npm package, with all matching, and
+a refused call stopping the build with the library's message. Sprockets writes
+`url("x")` as `url(x)`, with or without Gerillass. Each Sass setup reads load
 paths from a different place, which is why `lib/gerillass/engine.rb` has three
 branches:
 
@@ -43,7 +46,7 @@ branches:
 |---|---|
 | Rails, `dartsass-rails` (Propshaft) | `--load-path` appended to `config.dartsass.build_options` after initialization, so an app assigning its own options keeps it. Not `config.assets.paths`: Propshaft copies everything on it into `public/assets`, which published all 109 sources, and its `excluded_paths` also removes the folder from the list dartsass-rails reads |
 | Rails, `dartsass-sprockets` | appended to `config.sass.load_paths`, which is read on every compile. Appending to `config.assets.paths` after initialization missed the environment sprockets-rails had already built |
-| Jekyll | `lib/gerillass/jekyll.rb` adds the folder to `sass.load_paths` in a `:site, :after_init` hook. Tested with the gem in the `:jekyll_plugins` group; `plugins:` in `_config.yml` was not |
+| Jekyll | `lib/gerillass/jekyll.rb` adds the folder to `sass.load_paths` in a `:site, :after_init` hook. Works with the gem in the `:jekyll_plugins` group, and with `plugins: [gerillass]` in `_config.yml` |
 | plain Ruby | `Sass.compile(..., load_paths: [Gerillass.load_path])` with `sass-embedded` |
 
 **eyeglass metadata is inert.** The `eyeglass` block and the `eyeglass-module`
@@ -457,7 +460,7 @@ The security fix only reaches users when the npm package is republished — upda
 2. Add a `CHANGELOG.md` entry at the top, using the existing `- **Security:** / **Added:** / **Updated:** / **Removed:** / **Fixed:**` bullet style.
 3. Commit, then `git tag -a vX.Y.Z -m "vX.Y.Z"` — tags are `vX.Y.Z`, no dot after `v`.
 4. Push branch and tag, then `gh release create vX.Y.Z --latest --notes-file ...`.
-5. `npm publish`. The account has 2FA enabled, so this needs `--otp=<code>` and must be run by the maintainer. Then the gem, built outside the repository and pushed by the maintainer with their own one-time code: `gem build gerillass.gemspec --output <dir>/gerillass-X.Y.Z.gem` and `gem push <that file> --otp=<code>`. `/release` step 6b has the checks to run on the built gem first.
+5. `npm publish`. The account has 2FA enabled, so this needs `--otp=<code>` and must be run by the maintainer. Then the gem, built from the tag in a worktree outside the repository and pushed by the maintainer with their own one-time code: `gem build gerillass.gemspec --output <dir>/gerillass-X.Y.Z.gem` and `gem push <that file> --otp=<code>`. `/release` step 6b has the checks to run on the built gem first.
 6. Update the site, which names the version in several places. The header badge
    and both download buttons follow `package.json` through `site/src/release.js`,
    but the download link is a 404 until the tag exists, so the site deploys after
@@ -596,9 +599,8 @@ Written 14 September 2026, the report above turned into work in the shape of
 groundwork, conditions and selectors for 2.3.1, keywords, images and the unit
 bug for 2.3.2, colours for 2.3.3 and lengths for 2.3.4.
 
-The maintainer took all six recommendations. **S0 and S1 are done on the
-`silent-values-plan` branch and not yet released**; the status under each item
-has the measurements. S0 moved the private helper copies into `scss/internal/`
+The maintainer took all six recommendations. **Every step, S0 to S7, shipped
+together in 2.3.1**; the status under each item has the measurements. S0 moved the private helper copies into `scss/internal/`
 (see Architecture), added `huge`, `10deg` and `-10px` to the audit, and added
 `tools/browser-check.js`. S1 made `breakpoint`, `remove`, `container-query`
 and `screen-agent` refuse a size no condition can match, through
@@ -653,7 +655,7 @@ turned two broken calls into working ones instead of refusing them:
 their `calc()` was dropped. Chunk 4 made `position` raise on an offset a
 browser drops instead of warning through `validateLength`, which had warned
 about working values such as `AUTO` and stayed silent for `10deg`. S7, and with
-it the plan, is done and unreleased.
+it the plan, is done and released in 2.3.1.
 
 ### What `counter-modernisation.md` records
 
@@ -755,16 +757,16 @@ Verified as of v2.3.0.
 
 ### Next
 
-Three pieces of work are open, and none is started:
+`todos/silent-values-plan.md` is done: S0 to S7 shipped together as 2.3.1,
+not as the four patch releases the plan proposed, because fixes to early steps
+landed in later commits and tagging each step would have shipped a false
+refusal fixed afterwards, such as `only(3n)`. The same version is on RubyGems,
+where it differs from npm in three `@warn` texts, `breakpoint`,
+`container-query` and `remove`: the gem was built from a branch holding a
+commit made after the tag, which `/release` step 6b now prevents.
 
-- **`todos/silent-values.md`**: 49 arguments in 28 mixins turn a value a
-  browser drops into CSS. Planned in `todos/silent-values-plan.md`, with the
-  six decisions taken. S0 to S7 are done on the `silent-values-plan` branch
-  and ship together as 2.3.1, not as the four patch releases the plan
-  proposed: fixes to early steps landed in later commits, so tagging each step
-  would have shipped a false refusal fixed afterwards, such as `only(3n)`. The
-  documentation pages say 2.3.1 wherever they name the version a change came
-  in.
+Two pieces of work are open, and neither is started:
+
 - **3.0.0**: eight behaviour changes, each in its own file in `todos/` and
   each to be tested and decided on its own before any is planned: breakpoint
   boundaries, `columnizer` on `gap`, `hide("unhide")`, a default `content` for
