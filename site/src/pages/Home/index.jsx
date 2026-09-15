@@ -5,6 +5,7 @@ import SiteFooter from "components/SiteFooter";
 import Announcement from "components/Announcement";
 import Hero from "components/Hero";
 import Featured from "components/Featured";
+import Install from "components/Install";
 import Benefits from "components/Benefits";
 import Examples from "components/Examples";
 import Testimonial from 'components/Testimonial';
@@ -29,6 +30,7 @@ function Home() {
         <PageContent>
           <Hero />
           <Featured />
+          <Install />
           <Benefits />
           <Examples />
           {/* <LivePlayground /> */}

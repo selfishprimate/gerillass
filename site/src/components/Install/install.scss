@@ -1,0 +1,71 @@
+@import "assets/scss/abstract";
+
+/*
+  Between Featured and Benefits, with the same visible space above and below:
+  from the last line of text above to the block, and from the hint to the first
+  line of Benefits.
+
+  The space above is 4rem of padding and whatever Featured leaves under its
+  text. The space below would be this padding plus Benefits' own top padding,
+  6rem or 8rem, which alone is already more than the space above, so the bottom
+  has no padding and pulls Benefits up instead. Measured: 101.5px above and
+  195.4px below at 1440px, 56.8px and 146.9px at 375px, where the root size is
+  14.4px, which is why the margins are not one rem value. Between medium and
+  large Featured is showing again but Benefits still has 6rem on top, so that
+  range needs its own: the phone's margin left the space below 30px short at
+  800px.
+*/
+.install {
+  padding: 4rem 0 0;
+  margin-bottom: -2.25rem;
+  @include breakpoint(min, medium) {
+    margin-bottom: -0.375rem;
+  }
+  @include breakpoint(min, large) {
+    margin-bottom: -1.875rem;
+  }
+  text-align: center;
+
+  &__block {
+    max-width: remify(720px);
+    margin: 0 auto remify(16px);
+    text-align: left;
+
+    /*
+      Cut to a hand-drawn outline rather than a rounded rectangle, in the
+      spirit of the buttons in public/images/buttons: edges that bow a little,
+      corners that are not all the same.
+
+      There are two drawings, each in the proportions of the block it covers
+      (720x102 wide, 317x95 on a phone), because stretching one across both
+      turned its corners into flattened ellipses. Each is stretched to fit with
+      preserveAspectRatio="none", which a few pixels either way does not show.
+      No edge comes in more than 5px, so the copy button, 11px to 16px from the
+      corner, and the code, 24px in, are never cut.
+
+      border-radius goes to 0 so the drawing alone decides the corners. A mask
+      whose image fails to load hides the whole element, so both files are in
+      public/, served with the page.
+    */
+    .code-block {
+      border-radius: 0;
+      -webkit-mask: url("/images/shapes/code-block-wide.svg") center / 100% 100% no-repeat;
+      mask: url("/images/shapes/code-block-wide.svg") center / 100% 100% no-repeat;
+      @include breakpoint(max, medium) {
+        -webkit-mask-image: url("/images/shapes/code-block-narrow.svg");
+        mask-image: url("/images/shapes/code-block-narrow.svg");
+      }
+    }
+  }
+
+  &__hint {
+    margin: 0;
+    font-size: remify(14px);
+
+    /* Underlined so the link reads as one in a line of the same colour. */
+    a {
+      text-decoration: underline;
+      text-underline-offset: remify(3px);
+    }
+  }
+}
