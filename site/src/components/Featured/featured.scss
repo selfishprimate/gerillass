@@ -102,30 +102,64 @@
       font-family: $icons-name;
       font-size: remify(28px);
     }
+    /*
+      Drawn by hand rather than as pills: the small button shapes from
+      public/images/buttons, outlined at rest and filled on hover or for the
+      dark variant. They are stretched to each button with 100% 100%, which the
+      54x30 drawing takes without distortion at these widths, and 30px tall so
+      the height matches the drawing's own. The drawings carry their own
+      #222c25, a shade darker than $primary-color, so the text keeps the site's
+      colours and only the shape comes from the file.
+    */
     &__item {
       position: relative;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: remify(28px);
+      height: remify(30px);
       font-size: remify(13px);
-      padding: 0 0.8rem;
-      border: remify(2px) solid $primary-color;
-      border-radius: 999px;
+      padding: 0 0.9rem;
+      background: url("/images/buttons/btn-small-outlined.svg") center / 100% 100% no-repeat;
+      /*
+        3px apart. The drawings stop short of their box, so at 6px the gap
+        looked like 8px across the middle and 16px at the corners, and at 1px it
+        closed to 3px and looked cramped.
+
+        The joining line has to end inside the drawn outline, not past it. An
+        outlined button is hollow, so a line that goes further shows inside it,
+        and one that stops short leaves a hairline of background. Measured at
+        1440px, at mid height, which is where the line sits: the outline is
+        about 1.6px thick; Star's drawing ends 1.5px inside its box on the
+        right, Fork's 1.1px on the left and 1.6px on the right, and the filled
+        Discussions starts 2.1px inside its box. Each line below ends in the
+        middle of the outline it meets, 0.8px from either edge of the stroke,
+        and into the filled button by 1.5px. The lengths follow from those
+        numbers and the 3px margin; a change to either needs them measured
+        again.
+      */
+      &.fork:not(:last-of-type)::after {
+        width: remify(9px);
+        right: remify(-6.6px);
+      }
       &:not(:last-of-type) {
-        margin-right: remify(6px);
+        margin-right: remify(3px);
         &::after {
           content: "";
           position: absolute;
           height: remify(2px);
-          width: remify(8px);
-          right: remify(-8px);
+          width: remify(7.2px);
+          right: remify(-4.9px);
           @include center(vertical);
           background-color: $primary-color;
         }
       }
+      /*
+        The filled drawing replaces the outlined one rather than a background
+        colour going behind it: a colour fills the whole rectangle, and the
+        hand-drawn edge would sit inside a dark box.
+      */
       &:hover {
-        background-color: $primary-color;
+        background-image: url("/images/buttons/btn-small-filled.svg");
         a {
           color: $secondary-color;
           opacity: 1;
@@ -137,7 +171,7 @@
         @include stretched-link;
       }
       &--dark {
-        background-color: $primary-color;
+        background-image: url("/images/buttons/btn-small-filled.svg");
         a {
           color: $secondary-color;
         }

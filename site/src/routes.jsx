@@ -3,6 +3,7 @@ import React from "react";
 import Layout from "./App";
 import Home from "pages/Home";
 import NotFound from "components/NotFound";
+import ErrorPage from "components/ErrorPage";
 import DocPage from "pages/Docs";
 import { Navigate } from "react-router-dom";
 import { pages } from "content/pages";
@@ -39,6 +40,19 @@ import { loadModule } from "./staleModule";
 */
 const TEMPLATES = { docs: DocPage };
 
+/*
+  The error page has no address of its own; it only replaces a page that
+  throws. /error-test is a page that does, so it can be looked at. Dev server
+  only: in a build import.meta.env.DEV is false, the entry is never added, and
+  prerender.mjs never sees it.
+*/
+function ThrowForErrorPage() {
+  throw new Error("A deliberate error from /error-test");
+}
+const devRoutes = import.meta.env.DEV
+  ? [{ path: "error-test", element: <ThrowForErrorPage /> }]
+  : [];
+
 const contentRoutes = pages
   .filter(({ section }) => {
     if (TEMPLATES[section]) return true;
@@ -68,6 +82,8 @@ export const routes = [
   {
     path: "/",
     element: <Layout />,
+    // A page that throws renders this instead of the router's bare error screen.
+    errorElement: <ErrorPage />,
     children: [
       { index: true, element: <Home /> },
       { path: "playground", element: <Home /> },
@@ -78,6 +94,7 @@ export const routes = [
       */
       { path: "docs", element: <Navigate to="/docs/introduction" replace /> },
       ...contentRoutes,
+      ...devRoutes,
       /*
         Two entries for the same page, and both are needed.
 
