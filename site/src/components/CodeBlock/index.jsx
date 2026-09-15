@@ -125,7 +125,7 @@ function CodeBlock({ label, language, children, className, ...rest }) {
           className="code-block__copy"
           onClick={copy}
           title={copied ? "Copied" : "Copy to the clipboard"}
-          aria-label={`Copy the ${label || named} to the clipboard`}
+          aria-label={`Copy the ${typeof label === "string" && label ? label : named} to the clipboard`}
         >
           {copied ? <CheckIcon size={16} /> : <CopyIcon size={16} />}
         </button>
