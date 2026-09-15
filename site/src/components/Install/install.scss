@@ -16,6 +16,15 @@
   800px.
 */
 .install {
+  /*
+    Above Benefits, which that negative margin pulls up over this section's
+    last line. Benefits has an opacity animation, so it paints as its own layer
+    after this one, and its top padding took every click on the "installation
+    guide" link: measured with elementFromPoint at the link's middle and both
+    ends, at 1440px and 375px, every point landed on section.benefits.
+  */
+  position: relative;
+  z-index: 1;
   padding: 4rem 0 0;
   margin-bottom: -2.25rem;
   @include breakpoint(min, medium) {
