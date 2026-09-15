@@ -195,15 +195,21 @@ npm publish --otp=<code>
 The gem is the same release: `gerillass.gemspec` reads its version from
 `package.json`, so there is nothing to bump. It ships `scss/`, `gerillass.json`,
 `SKILL.md`, `lib/`, `LICENSE.md` and `README.md` and has no runtime
-dependencies. Run `npm run manifest` first, as for npm: the two agent files are
-committed build output and the gem takes them as they are.
+dependencies. The two agent files are committed build output and the gem takes
+them as they are.
 
-Build it outside the repository, so no `.gem` is left at the root, and check
-what is in it before pushing:
+**Build it from the tag, never from a branch.** 2.3.1 was built from a branch
+that already held a commit made after `v2.3.1`, and the gem shipped three
+warning messages that differ from the npm package of the same version. A
+version cannot be pushed twice, so a difference like that stays until the next
+release. Build in a worktree of the tag, outside the repository so no `.gem` is
+left at the root, and check what is in it before pushing:
 
 ```bash
 out="$(mktemp -d)"
-gem build gerillass.gemspec --output "$out/gerillass-X.Y.Z.gem"
+git worktree add "$out/src" vX.Y.Z
+(cd "$out/src" && gem build gerillass.gemspec --output "$out/gerillass-X.Y.Z.gem")
+git worktree remove "$out/src"
 ruby -e 'require "rubygems/package"; s = Gem::Package.new(ARGV[0]).spec
   puts s.version, s.runtime_dependencies.inspect, s.files.size,
        s.files.reject { |f| f.start_with?("scss/") }' "$out/gerillass-X.Y.Z.gem"
@@ -212,6 +218,17 @@ ruby -e 'require "rubygems/package"; s = Gem::Package.new(ARGV[0]).spec
 Expect `X.Y.Z`, `[]`, one file per `scss/` partial plus seven, and those seven
 being `gerillass.json`, `SKILL.md`, `LICENSE.md`, `README.md` and the three
 files under `lib/`.
+
+Then compare it with what npm published for the same version. Every command
+must print nothing:
+
+```bash
+gem unpack "$out/gerillass-X.Y.Z.gem" --target "$out/gem"
+mkdir "$out/npm" && (cd "$out/npm" && tar -xzf "$(npm pack gerillass@X.Y.Z --silent)")
+diff -r "$out/gem/gerillass-X.Y.Z/scss" "$out/npm/package/scss"
+diff "$out/gem/gerillass-X.Y.Z/gerillass.json" "$out/npm/package/gerillass.json"
+diff "$out/gem/gerillass-X.Y.Z/SKILL.md" "$out/npm/package/SKILL.md"
+```
 
 The macOS system Ruby is too old for the integrations; use Homebrew's
 (`/opt/homebrew/opt/ruby/bin`). The gemspec is kept to ASCII on purpose: RubyGems
