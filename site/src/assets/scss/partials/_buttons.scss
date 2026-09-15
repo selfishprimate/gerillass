@@ -12,7 +12,35 @@ $button-sizes: (
   large: remify(66px),
 );
 
+/*
+  The colour a button's shape is painted in, at rest and on hover, for each
+  variant. The text colours are set separately below.
+*/
+$button-hover-shape: (
+  primary: $accent-color,
+  secondary: $secondary-color,
+  accent: $primary-color,
+);
+
+/*
+  Every button is drawn by hand rather than as a rounded rectangle: the large
+  shape from public/images/buttons, filled or outlined.
+
+  The drawing is not the button's background. Its file carries its own colour,
+  and the buttons change colour on hover, so the shape is a mask on a layer
+  behind the text instead, and that layer is painted with --button-shape. The
+  colours stay here, hover keeps working for every variant, and the text is
+  never masked. The masks are copies in public/images/shapes with a viewBox and
+  preserveAspectRatio="none", so a 244px or a 279px button stretches the same
+  85x30 drawing; the originals have neither.
+
+  The button keeps its 3px transparent border so no button changes size, and
+  the layer reaches over it with inset: -3px. The outlined drawing's line comes
+  out about 3.3px thick at 66px tall, close to the 3px border it replaces.
+*/
 .button {
+  position: relative;
+  isolation: isolate;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -27,23 +55,37 @@ $button-sizes: (
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  background-color: transparent;
   border: 3px solid transparent;
   border-radius: $button-border-radius;
   padding: 0 $global-space * 2;
   cursor: pointer;
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    z-index: -1;
+    background-color: var(--button-shape, transparent);
+    -webkit-mask: url("/images/shapes/button-large-filled.svg") center / 100% 100% no-repeat;
+    mask: url("/images/shapes/button-large-filled.svg") center / 100% 100% no-repeat;
+  }
+  &.button--outlined::before {
+    -webkit-mask-image: url("/images/shapes/button-large-outlined.svg");
+    mask-image: url("/images/shapes/button-large-outlined.svg");
+  }
   &:focus,
   &:active {
     outline: 0;
   }
   @each $name, $color in $button-colors {
     &.button--#{$name} {
-      background-color: $color;
+      --button-shape: #{$color};
       @if $name == "secondary" {
         color: $primary-color;
       }
       &:hover {
+        --button-shape: #{map-get($button-hover-shape, $name)};
         @if $name == "primary" {
-          background-color: $accent-color;
           /*
             Said out loud, because these buttons are links. `a:hover` in
             _general.scss paints an anchor `$accent-color`, and at (0,1,1) it
@@ -58,27 +100,20 @@ $button-sizes: (
           */
           color: $secondary-color;
           &.button--outlined {
-            border-color: $accent-color;
             color: $accent-color;
           }
         } @else if $name == "secondary" {
-          background-color: $secondary-color;
           &.button--outlined {
-            border-color: $secondary-color;
             color: $secondary-color;
           }
         } @else if $name == "accent" {
-          background-color: $primary-color;
           color: $secondary-color;
           &.button--outlined {
-            border-color: $primary-color;
             color: $primary-color;
           }
         }
       }
       &.button--outlined {
-        background-color: transparent;
-        border-color: $color;
         color: $color;
       }
     }

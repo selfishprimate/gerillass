@@ -101,18 +101,41 @@
     last of its type and the gap vanished. A gap does not care what the items
     are made of.
   */
+  /*
+    Each button is as wide as its label plus the button's own padding, the way
+    the testimonial's "Share on Twitter" is, stacked or side by side. They used
+    to fill the width: 244px each in a row with `flex: 1`, leaving 61px beside
+    "Download", and the full 317px when stacked on a phone, leaving 98px, where
+    the hand-drawn shape looked padded out.
+
+    Stacked, the two are one width, the wider label's: the column is only as
+    wide as its widest button (`width: fit-content`) and stretches both to it,
+    and `margin-inline: auto` centres the pair. That is phones only: from
+    medium, 768px, there is room for both side by side (418px at the 16px
+    root), so each keeps its own width, and the row stays centred. From large,
+    where the hero sets its text beside the illustration, the row starts on
+    the left, under the heading.
+  */
   &__buttons {
     display: flex;
     flex-direction: column;
     gap: $global-space;
-    margin-bottom: remify(20px);
+    width: fit-content;
+    margin: 0 auto remify(20px);
 
-    @include breakpoint(min, large) {
+    .button { width: auto; }
+
+    @include breakpoint(min, medium) {
       flex-direction: row;
       max-width: 500px;
       gap: $global-space * 0.75;
 
-      &__item { flex: 1; }
+      &__item { flex: none; }
+    }
+
+    @include breakpoint(min, large) {
+      margin-left: 0;
+      margin-right: 0;
     }
   }
 }
