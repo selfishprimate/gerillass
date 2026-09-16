@@ -1,0 +1,12 @@
+// Two, three and no clamp on the same paragraph, in a narrow column so the
+// text runs long enough to be cut.
+
+.card {
+  max-width: 280px;
+  margin-bottom: 24px;
+  font: 16px/1.5 system-ui, sans-serif;
+}
+
+.two { @include line-clamp(2); }
+.three { @include line-clamp(3); }
+.none { @include line-clamp(none); }

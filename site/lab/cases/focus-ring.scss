@@ -1,0 +1,56 @@
+// focus-ring draws on :focus-visible, so a mouse click shows nothing. Click
+// once inside the preview, then press Tab to move through the elements.
+
+.demo {
+  --focus: #1a73e8;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 32px;
+}
+
+.button {
+  padding: 10px 18px;
+  font: 600 15px/1.2 system-ui, sans-serif;
+  color: #2f3937;
+  background: #f2f2eb;
+  border: 1px solid #dee0cd;
+}
+
+// The defaults: 2px wide, 2px out, in the text's own colour.
+.default {
+  @include focus-ring;
+}
+
+// Wider, further out, and in a colour from a custom property.
+.custom {
+  @include focus-ring(3px, 4px, var(--focus));
+}
+
+// The ring follows the element's border-radius.
+.rounded {
+  border-radius: 999px;
+  @include focus-ring(3px, 3px, var(--focus));
+}
+
+// An ancestor with overflow: hidden clips a ring drawn outside the element.
+.clip {
+  overflow: hidden;
+  padding: 0;
+  border-radius: 8px;
+}
+
+.clip-outside {
+  @include focus-ring(3px, 2px, var(--focus));
+}
+
+// A negative offset draws the ring inside the element, where nothing clips it.
+.clip-inside {
+  @include focus-ring(3px, -4px, var(--focus));
+}
+
+.link {
+  font: 15px/1.5 system-ui, sans-serif;
+  color: #2f3937;
+  @include focus-ring(2px, 3px);
+}
