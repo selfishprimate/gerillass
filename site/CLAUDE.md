@@ -913,6 +913,52 @@ router's own screen would show; that was not tried.
   measured narrower than they are. Every measurement above was taken on a fresh
   load at its width.
 
+## The lab
+
+`/lab` is a workbench for developing the library, not for users. It exists on
+the dev server only: `routes.jsx` adds it behind `import.meta.env.DEV` with a
+lazy import, so a build writes no `lab.html` and bundles neither the page nor
+its compiler.
+
+The public playground compiles a published version from jsDelivr; the lab
+compiles the working tree. `pages/Lab` reads every file under the repository's
+`scss/` as text through `import.meta.glob`, and compiles with the site's own
+`sass` package through the playground's importer, so it shows whatever the
+checked-out branch holds.
+
+A case is two files in `site/lab/cases`: `name.scss` and `name.html`. The Sass
+gets `@use "gerillass" as *;` on its first line unless it loads the library
+itself, on the same line so an error's line number is the file's. For the open
+case the page shows the library's `@warn` and `@error` messages and the compiled
+CSS on the left half of the window, and the HTML rendered with that CSS in an
+iframe filling the right half, with a divider between them that can be
+dragged. The library files the case calls are found from its Sass (an
+`@include`, with or without `gls-`, or a call to a function's camelCase name)
+and shown in a Library panel. The case's name is its file name in title case,
+and the line under it is the first sentence of that first member's summary in
+`gerillass.json`, which the page imports, so it follows the manifest and waits
+for `npm run manifest` like everything else there.
+
+The source column is four folds, Library, SCSS, CSS and HTML by default, which
+can be reordered by their grips. The HTML, the Sass and the library files can
+all be edited on the page. An edit is a draft, kept per file in localStorage
+with the rest of the page's state so a refresh or a new tab keeps it, and the
+compile uses drafts, so a change to a mixin shows before it is saved. A draft
+remembers the file as it was when it began, and says so when the file has
+changed on disk since, since a long-lived draft could otherwise hide an edit
+made in the editor. Save writes the draft to disk
+through `plugins/lab-save.js`, a dev-server-only endpoint that writes only files
+that already exist, and only `.scss` under `scss/` or `.scss` and `.html` under
+`site/lab/cases`; new mixins and cases are created in the editor.
+
+Any save, from the page or the editor, reloads the page rather than
+hot-updating it. A draft that matches the file on disk after the reload is
+dropped, which is how Save clears its own. **The repository's hooks do not run
+on a file the lab saves**, so after changing the library here, run
+`npm run manifest` and the tests as for a change made in a shell. The lab does
+not replace the checks in the root CLAUDE.md either: a change that looks right
+here still needs the before and after compile and the browser check.
+
 ## Dormant code — do not assume it is live
 
 `src/pages/Contact` (no route), `components/Invitations/TopInvitation` (never
