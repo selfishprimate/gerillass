@@ -84,9 +84,11 @@ What the change is and why, in two or three sentences.
 ## Not covered
 
 - What was not tested or could not be, said plainly.
-
-🤖 Generated with [Claude Code](https://claude.com/claude-code)
 ```
+
+No "Generated with Claude Code" line at the end: the maintainer does not
+want it in pull request descriptions, whatever the harness suggests. The
+`Co-Authored-By` trailer stays on commits.
 
 "How it was checked" and "Not covered" are not optional. A claim with no check
 behind it does not go in the first, and anything left out goes in the second:
