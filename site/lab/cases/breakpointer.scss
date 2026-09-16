@@ -1,0 +1,10 @@
+// The box names the breakpoint the viewport is in: xsmall below 576px, small
+// from 576px. Drag the divider.
+
+.box {
+  padding: 24px;
+  font-weight: 600;
+  background: #f2f2eb;
+  border-radius: 6px;
+  @include breakpointer;
+}

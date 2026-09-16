@@ -1,0 +1,31 @@
+// stretched-link makes the whole card clickable, not only its link. Hover each
+// card: the pointer appears everywhere on the second one.
+
+.demo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+}
+
+.card {
+  position: relative;
+  width: 200px;
+  padding: 16px;
+  background: #f2f2eb;
+  border: 1px solid #dee0cd;
+}
+
+.card a {
+  font-weight: 600;
+  color: #2f3937;
+}
+
+.card p { margin: 4px 0 0; }
+
+.caption {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: #8a8f7a;
+}
+
+.stretched { @include stretched-link; }

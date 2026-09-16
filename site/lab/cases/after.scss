@@ -1,0 +1,20 @@
+// after adds a ::after pseudo-element with the content you pass. The same link
+// twice: plain, then with an arrow after it.
+
+.link {
+  margin: 0 0 4px;
+  font-weight: 600;
+  color: #2f3937;
+}
+
+.caption {
+  margin: 0 0 24px;
+  font-size: 13px;
+  color: #8a8f7a;
+}
+
+.with {
+  @include after(" →") {
+    color: #5bc0bb;
+  }
+}

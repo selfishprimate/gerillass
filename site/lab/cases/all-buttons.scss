@@ -1,0 +1,24 @@
+// all-buttons styles every kind of button in one rule: button, and inputs of
+// type button, reset and submit. The same three buttons, unstyled and styled.
+
+.row {
+  display: flex;
+  gap: 12px;
+}
+
+.caption {
+  margin: 8px 0 24px;
+  font-size: 13px;
+  color: #8a8f7a;
+}
+
+.with {
+  @include all-buttons {
+    padding: 8px 16px;
+    font: 600 14px system-ui, sans-serif;
+    color: #fff;
+    background: #2f3937;
+    border: 0;
+    border-radius: 6px;
+  }
+}

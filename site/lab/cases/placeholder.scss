@@ -1,0 +1,29 @@
+// The same field twice: the browser's grey placeholder, then one styled with
+// placeholder.
+
+.demo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.field {
+  width: 200px;
+  padding: 8px 12px;
+  font: inherit;
+  border: 1px solid #dee0cd;
+  border-radius: 6px;
+}
+
+.caption {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: #8a8f7a;
+}
+
+.styled {
+  @include placeholder {
+    color: #5bc0bb;
+    font-style: italic;
+  }
+}

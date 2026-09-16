@@ -1,0 +1,15 @@
+// The same six items in three columns, first touching and then with a gutter.
+
+.grid {
+  margin-bottom: 24px;
+}
+
+.grid div {
+  padding: 12px;
+  text-align: center;
+  background: #f2f2eb;
+  border: 1px solid #dee0cd;
+}
+
+.three { @include columnizer(3); }
+.gutter { @include columnizer(3, 16px); }

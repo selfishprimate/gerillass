@@ -1,0 +1,15 @@
+// Three circles, each from a single size.
+
+.demo {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.dot {
+  background: #5bc0bb;
+}
+
+.small { @include circle(40px); }
+.medium { @include circle(64px); }
+.large { @include circle(96px); }

@@ -1,0 +1,27 @@
+// border-box keeps padding and border inside an element's width. Both boxes
+// are 200px wide with 20px padding and a 4px border; the bar above is 200px.
+
+.ruler {
+  width: 200px;
+  height: 4px;
+  background: #5bc0bb;
+}
+
+.box {
+  width: 200px;
+  margin-top: 4px;
+  padding: 20px;
+  color: #2f3937;
+  background: #f2f2eb;
+  border: 4px solid #dee0cd;
+}
+
+.caption {
+  margin: 8px 0 24px;
+  font-size: 13px;
+  color: #8a8f7a;
+}
+
+.with {
+  @include border-box("only");
+}

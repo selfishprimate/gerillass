@@ -1,0 +1,8 @@
+// text-image fills the letters with a photo instead of a colour.
+
+.title {
+  margin: 0;
+  font: 900 72px/1 system-ui, sans-serif;
+  text-transform: uppercase;
+  @include text-image("/images/backgrounds/03.jpg");
+}

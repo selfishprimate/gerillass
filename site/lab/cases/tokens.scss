@@ -1,0 +1,55 @@
+// tokens writes a map out as custom properties. The card is styled once with
+// var(); a light and a dark map give it two themes. The third panel follows
+// the system's appearance setting.
+
+$light: (bg: #ffffff, surface: #f2f2eb, text: #2f3937, muted: #6b7068, accent: #1f8a85);
+$dark: (bg: #1c2321, surface: #2f3937, text: #f2f2eb, muted: #a9ae9f, accent: #5bc0bb);
+
+[data-theme="light"] {
+  @include tokens($light, color);
+}
+
+[data-theme="dark"] {
+  @include tokens($dark, color);
+}
+
+// Light by default, dark when the system asks for it.
+[data-theme="system"] {
+  @include tokens($light, color);
+
+  @media (prefers-color-scheme: dark) {
+    @include tokens($dark, color);
+  }
+}
+
+.demo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+// The same card in every panel; only the tokens change.
+.panel {
+  padding: 16px;
+  background: var(--color-bg);
+  border: 1px solid #dee0cd;
+  border-radius: 8px;
+}
+
+.card {
+  width: 180px;
+  padding: 16px;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border-radius: 6px;
+}
+
+.card h3 {
+  margin: 0 0 4px;
+  color: var(--color-accent);
+}
+
+.card p {
+  margin: 0;
+  color: var(--color-muted);
+}

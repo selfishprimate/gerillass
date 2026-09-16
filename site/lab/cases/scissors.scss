@@ -1,0 +1,23 @@
+// scissors cuts the corners off a box. One size cuts all four the same; four
+// sizes cut each corner differently, clockwise from the top left.
+
+.demo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+}
+
+.tile {
+  width: 160px;
+  height: 120px;
+  background: #5bc0bb;
+}
+
+.caption {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: #8a8f7a;
+}
+
+.even { @include scissors(16px); }
+.uneven { @include scissors(0 16px 32px 48px); }

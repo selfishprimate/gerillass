@@ -1,0 +1,26 @@
+// Two identical boxes asking to turn teal from 500px wide. Only the one inside
+// a container can answer; the other never changes. Drag the divider.
+
+.wrapper {
+  margin-bottom: 8px;
+}
+
+.with {
+  @include container;
+}
+
+.box {
+  padding: 24px;
+  background: #f2f2eb;
+  border-radius: 6px;
+  @include container-query(min, 500px) {
+    color: #fff;
+    background: #5bc0bb;
+  }
+}
+
+.caption {
+  margin: 0 0 24px;
+  font-size: 13px;
+  color: #8a8f7a;
+}

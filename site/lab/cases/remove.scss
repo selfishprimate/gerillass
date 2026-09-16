@@ -1,0 +1,18 @@
+// The first box disappears once the preview is 600px wide or less; the second
+// always stays. Drag the divider.
+
+.demo {
+  display: flex;
+  gap: 16px;
+}
+
+.box {
+  padding: 24px;
+  border-radius: 6px;
+  background: #dee0cd;
+}
+
+.gone {
+  background: #5bc0bb;
+  @include remove(max, 600px);
+}

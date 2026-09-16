@@ -1,0 +1,19 @@
+// aspect-ratio gives an element a fixed shape and crops an image to fill it.
+// The same photo in three ratios.
+
+.demo {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: start;
+  gap: 16px;
+}
+
+.caption {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: #8a8f7a;
+}
+
+.wide { @include aspect-ratio("16:9"); }
+.photo { @include aspect-ratio("4:3"); }
+.square { @include aspect-ratio("1:1"); }

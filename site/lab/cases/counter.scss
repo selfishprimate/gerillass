@@ -1,0 +1,24 @@
+// counter numbers the items of a list, here in plain and Roman numerals.
+
+.list {
+  margin: 0 0 24px;
+}
+
+.item {
+  padding: 6px 0;
+  border-bottom: 1px solid #dee0cd;
+}
+
+.numbers {
+  @include counter(".") {
+    margin-right: 8px;
+    font-weight: 700;
+  }
+}
+
+.roman {
+  @include counter("upper-roman", ".") {
+    margin-right: 8px;
+    font-weight: 700;
+  }
+}

@@ -1,0 +1,12 @@
+// brand-logo turns a link into a logo image, hiding its text but keeping the
+// whole logo clickable. The same link twice: as text, then as a logo.
+
+.caption {
+  margin: 8px 0 24px;
+  font-size: 13px;
+  color: #8a8f7a;
+}
+
+.with {
+  @include brand-logo(130px, 100px, "/images/general/sass-logo-black.svg");
+}

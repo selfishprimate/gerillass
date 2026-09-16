@@ -1,0 +1,11 @@
+// A box you can resize. Drag the corner.
+
+.box {
+  width: 240px;
+  height: 120px;
+  padding: 12px;
+  border: 1px solid #dee0cd;
+  border-radius: 6px;
+  background: #f2f2eb;
+  @include resizable;
+}

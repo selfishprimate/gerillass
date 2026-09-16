@@ -1,0 +1,25 @@
+// The same figure twice: the browser's margins and a full-size image, then
+// with reset-figure, where the margins are gone and the image fits.
+
+.demo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.frame {
+  width: 200px;
+  max-height: 160px;
+  overflow: hidden;
+  border: 1px solid #dee0cd;
+}
+
+.caption {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: #8a8f7a;
+}
+
+.reset {
+  @include reset-figure;
+}

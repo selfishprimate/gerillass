@@ -930,6 +930,13 @@ compiles the working tree. `pages/Lab` reads every file under the repository's
 `sass` package through the playground's importer, so it shows whatever the
 checked-out branch holds.
 
+Every mixin has a case, and the maintainer wants them simple: the core effect
+in two to four variants, usually the same element "Without" and "With" the
+mixin, captions in plain words rather than Sass calls, and nested HTML. Traps
+and edge cases belong in `meta/` and the docs, not here. Three cannot show a
+match by dragging the divider: `smartphone` and `tablet` read the screen's
+size and `screen-agent` its pixel density.
+
 A case is two files in `site/lab/cases`: `name.scss` and `name.html`. The Sass
 gets `@use "gerillass" as *;` on its first line unless it loads the library
 itself, on the same line so an error's line number is the file's. For the open

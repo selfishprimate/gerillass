@@ -1,0 +1,20 @@
+// smartphone matches the screen, not the preview, so dragging the divider does
+// nothing. To see Match, emulate a 414x896 phone held upright, such as an
+// iPhone XR in Chrome's device toolbar, and reload.
+
+.box {
+  padding: 16px;
+  font-weight: 600;
+  background: #f2f2eb;
+}
+
+.box::after { content: "No match on this screen"; }
+
+.phone {
+  @include smartphone("iPhone11") {
+    color: #fff;
+    background: #5bc0bb;
+
+    &::after { content: "Match: iPhone 11"; }
+  }
+}

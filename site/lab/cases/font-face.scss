@@ -1,0 +1,19 @@
+// The same line in Inter, loaded by font-face, and in the fallback font.
+
+@include font-face("Lab Inter", "/fonts/inter/inter-latin", $file-formats: woff2);
+
+.sample {
+  margin: 0;
+  font-size: 32px;
+  font-family: Georgia, serif;
+}
+
+.inter {
+  font-family: "Lab Inter", Georgia, serif;
+}
+
+.caption {
+  margin: 4px 0 24px;
+  font-size: 13px;
+  color: #8a8f7a;
+}

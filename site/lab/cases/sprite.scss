@@ -1,0 +1,14 @@
+// sprite shows one 100px frame of a six-frame image sheet. Stepping its
+// position through the frames plays the walk.
+
+.walker {
+  width: 100px;
+  height: 100px;
+  background-color: #f2f2eb;
+  @include sprite("/images/docs/sprite.png", 0 0);
+  animation: walk 0.7s steps(6) infinite;
+}
+
+@keyframes walk {
+  to { background-position: -600px 0; }
+}

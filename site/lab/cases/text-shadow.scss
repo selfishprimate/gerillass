@@ -1,0 +1,11 @@
+// text-shadow adds a shadow in a direction. With fill, the shadow is repeated
+// 1px at a time into a solid extrusion.
+
+.title {
+  margin: 0 0 24px;
+  font: 800 48px/1.1 system-ui, sans-serif;
+  color: #2f3937;
+}
+
+.shadow { @include text-shadow(bottom-right #5bc0bb 4px); }
+.fill { @include text-shadow(bottom-right #5bc0bb 8px true); }

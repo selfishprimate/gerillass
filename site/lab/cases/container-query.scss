@@ -1,0 +1,53 @@
+// The same card in a narrow sidebar and a wide main column, twice. With a
+// container query each card follows its own column; with a media query both
+// follow the preview. Drag the divider.
+
+.page {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 16px;
+}
+
+.column {
+  @include container;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px;
+  background: #f2f2eb;
+  border-radius: 6px;
+}
+
+.image {
+  flex: 0 0 64px;
+  height: 64px;
+  background: #5bc0bb;
+  border-radius: 4px;
+}
+
+.text {
+  margin: 0;
+}
+
+.caption {
+  margin: 8px 0 24px;
+  font-size: 13px;
+  color: #8a8f7a;
+}
+
+// Side by side once the card's own column is 300px wide.
+.by-container {
+  @include container-query(min, 300px) {
+    flex-direction: row;
+  }
+}
+
+// Side by side once the preview is 500px wide, wherever the card sits.
+.by-media {
+  @media (min-width: 500px) {
+    flex-direction: row;
+  }
+}

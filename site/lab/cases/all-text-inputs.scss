@@ -1,0 +1,23 @@
+// all-text-inputs styles every kind of text field in one rule. The same three
+// fields, unstyled and styled.
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.caption {
+  margin: 8px 0 24px;
+  font-size: 13px;
+  color: #8a8f7a;
+}
+
+.with {
+  @include all-text-inputs {
+    padding: 8px 10px;
+    font: 14px system-ui, sans-serif;
+    border: 2px solid #dee0cd;
+    border-radius: 6px;
+  }
+}

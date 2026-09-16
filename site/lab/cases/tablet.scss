@@ -1,0 +1,20 @@
+// tablet matches the screen, not the preview, so dragging the divider does
+// nothing. The box says Match only on a 768x1024 screen held upright, such as
+// an iPad mini.
+
+.box {
+  padding: 16px;
+  font-weight: 600;
+  background: #f2f2eb;
+}
+
+.box::after { content: "No match on this screen"; }
+
+.ipad {
+  @include tablet("iPadMini") {
+    color: #fff;
+    background: #5bc0bb;
+
+    &::after { content: "Match: iPad mini"; }
+  }
+}

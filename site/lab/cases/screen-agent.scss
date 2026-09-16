@@ -1,0 +1,19 @@
+// screen-agent matches the screen's pixel density, not the preview's size. On a
+// retina display this box says Match; on an ordinary one it does not.
+
+.box {
+  padding: 16px;
+  font-weight: 600;
+  background: #f2f2eb;
+}
+
+.box::after { content: "No match on this screen"; }
+
+.retina {
+  @include screen-agent("2x") {
+    color: #fff;
+    background: #5bc0bb;
+
+    &::after { content: "Match: a 2x screen"; }
+  }
+}

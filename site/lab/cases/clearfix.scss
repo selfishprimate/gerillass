@@ -1,0 +1,37 @@
+// A box holding a floated square. Without clearfix the box collapses and the
+// square hangs out of it; with clearfix the box wraps around it.
+
+.demo {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+}
+
+.column {
+  width: 180px;
+}
+
+.box {
+  padding: 8px;
+  background: #f2f2eb;
+  border: 2px solid #2f3937;
+}
+
+.square {
+  float: left;
+  width: 64px;
+  height: 64px;
+  background: #5bc0bb;
+}
+
+.fixed {
+  @include clearfix;
+}
+
+.caption {
+  clear: both;
+  margin: 0;
+  padding-top: 8px;
+  font-size: 13px;
+  color: #8a8f7a;
+}

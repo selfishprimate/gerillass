@@ -1,0 +1,39 @@
+// Three ranges named from the breakpoint map. Only one box is lit at any width,
+// because a range ends 1px before the next one starts. Drag the divider.
+
+.demo {
+  display: flex;
+  gap: 12px;
+}
+
+.box {
+  flex: 1;
+  padding: 16px;
+  text-align: center;
+  background: #f2f2eb;
+  border-radius: 6px;
+}
+
+// Below 576px.
+.phone {
+  @include breakpoint(xsmall, small) {
+    color: #fff;
+    background: #5bc0bb;
+  }
+}
+
+// From 576px to 767px.
+.tablet {
+  @include breakpoint(between, small medium) {
+    color: #fff;
+    background: #5bc0bb;
+  }
+}
+
+// From 768px.
+.desktop {
+  @include breakpoint(min, medium) {
+    color: #fff;
+    background: #5bc0bb;
+  }
+}
