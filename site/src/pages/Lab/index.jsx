@@ -2,7 +2,7 @@ import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from "re
 import { useSearchParams } from "react-router-dom";
 
 import CodeBlock from "components/CodeBlock";
-import { ChevronRightIcon } from "components/Icons";
+import { ChevronRightIcon, PanelRightCloseIcon, PanelRightOpenIcon } from "components/Icons";
 import { collectingLogger, makeImporter } from "components/Playground/compiler";
 
 import manifest from "../../../../gerillass.json";
@@ -321,6 +321,7 @@ function Lab() {
   const [order, setOrder] = useState(readOrder);
   const [split, setSplit] = useState(() => clampSplit(readStored("lab:split", SPLIT.initial)));
   const [shown, setShown] = useState(() => readStored("lab:shown", {}));
+  const [preview, setPreview] = useState(() => readStored("lab:preview", true) !== false);
   const [dragging, setDragging] = useState(false);
   const [movingPanel, setMovingPanel] = useState(null);
   const [dropTarget, setDropTarget] = useState(null);
@@ -332,6 +333,7 @@ function Lab() {
   useEffect(() => writeStored("lab:order", order), [order]);
   useEffect(() => writeStored("lab:split", split), [split]);
   useEffect(() => writeStored("lab:shown", shown), [shown]);
+  useEffect(() => writeStored("lab:preview", preview), [preview]);
 
   /*
     A draft that matches the file on disk is no longer a draft. This is what
@@ -654,11 +656,19 @@ function Lab() {
       lab on the left (the cases and the case's source), and on the right
       nothing but the rendered page, white and edge to edge. The divider can be
       dragged, and a double click puts it back in the middle.
+
+      The switch beside the case's name takes the preview and the divider away
+      and gives the lab the whole window. The split is kept for when it comes
+      back.
     */
     <main
       ref={labRef}
       className={`lab${dragging ? " is-dragging" : ""}`}
-      style={{ gridTemplateColumns: `minmax(0, ${split}fr) auto minmax(0, ${100 - split}fr)` }}
+      style={{
+        gridTemplateColumns: preview
+          ? `minmax(0, ${split}fr) auto minmax(0, ${100 - split}fr)`
+          : "minmax(0, 1fr)",
+      }}
     >
       <div className="lab__left">
         <div className="lab__body">
@@ -690,10 +700,23 @@ function Lab() {
 
           <div className="lab__source">
             <div className="lab__case__head">
-              <h2 className="lab__case__name">{titleCase(name)}</h2>
-              {sources[0] && SUMMARIES.get(sources[0]) && (
-                <p className="lab__case__summary">{SUMMARIES.get(sources[0])}</p>
-              )}
+              <div className="lab__case__text">
+                <h2 className="lab__case__name">{titleCase(name)}</h2>
+                {sources[0] && SUMMARIES.get(sources[0]) && (
+                  <p className="lab__case__summary">{SUMMARIES.get(sources[0])}</p>
+                )}
+              </div>
+              <button
+                type="button"
+                className="lab__preview-toggle"
+                aria-expanded={preview}
+                aria-controls="lab-preview"
+                aria-label={preview ? "Hide the preview" : "Show the preview"}
+                title={preview ? "Hide the preview" : "Show the preview"}
+                onClick={() => setPreview((visible) => !visible)}
+              >
+                {preview ? <PanelRightCloseIcon size={18} /> : <PanelRightOpenIcon size={18} />}
+              </button>
             </div>
 
             {saveError && (
@@ -716,27 +739,31 @@ function Lab() {
         </div>
       </div>
 
-      <div
-        className="lab__divider"
-        role="separator"
-        aria-orientation="vertical"
-        aria-label="Resize the lab and the preview"
-        aria-valuemin={SPLIT.min}
-        aria-valuemax={SPLIT.max}
-        aria-valuenow={Math.round(split)}
-        tabIndex={0}
-        onPointerDown={startDrag}
-        onKeyDown={nudge}
-        onDoubleClick={() => setSplit(SPLIT.initial)}
-      />
-
-      <div className="lab__render">
-        <iframe
-          className="lab__frame"
-          title={`${name} preview`}
-          srcDoc={previewDocument(result.error ? lastGood : result.css, html)}
+      {preview && (
+        <div
+          className="lab__divider"
+          role="separator"
+          aria-orientation="vertical"
+          aria-label="Resize the lab and the preview"
+          aria-valuemin={SPLIT.min}
+          aria-valuemax={SPLIT.max}
+          aria-valuenow={Math.round(split)}
+          tabIndex={0}
+          onPointerDown={startDrag}
+          onKeyDown={nudge}
+          onDoubleClick={() => setSplit(SPLIT.initial)}
         />
-      </div>
+      )}
+
+      {preview && (
+        <div id="lab-preview" className="lab__render">
+          <iframe
+            className="lab__frame"
+            title={`${name} preview`}
+            srcDoc={previewDocument(result.error ? lastGood : result.css, html)}
+          />
+        </div>
+      )}
     </main>
   );
 }

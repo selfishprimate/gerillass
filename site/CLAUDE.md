@@ -875,10 +875,14 @@ Masking spec (not tested here), which is why every mask lives in `public/`,
 same-origin. The policy's `img-src 'self'` covers them; the deployed header was
 not tested against a mask.
 
-The hero's buttons are as wide as their labels. Stacked below medium they share
-the wider one's width (`width: fit-content` on the column) and are centred;
-from medium they sit side by side, still centred; from large, where the hero
-itself turns into a row at 992px, they start under the heading.
+The hero's buttons are as wide as their labels from medium, where they sit side
+by side and centred; from large, where the hero itself turns into a row at
+992px, they start under the heading. Stacked below medium they are larger than
+the rem-sized `button--large` (68px tall with 27px text at 375px, against 59px
+and 23px) and take the column's width up to 288px, so a narrow phone shrinks
+them rather than letting them overflow. That rule is `breakpoint(xsmall,
+medium)`, since `breakpoint(max, medium)` compiles to `max-width: 768px` and
+reached the first side-by-side width.
 
 ### The error page
 
@@ -932,7 +936,9 @@ itself, on the same line so an error's line number is the file's. For the open
 case the page shows the library's `@warn` and `@error` messages and the compiled
 CSS on the left half of the window, and the HTML rendered with that CSS in an
 iframe filling the right half, with a divider between them that can be
-dragged. The library files the case calls are found from its Sass (an
+dragged. A button beside the case's name hides the preview and the divider and
+gives the lab the whole window; the choice is kept in localStorage, and the
+divider comes back where it was. The library files the case calls are found from its Sass (an
 `@include`, with or without `gls-`, or a call to a function's camelCase name)
 and shown in a Library panel. The case's name is its file name in title case,
 and the line under it is the first sentence of that first member's summary in
@@ -940,7 +946,11 @@ and the line under it is the first sentence of that first member's summary in
 for `npm run manifest` like everything else there.
 
 The source column is four folds, Library, SCSS, CSS and HTML by default, which
-can be reordered by their grips. The HTML, the Sass and the library files can
+can be reordered by their grips. Open folds share the column's height, and each
+keeps its code block at least 400px tall; when that is more than the window
+has, the column scrolls. The block's `<pre>` carries `contain: size`, because
+without it a fold's minimum height was the whole file, 1588px for
+`_focus-ring.scss`. The HTML, the Sass and the library files can
 all be edited on the page. An edit is a draft, kept per file in localStorage
 with the rest of the page's state so a refresh or a new tab keeps it, and the
 compile uses drafts, so a change to a mixin shows before it is saved. A draft
