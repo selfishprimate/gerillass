@@ -205,9 +205,17 @@ made, plus the workflows that are easy to half-finish:
   without CLAUDE.md changing, keeps the turn going once with the sections that
   usually need it. Saying nothing needs to change is a valid answer; it does not
   repeat for the same set of files.
-- **`/release`, `/new-mixin`, `/sass-test`, `/audit-library`** — the release
-  checklist, the add-a-member checklist, the sass-true conventions, and the
-  adversarial sweep over every mixin (`tools/audit.js`).
+- **`hooks/check-commit-message.js`** — a `PreToolUse` hook on `Bash`, so it
+  runs before a command rather than after an edit. When the command is a
+  `git commit`, it refuses a message whose subject is over 72 characters or
+  ends in a full stop, or that has no body beyond its trailers. A message it
+  cannot read from the command, `-m "$MSG"` or an unquoted heredoc, is refused
+  too: commits went in without a body exactly that way. The standard it checks
+  is written out in `/commit-and-pr`.
+- **`/release`, `/new-mixin`, `/sass-test`, `/audit-library`, `/commit-and-pr`**
+  — the release checklist, the add-a-member checklist, the sass-true
+  conventions, the adversarial sweep over every mixin (`tools/audit.js`), and
+  the commit message and pull request description standard.
 
 The first four hooks are `PostToolUse` on `Write|Edit` and exit 2 (blocking)
 on failure. **They only fire for edits made through the editor**, and a file
