@@ -9,7 +9,7 @@ Gerillass is a **pure Sass library** — a toolkit of mixins and functions, in t
 Two consequences follow from this and drive most decisions in the repo:
 
 1. **`package.json` must have no `dependencies`.** Everything (`jest`, `sass`, `sass-true`, `glob`) belongs in `devDependencies`. Consumers get only `.scss` files, so a runtime dependency here forces the entire test toolchain onto every downstream project. This was the cause of 24 Dependabot alerts fixed in v1.3.3 — do not reintroduce it.
-2. **Only `scss/` ships.** `.npmignore` excludes `test`, `assets`, `meta`, `tools`, dotfiles and `*.md`; npm always adds `README.md`, `LICENSE.md` and `package.json` back. Verify with `npm pack --dry-run` before any release (114 files / ~58 kB since `gradient` replaced the two old gradient mixins).
+2. **Only `scss/` ships.** `.npmignore` excludes `test`, `assets`, `meta`, `tools`, dotfiles and `*.md`; npm always adds `README.md`, `LICENSE.md` and `package.json` back. Verify with `npm pack --dry-run` before any release (114 files, an 82 kB tarball, since `gradient` replaced the two old gradient mixins).
 3. **The gem is the same library, not a port.** `gerillass.gemspec` ships `scss/`, `gerillass.json` and `SKILL.md`, plus `lib/`, `LICENSE.md` and `README.md`, reads its version from `package.json`, and has no runtime dependencies. `lib/` only tells Rails, Jekyll or a plain `sass-embedded` compile where `scss/` is. `.npmignore` keeps `lib`, the gemspec and `*.gem` out of the npm package. Keep the gemspec ASCII: RubyGems reads it in the locale's encoding, and a literal non-ASCII character fails to load.
 
 Dart Sass only. LibSass/node-sass has been unsupported since v1.3.0.
@@ -471,11 +471,11 @@ from the source zip of a GitHub release by `export-ignore` in `.gitattributes`.
 
 The security fix only reaches users when the npm package is republished — updating the repo alone changes nothing for consumers.
 
-1. Bump `version` in `package.json` (patch for dependency/security work; `2.0.0` is reserved for the module migration).
+1. Bump `version` in `package.json`: patch for dependency, security and bugfix work, minor for a new member, major for a change that breaks a call that worked.
 2. Add a `CHANGELOG.md` entry at the top, using the existing `- **Security:** / **Added:** / **Updated:** / **Removed:** / **Fixed:**` bullet style.
 3. Commit, then `git tag -a vX.Y.Z -m "vX.Y.Z"` — tags are `vX.Y.Z`, no dot after `v`.
 4. Push branch and tag, then `gh release create vX.Y.Z --latest --notes-file ...`.
-5. `npm publish`. The account has 2FA enabled, so this needs `--otp=<code>` and must be run by the maintainer. Then the gem, built from the tag in a worktree outside the repository and pushed by the maintainer with their own one-time code: `gem build gerillass.gemspec --output <dir>/gerillass-X.Y.Z.gem` and `gem push <that file> --otp=<code>`. `/release` step 6b has the checks to run on the built gem first.
+5. **Publish to both registries, every release: npm and RubyGems.** A release on one only is not a release. `npm publish`. The account has 2FA enabled, so this needs `--otp=<code>` and must be run by the maintainer. Then the gem, built from the tag in a worktree outside the repository and pushed by the maintainer with their own one-time code: `gem build gerillass.gemspec --output <dir>/gerillass-X.Y.Z.gem` and `gem push <that file> --otp=<code>`. `/release` step 6b has the checks to run on the built gem first.
 6. Update the site, which names the version in several places. The header badge
    and both download buttons follow `package.json` through `site/src/release.js`,
    but the download link is a 404 until the tag exists, so the site deploys after
@@ -485,6 +485,10 @@ The security fix only reaches users when the npm package is republished — upda
    `npm run supporters --prefix site`, and check the documentation pages against
    what changed, and regenerate the playground demos with
    `npm run playground-demos --prefix site`. `/release` has the full table.
+7. **Every major release rewrites the announcement band** across the top of the
+   site, `site/src/components/Announcement/index.jsx`, to name the new version,
+   say in a sentence what breaks, and link `MIGRATION.md`. The maintainer made
+   this a rule on 17 September 2026. A minor or patch release leaves it alone.
 
 Default branch is `main` (renamed from `master` in v1.3.3). A repository ruleset blocks force-pushes and deletion of the default branch, with no bypass actors — direct pushes are allowed.
 

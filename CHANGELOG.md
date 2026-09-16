@@ -1,6 +1,36 @@
 # Change Log
 _Change is the essence._
 
+## 3.0.0
+
+The two gradient mixins are replaced by one, `gradient`, which also draws conic
+and repeating gradients and blends in a colour space, and `text-gradient` takes
+the same arguments. Both changes break existing calls and both stop the build,
+so nothing fails silently. `MIGRATION.md` has every old call's new form.
+
+- **Added:** `gradient`, a linear, radial or conic gradient, plain or repeating,
+  written as `background-image`. The colours come first and everything else has
+  a default. `$in` sets a colour space, such as `oklab` or `"oklch longer hue"`,
+  and the gradient is written once without it first, for a browser that does
+  not support colour spaces. A direction takes any angle unit, `"to top"` or
+  `var()`.
+- **Added:** `gradientValue`, the same gradient as a value, to layer it with an
+  image in one `background-image` or use it as a `mask-image` or
+  `border-image`.
+- **Removed:** `linear-gradient` and `radial-gradient`. Every call to them has a
+  `gradient` call that writes the same gradient; the property is now
+  `background-image` instead of the `background` shorthand, which also reset
+  any background colour set before it.
+- **Updated:** `text-gradient` takes the colours first, then every argument
+  `gradient` takes, so text can carry a radial, conic or repeating gradient and
+  blend in a colour space. A call in the old order stops the build and shows the
+  new form. Its output for the same arguments is unchanged.
+- **Updated:** `text-gradient`'s `$direction` and `background-image`'s
+  `$filter-direction` accept any angle unit, `"to top"`, `var()` and `calc()`.
+- **Updated:** a gradient with a single colour warns in `gradient`,
+  `gradientValue` and `text-gradient`, since browsers before Chrome 135,
+  Firefox 136 and Safari 18.4 drop it.
+
 ## 2.3.1
 
 Calls that compiled into CSS a browser drops, or into a media or container
