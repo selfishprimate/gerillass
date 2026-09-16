@@ -65,6 +65,27 @@ class Examples extends Component {
                   list, but not all. Well, consider it done.
                 </p>
               </Tab>
+
+              <Tab className="examples__tab-panels__tabs__tab">
+                <div className="examples__tab-panels__tabs__tab__title">
+                  Line Clamp
+                </div>
+                <p className="examples__tab-panels__tabs__tab__description">
+                  Truncate text after a set number of lines with{" "}
+                  <strong>CSS line clamp</strong>, and every declaration it
+                  needs to work.
+                </p>
+              </Tab>
+
+              <Tab className="examples__tab-panels__tabs__tab">
+                <div className="examples__tab-panels__tabs__tab__title">
+                  Fluid
+                </div>
+                <p className="examples__tab-panels__tabs__tab__description">
+                  Create <strong>fluid typography</strong> with a CSS{" "}
+                  <strong>clamp()</strong> value in one line of code.
+                </p>
+              </Tab>
             </TabList>
 
             <div className="examples__tab-panels__panels">
@@ -274,6 +295,93 @@ class Examples extends Component {
                   or see the{" "}
                   <a
                     href="https://github.com/selfishprimate/gerillass/blob/master/scss/library/_except.scss"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    source code on Github!
+                  </a>
+                </p>
+              </TabPanel>
+
+              <TabPanel className="examples__tab-panels__panels__panel highlight">
+                <div className="highlight__header">
+                  <h3 className="highlight__title">
+                    Line clamp Sass mixin for multi-line text truncation
+                  </h3>
+                  <p className="highlight__description">
+                    This Sass mixin will help you to{" "}
+                    <strong>truncate text after a number of lines</strong>.{" "}
+                    <code>-webkit-line-clamp</code> does nothing on its own, so
+                    the mixin writes every declaration it needs.
+                  </p>
+                </div>
+                <div className="highlight__item">
+                  <p className="highlight__item__description">
+                    Pass the number of lines to show before the text is cut.
+                  </p>
+                  <CodeBlock language="scss" label="SCSS">
+                    {".excerpt {\n  @include line-clamp(3);\n}"}
+                  </CodeBlock>
+                </div>
+                <div className="highlight__item">
+                  <p className="highlight__item__description">
+                    It will generate the CSS code below..
+                  </p>
+                  <CodeBlock language="css" label="CSS">
+                    {
+                      ".excerpt {\n  display: -webkit-box;\n  -webkit-box-orient: vertical;\n  -webkit-line-clamp: 3;\n  line-clamp: 3;\n  overflow: hidden;\n}"
+                    }
+                  </CodeBlock>
+                </div>
+                <p className="highlight__footnote">
+                  * This is just a simple demonstration of Line Clamp Sass
+                  mixin. For more cool features please checkout the{" "}
+                  <Link to="/docs/line-clamp">documentation</Link> or see the{" "}
+                  <a
+                    href="https://github.com/selfishprimate/gerillass/blob/main/scss/library/_line-clamp.scss"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    source code on Github!
+                  </a>
+                </p>
+              </TabPanel>
+
+              <TabPanel className="examples__tab-panels__panels__panel highlight">
+                <div className="highlight__header">
+                  <h3 className="highlight__title">
+                    Fluid typography with a Sass clamp() function
+                  </h3>
+                  <p className="highlight__description">
+                    This Sass function returns a{" "}
+                    <strong>CSS clamp() value</strong> that grows with the
+                    viewport between two sizes, then stops. It keeps a rem
+                    term, so the text still follows browser zoom.
+                  </p>
+                </div>
+                <div className="highlight__item">
+                  <p className="highlight__item__description">
+                    Pass the smallest and the largest size. By default the value
+                    grows between 320px and 1280px wide viewports.
+                  </p>
+                  <CodeBlock language="scss" label="SCSS">
+                    {".title {\n  font-size: fluid(24px, 48px);\n}"}
+                  </CodeBlock>
+                </div>
+                <div className="highlight__item">
+                  <p className="highlight__item__description">
+                    It will generate the CSS code below..
+                  </p>
+                  <CodeBlock language="css" label="CSS">
+                    {".title {\n  font-size: clamp(1.5rem, 1rem + 2.5vw, 3rem);\n}"}
+                  </CodeBlock>
+                </div>
+                <p className="highlight__footnote">
+                  * This is just a simple demonstration of Fluid Sass function.
+                  For more cool features please checkout the{" "}
+                  <Link to="/docs/fluid">documentation</Link> or see the{" "}
+                  <a
+                    href="https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_fluid.scss"
                     target="_blank"
                     rel="noopener noreferrer"
                   >

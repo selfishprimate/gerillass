@@ -352,7 +352,8 @@ are load-bearing:
   fragment stays an anchor.
 
 `CodeBlock` carries the look as well as the behaviour: `$primary-color`,
-1.5rem of padding, 1rem Roboto Mono, a 16px radius. That is the landing page's
+1.5rem of padding, 1rem Roboto Mono, the hand-drawn outline (see **Hand-drawn
+shapes**). That is the landing page's
 treatment, and the documentation showing a paler, smaller, tighter block read
 as a different site. The landing page also reaches the same `<pre>` through
 `.highlight pre`, a descendant selector that the component's wrapper does not
@@ -805,20 +806,41 @@ measure the joints after any reorder rather than trusting the paddings.
 `npm install gerillass --save-dev`, in the site's `CodeBlock`, so it has the
 same copy button as the documentation.
 
-**The space above and below it is equal, measured text to text**, from the last
-line of the section above to the block, and from the hint to the first line of
-Benefits. Two things make that awkward. `_typography.scss` sets the root to 90%
-below medium, and Benefits' own top padding (6rem, 8rem from large) is already
-larger than the space above Install. So Install has no bottom padding and a
-negative bottom margin per range: -2.25rem below medium, -0.375rem from medium,
--1.875rem from large. Measured: 101.5px above and 101.4px below at 1440px and
-1024px, 93.5 and 93.4 at 800px and 768px, 56.8 and 56.9 at 600px and 375px.
-Change either section's padding and those three numbers need measuring again.
+### Benefits
+
+Four items, each a real feature written in the words people search for, from
+keyword research on 15 September 2026: media and container queries, fluid
+typography and line clamp, AI coding agents, and npm or RubyGems. Every claim
+and count in the copy is checkable against `gerillass.json`; change a count in
+the release that changed it.
+
+The illustrations are PNGs in `public/images/illustrations`, referenced by URL,
+and were generated with ChatGPT from the template in
+`prompts/illustrations.md`. Use that template for any new one, so a
+replacement keeps the same style. Each PNG carries its background blob.
+
+`prompts/` holds the prompts used to generate the site's images, one file per
+kind (`illustrations.md`, and `mascot.md` once there is one). It sits outside
+`public/` on purpose, since everything there is deployed.
 
 ### Hand-drawn shapes
 
-The buttons and the install block are cut to shapes that look drawn by hand.
-Three separate mechanisms, each chosen for a reason:
+The buttons, the code blocks, the playground's editors and the command palette
+are cut to shapes that look drawn by hand. Four separate mechanisms, each
+chosen for a reason:
+
+- **Blocks of any height: nine pieces.** `hand-drawn-block` in
+  `src/assets/scss/abstract/_mixins.scss` masks an element with the install
+  block's drawing cut into nine files under `public/images/shapes/code-block/`:
+  four corners at their drawn size, four edges that stretch along their own
+  length, and a plain fill in the middle. `CodeBlock`, the playground's
+  `__editor` and the palette's `__dialog` use it, because their heights run
+  from one line to hundreds and a single stretched drawing pulls the corners
+  out of shape. A mask cuts away a `box-shadow`, so the palette's shadow is a
+  `drop-shadow` filter on `.palette__frame` around the dialog. The selected
+  Examples tab below xlarge takes the large button's filled drawing on a
+  `::before`, with `inset: 0` because the tab list scrolls sideways and would
+  clip anything outside a tab.
 
 - **Large buttons: a mask, not a background.** Every `.button` in
   `_buttons.scss` has a `::before` layer behind its label, masked to

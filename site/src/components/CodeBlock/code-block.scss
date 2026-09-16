@@ -16,7 +16,8 @@
   carried the same three for this reason.
 */
 .code-block {
-  border-radius: remify(16px);
+  /* The install block replaces this with a single drawing of its own. */
+  @include hand-drawn-block;
   overflow: hidden;
   background: $primary-color;
 

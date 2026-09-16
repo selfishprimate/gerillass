@@ -34,6 +34,7 @@ function Breadcrumbs({ path }) {
 
   return (
     <nav className="breadcrumbs" aria-label="breadcrumb">
+      <h2 className="breadcrumbs__title">Breadcrumbs</h2>
       <ol className="breadcrumbs__list">
         <li className="breadcrumbs__item">
           <Link className="breadcrumbs__link breadcrumbs__home" to="/">

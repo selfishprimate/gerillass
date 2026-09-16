@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 import ReactDOM from "react-dom";
 import { Controlled as CodeMirror } from "react-codemirror2";
 import { motion, AnimatePresence } from "framer-motion";
@@ -743,12 +742,18 @@ class Playground extends Component {
                         <span aria-hidden="true">{"// "}</span>
                         {DEMOS[mixin].description} Learn more about{" "}
                         {DEMOS[mixin].title || mixinTitle(mixin)}:{" "}
-                        <Link
+                        {/*
+                          A new tab, so following the link does not leave the
+                          playground and the Sass typed into it.
+                        */}
+                        <a
                           className="playground__editor__link"
-                          to={`${DOCS}/${mixin}`}
+                          href={`${DOCS}/${mixin}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
                         >
                           {`gerillass.com${DOCS}/${mixin}`}
-                        </Link>
+                        </a>
                       </motion.p>
                     )}
                     <CodeMirror

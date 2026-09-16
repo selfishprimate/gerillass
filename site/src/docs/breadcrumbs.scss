@@ -8,6 +8,11 @@
 .breadcrumbs {
   margin-bottom: remify(34px);
 
+  /* Names the nav in the page outline, the way the header names its own. */
+  &__title {
+    @include hide;
+  }
+
   &__list {
     display: flex;
     flex-wrap: wrap;

@@ -25,6 +25,11 @@
     &.is-open { display: block; }
   }
 
+  /* Names the aside in the page outline, the way the header names its nav. */
+  &__title {
+    @include hide;
+  }
+
   &__main {
     min-width: 0;
   }

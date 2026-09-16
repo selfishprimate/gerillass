@@ -1,7 +1,5 @@
 @import "assets/scss/abstract";
 
-$pane-radius: remify(16px);
-
 /*
   The playground is a window over the site rather than a page of its own: it
   wants the whole screen for two editors, and the site's header and footer have
@@ -276,8 +274,8 @@ $pane-radius: remify(16px);
 
   /*
     CodeMirror ships its own layout; everything below only restates the site's
-    code-block look — the dark panel, the mono face and the rounded corners the
-    static examples already use.
+    code-block look — the dark panel, the mono face and the hand-drawn outline
+    the static examples already use.
   */
   &__editor {
     position: relative;
@@ -287,7 +285,7 @@ $pane-radius: remify(16px);
     min-height: 0;
     overflow: hidden;
     background-color: $primary-color;
-    border-radius: $pane-radius;
+    @include hand-drawn-block;
 
     /* The block's own name and buttons, on the panel with the code. */
     &__bar {

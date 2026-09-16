@@ -60,6 +60,9 @@ function Install() {
 
   return (
     <section className="install section">
+      <div className="section__header hidden">
+        <h2 className="section__title">How to install Gerillass?</h2>
+      </div>
       <div className="section__inner">
         <div className="install__block">
           <CodeBlock language="bash" label={label}>
