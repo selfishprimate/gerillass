@@ -303,21 +303,21 @@ So, feel free to use any tool to support that. My suggestion is Autoprefixer. If
 
 ## Experimenting
 
-Experimentation with Gerillass is easy: If you're processing Sass files on your computer already, [download the Gerillass Sass library](https://github.com/selfishprimate/gerillass/archive/main.zip), include it in your project, and start using it. If not, use [Gerillass Play](https://github.com/selfishprimate/gerillass-play)! Gerillass Play is a Gulp based playground, built for you to get started with [Sass](https://sass-lang.com/) and [Gerillass](https://gerillass.com/) quickly.
+The quickest way to try Gerillass is the [playground](https://gerillass.com/playground). It runs in your browser, so there is nothing to install: write Sass on one side and read the CSS it compiles to on the other. Pick a mixin to start from an example, and pick any published Gerillass version to compile against, which makes it easy to see how a call behaves before and after an upgrade.
 
-**Important Note**: Don't forget that you must have [Node.js](https://nodejs.org/en/) and [Gulp CLI](https://gulpjs.com/docs/en/getting-started/quick-start) installed on your machine to work with Gerillass Play.
+When you are ready to use it in a project, follow the [installation](#installation) steps for your build tool.
 
 ## Testing
 
-Gerillass comes with a unit-testing module named [True](https://github.com/oddbird/true), which makes Sass unit tests possible (endless thanks to the [OddBird Team](https://github.com/oddbird)).
-
-You can find two test examples under the `test` folder, take your time, examine the codes, and then write your unit tests. After that, run the following command to see if the tests pass.
+The test suite runs with [Jest](https://jestjs.io/) and [True](https://github.com/oddbird/true), which makes Sass unit tests possible (endless thanks to the [OddBird Team](https://github.com/oddbird)).
 
     npm test
 
+It checks more than hand-written assertions: every mixin is called at least once, every documented example is compiled and compared with a snapshot, and every input a mixin should refuse must stop the build with the library's own error message. [CONTRIBUTING.md](CONTRIBUTING.md#testing) explains which of these a change needs.
+
 ## Contribution
 
-Please read the [contribution details](CONTRIBUTING.md) and feel free to contribute to the library.
+Please read the [contribution details](CONTRIBUTING.md) and feel free to contribute to the library. If you are working on a mixin, the site's dev server has a lab that renders your working copy of the library as you edit it; [CONTRIBUTING.md](CONTRIBUTING.md#seeing-what-it-renders) shows how to use it.
 
 ## License
 
