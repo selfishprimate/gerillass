@@ -26,6 +26,9 @@
   position: relative;
   z-index: 1;
   padding: 4rem 0 0;
+  /* Animation, after Featured and before Benefits */
+  opacity: 0;
+  animation: setBack 0.5s 0.6s forwards;
   margin-bottom: -2.25rem;
   @include breakpoint(min, medium) {
     margin-bottom: -0.375rem;
