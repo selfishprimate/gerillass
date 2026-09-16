@@ -744,6 +744,14 @@ written beside the old two for comparison, over a shared builder in
 `scss/internal/_gradient.scss` that four other mixins also use; the file lists
 what changed and what is left.
 
+### What `text-gradient-animation.md` proposes
+
+Suggested by the maintainer on 17 September 2026 for later: a shimmer or colour
+sweep on `text-gradient`. By hand it needs `background-size`, `@keyframes` and
+an `animation`, and the mixin's `background` shorthand resets the size and
+position unless they come after it. The file lists the design questions and
+what to measure in the three browsers first. Not planned.
+
 ### What `fix-plan.md` sets out
 
 The findings of the agent trials turned into work. For each problem: what goes

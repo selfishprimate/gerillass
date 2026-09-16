@@ -41,6 +41,8 @@ A color stop position can be defined with `length` or `percentage` units.
 
 ## Examples
 
+### The basics
+
 <Example caption="Pass the colours and a direction. As many colours as you like.">
 ```scss
 .element{
@@ -136,6 +138,88 @@ A color stop position can be defined with `length` or `percentage` units.
 ```
 ```html
 <h2 class="element sandbox text">Text Gradient is Awesome!</h2>
+```
+</Example>
+
+### In real interfaces
+
+Each of these is the mixin alone. The only other declaration is the font, so the letters are big enough to show the gradient. They are spans rather than blocks: the gradient paints the element's box, and a block is as wide as the page, so a diagonal, radial or conic gradient would spread far past the word.
+
+<Example caption="Highlight one word of a hero headline. The gradient sits on a span, so the rest of the sentence keeps its colour.">
+```scss
+.headline{
+  font: 800 44px/1.1 system-ui, sans-serif;
+
+  span{
+    @include text-gradient(#6366f1 #ec4899, $direction: right, $in: oklab);
+  }
+}
+```
+```html
+<h1 class="headline">Design at the <span>speed of thought</span></h1>
+```
+</Example>
+
+<Example caption="A price on a pricing card, blended in oklch so the colours stay vivid across the digits.">
+```scss
+.price{
+  font: 800 72px/1 system-ui, sans-serif;
+  @include text-gradient(#0ea5e9 #22c55e, $direction: 135deg, $in: oklch);
+}
+```
+```html
+<span class="price">$29/mo</span>
+```
+</Example>
+
+<Example caption="A gold label for a premium tier. Stops crowded at the middle give the letters the bright band that metal has.">
+```scss
+.premium{
+  font: 900 48px/1 system-ui, sans-serif;
+  @include text-gradient(
+    (#8b6508 0%) (#ffd700 45%) (#fff8dc 50%) (#daa520 55%) (#8b6508 100%),
+    $direction: top
+  );
+}
+```
+```html
+<span class="premium">PREMIUM</span>
+```
+</Example>
+
+<Example caption="A wordmark split in two colours by a hard diagonal, from two stops that meet at 50%.">
+```scss
+.wordmark{
+  font: 900 64px/1 system-ui, sans-serif;
+  @include text-gradient((#0f172a 50%) (#f97316 50%), $direction: 135deg);
+}
+```
+```html
+<span class="wordmark">SPLIT</span>
+```
+</Example>
+
+<Example caption="A glowing title: a radial gradient is brightest in the middle of the word and cools towards the ends.">
+```scss
+.glow{
+  font: 900 56px/1 system-ui, sans-serif;
+  @include text-gradient(#f0abfc #a855f7 #3b82f6, radial, $shape: ellipse, $position: center);
+}
+```
+```html
+<span class="glow">LAUNCH DAY</span>
+```
+</Example>
+
+<Example caption="A holographic label. A conic gradient blended the long way round the hue circle gives the letters every colour at once.">
+```scss
+.holo{
+  font: 900 64px/1 system-ui, sans-serif;
+  @include text-gradient(#f472b6 #f472b6, conic, $from: 45deg, $in: oklch longer hue);
+}
+```
+```html
+<span class="holo">HOLO</span>
 ```
 </Example>
 
