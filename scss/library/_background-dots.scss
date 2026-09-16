@@ -7,6 +7,7 @@
 @use "../internal/image-value" as *;
 @use "../internal/color-problem" as *;
 @use "../internal/length-problem" as *;
+@use "../internal/gradient" as *;
 
 @mixin background-dots(
   $color: null,
@@ -59,22 +60,22 @@
   @if not $color {
     $color: rgba(0, 0, 0, 0.1);
     @if $diagonal == true {
-      background-image: radial-gradient($color $size, transparent 0),
-        radial-gradient($color $size, transparent 0);
+      background-image: gradientOf(($color $size, transparent 0), radial, $member: "background-dots"),
+        gradientOf(($color $size, transparent 0), radial, $member: "background-dots");
       background-position: calc($gutter / 2) calc($gutter / 2),
         calc($gutter * 2) calc($gutter * 2);
     } @else if $diagonal == false {
-      background-image: radial-gradient($color $size, transparent 0);
+      background-image: gradientOf(($color $size, transparent 0), radial, $member: "background-dots");
       background-position: calc($gutter / 2) calc($gutter / 2);
     }
   } @else if $color {
     @if $diagonal == true {
-      background-image: radial-gradient(list.nth($color, 1) $size, transparent 0),
-        radial-gradient(list.nth($color, list.length($color)) $size, transparent 0);
+      background-image: gradientOf((list.nth($color, 1) $size, transparent 0), radial, $member: "background-dots"),
+        gradientOf((list.nth($color, list.length($color)) $size, transparent 0), radial, $member: "background-dots");
       background-position: calc($gutter / 2) calc($gutter / 2),
         calc($gutter * 2) calc($gutter * 2);
     } @else if $diagonal == false {
-      background-image: radial-gradient(list.nth($color, 1) $size, transparent 0);
+      background-image: gradientOf((list.nth($color, 1) $size, transparent 0), radial, $member: "background-dots");
       background-position: calc($gutter / 2) calc($gutter / 2);
       @if list.length($color) > 1 {
         @error "Please do not pass more than one argument when you disable 'diagonal' property! Simply remove the argument(s) after '#{list.nth($color, 1)}' to resolve the problem.";

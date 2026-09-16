@@ -1,0 +1,120 @@
+---
+title: "Gradient Value"
+page_title: "Gradient Value Sass Function"
+page_description: "The gradientValue Sass function returns a CSS gradient as a value, so it can be layered over an image or used as a mask or border image."
+page_keywords: "Gerillass gradientValue, Sass gradient function, SCSS mask-image gradient, layered background gradient, Gerillass Utilities"
+---
+
+# Gradient Value
+
+<Member name="gradientValue">
+
+The **gradientValue** function returns the same gradient the `gradient` mixin writes, as a value instead of a declaration. Use it where a gradient is one part of a property: layered over a photo in a single `background-image`, or as a `mask-image` or `border-image`.
+
+It takes the same arguments as the mixin and refuses the same input.
+
+<Hint kind="info">
+
+A function returns one value, so it cannot write the fallback the mixin writes before a gradient with `$in`. If an old browser matters, write the same call without `$in` in a declaration before it.
+
+</Hint>
+
+</Member>
+
+## Arguments
+
+<Arguments of="gradientValue">
+  <Argument name="$colors" type="list">The colour stops, in the forms the `gradient` mixin takes.</Argument>
+  <Argument name="$type" type="string">`linear`, the default, `radial` or `conic`.</Argument>
+  <Argument name="$direction" type="string, number">Linear only.</Argument>
+  <Argument name="$shape" type="string">Radial only.</Argument>
+  <Argument name="$position" type="string">Radial or conic.</Argument>
+  <Argument name="$from" type="number">Conic only.</Argument>
+  <Argument name="$in" type="string">A colour space such as `oklab`.</Argument>
+  <Argument name="$repeating" type="boolean">`true` for a repeating gradient.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="A dark gradient layered over a photo, so the white title on it stays readable.">
+```scss
+.element{
+  display: flex;
+  align-items: flex-end;
+  padding: 20px;
+  font: 700 24px/1.2 system-ui, sans-serif;
+  color: #fff;
+  background-image: gradientValue((rgba(0, 0, 0, 0.75), transparent), $direction: top), url("/images/landscape.webp");
+  background-size: cover;
+  background-position: center;
+}
+```
+```html
+<div class="element sandbox large">Fjords of Norway</div>
+```
+</Example>
+
+<Example caption="A gradient as a mask, fading the element itself out towards the bottom.">
+```scss
+.element{
+  background: #43c6ac;
+  mask-image: gradientValue((#000 40%, transparent));
+}
+```
+```html
+<div class="element sandbox large"></div>
+```
+</Example>
+
+<Example caption="A gradient border. `border-image` draws the gradient where the border would be, so the box keeps its own background.">
+```scss
+.element{
+  border: 6px solid;
+  border-image: gradientValue((#43c6ac, #191654), $direction: right) 1;
+}
+```
+```html
+<div class="element sandbox large"></div>
+```
+</Example>
+
+<Example caption="Two gradients in one property. A soft radial glow sits on top of a linear wash, the layered background many landing pages use.">
+```scss
+.element{
+  background-image:
+    gradientValue((rgba(255, 255, 255, 0.6), transparent 60%), radial, $shape: circle, $position: top-left),
+    gradientValue((#6366f1, #ec4899), $direction: 135deg);
+}
+```
+```html
+<div class="element sandbox large"></div>
+```
+</Example>
+
+## What it refuses
+
+The function refuses what the `gradient` mixin refuses, and names itself in the message. An argument that does not belong to the gradient's type stops the build, because the browser would ignore it and nothing would say so.
+
+```scss
+.element {
+  background-image: gradientValue(red blue, $shape: circle);
+}
+```
+```text
+Error: $shape is for a radial gradient, and this one is linear.
+```
+
+A direction the browser drops stops it too, since the whole gradient goes with it.
+
+```scss
+.element {
+  mask-image: gradientValue(#000 transparent, $direction: "to center");
+}
+```
+```text
+Error: `"to center"` is not a valid $direction for `gradientValue`. Pass an angle such as `45deg` or `0.25turn`, `"to top right"`, or one of: top, top-right, right, bottom-right, bottom, bottom-left, left, top-left.
+```
+
+## Related Links
+* [mask-image](https://developer.mozilla.org/en-US/docs/Web/CSS/mask-image)
+* [Using multiple backgrounds](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_backgrounds_and_borders/Using_multiple_backgrounds)

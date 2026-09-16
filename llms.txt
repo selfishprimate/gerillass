@@ -1,8 +1,8 @@
 # Gerillass
 
-> A Sass toolkit of 56 mixins and 23 functions, built to be read by coding agents as well as by people. Every member is described in a machine-readable manifest whose examples and refusals are executed by the test suite, so the documentation cannot drift away from the code.
+> A Sass toolkit of 55 mixins and 24 functions, built to be read by coding agents as well as by people. Every member is described in a machine-readable manifest whose examples and refusals are executed by the test suite, so the documentation cannot drift away from the code.
 
-Gerillass is a pure Sass library. There is no build step and no runtime dependency: the `.scss` sources are the deliverable, and the package installs nothing else. It needs Dart Sass; LibSass and node-sass are not supported. This file describes Gerillass 2.3.1.
+Gerillass is a pure Sass library. There is no build step and no runtime dependency: the `.scss` sources are the deliverable, and the package installs nothing else. It needs Dart Sass; LibSass and node-sass are not supported. This file describes Gerillass 3.0.0.
 
 Load it with `@use "gerillass" as *;` under a bundler, or `@use "pkg:gerillass" as *;` with the Dart Sass package importer. It is also a Ruby gem, `gerillass`: Rails with dartsass-rails or dartsass-sprockets, and Jekyll, need no configuration, and plain Ruby passes `Gerillass.load_path` to sass-embedded.
 
@@ -41,16 +41,15 @@ Arguments are validated and refused with a message naming what is accepted, so a
 - [except($params...)](https://docs.gerillass.com/docs/except/): Selects every sibling except the ones named.
 - [focus-ring($width: 2px, $offset: 2px, $color: currentColor)](https://docs.gerillass.com/docs/focus-ring/): Draws a keyboard focus ring with outline on :focus-visible, which survives forced-colors mode where a box-shadow ring disappears.
 - [font-face($font-family, $file-path, $font-style: normal, $font-weight: 400, $file-formats: eot woff2 woff ttf svg, $font-display: null)](https://docs.gerillass.com/docs/font-face/): Emits an @font-face rule for one family across several file formats.
+- [gradient($colors, $type: linear, $direction: null, $shape: null, $position: null, $from: null, $in: null, $repeating: false)](https://github.com/selfishprimate/gerillass/blob/main/scss/library/_gradient.scss): A linear, radial or conic gradient as background-image, plain or repeating, with an optional colour interpolation space.
 - [hide($toggle: "hide")](https://docs.gerillass.com/docs/hide/): Visually hides an element while keeping it available to screen readers, or reverses that.
 - [line-clamp($lines: 3)](https://docs.gerillass.com/docs/line-clamp/): Truncates text after a number of lines, where ellipsis truncates one.
-- [linear-gradient($direction, $colors)](https://docs.gerillass.com/docs/linear-gradient/): Linear gradient background from a direction name or an angle.
 - [loadify($params...)](https://docs.gerillass.com/docs/loadify/): Fades elements in on page load.
 - [motion-safe](https://docs.gerillass.com/docs/motion-safe/): Wraps its content in @media (prefers-reduced-motion: no-preference), so motion is opt-in: a user who asked their system for less motion gets none of it.
 - [only($params...)](https://docs.gerillass.com/docs/only/): Selects only the siblings named.
 - [placeholder-shown](https://docs.gerillass.com/docs/placeholder-shown/): Styles an input while its placeholder is visible.
 - [placeholder](https://docs.gerillass.com/docs/placeholder/): Styles the placeholder text of an input across vendor prefixes.
 - [position($position: absolute, $offsets: 0, $logical: false)](https://docs.gerillass.com/docs/position/): Sets position and offsets in one call, using shorthand order.
-- [radial-gradient($shape, $position, $colors)](https://docs.gerillass.com/docs/radial-gradient/): Radial gradient background from a shape and a position.
 - [remove($params...)](https://docs.gerillass.com/docs/remove/): Hides an element outright, or within a media query: from a breakpoint up with min, up to it with max, or between two breakpoints.
 - [reset-css](https://docs.gerillass.com/docs/reset-css/): Meyer reset.
 - [reset-figure](https://docs.gerillass.com/docs/reset-figure/): Removes default figure margins and makes the image inside responsive.
@@ -63,7 +62,7 @@ Arguments are validated and refused with a message naming what is accepted, so a
 - [sprite($params...)](https://docs.gerillass.com/docs/sprite/): Sets up an element as a sprite tile: an image, a background position, or both.
 - [stretched-link($value: "before")](https://docs.gerillass.com/docs/stretched-link/): Expands a link to cover its positioned parent, so the whole card is clickable.
 - [tablet($device, $orientation: null)](https://docs.gerillass.com/docs/tablet/): Media query targeting a known tablet by device dimensions.
-- [text-gradient($direction, $colors)](https://docs.gerillass.com/docs/text-gradient/): Applies a linear gradient to the text itself via background-clip.
+- [text-gradient($colors, $type: linear, $direction: null, $shape: null, $position: null, $from: null, $in: null, $repeating: false)](https://docs.gerillass.com/docs/text-gradient/): Fills the text with a gradient through background-clip: text.
 - [text-image($image: null)](https://docs.gerillass.com/docs/text-image/): Fills the text with an image via background-clip.
 - [text-selection($value: null)](https://docs.gerillass.com/docs/text-selection/): Styles the ::selection pseudo-element.
 - [text-shadow($params...)](https://docs.gerillass.com/docs/text-shadow/): Layered text shadows built from a direction, a colour and an offset.
@@ -81,6 +80,7 @@ Arguments are validated and refused with a message naming what is accepted, so a
 - [fluid($min, $max, $min-viewport: 320px, $max-viewport: 1280px)](https://docs.gerillass.com/docs/fluid/): A clamp() value that grows with the viewport between two widths, then stops.
 - [fontSizer($size, $time)](https://docs.gerillass.com/docs/font-sizer/): Multiplies a size by a factor.
 - [fontSource($font-family, $file-path, $file-formats)](https://docs.gerillass.com/docs/font-source/): Builds one src entry for an @font-face rule.
+- [gradientValue($colors, $type: linear, $direction: null, $shape: null, $position: null, $from: null, $in: null, $repeating: false)](https://github.com/selfishprimate/gerillass/blob/main/scss/utilities/_gradient-value.scss): The gradient mixin's gradient as a value, for layering it with an image in one background-image, or using it as a mask-image or border-image.
 - [isColor($value)](https://docs.gerillass.com/docs/is-color/): Returns the value if every item in it is a colour, and errors otherwise.
 - [isGutter($value)](https://docs.gerillass.com/docs/is-gutter/): True for anything that can sit where a CSS length is expected: a number, a calculation, or a CSS function such as var().
 - [isNumber($value)](https://docs.gerillass.com/docs/is-number/): Returns the value if it is a number.
@@ -102,6 +102,6 @@ Arguments are validated and refused with a message naming what is accepted, so a
 - [gerillass.json](https://github.com/selfishprimate/gerillass/blob/main/gerillass.json): the full machine-readable API. Every member with its signature, what each argument accepts, examples that compile, and the inputs it refuses. Ships inside the installed package at `node_modules/gerillass/gerillass.json`, and at the root of the gem, whose folder `bundle info gerillass --path` prints.
 - [SKILL.md](https://github.com/selfishprimate/gerillass/blob/main/SKILL.md): the same material written as an agent skill, generated from the manifest. Ships in the npm package and in the gem.
 - [README](https://github.com/selfishprimate/gerillass/blob/main/README.md): installation for Vite, webpack, Next.js, Angular, Gulp, Grunt, Rails and Jekyll, and how to point an agent at the two files above.
-- [MIGRATION.md](https://github.com/selfishprimate/gerillass/blob/main/MIGRATION.md): upgrading a project from 1.x to 2.0.0. The utility functions were renamed and two mixins were replaced.
+- [MIGRATION.md](https://github.com/selfishprimate/gerillass/blob/main/MIGRATION.md): upgrading a project to 3.0.0, where the gradient mixins changed, and from 1.x to 2.0.0, where the utility functions were renamed and two mixins were replaced.
 - [CHANGELOG](https://github.com/selfishprimate/gerillass/blob/main/CHANGELOG.md): what changed in every release.
 - [Source repository](https://github.com/selfishprimate/gerillass): the `.scss` sources, which are short and readable.

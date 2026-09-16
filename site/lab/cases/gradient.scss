@@ -1,0 +1,45 @@
+// A linear and a radial gradient, then a conic one and the same two colours
+// without and with a colour space.
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.box {
+  width: 160px;
+  height: 100px;
+  border-radius: 8px;
+}
+
+.caption {
+  margin: 6px 0 0;
+  font-size: 13px;
+  color: #8a8f7a;
+}
+
+.new-linear {
+  @include gradient((#5bc0bb, #2f3937), $direction: right);
+}
+
+.new-radial {
+  @include gradient((#5bc0bb, #2f3937), radial, $shape: circle, $position: "top-left");
+}
+
+// A pie chart: a conic gradient goes round a centre.
+.conic {
+  width: 100px;
+  border-radius: 50%;
+  @include gradient((#5bc0bb 0 40%, #2f3937 40% 75%, #dee0cd 75% 100%), conic);
+}
+
+// Blue to yellow goes grey in the middle unless it blends in oklab.
+.srgb {
+  @include gradient((blue, yellow), $direction: right);
+}
+
+.oklab {
+  @include gradient((blue, yellow), $direction: right, $in: oklab);
+}

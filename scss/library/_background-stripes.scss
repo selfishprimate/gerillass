@@ -8,6 +8,7 @@
 @use "../internal/image-value" as *;
 @use "../internal/color-problem" as *;
 @use "../internal/length-problem" as *;
+@use "../internal/gradient" as *;
 
 @mixin background-stripes(
   $color: null,
@@ -57,26 +58,14 @@
   $get-image: if($image, string.unquote(", ") + imageValue($image, "background-stripes", "$image", $unquote: true), string.unquote(""));
   @if not $color {
     $color: rgba(0, 0, 0, 0.1);
-    background-image: repeating-linear-gradient(
-        $validate-unit,
-        $color 0,
-        $color $thickness,
-        transparent $thickness,
-        transparent calc($thickness * 2)
-      ) + $get-image;
+    background-image: gradientOf(($color 0, $color $thickness, transparent $thickness, transparent calc($thickness * 2)), linear, $validate-unit, $repeating: true, $member: "background-stripes") + $get-image;
     @if $image {
       background-position: center;
       background-repeat: no-repeat;
       background-size: cover;
     }
   } @else if list.length($color) == 1 {
-    background-image: repeating-linear-gradient(
-        $validate-unit,
-        $color 0,
-        $color $thickness,
-        transparent $thickness,
-        transparent calc($thickness * 2)
-      ) + $get-image;
+    background-image: gradientOf(($color 0, $color $thickness, transparent $thickness, transparent calc($thickness * 2)), linear, $validate-unit, $repeating: true, $member: "background-stripes") + $get-image;
     @if $image {
       background-position: center;
       background-repeat: no-repeat;
@@ -86,10 +75,10 @@
     $list: ();
     @for $i from 1 through list.length($color) {
       $index-color: list.nth($color, $i);
-      $style-rule: $index-color calc($thickness * $i - $thickness), $index-color calc($thickness * $i);
-      $list: list.append($list, $style-rule, comma);
+      $list: list.append($list, $index-color calc($thickness * $i - $thickness), comma);
+      $list: list.append($list, $index-color calc($thickness * $i), comma);
     }
-    background-image: repeating-linear-gradient($validate-unit, $list) + $get-image;
+    background-image: gradientOf($list, linear, $validate-unit, $repeating: true, $member: "background-stripes") + $get-image;
     @if $image {
       background-position: center;
       background-repeat: no-repeat;

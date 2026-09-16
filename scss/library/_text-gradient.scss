@@ -1,36 +1,46 @@
 @charset "UTF-8";
 
 @use "sass:list";
-@use "sass:map";
-@use "sass:math";
 @use "sass:meta";
-@use "../maps/map-for-directions" as *;
-@use "../internal/color-stops-problem" as *;
+@use "sass:string";
+@use "../internal/gradient" as *;
 
-@mixin text-gradient($direction, $colors) {
-  // A stop the browser does not keep drops the whole gradient, and with it the
-  // text, which this mixin makes transparent; see
-  // scss/internal/_color-stops-problem.scss.
-  $problem: colorStopsProblem($colors);
-  @if $problem {
-    @error "`#{meta.inspect($colors)}` is not a valid $colors for `text-gradient`: #{$problem}. A browser drops the whole gradient, and the transparent text with it.";
-  }
-  $list: ();
-  @for $i from 1 through list.length($colors) {
-    $list: list.append($list, list.nth($colors, $i), comma);
-  }
-  @if map.has-key($map-for-directions, $direction) {
-    background: linear-gradient(
-      map.get($map-for-directions, $direction),
-      $list
-    );
-  } @else if not map.has-key($map-for-directions, $direction) {
-    @if meta.type-of($direction) != "number" or not list.index("deg", math.unit($direction)) {
-      @error "`#{$direction}` is not a valid $direction for `text-gradient`. Pass an angle such as `45deg`, or one of: #{map.keys($map-for-directions)}.";
-    } @else {
-      background: linear-gradient($direction, $list);
+// Fills the letters with a gradient: the gradient mixin's arguments, and
+// background-clip: text. The gradient is built and checked in
+// scss/internal/_gradient.scss.
+//
+// The colours come first since 3.0.0, as in gradient, so a direction, a type
+// and a colour space can all be left out. A call in the old order,
+// `text-gradient("top", (red, blue))`, would otherwise fail on `"top"` not
+// being a colour, so it is caught and answered with the new form.
+//
+// It still writes the background shorthand rather than background-image, so a
+// call in the new order compiles to exactly what the same call compiled to in
+// the old order.
+@mixin text-gradient(
+  $colors,
+  $type: linear,
+  $direction: null,
+  $shape: null,
+  $position: null,
+  $from: null,
+  $in: null,
+  $repeating: false
+) {
+  @if gradientDirection($colors) != null and not list.index("linear" "radial" "conic", string.to-lower-case("#{$type}")) {
+    $written: meta.inspect($type);
+    @if list.separator($type) == "comma" {
+      $written: "(#{$written})";
     }
+    @error "`text-gradient` takes the colours first since 3.0.0. Write `text-gradient(#{$written}, $direction: #{meta.inspect($colors)})`.";
   }
+  $value: gradientOf($colors, $type, $direction, $shape, $position, $from, $in, $repeating, $member: "text-gradient");
+  // Written without the space first, as the gradient mixin does, for a browser
+  // that does not know `in`.
+  @if $in != null {
+    background: gradientOf($colors, $type, $direction, $shape, $position, $from, null, $repeating, $member: "text-gradient", $warn: false);
+  }
+  background: $value;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

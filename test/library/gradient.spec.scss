@@ -1,0 +1,83 @@
+// gradient took over from linear-gradient and radial-gradient in 3.0.0, and
+// these are the forms their specs pinned, each measured as kept by a browser:
+// stops with two positions, a hint, a single stop, var() for the whole list,
+// an extent keyword as the position, sizes with a raw position, var() as the
+// shape and keywords in capitals. The gradient value is the same the old
+// mixins wrote; the property is background-image instead of background.
+@use 'true' as *;
+@use '../../scss/gerillass' as *;
+
+@include describe('gradient()') {
+  @include it('Accepts stops with positions and a hint between colours.') {
+    @include assert {
+      @include output {
+        .a { @include gradient((red 0 10%) (blue 10% 100%), $direction: "top"); }
+        .b { @include gradient((red, 30%, blue), $direction: "top"); }
+      }
+      @include expect {
+        .a { background-image: linear-gradient(to top, red 0 10%, blue 10% 100%); }
+        .b { background-image: linear-gradient(to top, red, 30%, blue); }
+      }
+    }
+  }
+
+  @include it('Accepts var() for the whole list.') {
+    @include assert {
+      @include output { .a { @include gradient(var(--stops), $direction: 45deg); } }
+      @include expect { .a { background-image: linear-gradient(45deg, var(--stops)); } }
+    }
+  }
+
+  @include it('Accepts an extent keyword as the position.') {
+    @include assert {
+      @include output { .a { @include gradient(red blue, radial, $shape: ellipse, $position: "closest-side"); } }
+      @include expect { .a { background-image: radial-gradient(ellipse closest-side, red, blue); } }
+    }
+  }
+
+  @include it('Accepts sizes and raw positions, quoted or not.') {
+    @include assert {
+      @include output {
+        .a { @include gradient(red blue, radial, $shape: "ellipse 10% 20%", $position: "at 30% 40%"); }
+        .b { @include gradient(red blue, radial, $shape: "circle 10px", $position: top-left); }
+        .c { @include gradient(red blue, radial, $shape: circle, $position: "farthest-side at left 10px top 20px"); }
+        .d { @include gradient(red blue, radial, $shape: ellipse 70% 60%, $position: at 50% 0%); }
+      }
+      @include expect {
+        .a { background-image: radial-gradient(ellipse 10% 20% at 30% 40%, red, blue); }
+        .b { background-image: radial-gradient(circle 10px at top left, red, blue); }
+        .c { background-image: radial-gradient(circle farthest-side at left 10px top 20px, red, blue); }
+        .d { background-image: radial-gradient(ellipse 70% 60% at 50% 0%, red, blue); }
+      }
+    }
+  }
+
+  @include it('Accepts var() as the shape and keywords in any case.') {
+    @include assert {
+      @include output {
+        .a { @include gradient(red blue, radial, $shape: var(--shape), $position: center); }
+        .b { @include gradient(red blue, radial, $shape: CIRCLE, $position: "AT CENTER"); }
+      }
+      @include expect {
+        .a { background-image: radial-gradient(var(--shape) at center, red, blue); }
+        .b { background-image: radial-gradient(CIRCLE AT CENTER, red, blue); }
+      }
+    }
+  }
+
+  @include it('Takes conic stops as angles and percentages, and writes a fallback before $in.') {
+    @include assert {
+      @include output {
+        .a { @include gradient((red 0deg 90deg) (blue 90deg 1turn), conic, $from: 45deg, $position: "at 30% 40%"); }
+        .b { @include gradient(blue yellow, $direction: right, $in: oklab); }
+      }
+      @include expect {
+        .a { background-image: conic-gradient(from 45deg at 30% 40%, red 0deg 90deg, blue 90deg 1turn); }
+        .b {
+          background-image: linear-gradient(to right, blue, yellow);
+          background-image: linear-gradient(to right in oklab, blue, yellow);
+        }
+      }
+    }
+  }
+}

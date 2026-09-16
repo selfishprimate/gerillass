@@ -1,3 +1,105 @@
+# Migrating to Gerillass 3.0.0
+
+Written while 3.0.0 is being prepared, and added to as its changes land. So far
+it covers the gradients. The 2.0.0 guide follows below, unchanged.
+
+Every claim here was checked by compiling the old call against 2.3.1's source
+and the new one against 3.0.0's, and comparing the output.
+
+---
+
+## The short version
+
+| | |
+|---|---|
+| `linear-gradient` and `radial-gradient` were removed, replaced by `gradient` | breaking, loud |
+| `text-gradient` takes the colours first | breaking, loud |
+| `text-gradient` and `background-image` take more directions | not breaking |
+
+Both breaks stop the build, so nothing fails silently. The first one does not
+say which mixin is missing, though: Sass reports only `Undefined mixin.`, with
+the line. Search for the old names rather than waiting for the errors.
+
+```bash
+grep -rn "linear-gradient\|radial-gradient\|text-gradient" --include=*.scss .
+```
+
+That also finds the CSS functions `linear-gradient()` and `radial-gradient()`,
+which are not affected. Only a line with `@include` in front of the name needs
+changing.
+
+---
+
+## Break 1: `linear-gradient` and `radial-gradient` became `gradient`
+
+`gradient` takes the colours first, then the type, then named arguments for the
+rest. Every call to the old mixins has a `gradient` call that writes the same
+gradient:
+
+| 2.x | 3.0.0 |
+|---|---|
+| `@include linear-gradient(right, red blue);` | `@include gradient(red blue, $direction: right);` |
+| `@include linear-gradient(45deg, (red 0 10%) (blue 10% 100%));` | `@include gradient((red 0 10%) (blue 10% 100%), $direction: 45deg);` |
+| `@include radial-gradient(circle, center, red orange);` | `@include gradient(red orange, radial, $shape: circle, $position: center);` |
+| `@include radial-gradient("circle 10px", top-left, red blue);` | `@include gradient(red blue, radial, $shape: "circle 10px", $position: top-left);` |
+| `@include radial-gradient(ellipse, "closest-side", red blue);` | `@include gradient(red blue, radial, $shape: ellipse, $position: "closest-side");` |
+
+The `gls-` forms follow the same pattern: `gls-linear-gradient` becomes
+`gls-gradient`.
+
+**One difference in the output.** The old mixins wrote the `background`
+shorthand; `gradient` writes `background-image`. The gradient itself is
+identical: the 22 calls in the old documentation, manifest and specs were
+compiled both ways and their gradient values match. But the shorthand also
+reset every other background property, so a rule that relied on that reset
+behaves differently. Measured in Chrome 152, Firefox 156 and Safari 26.6.2, with the same result in each: with `background-color` and
+`background-size` set before the call, the shorthand turned them into
+`transparent` and `auto`, and `background-image` leaves them as they were. If
+a stylesheet set a background colour earlier and counted on the gradient
+clearing it, set `background-color` yourself.
+
+What `gradient` adds, none of which an old call needs: conic gradients,
+repeating gradients with `$repeating: true`, a colour space with `$in`, and
+directions in any angle unit, `"to top"` or `var()`. The
+[gradient page](https://gerillass.com/docs/gradient) has examples of each, and
+the old documentation URLs redirect there.
+
+---
+
+## Break 2: `text-gradient` takes the colours first
+
+`text-gradient` now takes the same arguments as `gradient`, in the same order.
+
+| 2.x | 3.0.0 |
+|---|---|
+| `@include text-gradient(right, orange red purple);` | `@include text-gradient(orange red purple, $direction: right);` |
+| `@include text-gradient($direction: top, $colors: red orange);` | unchanged: named arguments work in any order |
+
+A call in the old order stops the build and writes out the new form:
+
+```text
+Error: `text-gradient` takes the colours first since 3.0.0. Write `text-gradient((red, blue), $direction: "top")`.
+```
+
+The output is the same as before for the same arguments: 15 calls compiled in
+the old order and in the new were byte-identical. It still writes the
+`background` shorthand.
+
+---
+
+## Not breaking: more directions
+
+`text-gradient`'s `$direction` and `background-image`'s `$filter-direction`
+used to accept a direction name or an angle in `deg`. They now also accept
+`turn`, `rad` and `grad`, a unitless `0`, `"to top"` or `"to left top"`, and
+`var()` or `calc()`. Calls that compiled before compile to the same CSS.
+
+A gradient with a single colour now warns, in `gradient`, `gradientValue` and
+`text-gradient`: browsers before Chrome 135, Firefox 136 and Safari 18.4 drop
+it.
+
+---
+
 # Migrating to Gerillass 2.0.0
 
 This document is written for someone updating a **project that documents or

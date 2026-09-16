@@ -9,7 +9,7 @@ Gerillass is a **pure Sass library** — a toolkit of mixins and functions, in t
 Two consequences follow from this and drive most decisions in the repo:
 
 1. **`package.json` must have no `dependencies`.** Everything (`jest`, `sass`, `sass-true`, `glob`) belongs in `devDependencies`. Consumers get only `.scss` files, so a runtime dependency here forces the entire test toolchain onto every downstream project. This was the cause of 24 Dependabot alerts fixed in v1.3.3 — do not reintroduce it.
-2. **Only `scss/` ships.** `.npmignore` excludes `test`, `assets`, `meta`, `tools`, dotfiles and `*.md`; npm always adds `README.md`, `LICENSE.md` and `package.json` back. Verify with `npm pack --dry-run` before any release (113 files / ~58 kB since `scss/internal/` was added).
+2. **Only `scss/` ships.** `.npmignore` excludes `test`, `assets`, `meta`, `tools`, dotfiles and `*.md`; npm always adds `README.md`, `LICENSE.md` and `package.json` back. Verify with `npm pack --dry-run` before any release (114 files, an 82 kB tarball, since `gradient` replaced the two old gradient mixins).
 3. **The gem is the same library, not a port.** `gerillass.gemspec` ships `scss/`, `gerillass.json` and `SKILL.md`, plus `lib/`, `LICENSE.md` and `README.md`, reads its version from `package.json`, and has no runtime dependencies. `lib/` only tells Rails, Jekyll or a plain `sass-embedded` compile where `scss/` is. `.npmignore` keeps `lib`, the gemspec and `*.gem` out of the npm package. Keep the gemspec ASCII: RubyGems reads it in the locale's encoding, and a literal non-ASCII character fails to load.
 
 Dart Sass only. LibSass/node-sass has been unsupported since v1.3.0.
@@ -157,10 +157,15 @@ added, do all of this and report it:
    values built by interpolation such as `#{$n}px` and `#{$name}`, which reach
    a check as unquoted strings, lists, and An+B forms such as `3n`. A value kind missing from the list is
    never tested, which is how both rows above slipped through.
-2. **Test the output in a browser.** For every call whose CSS changes, and
-   every call that starts or stops raising, test the old and the new CSS in
-   Chrome with `tools/browser-check.js`. An error is justified only when the
-   old CSS was dropped, never matched, or demonstrably did nothing.
+2. **Test the output in all three browsers.** For every call whose CSS
+   changes, and every call that starts or stops raising, test the old and the
+   new CSS in Chrome, Firefox and Safari, all three installed on the
+   maintainer's machine. The maintainer made this a rule on 17 September 2026:
+   a check measured in Chrome alone can refuse a value another engine keeps, or
+   accept one it drops. `tools/browser-check.js --serve` gives a page to open
+   in each. An error is justified only when the old CSS was dropped, never
+   matched, or demonstrably did nothing, and a browser that disagrees with the
+   others is reported rather than averaged away.
 3. **When the browser kept it, build the case.** Look at where the value lands
    in the emitted CSS, write the markup a user would have, and look at the
    result. Decide by what the mixin does with the value, not by whether the
@@ -293,8 +298,8 @@ Four layers, loaded in dependency order by `scss/_gerillass.scss`. The order is 
 |---|---|---|---|
 | 1 | `scss/lists/` | flat value lists (`$list-of-buttons`) | `list-of-` prefix, `!default` |
 | 2 | `scss/maps/` | keyed config (`$map-for-breakpoints`) | `map-for-` prefix, `!default` |
-| 3 | `scss/utilities/` | 23 helper **functions** | `camelCase` |
-| 4 | `scss/library/` | 56 **mixins** — the bulk of the API | `kebab-case` |
+| 3 | `scss/utilities/` | 24 helper **functions** | `camelCase` |
+| 4 | `scss/library/` | 55 **mixins** — the bulk of the API | `kebab-case` |
 
 `_gerillass.scss` lists every partial explicitly. **A new file is invisible until you add its `@import` line there**, in the correct layer block.
 
@@ -317,7 +322,7 @@ Until 2.0.0 they carried a `__` prefix. It had to go: under `@use`/`@forward` a 
 
 **A utility that nothing in `scss/` calls is not dead code.** `remify`, `convertToEm`, `fontSizer`, `isNumber`, `tint` and `shade` are called by no mixin at all — they are there for users, and removing them would break stylesheets. Never treat "no internal callers" as a reason to delete a member; the library is the smaller half of its own audience.
 
-Mixins validate their input and `@error` with a message that names the accepted values — 48 of the 49 that take arguments do this, mostly inline. Match that style rather than failing silently.
+Mixins validate their input and `@error` with a message that names the accepted values — 47 of the 48 that take arguments do this, mostly inline. Match that style rather than failing silently.
 
 Silent failure is the trap to watch for. A mixin that branches on `type-of` and
 has no `@else` emits nothing at all for an unexpected type, which surfaces as a
@@ -395,10 +400,10 @@ Four levels, and knowing which one covers a member tells you what you can trust:
 
 | Level | Proves | Coverage |
 |---|---|---|
-| `test/smoke.scss` | the mixin evaluates at all | 56/56 mixins |
+| `test/smoke.scss` | the mixin evaluates at all | 55/55 mixins |
 | snapshot of `meta/` examples | the output cannot change unnoticed | 79/79 members |
 | `meta/` rejects | bad input is refused with a real message | 58/79 |
-| sass-true spec in `test/` | the CSS is **correct** | 23/79 |
+| sass-true spec in `test/` | the CSS is **correct** | 22/79 |
 
 Only the last one catches an output that was wrong from the start; a snapshot
 records a wrong value as correct. Hand-written specs are therefore reserved for
@@ -466,11 +471,11 @@ from the source zip of a GitHub release by `export-ignore` in `.gitattributes`.
 
 The security fix only reaches users when the npm package is republished — updating the repo alone changes nothing for consumers.
 
-1. Bump `version` in `package.json` (patch for dependency/security work; `2.0.0` is reserved for the module migration).
+1. Bump `version` in `package.json`: patch for dependency, security and bugfix work, minor for a new member, major for a change that breaks a call that worked.
 2. Add a `CHANGELOG.md` entry at the top, using the existing `- **Security:** / **Added:** / **Updated:** / **Removed:** / **Fixed:**` bullet style.
 3. Commit, then `git tag -a vX.Y.Z -m "vX.Y.Z"` — tags are `vX.Y.Z`, no dot after `v`.
 4. Push branch and tag, then `gh release create vX.Y.Z --latest --notes-file ...`.
-5. `npm publish`. The account has 2FA enabled, so this needs `--otp=<code>` and must be run by the maintainer. Then the gem, built from the tag in a worktree outside the repository and pushed by the maintainer with their own one-time code: `gem build gerillass.gemspec --output <dir>/gerillass-X.Y.Z.gem` and `gem push <that file> --otp=<code>`. `/release` step 6b has the checks to run on the built gem first.
+5. **Publish to both registries, every release: npm and RubyGems.** A release on one only is not a release. `npm publish`. The account has 2FA enabled, so this needs `--otp=<code>` and must be run by the maintainer. Then the gem, built from the tag in a worktree outside the repository and pushed by the maintainer with their own one-time code: `gem build gerillass.gemspec --output <dir>/gerillass-X.Y.Z.gem` and `gem push <that file> --otp=<code>`. `/release` step 6b has the checks to run on the built gem first.
 6. Update the site, which names the version in several places. The header badge
    and both download buttons follow `package.json` through `site/src/release.js`,
    but the download link is a 404 until the tag exists, so the site deploys after
@@ -480,6 +485,10 @@ The security fix only reaches users when the npm package is republished — upda
    `npm run supporters --prefix site`, and check the documentation pages against
    what changed, and regenerate the playground demos with
    `npm run playground-demos --prefix site`. `/release` has the full table.
+7. **Every major release rewrites the announcement band** across the top of the
+   site, `site/src/components/Announcement/index.jsx`, to name the new version,
+   say in a sentence what breaks, and link `MIGRATION.md`. The maintainer made
+   this a rule on 17 September 2026. A minor or patch release leaves it alone.
 
 Default branch is `main` (renamed from `master` in v1.3.3). A repository ruleset blocks force-pushes and deletion of the default branch, with no bypass actors — direct pushes are allowed.
 
@@ -721,6 +730,34 @@ examine and test each on its own.
   defeats `aspect-ratio`. Measured in Chrome only, including the override of an
   earlier `height`.
 
+### What `gradient.md` proposes
+
+Researched 16 September 2026, when the maintainer asked whether
+`linear-gradient` and `radial-gradient` could become one `gradient` mixin with
+the type as an argument. It records what the two get wrong, measured in Chrome
+152: they write the `background` shorthand, which reset a `background-color`
+set before them, and `$direction` takes only `deg`. It lists what modern
+gradients add, with versions from the compat data: conic and repeating forms,
+and `in oklab` or `in oklch longer hue` interpolation, newly available across
+browsers since Firefox 127. Conic stops take angles, not lengths, so the shared
+stop check cannot be reused as it is. The proposal takes colours first so the
+rest can default, keeps the old names as wrappers so their output does not
+change, and leaves removing them to 3.0.0. The maintainer decided on the
+removal in 3.0.0 with no wrappers, and it is done on the `gradient` branch:
+`gradient` and `gradientValue` over a shared builder in
+`scss/internal/_gradient.scss` that four other mixins also use, `text-gradient`
+with the same arguments colours first, the old two removed with redirects from
+their pages, and a `MIGRATION.md` section. What is left is release work: the
+playground demos and the two pages in `llms.txt`.
+
+### What `text-gradient-animation.md` proposes
+
+Suggested by the maintainer on 17 September 2026 for later: a shimmer or colour
+sweep on `text-gradient`. By hand it needs `background-size`, `@keyframes` and
+an `animation`, and the mixin's `background` shorthand resets the size and
+position unless they come after it. The file lists the design questions and
+what to measure in the three browsers first. Not planned.
+
 ### What `fix-plan.md` sets out
 
 The findings of the agent trials turned into work. For each problem: what goes
@@ -777,6 +814,11 @@ commit made after the tag, which `/release` step 6b now prevents.
 
 Two pieces of work are open, and neither is started:
 
+- **3.0.0, gradients**: done on the `gradient` branch, not yet merged; see
+  `todos/gradient.md`. At release, regenerate the playground demos (the
+  playground compiles the published version, so a demo in the new API fails
+  before then) and take `gradient` and `gradientValue` out of
+  `WITHOUT_DOCS_PAGE` in `tools/build-llms-txt.js`.
 - **3.0.0**: eight behaviour changes, each in its own file in `todos/` and
   each to be tested and decided on its own before any is planned: breakpoint
   boundaries, `columnizer` on `gap`, `hide("unhide")`, a default `content` for
@@ -865,9 +907,10 @@ that still supports older toolchains.
 
 ### Modernisation
 
-- **Sass is deprecating its own `if()`, and the library calls it 20 times.**
-  Compiling `test/smoke.scss`, Dart Sass prints 24 `if-function` warnings (5
-  shown, 19 omitted); 1.91 prints none. Counted on `main` at d538217 the same
+- **Sass is deprecating its own `if()`, and the library calls it 19 times.**
+  Compiling `test/smoke.scss`, Dart Sass prints 23 `if-function` warnings (5
+  shown, 18 omitted); 1.91 prints none. The gradient work removed one, in
+  `background-image`'s default filter direction, now written with `or`. Counted on `main` at d538217 the same
   way, outside comments, it was 22 calls and 26 warnings, so the 21 and 25 this
   line used to give were already stale. `todos/silent-values-plan.md` removed
   two while fixing what each guarded: S1 in `breakpoint` and S5 in

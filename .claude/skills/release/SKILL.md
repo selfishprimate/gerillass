@@ -15,8 +15,13 @@ confirm before touching anything:
 - **patch** for dependency, security and bugfix work. This is what almost every
   release here has been, including dependency restructuring (see 1.2.6, 1.3.3).
 - **minor** for a new mixin or function.
-- `2.0.0` is **reserved** for the `@use`/`@forward` module migration. Do not
-  spend it on anything else.
+- **major** for a change that breaks a call that worked, such as a removed
+  member or a changed argument order. 2.0.0 was the module migration; 3.0.0
+  replaced the gradient mixins.
+
+Every release publishes to **both** registries, npm (step 6) and RubyGems
+(step 6b). Every **major** release also rewrites the site's announcement band
+(step 3c). Both are rules the maintainer set; do not skip either.
 
 ## 1. Verify the tree before anything else
 
@@ -80,7 +85,7 @@ on the documentation site since the last release should stop linking to source.
 v2.1.0 shipped with `line-clamp` pointing at a page that did not exist, because
 this step was a loop to copy and it was skipped.
 
-Expect 113 files / ~58 kB since `scss/internal/` was added: everything under `scss/`, the generated
+Expect 114 files, an 82 kB tarball (3.0.0): everything under `scss/`, the generated
 `gerillass.json` and `SKILL.md`, plus `README.md`, `LICENSE.md` and
 `package.json`. If `test/`, `meta/`, `tools/`, `yarn.lock` or
 `node_modules` appear, `.npmignore` is broken — stop and fix it.
@@ -136,7 +141,7 @@ the site advertising the old one, or linking to a download that does not exist.
 | Stargazers row | a committed snapshot | `npm run supporters --prefix site` |
 | Playground starter snippets | `demos.json`, generated from `site/content/docs/*.mdx` and the root `gerillass.json` | `npm run playground-demos --prefix site` when a documented example or a page description changed, and whenever a mixin is added |
 | Documentation pages | `site/content/docs/*.mdx` | compile every example against the previous tag and `HEAD`; for each member whose behaviour changed, read its argument table and footnotes for claims that are no longer true |
-| Announcement banner | hand-written | only for a release that breaks something; leave it otherwise |
+| Announcement banner | hand-written in `site/src/components/Announcement/index.jsx` | **every major release**: name the version, say in one sentence what breaks, link `MIGRATION.md`. A rule since 17 September 2026. Leave it for a minor or patch |
 
 Confirm the badge and the download link in the build before tagging:
 

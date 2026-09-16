@@ -1,6 +1,6 @@
 {
   "name": "gerillass",
-  "version": "2.3.1",
+  "version": "3.0.0",
   "description": "Gerillass is an open-source toolkit that contains a set of Sass mixins to help designers and developers to create better, faster and consistent user interfaces.",
   "homepage": "https://gerillass.com",
   "documentation": "https://docs.gerillass.com",
@@ -291,7 +291,7 @@
           "name": "$filter-color",
           "default": "null",
           "accepts": [
-            "one colour, or several colour stops for a gradient, in the forms linear-gradient takes",
+            "one colour, or several colour stops for a gradient, in the forms the gradient mixin takes",
             "with $image-url null, an image as the overlay layer too: a gradient, url(), image-set() or var()",
             "a word that is not a colour, a quoted colour, a length and a CSS-wide keyword are refused"
           ]
@@ -300,8 +300,10 @@
           "name": "$filter-direction",
           "default": "null",
           "accepts": [
-            "an angle such as 45deg",
-            "a direction name such as top or bottom-left"
+            "a direction name such as top or bottom-left",
+            "an angle in deg, grad, rad or turn, or 0",
+            "\"to top\" or \"to left top\" as a string",
+            "var() or calc()"
           ]
         }
       ],
@@ -1044,6 +1046,117 @@
       ]
     },
     {
+      "name": "gradient",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$colors",
+          "required": true,
+          "accepts": [
+            "one or more colour stops: a colour, or a colour with one or two positions, such as (red 0 10%) (blue 10% 100%)",
+            "a position on its own between two colours, as a hint",
+            "for a conic gradient the positions are angles or percentages, not lengths",
+            "var() for a stop or the whole list",
+            "a single colour warns, because browsers before Chrome 135, Firefox 136 and Safari 18.4 drop that gradient"
+          ]
+        },
+        {
+          "name": "$type",
+          "default": "linear",
+          "accepts": [
+            "linear, the default",
+            "radial",
+            "conic"
+          ]
+        },
+        {
+          "name": "$direction",
+          "default": "null",
+          "accepts": [
+            "linear only",
+            "a direction name such as top or bottom-left",
+            "an angle in deg, grad, rad or turn, or 0",
+            "\"to top\" or \"to left top\" as a string",
+            "var() or calc()"
+          ]
+        },
+        {
+          "name": "$shape",
+          "default": "null",
+          "accepts": [
+            "radial only",
+            "circle or ellipse, with an optional size as a string, such as \"circle 10px\""
+          ]
+        },
+        {
+          "name": "$position",
+          "default": "null",
+          "accepts": [
+            "radial or conic",
+            "a position name such as center or top-left",
+            "at followed by a position, as a string, such as \"at 30% 40%\"; a radial gradient may put a size before it"
+          ]
+        },
+        {
+          "name": "$from",
+          "default": "null",
+          "accepts": [
+            "conic only",
+            "an angle in deg, grad, rad or turn, 0, or var()"
+          ]
+        },
+        {
+          "name": "$in",
+          "default": "null",
+          "accepts": [
+            "a colour space: srgb, srgb-linear, display-p3, display-p3-linear, a98-rgb, prophoto-rgb, rec2020, lab, oklab, xyz, xyz-d50 or xyz-d65",
+            "a polar space, hsl, hwb, lch or oklch, with an optional hue method as a string, such as \"oklch longer hue\"",
+            "var()",
+            "the gradient is written once without the space first, for a browser that does not know it"
+          ]
+        },
+        {
+          "name": "$repeating",
+          "default": "false",
+          "accepts": [
+            "false, the default",
+            "true, for a repeating gradient"
+          ]
+        }
+      ],
+      "file": "scss/library/_gradient.scss",
+      "signature": "gradient($colors, $type: linear, $direction: null, $shape: null, $position: null, $from: null, $in: null, $repeating: false)",
+      "summary": "A linear, radial or conic gradient as background-image, plain or repeating, with an optional colour interpolation space. Replaced linear-gradient and radial-gradient in 3.0.0.",
+      "examples": [
+        ".a { @include gradient((red, blue)); }",
+        ".a { @include gradient((red, blue), $direction: \"top-right\"); }",
+        ".a { @include gradient((red, blue), radial, $shape: circle, $position: \"top-left\"); }",
+        ".a { @include gradient((teal 0 40%, purple 40% 75%, coral 75% 100%), conic); }",
+        ".a { @include gradient((black 0 25%, white 0 50%), conic, $repeating: true); }",
+        ".a { @include gradient((blue, yellow), $direction: right, $in: oklab); }"
+      ],
+      "rejects": [
+        ".a { @include gradient((red, blue), sideways); }",
+        ".a { @include gradient((red, blue), $direction: 10px); }",
+        ".a { @include gradient((red, blue), $direction: \"to center\"); }",
+        ".a { @include gradient((red, blue), radial, $direction: top); }",
+        ".a { @include gradient((red, blue), $shape: circle); }",
+        ".a { @include gradient((red, blue), $position: center); }",
+        ".a { @include gradient((red, blue), $from: 45deg); }",
+        ".a { @include gradient((red, blue), conic, $from: 10px); }",
+        ".a { @include gradient((red, blue), conic, $position: \"closest-side at center\"); }",
+        ".a { @include gradient((red 10px, blue), conic); }",
+        ".a { @include gradient((red, blue), radial, $shape: \"circle 10%\"); }",
+        ".a { @include gradient((huge, blue)); }",
+        ".a { @include gradient((red, blue), $in: rgb); }",
+        ".a { @include gradient((red, blue), $in: \"oklab longer hue\"); }",
+        ".a { @include gradient((red, blue), $repeating: yes); }"
+      ],
+      "warns": [
+        ".a { @include gradient(red); }"
+      ]
+    },
+    {
       "name": "hide",
       "kind": "mixin",
       "arguments": [
@@ -1097,48 +1210,6 @@
         ".a { @include line-clamp(3px); }",
         ".a { @include line-clamp(\"three\"); }",
         ".a { @include line-clamp(url(a.png)); }"
-      ]
-    },
-    {
-      "name": "linear-gradient",
-      "kind": "mixin",
-      "arguments": [
-        {
-          "name": "$direction",
-          "required": true,
-          "accepts": [
-            "a direction name such as top or bottom-left",
-            "an angle such as 45deg"
-          ]
-        },
-        {
-          "name": "$colors",
-          "required": true,
-          "accepts": [
-            "one or more colour stops: a colour, or a colour with one or two positions, such as (red 0 10%) (blue 10% 100%)",
-            "a position on its own between two colours, as a hint, such as (red, 30%, blue)",
-            "var() for a stop or the whole list",
-            "a word that is not a colour, a position first or last, two positions in a row, three positions in a stop and null are refused, because the gradient would be dropped"
-          ]
-        }
-      ],
-      "file": "scss/library/_linear-gradient.scss",
-      "signature": "linear-gradient($direction, $colors)",
-      "summary": "Linear gradient background from a direction name or an angle.",
-      "examples": [
-        ".a { @include linear-gradient(\"top\", (red, blue)); }",
-        ".a { @include linear-gradient(45deg, (red, blue)); }"
-      ],
-      "rejects": [
-        ".a { @include linear-gradient(sideways, (red, blue)); }",
-        ".a { @include linear-gradient(true, (red, blue)); }",
-        ".a { @include linear-gradient(\"top\", (huge, blue)); }",
-        ".a { @include linear-gradient(\"top\", (inherit, blue)); }",
-        ".a { @include linear-gradient(\"top\", (red, 10%)); }",
-        ".a { @include linear-gradient(\"top\", (10%, red, blue)); }",
-        ".a { @include linear-gradient(\"top\", (red, 30%, 40%, blue)); }",
-        ".a { @include linear-gradient(\"top\", (red 10% 20% 30%, blue)); }",
-        ".a { @include linear-gradient(\"top\", null); }"
       ]
     },
     {
@@ -1305,56 +1376,6 @@
         ".a { @include position(absolute, red); }",
         ".a { @include position(absolute, \"10px\"); }",
         ".a { @include position(absolute, url(a.png)); }"
-      ]
-    },
-    {
-      "name": "radial-gradient",
-      "kind": "mixin",
-      "arguments": [
-        {
-          "name": "$shape",
-          "required": true,
-          "accepts": [
-            "circle or ellipse",
-            "with a size as a string: an extent keyword such as \"circle closest-side\", one length for a circle, or two lengths or percentages for an ellipse",
-            "var() or calc()"
-          ]
-        },
-        {
-          "name": "$position",
-          "required": true,
-          "accepts": [
-            "a position name such as center or top-left",
-            "an extent keyword such as closest-side",
-            "at followed by a position, as a string, such as \"at 30% 40%\" or \"at left 10px top 20px\", optionally after a size",
-            "a word outside these, such as inherit, is refused, because the whole gradient would be dropped"
-          ]
-        },
-        {
-          "name": "$colors",
-          "required": true,
-          "accepts": [
-            "one or more colour stops, in the same forms as linear-gradient: a colour with up to two positions, a position between two colours, or var()",
-            "a stop the browser drops is refused, because the whole gradient would be dropped"
-          ]
-        }
-      ],
-      "file": "scss/library/_radial-gradient.scss",
-      "signature": "radial-gradient($shape, $position, $colors)",
-      "summary": "Radial gradient background from a shape and a position.",
-      "examples": [
-        ".a { @include radial-gradient(circle, \"center\", (red, blue)); }"
-      ],
-      "rejects": [
-        ".a { @include radial-gradient(42, \"center\", (red, blue)); }",
-        ".a { @include radial-gradient(circle, 42, (red, blue)); }",
-        ".a { @include radial-gradient(huge, \"center\", (red, blue)); }",
-        ".a { @include radial-gradient(\"circle 10%\", \"center\", (red, blue)); }",
-        ".a { @include radial-gradient(circle, huge, (red, blue)); }",
-        ".a { @include radial-gradient(circle, \"at huge\", (red, blue)); }",
-        ".a { @include radial-gradient(circle, inherit, (red, blue)); }",
-        ".a { @include radial-gradient(circle, \"center\", (huge, blue)); }",
-        ".a { @include radial-gradient(circle, \"center\", (red, blue, 90%)); }"
       ]
     },
     {
@@ -1686,32 +1707,89 @@
       "kind": "mixin",
       "arguments": [
         {
-          "name": "$direction",
-          "required": true,
-          "accepts": [
-            "a direction name such as top or bottom-left",
-            "an angle such as 45deg"
-          ]
-        },
-        {
           "name": "$colors",
           "required": true,
           "accepts": [
-            "one or more colour stops, in the same forms as linear-gradient: a colour with up to two positions, a position between two colours, or var()",
-            "a stop the browser drops is refused, because the gradient and the transparent text would go with it"
+            "one or more colour stops, in the forms the gradient mixin takes",
+            "a stop the browser drops is refused, because the gradient and the transparent text would go with it",
+            "a single colour warns"
+          ]
+        },
+        {
+          "name": "$type",
+          "default": "linear",
+          "accepts": [
+            "linear, the default",
+            "radial",
+            "conic"
+          ]
+        },
+        {
+          "name": "$direction",
+          "default": "null",
+          "accepts": [
+            "linear only",
+            "a direction name such as top or bottom-left",
+            "an angle in deg, grad, rad or turn, or 0",
+            "\"to top\" or \"to left top\" as a string",
+            "var() or calc()"
+          ]
+        },
+        {
+          "name": "$shape",
+          "default": "null",
+          "accepts": [
+            "radial only, circle or ellipse with an optional size"
+          ]
+        },
+        {
+          "name": "$position",
+          "default": "null",
+          "accepts": [
+            "radial or conic, a position name or at followed by a position"
+          ]
+        },
+        {
+          "name": "$from",
+          "default": "null",
+          "accepts": [
+            "conic only, an angle"
+          ]
+        },
+        {
+          "name": "$in",
+          "default": "null",
+          "accepts": [
+            "a colour space such as oklab, or a polar one with a hue method",
+            "the gradient is written once without the space first, for a browser that does not know it"
+          ]
+        },
+        {
+          "name": "$repeating",
+          "default": "false",
+          "accepts": [
+            "false, the default",
+            "true"
           ]
         }
       ],
       "file": "scss/library/_text-gradient.scss",
-      "signature": "text-gradient($direction, $colors)",
-      "summary": "Applies a linear gradient to the text itself via background-clip.",
+      "signature": "text-gradient($colors, $type: linear, $direction: null, $shape: null, $position: null, $from: null, $in: null, $repeating: false)",
+      "summary": "Fills the text with a gradient through background-clip: text. It takes the gradient mixin's arguments, colours first: a linear, radial or conic gradient, plain or repeating, with an optional colour space.",
       "examples": [
-        ".a { @include text-gradient(\"top\", (red, blue)); }"
+        ".a { @include text-gradient((red, blue), $direction: top); }",
+        ".a { @include text-gradient(blue yellow, $direction: right, $in: oklab); }",
+        ".a { @include text-gradient(red yellow lime cyan blue magenta red, conic); }"
       ],
       "rejects": [
-        ".a { @include text-gradient(sideways, (red, blue)); }",
-        ".a { @include text-gradient(\"top\", (huge, blue)); }",
-        ".a { @include text-gradient(\"top\", (\"red\", blue)); }"
+        ".a { @include text-gradient(\"top\", (red, blue)); }",
+        ".a { @include text-gradient(red blue, $direction: sideways); }",
+        ".a { @include text-gradient((huge, blue)); }",
+        ".a { @include text-gradient((\"red\", blue)); }",
+        ".a { @include text-gradient(red blue, $from: 45deg); }"
+      ],
+      "warns": [
+        ".a { @include text-gradient(red); }"
       ]
     },
     {
@@ -2186,6 +2264,90 @@
         ".a { content: \"#{fontSource(\"Inter\", \"/fonts/inter\", woff2)}\"; }"
       ],
       "rejects": []
+    },
+    {
+      "name": "gradientValue",
+      "kind": "function",
+      "arguments": [
+        {
+          "name": "$colors",
+          "required": true,
+          "accepts": [
+            "the colour stops, in the forms the gradient mixin takes",
+            "a single colour warns, because browsers before Chrome 135, Firefox 136 and Safari 18.4 drop that gradient"
+          ]
+        },
+        {
+          "name": "$type",
+          "default": "linear",
+          "accepts": [
+            "linear, the default",
+            "radial",
+            "conic"
+          ]
+        },
+        {
+          "name": "$direction",
+          "default": "null",
+          "accepts": [
+            "linear only, in the forms the gradient mixin takes"
+          ]
+        },
+        {
+          "name": "$shape",
+          "default": "null",
+          "accepts": [
+            "radial only, circle or ellipse with an optional size"
+          ]
+        },
+        {
+          "name": "$position",
+          "default": "null",
+          "accepts": [
+            "radial or conic, a position name or at followed by a position"
+          ]
+        },
+        {
+          "name": "$from",
+          "default": "null",
+          "accepts": [
+            "conic only, an angle"
+          ]
+        },
+        {
+          "name": "$in",
+          "default": "null",
+          "accepts": [
+            "a colour space, with a hue method for a polar one",
+            "var()"
+          ]
+        },
+        {
+          "name": "$repeating",
+          "default": "false",
+          "accepts": [
+            "false, the default",
+            "true"
+          ]
+        }
+      ],
+      "file": "scss/utilities/_gradient-value.scss",
+      "signature": "gradientValue($colors, $type: linear, $direction: null, $shape: null, $position: null, $from: null, $in: null, $repeating: false)",
+      "summary": "The gradient mixin's gradient as a value, for layering it with an image in one background-image, or using it as a mask-image or border-image. It takes the same arguments and refuses the same input, but cannot write the fallback the mixin writes before a gradient with $in.",
+      "examples": [
+        ".a { background-image: gradientValue((rgba(0, 0, 0, 0.75), transparent), $direction: top), url(\"/img/hero.jpg\"); }",
+        ".a { mask-image: gradientValue((#000 60%, transparent)); }",
+        ".a { border: 4px solid; border-image: gradientValue((red, blue), $direction: right) 1; }"
+      ],
+      "rejects": [
+        ".a { background-image: gradientValue((red, blue), $direction: sideways); }",
+        ".a { background-image: gradientValue((red, blue), $shape: circle); }",
+        ".a { background-image: gradientValue((red 10px, blue), conic); }",
+        ".a { background-image: gradientValue((red, blue), $in: rgb); }"
+      ],
+      "warns": [
+        ".a { background-image: gradientValue(red); }"
+      ]
     },
     {
       "name": "isColor",

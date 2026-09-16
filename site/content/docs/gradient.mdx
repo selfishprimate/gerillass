@@ -1,0 +1,572 @@
+---
+title: "Gradient"
+page_title: "Gradient Sass Mixin"
+page_description: "Write linear, radial and conic CSS gradients with one Sass mixin, repeating or not, and choose the colour space they blend in."
+page_keywords: "Gerillass gradient, Gradient Sass mixin, Sass linear-gradient, Sass radial-gradient, Sass conic-gradient, SCSS gradient, CSS gradient interpolation, oklab gradient"
+aliases:
+  - /docs/linear-gradient/
+  - /docs/radial-gradient/
+---
+
+# Gradient
+
+<Member name="gradient">
+
+The **Gradient Sass mixin** writes a linear, radial or conic gradient as `background-image`. The colours come first, so a plain two-colour gradient is one short call, and everything else has a default: the type is linear unless you say otherwise.
+
+It writes `background-image` rather than the `background` shorthand, which resets a `background-color` set before it.
+
+<Hint kind="info">
+
+`$in` sets the colour space the gradient blends in. Blue to yellow goes grey in the middle in the browser's default sRGB, and stays clear `in oklab`. The mixin writes the gradient once without the space first, so a browser that does not know `in` still draws one.
+
+</Hint>
+
+</Member>
+
+<Hint kind="warning">
+
+**New in Gerillass 3.0.0:** `gradient` replaces the `linear-gradient` and `radial-gradient` mixins, which are gone. Every call to them has a `gradient` call that writes the same gradient; the examples below include all of theirs. See `MIGRATION.md` for the change call by call.
+
+</Hint>
+
+## Arguments
+
+<Arguments of="gradient">
+  <Argument name="$colors" type="list">The colour stops. A stop is a colour followed by up to two positions, and a position on its own between two colours is a hint. In a conic gradient the positions are angles or percentages. A single colour warns, since browsers before Chrome 135, Firefox 136 and Safari 18.4 drop it.</Argument>
+  <Argument name="$type" type="string">`linear`, the default, `radial` or `conic`.</Argument>
+  <Argument name="$direction" type="string, number">Linear only. A name such as `top` or `bottom-left`, an angle in any unit such as `0.25turn`, `"to left top"`, or `var()`.</Argument>
+  <Argument name="$shape" type="string">Radial only. `circle` or `ellipse`, with an optional size such as `"circle 10px"`.</Argument>
+  <Argument name="$position" type="string">Radial or conic. A name such as `center` or `top-left`, or `"at 30% 40%"`.</Argument>
+  <Argument name="$from" type="number">Conic only. The angle the gradient starts at.</Argument>
+  <Argument name="$in" type="string">A colour space such as `oklab`, or a polar one with a hue method such as `"oklch longer hue"`.</Argument>
+  <Argument name="$repeating" type="boolean">`true` for a repeating gradient.</Argument>
+</Arguments>
+
+## Examples
+
+### Linear gradients
+
+Everything the removed `linear-gradient` mixin did, with the colours first and the direction named.
+
+<Example caption="Pass the colours and a direction. With no direction the gradient runs top to bottom, the CSS default.">
+```scss
+.element{
+  @include gradient(#43c6ac #191654, $direction: right);
+}
+```
+```html
+<div class="element sandbox large"></div>
+```
+</Example>
+
+<Example caption="Add as many colours as you like.">
+```scss
+.element{
+  @include gradient(#43c6ac #191654 #963d91, $direction: right);
+}
+```
+```html
+<div class="element sandbox large"></div>
+```
+</Example>
+
+<Example caption="Colour stop positions set where each colour starts and ends, so the transitions only happen in the gaps.">
+```scss
+.element{
+  @include gradient(
+    (#1a2a6c 0 10%) (#b21f1f 30% 60%) (#fdbb2d 90% 100%),
+    $direction: right
+  );
+}
+```
+```html
+<div class="element sandbox large"></div>
+```
+</Example>
+
+<Example caption="Make the stops meet and the transitions become hard edges.">
+```scss
+.element{
+  @include gradient(
+    (#1a2a6c 25%) (#b21f1f 25% 50%) (#fdbb2d 50% 75%) (orange 75% 100%),
+    $direction: right
+  );
+}
+```
+```html
+<div class="element sandbox large"></div>
+```
+</Example>
+
+<Example caption="An angle works in any unit: `deg`, `turn`, `rad` or `grad`.">
+```scss
+.element{
+  @include gradient(#f857a6 #5b86e5, $direction: 0.125turn);
+}
+```
+```html
+<div class="element sandbox large"></div>
+```
+</Example>
+
+### Radial gradients
+
+Everything the removed `radial-gradient` mixin did. Pass `radial` as the type, then a shape and a position if you want them.
+
+<Example caption="A circle from the centre.">
+```scss
+.element{
+  @include gradient(red orange, radial, $shape: circle, $position: center);
+}
+```
+```html
+<div class="element sandbox large"></div>
+```
+</Example>
+
+<Example caption="An ellipse, which follows the shape of the box.">
+```scss
+.element{
+  @include gradient(red orange, radial, $shape: ellipse, $position: center);
+}
+```
+```html
+<div class="element sandbox large"></div>
+```
+</Example>
+
+<Example caption="Move the centre to a corner.">
+```scss
+.element{
+  @include gradient(red orange gold, radial, $shape: circle, $position: top-right);
+}
+```
+```html
+<div class="element sandbox large"></div>
+```
+</Example>
+
+<Example caption="Hard stops turn a radial gradient into rings.">
+```scss
+.element{
+  @include gradient(
+    (darkslateblue 0 10%) (white 10% 20%) (dodgerblue 20% 30%) (powderblue 30% 100%),
+    radial,
+    $shape: circle,
+    $position: center
+  );
+}
+```
+```html
+<div class="element sandbox large"></div>
+```
+</Example>
+
+<Example caption="With named arguments the call reads like a sentence.">
+```scss
+.element{
+  @include gradient(
+    $colors: pink crimson,
+    $type: radial,
+    $shape: circle,
+    $position: top
+  );
+}
+```
+```html
+<div class="element sandbox large"></div>
+```
+</Example>
+
+### Conic gradients
+
+A conic gradient sweeps its colours round a centre, like the hand of a clock. Its stops are angles or percentages of a full turn.
+
+<Example caption="A pie chart is three stops and no image.">
+```scss
+.chart{
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  @include gradient(
+    (#43c6ac 0 45%) (#191654 45% 80%) (#fdbb2d 80% 100%),
+    conic
+  );
+}
+```
+```html
+<div class="chart"></div>
+```
+</Example>
+
+<Example caption="A progress ring: the filled part is one stop, the track is the other, and a circle in the middle holds the number.">
+```scss
+.ring{
+  display: grid;
+  place-items: center;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  @include gradient((#6366f1 0 72%) (#e0e7ff 72% 100%), conic);
+
+  &::before{
+    content: "72%";
+    display: grid;
+    place-items: center;
+    width: 124px;
+    height: 124px;
+    border-radius: 50%;
+    background: #fff;
+    font: 600 28px/1 system-ui, sans-serif;
+    color: #312e81;
+  }
+}
+```
+```html
+<div class="ring"></div>
+```
+</Example>
+
+<Example caption="A colour wheel for a picker. Blending red to red the long way round the hue circle passes through every hue.">
+```scss
+.wheel{
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  @include gradient(red red, conic, $in: hsl longer hue);
+}
+```
+```html
+<div class="wheel"></div>
+```
+</Example>
+
+<Example caption="A sunburst behind a sale banner. The rays repeat every 20 degrees from a centre below the bottom edge, set with `$position`, and start at an angle set with `$from`.">
+```scss
+.element{
+  @include gradient(
+    (#fde68a 0 10deg) (#f59e0b 10deg 20deg),
+    conic,
+    $from: -5deg,
+    $position: "at 50% 120%",
+    $repeating: true
+  );
+}
+```
+```html
+<div class="element sandbox large"></div>
+```
+</Example>
+
+### Repeating gradients
+
+Set `$repeating: true` and the stops repeat until they fill the box, which is how patterns are made without a single image file.
+
+<Example caption="Hazard tape, for a warning banner or a maintenance notice.">
+```scss
+.tape{
+  display: grid;
+  place-items: center;
+  height: 64px;
+  font: 700 18px/1 system-ui, sans-serif;
+  letter-spacing: 0.1em;
+  color: #111;
+  @include gradient(
+    (#facc15 0 20px) (#111 20px 40px),
+    $direction: 45deg,
+    $repeating: true
+  );
+
+  span{
+    padding: 6px 14px;
+    background: #facc15;
+  }
+}
+```
+```html
+<div class="tape"><span>UNDER MAINTENANCE</span></div>
+```
+</Example>
+
+<Example caption="The checkerboard design tools draw behind a transparent image. The pattern is one conic tile, repeated by background-size.">
+```scss
+.transparency{
+  height: 200px;
+  background-size: 24px 24px;
+  @include gradient((#e5e7eb 0 25%) (#fff 25% 50%), conic, $repeating: true);
+}
+```
+```html
+<div class="transparency"></div>
+```
+</Example>
+
+<Example caption="Ripples, for a map pin or a live indicator.">
+```scss
+.ripples{
+  height: 200px;
+  @include gradient(
+    (#0f766e 0 2px) (#ccfbf1 2px 18px),
+    radial,
+    $shape: circle,
+    $position: center,
+    $repeating: true
+  );
+}
+```
+```html
+<div class="ripples"></div>
+```
+</Example>
+
+<Example caption="Ruled lines, like a notebook page.">
+```scss
+.element{
+  @include gradient(
+    (#fff 0 27px) (#bfdbfe 27px 28px),
+    $repeating: true
+  );
+}
+```
+```html
+<div class="element sandbox large"></div>
+```
+</Example>
+
+### In real interfaces
+
+<Example caption="A spotlight hero. An ellipse of colour glows from the top edge of a dark section, the look of many product launch pages.">
+```scss
+.hero{
+  display: grid;
+  place-items: center;
+  height: 260px;
+  border-radius: 16px;
+  font: 700 32px/1.2 system-ui, sans-serif;
+  color: #fff;
+  background-color: #0b1020;
+  @include gradient(
+    (rgba(99, 102, 241, 0.55) 0%) (transparent 70%),
+    radial,
+    $shape: ellipse 70% 60%,
+    $position: "at 50% 0%"
+  );
+}
+```
+```html
+<div class="hero">Ship faster</div>
+```
+</Example>
+
+<Example caption="A call to action button, blended in oklch so the middle stays vivid instead of turning muddy.">
+```scss
+.button{
+  display: inline-block;
+  padding: 14px 28px;
+  border-radius: 999px;
+  font: 600 16px/1 system-ui, sans-serif;
+  color: #fff;
+  text-decoration: none;
+  @include gradient(#ff5f6d #6a82fb, $direction: right, $in: oklch);
+}
+```
+```html
+<a class="button" href="#">Start free trial</a>
+```
+</Example>
+
+<Example caption="A progress bar with a hard edge, so the value reads at a glance.">
+```scss
+.progress{
+  height: 14px;
+  border-radius: 999px;
+  @include gradient((#22c55e 0 64%) (#e5e7eb 64% 100%), $direction: right);
+}
+```
+```html
+<div class="progress"></div>
+```
+</Example>
+
+<Example caption="A card whose top edge catches the light, for a featured plan in a pricing table.">
+```scss
+.card{
+  width: 260px;
+  padding: 28px 24px;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  font: 15px/1.5 system-ui, sans-serif;
+  color: #374151;
+  @include gradient((#eef2ff 0) (#fff 45%));
+
+  strong{
+    display: block;
+    font-size: 22px;
+    color: #111827;
+  }
+}
+```
+```html
+<div class="card"><strong>Pro</strong>Everything you need to grow.</div>
+```
+</Example>
+
+### More ideas
+
+Shapes and scenes drawn with nothing but a gradient.
+
+<Example caption="A retro sun for a synthwave poster. Hard stops cut it into bands, and a second colour stop in each band leaves a gap of the page behind.">
+```scss
+.sun{
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  @include gradient(
+    (#fde047 0 42%) (#fb923c 42% 56%) (#fff 56% 59%)
+    (#f472b6 59% 70%) (#fff 70% 73%) (#c026d3 73% 84%)
+    (#fff 84% 88%) (#7c3aed 88% 100%)
+  );
+}
+```
+```html
+<div class="sun"></div>
+```
+</Example>
+
+<Example caption="A gauge for a dashboard. The conic gradient starts at -90deg, fills the top half up to the value, and leaves the bottom half the colour of the page.">
+```scss
+.gauge{
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  @include gradient(
+    (#22c55e 0 32%) (#e5e7eb 32% 50%) (#fff 50% 100%),
+    conic,
+    $from: -90deg
+  );
+}
+```
+```html
+<div class="gauge"></div>
+```
+</Example>
+
+<Example caption="A radar screen. The sweep is a conic gradient that stays dark for most of the turn and brightens towards its leading edge.">
+```scss
+.radar{
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  @include gradient((#052e16 0 70%) (#16a34a 97%) (#86efac 100%), conic, $from: 20deg);
+}
+```
+```html
+<div class="radar"></div>
+```
+</Example>
+
+<Example caption="A stage light. A narrow wedge of a conic gradient, placed above the top edge with `$position`, falls on the stage as a beam.">
+```scss
+.element{
+  @include gradient(
+    (#1e1b4b 0 165deg) (#fef3c7 172deg 188deg) (#1e1b4b 195deg 360deg),
+    conic,
+    $position: "at 50% -10%"
+  );
+}
+```
+```html
+<div class="element sandbox xlarge"></div>
+```
+</Example>
+
+<Example caption="Contour lines for a map or a hiking app, from rings repeated round a peak that sits off centre.">
+```scss
+.element{
+  @include gradient(
+    (#ecfccb 0 14px) (#65a30d 14px 15px) (#ecfccb 15px 28px),
+    radial,
+    $shape: circle,
+    $position: "at 30% 40%",
+    $repeating: true
+  );
+}
+```
+```html
+<div class="element sandbox xlarge"></div>
+```
+</Example>
+
+<Example caption="A rainbow flag in six hard stops, for a banner or an avatar ring.">
+```scss
+.element{
+  @include gradient(
+    (#e40303 0 16.66%) (#ff8c00 16.66% 33.33%) (#ffed00 33.33% 50%)
+    (#008026 50% 66.66%) (#24408e 66.66% 83.33%) (#732982 83.33% 100%)
+  );
+}
+```
+```html
+<div class="element sandbox large"></div>
+```
+</Example>
+
+### Colour spaces
+
+<Example caption="Blue to yellow blended in the browser's default sRGB. The middle turns grey.">
+```scss
+.element{
+  @include gradient(blue yellow, $direction: right);
+}
+```
+```html
+<div class="element sandbox large"></div>
+```
+</Example>
+
+<Example caption="The same two colours `in oklab`. The blend stays clear all the way. A browser that does not support colour spaces gets the sRGB version instead.">
+```scss
+.element{
+  @include gradient(blue yellow, $direction: right, $in: oklab);
+}
+```
+```html
+<div class="element sandbox large"></div>
+```
+</Example>
+
+<Hint kind="info">
+
+To layer a gradient over a photo, or use one as a `mask-image` or `border-image`, use the [gradientValue](/docs/gradient-value) function. It takes the same arguments and returns the gradient as a value.
+
+</Hint>
+
+## What it refuses
+
+An argument that does not belong to the gradient's type stops the build, because the browser would ignore it and nothing would say so.
+
+```scss
+.element {
+  @include gradient(red blue, $from: 45deg);
+}
+```
+```text
+Error: $from is for a conic gradient, and this one is linear.
+```
+
+A colour stop the browser drops stops the build too, since the whole gradient goes with it. A conic gradient's stops are angles or percentages, so a length is refused there.
+
+```scss
+.element {
+  @include gradient((red 10px) blue, conic);
+}
+```
+```text
+Error: `(red 10px) blue` is not a valid $colors for `gradient`: in `red 10px`, `10px` is not an angle or a percentage, and a conic stop is placed by one. A browser drops the whole gradient.
+```
+
+## Related Links
+* [Using CSS Gradients](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Images/Using_CSS_gradients)
+* [conic-gradient()](https://developer.mozilla.org/en-US/docs/Web/CSS/gradient/conic-gradient)
+* [Color interpolation method](https://developer.mozilla.org/en-US/docs/Web/CSS/color-interpolation-method)

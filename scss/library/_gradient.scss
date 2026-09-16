@@ -1,0 +1,31 @@
+@charset "UTF-8";
+
+@use "../internal/gradient" as *;
+
+// One mixin for linear, radial and conic gradients, plain or repeating, with an
+// optional colour interpolation space. It replaced linear-gradient and
+// radial-gradient in 3.0.0; MIGRATION.md has each old call's new form.
+//
+// It writes background-image, not the background shorthand: measured in Chrome
+// 152, the shorthand reset a background-color set before it to transparent.
+// What each argument takes, and what was measured, is in
+// scss/internal/_gradient.scss.
+@mixin gradient(
+  $colors,
+  $type: linear,
+  $direction: null,
+  $shape: null,
+  $position: null,
+  $from: null,
+  $in: null,
+  $repeating: false
+) {
+  $value: gradientOf($colors, $type, $direction, $shape, $position, $from, $in, $repeating);
+  // Written without the space first. A browser that does not know `in` drops
+  // the second declaration and keeps this one; measured in Chrome by giving it
+  // a space name it does not know.
+  @if $in != null {
+    background-image: gradientOf($colors, $type, $direction, $shape, $position, $from, null, $repeating, $warn: false);
+  }
+  background-image: $value;
+}

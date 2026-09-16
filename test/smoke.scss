@@ -53,15 +53,14 @@
 .escape-to-parent { @include escape-to-parent(".parent") { color: red; } }
 .except { @include except("first") { color: red; } }
 .focus-ring { @include focus-ring; }
+.gradient { @include gradient((red, blue), conic, $from: 45deg, $in: oklab); }
 .hide { @include hide; }
 .line-clamp { @include line-clamp(3); }
-.linear-gradient { @include linear-gradient("top", red blue); }
 .motion-safe { @include motion-safe { transition: opacity 0.2s; } }
 .only { @include only("first") { color: red; } }
 .placeholder { @include placeholder { color: gray; } }
 .placeholder-shown { @include placeholder-shown { color: gray; } }
 .position { @include position(absolute, 0 10px); }
-.radial-gradient { @include radial-gradient(circle, "center", red blue); }
 .remove { @include remove("only", "medium"); }
 .reset-figure { @include reset-figure; }
 .resizable { @include resizable; }
@@ -73,7 +72,7 @@
 .sprite { @include sprite("/img/sprite.png"); }
 .stretched-link { @include stretched-link; }
 .tablet { @include tablet("iPadPro") { color: red; } }
-.text-gradient { @include text-gradient("top", red blue); }
+.text-gradient { @include text-gradient(red blue, $direction: top); }
 .text-image { @include text-image("/img/text.png"); }
 .text-shadow { @include text-shadow(bottom-right red 5px); }
 .text-stroke { @include text-stroke; }

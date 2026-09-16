@@ -6,7 +6,7 @@
 @include describe('text-gradient()') {
   @include it('Accepts a colour function and var().') {
     @include assert {
-      @include output { .a { @include text-gradient("top", oklch(70% 0.1 200) var(--end)); } }
+      @include output { .a { @include text-gradient(oklch(70% 0.1 200) var(--end), $direction: "top"); } }
       @include expect {
         .a {
           background: linear-gradient(to top, oklch(70% 0.1 200deg), var(--end));

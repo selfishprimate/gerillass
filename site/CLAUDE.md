@@ -238,8 +238,10 @@ Check the tag exists before pointing the download links at it:
 
 **`components/Announcement` does not follow `release.js`.** The band across the
 top of the page states a *migration*, not a version: it carried a LibSass
-deprecation for years and now carries 2.0.0. A routine version bump leaves it
-alone. It changes when something breaks.
+deprecation for years, then 2.0.0, and now 3.0.0. A minor or patch release
+leaves it alone. **Every major release rewrites it**, a rule the maintainer set
+on 17 September 2026: the version, one sentence on what breaks, and a link to
+`MIGRATION.md`.
 
 ## Deployment (Netlify)
 

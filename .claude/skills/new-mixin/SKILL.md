@@ -20,8 +20,8 @@ which is worse. Do all of them, and step 8 in particular: it is a rule in
 | keyed config | `scss/maps/` | `$map-for-…`, with `!default` |
 
 One member per file, and **the filename must match the member name** —
-`_border-radius.scss` holds `@mixin border-radius`. This holds for all 56
-existing mixins and 23 utilities; do not be the exception.
+`_border-radius.scss` holds `@mixin border-radius`. This holds for all 55
+existing mixins and 24 utilities; do not be the exception.
 
 ## 2. Write the file
 
@@ -41,7 +41,7 @@ reversed in 2.0.0: library partials used to be forbidden from carrying a `@use`
 rule, because a Gulp task concatenated them into one bundle and a `@use` landing
 mid-file made Sass reject the whole thing. That generator is gone.
 
-Validate arguments and fail loudly. 48 of the 49 mixins that take arguments do
+Validate arguments and fail loudly. 47 of the 48 mixins that take arguments do
 this, and the message should name what is acceptable:
 
 ```scss
@@ -197,9 +197,10 @@ The documentation and the test suite only cover what someone wrote down. Before
 calling the member done, follow **The rule for changing or adding a member** in
 `CLAUDE.md`:
 
-- measure in Chrome, with `tools/browser-check.js`, the values each property
-  keeps before writing a check, and compare what the mixin renders with the
-  same CSS written by hand;
+- measure in Chrome, Firefox and Safari, all three, with
+  `tools/browser-check.js`, the values each property keeps before writing a
+  check, and compare what the mixin renders with the same CSS written by hand.
+  This is a rule, for a new member and for every change to one;
 - compile a wide set of calls, well beyond the examples (`var()` with a
   fallback, maths functions, CSS-wide and vendor keywords, colour functions,
   gradients, `url()`, `paint()`, quoted values, lists), and test the output of

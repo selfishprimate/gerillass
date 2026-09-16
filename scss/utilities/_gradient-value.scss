@@ -1,0 +1,24 @@
+@charset "UTF-8";
+
+@use "../internal/gradient" as *;
+
+// The gradient mixin's gradient as a value, for where a mixin cannot write the
+// whole declaration: layered with an image in one background-image, or as a
+// mask-image or border-image. It takes the same arguments and refuses the same
+// input; see scss/internal/_gradient.scss.
+//
+// A function returns one value, so unlike the mixin it cannot write a fallback
+// before a gradient with $in. Write one yourself if an old browser matters:
+// the same call with $in left out, in a declaration before it.
+@function gradientValue(
+  $colors,
+  $type: linear,
+  $direction: null,
+  $shape: null,
+  $position: null,
+  $from: null,
+  $in: null,
+  $repeating: false
+) {
+  @return gradientOf($colors, $type, $direction, $shape, $position, $from, $in, $repeating, $member: "gradientValue");
+}

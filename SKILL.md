@@ -5,7 +5,7 @@ description: Use the Gerillass Sass mixin library — loading it, the mixin cata
 
 # Gerillass
 
-A Sass mixin library: 56 mixins and 23 functions that emit CSS from
+A Sass mixin library: 55 mixins and 24 functions that emit CSS from
 semantic declarations. It is Sass source only — there is no runtime and no
 utility classes, so styles live in your stylesheet and your markup stays clean.
 
@@ -100,14 +100,13 @@ a dropped declaration rather than an error.
 | `except` | `.a { @include except(#ff0000) { margin: 0; } }` |
 | `focus-ring` | `@include focus-ring;` |
 | `font-face` | `.a { @include font-face("Inter", "/fonts/inter"); }` |
+| `gradient` | `.a { @include gradient((red, blue), sideways); }` |
 | `hide` | `.a { @include hide(nonsense); }` |
 | `line-clamp` | `.a { @include line-clamp(0); }` |
-| `linear-gradient` | `.a { @include linear-gradient(sideways, (red, blue)); }` |
 | `loadify` | `@include loadify(nonsense);` |
 | `motion-safe` | `.card { @include motion-safe; }` |
 | `only` | `.a { @include only(#ff0000) { margin: 0; } }` |
 | `position` | `.badge { @include position(absolute, 0, $logical: yes); }` |
-| `radial-gradient` | `.a { @include radial-gradient(42, "center", (red, blue)); }` |
 | `remove` | `.a { @include remove(a, b, c); }` |
 | `reset-css` | `.a { @include reset-css; }` |
 | `resizable` | `.a { @include resizable(huge); }` |
@@ -118,7 +117,7 @@ a dropped declaration rather than an error.
 | `sprite` | `.icon { @include sprite("/img/sprite.txt"); }` |
 | `stretched-link` | `.card a { @include stretched-link(middle); }` |
 | `tablet` | `.a { @include tablet(Surface) { display: none; } }` |
-| `text-gradient` | `.a { @include text-gradient(sideways, (red, blue)); }` |
+| `text-gradient` | `.a { @include text-gradient("top", (red, blue)); }` |
 | `text-image` | `.a { @include text-image(16 9); }` |
 | `text-selection` | `.a { @include text-selection(bogus) { background: yellow; } }` |
 | `text-shadow` | `.a { @include text-shadow(42); }` |
@@ -209,16 +208,15 @@ a dropped declaration rather than an error.
 | `except($params...)` | Selects every sibling except the ones named. |
 | `focus-ring($width: 2px, $offset: 2px, $color: currentColor)` | Draws a keyboard focus ring with outline on :focus-visible, which survives forced-colors mode where a box-shadow ring disappears. |
 | `font-face($font-family, $file-path, $font-style: normal, $font-weight: 400, $file-formats: eot woff2 woff ttf svg, $font-display: null)` | Emits an @font-face rule for one family across several file formats. Must be called at the root. |
+| `gradient($colors, $type: linear, $direction: null, $shape: null, $position: null, $from: null, $in: null, $repeating: false)` | A linear, radial or conic gradient as background-image, plain or repeating, with an optional colour interpolation space. Replaced linear-gradient and radial-gradient in 3.0.0. |
 | `hide($toggle: "hide")` | Visually hides an element while keeping it available to screen readers, or reverses that. |
 | `line-clamp($lines: 3)` | Truncates text after a number of lines, where ellipsis truncates one. It emits five declarations rather than one because -webkit-line-clamp does nothing on its own: without display: -webkit-box or without -webkit-box-orient: vertical the text is not clamped at all and nothing warns you, and without overflow: hidden the clamped text spills out below the box. The unprefixed line-clamp is emitted too, for when it becomes Baseline. |
-| `linear-gradient($direction, $colors)` | Linear gradient background from a direction name or an angle. |
 | `loadify($params...)` | Fades elements in on page load. Call once at the root to set up, then on each element. Under prefers-reduced-motion: reduce the end state is applied directly and no animation runs. Switching the animation off alone would not do, because the element starts invisible and the animation is what reveals it, so the content would stay hidden for good. |
 | `motion-safe` | Wraps its content in @media (prefers-reduced-motion: no-preference), so motion is opt-in: a user who asked their system for less motion gets none of it. |
 | `only($params...)` | Selects only the siblings named. |
 | `placeholder-shown` | Styles an input while its placeholder is visible. |
 | `placeholder` | Styles the placeholder text of an input across vendor prefixes. |
 | `position($position: absolute, $offsets: 0, $logical: false)` | Sets position and offsets in one call, using shorthand order. |
-| `radial-gradient($shape, $position, $colors)` | Radial gradient background from a shape and a position. |
 | `remove($params...)` | Hides an element outright, or within a media query: from a breakpoint up with min, up to it with max, or between two breakpoints. One breakpoint on its own hides the element at exactly that width, a single pixel, and prints a warning: pass only for that. |
 | `reset-css` | Meyer reset. Must be called at the root of the stylesheet. |
 | `reset-figure` | Removes default figure margins and makes the image inside responsive. |
@@ -231,7 +229,7 @@ a dropped declaration rather than an error.
 | `sprite($params...)` | Sets up an element as a sprite tile: an image, a background position, or both. |
 | `stretched-link($value: "before")` | Expands a link to cover its positioned parent, so the whole card is clickable. |
 | `tablet($device, $orientation: null)` | Media query targeting a known tablet by device dimensions. |
-| `text-gradient($direction, $colors)` | Applies a linear gradient to the text itself via background-clip. |
+| `text-gradient($colors, $type: linear, $direction: null, $shape: null, $position: null, $from: null, $in: null, $repeating: false)` | Fills the text with a gradient through background-clip: text. It takes the gradient mixin's arguments, colours first: a linear, radial or conic gradient, plain or repeating, with an optional colour space. |
 | `text-image($image: null)` | Fills the text with an image via background-clip. |
 | `text-selection($value: null)` | Styles the ::selection pseudo-element. |
 | `text-shadow($params...)` | Layered text shadows built from a direction, a colour and an offset. |
@@ -254,6 +252,7 @@ and camelCase is what tells them apart from the kebab-case mixins above.
 | `fluid($min, $max, $min-viewport: 320px, $max-viewport: 1280px)` | A clamp() value that grows with the viewport between two widths, then stops. The preferred value keeps a rem term rather than being pure vw, because a vw-only value ignores browser text zoom and fails WCAG 1.4.4. It is a function rather than a mixin because the value is the hard part and belongs to any property, not only font-size. |
 | `fontSizer($size, $time)` | Multiplies a size by a factor. Handy for a modular scale. |
 | `fontSource($font-family, $file-path, $file-formats)` | Builds one src entry for an @font-face rule. |
+| `gradientValue($colors, $type: linear, $direction: null, $shape: null, $position: null, $from: null, $in: null, $repeating: false)` | The gradient mixin's gradient as a value, for layering it with an image in one background-image, or using it as a mask-image or border-image. It takes the same arguments and refuses the same input, but cannot write the fallback the mixin writes before a gradient with $in. |
 | `isColor($value)` | Returns the value if every item in it is a colour, and errors otherwise. |
 | `isGutter($value)` | True for anything that can sit where a CSS length is expected: a number, a calculation, or a CSS function such as var(). |
 | `isNumber($value)` | Returns the value if it is a number. |

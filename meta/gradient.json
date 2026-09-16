@@ -1,0 +1,100 @@
+{
+  "name": "gradient",
+  "summary": "A linear, radial or conic gradient as background-image, plain or repeating, with an optional colour interpolation space. Replaced linear-gradient and radial-gradient in 3.0.0.",
+  "arguments": [
+    {
+      "name": "$colors",
+      "accepts": [
+        "one or more colour stops: a colour, or a colour with one or two positions, such as (red 0 10%) (blue 10% 100%)",
+        "a position on its own between two colours, as a hint",
+        "for a conic gradient the positions are angles or percentages, not lengths",
+        "var() for a stop or the whole list",
+        "a single colour warns, because browsers before Chrome 135, Firefox 136 and Safari 18.4 drop that gradient"
+      ]
+    },
+    {
+      "name": "$type",
+      "accepts": [
+        "linear, the default",
+        "radial",
+        "conic"
+      ]
+    },
+    {
+      "name": "$direction",
+      "accepts": [
+        "linear only",
+        "a direction name such as top or bottom-left",
+        "an angle in deg, grad, rad or turn, or 0",
+        "\"to top\" or \"to left top\" as a string",
+        "var() or calc()"
+      ]
+    },
+    {
+      "name": "$shape",
+      "accepts": [
+        "radial only",
+        "circle or ellipse, with an optional size as a string, such as \"circle 10px\""
+      ]
+    },
+    {
+      "name": "$position",
+      "accepts": [
+        "radial or conic",
+        "a position name such as center or top-left",
+        "at followed by a position, as a string, such as \"at 30% 40%\"; a radial gradient may put a size before it"
+      ]
+    },
+    {
+      "name": "$from",
+      "accepts": [
+        "conic only",
+        "an angle in deg, grad, rad or turn, 0, or var()"
+      ]
+    },
+    {
+      "name": "$in",
+      "accepts": [
+        "a colour space: srgb, srgb-linear, display-p3, display-p3-linear, a98-rgb, prophoto-rgb, rec2020, lab, oklab, xyz, xyz-d50 or xyz-d65",
+        "a polar space, hsl, hwb, lch or oklch, with an optional hue method as a string, such as \"oklch longer hue\"",
+        "var()",
+        "the gradient is written once without the space first, for a browser that does not know it"
+      ]
+    },
+    {
+      "name": "$repeating",
+      "accepts": [
+        "false, the default",
+        "true, for a repeating gradient"
+      ]
+    }
+  ],
+  "examples": [
+    ".a { @include gradient((red, blue)); }",
+    ".a { @include gradient((red, blue), $direction: \"top-right\"); }",
+    ".a { @include gradient((red, blue), radial, $shape: circle, $position: \"top-left\"); }",
+    ".a { @include gradient((teal 0 40%, purple 40% 75%, coral 75% 100%), conic); }",
+    ".a { @include gradient((black 0 25%, white 0 50%), conic, $repeating: true); }",
+    ".a { @include gradient((blue, yellow), $direction: right, $in: oklab); }"
+  ],
+  "warns": [
+    ".a { @include gradient(red); }"
+  ],
+  "rejects": [
+    ".a { @include gradient((red, blue), sideways); }",
+    ".a { @include gradient((red, blue), $direction: 10px); }",
+    ".a { @include gradient((red, blue), $direction: \"to center\"); }",
+    ".a { @include gradient((red, blue), radial, $direction: top); }",
+    ".a { @include gradient((red, blue), $shape: circle); }",
+    ".a { @include gradient((red, blue), $position: center); }",
+    ".a { @include gradient((red, blue), $from: 45deg); }",
+    ".a { @include gradient((red, blue), conic, $from: 10px); }",
+    ".a { @include gradient((red, blue), conic, $position: \"closest-side at center\"); }",
+    ".a { @include gradient((red 10px, blue), conic); }",
+    ".a { @include gradient((red, blue), radial, $shape: \"circle 10%\"); }",
+    ".a { @include gradient((huge, blue)); }",
+    ".a { @include gradient((red, blue), $in: rgb); }",
+    ".a { @include gradient((red, blue), $in: \"oklab longer hue\"); }",
+    ".a { @include gradient((red, blue), $repeating: yes); }"
+  ]
+}

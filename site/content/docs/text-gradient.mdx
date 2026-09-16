@@ -20,19 +20,33 @@ A color stop position can be defined with `length` or `percentage` units.
 
 </Member>
 
+<Hint kind="warning">
+
+**Changed in Gerillass 3.0.0:** the colours come first, and the direction is a named argument. `text-gradient("top", (red, blue))` is now `text-gradient((red, blue), $direction: top)`. A call in the old order stops the build with the new form written out. The mixin also takes every argument the [gradient](/docs/gradient) mixin takes, so text can carry a radial, conic or repeating gradient and blend in a colour space.
+
+</Hint>
+
 ## Arguments
 
-<Arguments of="text-gradient" footnote="**Important:** When you use color stop points together with the color values, each group of values must be wrapped in parentheses and separated by a space. See the <a href='#examples'>examples</a> for more.">
-  <Argument name="$direction" type="string, number">Sets the direction of the gradient line. Accepts the string values <code>top</code>, <code>top-right</code>, <code>right</code>, <code>bottom-right</code>, <code>bottom</code>, <code>bottom-left</code>, <code>left</code>, and <code>top-left</code>. You can also pass a custom value as a number followed by a <code>deg</code> unit.</Argument>
-  <Argument name="$colors" type="list">Accepts a list of colors, with or without color stop points. You can pass as many color values as you want. The stops take the same forms as in <a href="/docs/linear-gradient">Linear Gradient</a>.</Argument>
+<Arguments of="text-gradient">
+  <Argument name="$colors" type="list">The colour stops, in the forms the `gradient` mixin takes. Each stop is a colour with up to two positions, wrapped in parentheses when it has positions.</Argument>
+  <Argument name="$type" type="string">`linear`, the default, `radial` or `conic`.</Argument>
+  <Argument name="$direction" type="string, number">Linear only. A name such as `top` or `bottom-left`, an angle in any unit, `"to left top"`, or `var()`.</Argument>
+  <Argument name="$shape" type="string">Radial only. `circle` or `ellipse`, with an optional size.</Argument>
+  <Argument name="$position" type="string">Radial or conic. A name such as `center`, or `"at 30% 40%"`.</Argument>
+  <Argument name="$from" type="number">Conic only. The angle the gradient starts at.</Argument>
+  <Argument name="$in" type="string">A colour space such as `oklab`.</Argument>
+  <Argument name="$repeating" type="boolean">`true` for a repeating gradient.</Argument>
 </Arguments>
 
 ## Examples
 
-<Example caption="First, let's forget about color stop positioning and pass values only for the `$direction` and `$colors` arguments.">
+### The basics
+
+<Example caption="Pass the colours and a direction. As many colours as you like.">
 ```scss
 .element{
-  @include text-gradient(right, orange red purple blue green);
+  @include text-gradient(orange red purple blue green, $direction: right);
 }
 ```
 ```html
@@ -40,12 +54,12 @@ A color stop position can be defined with `length` or `percentage` units.
 ```
 </Example>
 
-<Example caption="The one-line method (also known as using **positional arguments**) can be confusing sometimes. To explain clearly how this mixin works, let's use **named arguments** (not harder, just a little slower) to pass some values.">
+<Example caption="With named arguments the call reads the same in any order.">
 ```scss
 .element{
   @include text-gradient(
-    $direction: top-left,
-    $colors: red orange
+    $colors: red orange,
+    $direction: top-left
   );
 }
 ```
@@ -54,12 +68,23 @@ A color stop position can be defined with `length` or `percentage` units.
 ```
 </Example>
 
-<Example caption="Now let's try it with color stop positions to make it a bit more complex.">
+<Example caption="Colour stop positions make the colours meet at a hard edge.">
+```scss
+.element{
+  @include text-gradient((red 50%) (orange 50%), $direction: bottom);
+}
+```
+```html
+<h2 class="element sandbox text">Text Gradient is Awesome!</h2>
+```
+</Example>
+
+<Example caption="A colour can take a start and an end position.">
 ```scss
 .element{
   @include text-gradient(
-    $direction: bottom,
-    $colors: (red 50%) (orange 50%) 
+    (green 0 40%) (blue 40% 60%) (purple 60% 100%),
+    $direction: top
   );
 }
 ```
@@ -68,12 +93,46 @@ A color stop position can be defined with `length` or `percentage` units.
 ```
 </Example>
 
-<Example caption="You can use the starting position and the ending position of a color together.">
+<Example caption="The transitions do not have to be sharp.">
+```scss
+.element{
+  @include text-gradient((red 30%) (orange 60%) (brown 80%), $direction: bottom);
+}
+```
+```html
+<h2 class="element sandbox text">Text Gradient is Awesome!</h2>
+```
+</Example>
+
+<Example caption="Blend in oklab for an even transition between two colours.">
+```scss
+.element{
+  @include text-gradient(#2563eb #db2777, $direction: right, $in: oklab);
+}
+```
+```html
+<h2 class="element sandbox text">Text Gradient is Awesome!</h2>
+```
+</Example>
+
+<Example caption="A conic gradient sweeps a rainbow round the middle of the words.">
+```scss
+.element{
+  @include text-gradient(#ef4444 #f59e0b #22c55e #3b82f6 #a855f7 #ef4444, conic);
+}
+```
+```html
+<h2 class="element sandbox text">Text Gradient is Awesome!</h2>
+```
+</Example>
+
+<Example caption="A repeating gradient stripes the letters, a retro poster look.">
 ```scss
 .element{
   @include text-gradient(
-    $direction: top,
-    $colors: (green 0 40%) (blue 40% 60%) (purple 60% 100%) 
+    (#db2777 0 6px) (#f59e0b 6px 12px),
+    $direction: 45deg,
+    $repeating: true
   );
 }
 ```
@@ -82,33 +141,110 @@ A color stop position can be defined with `length` or `percentage` units.
 ```
 </Example>
 
-<Example caption="The transitions between the colors do not always have to be as sharp as in the examples above.">
+### In real interfaces
+
+Each of these is the mixin alone. The only other declaration is the font, so the letters are big enough to show the gradient. They are spans rather than blocks: the gradient paints the element's box, and a block is as wide as the page, so a diagonal, radial or conic gradient would spread far past the word.
+
+<Example caption="Highlight one word of a hero headline. The gradient sits on a span, so the rest of the sentence keeps its colour.">
 ```scss
-.element{
+.headline{
+  font: 800 44px/1.1 system-ui, sans-serif;
+
+  span{
+    @include text-gradient(#6366f1 #ec4899, $direction: right, $in: oklab);
+  }
+}
+```
+```html
+<h1 class="headline">Design at the <span>speed of thought</span></h1>
+```
+</Example>
+
+<Example caption="A price on a pricing card, blended in oklch so the colours stay vivid across the digits.">
+```scss
+.price{
+  font: 800 72px/1 system-ui, sans-serif;
+  @include text-gradient(#0ea5e9 #22c55e, $direction: 135deg, $in: oklch);
+}
+```
+```html
+<span class="price">$29/mo</span>
+```
+</Example>
+
+<Example caption="A gold label for a premium tier. Stops crowded at the middle give the letters the bright band that metal has.">
+```scss
+.premium{
+  font: 900 48px/1 system-ui, sans-serif;
   @include text-gradient(
-    $direction: bottom,
-    $colors: (red 30%) (orange 60%) (brown 80%)
+    (#8b6508 0%) (#ffd700 45%) (#fff8dc 50%) (#daa520 55%) (#8b6508 100%),
+    $direction: top
   );
 }
 ```
 ```html
-<h2 class="element sandbox text">Text Gradient is Awesome!</h2>
+<span class="premium">PREMIUM</span>
 ```
 </Example>
 
-If you want to master this, you need a clear understanding of how **linear-gradient()** works. For more, check out the links below:
+<Example caption="A wordmark split in two colours by a hard diagonal, from two stops that meet at 50%.">
+```scss
+.wordmark{
+  font: 900 64px/1 system-ui, sans-serif;
+  @include text-gradient((#0f172a 50%) (#f97316 50%), $direction: 135deg);
+}
+```
+```html
+<span class="wordmark">SPLIT</span>
+```
+</Example>
+
+<Example caption="A glowing title: a radial gradient is brightest in the middle of the word and cools towards the ends.">
+```scss
+.glow{
+  font: 900 56px/1 system-ui, sans-serif;
+  @include text-gradient(#f0abfc #a855f7 #3b82f6, radial, $shape: ellipse, $position: center);
+}
+```
+```html
+<span class="glow">LAUNCH DAY</span>
+```
+</Example>
+
+<Example caption="A holographic label. A conic gradient blended the long way round the hue circle gives the letters every colour at once.">
+```scss
+.holo{
+  font: 900 64px/1 system-ui, sans-serif;
+  @include text-gradient(#f472b6 #f472b6, conic, $from: 45deg, $in: oklch longer hue);
+}
+```
+```html
+<span class="holo">HOLO</span>
+```
+</Example>
 
 ## What it refuses
 
-A colour stop the browser drops stops the build. Here it matters twice: the browser drops the gradient, and the mixin has already made the text transparent, so the text disappears. Until 2.3.1 such a stop compiled.
+A call in the order used before 3.0.0 stops the build and shows the new form.
 
 ```scss
 .element {
-  @include text-gradient("top", (huge, blue));
+  @include text-gradient("top", (red, blue));
 }
 ```
 ```text
-Error: `huge, blue` is not a valid $colors for `text-gradient`: `huge` is not a colour stop: it is not a colour. A browser drops the whole gradient, and the transparent text with it.
+Error: `text-gradient` takes the colours first since 3.0.0. Write `text-gradient((red, blue), $direction: "top")`.
+```
+
+A colour stop the browser drops stops the build too. Here it matters twice: the browser drops the gradient, and the mixin has already made the text transparent, so the text disappears.
+
+```scss
+.element {
+  @include text-gradient((huge, blue));
+}
+```
+```text
+Error: `huge, blue` is not a valid $colors for `text-gradient`: `huge` is not a colour stop: it is not a colour. A browser drops the whole gradient.
 ```
 
 ## Related Links
