@@ -1,6 +1,6 @@
 {
   "name": "gradient",
-  "summary": "A linear, radial or conic gradient as background-image, plain or repeating, with an optional colour interpolation space. Written beside linear-gradient and radial-gradient for comparison.",
+  "summary": "A linear, radial or conic gradient as background-image, plain or repeating, with an optional colour interpolation space. Replaced linear-gradient and radial-gradient in 3.0.0.",
   "arguments": [
     {
       "name": "$colors",
@@ -14,7 +14,11 @@
     },
     {
       "name": "$type",
-      "accepts": ["linear, the default", "radial", "conic"]
+      "accepts": [
+        "linear, the default",
+        "radial",
+        "conic"
+      ]
     },
     {
       "name": "$direction",
@@ -28,7 +32,10 @@
     },
     {
       "name": "$shape",
-      "accepts": ["radial only", "circle or ellipse, with an optional size as a string, such as \"circle 10px\""]
+      "accepts": [
+        "radial only",
+        "circle or ellipse, with an optional size as a string, such as \"circle 10px\""
+      ]
     },
     {
       "name": "$position",
@@ -40,7 +47,10 @@
     },
     {
       "name": "$from",
-      "accepts": ["conic only", "an angle in deg, grad, rad or turn, 0, or var()"]
+      "accepts": [
+        "conic only",
+        "an angle in deg, grad, rad or turn, 0, or var()"
+      ]
     },
     {
       "name": "$in",
@@ -53,7 +63,10 @@
     },
     {
       "name": "$repeating",
-      "accepts": ["false, the default", "true, for a repeating gradient"]
+      "accepts": [
+        "false, the default",
+        "true, for a repeating gradient"
+      ]
     }
   ],
   "examples": [

@@ -291,7 +291,7 @@
           "name": "$filter-color",
           "default": "null",
           "accepts": [
-            "one colour, or several colour stops for a gradient, in the forms linear-gradient takes",
+            "one colour, or several colour stops for a gradient, in the forms the gradient mixin takes",
             "with $image-url null, an image as the overlay layer too: a gradient, url(), image-set() or var()",
             "a word that is not a colour, a quoted colour, a length and a CSS-wide keyword are refused"
           ]
@@ -1126,7 +1126,7 @@
       ],
       "file": "scss/library/_gradient.scss",
       "signature": "gradient($colors, $type: linear, $direction: null, $shape: null, $position: null, $from: null, $in: null, $repeating: false)",
-      "summary": "A linear, radial or conic gradient as background-image, plain or repeating, with an optional colour interpolation space. Written beside linear-gradient and radial-gradient for comparison.",
+      "summary": "A linear, radial or conic gradient as background-image, plain or repeating, with an optional colour interpolation space. Replaced linear-gradient and radial-gradient in 3.0.0.",
       "examples": [
         ".a { @include gradient((red, blue)); }",
         ".a { @include gradient((red, blue), $direction: \"top-right\"); }",
@@ -1210,48 +1210,6 @@
         ".a { @include line-clamp(3px); }",
         ".a { @include line-clamp(\"three\"); }",
         ".a { @include line-clamp(url(a.png)); }"
-      ]
-    },
-    {
-      "name": "linear-gradient",
-      "kind": "mixin",
-      "arguments": [
-        {
-          "name": "$direction",
-          "required": true,
-          "accepts": [
-            "a direction name such as top or bottom-left",
-            "an angle such as 45deg"
-          ]
-        },
-        {
-          "name": "$colors",
-          "required": true,
-          "accepts": [
-            "one or more colour stops: a colour, or a colour with one or two positions, such as (red 0 10%) (blue 10% 100%)",
-            "a position on its own between two colours, as a hint, such as (red, 30%, blue)",
-            "var() for a stop or the whole list",
-            "a word that is not a colour, a position first or last, two positions in a row, three positions in a stop and null are refused, because the gradient would be dropped"
-          ]
-        }
-      ],
-      "file": "scss/library/_linear-gradient.scss",
-      "signature": "linear-gradient($direction, $colors)",
-      "summary": "Linear gradient background from a direction name or an angle.",
-      "examples": [
-        ".a { @include linear-gradient(\"top\", (red, blue)); }",
-        ".a { @include linear-gradient(45deg, (red, blue)); }"
-      ],
-      "rejects": [
-        ".a { @include linear-gradient(sideways, (red, blue)); }",
-        ".a { @include linear-gradient(true, (red, blue)); }",
-        ".a { @include linear-gradient(\"top\", (huge, blue)); }",
-        ".a { @include linear-gradient(\"top\", (inherit, blue)); }",
-        ".a { @include linear-gradient(\"top\", (red, 10%)); }",
-        ".a { @include linear-gradient(\"top\", (10%, red, blue)); }",
-        ".a { @include linear-gradient(\"top\", (red, 30%, 40%, blue)); }",
-        ".a { @include linear-gradient(\"top\", (red 10% 20% 30%, blue)); }",
-        ".a { @include linear-gradient(\"top\", null); }"
       ]
     },
     {
@@ -1418,56 +1376,6 @@
         ".a { @include position(absolute, red); }",
         ".a { @include position(absolute, \"10px\"); }",
         ".a { @include position(absolute, url(a.png)); }"
-      ]
-    },
-    {
-      "name": "radial-gradient",
-      "kind": "mixin",
-      "arguments": [
-        {
-          "name": "$shape",
-          "required": true,
-          "accepts": [
-            "circle or ellipse",
-            "with a size as a string: an extent keyword such as \"circle closest-side\", one length for a circle, or two lengths or percentages for an ellipse",
-            "var() or calc()"
-          ]
-        },
-        {
-          "name": "$position",
-          "required": true,
-          "accepts": [
-            "a position name such as center or top-left",
-            "an extent keyword such as closest-side",
-            "at followed by a position, as a string, such as \"at 30% 40%\" or \"at left 10px top 20px\", optionally after a size",
-            "a word outside these, such as inherit, is refused, because the whole gradient would be dropped"
-          ]
-        },
-        {
-          "name": "$colors",
-          "required": true,
-          "accepts": [
-            "one or more colour stops, in the same forms as linear-gradient: a colour with up to two positions, a position between two colours, or var()",
-            "a stop the browser drops is refused, because the whole gradient would be dropped"
-          ]
-        }
-      ],
-      "file": "scss/library/_radial-gradient.scss",
-      "signature": "radial-gradient($shape, $position, $colors)",
-      "summary": "Radial gradient background from a shape and a position.",
-      "examples": [
-        ".a { @include radial-gradient(circle, \"center\", (red, blue)); }"
-      ],
-      "rejects": [
-        ".a { @include radial-gradient(42, \"center\", (red, blue)); }",
-        ".a { @include radial-gradient(circle, 42, (red, blue)); }",
-        ".a { @include radial-gradient(huge, \"center\", (red, blue)); }",
-        ".a { @include radial-gradient(\"circle 10%\", \"center\", (red, blue)); }",
-        ".a { @include radial-gradient(circle, huge, (red, blue)); }",
-        ".a { @include radial-gradient(circle, \"at huge\", (red, blue)); }",
-        ".a { @include radial-gradient(circle, inherit, (red, blue)); }",
-        ".a { @include radial-gradient(circle, \"center\", (huge, blue)); }",
-        ".a { @include radial-gradient(circle, \"center\", (red, blue, 90%)); }"
       ]
     },
     {

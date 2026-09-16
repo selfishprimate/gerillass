@@ -3,8 +3,8 @@
 @use "../internal/gradient" as *;
 
 // One mixin for linear, radial and conic gradients, plain or repeating, with an
-// optional colour interpolation space. It sits beside linear-gradient and
-// radial-gradient so the three can be compared; see todos/gradient.md.
+// optional colour interpolation space. It replaced linear-gradient and
+// radial-gradient in 3.0.0; MIGRATION.md has each old call's new form.
 //
 // It writes background-image, not the background shorthand: measured in Chrome
 // 152, the shorthand reset a background-color set before it to transparent.

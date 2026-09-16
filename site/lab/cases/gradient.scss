@@ -1,5 +1,5 @@
-// The top two rows draw the same gradient with the old mixin and with
-// gradient, so they can be compared. The last row is what only gradient does.
+// A linear and a radial gradient, then a conic one and the same two colours
+// without and with a colour space.
 
 .row {
   display: flex;
@@ -26,14 +26,6 @@
 
 .new-radial {
   @include gradient((#5bc0bb, #2f3937), radial, $shape: circle, $position: "top-left");
-}
-
-.old-linear {
-  @include linear-gradient(right, (#5bc0bb, #2f3937));
-}
-
-.old-radial {
-  @include radial-gradient(circle, "top-left", (#5bc0bb, #2f3937));
 }
 
 // A pie chart: a conic gradient goes round a centre.

@@ -56,13 +56,11 @@
 .gradient { @include gradient((red, blue), conic, $from: 45deg, $in: oklab); }
 .hide { @include hide; }
 .line-clamp { @include line-clamp(3); }
-.linear-gradient { @include linear-gradient("top", red blue); }
 .motion-safe { @include motion-safe { transition: opacity 0.2s; } }
 .only { @include only("first") { color: red; } }
 .placeholder { @include placeholder { color: gray; } }
 .placeholder-shown { @include placeholder-shown { color: gray; } }
 .position { @include position(absolute, 0 10px); }
-.radial-gradient { @include radial-gradient(circle, "center", red blue); }
 .remove { @include remove("only", "medium"); }
 .reset-figure { @include reset-figure; }
 .resizable { @include resizable; }

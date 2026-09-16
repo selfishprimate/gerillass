@@ -20,7 +20,7 @@ which is worse. Do all of them, and step 8 in particular: it is a rule in
 | keyed config | `scss/maps/` | `$map-for-…`, with `!default` |
 
 One member per file, and **the filename must match the member name** —
-`_border-radius.scss` holds `@mixin border-radius`. This holds for all 57
+`_border-radius.scss` holds `@mixin border-radius`. This holds for all 55
 existing mixins and 24 utilities; do not be the exception.
 
 ## 2. Write the file
@@ -41,7 +41,7 @@ reversed in 2.0.0: library partials used to be forbidden from carrying a `@use`
 rule, because a Gulp task concatenated them into one bundle and a `@use` landing
 mid-file made Sass reject the whole thing. That generator is gone.
 
-Validate arguments and fail loudly. 49 of the 50 mixins that take arguments do
+Validate arguments and fail loudly. 47 of the 48 mixins that take arguments do
 this, and the message should name what is acceptable:
 
 ```scss

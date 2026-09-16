@@ -97,7 +97,7 @@ ${functions.map(link).join("\n")}
 - [gerillass.json](${BLOB}/gerillass.json): the full machine-readable API. Every member with its signature, what each argument accepts, examples that compile, and the inputs it refuses. Ships inside the installed package at \`node_modules/gerillass/gerillass.json\`, and at the root of the gem, whose folder \`bundle info gerillass --path\` prints.
 - [SKILL.md](${BLOB}/SKILL.md): the same material written as an agent skill, generated from the manifest. Ships in the npm package and in the gem.
 - [README](${BLOB}/README.md): installation for Vite, webpack, Next.js, Angular, Gulp, Grunt, Rails and Jekyll, and how to point an agent at the two files above.
-- [MIGRATION.md](${BLOB}/MIGRATION.md): upgrading a project from 1.x to 2.0.0. The utility functions were renamed and two mixins were replaced.
+- [MIGRATION.md](${BLOB}/MIGRATION.md): upgrading a project to 3.0.0, where the gradient mixins changed, and from 1.x to 2.0.0, where the utility functions were renamed and two mixins were replaced.
 - [CHANGELOG](${BLOB}/CHANGELOG.md): what changed in every release.
 - [Source repository](${REPO}): the \`.scss\` sources, which are short and readable.
 `;

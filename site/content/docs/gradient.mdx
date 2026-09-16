@@ -2,7 +2,10 @@
 title: "Gradient"
 page_title: "Gradient Sass Mixin"
 page_description: "Write linear, radial and conic CSS gradients with one Sass mixin, repeating or not, and choose the colour space they blend in."
-page_keywords: "Gerillass gradient, Gradient Sass mixin, Sass conic-gradient, SCSS gradient, CSS gradient interpolation, oklab gradient"
+page_keywords: "Gerillass gradient, Gradient Sass mixin, Sass linear-gradient, Sass radial-gradient, Sass conic-gradient, SCSS gradient, CSS gradient interpolation, oklab gradient"
+aliases:
+  - /docs/linear-gradient/
+  - /docs/radial-gradient/
 ---
 
 # Gradient
@@ -11,7 +14,7 @@ page_keywords: "Gerillass gradient, Gradient Sass mixin, Sass conic-gradient, SC
 
 The **Gradient Sass mixin** writes a linear, radial or conic gradient as `background-image`. The colours come first, so a plain two-colour gradient is one short call, and everything else has a default: the type is linear unless you say otherwise.
 
-It sits beside `linear-gradient` and `radial-gradient` while the three are compared. Unlike them it writes `background-image` rather than the `background` shorthand, which resets a `background-color` set before it.
+It writes `background-image` rather than the `background` shorthand, which resets a `background-color` set before it.
 
 <Hint kind="info">
 
@@ -20,6 +23,12 @@ It sits beside `linear-gradient` and `radial-gradient` while the three are compa
 </Hint>
 
 </Member>
+
+<Hint kind="warning">
+
+**New in Gerillass 3.0.0:** `gradient` replaces the `linear-gradient` and `radial-gradient` mixins, which are gone. Every call to them has a `gradient` call that writes the same gradient; the examples below include all of theirs. See `MIGRATION.md` for the change call by call.
+
+</Hint>
 
 ## Arguments
 
@@ -38,7 +47,7 @@ It sits beside `linear-gradient` and `radial-gradient` while the three are compa
 
 ### Linear gradients
 
-Everything `linear-gradient` did, with the colours first and the direction named.
+Everything the removed `linear-gradient` mixin did, with the colours first and the direction named.
 
 <Example caption="Pass the colours and a direction. With no direction the gradient runs top to bottom, the CSS default.">
 ```scss
@@ -103,7 +112,7 @@ Everything `linear-gradient` did, with the colours first and the direction named
 
 ### Radial gradients
 
-Everything `radial-gradient` did. Pass `radial` as the type, then a shape and a position if you want them.
+Everything the removed `radial-gradient` mixin did. Pass `radial` as the type, then a shape and a position if you want them.
 
 <Example caption="A circle from the centre.">
 ```scss

@@ -35,8 +35,8 @@
 //   method, a method without `hue`, and `rgb` or `hsv` were dropped. `in
 //   var(--s)` with `--s: oklab` computed to `in oklab`.
 //
-// The shape, size and position checks are copied from _radial-gradient.scss,
-// where the measurements behind them are written.
+// The shape, size and position checks came from radial-gradient, removed in
+// 3.0.0, with the measurements behind them.
 
 $-types: "linear" "radial" "conic";
 $-rectangular-spaces: "srgb" "srgb-linear" "display-p3" "display-p3-linear" "a98-rgb" "prophoto-rgb" "rec2020" "lab" "oklab" "xyz" "xyz-d50" "xyz-d65";

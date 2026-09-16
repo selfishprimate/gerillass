@@ -1189,18 +1189,6 @@ exports[`Manifest examples line-clamp: .title { @include line-clamp(2); } 1`] = 
 }"
 `;
 
-exports[`Manifest examples linear-gradient: .a { @include linear-gradient("top", (red, blue)); } 1`] = `
-".a {
-  background: linear-gradient(to top, red, blue);
-}"
-`;
-
-exports[`Manifest examples linear-gradient: .a { @include linear-gradient(45deg, (red, blue)); } 1`] = `
-".a {
-  background: linear-gradient(45deg, red, blue);
-}"
-`;
-
 exports[`Manifest examples loadify: @include loadify(init); .a { @include loadify; } 1`] = `
 "@keyframes loadify {
   to {
@@ -1415,12 +1403,6 @@ exports[`Manifest examples position: .tip { @include position(absolute, anchor(b
 exports[`Manifest examples pseudoSelector: .a { content: "#{pseudoSelector(("button", "a"), "hover")}"; } 1`] = `
 ".a {
   content: "button:hover, a:hover";
-}"
-`;
-
-exports[`Manifest examples radial-gradient: .a { @include radial-gradient(circle, "center", (red, blue)); } 1`] = `
-".a {
-  background: radial-gradient(circle at center, red, blue);
 }"
 `;
 
