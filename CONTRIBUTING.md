@@ -104,6 +104,23 @@ That regenerates `gerillass.json` and `SKILL.md`, both of which ship in the pack
 
 Your `rejects` entries are how your validation gets tested: the suite compiles each one, requires it to fail, and requires the failure to be *your* message rather than an internal Sass error.
 
+## Seeing what it renders
+
+The tests say what a mixin writes. To see what that renders, the site has a lab, on its dev server only:
+
+    npm run dev --prefix site
+
+Then open `http://localhost:7001/lab`. It compiles the `scss/` folder of your working copy, not a published version, so it shows the branch you are on.
+
+A case is two files in `site/lab/cases` with the same name: the Sass that calls a member, and the markup it styles.
+
+    site/lab/cases/focus-ring.scss    .button { @include focus-ring; }
+    site/lab/cases/focus-ring.html    <button class="button">Tab to me</button>
+
+The lab finds the member's own file from the `@include` and shows it beside the case, with the compiled CSS, any warning or error, and the rendered page. The library and the case can be edited and saved from the page, and saving from your editor reloads it too.
+
+It is a place to look, not a test. A change that looks right in the lab still needs `npm test` and the checks below, and a library file saved from the lab needs `npm run manifest` afterwards, as described under **What runs automatically**.
+
 ## Testing
 
     npm test
@@ -147,7 +164,7 @@ Five commands are available as slash commands:
 | `/release` | version, changelog, tag, GitHub release, npm publish |
 | `/commit-and-pr` | the commit message and pull request description standard |
 
-**What runs automatically.** Four hooks fire after a file is edited through the editor: they refuse a `package.json` that declares runtime dependencies, rebuild `gerillass.json` and `SKILL.md`, check that the counts quoted in the documentation still match the repository, and refuse a release without its wiki page. One more runs when Claude Code finishes a turn, over everything the branch changed however it was changed, and asks for CLAUDE.md to be updated when the work it describes moved. And one runs before a `git commit`, refusing a message with no body, a subject over 72 characters, or a subject ending in a full stop; `/commit-and-pr` describes the standard, and commits you make in your own terminal are not checked. If you change files with a shell command outside Claude Code, run `npm run manifest` and `node tools/check-docs.js` yourself.
+**What runs automatically.** Four hooks fire after a file is edited through the editor: they refuse a `package.json` that declares runtime dependencies, rebuild `gerillass.json` and `SKILL.md`, check that the counts quoted in the documentation still match the repository, and refuse a release without its wiki page. One more runs when Claude Code finishes a turn, over everything the branch changed however it was changed, and asks for CLAUDE.md to be updated when the work it describes moved. And one runs before a `git commit`, refusing a message with no body, a subject over 72 characters, or a subject ending in a full stop; `/commit-and-pr` describes the standard, and commits you make in your own terminal are not checked. If you change files with a shell command outside Claude Code, or save them from the lab, run `npm run manifest` and `node tools/check-docs.js` yourself.
 
 **One rule if you use an agent.** Do not let it claim something it has not run. This library is published and has real users; a wrong claim either ships a defect or deletes something someone depends on. `CLAUDE.md` has a section on this with the mistakes that have actually been made here.
 

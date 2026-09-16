@@ -1,0 +1,517 @@
+@import "assets/scss/abstract";
+
+/*
+  A tool rather than a page, but in the site's own clothes: the docs sidebar's
+  links for the cases, the install block's switch for the library files, and
+  the hand-drawn outline on every block of code.
+
+  It is exactly as tall as the window and split into two halves: the lab on
+  the left, the white preview on the right, and a divider the full height of
+  the window between them. The page itself never scrolls; anything long
+  scrolls inside its own box.
+*/
+.lab {
+  display: grid;
+  height: 100vh;
+  overflow: hidden;
+  font-family: $secondary-font-family;
+  color: $primary-color;
+  background: $snow;
+
+  code {
+    font-family: $tertiary-font-family;
+  }
+
+  /* Nothing in the page takes the pointer from the divider while it moves. */
+  &.is-dragging {
+    cursor: col-resize;
+    user-select: none;
+
+    iframe {
+      pointer-events: none;
+    }
+  }
+
+  /*
+    The menu beside the source, filling the half. The half has no padding of
+    its own: each side pads itself, so the rule between them runs the full
+    height of the window.
+  */
+  &__left {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+  }
+
+  /* At the top of the left menu: the name, then a line on what the page does. */
+  &__header {
+    margin-bottom: remify(24px);
+  }
+
+  /* Headings take the display face site-wide; the lab keeps to the text face. */
+  &__title {
+    margin: 0;
+    font-family: $secondary-font-family;
+    font-size: remify(24px);
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  &__note {
+    margin: remify(8px) 0 0;
+    font-size: remify(13px);
+    line-height: 1.45;
+    opacity: 0.7;
+  }
+
+  &__body {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: remify(204px) minmax(0, 1fr);
+  }
+
+  /*
+    The docs sidebar's list, so the lab reads as part of the same site, with a
+    rule on its right in the divider's colour, from the top of the window to
+    the bottom.
+  */
+  &__cases {
+    min-height: 0;
+    overflow-y: auto;
+    padding: remify(20px) remify(24px);
+    border-right: 1px solid $eggshell;
+
+    &__title {
+      margin: 0 0 remify(8px);
+      font-family: $secondary-font-family;
+      font-size: remify(12px);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      opacity: 0.55;
+    }
+
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    &__link {
+      display: block;
+      width: 100%;
+      padding: remify(3px) 0;
+      font: inherit;
+      font-size: remify(14px);
+      line-height: 1.45;
+      text-align: left;
+      color: $primary-color;
+      background: none;
+      border: 0;
+      cursor: pointer;
+      transition: color $global-transition;
+
+      &:hover { color: $accent-color; }
+
+      &.is-current {
+        color: $accent-color;
+        font-weight: 600;
+      }
+    }
+  }
+
+  /*
+    Edge to edge, so the rule under the case's name and the rules between the
+    folds reach both sides. What is inside pads itself.
+  */
+  &__source {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+  }
+
+  &__case__head {
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    gap: remify(6px);
+    padding: remify(20px) remify(24px) remify(16px);
+    border-bottom: 1px solid $eggshell;
+  }
+
+  &__case__name {
+    margin: 0;
+    font-family: $secondary-font-family;
+    font-size: remify(18px);
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  /* What the case's first library member is for, from the manifest. */
+  &__case__summary {
+    margin: 0;
+    font-size: remify(14px);
+    line-height: 1.45;
+    opacity: 0.7;
+  }
+
+  &__message {
+    flex: none;
+    max-height: remify(160px);
+    margin: remify(12px) remify(24px) 0;
+    padding: remify(10px) remify(12px);
+    overflow: auto;
+    font-family: $tertiary-font-family;
+    font-size: remify(13px);
+    white-space: pre-wrap;
+    border-radius: remify(8px);
+
+    &--error { color: #7a1f1a; background: #fbe4e2; }
+    &--warning { color: #6b5412; background: #fbf1d3; }
+  }
+
+  &__panels {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+
+  /* An open fold takes an equal share of the height; a closed one its heading. */
+  &__panel {
+    display: flex;
+    flex-direction: column;
+    flex: none;
+    min-height: 0;
+
+    &.is-open {
+      flex: 1 1 0;
+    }
+
+    /* A rule between folds and under the last one, edge to edge. */
+    & + & {
+      border-top: 1px solid $eggshell;
+    }
+
+    &:last-child {
+      border-bottom: 1px solid $eggshell;
+    }
+
+    /* The heading, then what the file says about itself, then Save and Revert. */
+    &__head {
+      flex: none;
+      display: flex;
+      align-items: center;
+      gap: remify(12px);
+      min-height: remify(52px);
+      padding: 0 remify(24px);
+      cursor: pointer;
+    }
+
+    /* On the right, pointing down when the fold is closed and up when it is open. */
+    &__chevron {
+      display: inline-flex;
+      flex: none;
+      margin-left: auto;
+
+      svg {
+        transform: rotate(90deg);
+        transition: transform $global-transition;
+      }
+    }
+
+    &.is-open &__chevron svg {
+      transform: rotate(-90deg);
+    }
+
+    /*
+      The meta and the actions already push themselves right, so a chevron
+      after either sits beside them rather than splitting the space.
+    */
+    &__meta + &__chevron,
+    &__actions + &__chevron {
+      margin-left: 0;
+    }
+
+    &__heading {
+      display: flex;
+      align-items: center;
+      margin: 0;
+      font-family: $secondary-font-family;
+      font-size: inherit;
+      line-height: 1;
+    }
+
+    &__actions {
+      display: inline-flex;
+      gap: remify(6px);
+      margin-left: auto;
+      cursor: default;
+    }
+
+    /* The handle a fold is moved by. */
+    &__grip {
+      display: inline-flex;
+      align-items: center;
+      padding: remify(4px) remify(2px);
+      color: inherit;
+      background: none;
+      border: 0;
+      border-radius: remify(4px);
+      cursor: grab;
+      opacity: 0.4;
+      transition: opacity $global-transition;
+
+      &:hover,
+      &:focus-visible {
+        opacity: 1;
+      }
+
+      &:focus-visible {
+        outline: remify(2px) solid rgba($primary-color, 0.5);
+      }
+
+      &:active {
+        cursor: grabbing;
+      }
+    }
+
+    &__warning {
+      font-size: remify(13px);
+      font-weight: 600;
+      color: #8a5a00;
+    }
+
+    /* Where a dragged fold will land. */
+    &.is-drop-target {
+      box-shadow: inset 0 remify(3px) 0 $accent-color;
+    }
+
+    &__toggle {
+      display: flex;
+      align-items: center;
+      gap: remify(6px);
+      padding: 0;
+      font: inherit;
+      font-size: remify(16px);
+      line-height: 1.2;
+      font-weight: 600;
+      color: inherit;
+      text-align: left;
+      background: none;
+      border: 0;
+      cursor: pointer;
+      transition: color $global-transition;
+
+      &:focus-visible {
+        outline: remify(2px) solid rgba($primary-color, 0.5);
+        outline-offset: remify(2px);
+      }
+    }
+
+    &__meta {
+      margin-left: auto;
+      font-size: remify(13px);
+      font-weight: 400;
+      opacity: 0.6;
+    }
+
+    &__body {
+      display: flex;
+      flex-direction: column;
+      flex: 1 1 auto;
+      min-height: 0;
+      padding: 0 remify(24px) remify(16px);
+
+      &[hidden] {
+        display: none;
+      }
+
+      /* The code block fills the fold and scrolls its own CSS. */
+      .code-block {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 auto;
+        min-height: 0;
+      }
+
+      .code-block pre {
+        flex: 1 1 auto;
+        min-height: 0;
+        overflow: auto;
+      }
+    }
+  }
+
+  /*
+    An editable block: the site's code block with a textarea over its <pre>.
+    Everything that decides where a character lands is the pre's own, from
+    code-block.scss (Roboto Mono at 1rem and 1.4, the inherited letter-spacing
+    and the padding), so the caret sits on the highlighted text. The textarea
+    scrolls and the pre is moved to follow it.
+  */
+  &__code {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+
+    pre {
+      overflow: hidden !important;
+    }
+
+    &__input {
+      position: absolute;
+      margin: 0;
+      padding: remify(12px) 1.5rem 1.5rem;
+      font-family: $tertiary-font-family;
+      font-size: 1rem;
+      line-height: 1.4;
+      letter-spacing: inherit;
+      white-space: pre;
+      tab-size: 2;
+      color: transparent;
+      caret-color: $secondary-color;
+      background: transparent;
+      border: 0;
+      outline: 0;
+      resize: none;
+      overflow: auto;
+
+      &::selection {
+        color: transparent;
+        background: rgba($secondary-color, 0.25);
+      }
+    }
+  }
+
+
+  /* Save and Revert: small, and Save the one that is filled. */
+  &__action {
+    padding: remify(3px) remify(10px);
+    font: inherit;
+    font-size: remify(13px);
+    font-weight: 600;
+    line-height: 1.4;
+    color: $primary-color;
+    background: transparent;
+    border: 1px solid rgba($primary-color, 0.25);
+    border-radius: remify(6px);
+    cursor: pointer;
+    transition: $global-transition;
+
+    &:hover { border-color: $primary-color; }
+
+    &--primary {
+      color: $snow;
+      background: $primary-color;
+      border-color: $primary-color;
+
+      &:hover { background: $accent-color; border-color: $accent-color; }
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: progress;
+    }
+  }
+
+  /* Which library file is showing, when a case calls more than one. */
+  &__files {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-self: flex-start;
+    gap: remify(2px);
+    margin-bottom: remify(6px);
+    padding: remify(2px);
+    font-size: remify(12px);
+    border-radius: remify(7px);
+    background-color: rgba($primary-color, 0.06);
+
+    button {
+      padding: remify(3px) remify(8px);
+      font: inherit;
+      line-height: 1.4;
+      color: $primary-color;
+      background: transparent;
+      border: 0;
+      border-radius: remify(6px);
+      cursor: pointer;
+      opacity: 0.55;
+      transition: $global-transition;
+
+      &:hover { opacity: 0.85; }
+
+      &[aria-pressed="true"] {
+        opacity: 1;
+        background-color: rgba($primary-color, 0.12);
+      }
+    }
+  }
+
+  &__path {
+    flex: none;
+    margin: 0 0 remify(6px);
+    font-family: $tertiary-font-family;
+    font-size: remify(12px);
+    opacity: 0.6;
+  }
+
+  &__empty {
+    margin: 0;
+    font-size: remify(14px);
+    opacity: 0.7;
+  }
+
+  /*
+    A line the full height of the window, with a wider invisible target on both
+    sides of it, so it is easy to grab without taking room from either half.
+  */
+  &__divider {
+    position: relative;
+    z-index: 1;
+    width: 1px;
+    background: $eggshell;
+    cursor: col-resize;
+    touch-action: none;
+    transition: background $global-transition;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: remify(-6px);
+      right: remify(-6px);
+    }
+
+    &:hover,
+    &:focus-visible,
+    .is-dragging & {
+      background: $accent-color;
+    }
+
+    &:focus-visible {
+      outline: 0;
+    }
+  }
+
+  /* Nothing but the page: white, edge to edge. */
+  &__render {
+    min-width: 0;
+    min-height: 0;
+    background: $white;
+  }
+
+  &__frame {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: $white;
+    border: 0;
+  }
+}

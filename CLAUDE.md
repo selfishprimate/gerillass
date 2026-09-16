@@ -98,6 +98,8 @@ sass --load-path=scss --quiet /tmp/check.scss
 
 This distinction matters: a change can look fine and still be broken for every user of a mixin you did not include in your test file.
 
+To see what a call renders, rather than only what it compiles to, run the site's dev server (`npm run dev --prefix site`) and open `/lab`. It compiles the working tree's `scss/` against cases kept in `site/lab/cases`; `site/CLAUDE.md` has the details.
+
 ## Verifying a claim
 
 This is a published library with real users, so a wrong claim either ships a

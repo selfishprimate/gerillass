@@ -147,7 +147,7 @@ export function loadLibrary(version) {
   return libraries.get(version);
 }
 
-function makeImporter(files) {
+export function makeImporter(files) {
   const resolve = (path) =>
     candidates(path).find((candidate) => files.has(candidate)) || null;
 
@@ -200,7 +200,7 @@ const ANSI = /\u001b\[[0-9;]*m/g;
 */
 const OMITTED = /repetitive deprecation warnings omitted/i;
 
-function collectingLogger(warnings) {
+export function collectingLogger(warnings) {
   return {
     warn(message, options) {
       if (options && options.deprecation) return;
