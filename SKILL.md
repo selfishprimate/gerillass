@@ -119,7 +119,7 @@ a dropped declaration rather than an error.
 | `sprite` | `.icon { @include sprite("/img/sprite.txt"); }` |
 | `stretched-link` | `.card a { @include stretched-link(middle); }` |
 | `tablet` | `.a { @include tablet(Surface) { display: none; } }` |
-| `text-gradient` | `.a { @include text-gradient(sideways, (red, blue)); }` |
+| `text-gradient` | `.a { @include text-gradient("top", (red, blue)); }` |
 | `text-image` | `.a { @include text-image(16 9); }` |
 | `text-selection` | `.a { @include text-selection(bogus) { background: yellow; } }` |
 | `text-shadow` | `.a { @include text-shadow(42); }` |
@@ -233,7 +233,7 @@ a dropped declaration rather than an error.
 | `sprite($params...)` | Sets up an element as a sprite tile: an image, a background position, or both. |
 | `stretched-link($value: "before")` | Expands a link to cover its positioned parent, so the whole card is clickable. |
 | `tablet($device, $orientation: null)` | Media query targeting a known tablet by device dimensions. |
-| `text-gradient($direction, $colors)` | Applies a linear gradient to the text itself via background-clip. |
+| `text-gradient($colors, $type: linear, $direction: null, $shape: null, $position: null, $from: null, $in: null, $repeating: false)` | Fills the text with a gradient through background-clip: text. It takes the gradient mixin's arguments, colours first: a linear, radial or conic gradient, plain or repeating, with an optional colour space. |
 | `text-image($image: null)` | Fills the text with an image via background-clip. |
 | `text-selection($value: null)` | Styles the ::selection pseudo-element. |
 | `text-shadow($params...)` | Layered text shadows built from a direction, a colour and an offset. |

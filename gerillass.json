@@ -1799,9 +1799,28 @@
       "kind": "mixin",
       "arguments": [
         {
-          "name": "$direction",
+          "name": "$colors",
           "required": true,
           "accepts": [
+            "one or more colour stops, in the forms the gradient mixin takes",
+            "a stop the browser drops is refused, because the gradient and the transparent text would go with it",
+            "a single colour warns"
+          ]
+        },
+        {
+          "name": "$type",
+          "default": "linear",
+          "accepts": [
+            "linear, the default",
+            "radial",
+            "conic"
+          ]
+        },
+        {
+          "name": "$direction",
+          "default": "null",
+          "accepts": [
+            "linear only",
             "a direction name such as top or bottom-left",
             "an angle in deg, grad, rad or turn, or 0",
             "\"to top\" or \"to left top\" as a string",
@@ -1809,27 +1828,60 @@
           ]
         },
         {
-          "name": "$colors",
-          "required": true,
+          "name": "$shape",
+          "default": "null",
           "accepts": [
-            "one or more colour stops, in the same forms as linear-gradient: a colour with up to two positions, a position between two colours, or var()",
-            "a stop the browser drops is refused, because the gradient and the transparent text would go with it"
+            "radial only, circle or ellipse with an optional size"
+          ]
+        },
+        {
+          "name": "$position",
+          "default": "null",
+          "accepts": [
+            "radial or conic, a position name or at followed by a position"
+          ]
+        },
+        {
+          "name": "$from",
+          "default": "null",
+          "accepts": [
+            "conic only, an angle"
+          ]
+        },
+        {
+          "name": "$in",
+          "default": "null",
+          "accepts": [
+            "a colour space such as oklab, or a polar one with a hue method",
+            "the gradient is written once without the space first, for a browser that does not know it"
+          ]
+        },
+        {
+          "name": "$repeating",
+          "default": "false",
+          "accepts": [
+            "false, the default",
+            "true"
           ]
         }
       ],
       "file": "scss/library/_text-gradient.scss",
-      "signature": "text-gradient($direction, $colors)",
-      "summary": "Applies a linear gradient to the text itself via background-clip.",
+      "signature": "text-gradient($colors, $type: linear, $direction: null, $shape: null, $position: null, $from: null, $in: null, $repeating: false)",
+      "summary": "Fills the text with a gradient through background-clip: text. It takes the gradient mixin's arguments, colours first: a linear, radial or conic gradient, plain or repeating, with an optional colour space.",
       "examples": [
-        ".a { @include text-gradient(\"top\", (red, blue)); }"
+        ".a { @include text-gradient((red, blue), $direction: top); }",
+        ".a { @include text-gradient(blue yellow, $direction: right, $in: oklab); }",
+        ".a { @include text-gradient(red yellow lime cyan blue magenta red, conic); }"
       ],
       "rejects": [
-        ".a { @include text-gradient(sideways, (red, blue)); }",
-        ".a { @include text-gradient(\"top\", (huge, blue)); }",
-        ".a { @include text-gradient(\"top\", (\"red\", blue)); }"
+        ".a { @include text-gradient(\"top\", (red, blue)); }",
+        ".a { @include text-gradient(red blue, $direction: sideways); }",
+        ".a { @include text-gradient((huge, blue)); }",
+        ".a { @include text-gradient((\"red\", blue)); }",
+        ".a { @include text-gradient(red blue, $from: 45deg); }"
       ],
       "warns": [
-        ".a { @include text-gradient(\"top\", red); }"
+        ".a { @include text-gradient(red); }"
       ]
     },
     {

@@ -1681,9 +1681,30 @@ exports[`Manifest examples tablet: .a { @include tablet("iPadPro") { display: no
 }"
 `;
 
-exports[`Manifest examples text-gradient: .a { @include text-gradient("top", (red, blue)); } 1`] = `
+exports[`Manifest examples text-gradient: .a { @include text-gradient((red, blue), $direction: top); } 1`] = `
 ".a {
   background: linear-gradient(to top, red, blue);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}"
+`;
+
+exports[`Manifest examples text-gradient: .a { @include text-gradient(blue yellow, $direction: right, $in: oklab 1`] = `
+".a {
+  background: linear-gradient(to right, blue, yellow);
+  background: linear-gradient(to right in oklab, blue, yellow);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}"
+`;
+
+exports[`Manifest examples text-gradient: .a { @include text-gradient(red yellow lime cyan blue magenta red, con 1`] = `
+".a {
+  background: conic-gradient(red, yellow, lime, cyan, blue, magenta, red);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -1984,9 +2005,9 @@ exports[`Manifest warnings remove warns: .a { @include remove("medium"); } 1`] =
 }"
 `;
 
-exports[`Manifest warnings text-gradient warns: .a { @include text-gradient("top", red); } 1`] = `
+exports[`Manifest warnings text-gradient warns: .a { @include text-gradient(red); } 1`] = `
 ".a {
-  background: linear-gradient(to top, red);
+  background: linear-gradient(red);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

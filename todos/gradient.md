@@ -47,9 +47,17 @@ on every one: each accepted form was kept and each refused form dropped. The
 only difference from what the page expected was `in srgb`, which all three
 serialise away because sRGB is the default.
 
-Still to do: `$in` and conic for `text-gradient`, which needs its signature
-changed; removing `linear-gradient` and `radial-gradient` in 3.0.0 with a
-`MIGRATION.md` section; and the playground demos.
+`text-gradient` takes the gradient mixin's arguments, colours first, since
+this branch. 15 calls in the old order, rewritten in the new, compile to the
+same CSS; a call in the old order stops the build with the new form written
+out. Its eight documentation examples were computed in Chrome 152, Firefox 156
+and Safari 26.6.2, each clipped to the text, and looked at in Chrome and
+Firefox.
+
+Still to do: removing `linear-gradient` and `radial-gradient` in 3.0.0 with a
+`MIGRATION.md` section, which also covers the new `text-gradient` order; and
+the playground demos, at release time only, since the playground compiles the
+published version and a demo in the new API fails there until 3.0.0 is out.
 
 Browser measurements are Chrome 152 in the browser pane, with `CSS.supports`
 and computed styles. Support in other browsers is from

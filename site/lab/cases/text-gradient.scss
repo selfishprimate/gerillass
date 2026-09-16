@@ -6,5 +6,5 @@
   font: 800 56px/1.1 system-ui, sans-serif;
 }
 
-.right { @include text-gradient("right", (#2f3937, #5bc0bb)); }
-.angle { @include text-gradient(135deg, (#5bc0bb, #2f3937)); }
+.right { @include text-gradient((#2f3937, #5bc0bb), $direction: right); }
+.angle { @include text-gradient((#5bc0bb, #2f3937), $direction: 135deg); }

@@ -74,7 +74,7 @@
 .sprite { @include sprite("/img/sprite.png"); }
 .stretched-link { @include stretched-link; }
 .tablet { @include tablet("iPadPro") { color: red; } }
-.text-gradient { @include text-gradient("top", red blue); }
+.text-gradient { @include text-gradient(red blue, $direction: top); }
 .text-image { @include text-image("/img/text.png"); }
 .text-shadow { @include text-shadow(bottom-right red 5px); }
 .text-stroke { @include text-stroke; }
