@@ -79,7 +79,7 @@ npm pack --dry-run                # inspect exactly what would be published
 yarn audit                        # must stay at zero across all severities
 ```
 
-There is no lint step and no CI — `.github/` holds only funding and issue templates. Yarn 1 (classic) is the lockfile format; `yarn.lock` is committed, `package-lock.json` is not used.
+There is no lint step and no CI — `.github/` holds only funding, issue and pull request templates. Yarn 1 (classic) is the lockfile format; `yarn.lock` is committed, `package-lock.json` is not used.
 
 ### Compiling by hand
 
