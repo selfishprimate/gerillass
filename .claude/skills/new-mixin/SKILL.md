@@ -5,9 +5,9 @@ description: Scaffold a new Gerillass mixin or utility function with the project
 
 # Add a member to the Gerillass library
 
-Eight steps. Two of them fail loudly if you skip them: the manifest suite checks
+Nine steps. Two of them fail loudly if you skip them: the manifest suite checks
 that a new mixin has metadata and a smoke-test call. The others fail silently,
-which is worse. Do all of them, and step 7 in particular: it is a rule in
+which is worse. Do all of them, and step 8 in particular: it is a rule in
 `CLAUDE.md`, not a suggestion.
 
 ## 1. Pick the layer
@@ -106,7 +106,45 @@ which is what `test/smoke.scss` is for.
 The `gls-` prefixed copy needs nothing: `_gerillass.scss` produces it with
 `@forward "library" as gls-*`.
 
-## 5. Describe it in `meta/`
+## 5. Look at it in the lab
+
+A compile says what the mixin writes; the lab shows what that renders. Run the
+site's dev server and open `/lab`:
+
+```bash
+npm run dev --prefix site   # then http://localhost:7001/lab
+```
+
+Add a case: two files in `site/lab/cases` with the same name, the Sass calling
+the new member and the markup it styles.
+
+```scss
+// site/lab/cases/your-mixin.scss
+.element {
+  @include your-mixin(10px);
+}
+```
+
+```html
+<!-- site/lab/cases/your-mixin.html -->
+<div class="element">Your mixin</div>
+```
+
+The case appears in the lab's list without a restart. There is nothing to link:
+the lab finds `scss/library/_your-mixin.scss` from the `@include` (or a
+function from a call to its name) and shows it in the Library panel, the
+compiled CSS and any `@warn` or `@error` beside it, and the rendered page on
+the right. Edit the mixin there or in the editor; every save reloads the lab.
+A case is also the place to try the calls step 2 refuses, to see the message a
+user will get.
+
+Two things the lab does not do. **A file it saves does not trigger the
+repository's hooks**, so run `npm run manifest` yourself after changing the
+library from the page. And it does not replace steps 7 and 8: a render that
+looks right is not a test, and it is not the before-and-after comparison.
+`site/CLAUDE.md` has the details under **The lab**.
+
+## 6. Describe it in `meta/`
 
 **The build fails without this.** `test/manifest.spec.js` asserts that every
 mixin in `scss/library/` has a `meta/` entry with a summary and at least one
@@ -143,7 +181,7 @@ rest. A hook does it automatically after an edit under `scss/` or `meta/`, but
 only for edits made through the editor — a change made by a shell command does
 not trigger it.
 
-## 6. Cover it with tests
+## 7. Cover it with tests
 
 Add a line to `test/smoke.scss` calling your mixin with valid arguments —
 `test/smoke.spec.js` fails if a mixin in `scss/library/` has no call there.
@@ -153,7 +191,7 @@ output. It does not say the output was right to begin with. If your mixin
 computes anything — arithmetic, a percentage, a polygon, a shorthand order —
 write a real assertion with `/sass-test` as well.
 
-## 7. Test it in a browser and compare
+## 8. Test it in a browser and compare
 
 The documentation and the test suite only cover what someone wrote down. Before
 calling the member done, follow **The rule for changing or adding a member** in
@@ -171,7 +209,7 @@ calling the member done, follow **The rule for changing or adding a member** in
   did nothing, building the case where the browser kept it;
 - write down what was not covered.
 
-## 8. Confirm
+## 9. Confirm
 
 ```bash
 npm test

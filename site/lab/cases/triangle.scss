@@ -1,0 +1,13 @@
+// Every direction triangle takes, with the same colour and size, so a change
+// to one direction shows up beside the others.
+
+.demo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+}
+
+.up { @include triangle(top, #2f3937, 24px); }
+.right { @include triangle(right, #2f3937, 24px); }
+.down { @include triangle(bottom, #2f3937, 24px); }
+.left { @include triangle(left, #2f3937, 24px); }

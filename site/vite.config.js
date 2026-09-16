@@ -5,6 +5,7 @@ import sassExample from "./plugins/sass-example.js";
 import livePlaygroundDemos from "./plugins/live-playground-demos.js";
 import docsIndex from "./plugins/docs-index.js";
 import docsRedirects from "./plugins/docs-redirects.js";
+import labSave from "./plugins/lab-save.js";
 import mdx from "@mdx-js/rollup";
 import remarkFrontmatter from "remark-frontmatter";
 import remarkGfm from "remark-gfm";
@@ -60,6 +61,8 @@ export default defineConfig({
     livePlaygroundDemos(),
     docsIndex(),
     docsRedirects(),
+    // /lab saves edited library and case files through this, on the dev server only.
+    labSave(),
   ],
   // create-react-app let the source import from the top of src/ without a
   // relative path -- `components/Header`, `release` -- because jsconfig.json set

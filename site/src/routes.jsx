@@ -49,8 +49,19 @@ const TEMPLATES = { docs: DocPage };
 function ThrowForErrorPage() {
   throw new Error("A deliberate error from /error-test");
 }
+/*
+  /lab is the workbench for developing the library against the working tree,
+  under the same rule and for the same reason: it is lazy, so a build drops the
+  import with the entry and never ships its compiler or the library sources.
+*/
 const devRoutes = import.meta.env.DEV
-  ? [{ path: "error-test", element: <ThrowForErrorPage /> }]
+  ? [
+      { path: "error-test", element: <ThrowForErrorPage /> },
+      {
+        path: "lab",
+        lazy: async () => ({ Component: (await import("pages/Lab")).default }),
+      },
+    ]
   : [];
 
 const contentRoutes = pages
