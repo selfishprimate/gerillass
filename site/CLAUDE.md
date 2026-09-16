@@ -875,10 +875,14 @@ Masking spec (not tested here), which is why every mask lives in `public/`,
 same-origin. The policy's `img-src 'self'` covers them; the deployed header was
 not tested against a mask.
 
-The hero's buttons are as wide as their labels. Stacked below medium they share
-the wider one's width (`width: fit-content` on the column) and are centred;
-from medium they sit side by side, still centred; from large, where the hero
-itself turns into a row at 992px, they start under the heading.
+The hero's buttons are as wide as their labels from medium, where they sit side
+by side and centred; from large, where the hero itself turns into a row at
+992px, they start under the heading. Stacked below medium they are larger than
+the rem-sized `button--large` (68px tall with 27px text at 375px, against 59px
+and 23px) and take the column's width up to 288px, so a narrow phone shrinks
+them rather than letting them overflow. That rule is `breakpoint(xsmall,
+medium)`, since `breakpoint(max, medium)` compiles to `max-width: 768px` and
+reached the first side-by-side width.
 
 ### The error page
 
