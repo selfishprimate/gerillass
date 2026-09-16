@@ -197,9 +197,10 @@ The documentation and the test suite only cover what someone wrote down. Before
 calling the member done, follow **The rule for changing or adding a member** in
 `CLAUDE.md`:
 
-- measure in Chrome, with `tools/browser-check.js`, the values each property
-  keeps before writing a check, and compare what the mixin renders with the
-  same CSS written by hand;
+- measure in Chrome, Firefox and Safari, all three, with
+  `tools/browser-check.js`, the values each property keeps before writing a
+  check, and compare what the mixin renders with the same CSS written by hand.
+  This is a rule, for a new member and for every change to one;
 - compile a wide set of calls, well beyond the examples (`var()` with a
   fallback, maths functions, CSS-wide and vendor keywords, colour functions,
   gradients, `url()`, `paint()`, quoted values, lists), and test the output of

@@ -157,10 +157,15 @@ added, do all of this and report it:
    values built by interpolation such as `#{$n}px` and `#{$name}`, which reach
    a check as unquoted strings, lists, and An+B forms such as `3n`. A value kind missing from the list is
    never tested, which is how both rows above slipped through.
-2. **Test the output in a browser.** For every call whose CSS changes, and
-   every call that starts or stops raising, test the old and the new CSS in
-   Chrome with `tools/browser-check.js`. An error is justified only when the
-   old CSS was dropped, never matched, or demonstrably did nothing.
+2. **Test the output in all three browsers.** For every call whose CSS
+   changes, and every call that starts or stops raising, test the old and the
+   new CSS in Chrome, Firefox and Safari, all three installed on the
+   maintainer's machine. The maintainer made this a rule on 17 September 2026:
+   a check measured in Chrome alone can refuse a value another engine keeps, or
+   accept one it drops. `tools/browser-check.js --serve` gives a page to open
+   in each. An error is justified only when the old CSS was dropped, never
+   matched, or demonstrably did nothing, and a browser that disagrees with the
+   others is reported rather than averaged away.
 3. **When the browser kept it, build the case.** Look at where the value lands
    in the emitted CSS, write the markup a user would have, and look at the
    result. Decide by what the mixin does with the value, not by whether the
