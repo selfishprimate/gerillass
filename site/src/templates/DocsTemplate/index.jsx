@@ -51,6 +51,7 @@ function DocsTemplate({ children }) {
           </button>
 
           <aside className={`docs-layout__aside${open ? " is-open" : ""}`}>
+            <h2 className="docs-layout__title">Documentation Navigation</h2>
             {/*
               The list is one box inside another on purpose. The outer one is
               taken out of the flow so it cannot make the page taller than its
