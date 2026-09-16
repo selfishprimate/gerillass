@@ -89,11 +89,27 @@
           &__description {
             display: none;
           }
+          /*
+            The hand-drawn filled button behind the selected tab, the way
+            _buttons.scss draws one: a layer masked to the drawing rather than a
+            background. inset stays 0, where a button uses -3px, because this
+            list scrolls sideways and would clip anything outside a tab; and
+            isolation keeps the layer behind the label instead of behind the
+            section.
+          */
           &.react-tabs__tab--selected {
             opacity: 1;
-            background-color: $primary-color;
-            border-radius: $border-radius;
             color: $secondary-color;
+            isolation: isolate;
+            &::before {
+              content: "";
+              position: absolute;
+              inset: 0;
+              z-index: -1;
+              background-color: $primary-color;
+              -webkit-mask: url("/images/shapes/button-large-filled.svg") center / 100% 100% no-repeat;
+              mask: url("/images/shapes/button-large-filled.svg") center / 100% 100% no-repeat;
+            }
           }
         }
       }
