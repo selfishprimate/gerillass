@@ -133,13 +133,49 @@
     min-height: 0;
   }
 
+  /* The name and its summary on the left, the preview's switch centred beside them. */
   &__case__head {
     flex: none;
     display: flex;
-    flex-direction: column;
-    gap: remify(6px);
+    align-items: center;
+    justify-content: space-between;
+    gap: remify(12px);
     padding: remify(20px) remify(24px) remify(16px);
     border-bottom: 1px solid $eggshell;
+  }
+
+  &__case__text {
+    display: flex;
+    flex-direction: column;
+    gap: remify(6px);
+    min-width: 0;
+  }
+
+  /* The documentation's `.docs-iconlink`: a surface, no border, and only the
+     surface deepens under the pointer. */
+  &__preview-toggle {
+    @include sizer(remify(38px));
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    color: $primary-color;
+    background: $alabaster;
+    border: 0;
+    border-radius: remify(10px);
+    cursor: pointer;
+    transition: background-color $global-transition;
+
+    &:hover,
+    &:focus-visible {
+      background: $eggshell;
+    }
+
+    &:focus-visible {
+      outline: remify(2px) solid rgba($primary-color, 0.5);
+      outline-offset: remify(2px);
+    }
   }
 
   &__case__name {

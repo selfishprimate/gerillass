@@ -936,7 +936,9 @@ itself, on the same line so an error's line number is the file's. For the open
 case the page shows the library's `@warn` and `@error` messages and the compiled
 CSS on the left half of the window, and the HTML rendered with that CSS in an
 iframe filling the right half, with a divider between them that can be
-dragged. The library files the case calls are found from its Sass (an
+dragged. A button beside the case's name hides the preview and the divider and
+gives the lab the whole window; the choice is kept in localStorage, and the
+divider comes back where it was. The library files the case calls are found from its Sass (an
 `@include`, with or without `gls-`, or a call to a function's camelCase name)
 and shown in a Library panel. The case's name is its file name in title case,
 and the line under it is the first sentence of that first member's summary in
