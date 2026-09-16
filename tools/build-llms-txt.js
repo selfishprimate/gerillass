@@ -61,7 +61,7 @@ const slugOf = (member) =>
 // published. A member added in a release has no page until someone writes it,
 // so put its name here and take it out once the page is live.
 // `node tools/check-links.js` is what catches a name left in or left out.
-const WITHOUT_DOCS_PAGE = new Set(["gradient", "gradientValue"]);
+const WITHOUT_DOCS_PAGE = new Set([]);
 
 const link = (member) => {
   const url = WITHOUT_DOCS_PAGE.has(member.name)
