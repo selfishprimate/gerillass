@@ -99,7 +99,7 @@ kbd {
     darkest, and the two together give a veil the site could have been printed
     on.
   */
-  background: transparentize($scrim-color, 0.42);
+  background: transparentize($scrim-color, 0.06);
 
   /*
     Frosted rather than merely dimmed. The blur is what separates the dialog
@@ -110,14 +110,25 @@ kbd {
     of the three states rather than the fallback.
   */
   @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-    background: transparentize($scrim-color, 0.54);
+    background: transparentize($scrim-color, 0.18);
     -webkit-backdrop-filter: blur(remify(8px)) saturate(120%);
     backdrop-filter: blur(remify(8px)) saturate(120%);
   }
 
-  &__dialog {
+  /*
+    Carries the shadow, because the dialog cannot: a mask cuts away everything
+    outside the shape, a box-shadow included. drop-shadow follows the drawn
+    edge instead of a box, so the shadow is as hand-drawn as the dialog.
+  */
+  &__frame {
+    display: flex;
     width: 100%;
     max-width: remify(720px);
+    filter: drop-shadow(0 remify(20px) remify(25px) transparentize($primary-color, 0.78));
+  }
+
+  &__dialog {
+    width: 100%;
     max-height: 46vh;
     display: flex;
     flex-direction: column;
@@ -125,17 +136,10 @@ kbd {
     background: $snow;
     /*
       No border. The shadow and the dimmed page behind it are enough to lift
-      the dialog off the page, and a rule around it only competed with the
-      rounding.
+      the dialog off the page. The outline is the hand-drawn shape the code
+      blocks use, since a dialog's height follows its results.
     */
-    border-radius: remify(16px);
-    /*
-      A translucent ring instead of a border: it sits outside the rounding
-      rather than on it, so the corners stay clean, and it lifts the dialog off
-      the dimmed page without drawing a hard line around it.
-    */
-    box-shadow: 0 0 0 remify(6px) transparentize($snow, 0.88),
-      0 remify(20px) remify(50px) transparentize($primary-color, 0.78);
+    @include hand-drawn-block;
   }
 
   &__field {
@@ -202,11 +206,11 @@ kbd {
     /*
       cmdk marks the highlighted row, and it follows the arrow keys and the
       mouse together, so there is one idea of "selected" rather than two. The
-      mark is the sidebar's hover colour with the accent down the left edge,
-      which is how the current page is marked there.
+      mark sits halfway between $alabaster, which read too faint against the
+      dialog's own light ground, and $eggshell, which read too heavy.
     */
     &[data-selected="true"] {
-      background: $alabaster;
+      background: mix($alabaster, $eggshell, 50%);
     }
   }
 

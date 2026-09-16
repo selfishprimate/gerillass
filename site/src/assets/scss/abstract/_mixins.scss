@@ -1,0 +1,27 @@
+/*
+  The hand-drawn outline of the buttons and the install block, for a dark block
+  of code of any size: the site's CodeBlock and the playground's editors.
+
+  The drawing is cut into nine pieces: the corners keep their drawn size, the
+  edges stretch along their own length only, and the middle is a plain fill.
+  One drawing stretched to the block would pull the corners out of shape, since
+  a block runs from one line of code to dozens. The pieces overlap by a pixel so
+  no seam shows between them, and they live in public/, because a mask whose
+  image fails to load hides the whole element.
+*/
+@mixin hand-drawn-block {
+  $piece: "/images/shapes/code-block/";
+  $mask:
+    url("#{$piece}top-left.svg") left top / 30px 30px no-repeat,
+    url("#{$piece}top-right.svg") right top / 30px 30px no-repeat,
+    url("#{$piece}bottom-left.svg") left bottom / 30px 30px no-repeat,
+    url("#{$piece}bottom-right.svg") right bottom / 30px 30px no-repeat,
+    url("#{$piece}top.svg") center top / calc(100% - 58px) 30px no-repeat,
+    url("#{$piece}bottom.svg") center bottom / calc(100% - 58px) 30px no-repeat,
+    url("#{$piece}left.svg") left center / 30px calc(100% - 58px) no-repeat,
+    url("#{$piece}right.svg") right center / 30px calc(100% - 58px) no-repeat,
+    linear-gradient(#000, #000) center / calc(100% - 58px) calc(100% - 58px) no-repeat;
+  border-radius: 0;
+  -webkit-mask: $mask;
+  mask: $mask;
+}

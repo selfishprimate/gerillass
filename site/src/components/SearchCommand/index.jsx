@@ -167,83 +167,90 @@ function SearchCommand() {
                   if (event.target === event.currentTarget) setOpen(false);
                 }}
               >
-                <MotionCommand
-                  className="palette__dialog"
-                  /*
-                    No initial, animate or exit of its own: a child with
-                    variants follows its parent through the same three states,
-                    so the scrim and the dialog cannot come apart.
-                  */
-                  variants={DIALOG_MOTION}
-                  label="Search the documentation"
-                  loop
-                  /*
-                    cmdk moves the selection and opens on Enter, but it does
-                    not close: the dialog is ours, so Escape is ours to answer.
-                  */
-                  onKeyDown={(event) => {
-                    if (event.key === "Escape") {
-                      event.preventDefault();
-                      setOpen(false);
-                    }
-                  }}
-                >
-                  <div className="palette__field">
-                    <SearchIcon size={17} />
-                    <Command.Input
-                      value={query}
-                      onValueChange={setQuery}
-                      placeholder="Search mixins, functions, and pages"
-                      className="palette__input"
-                      autoFocus
-                    />
-                    <button
-                      type="button"
-                      className="palette__close"
-                      onClick={() => setOpen(false)}
-                      aria-label="Close search"
-                    >
-                      <kbd>Esc</kbd>
-                    </button>
-                  </div>
-
-                  <Command.List className="palette__list">
-                    {nothing ? (
-                      <Command.Empty className="palette__empty">
-                        Nothing matches “{query}”.
-                      </Command.Empty>
-                    ) : null}
-
-                    {groups.map((group) => (
-                      <Command.Group
-                        key={group.label}
-                        heading={group.label}
-                        className="palette__group"
+                {/*
+                  The frame carries the shadow, since the dialog's mask would
+                  cut a shadow of its own away. Variants still reach the
+                  dialog through it.
+                */}
+                <div className="palette__frame">
+                  <MotionCommand
+                    className="palette__dialog"
+                    /*
+                      No initial, animate or exit of its own: a child with
+                      variants follows its parent through the same three states,
+                      so the scrim and the dialog cannot come apart.
+                    */
+                    variants={DIALOG_MOTION}
+                    label="Search the documentation"
+                    loop
+                    /*
+                      cmdk moves the selection and opens on Enter, but it does
+                      not close: the dialog is ours, so Escape is ours to answer.
+                    */
+                    onKeyDown={(event) => {
+                      if (event.key === "Escape") {
+                        event.preventDefault();
+                        setOpen(false);
+                      }
+                    }}
+                  >
+                    <div className="palette__field">
+                      <SearchIcon size={17} />
+                      <Command.Input
+                        value={query}
+                        onValueChange={setQuery}
+                        placeholder="Search mixins, functions, and pages"
+                        className="palette__input"
+                        autoFocus
+                      />
+                      <button
+                        type="button"
+                        className="palette__close"
+                        onClick={() => setOpen(false)}
+                        aria-label="Close search"
                       >
-                        {group.items.map((page) => (
-                          <Command.Item
-                            key={page.slug}
-                            /*
-                              The member's own name goes in the value as well
-                              as the title, so typing clearUnit finds the page
-                              called Clear Unit. cmdk matches on this string.
-                            */
-                            value={`${page.title} ${page.member ?? ""} ${page.slug} ${
-                              ALIASES[page.slug] ?? page.alias ?? ""
-                            }`}
-                            onSelect={() => go(page.href)}
-                            className="palette__item"
-                          >
-                            <span className="palette__title">{page.title}</span>
-                            <span className="palette__summary">
-                              {page.summary}
-                            </span>
-                          </Command.Item>
-                        ))}
-                      </Command.Group>
-                    ))}
-                  </Command.List>
-                </MotionCommand>
+                        <kbd>Esc</kbd>
+                      </button>
+                    </div>
+
+                    <Command.List className="palette__list">
+                      {nothing ? (
+                        <Command.Empty className="palette__empty">
+                          Nothing matches “{query}”.
+                        </Command.Empty>
+                      ) : null}
+
+                      {groups.map((group) => (
+                        <Command.Group
+                          key={group.label}
+                          heading={group.label}
+                          className="palette__group"
+                        >
+                          {group.items.map((page) => (
+                            <Command.Item
+                              key={page.slug}
+                              /*
+                                The member's own name goes in the value as well
+                                as the title, so typing clearUnit finds the page
+                                called Clear Unit. cmdk matches on this string.
+                              */
+                              value={`${page.title} ${page.member ?? ""} ${page.slug} ${
+                                ALIASES[page.slug] ?? page.alias ?? ""
+                              }`}
+                              onSelect={() => go(page.href)}
+                              className="palette__item"
+                            >
+                              <span className="palette__title">{page.title}</span>
+                              <span className="palette__summary">
+                                {page.summary}
+                              </span>
+                            </Command.Item>
+                          ))}
+                        </Command.Group>
+                      ))}
+                    </Command.List>
+                  </MotionCommand>
+                </div>
               </motion.div>
             ) : null}
           </AnimatePresence>,
