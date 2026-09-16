@@ -125,6 +125,31 @@
 
     .button { width: auto; }
 
+    /*
+      Stacked, the buttons are larger. The root font size drops on a phone, so
+      a `button--large` sized in rem came out 59px tall with 23px text, smaller
+      than on a desktop, where it is the page's main action.
+
+      A range, not `max`: `breakpoint(max, medium)` is `max-width: 768px` and
+      reached the first width where the buttons sit side by side. The range
+      ends at 767px.
+
+      The width comes from the column, not from padding: the pair fills the
+      space it has up to a maximum, so a narrow phone shrinks the buttons
+      instead of pushing them out of the page.
+    */
+    @include breakpoint(xsmall, medium) {
+      width: 100%;
+      max-width: remify(320px);
+
+      .button {
+        width: 100%;
+        height: remify(76px);
+        font-size: remify(30px);
+        padding: 0 $global-space;
+      }
+    }
+
     @include breakpoint(min, medium) {
       flex-direction: row;
       max-width: 500px;
