@@ -14,14 +14,16 @@ const OLDEST_SUPPORTED = "1.3.0";
   The 1.x releases stay on the list: trying a snippet against the release you
   actually have is what the selector is for. The demos are written for the
   current one, though, so an older release will refuse what a later one added
-  — the three 2.1.0 mixins, and the two 2.0.0 replaced — and will pass a
+  — the three 2.1.0 mixins, the two 2.0.0 replaced, and the gradient mixins
+  3.0.0 replaced — and will pass a
   renamed utility function through as literal CSS, which is Sass's behaviour
   for an unknown function rather than something the playground can catch.
 */
 
 export const FALLBACK = {
-  latest: "2.3.1",
+  latest: "3.0.0",
   versions: [
+    "3.0.0",
     "2.3.1",
     "2.3.0",
     "2.2.1",

@@ -804,22 +804,21 @@ Verified as of v2.3.0.
 
 ### Next
 
-`todos/silent-values-plan.md` is done: S0 to S7 shipped together as 2.3.1,
-not as the four patch releases the plan proposed, because fixes to early steps
-landed in later commits and tagging each step would have shipped a false
-refusal fixed afterwards, such as `only(3n)`. The same version is on RubyGems,
-where it differs from npm in three `@warn` texts, `breakpoint`,
-`container-query` and `remove`: the gem was built from a branch holding a
-commit made after the tag, which `/release` step 6b now prevents.
+3.0.0 is released, on npm and RubyGems, 17 September 2026. It replaced
+`linear-gradient` and `radial-gradient` with `gradient` and `gradientValue` and
+changed `text-gradient`'s argument order; `todos/gradient.md` records the
+research and the measurements behind it. The gem was built from the `v3.0.0`
+tag and matches the npm package file for file, and its SHA-256 on RubyGems
+matches the local build. The playground's `FALLBACK` and demos were updated
+after npm had it, and all 55 demos compile against the published package.
+
+2.3.1 shipped `todos/silent-values-plan.md`, S0 to S7, in one release. Its gem
+differs from npm in three `@warn` texts, because it was built from a branch
+holding a commit made after the tag, which `/release` step 6b now prevents.
 
 Two pieces of work are open, and neither is started:
 
-- **3.0.0, gradients**: done on the `gradient` branch, not yet merged; see
-  `todos/gradient.md`. At release, regenerate the playground demos (the
-  playground compiles the published version, so a demo in the new API fails
-  before then) and take `gradient` and `gradientValue` out of
-  `WITHOUT_DOCS_PAGE` in `tools/build-llms-txt.js`.
-- **3.0.0**: eight behaviour changes, each in its own file in `todos/` and
+- **Behaviour changes for a later major**: eight, each in its own file in `todos/` and
   each to be tested and decided on its own before any is planned: breakpoint
   boundaries, `columnizer` on `gap`, `hide("unhide")`, a default `content` for
   `before`/`after`, `font-face` formats, `all-text-inputs`, `aspect-ratio` with

@@ -134,6 +134,11 @@
     "description": "The Font Face Sass mixin helps you generate a cross-browser compatible @font-face CSS at-rule in CSS and SCSS.",
     "scss": "@use \"gerillass\" as *;\n\n@include font-face (\n  $font-weight: 700,\n  $font-style: italic,\n  $file-formats: eot woff2 woff, \n  $font-family: \"Fanwood Text\",\n  $file-path: \"fonts/fanwood-text/fanwood-text-bold-italic\",\n);\n"
   },
+  "gradient": {
+    "title": "Gradient",
+    "description": "Write linear, radial and conic CSS gradients with one Sass mixin, repeating or not, and choose the colour space they blend in.",
+    "scss": "@use \"gerillass\" as *;\n\n.ring{\n  display: grid;\n  place-items: center;\n  width: 160px;\n  height: 160px;\n  border-radius: 50%;\n  @include gradient((#6366f1 0 72%) (#e0e7ff 72% 100%), conic);\n\n  &::before{\n    content: \"72%\";\n    display: grid;\n    place-items: center;\n    width: 124px;\n    height: 124px;\n    border-radius: 50%;\n    background: #fff;\n    font: 600 28px/1 system-ui, sans-serif;\n    color: #312e81;\n  }\n}\n"
+  },
   "hide": {
     "title": "Hide",
     "description": "Hide an element visually while keeping it available to screen readers, with the Hide Sass mixin. The accessible way to take something out of view.",
@@ -143,11 +148,6 @@
     "title": "Line Clamp",
     "description": "Truncate text after a number of lines with the Line Clamp Sass mixin. It writes all five declarations the effect needs, which -webkit-line-clamp does not.",
     "scss": "@use \"gerillass\" as *;\n\n.excerpt {\n  @include line-clamp(3);\n}\n"
-  },
-  "linear-gradient": {
-    "title": "Linear Gradient",
-    "description": "Generate CSS gradients with the Linear Gradient Sass mixin, and layer them over the images and text a page component is built from.",
-    "scss": "@use \"gerillass\" as *;\n\n.element{\n  @include linear-gradient(\n    $direction: right,\n    $colors: (#1a2a6c 25%) (#b21f1f 25% 50%) (#fdbb2d 50% 75%) (orange 75% 100%)\n  );\n}\n"
   },
   "loadify": {
     "title": "Loadify",
@@ -178,11 +178,6 @@
     "title": "Position",
     "description": "The Position Sass mixin provides a one-line method to quickly set both the position and the offset properties of a selected element.",
     "scss": "@use \"gerillass\" as *;\n\n.badge {\n  @include position(absolute, 0.75rem auto auto 0.75rem, $logical: true);\n}\n"
-  },
-  "radial-gradient": {
-    "title": "Radial Gradient",
-    "description": "The Radial Gradient Sass mixin helps you generate beautiful radial CSS gradients. It uses the radial-gradient CSS function.",
-    "scss": "@use \"gerillass\" as *;\n\n.element{\n  @include radial-gradient(circle, center, (darkslateblue 0 10%) (white 10% 20%) (dodgerblue 20% 30%) (powderblue 30% 100%));\n}\n"
   },
   "remove": {
     "title": "Remove",
@@ -247,7 +242,7 @@
   "text-gradient": {
     "title": "Text Gradient",
     "description": "Add a gradient overlay to text with the Text Gradient Sass mixin. One line sets the direction of the gradient, the colours and the colour stops.",
-    "scss": "@use \"gerillass\" as *;\n\n.element{\n  @include text-gradient(\n    $direction: top,\n    $colors: (green 0 40%) (blue 40% 60%) (purple 60% 100%) \n  );\n}\n"
+    "scss": "@use \"gerillass\" as *;\n\n.premium{\n  font: 900 48px/1 system-ui, sans-serif;\n  @include text-gradient(\n    (#8b6508 0%) (#ffd700 45%) (#fff8dc 50%) (#daa520 55%) (#8b6508 100%),\n    $direction: top\n  );\n}\n"
   },
   "text-image": {
     "title": "Text Image",
