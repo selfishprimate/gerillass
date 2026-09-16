@@ -65,7 +65,9 @@ to paste.
 **Title:** a one-sentence summary of the change, like a commit subject. Never a
 single word or the branch name.
 
-**Description:** these four sections, in this order.
+**Description:** these four sections, in this order. They are also
+`.github/pull_request_template.md`, which GitHub puts in the description box of
+a new pull request, so a change to the sections goes in both places.
 
 ```markdown
 ## Summary
