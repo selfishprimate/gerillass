@@ -1,0 +1,20 @@
+// Three boxes fade in one after another. Change anything to replay.
+
+// loadify needs this setup call first, at the root.
+@include loadify(init);
+
+.demo {
+  display: flex;
+  gap: 16px;
+}
+
+.box {
+  width: 100px;
+  height: 100px;
+  border-radius: 6px;
+  background: #5bc0bb;
+}
+
+.one { @include loadify(0.2s, 0.6s); }
+.two { @include loadify(0.8s, 0.6s); }
+.three { @include loadify(1.4s, 0.6s); }

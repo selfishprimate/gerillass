@@ -1,0 +1,22 @@
+// sizer sets width and height in one call. One value makes a square; two set
+// the width, then the height.
+
+.demo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 32px;
+}
+
+.box {
+  background: #5bc0bb;
+}
+
+.caption {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: #8a8f7a;
+}
+
+.square { @include sizer(96px); }
+.wide { @include sizer(180px, 64px); }

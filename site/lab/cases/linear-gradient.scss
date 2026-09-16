@@ -1,0 +1,24 @@
+// The same two colours as a gradient running to the right, to the bottom and
+// at 45 degrees.
+
+.demo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.box {
+  width: 140px;
+  height: 100px;
+  border-radius: 6px;
+}
+
+.caption {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: #8a8f7a;
+}
+
+.right { @include linear-gradient(right, (#2f3937, #5bc0bb)); }
+.down { @include linear-gradient(bottom, (#2f3937, #5bc0bb)); }
+.angle { @include linear-gradient(45deg, (#2f3937, #5bc0bb)); }

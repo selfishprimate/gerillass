@@ -1,0 +1,24 @@
+// background-stripes fills a box with stripes of one or more colours, at the
+// angle you give.
+
+.demo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.box {
+  width: 200px;
+  height: 140px;
+  background-color: #f2f2eb;
+}
+
+.caption {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: #8a8f7a;
+}
+
+.diagonal { @include background-stripes(#dee0cd, 12px); }
+.vertical { @include background-stripes(#dee0cd, 12px, 90deg); }
+.two { @include background-stripes(#5bc0bb #2f3937, 12px); }

@@ -1,0 +1,10 @@
+// text-stroke outlines the letters. By default a 1px black outline with a
+// hollow fill; here also a 2px teal outline around a filled letter.
+
+.title {
+  margin: 0 0 16px;
+  font: 900 64px/1.1 Arial, Helvetica, sans-serif;
+}
+
+.outline { @include text-stroke; }
+.filled { @include text-stroke(#2f3937, #f2f2eb, #5bc0bb, 2px); }

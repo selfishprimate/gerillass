@@ -1,0 +1,15 @@
+// The field has a dashed border while it is empty and a solid one once it has
+// text. Type in the field.
+
+.field {
+  width: 240px;
+  padding: 8px 12px;
+  font: inherit;
+  border: 2px solid #5bc0bb;
+  border-radius: 6px;
+
+  @include placeholder-shown {
+    border-style: dashed;
+    border-color: #dee0cd;
+  }
+}

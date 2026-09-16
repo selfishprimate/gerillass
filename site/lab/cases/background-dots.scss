@@ -1,0 +1,23 @@
+// background-dots fills a box with a dot pattern, staggered by default or in
+// a straight grid.
+
+.demo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.box {
+  width: 200px;
+  height: 140px;
+  background-color: #f2f2eb;
+}
+
+.caption {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: #8a8f7a;
+}
+
+.staggered { @include background-dots(#5bc0bb, 4px, 20px); }
+.grid { @include background-dots(#5bc0bb, 4px, 20px, false); }

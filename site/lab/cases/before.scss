@@ -1,0 +1,20 @@
+// before adds a ::before pseudo-element with the content you pass. The same
+// line twice: plain, then with a check mark in front.
+
+.item {
+  margin: 0 0 4px;
+  font-weight: 600;
+  color: #2f3937;
+}
+
+.caption {
+  margin: 0 0 24px;
+  font-size: 13px;
+  color: #8a8f7a;
+}
+
+.with {
+  @include before("✓ ") {
+    color: #5bc0bb;
+  }
+}

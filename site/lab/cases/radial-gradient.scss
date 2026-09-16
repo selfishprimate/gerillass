@@ -1,0 +1,23 @@
+// The same two colours as a circle from the centre and an ellipse from the top
+// left corner.
+
+.demo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.box {
+  width: 160px;
+  height: 100px;
+  border-radius: 6px;
+}
+
+.caption {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: #8a8f7a;
+}
+
+.circle { @include radial-gradient(circle, center, (#5bc0bb, #2f3937)); }
+.corner { @include radial-gradient(ellipse, top-left, (#5bc0bb, #2f3937)); }

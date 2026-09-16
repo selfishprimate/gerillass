@@ -1,0 +1,25 @@
+// The same image in two 200px columns: at its own size and cut off, then with
+// responsive-image, filling the column.
+
+.demo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.column {
+  width: 200px;
+  max-height: 140px;
+  overflow: hidden;
+  border: 1px solid #dee0cd;
+}
+
+.caption {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: #8a8f7a;
+}
+
+.fit {
+  @include responsive-image;
+}

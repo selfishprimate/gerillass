@@ -1,0 +1,25 @@
+// The same row of boxes, dark except the first, then except the odd ones.
+
+.row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.box {
+  width: 48px;
+  height: 48px;
+  background: #dee0cd;
+}
+
+.first .box {
+  @include except(first) {
+    background: #2f3937;
+  }
+}
+
+.odd .box {
+  @include except(odd) {
+    background: #2f3937;
+  }
+}

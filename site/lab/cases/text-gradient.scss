@@ -1,0 +1,10 @@
+// text-gradient fills the letters with a gradient, in a direction or at an angle.
+
+.title {
+  width: fit-content;
+  margin: 0 0 16px;
+  font: 800 56px/1.1 system-ui, sans-serif;
+}
+
+.right { @include text-gradient("right", (#2f3937, #5bc0bb)); }
+.angle { @include text-gradient(135deg, (#5bc0bb, #2f3937)); }

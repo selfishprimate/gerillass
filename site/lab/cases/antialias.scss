@@ -1,0 +1,25 @@
+// antialias makes light text on a dark ground render thinner on macOS. The
+// same text twice; the difference is subtle and shows only on a Mac.
+
+.demo {
+  display: flex;
+  gap: 16px;
+}
+
+.text {
+  margin: 0;
+  padding: 16px 20px;
+  font: 24px system-ui, sans-serif;
+  color: #fff;
+  background: #2f3937;
+}
+
+.caption {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: #8a8f7a;
+}
+
+.with {
+  @include antialias("only");
+}

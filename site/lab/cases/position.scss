@@ -1,0 +1,25 @@
+// A card with a badge pinned to its top right corner and a bar along its
+// bottom edge, both placed with position.
+
+.card {
+  position: relative;
+  width: 240px;
+  height: 140px;
+  border-radius: 6px;
+  background: #f2f2eb;
+}
+
+.badge {
+  @include position(absolute, 8px 8px null null);
+  padding: 2px 8px;
+  font-size: 13px;
+  color: #fff;
+  background: #2f3937;
+  border-radius: 4px;
+}
+
+.bar {
+  @include position(absolute, null 0 0 0);
+  height: 8px;
+  background: #5bc0bb;
+}

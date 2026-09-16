@@ -1,0 +1,23 @@
+// border-radius rounds all corners, one side, or each corner on its own.
+
+.demo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.box {
+  width: 140px;
+  height: 100px;
+  background: #5bc0bb;
+}
+
+.caption {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: #8a8f7a;
+}
+
+.all { @include border-radius(24px); }
+.top { @include border-radius("top", 24px); }
+.each { @include border-radius(0, 16px, 32px, 48px); }

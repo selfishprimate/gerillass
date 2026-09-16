@@ -1,0 +1,11 @@
+// text-selection sets the colours of selected text. Select the text in both
+// paragraphs.
+
+p { margin: 0 0 16px; }
+
+.custom {
+  @include text-selection {
+    color: #fff;
+    background: #5bc0bb;
+  }
+}

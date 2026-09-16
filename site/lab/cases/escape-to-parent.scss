@@ -1,0 +1,15 @@
+// The card's own rule also styles the card when it carries .dark, without
+// leaving the .card block.
+
+.card {
+  margin-bottom: 16px;
+  padding: 16px;
+  color: #2f3937;
+  background: #f2f2eb;
+  border-radius: 6px;
+
+  @include escape-to-parent(".dark") {
+    color: #fff;
+    background: #2f3937;
+  }
+}

@@ -1,0 +1,27 @@
+// Four rows of the same list, each colouring only the items it picks.
+
+.list {
+  display: flex;
+  gap: 8px;
+  margin: 0 0 8px;
+  padding: 0;
+  list-style: none;
+}
+
+.list li {
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  background: #dee0cd;
+}
+
+.caption {
+  margin: 0 0 16px;
+  font-size: 13px;
+  color: #8a8f7a;
+}
+
+.first li { @include only(first) { background: #2f3937; } }
+.even li { @include only(even) { background: #2f3937; } }
+.third li { @include only(3) { background: #2f3937; } }
+.last li { @include only(last) { background: #2f3937; } }

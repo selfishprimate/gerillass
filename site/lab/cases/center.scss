@@ -1,0 +1,32 @@
+// The same dot in the same box, left where it falls and then centred.
+
+.demo {
+  display: flex;
+  gap: 32px;
+}
+
+.box {
+  position: relative;
+  width: 160px;
+  height: 120px;
+  background: #f2f2eb;
+  border: 1px solid #dee0cd;
+}
+
+.dot {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  background: #2f3937;
+  border-radius: 50%;
+}
+
+.centered {
+  @include center;
+}
+
+.caption {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: #8a8f7a;
+}

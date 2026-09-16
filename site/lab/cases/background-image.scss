@@ -1,0 +1,26 @@
+// background-image sets a photo to cover its box, and can lay a colour filter
+// over it so text on top stays readable.
+
+.demo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.box {
+  display: grid;
+  place-items: center;
+  width: 240px;
+  height: 160px;
+  font: 600 20px system-ui, sans-serif;
+  color: #fff;
+}
+
+.caption {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: #8a8f7a;
+}
+
+.plain { @include background-image("/images/backgrounds/03.jpg"); }
+.filter { @include background-image("/images/backgrounds/03.jpg", rgba(47, 57, 55, 0.6)); }

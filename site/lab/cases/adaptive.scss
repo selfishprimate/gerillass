@@ -1,0 +1,19 @@
+// adaptive centres a box and caps its width at each breakpoint, less a gutter
+// on both sides. Widen the preview past 576px or 768px to watch the cap step.
+
+.box {
+  margin-bottom: 16px;
+  padding: 16px;
+  color: #2f3937;
+  background: #dee0cd;
+}
+
+.caption {
+  margin: 0 0 4px;
+  font-size: 13px;
+  color: #8a8f7a;
+}
+
+.with {
+  @include adaptive;
+}

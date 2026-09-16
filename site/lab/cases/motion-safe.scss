@@ -1,0 +1,17 @@
+// The box spins, but only for people who have not asked their system for
+// reduced motion. Turn that setting on and it stands still.
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.box {
+  width: 80px;
+  height: 80px;
+  border-radius: 6px;
+  background: #5bc0bb;
+
+  @include motion-safe {
+    animation: spin 2s linear infinite;
+  }
+}
