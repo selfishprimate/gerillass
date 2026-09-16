@@ -1,0 +1,425 @@
+@charset "UTF-8";
+
+@use "sass:list";
+@use "sass:map";
+@use "sass:math";
+@use "sass:meta";
+@use "sass:string";
+@use "../maps/map-for-directions" as *;
+@use "../maps/map-for-positions" as *;
+@use "color-stops-problem" as *;
+@use "is-condition-value" as *;
+@use "is-css-function" as *;
+@use "words" as *;
+
+// Shared by the mixins and not public API; see _is-css-function.scss.
+//
+// Builds a linear, radial or conic gradient, plain or repeating, with an
+// optional colour interpolation space, and checks every part of it. The
+// gradient mixin, the gradientValue function, text-gradient, background-image,
+// background-dots and background-stripes all write their gradients through it.
+//
+// What Chrome 152 kept and dropped, checked with CSS.supports in
+// background-image:
+//
+// - a linear direction: an angle in deg, grad, rad or turn, a unitless 0, calc(),
+//   and `to` with one side or a side and a corner in either order (`to left
+//   top`); `to center`, `to top bottom` and a length were dropped;
+// - a conic start: `from` an angle or 0, dropped with a length; a conic position
+//   takes `at` and a position like radial, and a size or shape dropped it;
+// - a conic stop: an angle, a percentage, 0 or calc(), dropped with a length;
+// - `in` a space: srgb, srgb-linear, display-p3, display-p3-linear, a98-rgb,
+//   prophoto-rgb, rec2020, lab, oklab, xyz, xyz-d50 and xyz-d65, or a polar
+//   hsl, hwb, lch or oklch with an optional `shorter`, `longer`, `increasing` or
+//   `decreasing hue`; a hue method on a rectangular space, `hue` without a
+//   method, a method without `hue`, and `rgb` or `hsv` were dropped. `in
+//   var(--s)` with `--s: oklab` computed to `in oklab`.
+//
+// The shape, size and position checks are copied from _radial-gradient.scss,
+// where the measurements behind them are written.
+
+$-types: "linear" "radial" "conic";
+$-rectangular-spaces: "srgb" "srgb-linear" "display-p3" "display-p3-linear" "a98-rgb" "prophoto-rgb" "rec2020" "lab" "oklab" "xyz" "xyz-d50" "xyz-d65";
+$-polar-spaces: "hsl" "hwb" "lch" "oklch";
+$-hue-methods: "shorter" "longer" "increasing" "decreasing";
+$-sides: "top" "bottom" "left" "right";
+
+$-extents: "closest-side" "closest-corner" "farthest-side" "farthest-corner";
+$-places: "left" "center" "right" "top" "bottom";
+
+// "extent", "length" or "percentage" for a word that can size the gradient,
+// or null.
+@function -size-kind($word) {
+  $lower: string.to-lower-case("#{$word}");
+  @if list.index($-extents, $lower) {
+    @return "extent";
+  }
+  @if string.index($lower, "-") == 1 {
+    @return null;
+  }
+  @if isConditionValue($word, "length") {
+    @return "length";
+  }
+  @if isConditionValue($word, "length-percentage") {
+    @return "percentage";
+  }
+  @return null;
+}
+
+// Checks the size words before `at`. $shape is the shape named, or null.
+@function -size-problem($words, $shape) {
+  $extents: 0;
+  $lengths: 0;
+  $percentages: 0;
+  @each $word in $words {
+    $kind: -size-kind($word);
+    @if $kind == null {
+      @return "`#{$word}` is not a shape, an extent keyword such as `closest-side`, or a length";
+    } @else if $kind == "extent" {
+      $extents: $extents + 1;
+    } @else if $kind == "length" {
+      $lengths: $lengths + 1;
+    } @else {
+      $percentages: $percentages + 1;
+    }
+  }
+  $sizes: $lengths + $percentages;
+  @if $extents > 1 or ($extents == 1 and $sizes > 0) {
+    @return "it gives the size twice";
+  }
+  @if $sizes > 2 {
+    @return "a size is one length or two";
+  }
+  @if $sizes == 1 and ($percentages == 1 or $shape == "ellipse") {
+    @return "one size is a circle's radius, which is a length and not a percentage";
+  }
+  @if $sizes == 2 and $shape == "circle" {
+    @return "a circle takes one length, not two";
+  }
+  @return null;
+}
+
+@function -shape-problem($shape) {
+  @if string.index($shape, "(") {
+    @return null;
+  }
+  $named: null;
+  $sizes: ();
+  @each $word in wordsOf($shape) {
+    $lower: string.to-lower-case($word);
+    @if list.index("circle" "ellipse", $lower) {
+      @if $named {
+        @return "it names the shape twice";
+      }
+      $named: $lower;
+    } @else {
+      $sizes: list.append($sizes, $word);
+    }
+  }
+  @return -size-problem($sizes, $named);
+}
+
+@function -position-problem($position) {
+  @if map.has-key($map-for-positions, $position) or string.index($position, "(") {
+    @return null;
+  }
+  $sizes: ();
+  $places: ();
+  $after-at: false;
+  @each $word in wordsOf($position) {
+    $lower: string.to-lower-case($word);
+    @if $lower == "at" {
+      @if $after-at {
+        @return "it has `at` twice";
+      }
+      $after-at: true;
+    } @else if $after-at {
+      $places: list.append($places, $word);
+    } @else if list.index("circle" "ellipse", $lower) {
+      @return "the shape goes in $shape, not $position";
+    } @else {
+      $sizes: list.append($sizes, $word);
+    }
+  }
+  $problem: -size-problem($sizes, null);
+  @if $problem {
+    @return "#{$problem}. Pass a position name such as `center` or `top-left`, an extent keyword such as `closest-side`, or `at` followed by a position, such as `at 30% 40%`";
+  }
+  @if $after-at and list.length($places) == 0 {
+    @return "`at` needs a position after it, such as `at center`";
+  }
+  @if list.length($places) > 4 {
+    @return "a position takes at most four values";
+  }
+  $keywords: 0;
+  @each $word in $places {
+    @if list.index($-places, string.to-lower-case($word)) {
+      $keywords: $keywords + 1;
+    } @else if not isConditionValue($word, "length-percentage") {
+      @return "`#{$word}` is not a position; after `at` pass left, center, right, top, bottom or a length";
+    }
+  }
+  @if $keywords > 2 and $keywords == list.length($places) {
+    @return "a position of keywords alone takes at most two, such as `at top left`";
+  }
+  @return null;
+}
+
+// True for var(), env() or attr(), which may stand for anything, so it is
+// written as it is.
+@function -is-substitution($value) {
+  @return isCssFunction($value, "var" "env" "attr");
+}
+
+// True for an angle, a unitless 0, a calculation or var().
+@function -is-angle($value) {
+  @return $value == 0 or isConditionValue($value, "angle") or -is-substitution($value);
+}
+
+// The CSS for a linear gradient's $direction, or null when a browser would
+// drop it. background-image checks its $filter-direction with this.
+@function gradientDirection($direction) {
+  @if map.has-key($map-for-directions, $direction) {
+    @return map.get($map-for-directions, $direction);
+  }
+  @if -is-angle($direction) {
+    @return $direction;
+  }
+  $words: wordsOf($direction);
+  @if meta.type-of($direction) == "string" and string.to-lower-case("#{list.nth($words, 1)}") == "to" and list.length($words) >= 2 and list.length($words) <= 3 {
+    $vertical: 0;
+    $horizontal: 0;
+    @for $i from 2 through list.length($words) {
+      $word: string.to-lower-case("#{list.nth($words, $i)}");
+      @if $word == "top" or $word == "bottom" {
+        $vertical: $vertical + 1;
+      } @else if $word == "left" or $word == "right" {
+        $horizontal: $horizontal + 1;
+      } @else {
+        @return null;
+      }
+    }
+    @if $vertical <= 1 and $horizontal <= 1 {
+      @return string.unquote($direction);
+    }
+  }
+  @return null;
+}
+
+// What is wrong with $in, or null.
+@function -in-problem($in) {
+  // Measured in Chrome 152: `in var(--s)` with `--s: oklab` computed to
+  // `in oklab`, so var() is written as it is.
+  @if -is-substitution($in) {
+    @return null;
+  }
+  @if not list.index("string" "list", meta.type-of($in)) {
+    @return "it is not a colour space";
+  }
+  $words: ();
+  @each $word in wordsOf($in) {
+    $words: list.append($words, string.to-lower-case("#{$word}"));
+  }
+  $space: list.nth($words, 1);
+  $count: list.length($words);
+  @if list.index($-rectangular-spaces, $space) {
+    @if $count > 1 {
+      @return "a hue method such as `longer hue` needs a polar space: hsl, hwb, lch or oklch";
+    }
+    @return null;
+  }
+  @if list.index($-polar-spaces, $space) {
+    @if $count == 1 {
+      @return null;
+    }
+    @if $count == 3 and list.index($-hue-methods, list.nth($words, 2)) and list.nth($words, 3) == "hue" {
+      @return null;
+    }
+    @return "after a polar space comes a hue method and the word hue, such as `oklch longer hue`";
+  }
+  @return "`#{$space}` is not a colour space; pass one such as oklab or oklch";
+}
+
+// What is wrong with a conic gradient's stops, or null. A position there is an
+// angle or a percentage, so each is checked for that and then replaced with 0,
+// and the list goes through colorStopsProblem for everything else.
+@function -conic-stops-problem($colors) {
+  $checked: ();
+  @each $item in $colors {
+    @if meta.type-of($item) == "list" and list.length($item) > 1 {
+      $stop: (list.nth($item, 1),);
+      @for $i from 2 through list.length($item) {
+        $position: list.nth($item, $i);
+        @if not -is-conic-position($position) {
+          @return "in `#{meta.inspect($item)}`, `#{meta.inspect($position)}` is not an angle or a percentage, and a conic stop is placed by one";
+        }
+        @if -is-substitution($position) {
+          $stop: list.append($stop, $position, space);
+        } @else {
+          $stop: list.append($stop, 0, space);
+        }
+      }
+      $checked: list.append($checked, $stop, comma);
+    } @else if meta.type-of($item) == "number" or isConditionValue($item, "length-percentage") or isConditionValue($item, "angle") {
+      @if not -is-conic-position($item) {
+        @return "`#{meta.inspect($item)}` is not an angle or a percentage, and a conic hint is placed by one";
+      }
+      $checked: list.append($checked, 0, comma);
+    } @else {
+      $checked: list.append($checked, $item, comma);
+    }
+  }
+  @return colorStopsProblem($checked);
+}
+
+@function -is-conic-position($value) {
+  @if -is-angle($value) or meta.type-of($value) == "calculation" {
+    @return true;
+  }
+  @if meta.type-of($value) == "number" {
+    @return math.unit($value) == "%";
+  }
+  $text: string.unquote("#{$value}");
+  @return string.slice($text, -1) == "%" and isConditionValue($value, "length-percentage");
+}
+
+
+// A gradient, as a value. $member, $colors-name and $direction-name are the
+// names an error gives, so a mixin that passes its own arguments through names
+// them as its user wrote them. $warn is false for the fallback a mixin writes
+// before a gradient with $in, so a single colour warns once.
+@function gradientOf(
+  $colors,
+  $type: linear,
+  $direction: null,
+  $shape: null,
+  $position: null,
+  $from: null,
+  $in: null,
+  $repeating: false,
+  $member: "gradient",
+  $colors-name: "$colors",
+  $direction-name: "$direction",
+  $warn: true
+) {
+  $kind: string.to-lower-case("#{$type}");
+  @if meta.type-of($type) != "string" or not list.index($-types, $kind) {
+    @error "`#{meta.inspect($type)}` is not a valid $type for `#{$member}`. Pass linear, radial or conic.";
+  }
+  @if meta.type-of($repeating) != "bool" {
+    @error "`#{meta.inspect($repeating)}` is not a valid $repeating for `#{$member}`. Pass true or false.";
+  }
+
+  // An argument the type does not read would be dropped without a word.
+  @if $direction != null and $kind != "linear" {
+    $hint: "Use $position for where a radial gradient sits.";
+    @if $kind == "conic" {
+      $hint: "Use $from for where a conic gradient starts.";
+    }
+    @error "#{$direction-name} is for a linear gradient, and this one is #{$kind}. #{$hint}";
+  }
+  @if $shape != null and $kind != "radial" {
+    @error "$shape is for a radial gradient, and this one is #{$kind}.";
+  }
+  @if $position != null and $kind == "linear" {
+    @error "$position is for a radial or conic gradient, and this one is linear. Use #{$direction-name}.";
+  }
+  @if $from != null and $kind != "conic" {
+    @error "$from is for a conic gradient, and this one is #{$kind}.";
+  }
+
+  $prelude: ();
+
+  @if $kind == "linear" and $direction != null {
+    $value: gradientDirection($direction);
+    @if $value == null {
+      @error "`#{meta.inspect($direction)}` is not a valid #{$direction-name} for `#{$member}`. Pass an angle such as `45deg` or `0.25turn`, `\"to top right\"`, or one of: #{map.keys($map-for-directions)}.";
+    }
+    $prelude: list.append($prelude, $value, space);
+  }
+
+  // A shape or position written without quotes, such as `ellipse 70% 60%` or
+  // `at 50% 0%`, reaches here as a space-separated list; it is the same words.
+  @if meta.type-of($shape) == "list" and list.separator($shape) == "space" {
+    $shape: "#{$shape}";
+  }
+  @if meta.type-of($position) == "list" and list.separator($position) == "space" {
+    $position: "#{$position}";
+  }
+
+  @if $kind == "radial" and $shape != null {
+    @if meta.type-of($shape) != "string" {
+      @error "`#{meta.inspect($shape)}` is not a valid $shape for `#{$member}`. Pass circle or ellipse, optionally with a size.";
+    }
+    $shape: string.unquote($shape);
+    $problem: -shape-problem($shape);
+    @if $problem {
+      @error "`#{$shape}` is not a valid $shape for `#{$member}`: #{$problem}. A browser drops the whole gradient.";
+    }
+    $prelude: list.append($prelude, $shape, space);
+  }
+
+  @if $kind == "conic" and $from != null {
+    @if not -is-angle($from) {
+      @error "`#{meta.inspect($from)}` is not a valid $from for `#{$member}`. Pass an angle, such as `45deg` or `0.25turn`.";
+    }
+    $prelude: list.append($prelude, string.unquote("from #{$from}"), space);
+  }
+
+  @if $position != null {
+    @if meta.type-of($position) != "string" {
+      @error "`#{meta.inspect($position)}` is not a valid $position for `#{$member}`. Pass a position name such as `center` or `top-left`, or a CSS position as a string, such as `\"at 30% 40%\"`.";
+    }
+    $position: string.unquote($position);
+    @if map.has-key($map-for-positions, $position) {
+      $prelude: list.append($prelude, map.get($map-for-positions, $position), space);
+    } @else {
+      $problem: -position-problem($position);
+      @if not $problem and $kind == "conic" and not string.index($position, "(") and string.to-lower-case(list.nth(wordsOf($position), 1)) != "at" {
+        $problem: "a conic gradient has no size, so its position starts with `at`";
+      }
+      @if $problem {
+        @error "`#{$position}` is not a valid $position for `#{$member}`: #{$problem}. A browser drops the whole gradient.";
+      }
+      $prelude: list.append($prelude, $position, space);
+    }
+  }
+
+  $problem: null;
+  @if $kind == "conic" {
+    $problem: -conic-stops-problem($colors);
+  } @else {
+    $problem: colorStopsProblem($colors);
+  }
+  @if $problem {
+    @error "`#{meta.inspect($colors)}` is not a valid #{$colors-name} for `#{$member}`: #{$problem}. A browser drops the whole gradient.";
+  }
+  // From the compat data, not measured in an old browser: a gradient with one
+  // colour is kept only from Chrome 135, Firefox 136 and Safari 18.4.
+  @if $warn and list.length($colors) == 1 and not -is-substitution(list.nth($colors, 1)) {
+    @warn "`#{$member}` was given one colour, `#{meta.inspect($colors)}`. Browsers before Chrome 135, Firefox 136 and Safari 18.4 drop a gradient with a single colour stop; pass two colours, or use background-color.";
+  }
+
+  @if $in != null {
+    $problem: -in-problem($in);
+    @if $problem {
+      @error "`#{meta.inspect($in)}` is not a valid $in for `#{$member}`: #{$problem}. A browser drops the whole gradient.";
+    }
+    $prelude: list.append($prelude, string.unquote("in #{$in}"), space);
+  }
+
+  $stops: ();
+  @each $item in $colors {
+    $stops: list.append($stops, $item, comma);
+  }
+
+  $name: "#{$kind}-gradient";
+  @if $repeating {
+    $name: "repeating-#{$name}";
+  }
+  $function: meta.get-function($name, $css: true);
+  @if list.length($prelude) > 0 {
+    @return meta.call($function, $prelude, $stops...);
+  }
+  @return meta.call($function, $stops...);
+}

@@ -53,6 +53,7 @@
 .escape-to-parent { @include escape-to-parent(".parent") { color: red; } }
 .except { @include except("first") { color: red; } }
 .focus-ring { @include focus-ring; }
+.gradient { @include gradient((red, blue), conic, $from: 45deg, $in: oklab); }
 .hide { @include hide; }
 .line-clamp { @include line-clamp(3); }
 .linear-gradient { @include linear-gradient("top", red blue); }

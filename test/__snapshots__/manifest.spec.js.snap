@@ -1027,6 +1027,62 @@ exports[`Manifest examples fontSource: .a { content: "#{fontSource("Inter", "/fo
 }"
 `;
 
+exports[`Manifest examples gradient: .a { @include gradient((black 0 25%, white 0 50%), conic, $repeating:  1`] = `
+".a {
+  background-image: repeating-conic-gradient(black 0 25%, white 0 50%);
+}"
+`;
+
+exports[`Manifest examples gradient: .a { @include gradient((blue, yellow), $direction: right, $in: oklab); 1`] = `
+".a {
+  background-image: linear-gradient(to right, blue, yellow);
+  background-image: linear-gradient(to right in oklab, blue, yellow);
+}"
+`;
+
+exports[`Manifest examples gradient: .a { @include gradient((red, blue)); } 1`] = `
+".a {
+  background-image: linear-gradient(red, blue);
+}"
+`;
+
+exports[`Manifest examples gradient: .a { @include gradient((red, blue), $direction: "top-right"); } 1`] = `
+".a {
+  background-image: linear-gradient(to top right, red, blue);
+}"
+`;
+
+exports[`Manifest examples gradient: .a { @include gradient((red, blue), radial, $shape: circle, $position: 1`] = `
+".a {
+  background-image: radial-gradient(circle at top left, red, blue);
+}"
+`;
+
+exports[`Manifest examples gradient: .a { @include gradient((teal 0 40%, purple 40% 75%, coral 75% 100%), c 1`] = `
+".a {
+  background-image: conic-gradient(teal 0 40%, purple 40% 75%, coral 75% 100%);
+}"
+`;
+
+exports[`Manifest examples gradientValue: .a { background-image: gradientValue((rgba(0, 0, 0, 0.75), transparent 1`] = `
+".a {
+  background-image: linear-gradient(to top, rgba(0, 0, 0, 0.75), transparent), url("/img/hero.jpg");
+}"
+`;
+
+exports[`Manifest examples gradientValue: .a { border: 4px solid; border-image: gradientValue((red, blue), $dire 1`] = `
+".a {
+  border: 4px solid;
+  border-image: linear-gradient(to right, red, blue) 1;
+}"
+`;
+
+exports[`Manifest examples gradientValue: .a { mask-image: gradientValue((#000 60%, transparent)); } 1`] = `
+".a {
+  mask-image: linear-gradient(#000 60%, transparent);
+}"
+`;
+
 exports[`Manifest examples hide: .a { @include hide("unhide"); } 1`] = `
 ".a {
   position: static;
@@ -1908,10 +1964,32 @@ exports[`Manifest warnings container-query warns: .title { @include container-qu
 }"
 `;
 
+exports[`Manifest warnings gradient warns: .a { @include gradient(red); } 1`] = `
+".a {
+  background-image: linear-gradient(red);
+}"
+`;
+
+exports[`Manifest warnings gradientValue warns: .a { background-image: gradientValue(red); } 1`] = `
+".a {
+  background-image: linear-gradient(red);
+}"
+`;
+
 exports[`Manifest warnings remove warns: .a { @include remove("medium"); } 1`] = `
 "@media (width: 768px) {
   .a {
     display: none;
   }
+}"
+`;
+
+exports[`Manifest warnings text-gradient warns: .a { @include text-gradient("top", red); } 1`] = `
+".a {
+  background: linear-gradient(to top, red);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
 }"
 `;

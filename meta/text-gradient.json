@@ -6,7 +6,9 @@
       "name": "$direction",
       "accepts": [
         "a direction name such as top or bottom-left",
-        "an angle such as 45deg"
+        "an angle in deg, grad, rad or turn, or 0",
+        "\"to top\" or \"to left top\" as a string",
+        "var() or calc()"
       ]
     },
     {
@@ -24,5 +26,8 @@
     ".a { @include text-gradient(sideways, (red, blue)); }",
     ".a { @include text-gradient(\"top\", (huge, blue)); }",
     ".a { @include text-gradient(\"top\", (\"red\", blue)); }"
+  ],
+  "warns": [
+    ".a { @include text-gradient(\"top\", red); }"
   ]
 }

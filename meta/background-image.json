@@ -21,8 +21,10 @@
     {
       "name": "$filter-direction",
       "accepts": [
-        "an angle such as 45deg",
-        "a direction name such as top or bottom-left"
+        "a direction name such as top or bottom-left",
+        "an angle in deg, grad, rad or turn, or 0",
+        "\"to top\" or \"to left top\" as a string",
+        "var() or calc()"
       ]
     }
   ],

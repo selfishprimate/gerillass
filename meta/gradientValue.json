@@ -1,0 +1,34 @@
+{
+  "name": "gradientValue",
+  "summary": "The gradient mixin's gradient as a value, for layering it with an image in one background-image, or using it as a mask-image or border-image. It takes the same arguments and refuses the same input, but cannot write the fallback the mixin writes before a gradient with $in.",
+  "arguments": [
+    {
+      "name": "$colors",
+      "accepts": [
+        "the colour stops, in the forms the gradient mixin takes",
+        "a single colour warns, because browsers before Chrome 135, Firefox 136 and Safari 18.4 drop that gradient"
+      ]
+    },
+    { "name": "$type", "accepts": ["linear, the default", "radial", "conic"] },
+    { "name": "$direction", "accepts": ["linear only, in the forms the gradient mixin takes"] },
+    { "name": "$shape", "accepts": ["radial only, circle or ellipse with an optional size"] },
+    { "name": "$position", "accepts": ["radial or conic, a position name or at followed by a position"] },
+    { "name": "$from", "accepts": ["conic only, an angle"] },
+    { "name": "$in", "accepts": ["a colour space, with a hue method for a polar one", "var()"] },
+    { "name": "$repeating", "accepts": ["false, the default", "true"] }
+  ],
+  "examples": [
+    ".a { background-image: gradientValue((rgba(0, 0, 0, 0.75), transparent), $direction: top), url(\"/img/hero.jpg\"); }",
+    ".a { mask-image: gradientValue((#000 60%, transparent)); }",
+    ".a { border: 4px solid; border-image: gradientValue((red, blue), $direction: right) 1; }"
+  ],
+  "warns": [
+    ".a { background-image: gradientValue(red); }"
+  ],
+  "rejects": [
+    ".a { background-image: gradientValue((red, blue), $direction: sideways); }",
+    ".a { background-image: gradientValue((red, blue), $shape: circle); }",
+    ".a { background-image: gradientValue((red 10px, blue), conic); }",
+    ".a { background-image: gradientValue((red, blue), $in: rgb); }"
+  ]
+}

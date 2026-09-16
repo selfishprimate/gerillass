@@ -1,0 +1,54 @@
+// gradientValue returns a gradient as a value, so it can share a property with
+// something else: layered over a photo, or used as a mask.
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.box {
+  display: flex;
+  align-items: flex-end;
+  width: 200px;
+  height: 120px;
+  padding: 12px;
+  box-sizing: border-box;
+  font-weight: 600;
+  color: #fff;
+  border-radius: 8px;
+  background-size: cover;
+}
+
+.caption {
+  margin: 6px 0 0;
+  font-size: 13px;
+  color: #8a8f7a;
+}
+
+.photo {
+  background-image: url("/images/landscape.webp");
+}
+
+// A dark gradient over the photo, in the same background-image.
+.layered {
+  background-image: gradientValue((rgba(0, 0, 0, 0.75), transparent), $direction: top), url("/images/landscape.webp");
+}
+
+.list {
+  width: 200px;
+  height: 120px;
+  margin: 0;
+  padding: 8px 12px;
+  box-sizing: border-box;
+  overflow: hidden;
+  line-height: 1.5;
+  list-style: none;
+  border: 1px solid #dee0cd;
+  border-radius: 8px;
+}
+
+// The same list, faded out at the bottom by a gradient mask.
+.faded {
+  mask-image: gradientValue((#000 50%, transparent));
+}

@@ -1,0 +1,65 @@
+---
+title: "Gradient Value"
+page_title: "Gradient Value Sass Function"
+page_description: "The gradientValue Sass function returns a CSS gradient as a value, so it can be layered over an image or used as a mask or border image."
+page_keywords: "Gerillass gradientValue, Sass gradient function, SCSS mask-image gradient, layered background gradient, Gerillass Utilities"
+---
+
+# Gradient Value
+
+<Member name="gradientValue">
+
+The **gradientValue** function returns the same gradient the `gradient` mixin writes, as a value instead of a declaration. Use it where a gradient is one part of a property: layered over a photo in a single `background-image`, or as a `mask-image` or `border-image`.
+
+It takes the same arguments as the mixin and refuses the same input.
+
+<Hint kind="info">
+
+A function returns one value, so it cannot write the fallback the mixin writes before a gradient with `$in`. If an old browser matters, write the same call without `$in` in a declaration before it.
+
+</Hint>
+
+</Member>
+
+## Arguments
+
+<Arguments of="gradientValue">
+  <Argument name="$colors" type="list">The colour stops, in the forms the `gradient` mixin takes.</Argument>
+  <Argument name="$type" type="string">`linear`, the default, `radial` or `conic`.</Argument>
+  <Argument name="$direction" type="string, number">Linear only.</Argument>
+  <Argument name="$shape" type="string">Radial only.</Argument>
+  <Argument name="$position" type="string">Radial or conic.</Argument>
+  <Argument name="$from" type="number">Conic only.</Argument>
+  <Argument name="$in" type="string">A colour space such as `oklab`.</Argument>
+  <Argument name="$repeating" type="boolean">`true` for a repeating gradient.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="A dark gradient layered over a photo, so white text on it stays readable.">
+```scss
+.element{
+  background-image: gradientValue((rgba(0, 0, 0, 0.75), transparent), $direction: top), url("/images/landscape.webp");
+  background-size: cover;
+}
+```
+```html
+<div class="element sandbox large"></div>
+```
+</Example>
+
+<Example caption="A gradient as a mask, fading the element itself out towards the bottom.">
+```scss
+.element{
+  background: #43c6ac;
+  mask-image: gradientValue((#000 40%, transparent));
+}
+```
+```html
+<div class="element sandbox large"></div>
+```
+</Example>
+
+## Related Links
+* [mask-image](https://developer.mozilla.org/en-US/docs/Web/CSS/mask-image)
+* [Using multiple backgrounds](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_backgrounds_and_borders/Using_multiple_backgrounds)

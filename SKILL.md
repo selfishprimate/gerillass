@@ -5,7 +5,7 @@ description: Use the Gerillass Sass mixin library — loading it, the mixin cata
 
 # Gerillass
 
-A Sass mixin library: 56 mixins and 23 functions that emit CSS from
+A Sass mixin library: 57 mixins and 24 functions that emit CSS from
 semantic declarations. It is Sass source only — there is no runtime and no
 utility classes, so styles live in your stylesheet and your markup stays clean.
 
@@ -100,6 +100,7 @@ a dropped declaration rather than an error.
 | `except` | `.a { @include except(#ff0000) { margin: 0; } }` |
 | `focus-ring` | `@include focus-ring;` |
 | `font-face` | `.a { @include font-face("Inter", "/fonts/inter"); }` |
+| `gradient` | `.a { @include gradient((red, blue), sideways); }` |
 | `hide` | `.a { @include hide(nonsense); }` |
 | `line-clamp` | `.a { @include line-clamp(0); }` |
 | `linear-gradient` | `.a { @include linear-gradient(sideways, (red, blue)); }` |
@@ -209,6 +210,7 @@ a dropped declaration rather than an error.
 | `except($params...)` | Selects every sibling except the ones named. |
 | `focus-ring($width: 2px, $offset: 2px, $color: currentColor)` | Draws a keyboard focus ring with outline on :focus-visible, which survives forced-colors mode where a box-shadow ring disappears. |
 | `font-face($font-family, $file-path, $font-style: normal, $font-weight: 400, $file-formats: eot woff2 woff ttf svg, $font-display: null)` | Emits an @font-face rule for one family across several file formats. Must be called at the root. |
+| `gradient($colors, $type: linear, $direction: null, $shape: null, $position: null, $from: null, $in: null, $repeating: false)` | A linear, radial or conic gradient as background-image, plain or repeating, with an optional colour interpolation space. Written beside linear-gradient and radial-gradient for comparison. |
 | `hide($toggle: "hide")` | Visually hides an element while keeping it available to screen readers, or reverses that. |
 | `line-clamp($lines: 3)` | Truncates text after a number of lines, where ellipsis truncates one. It emits five declarations rather than one because -webkit-line-clamp does nothing on its own: without display: -webkit-box or without -webkit-box-orient: vertical the text is not clamped at all and nothing warns you, and without overflow: hidden the clamped text spills out below the box. The unprefixed line-clamp is emitted too, for when it becomes Baseline. |
 | `linear-gradient($direction, $colors)` | Linear gradient background from a direction name or an angle. |
@@ -254,6 +256,7 @@ and camelCase is what tells them apart from the kebab-case mixins above.
 | `fluid($min, $max, $min-viewport: 320px, $max-viewport: 1280px)` | A clamp() value that grows with the viewport between two widths, then stops. The preferred value keeps a rem term rather than being pure vw, because a vw-only value ignores browser text zoom and fails WCAG 1.4.4. It is a function rather than a mixin because the value is the hard part and belongs to any property, not only font-size. |
 | `fontSizer($size, $time)` | Multiplies a size by a factor. Handy for a modular scale. |
 | `fontSource($font-family, $file-path, $file-formats)` | Builds one src entry for an @font-face rule. |
+| `gradientValue($colors, $type: linear, $direction: null, $shape: null, $position: null, $from: null, $in: null, $repeating: false)` | The gradient mixin's gradient as a value, for layering it with an image in one background-image, or using it as a mask-image or border-image. It takes the same arguments and refuses the same input, but cannot write the fallback the mixin writes before a gradient with $in. |
 | `isColor($value)` | Returns the value if every item in it is a colour, and errors otherwise. |
 | `isGutter($value)` | True for anything that can sit where a CSS length is expected: a number, a calculation, or a CSS function such as var(). |
 | `isNumber($value)` | Returns the value if it is a number. |
