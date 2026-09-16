@@ -219,27 +219,6 @@ A conic gradient sweeps its colours round a centre, like the hand of a clock. It
 ```
 </Example>
 
-<Example caption="A loading spinner: a conic sweep from transparent to colour, cut into a ring and turned.">
-```scss
-@keyframes spin{
-  to{ transform: rotate(1turn); }
-}
-
-.spinner{
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  @include gradient(transparent #0ea5e9, conic, $from: 90deg);
-  -webkit-mask: radial-gradient(circle, transparent 23px, #000 24px);
-  mask: radial-gradient(circle, transparent 23px, #000 24px);
-  animation: spin 0.9s linear infinite;
-}
-```
-```html
-<div class="spinner"></div>
-```
-</Example>
-
 <Example caption="A colour wheel for a picker. Blending red to red the long way round the hue circle passes through every hue.">
 ```scss
 .wheel{
@@ -251,6 +230,23 @@ A conic gradient sweeps its colours round a centre, like the hand of a clock. It
 ```
 ```html
 <div class="wheel"></div>
+```
+</Example>
+
+<Example caption="A sunburst behind a sale banner. The rays repeat every 20 degrees from a centre below the bottom edge, set with `$position`, and start at an angle set with `$from`.">
+```scss
+.element{
+  @include gradient(
+    (#fde68a 0 10deg) (#f59e0b 10deg 20deg),
+    conic,
+    $from: -5deg,
+    $position: "at 50% 120%",
+    $repeating: true
+  );
+}
+```
+```html
+<div class="element sandbox large"></div>
 ```
 </Example>
 
@@ -312,6 +308,20 @@ Set `$repeating: true` and the stops repeat until they fill the box, which is ho
 ```
 ```html
 <div class="ripples"></div>
+```
+</Example>
+
+<Example caption="Ruled lines, like a notebook page.">
+```scss
+.element{
+  @include gradient(
+    (#fff 0 27px) (#bfdbfe 27px 28px),
+    $repeating: true
+  );
+}
+```
+```html
+<div class="element sandbox large"></div>
 ```
 </Example>
 
