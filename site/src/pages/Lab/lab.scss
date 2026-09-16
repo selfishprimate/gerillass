@@ -125,12 +125,17 @@
   /*
     Edge to edge, so the rule under the case's name and the rules between the
     folds reach both sides. What is inside pads itself.
+
+    It scrolls when the open folds need more than the window has, since each
+    keeps its code at least 400px tall rather than squeezing it to a few lines
+    on a short screen. The cases on the left and the preview stay put.
   */
   &__source {
     display: flex;
     flex-direction: column;
     min-width: 0;
     min-height: 0;
+    overflow-y: auto;
   }
 
   /* The name and its summary on the left, the preview's switch centred beside them. */
@@ -212,11 +217,13 @@
   &__panels {
     display: flex;
     flex-direction: column;
-    flex: 1 1 auto;
-    min-height: 0;
+    flex: 1 0 auto;
   }
 
-  /* An open fold takes an equal share of the height; a closed one its heading. */
+  /*
+    An open fold takes an equal share of the height, but never less than its
+    heading and 400px of code; a closed one takes its heading.
+  */
   &__panel {
     display: flex;
     flex-direction: column;
@@ -224,7 +231,8 @@
     min-height: 0;
 
     &.is-open {
-      flex: 1 1 0;
+      flex: 1 0 0;
+      min-height: min-content;
     }
 
     /* A rule between folds and under the last one, edge to edge. */
@@ -371,13 +379,17 @@
         display: flex;
         flex-direction: column;
         flex: 1 1 auto;
-        min-height: 0;
+        min-height: 400px;
       }
 
+      /* `contain: size` keeps a long file out of the fold's minimum height, which
+         is then the heading, the path and the 400px of the block, not every
+         line of the file. */
       .code-block pre {
         flex: 1 1 auto;
         min-height: 0;
         overflow: auto;
+        contain: size;
       }
     }
   }

@@ -946,7 +946,11 @@ and the line under it is the first sentence of that first member's summary in
 for `npm run manifest` like everything else there.
 
 The source column is four folds, Library, SCSS, CSS and HTML by default, which
-can be reordered by their grips. The HTML, the Sass and the library files can
+can be reordered by their grips. Open folds share the column's height, and each
+keeps its code block at least 400px tall; when that is more than the window
+has, the column scrolls. The block's `<pre>` carries `contain: size`, because
+without it a fold's minimum height was the whole file, 1588px for
+`_focus-ring.scss`. The HTML, the Sass and the library files can
 all be edited on the page. An edit is a draft, kept per file in localStorage
 with the rest of the page's state so a refresh or a new tab keeps it, and the
 compile uses drafts, so a change to a mixin shows before it is saved. A draft
