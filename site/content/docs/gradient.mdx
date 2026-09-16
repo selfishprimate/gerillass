@@ -403,6 +403,106 @@ Set `$repeating: true` and the stops repeat until they fill the box, which is ho
 ```
 </Example>
 
+### More ideas
+
+Shapes and scenes drawn with nothing but a gradient.
+
+<Example caption="A retro sun for a synthwave poster. Hard stops cut it into bands, and a second colour stop in each band leaves a gap of the page behind.">
+```scss
+.sun{
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  @include gradient(
+    (#fde047 0 42%) (#fb923c 42% 56%) (#fff 56% 59%)
+    (#f472b6 59% 70%) (#fff 70% 73%) (#c026d3 73% 84%)
+    (#fff 84% 88%) (#7c3aed 88% 100%)
+  );
+}
+```
+```html
+<div class="sun"></div>
+```
+</Example>
+
+<Example caption="A gauge for a dashboard. The conic gradient starts at -90deg, fills the top half up to the value, and leaves the bottom half the colour of the page.">
+```scss
+.gauge{
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  @include gradient(
+    (#22c55e 0 32%) (#e5e7eb 32% 50%) (#fff 50% 100%),
+    conic,
+    $from: -90deg
+  );
+}
+```
+```html
+<div class="gauge"></div>
+```
+</Example>
+
+<Example caption="A radar screen. The sweep is a conic gradient that stays dark for most of the turn and brightens towards its leading edge.">
+```scss
+.radar{
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  @include gradient((#052e16 0 70%) (#16a34a 97%) (#86efac 100%), conic, $from: 20deg);
+}
+```
+```html
+<div class="radar"></div>
+```
+</Example>
+
+<Example caption="A stage light. A narrow wedge of a conic gradient, placed above the top edge with `$position`, falls on the stage as a beam.">
+```scss
+.element{
+  @include gradient(
+    (#1e1b4b 0 165deg) (#fef3c7 172deg 188deg) (#1e1b4b 195deg 360deg),
+    conic,
+    $position: "at 50% -10%"
+  );
+}
+```
+```html
+<div class="element sandbox xlarge"></div>
+```
+</Example>
+
+<Example caption="Contour lines for a map or a hiking app, from rings repeated round a peak that sits off centre.">
+```scss
+.element{
+  @include gradient(
+    (#ecfccb 0 14px) (#65a30d 14px 15px) (#ecfccb 15px 28px),
+    radial,
+    $shape: circle,
+    $position: "at 30% 40%",
+    $repeating: true
+  );
+}
+```
+```html
+<div class="element sandbox xlarge"></div>
+```
+</Example>
+
+<Example caption="A rainbow flag in six hard stops, for a banner or an avatar ring.">
+```scss
+.element{
+  @include gradient(
+    (#e40303 0 16.66%) (#ff8c00 16.66% 33.33%) (#ffed00 33.33% 50%)
+    (#008026 50% 66.66%) (#24408e 66.66% 83.33%) (#732982 83.33% 100%)
+  );
+}
+```
+```html
+<div class="element sandbox large"></div>
+```
+</Example>
+
 ### Colour spaces
 
 <Example caption="Blue to yellow blended in the browser's default sRGB. The middle turns grey.">
