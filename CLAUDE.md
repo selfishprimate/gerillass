@@ -758,8 +758,10 @@ examine and test each on its own.
   types>)` and `textarea`, which drops the colour picker whose swatch the styles
   stretched, adds unknown types browsers draw as text, and leaves `select` out.
 - `aspect-ratio-height-auto.md`: `height: auto`, since a `height` attribute
-  defeats `aspect-ratio`. Measured in Chrome only, including the override of an
-  earlier `height`.
+  defeats `aspect-ratio`. Done for 4.0.0 on the `aspect-ratio-height` branch,
+  as `:where(&) { height: auto; }`: in all three browsers it overrides the
+  attribute on images, iframes, video and inside picture, flex and grid, and
+  keeps every height a stylesheet sets, which a plain `height: auto` did not.
 
 ### What `gradient.md` proposes
 
@@ -861,12 +863,12 @@ Two pieces of work are open, and neither is started:
   `todos/font-face-woff2-default.md`, on `font-face-woff2`, branched from
   `before-after-content`; and `all-text-inputs` by exclusion, from
   `todos/all-text-inputs-list.md`, on `all-text-inputs`, branched from
-  `font-face-woff2`. Each has a `MIGRATION.md` section. The maintainer may add more of the items below to
+  `font-face-woff2`; and `aspect-ratio` against a `height` attribute, from
+  `todos/aspect-ratio-height-auto.md`, on `aspect-ratio-height`, branched from
+  `all-text-inputs`. Each has a `MIGRATION.md` section. The maintainer may add more of the items below to
   the same major.
-- **Behaviour changes for a later major**: two, each in its own file in `todos/` and
-  each to be tested and decided on its own before any is planned:
-  `aspect-ratio` with
-  a `height` attribute, and `counter`. Each needs a `MIGRATION.md` section.
+- **Behaviour changes for a later major**: one, in its own file in `todos/`, to be
+  tested and decided on its own before it is planned: `counter`. It needs a `MIGRATION.md` section.
 - **`todos/design-tokens.md`**: a token layer on `tokens`, starting with the
   decision whether to ship a palette.
 
@@ -1005,6 +1007,7 @@ new mixin emits what it does:
 | `aspect-ratio` on an `<img>` | the image is stretched, not cropped | `object-fit: cover` |
 | `aspect-ratio` on an `<iframe>` | overflows its container by 4px, from the 2px default border | `border: 0` |
 | `aspect-ratio` on a **wrapper** | does nothing for an `<iframe>` inside, which keeps its intrinsic 300×150 | applied to the element itself |
+| `aspect-ratio` on an element with a `height` attribute | the attribute height wins and the ratio is ignored, 300×900 for a 4:3 image | `height: auto` inside `:where()`, since 4.0.0 |
 
 That last row is the migration hazard and is called out in `MIGRATION.md`: the
 old mixins went on a wrapping `<div>`, the new one goes on the element.

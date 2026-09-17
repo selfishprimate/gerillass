@@ -2,7 +2,11 @@
 
 Moved out of `todos/fix-plan.md`, where it was B8, on 15 September 2026. The
 maintainer asked for each remaining 3.0.0 item to be examined and tested on its
-own rather than done as a batch. Not planned.
+own rather than done as a batch.
+
+**Status.** Done for 4.0.0 on the `aspect-ratio-height` branch, 17 September
+2026, with `height: auto` inside `:where()` rather than in the mixin's own rule.
+**What was measured and built** at the end has the results.
 
 ## What the mixin does today
 
@@ -87,3 +91,37 @@ Safari were not tried.
 four tests' expected blocks; the manifest snapshots; `MIGRATION.md`;
 `site/content/docs/aspect-ratio.mdx`; the 2.0.0 measurement table in
 `CLAUDE.md`.
+
+## What was measured and built, 17 September 2026
+
+The proposal's `height: auto` overrode a height set in a stylesheet. A `height`
+attribute is a presentational hint, below any author rule, so a rule with no
+specificity overrides the attribute and loses to every stylesheet height. The
+branch writes `:where(&) { height: auto; }`.
+
+Chrome 152 and Firefox 156 headless and Safari 26.6.2, identically, in a 300px
+box, each case in its own frame, for the library before the change, the branch,
+and the proposal's plain `height: auto`:
+
+| Case | Old | `:where()` | Plain `height: auto` |
+|---|---|---|---|
+| img 1600×900 with attributes, 4:3 | 300×900 | 300×225 | 300×225 |
+| img without attributes | 300×225 | 300×225 | 300×225 |
+| iframe 560×315 with attributes, 16:9 | 300×315 | 300×169 | 300×169 |
+| video 640×480 with attributes, 16:9 | 300×480 | 300×169 | 300×169 |
+| img with attributes in `<picture>` | 300×900 | 300×225 | 300×225 |
+| the same as a flex, column flex or grid item | 300×900 | 300×225 | 300×225 |
+| div, `height: 400px` before the include | 300×400 | 300×400 | 300×225 |
+| div, `height: 400px` in an earlier rule | 300×400 | 300×400 | 300×225 |
+| div, `height: 400px` after the include | 300×400 | 300×400 | 300×400 |
+| div, `div { height: 400px }` | 300×400 | 300×400 | 300×225 |
+| img with attributes and `max-height: 150px` | 300×150 | 300×150 | 300×150 |
+| div with `$fit: null` | 300×225 | 300×225 | 300×225 |
+
+**Documentation**: a section on the attribute case with the table, the embed
+example now uses the embed code's own `width` and `height`, and an image example
+with its dimensions in the markup, both with the HTML shown first. The four
+spec tests expect the new rule.
+
+**Not covered**: a mobile browser; `object-fit` values other than the default
+next to the attribute case; an SVG `<img>` without intrinsic dimensions.
