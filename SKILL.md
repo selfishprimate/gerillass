@@ -122,7 +122,7 @@ a dropped declaration rather than an error.
 | `text-image` | `.a { @include text-image(16 9); }` |
 | `text-selection` | `.a { @include text-selection(bogus) { background: yellow; } }` |
 | `text-shadow` | `.a { @include text-shadow(42); }` |
-| `text-stroke` | `.a { @include text-stroke(huge); }` |
+| `text-stroke` | `.a { @include text-stroke(black, transparent, red, 2px); }` |
 | `tokens` | `:root { @include tokens(#fff); }` |
 | `triangle` | `.caret { @include triangle(sideways); }` |
 
@@ -220,6 +220,13 @@ a dropped declaration rather than an error.
 - A distance a browser resolves, such as `var()` or `calc()`, is written as a `calc()` holding the sine or cosine, which every engine resolves. It cannot be filled, since the number of layers has to be counted while the stylesheet compiles.
 - A `text-shadow` transition, such as one between a resting state and `:hover`, only animates when both states hold the same number of layers. A filled shadow's layer count comes from the distance and `$step`, so change both together, or the shadow switches rather than moves.
 
+**`text-stroke`**
+
+- Since 4.0.0 the arguments are `$width, $color, $style, $fill`, and the old order, `$fallback-color, $color, $stroke-color, $stroke-width`, raises rather than compiling. `$style: hollow` is the default, which is the look 3.x wrote with no arguments, in `currentColor` rather than black.
+- A bare `-webkit-text-stroke` is centred on the glyph outline, so half of it is painted over the letter: measured at 200px in Chrome 152, Firefox 156 and Safari 26.6.2, a 20px stroke cut the letter's own ink from 11213 to 3174 pixels and a 40px stroke left none. `$style: outside` writes `paint-order: stroke fill`, which keeps the letterform whole in all three.
+- `$style: outside` doubles the width it writes, since half of the stroke is then hidden behind the letter: a 40px stroke drawn that way left 17006 pixels of ink against a centred 20px stroke's 15915. A keyword width, `thin`, `medium` or `thick`, cannot be doubled and raises; a `var()` width is doubled by the browser through `calc()`.
+- Unprefixed `text-stroke` is supported by no engine, checked with `CSS.supports` in all three, so the mixin writes the `-webkit-` properties only. In an engine that has neither, `hollow` still shows solid text, because it writes `color` as well.
+
 ## Mixins
 
 | Signature | What it does |
@@ -276,7 +283,7 @@ a dropped declaration rather than an error.
 | `text-image($image: null)` | Fills the text with an image via background-clip. |
 | `text-selection($value: null)` | Styles the ::selection pseudo-element. |
 | `text-shadow($params...)` | Layered text shadows, each written as a direction or an angle, a colour and a distance. |
-| `text-stroke($fallback-color: black, $color: transparent, $stroke-color: black, $stroke-width: 1px)` | Outlines text using the webkit text-stroke properties. |
+| `text-stroke($width: 1px, $color: currentColor, $style: hollow, $fill: null)` | An outline on text, in three looks: outside the letter, straddling it, or the letter left unfilled. |
 | `tokens($map, $prefix: null)` | Writes a Sass map out as CSS custom properties, for any kind of token: colours, spacing, sizes, radii, type, shadows, durations. With the prefix space, (4: 1rem) becomes --space-4: 1rem. A null value is skipped, and a quoted string keeps its quotes. |
 | `triangle($direction: "bottom", $color: black, $size: 10px 8px)` | Draws a CSS triangle out of borders, pointing in a given direction. |
 

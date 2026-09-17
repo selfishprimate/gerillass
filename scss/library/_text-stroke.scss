@@ -1,24 +1,46 @@
 @charset "UTF-8";
 
+@use "sass:list";
+@use "sass:map";
 @use "sass:meta";
+@use "sass:string";
 @use "../internal/color-problem" as *;
+@use "../internal/is-css-function" as *;
 @use "../internal/length-problem" as *;
 
-// Each colour is a declaration of its own, where Chrome 152 kept a CSS-wide
-// keyword and dropped a word that is not a colour, a quoted colour, a length and
-// two colours side by side; see scss/internal/_color-problem.scss. null leaves
-// that declaration out, as it always has.
-@mixin text-stroke(
-  $fallback-color: black,
-  $color: transparent,
-  $stroke-color: black,
-  $stroke-width: 1px
-) {
-  $colors: (
-    "$fallback-color": $fallback-color,
-    "$color": $color,
-    "$stroke-color": $stroke-color,
-  );
+// An outline on text, through -webkit-text-stroke, which is what all three
+// engines ship: `text-stroke` unprefixed is supported by none of them,
+// checked with CSS.supports in Chrome 152, Firefox 156 and Safari 26.6.2.
+//
+// The trap this encodes is what a bare -webkit-text-stroke does. The stroke is
+// centred on the glyph outline, so half of it is painted over the letter: at
+// 200px, a 20px stroke cut the letter's own ink from 11213 to 3174 pixels, and
+// a 40px stroke left none of it. `paint-order: stroke fill` paints the stroke
+// first and the letter over it, which keeps the letterform whole, and it is
+// supported in all three. Half the stroke is then hidden, so the width is
+// doubled to give the thickness that was asked for: measured at 200px, a 40px
+// stroke drawn that way left 17006 pixels of ink against a centred 20px
+// stroke's 15915.
+//
+// $style says which of the three looks is wanted. `hollow` is the default, as
+// the hollow look is what 3.x wrote with no arguments:
+//
+// - `outside`, the default: the letter keeps its shape and the outline sits
+//   around it;
+// - `center`: the raw property, the outline straddling the outline of the
+//   glyph, which thins the letter;
+// - `hollow`: the letter is not filled at all, leaving the outline on its own.
+//   `color` is written as well, so an engine that drops the two -webkit
+//   properties shows solid text rather than nothing.
+$-styles: "outside" "center" "hollow";
+
+@mixin text-stroke($width: 1px, $color: currentColor, $style: hollow, $fill: null) {
+  $style-name: string.to-lower-case("#{$style}");
+  @if meta.type-of($style) != "string" or not list.index($-styles, $style-name) {
+    @error "`#{meta.inspect($style)}` is not a valid $style for `text-stroke`. Pass `outside`, which keeps the letterform, `center`, which straddles it, or `hollow`, which leaves the letter unfilled.";
+  }
+
+  $colors: ("$color": $color, "$fill": $fill);
   @each $name, $value in $colors {
     @if $value != null {
       $problem: colorProblem($value, $css-wide: true);
@@ -27,17 +49,44 @@
       }
     }
   }
-  // -webkit-text-stroke-width kept a length, 0, thin, medium or thick and a
-  // CSS-wide keyword in Chrome 152, and dropped a percentage and a negative
-  // width.
-  @if $stroke-width != null {
-    $problem: lengthProblem($stroke-width, $percent: false, $negative: false, $keywords: "thin" "medium" "thick", $css-wide: true);
-    @if $problem {
-      @error "`#{meta.inspect($stroke-width)}` is not a valid $stroke-width for `text-stroke`: #{$problem}. A browser drops the declaration.";
+
+  // -webkit-text-stroke-width keeps a length, 0, thin, medium or thick and a
+  // CSS-wide keyword, and drops a percentage and a negative width.
+  @if $width == null {
+    @error "`text-stroke` needs a $width, such as `2px`. Pass `$fill` and `$color` for the colours.";
+  }
+  $problem: lengthProblem($width, $percent: false, $negative: false, $keywords: "thin" "medium" "thick", $css-wide: true);
+  @if $problem {
+    @error "`#{meta.inspect($width)}` is not a valid $width for `text-stroke`: #{$problem}. A browser drops the declaration.";
+  }
+
+  $stroke-width: $width;
+  @if $style-name == "outside" {
+    @if meta.type-of($width) == "number" {
+      $stroke-width: $width * 2;
+    } @else if meta.type-of($width) == "calculation" or isCssFunction($width, "var" "env" "attr" "calc" "clamp" "min" "max" "round") {
+      // The browser knows the width, so the doubling is left to it.
+      $stroke-width: string.unquote("calc(2 * #{$width})");
+    } @else {
+      @error "`#{meta.inspect($width)}` cannot be used with `$style: outside` in `text-stroke`: half of an outside stroke is hidden behind the letter, so the width is doubled, and a keyword cannot be doubled. Pass a length, or `$style: center`.";
     }
   }
-  color: $fallback-color;
-  -webkit-text-fill-color: $color;
-  -webkit-text-stroke-color: $stroke-color;
+
+  @if $style-name == "hollow" {
+    // Without a fill of its own the text falls back to the stroke's colour,
+    // which is what an engine without these properties would show. currentColor
+    // is what `color` already holds, so it is not written again.
+    $fallback: $fill or $color;
+    @if string.to-lower-case("#{$fallback}") != "currentcolor" {
+      color: $fallback;
+    }
+    -webkit-text-fill-color: transparent;
+  } @else if $fill != null {
+    color: $fill;
+  }
+  @if $style-name == "outside" {
+    paint-order: stroke fill;
+  }
+  -webkit-text-stroke-color: $color;
   -webkit-text-stroke-width: $stroke-width;
 }

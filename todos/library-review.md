@@ -93,6 +93,11 @@ refused. `$step` was added for how far apart a filled shadow's layers sit, a
   [source] `width: min(100% - 2 * gutter, key)` would give a gutter at every
   width. Two agent trials turned the mixin down; `todos/fix-plan.md` says to
   find out who uses it before any deprecation.
+- **`text-stroke`** is **done for 4.0.0 on the `text-stroke` branch**: the
+  arguments are `$width, $color, $style, $fill`, and `$style: outside` writes
+  `paint-order: stroke fill` at twice the width, which keeps the letterform. The
+  ink counts behind that are in `MIGRATION.md`. Its remaining idea, a
+  `paint-order` shorthand for other members, was not pursued.
 - **`text-gradient` and `text-image`** set `color: transparent` with no guard,
   so the text is invisible wherever the background does not paint, forced
   colours included, and `text-image` loses its text when the image 404s.

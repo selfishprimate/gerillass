@@ -1,8 +1,8 @@
 ---
 title: "Text Stroke"
 page_title: "Text Stroke Sass Mixin"
-page_description: "The Text Stroke Sass mixin helps you add a stroke to a text element and style it very easily."
-page_keywords: "CSS text Stroke, Sass Text Stroke, CSS Text Stroke Generator, CSS Text Stroke Property, CSS Text Stroke Inside, CSS Text Stroke Width, CSS Text Stroke Animation, CSS Text Stroke Fallback Color, CSS Text Stroke Color, CSS Text Stroke Fill Color"
+page_description: "Outline text with the Text Stroke Sass mixin: around the letter, straddling it, or with the letter left unfilled, in one line of Sass."
+page_keywords: "CSS Text Stroke, Sass Text Stroke, CSS Outline Text, CSS Hollow Text, webkit-text-stroke, CSS paint-order, CSS Stroke Text Outside"
 page_image: "gerillass-text-stroke.jpg"
 ---
 
@@ -10,74 +10,242 @@ page_image: "gerillass-text-stroke.jpg"
 
 <Member name="text-stroke">
 
-The **Text Stroke Sass mixin** helps you add a stroke to a text element and style it very easily.
+The **Text Stroke Sass mixin** outlines text. It takes the width first, then the colour, and a `$style` that says where the outline sits: **outside** the letter, **centred** on its edge, or **hollow**, with the letter left unfilled.
 
 </Member>
 
+<Hint kind="warning">
+
+**Changed in Gerillass 4.0.0.** The arguments are now `$width, $color, $style, $fill`. The old order, `$fallback-color, $color, $stroke-color, $stroke-width`, raises instead of compiling, so every call says so at build time. The default is `hollow` in `currentColor`, which is the look 3.x wrote with no arguments.
+
+</Hint>
+
+<Hint kind="info">
+
+**Why `outside` exists.** `-webkit-text-stroke` centres the outline on the edge of the glyph, so half of it is painted over the letter. Measured at 200px in Chrome 152, Firefox 156 and Safari 26.6.2, a 20px stroke cut the letter's own ink from 11213 pixels to 3174, and a 40px stroke left none of it: the word turns into a blob. `$style: outside` writes `paint-order: stroke fill`, which paints the outline first and the letter over it, and doubles the width, since half of the stroke is then hidden. All three engines do this.
+
+</Hint>
+
 ## Arguments
 
-<Arguments of="text-stroke" footnote="**Design Tip:** When your stroke color is dark, try making the fallback color the same, so the text looks more consistent with the rest of the design.">
-  <Argument name="$color" type="color">Sets the color of the text. The default value is transparent. Each of the three colours takes a colour, <code>currentColor</code>, a system colour, a function such as <code>var()</code> or <code>light-dark()</code>, or a CSS-wide keyword, and <code>null</code> leaves its declaration out.</Argument>
-  <Argument name="$stroke-color" type="color">Sets the stroke color of the text. The default value is black.</Argument>
-  <Argument name="$fallback-color" type="color">This option is for browsers that do not support text stroke. It prevents the text from disappearing entirely in those browsers. The default value is black.</Argument>
-  <Argument name="$stroke-width" type="number (with unit)">Sets the width of the stroke. You can also pass the string values <code>thin</code>, <code>medium</code>, and <code>thick</code>, a CSS-wide keyword, <code>var()</code> or a maths function. Not a percentage or a negative width.</Argument>
+<Arguments of="text-stroke" footnote="Unprefixed `text-stroke` is supported by no engine, checked with `CSS.supports` in all three, so the mixin writes the `-webkit-` properties.">
+  <Argument name="$width" type="number">How thick the outline is, such as <code>2px</code>. <code>thin</code>, <code>medium</code> and <code>thick</code> work with <code>center</code> and <code>hollow</code>; a <code>var()</code> or <code>calc()</code> works everywhere.</Argument>
+  <Argument name="$color" type="color">The outline's colour. The default is <code>currentColor</code>.</Argument>
+  <Argument name="$style" type="string"><code>hollow</code>, the default, leaves the letter unfilled. <code>outside</code> keeps the letterform and puts the outline around it. <code>center</code> writes the property as it is.</Argument>
+  <Argument name="$fill" type="color">Optional. The text's own colour. Left out, the element keeps the colour it already has.</Argument>
 </Arguments>
 
 ## Examples
 
-<Example caption="Simply call the mixin without passing any arguments.">
+<Example caption="Hollow display type, the default. One line leaves the letters unfilled and draws their outline in the colour the element already has.">
 ```scss
-.element {
-  @include text-stroke;
+.display {
+  @include text-stroke(2px);
 }
 ```
 ```html
-<h1 class="element" style="margin: 0">Text Stroke is Awesome!</h1>
+<style>
+  .display { margin: 0; font: 800 52px/1.1 Inter, ui-sans-serif, system-ui, sans-serif; color: #1d4ed8; letter-spacing: -0.02em; }
+</style>
+<h2 class="display">Hollow headline</h2>
 ```
 </Example>
 
-<Example caption="Now pass some arguments to make the text look sexier!">
+<Example caption="An outline around filled letters, over a photograph. `outside` keeps the letterform, which is what makes the text readable at this size rather than turning it into a blob.">
 ```scss
-.element {
-  @include text-stroke(
-    $color: azure,
-    $stroke-color: cadetblue,
-    $fallback-color: cadetblue,
-    $stroke-width: 1px
-  );
+.hero-title {
+  @include text-stroke(3px, #0f172a, outside, #fff);
 }
 ```
 ```html
-<h1 class="element" style="margin: 0">Text Stroke is Awesome!</h1>
+<style>
+  .hero { padding: 26px 24px; border-radius: 10px; background: linear-gradient(120deg, #22d3ee, #6366f1 55%, #f472b6); }
+  .hero-title { margin: 0; font: 800 44px/1.15 Inter, ui-sans-serif, system-ui, sans-serif; }
+</style>
+<div class="hero"><h2 class="hero-title">Summer issue</h2></div>
 ```
 </Example>
 
-## What it refuses
-
-A colour the browser drops stops the build. Until 2.3.1 each argument was written as it was, and measured in Chrome 152 a word that is not a colour, a quoted colour, a length and two colours side by side are dropped, which here can leave the text transparent with no stroke.
-
+<Example caption="The same width in all three styles, so the difference is easy to see: `outside` keeps the letter whole, `center` eats into it, and `hollow` drops the fill entirely.">
 ```scss
-.element {
-  @include text-stroke(black, "red");
+.a { @include text-stroke(4px, #be123c, outside, #fef3c7); }
+.b { @include text-stroke(4px, #be123c, center, #fef3c7); }
+.c { @include text-stroke(4px, #be123c, hollow); }
+```
+```html
+<style>
+  .styles { display: grid; gap: 10px; }
+  .styles p { margin: 0; font: 800 44px/1.15 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .styles span { display: block; font: 600 11px/1 monospace; letter-spacing: .08em; color: #71717a; text-transform: uppercase; }
+</style>
+<div class="styles">
+  <div><span>outside</span><p class="a">Outline</p></div>
+  <div><span>center</span><p class="b">Outline</p></div>
+  <div><span>hollow</span><p class="c">Outline</p></div>
+</div>
+```
+</Example>
+
+<Example caption="A sticker headline: a thick white outline around the letters, with a hard shadow from [Text Shadow](/docs/text-shadow) underneath. Two includes, and the markup stays a heading.">
+```scss
+.sticker {
+  @include text-stroke(4px, #fff, outside, #db2777);
+  @include text-shadow(bottom-right rgb(15 23 42 / 0.35) 6px);
 }
 ```
-```text
-Error: `"red"` is not a valid $color for `text-stroke`: a colour in quotes is text, not a colour. A browser drops the declaration. Pass a colour such as `black`, `currentColor`, or a function such as `var(--stroke)`.
+```html
+<style>
+  .board { padding: 26px 24px; border-radius: 10px; background: repeating-linear-gradient(45deg, #bae6fd 0 14px, #7dd3fc 14px 28px); }
+  .sticker { margin: 0; font: 800 44px/1.15 Inter, ui-sans-serif, system-ui, sans-serif; }
+</style>
+<div class="board"><h2 class="sticker">Sale</h2></div>
 ```
+</Example>
 
-A stroke width the browser drops stops the build as well: measured in Chrome 152, a percentage, a negative width and a word other than `thin`, `medium`, `thick` or a CSS-wide keyword. Until 2.3.1 these compiled.
-
+<Example caption="A gradient inside the letters and a solid outline around them. [Gradient](/docs/gradient) paints the fill through `background-clip`, and the stroke keeps the shape legible over a busy background.">
 ```scss
-.element {
-  @include text-stroke(black, transparent, red, -1px);
+.poster-title {
+  @include text-gradient(#f97316 #db2777 #7c3aed);
+  @include text-stroke(2px, #0f172a, outside);
 }
 ```
-```text
-Error: `-1px` is not a valid $stroke-width for `text-stroke`: a length below zero does not work here. A browser drops the declaration.
+```html
+<style>
+  .poster { padding: 26px 24px; border-radius: 10px; background: #fef9c3; }
+  .poster-title { margin: 0; font: 800 50px/1.1 Inter, ui-sans-serif, system-ui, sans-serif; letter-spacing: -0.02em; }
+</style>
+<div class="poster"><h2 class="poster-title">Festival</h2></div>
 ```
+</Example>
+
+<Example caption="Numbers behind a statistic, outlined rather than filled, so they sit back without disappearing. `hollow` is what gives that a single line.">
+```scss
+.stat b {
+  @include text-stroke(2px, #c084fc, hollow);
+}
+```
+```html
+<style>
+  .stats { display: flex; flex-wrap: wrap; gap: 28px; font: 800 44px/1.15 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .stat { display: grid; gap: 2px; }
+  .stat b { font: 800 46px/1 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .stat span { font: 500 13px/1.3 Inter, ui-sans-serif, system-ui, sans-serif; color: #52525b; }
+</style>
+<div class="stats">
+  <p class="stat"><b>128</b><span>Mixins shipped</span></p>
+  <p class="stat"><b>96%</b><span>Test coverage</span></p>
+  <p class="stat"><b>0</b><span>Runtime dependencies</span></p>
+</div>
+```
+</Example>
+
+<Example caption="The width and the colour read from custom properties, so one rule serves every card and the markup sets the weight of the outline. The mixin doubles a `var()` width through `calc()`, which the browser resolves." listing="<div class=&quot;tags&quot;>
+&#32;&#32;<p class=&quot;tag&quot; style=&quot;--stroke-width: 1px; --stroke-color: #0ea5e9&quot;>Light</p>
+&#32;&#32;<p class=&quot;tag&quot; style=&quot;--stroke-width: 2px; --stroke-color: #7c3aed&quot;>Medium</p>
+&#32;&#32;<p class=&quot;tag&quot; style=&quot;--stroke-width: 4px; --stroke-color: #be123c&quot;>Heavy</p>
+</div>">
+```scss
+.tag {
+  @include text-stroke(var(--stroke-width), var(--stroke-color), outside, #fff);
+}
+```
+```html
+<style>
+  .tags { display: flex; flex-wrap: wrap; gap: 20px; }
+  .tag { margin: 0; font: 800 30px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; }
+</style>
+<div class="tags">
+  <p class="tag" style="--stroke-width: 1px; --stroke-color: #0ea5e9">Light</p>
+  <p class="tag" style="--stroke-width: 2px; --stroke-color: #7c3aed">Medium</p>
+  <p class="tag" style="--stroke-width: 4px; --stroke-color: #be123c">Heavy</p>
+</div>
+```
+</Example>
+
+<Example caption="One outline for both colour schemes, with `light-dark()` in the colour slot. The panels below force one scheme each to show the pair.">
+```scss
+.title {
+  @include text-stroke(2px, light-dark(#0f172a, #38bdf8), hollow);
+}
+```
+```html
+<style>
+  .schemes { display: flex; flex-wrap: wrap; gap: 16px; }
+  .schemes div { flex: 1 1 200px; padding: 20px; border-radius: 10px; }
+  .schemes .light { color-scheme: light; background: #f8fafc; }
+  .schemes .dark { color-scheme: dark; background: #0f172a; }
+  .title { margin: 0; font: 800 34px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; }
+</style>
+<div class="schemes">
+  <div class="light"><h2 class="title">Light</h2></div>
+  <div class="dark"><h2 class="title">Dark</h2></div>
+</div>
+```
+</Example>
+
+## On hover
+
+<Example caption="A menu of hollow words that fill in under the pointer. The fill is what changes, so the outline stays put and the letter colours in.">
+```scss
+.menu a {
+  @include text-stroke(2px, #0f172a, hollow);
+
+  @include motion-safe {
+    transition: -webkit-text-fill-color 0.25s ease;
+  }
+
+  &:hover,
+  &:focus-visible {
+    @include text-stroke(2px, #0f172a, hollow, #0f172a);
+    -webkit-text-fill-color: #facc15;
+  }
+}
+```
+```html
+<style>
+  .menu { display: grid; gap: 4px; padding: 20px; border-radius: 10px; background: #fff7ed; }
+  .menu a { font: 800 36px/1.15 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; text-decoration: none; }
+</style>
+<nav class="menu">
+  <a href="#one">Projects</a>
+  <a href="#two">Studio</a>
+  <a href="#three">Contact</a>
+</nav>
+```
+</Example>
+
+<Example caption="A card title whose outline thickens on hover. Both states pass a length, so the width animates from one to the other.">
+```scss
+.card-title {
+  @include text-stroke(1px, #7c3aed, outside, #faf5ff);
+
+  @include motion-safe {
+    transition: -webkit-text-stroke-width 0.25s ease;
+  }
+
+  .card:hover & {
+    @include text-stroke(4px, #7c3aed, outside, #faf5ff);
+  }
+}
+```
+```html
+<style>
+  .card { padding: 24px; border-radius: 10px; background: #2e1065; cursor: pointer; }
+  .card-title { margin: 0; font: 800 44px/1.15 Inter, ui-sans-serif, system-ui, sans-serif; }
+</style>
+<div class="card"><h2 class="card-title">Hover me</h2></div>
+```
+</Example>
+
+<Hint kind="danger">
+
+**Keep the text readable.** A hollow outline at a small size, or a thin one in a low contrast colour, is hard to read, and an outline is not a substitute for contrast between the text and its background. Reach for `hollow` on display type, and for `outside` when the text has to be read over a photograph.
+
+</Hint>
 
 ## Related Links
 
 - [Text Shadow](/docs/text-shadow)
+- [Text Gradient](/docs/text-gradient)
 - [CSS -webkit-text-stroke](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/-webkit-text-stroke)
-- [CSS -webkit-text-fill-color](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/-webkit-text-fill-color)
+- [CSS paint-order](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/paint-order)

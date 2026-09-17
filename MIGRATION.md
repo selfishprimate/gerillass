@@ -2,7 +2,7 @@
 
 Written while 4.0.0 is being prepared, and added to as its changes land. So far
 it covers `hide`, where breakpoint ranges end, `columnizer`, `before` and
-`after`, `font-face`, `all-text-inputs`, `aspect-ratio`, `counter`, and `text-shadow`. The 3.0.0 and
+`after`, `font-face`, `all-text-inputs`, `aspect-ratio`, `counter`, `text-shadow`, and `text-stroke`. The 3.0.0 and
 2.0.0 guides follow below, unchanged.
 
 Every claim here was checked by compiling the old call against 3.0.0's source
@@ -29,6 +29,8 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `text-shadow` puts a diagonal the same distance away as a straight one | breaking, silent |
 | `text-shadow` refuses a direction, colour, distance or blur a browser drops | breaking, loud |
 | `text-shadow` takes an angle, a `var()` distance and `$step` | not breaking |
+| `text-stroke` takes `$width` first and a `$style` | breaking, loud |
+| `text-stroke` with no arguments outlines in `currentColor`, not black | breaking, silent |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -44,6 +46,7 @@ grep -rn "all-text-inputs\|list-of-text-inputs" --include=*.scss .
 grep -rn "counter(" --include=*.scss .
 grep -rn "counter-start\|counter-continue\|counter-item" .
 grep -rn "text-shadow(" --include=*.scss .
+grep -rn "text-stroke(" --include=*.scss .
 ```
 
 ---
@@ -602,6 +605,71 @@ in the same unit as the distance.
 `$step` cannot fill a `var()` distance, since the layers are counted while the
 stylesheet compiles, and a `$step` with no filled group raises rather than
 doing nothing.
+
+---
+
+## Break: `text-stroke` takes the width first, and a `$style`
+
+```scss
+// 3.x
+@mixin text-stroke($fallback-color: black, $color: transparent, $stroke-color: black, $stroke-width: 1px)
+
+// 4.0.0
+@mixin text-stroke($width: 1px, $color: currentColor, $style: hollow, $fill: null)
+```
+
+Every old call raises, since a colour in the first position is not a width, so
+nothing changes silently except a call with no arguments at all.
+
+| 3.x | 4.0.0 |
+|---|---|
+| `text-stroke(black, transparent, red, 2px)` | `text-stroke(2px, red, hollow, black)` |
+| `text-stroke(#fde047, #fde047, #1d4ed8, 3px)` | `text-stroke(3px, #1d4ed8, center, #fde047)` |
+| `text-stroke` | `text-stroke`, now `currentColor` rather than black |
+
+The one silent change is that bare call: 3.x wrote `color: black`, so text that
+inherited another colour turned black. 4.0.0 leaves the colour alone and
+outlines in `currentColor`. Pass the colour if black was what you wanted:
+`text-stroke(1px, black)`.
+
+`center` is the old rendering of a filled call. The old mixin also wrote
+`-webkit-text-fill-color` with the fill colour, where 4.0.0 writes `color`, so
+an element that inherits a `-webkit-text-fill-color` from an ancestor needs
+`$style: hollow` or its own fill.
+
+## Added: `$style`, and an outline that keeps the letterform
+
+`-webkit-text-stroke` centres the outline on the edge of the glyph, so half of
+it is painted over the letter. Measured at 200px in Chrome 152, Firefox 156 and
+Safari 26.6.2, with the ink counted on a canvas:
+
+| Drawn | Letter's own ink | Outline's ink |
+|---|---|---|
+| no outline | 11213px | 0px |
+| centred 20px | 3174px | 15915px |
+| centred 40px | 0px | 28074px |
+| outside 20px | 10517px | 8023px |
+| outside 40px | 10517px | 17006px |
+
+`$style: outside` writes `paint-order: stroke fill`, which all three support,
+and doubles the width, since half of the outline is then hidden behind the
+letter: the last row matches a centred 20px stroke's ink while the letter
+survives whole.
+
+```scss
+.hero-title { @include text-stroke(3px, #0f172a, outside, #fff); }
+```
+
+A `var()` width is doubled in CSS, `calc(2 * var(--w))`, and a keyword width,
+`thin`, `medium` or `thick`, raises with `outside`, since a keyword cannot be
+doubled.
+
+## Break: `text-stroke` refuses what a browser drops
+
+Unchanged from 3.x, and now with the width in a new place: a colour that is not
+a colour, a quoted colour, two colours side by side, a percentage, a negative
+width and a unitless number all raise. `$style` is checked as well, so a typo
+such as `inside` names the three that exist.
 
 ---
 

@@ -1928,20 +1928,44 @@ exports[`Manifest examples text-shadow: .a { @include text-shadow(top var(--shad
 }"
 `;
 
-exports[`Manifest examples text-stroke: .a { @include text-stroke(black, transparent, red, 2px); } 1`] = `
+exports[`Manifest examples text-stroke: .a { @include text-stroke(1px, currentColor, center); } 1`] = `
 ".a {
-  color: black;
+  -webkit-text-stroke-color: currentColor;
+  -webkit-text-stroke-width: 1px;
+}"
+`;
+
+exports[`Manifest examples text-stroke: .a { @include text-stroke(2px, #1d4ed8); } 1`] = `
+".a {
+  color: #1d4ed8;
   -webkit-text-fill-color: transparent;
-  -webkit-text-stroke-color: red;
+  -webkit-text-stroke-color: #1d4ed8;
   -webkit-text-stroke-width: 2px;
+}"
+`;
+
+exports[`Manifest examples text-stroke: .a { @include text-stroke(3px, #1d4ed8, outside, #fde047); } 1`] = `
+".a {
+  color: #fde047;
+  paint-order: stroke fill;
+  -webkit-text-stroke-color: #1d4ed8;
+  -webkit-text-stroke-width: 6px;
+}"
+`;
+
+exports[`Manifest examples text-stroke: .a { @include text-stroke(var(--stroke-width), var(--stroke-color)); } 1`] = `
+".a {
+  color: var(--stroke-color);
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke-color: var(--stroke-color);
+  -webkit-text-stroke-width: var(--stroke-width);
 }"
 `;
 
 exports[`Manifest examples text-stroke: .a { @include text-stroke; } 1`] = `
 ".a {
-  color: black;
   -webkit-text-fill-color: transparent;
-  -webkit-text-stroke-color: black;
+  -webkit-text-stroke-color: currentColor;
   -webkit-text-stroke-width: 1px;
 }"
 `;

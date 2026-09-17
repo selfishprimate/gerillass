@@ -1961,52 +1961,70 @@
       "kind": "mixin",
       "arguments": [
         {
-          "name": "$fallback-color",
-          "default": "black",
+          "name": "$width",
+          "default": "1px",
           "accepts": [
-            "a colour for browsers without text-stroke",
-            "each colour accepts a colour, currentColor, a system colour, a function such as var() or light-dark(), a CSS-wide keyword, or null to leave its declaration out"
+            "a length, such as 2px",
+            "thin, medium or thick, with $style: center or hollow",
+            "var(), calc() and the other maths functions",
+            "a percentage, a negative width and a unitless number are refused"
           ]
         },
         {
           "name": "$color",
-          "default": "transparent",
+          "default": "currentColor",
           "accepts": [
-            "the text fill colour",
-            "a word that is not a colour, a quoted colour, a length or two colours are refused"
+            "the outline's colour",
+            "a colour, currentColor, a system colour, a function such as var() or light-dark(), or a CSS-wide keyword"
           ]
         },
         {
-          "name": "$stroke-color",
-          "default": "black",
+          "name": "$style",
+          "default": "hollow",
           "accepts": [
-            "the outline colour"
+            "outside, which keeps the letterform and puts the outline around it",
+            "center, the raw property, the outline straddling the glyph",
+            "hollow, the default, which leaves the letter unfilled"
           ]
         },
         {
-          "name": "$stroke-width",
-          "default": "1px",
+          "name": "$fill",
+          "default": "null",
           "accepts": [
-            "a length"
+            "the text's own colour, written as `color`",
+            "null, the default, which leaves the colour the element already has"
           ]
         }
       ],
       "file": "scss/library/_text-stroke.scss",
-      "signature": "text-stroke($fallback-color: black, $color: transparent, $stroke-color: black, $stroke-width: 1px)",
-      "summary": "Outlines text using the webkit text-stroke properties.",
+      "signature": "text-stroke($width: 1px, $color: currentColor, $style: hollow, $fill: null)",
+      "summary": "An outline on text, in three looks: outside the letter, straddling it, or the letter left unfilled.",
+      "caveats": [
+        "Since 4.0.0 the arguments are `$width, $color, $style, $fill`, and the old order, `$fallback-color, $color, $stroke-color, $stroke-width`, raises rather than compiling. `$style: hollow` is the default, which is the look 3.x wrote with no arguments, in `currentColor` rather than black.",
+        "A bare `-webkit-text-stroke` is centred on the glyph outline, so half of it is painted over the letter: measured at 200px in Chrome 152, Firefox 156 and Safari 26.6.2, a 20px stroke cut the letter's own ink from 11213 to 3174 pixels and a 40px stroke left none. `$style: outside` writes `paint-order: stroke fill`, which keeps the letterform whole in all three.",
+        "`$style: outside` doubles the width it writes, since half of the stroke is then hidden behind the letter: a 40px stroke drawn that way left 17006 pixels of ink against a centred 20px stroke's 15915. A keyword width, `thin`, `medium` or `thick`, cannot be doubled and raises; a `var()` width is doubled by the browser through `calc()`.",
+        "Unprefixed `text-stroke` is supported by no engine, checked with `CSS.supports` in all three, so the mixin writes the `-webkit-` properties only. In an engine that has neither, `hollow` still shows solid text, because it writes `color` as well."
+      ],
       "examples": [
         ".a { @include text-stroke; }",
-        ".a { @include text-stroke(black, transparent, red, 2px); }"
+        ".a { @include text-stroke(2px, #1d4ed8); }",
+        ".a { @include text-stroke(3px, #1d4ed8, outside, #fde047); }",
+        ".a { @include text-stroke(1px, currentColor, center); }",
+        ".a { @include text-stroke(var(--stroke-width), var(--stroke-color)); }"
       ],
       "rejects": [
+        ".a { @include text-stroke(black, transparent, red, 2px); }",
+        ".a { @include text-stroke(2px, notacolor); }",
+        ".a { @include text-stroke(2px, \"red\"); }",
+        ".a { @include text-stroke(2px, red blue); }",
+        ".a { @include text-stroke(-1px); }",
+        ".a { @include text-stroke(5%); }",
+        ".a { @include text-stroke(2); }",
         ".a { @include text-stroke(huge); }",
-        ".a { @include text-stroke(black, \"red\"); }",
-        ".a { @include text-stroke(black, transparent, 10px); }",
-        ".a { @include text-stroke(black, transparent, red blue); }",
-        ".a { @include text-stroke(black, transparent, red, huge); }",
-        ".a { @include text-stroke(black, transparent, red, 5%); }",
-        ".a { @include text-stroke(black, transparent, red, -1px); }",
-        ".a { @include text-stroke(black, transparent, red, 2); }"
+        ".a { @include text-stroke(thin, red, outside); }",
+        ".a { @include text-stroke(2px, red, inside); }",
+        ".a { @include text-stroke(null); }",
+        ".a { @include text-stroke(2px, red, hollow, notacolor); }"
       ]
     },
     {
