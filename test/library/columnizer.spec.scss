@@ -1,14 +1,17 @@
 // n columns separated by a gutter leave n-1 gutters across the row, so each
-// column is (100% - (n-1) * gutter) / n wide. The gutter is applied as a right
-// margin on every child except the last, and removed again on every nth child
-// so it never pushes a row out of alignment. The widths below are that formula
-// worked out for 3 columns and a 20px gutter.
+// column is (100% - (n-1) * gutter) / n wide. Since 4.0.0 the gutter is the
+// container's `gap`, which sits only between columns and rows, so nothing is
+// reset on every nth child and nothing is left under the last row. Measured in
+// Chrome 152, Firefox 156 and Safari 26.6.2 on 432 calls, with fractional
+// container widths and right to left; see scss/library/_columnizer.scss.
+// border-box reaches the contents of the columns through :where(), which has
+// no specificity, so a box-sizing the page sets wins.
 @use 'sass:string';
 @use 'true' as *;
 @use '../../scss/gerillass' as *;
 
 @include describe('columnizer()') {
-  @include it('Without a gutter the columns split the width evenly.') {
+  @include it('Without a gutter the columns split the width evenly, with no gap.') {
     @include assert {
       @include output {
         .grid {
@@ -19,26 +22,27 @@
         .grid {
           display: flex;
           flex-wrap: wrap;
-        }
-        .grid, .grid::before, .grid::after,
-        .grid *,
-        .grid *::before,
-        .grid *::after {
+          gap: 0;
           box-sizing: border-box;
         }
         .grid > * {
+          box-sizing: border-box;
+          flex-grow: 0;
+          flex-shrink: 0;
+          min-inline-size: 0;
           // the mixin interpolates the calc, so it reaches CSS unsimplified
-          flex: 0 0 string.unquote("calc(100% / 4)");
-          margin-bottom: 0;
+          flex-basis: string.unquote("calc(100% / 4)");
         }
-        .grid > *:not(:last-child) {
-          margin-right: 0;
+        // sass-true wraps the output in .test-output, which the mixin's
+        // :where(&) takes inside the parentheses
+        @at-root :where(.test-output .grid)::before, :where(.test-output .grid)::after, :where(.test-output .grid) *, :where(.test-output .grid) *::before, :where(.test-output .grid) *::after {
+          box-sizing: border-box;
         }
       }
     }
   }
 
-  @include it('With a gutter each column loses its share of the n-1 gutters.') {
+  @include it('With a gutter each column loses its share of the n-1 gaps.') {
     @include assert {
       @include output {
         .grid {
@@ -49,61 +53,73 @@
         .grid {
           display: flex;
           flex-wrap: wrap;
-        }
-        .grid, .grid::before, .grid::after,
-        .grid *,
-        .grid *::before,
-        .grid *::after {
+          gap: 20px;
           box-sizing: border-box;
         }
         .grid > * {
+          box-sizing: border-box;
           flex-grow: 0;
           flex-shrink: 0;
-          // three columns, two gutters between them; the mixin interpolates
+          min-inline-size: 0;
+          // three columns, two gaps between them; the mixin interpolates
           // rather than evaluating, so (3 - 1) * 20px survives into the output
           flex-basis: string.unquote("calc((100% - (3 - 1) * 20px) / 3)");
-          margin-bottom: 20px;
         }
-        .grid > *:not(:last-child) {
-          margin-right: 20px;
-        }
-        // the last item of every row must not carry the gutter
-        .grid > *:nth-child(3n) {
-          margin-right: 0;
+        // sass-true wraps the output in .test-output, which the mixin's
+        // :where(&) takes inside the parentheses
+        @at-root :where(.test-output .grid)::before, :where(.test-output .grid)::after, :where(.test-output .grid) *, :where(.test-output .grid) *::before, :where(.test-output .grid) *::after {
+          box-sizing: border-box;
         }
       }
     }
   }
 
-  @include it('The fill flag lets the last row stretch.') {
+  @include it('The fill flag lets the last row stretch, with or without a gutter.') {
     @include assert {
       @include output {
         .grid {
           @include columnizer(3, 20px, true);
+        }
+        .row {
+          @include columnizer(4, true);
         }
       }
       @include expect {
         .grid {
           display: flex;
           flex-wrap: wrap;
-        }
-        .grid, .grid::before, .grid::after,
-        .grid *,
-        .grid *::before,
-        .grid *::after {
+          gap: 20px;
           box-sizing: border-box;
         }
         .grid > * {
+          box-sizing: border-box;
           flex-grow: 1;
           flex-shrink: 0;
+          min-inline-size: 0;
           flex-basis: string.unquote("calc((100% - (3 - 1) * 20px) / 3)");
-          margin-bottom: 20px;
         }
-        .grid > *:not(:last-child) {
-          margin-right: 20px;
+        // sass-true wraps the output in .test-output, which the mixin's
+        // :where(&) takes inside the parentheses
+        @at-root :where(.test-output .grid)::before, :where(.test-output .grid)::after, :where(.test-output .grid) *, :where(.test-output .grid) *::before, :where(.test-output .grid) *::after {
+          box-sizing: border-box;
         }
-        .grid > *:nth-child(3n) {
-          margin-right: 0;
+        .row {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0;
+          box-sizing: border-box;
+        }
+        .row > * {
+          box-sizing: border-box;
+          flex-grow: 1;
+          flex-shrink: 0;
+          min-inline-size: 0;
+          flex-basis: string.unquote("calc(100% / 4)");
+        }
+        // sass-true wraps the output in .test-output, which the mixin's
+        // :where(&) takes inside the parentheses
+        @at-root :where(.test-output .row)::before, :where(.test-output .row)::after, :where(.test-output .row) *, :where(.test-output .row) *::before, :where(.test-output .row) *::after {
+          box-sizing: border-box;
         }
       }
     }
@@ -123,24 +139,54 @@
         .grid {
           display: flex;
           flex-wrap: wrap;
-        }
-        .grid, .grid::before, .grid::after,
-        .grid *,
-        .grid *::before,
-        .grid *::after {
+          gap: 0px;
           box-sizing: border-box;
         }
         .grid > * {
+          box-sizing: border-box;
           flex-grow: 0;
           flex-shrink: 0;
+          min-inline-size: 0;
           flex-basis: string.unquote("calc((100% - (3 - 1) * 0px) / 3)");
-          margin-bottom: 0px;
         }
-        .grid > *:not(:last-child) {
-          margin-right: 0px;
+        // sass-true wraps the output in .test-output, which the mixin's
+        // :where(&) takes inside the parentheses
+        @at-root :where(.test-output .grid)::before, :where(.test-output .grid)::after, :where(.test-output .grid) *, :where(.test-output .grid) *::before, :where(.test-output .grid) *::after {
+          box-sizing: border-box;
         }
-        .grid > *:nth-child(3n) {
-          margin-right: 0;
+      }
+    }
+  }
+
+  // Until 4.0.0 a count from a custom property with a gutter stopped the build
+  // with Sass's own `Expected "n"`, from `:nth-child(var(--cols)n)`. An
+  // interpolated gutter was refused with a message asking for exactly it.
+  @include it('Takes a custom property count with a gutter, and an interpolated gutter.') {
+    @include assert {
+      @include output {
+        $size: 24;
+        .grid {
+          @include columnizer(var(--cols), #{$size}px);
+        }
+      }
+      @include expect {
+        .grid {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 24px;
+          box-sizing: border-box;
+        }
+        .grid > * {
+          box-sizing: border-box;
+          flex-grow: 0;
+          flex-shrink: 0;
+          min-inline-size: 0;
+          flex-basis: string.unquote("calc((100% - (var(--cols) - 1) * 24px) / var(--cols))");
+        }
+        // sass-true wraps the output in .test-output, which the mixin's
+        // :where(&) takes inside the parentheses
+        @at-root :where(.test-output .grid)::before, :where(.test-output .grid)::after, :where(.test-output .grid) *, :where(.test-output .grid) *::before, :where(.test-output .grid) *::after {
+          box-sizing: border-box;
         }
       }
     }

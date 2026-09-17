@@ -145,6 +145,13 @@ a dropped declaration rather than an error.
 - A range that ends at a key from $map-for-breakpoints, and `max` with a key, end just under the key: `breakpoint(max, medium)` is `(max-width: 767.98px)` and `breakpoint(small, medium)` ends at `767.98px`, or `47.99rem` with a rem map. So `max` and `min` at the same key, and neighbouring ranges, neither overlap nor leave a gap, including at fractional viewport widths. A length written by hand is used as written, and a zero key is left alone. Until 4.0.0 `max` included the key and a range ended 1 below it, which overlapped at the key and left gaps.
 - Declarations written after the include, in the same rule, are emitted after the `@media` block and win over it. Write them before the include.
 
+**`columnizer`**
+
+- The gutter is the container's `gap`. Since 4.0.0 a margin on the columns adds to it instead of being overridden by the mixin's own margins, so remove a column margin that was only there for spacing.
+- The container and the columns are border-box. Everything inside the columns is too, through `:where()`, which has no specificity: a page with no border-box reset still has an input with `width: 100%` and padding fit its column, and a `box-sizing` the page sets, even on a bare `input` selector, wins. Until 4.0.0 `.grid *` overrode such a rule.
+- A `gap` written after the include replaces the gutter the column widths were computed with, so the row no longer ends flush. Pass the gutter to the mixin instead.
+- A percentage gutter is refused, because a row gap in % resolves against the container's height, which a wrapping row does not have, and a negative one because `gap` cannot be negative. A custom property holding either is not checked.
+
 **`container-query`**
 
 - A size on its own matches exactly that width, `(width: 400px)`, which is a single pixel, and the mixin prints a warning. Write `only` for that width, or `min`, `max` or a range for anything wider.
@@ -209,7 +216,7 @@ a dropped declaration rather than an error.
 | `center($axis: "both")` | Absolutely centres an element inside its positioned parent. |
 | `circle($size)` | Square element with a fully rounded border, i.e. a circle. |
 | `clearfix` | Clears floated children using an ::after pseudo-element. |
-| `columnizer($params...)` | Flexbox grid of equal columns, with an optional gutter and fill behaviour. |
+| `columnizer($params...)` | Flexbox grid of equal columns, with an optional gutter written as gap and an optional fill for the last row. |
 | `container-query($params...)` | A @container rule, taking the same argument shapes as breakpoint so the two read alike. Sizes may be a key from $map-for-breakpoints or a raw length, and a length is the common case because a container is usually narrower than the viewport. Nothing matches at all unless an ancestor was declared with the container mixin. |
 | `container($name: null, $type: inline-size)` | Marks an element as a query container, so container-query can ask about its width instead of the viewport's. The rule that asks has to sit on a descendant: an element is never matched by a @container rule reading its own container, and nothing warns you when it is not. |
 | `counter($params...)` | CSS counter for a list, with optional text before and after the number. |

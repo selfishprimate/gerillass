@@ -21,6 +21,11 @@
     }
     @include breakpoint(min, large) {
       @include columnizer(2, $global-space * 3);
+      /* Since 4.0.0 the gutter is a gap, which adds to a column's own margin
+         instead of overriding it, so the items' margin goes here. */
+      &__item {
+        margin-bottom: 0;
+      }
     }
   }
   &__figure {

@@ -608,24 +608,18 @@ exports[`Manifest examples columnizer: .grid { @include columnizer(#{3}, 0); } 1
 ".grid {
   display: flex;
   flex-wrap: wrap;
-}
-.grid, .grid::before, .grid::after,
-.grid *,
-.grid *::before,
-.grid *::after {
+  gap: 0px;
   box-sizing: border-box;
 }
 .grid > * {
+  box-sizing: border-box;
   flex-grow: 0;
   flex-shrink: 0;
+  min-inline-size: 0;
   flex-basis: calc((100% - (3 - 1) * 0px) / 3);
-  margin-bottom: 0px;
 }
-.grid > *:not(:last-child) {
-  margin-right: 0px;
-}
-.grid > *:nth-child(3n) {
-  margin-right: 0;
+:where(.grid)::before, :where(.grid)::after, :where(.grid) *, :where(.grid) *::before, :where(.grid) *::after {
+  box-sizing: border-box;
 }"
 `;
 
@@ -633,19 +627,18 @@ exports[`Manifest examples columnizer: .grid { @include columnizer(3); } 1`] = `
 ".grid {
   display: flex;
   flex-wrap: wrap;
-}
-.grid, .grid::before, .grid::after,
-.grid *,
-.grid *::before,
-.grid *::after {
+  gap: 0;
   box-sizing: border-box;
 }
 .grid > * {
-  flex: 0 0 calc(100% / 3);
-  margin-bottom: 0;
+  box-sizing: border-box;
+  flex-grow: 0;
+  flex-shrink: 0;
+  min-inline-size: 0;
+  flex-basis: calc(100% / 3);
 }
-.grid > *:not(:last-child) {
-  margin-right: 0;
+:where(.grid)::before, :where(.grid)::after, :where(.grid) *, :where(.grid) *::before, :where(.grid) *::after {
+  box-sizing: border-box;
 }"
 `;
 
@@ -653,24 +646,18 @@ exports[`Manifest examples columnizer: .grid { @include columnizer(3, 20px); } 1
 ".grid {
   display: flex;
   flex-wrap: wrap;
-}
-.grid, .grid::before, .grid::after,
-.grid *,
-.grid *::before,
-.grid *::after {
+  gap: 20px;
   box-sizing: border-box;
 }
 .grid > * {
+  box-sizing: border-box;
   flex-grow: 0;
   flex-shrink: 0;
+  min-inline-size: 0;
   flex-basis: calc((100% - (3 - 1) * 20px) / 3);
-  margin-bottom: 20px;
 }
-.grid > *:not(:last-child) {
-  margin-right: 20px;
-}
-.grid > *:nth-child(3n) {
-  margin-right: 0;
+:where(.grid)::before, :where(.grid)::after, :where(.grid) *, :where(.grid) *::before, :where(.grid) *::after {
+  box-sizing: border-box;
 }"
 `;
 
@@ -678,24 +665,18 @@ exports[`Manifest examples columnizer: .grid { @include columnizer(3, 20px, true
 ".grid {
   display: flex;
   flex-wrap: wrap;
-}
-.grid, .grid::before, .grid::after,
-.grid *,
-.grid *::before,
-.grid *::after {
+  gap: 20px;
   box-sizing: border-box;
 }
 .grid > * {
+  box-sizing: border-box;
   flex-grow: 1;
   flex-shrink: 0;
+  min-inline-size: 0;
   flex-basis: calc((100% - (3 - 1) * 20px) / 3);
-  margin-bottom: 20px;
 }
-.grid > *:not(:last-child) {
-  margin-right: 20px;
-}
-.grid > *:nth-child(3n) {
-  margin-right: 0;
+:where(.grid)::before, :where(.grid)::after, :where(.grid) *, :where(.grid) *::before, :where(.grid) *::after {
+  box-sizing: border-box;
 }"
 `;
 
@@ -703,24 +684,18 @@ exports[`Manifest examples columnizer: .grid { @include columnizer(3, var(--gap)
 ".grid {
   display: flex;
   flex-wrap: wrap;
-}
-.grid, .grid::before, .grid::after,
-.grid *,
-.grid *::before,
-.grid *::after {
+  gap: var(--gap);
   box-sizing: border-box;
 }
 .grid > * {
+  box-sizing: border-box;
   flex-grow: 0;
   flex-shrink: 0;
+  min-inline-size: 0;
   flex-basis: calc((100% - (3 - 1) * var(--gap)) / 3);
-  margin-bottom: var(--gap);
 }
-.grid > *:not(:last-child) {
-  margin-right: var(--gap);
-}
-.grid > *:nth-child(3n) {
-  margin-right: 0;
+:where(.grid)::before, :where(.grid)::after, :where(.grid) *, :where(.grid) *::before, :where(.grid) *::after {
+  box-sizing: border-box;
 }"
 `;
 
@@ -728,19 +703,37 @@ exports[`Manifest examples columnizer: .grid { @include columnizer(var(--cols));
 ".grid {
   display: flex;
   flex-wrap: wrap;
-}
-.grid, .grid::before, .grid::after,
-.grid *,
-.grid *::before,
-.grid *::after {
+  gap: 0;
   box-sizing: border-box;
 }
 .grid > * {
-  flex: 0 0 calc(100% / var(--cols));
-  margin-bottom: 0;
+  box-sizing: border-box;
+  flex-grow: 0;
+  flex-shrink: 0;
+  min-inline-size: 0;
+  flex-basis: calc(100% / var(--cols));
 }
-.grid > *:not(:last-child) {
-  margin-right: 0;
+:where(.grid)::before, :where(.grid)::after, :where(.grid) *, :where(.grid) *::before, :where(.grid) *::after {
+  box-sizing: border-box;
+}"
+`;
+
+exports[`Manifest examples columnizer: .grid { @include columnizer(var(--cols), 1.5rem); } 1`] = `
+".grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  box-sizing: border-box;
+}
+.grid > * {
+  box-sizing: border-box;
+  flex-grow: 0;
+  flex-shrink: 0;
+  min-inline-size: 0;
+  flex-basis: calc((100% - (var(--cols) - 1) * 1.5rem) / var(--cols));
+}
+:where(.grid)::before, :where(.grid)::after, :where(.grid) *, :where(.grid) *::before, :where(.grid) *::after {
+  box-sizing: border-box;
 }"
 `;
 

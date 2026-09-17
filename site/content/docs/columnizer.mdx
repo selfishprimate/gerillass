@@ -25,7 +25,7 @@ The **Columnizer** Sass mixin helps you **create evenly divided hypothetical col
 
 <Arguments of="columnizer">
   <Argument name="$columns" type="number">Sets the number of the hypothetical columns. A number without a unit, or <code>var()</code>, <code>env()</code> or <code>attr()</code>.</Argument>
-  <Argument name="$gutter" type="number (with unit)">Sets the value of the space between the columns. A length, a percentage, <code>var()</code> or a maths function. <code>0</code> is written as <code>0px</code>, because the gutter is multiplied inside <code>calc()</code>.</Argument>
+  <Argument name="$gutter" type="number (with unit)">Sets the space between the columns and between the rows, written as the container's <code>gap</code>. A length, <code>var()</code> or a maths function. Not a percentage and not below zero; see below. <code>0</code> is written as <code>0px</code>, because the gutter is multiplied inside <code>calc()</code>.</Argument>
   <Argument name="$fill" type="boolean">Lets the orphans fill the remaining gap at the end of the list. This argument is optional and <strong>should always come last</strong>. The default value is <code>false</code>.</Argument>
 </Arguments>
 
@@ -221,6 +221,129 @@ The **Columnizer** Sass mixin helps you **create evenly divided hypothetical col
 ```
 </Example>
 
+## Interface examples
+
+<Example caption="A form laid out in two columns. The inputs are `width: 100%` with padding and a border. The frame below has a border-box reset of its own, but they fit without one too, measured in Chrome, Firefox and Safari, because the mixin makes everything inside the columns border-box. A `box-sizing` the page sets itself still wins.">
+```scss
+.form-grid {
+  @include columnizer(2, 16px);
+}
+```
+```html
+<style>
+  .form-grid { font: 14px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+  .field { display: grid; gap: 6px; }
+  .field span { font-weight: 500; }
+  .field input {
+    width: 100%; height: 36px; padding: 0 12px;
+    border: 1px solid #e4e4e7; border-radius: 6px; font: inherit; color: inherit;
+  }
+</style>
+<form class="form-grid" onsubmit="return false">
+  <label class="field"><span>First name</span><input placeholder="Ada"></label>
+  <label class="field"><span>Last name</span><input placeholder="Lovelace"></label>
+  <label class="field"><span>Email</span><input type="email" placeholder="ada@example.com"></label>
+  <label class="field"><span>Phone</span><input type="tel" placeholder="+44 20 7946 0000"></label>
+</form>
+```
+</Example>
+
+<Example caption="The same grid in a right-to-left page. The gap has no side, so the first card sits against the right edge and every row ends flush with the left one.">
+```scss
+.cards {
+  @include columnizer(3, 12px);
+}
+```
+```html
+<style>
+  .cards { font: 14px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+  .card { padding: 14px; border: 1px solid #e4e4e7; border-radius: 8px; background: #fff; }
+  .card strong { display: block; margin-bottom: 4px; }
+  .card p { margin: 0; color: #71717a; }
+</style>
+<div class="cards" dir="rtl" lang="ar">
+  <div class="card"><strong>القاهرة</strong><p>٢٤ درجة</p></div>
+  <div class="card"><strong>دبي</strong><p>٣٥ درجة</p></div>
+  <div class="card"><strong>عمّان</strong><p>٢١ درجة</p></div>
+  <div class="card"><strong>بيروت</strong><p>٢٦ درجة</p></div>
+  <div class="card"><strong>تونس</strong><p>٢٣ درجة</p></div>
+</div>
+```
+</Example>
+
+<Example caption="The column count from a custom property, with a gutter, so one rule serves grids of different widths. Each list sets `--cols` in its own markup.">
+```scss
+.stats {
+  @include columnizer(var(--cols), 12px);
+}
+```
+```html
+<style>
+  .stats { font: 14px/1.3 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; margin-bottom: 12px; }
+  .stat { padding: 12px; border-radius: 8px; background: #f4f4f5; }
+  .stat span { display: block; color: #71717a; font-size: 12px; }
+  .stat strong { font-size: 18px; }
+</style>
+<div class="stats" style="--cols: 2">
+  <div class="stat"><span>Revenue</span><strong>$48.2k</strong></div>
+  <div class="stat"><span>Orders</span><strong>1,204</strong></div>
+</div>
+<div class="stats" style="--cols: 4">
+  <div class="stat"><span>Visits</span><strong>9.1k</strong></div>
+  <div class="stat"><span>Signups</span><strong>312</strong></div>
+  <div class="stat"><span>Churn</span><strong>2.4%</strong></div>
+  <div class="stat"><span>NPS</span><strong>61</strong></div>
+</div>
+```
+</Example>
+
+<Example caption="A long link in one card. The columns stay equal, because a column no longer grows to fit content it cannot wrap; `overflow-wrap: anywhere` on the text lets the link break inside its own column.">
+```scss
+.links {
+  @include columnizer(3, 12px);
+}
+```
+```html
+<style>
+  .links { font: 14px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+  .link { padding: 12px; border: 1px solid #e4e4e7; border-radius: 8px; overflow-wrap: anywhere; }
+  .link a { color: #2563eb; }
+</style>
+<div class="links">
+  <div class="link"><a href="#">https://example.com/documentation/getting-started/installation-with-a-package-manager</a></div>
+  <div class="link"><a href="#">example.com/faq</a></div>
+  <div class="link"><a href="#">example.com/blog</a></div>
+</div>
+```
+</Example>
+
+<Hint kind="info">
+
+**The gutter is a `gap` since 4.0.0.** Until then it was a right margin on the columns, taken off every nth column again, and a bottom margin on all of them. Measured in Chrome 152, Firefox 156 and Safari 26.6.2 on 432 calls, from one to six columns, with every kind of gutter, fractional container widths and right to left, the `gap` version lined every row up with both edges in all of them. The margins put the gutter on the wrong side in a right-to-left page, left a gutter under the last row, pushed a column onto the next row when the container also had a `gap`, and misaligned every row after a hidden column, since `:nth-child` still counts it. A count from a custom property with a gutter, `columnizer(var(--cols), 20px)`, did not compile at all.
+
+</Hint>
+
+<Hint kind="warning">
+
+**Two things to know when moving to 4.0.0.**
+
+- A margin you put on the columns now **adds** to the gap. The old margins used to override it.
+- A `gap` written after the include replaces the gutter the column widths were computed with, so rows no longer end flush. Pass the gutter to the mixin.
+
+</Hint>
+
+<Hint kind="info">
+
+**Everything inside the columns is `border-box`, and your own `box-sizing` wins.** The rule is written inside `:where()`, which has no specificity, so an input with `width: 100%` and padding fits its column on a page with no border-box reset, and a `box-sizing` you set anywhere, even `input { box-sizing: content-box }`, is kept. Until 4.0.0 the rule was `.grid *`, which overrode both of those. Measured in Chrome 152, Firefox 156 and Safari 26.6.2.
+
+</Hint>
+
+<Hint kind="info">
+
+**A long word or a wide image keeps its column.** The columns carry `min-inline-size: 0`. Without it a flex item is at least as wide as its content, so one long word or a 400px image widened its column and pushed the row out of shape, in Chrome even for an image with `max-width: 100%`. Content that cannot fit now overflows its column instead, which `overflow-wrap: anywhere` on text or `max-width: 100%` on an image handles.
+
+</Hint>
+
 ## What it refuses
 
 A column count or gutter the browser drops stops the build. Measured in Chrome 152, `calc(100% / 3px)` drops the column width, and so does a gutter that is unitless, a word, or a unit that is not a length. Until 2.3.1 these compiled. A gutter of `0` used to be one of them, `(3 - 1) * 0` being a number rather than a length, and is now written as `0px`.
@@ -232,6 +355,17 @@ A column count or gutter the browser drops stops the build. Measured in Chrome 1
 ```
 ```text
 Error: `3px` is not a valid column count for `columnizer`: a column count has no unit. A browser drops the column width.
+```
+
+Since 4.0.0 a percentage gutter stops the build too. A column gap in `%` is a share of the container's width, but a row gap in `%` is a share of its height, which a wrapping row does not have: measured in all three browsers, the rows touched. A negative gutter is refused because `gap` cannot be negative, and the browser dropped it. Until 4.0.0 both worked through the margins. Use a length, or `vw` for a gutter that follows the viewport.
+
+```scss
+.grid {
+  @include columnizer(3, 5%);
+}
+```
+```text
+Error: `5%` is not a valid gutter for `columnizer`: a row gap in % is a share of the container's height, which a wrapping row does not have, so the rows would touch. Pass a length, such as `2rem` or `3vw`.
 ```
 
 ## Related Links

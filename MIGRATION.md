@@ -1,8 +1,8 @@
 # Migrating to Gerillass 4.0.0
 
 Written while 4.0.0 is being prepared, and added to as its changes land. So far
-it covers `hide` and where breakpoint ranges end. The 3.0.0 and 2.0.0 guides
-follow below, unchanged.
+it covers `hide`, where breakpoint ranges end, and `columnizer`. The 3.0.0 and
+2.0.0 guides follow below, unchanged.
 
 Every claim here was checked by compiling the old call against 3.0.0's source
 and the new one against 4.0.0's, and the CSS each produces was measured in
@@ -17,6 +17,8 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `hide(unhide)` was removed | breaking, loud |
 | `hide(focusable)` was added | not breaking |
 | a range or `max` ending at a breakpoint name ends just under it | breaking, silent |
+| `columnizer` writes its gutter as `gap` | breaking, silent |
+| `columnizer` refuses a percentage or negative gutter | breaking, loud |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -25,6 +27,7 @@ every call either one touches:
 ```bash
 grep -rn "unhide" --include=*.scss .
 grep -rnE "(breakpoint|remove|container-query)\(" --include=*.scss .
+grep -rn "columnizer(" --include=*.scss .
 ```
 
 ---
@@ -178,6 +181,82 @@ and 1/64px in Safari, and a `767.98px` end left a container between it and
 - **A length end in a range you wrote yourself** is not changed, so
   `breakpoint(between, small 1199px)` still leaves a gap just under 1200px,
   as a `767px` end did at 767.5px. Write `1199.98px`.
+
+---
+
+## Break: `columnizer` writes its gutter as `gap`
+
+The layout it draws is the same, one to six columns measured, but it is built
+differently, and three things around it behave differently.
+
+```css
+/* 3.x: @include columnizer(3, 20px) */
+.grid { display: flex; flex-wrap: wrap; }
+.grid, .grid::before, .grid::after,
+.grid *, .grid *::before, .grid *::after { box-sizing: border-box; }
+.grid > * { flex-grow: 0; flex-shrink: 0; flex-basis: calc((100% - (3 - 1) * 20px) / 3); margin-bottom: 20px; }
+.grid > *:not(:last-child) { margin-right: 20px; }
+.grid > *:nth-child(3n) { margin-right: 0; }
+
+/* 4.0.0 */
+.grid { display: flex; flex-wrap: wrap; gap: 20px; box-sizing: border-box; }
+.grid > * { box-sizing: border-box; flex-grow: 0; flex-shrink: 0; min-inline-size: 0; flex-basis: calc((100% - (3 - 1) * 20px) / 3); }
+:where(.grid)::before, :where(.grid)::after,
+:where(.grid) *, :where(.grid) *::before, :where(.grid) *::after { box-sizing: border-box; }
+```
+
+### What it fixes
+
+Measured in Chrome 152, Firefox 156 and Safari 26.6.2, on 432 calls from one to
+six columns with every kind of gutter, at fractional container widths, left to
+right and right to left, the 4.0.0 output lined every row up with both edges and
+left nothing under the last row, in all three. The 3.x output:
+
+- put the gutter on the wrong side in a right-to-left page, so rows started a
+  gutter in from the edge;
+- left a gutter under the last row, as a bottom margin;
+- pushed a column onto the next row when the container also had a `gap`;
+- misaligned every row after a hidden column, because `:nth-child` counts it;
+- did not compile for `columnizer(var(--cols), 20px)`, with Sass's own
+  `Expected "n"`, nor for an interpolated gutter such as `#{$n}px`;
+- let one long word or wide image widen its column and push the row out of
+  shape, in Chrome even for an image with `max-width: 100%`;
+- laid out three per line as two in a vertical writing mode.
+
+### What to check
+
+- **A margin on the columns now adds to the gap.** The 3.x margins overrode a
+  column's own `margin-bottom` or `margin-right` of the same specificity
+  written before them. This site had exactly that: a list with a 64px bottom
+  margin on its items showed 48px rows under 3.x and 112px under 4.0.0, until
+  the margin was removed where `columnizer` applies. Remove column margins that
+  were only there for spacing.
+- **A `box-sizing` your page sets inside the columns is now kept.** Everything
+  inside the columns is still border-box, so an input with `width: 100%` and
+  padding still fits, but the rule is inside `:where()` and has no specificity.
+  Until 4.0.0 `.grid *` overrode an `input { box-sizing: content-box }` rule, or
+  a class written before the include, and now the page's rule wins. Measured
+  the same in all three browsers.
+- **Long content overflows its column instead of widening it.** Add
+  `overflow-wrap: anywhere` to text or `max-width: 100%` to images where that
+  shows.
+- **A `gap` written after the include** replaces the gutter the widths were
+  computed with, and rows end short of the edge. Pass the gutter to the mixin.
+
+## Break: `columnizer` refuses a percentage or a negative gutter
+
+Both worked through the margins. As a `gap`, a percentage row gap is a share of
+the container's height, which a wrapping row does not have, so the rows touched
+in all three browsers; a negative `gap` is invalid, the browser dropped it and
+the columns no longer fitted their rows. Both now stop the build and say why.
+
+| 3.x | 4.0.0 |
+|---|---|
+| `columnizer(3, 5%)` | a length, such as `columnizer(3, 2rem)`, or `3vw` to follow the viewport |
+| `columnizer(3, -10px)` | no equivalent; overlapping columns need margins written by hand |
+
+A custom property holding a percentage or a negative length is not checked,
+since its value is only known in the browser.
 
 ---
 

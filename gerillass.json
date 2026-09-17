@@ -665,7 +665,7 @@
           "variadic": true,
           "accepts": [
             "a column count, which may be a CSS function such as var(--cols)",
-            "a column count plus a gutter length, which may also be a CSS function",
+            "a column count plus a gutter length, which may also be a CSS function; not a percentage and not below zero",
             "a column count plus a boolean fill flag",
             "a column count, a gutter and a fill flag"
           ]
@@ -673,13 +673,20 @@
       ],
       "file": "scss/library/_columnizer.scss",
       "signature": "columnizer($params...)",
-      "summary": "Flexbox grid of equal columns, with an optional gutter and fill behaviour.",
+      "summary": "Flexbox grid of equal columns, with an optional gutter written as gap and an optional fill for the last row.",
+      "caveats": [
+        "The gutter is the container's `gap`. Since 4.0.0 a margin on the columns adds to it instead of being overridden by the mixin's own margins, so remove a column margin that was only there for spacing.",
+        "The container and the columns are border-box. Everything inside the columns is too, through `:where()`, which has no specificity: a page with no border-box reset still has an input with `width: 100%` and padding fit its column, and a `box-sizing` the page sets, even on a bare `input` selector, wins. Until 4.0.0 `.grid *` overrode such a rule.",
+        "A `gap` written after the include replaces the gutter the column widths were computed with, so the row no longer ends flush. Pass the gutter to the mixin instead.",
+        "A percentage gutter is refused, because a row gap in % resolves against the container's height, which a wrapping row does not have, and a negative one because `gap` cannot be negative. A custom property holding either is not checked."
+      ],
       "examples": [
         ".grid { @include columnizer(3); }",
         ".grid { @include columnizer(3, 20px); }",
         ".grid { @include columnizer(3, 20px, true); }",
         ".grid { @include columnizer(3, var(--gap)); }",
         ".grid { @include columnizer(var(--cols)); }",
+        ".grid { @include columnizer(var(--cols), 1.5rem); }",
         ".grid { @include columnizer(#{3}, 0); }"
       ],
       "rejects": [
@@ -689,7 +696,10 @@
         ".grid { @include columnizer(auto); }",
         ".grid { @include columnizer(3, 10deg); }",
         ".grid { @include columnizer(3, 2); }",
-        ".grid { @include columnizer(3, red, true); }"
+        ".grid { @include columnizer(3, red, true); }",
+        ".grid { @include columnizer(3, 5%); }",
+        ".grid { @include columnizer(3, calc(5% + 1rem)); }",
+        ".grid { @include columnizer(3, -10px); }"
       ]
     },
     {

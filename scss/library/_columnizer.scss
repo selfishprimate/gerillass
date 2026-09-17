@@ -4,8 +4,6 @@
 @use "sass:math";
 @use "sass:meta";
 @use "sass:string";
-@use "../library/border-box" as *;
-@use "../utilities/is-gutter" as *;
 @use "../internal/length-problem" as *;
 
 // The count divides 100% in calc(), which in Chrome 152 kept a unitless number
@@ -46,14 +44,29 @@
   @return "it is not a column count";
 }
 
-// The gutter is multiplied in calc() and written as a margin. Chrome 152 kept a
-// length, a percentage and a negative length, and dropped the flex-basis for a
-// unitless number, a unit that is not a length and a word. A unitless 0 made
-// `(3 - 1) * 0`, a number rather than a length, so it is written as 0px.
+// The gutter is written as `gap` and multiplied in calc(). A length, var() and
+// a maths function work. A unitless 0 made `(3 - 1) * 0`, a number rather than
+// a length, which Chrome 152 dropped from the flex-basis, so it is written as
+// 0px.
+//
+// Two gutters the margins took and `gap` does not, measured in Chrome 152,
+// Firefox 156 and Safari 26.6.2:
+// - A percentage. A column gap in % is a share of the container's width, but a
+//   row gap in % is a share of its height, which a wrapping flex row does not
+//   have, so the rows touched. The margins took % of the width both ways.
+// - A negative length. `gap` cannot be negative, the declaration was dropped,
+//   and the columns no longer fitted their rows.
 @function -gutter($gutter) {
   $problem: lengthProblem($gutter);
   @if $problem {
     @error "`#{meta.inspect($gutter)}` is not a valid gutter for `columnizer`: #{$problem}. A browser drops the column width.";
+  }
+  $text: meta.inspect($gutter);
+  @if string.index($text, "%") {
+    @error "`#{$text}` is not a valid gutter for `columnizer`: a row gap in % is a share of the container's height, which a wrapping row does not have, so the rows would touch. Pass a length, such as `2rem` or `3vw`.";
+  }
+  @if (meta.type-of($gutter) == "number" and $gutter < 0) or string.index($text, "-") == 1 {
+    @error "`#{$text}` is not a valid gutter for `columnizer`: `gap` cannot be negative, so a browser drops it and the columns no longer fit their rows. Pass a length of 0 or more.";
   }
   @if (meta.type-of($gutter) == "number" and math.is-unitless($gutter)) or (meta.type-of($gutter) == "string" and string.unquote($gutter) == string.unquote("0")) {
     @return 0px;
@@ -61,6 +74,21 @@
   @return $gutter;
 }
 
+// Lays the children out as equal columns: $columns per row, $gutter between
+// them in both directions, and with $fill the last row stretched.
+//
+// Until 4.0.0 the gutter was margins, a right margin reset on every nth child
+// and a bottom margin on all of them, with box-sizing on every descendant.
+// Measured in Chrome 152, Firefox 156 and Safari 26.6.2, that put the gutter on
+// the wrong side in a right-to-left page, left a gutter under the last row,
+// overflowed when the caller also wrote `gap`, and misplaced every row after a
+// hidden child, since `:nth-child` counts it. `columnizer(var(--cols), 20px)`
+// failed to compile, because `:nth-child(var(--cols)n)` cannot be written. `gap`
+// has none of these.
+//
+// box-sizing is set outright on the container and the columns, where the
+// widths are computed: a container with padding overflowed its parent without
+// it.
 @mixin columnizer($params...) {
   @if list.length($params) < 1 or list.length($params) > 3 {
     @error "`columnizer` takes 1 to 3 arguments; you passed #{list.length($params)}. Pass the column count, optionally a gutter length, and optionally a boolean telling the last row whether to fill.";
@@ -72,54 +100,59 @@
   }
   $gutter: null;
   $fill: false;
+  @if list.length($params) == 2 {
+    // Anything but a boolean is a gutter. isGutter used to decide, and it
+    // refused an interpolated length such as `#{$n}px`, which reaches here as
+    // an unquoted string, with a message asking for exactly that.
+    @if meta.type-of(list.nth($params, 2)) == bool {
+      $fill: list.nth($params, 2);
+    } @else {
+      $gutter: -gutter(list.nth($params, 2));
+    }
+  } @else if list.length($params) == 3 {
+    $gutter: -gutter(list.nth($params, 2));
+    $fill: list.nth($params, 3);
+  }
+
   display: flex;
   flex-wrap: wrap;
-  @include border-box;
+  // Written even without a gutter, so a later call without one, such as one
+  // column on a phone after three with a gutter, takes the earlier gap away.
+  @if $gutter {
+    gap: $gutter;
+  } @else {
+    gap: 0;
+  }
+  box-sizing: border-box;
   > * {
-    @if list.length($params) == 1 {
-      flex: 0 0 calc(100% / #{$columns});
-      margin-bottom: 0;
-      &:not(:last-child) {
-        margin-right: 0;
-      }
-    } @else if list.length($params) == 2 {
-      @if meta.type-of(list.nth($params, 2)) == bool {
-        $fill: list.nth($params, list.length($params));
-        flex-grow: #{if($fill == true, 1, 0)};
-        flex-shrink: 0;
-        flex-basis: calc(100% / #{$columns});
-        margin-bottom: 0;
-        &:not(:last-child) {
-          margin-right: 0;
-        }
-      } @else if isGutter(list.nth($params, 2)) {
-        $gutter: -gutter(list.nth($params, list.length($params)));
-        flex-grow: 0;
-        flex-shrink: 0;
-        flex-basis: calc((100% - (#{$columns} - 1) * #{$gutter}) / #{$columns});
-        margin-bottom: $gutter;
-        &:not(:last-child) {
-          margin-right: $gutter;
-        }
-        &:nth-child(#{$columns}n) {
-          margin-right: 0;
-        }
-      } @else {
-        @error "`#{list.nth($params, 2)}` is not a valid second argument for `columnizer`. Pass a gutter length such as `20px` or `var(--gap)`, or a boolean telling the last row whether to fill.";
-      }
-    } @else if list.length($params) == 3 {
-      $gutter: -gutter(list.nth($params, 2));
-      $fill: list.nth($params, list.length($params));
-      flex-grow: if($fill == true, 1, 0);
-      flex-shrink: 0;
-      flex-basis: calc((100% - (#{$columns} - 1) * #{$gutter}) / #{$columns});
-      margin-bottom: $gutter;
-      &:not(:last-child) {
-        margin-right: $gutter;
-      }
-      &:nth-child(#{$columns}n) {
-        margin-right: 0;
-      }
+    box-sizing: border-box;
+    @if $fill == true {
+      flex-grow: 1;
+    } @else {
+      flex-grow: 0;
     }
+    flex-shrink: 0;
+    // A flex item is at least as wide as its content by default, so a long word,
+    // or an image, even one with max-width: 100% in Chrome, widened its column
+    // and pushed the row out of shape. Logical, so it holds on the main axis in
+    // a vertical writing mode too.
+    min-inline-size: 0;
+    @if $gutter {
+      flex-basis: calc((100% - (#{$columns} - 1) * #{$gutter}) / #{$columns});
+    } @else {
+      flex-basis: calc(100% / #{$columns});
+    }
+  }
+  // Everything inside the columns gets border-box too, as it did before 4.0.0,
+  // so a `width: 100%` input with padding in a column still fits on a page with
+  // no border-box reset of its own. Inside :where() the rule has no
+  // specificity, so any box-sizing the page sets, even on a bare element
+  // selector, wins; before 4.0.0 `.grid *` overrode an `input` rule.
+  :where(&)::before,
+  :where(&)::after,
+  :where(&) *,
+  :where(&) *::before,
+  :where(&) *::after {
+    box-sizing: border-box;
   }
 }

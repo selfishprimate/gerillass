@@ -32,7 +32,7 @@ Arguments are validated and refused with a message naming what is accepted, so a
 - [center($axis: "both")](https://docs.gerillass.com/docs/center/): Absolutely centres an element inside its positioned parent.
 - [circle($size)](https://docs.gerillass.com/docs/circle/): Square element with a fully rounded border, i.e.
 - [clearfix](https://docs.gerillass.com/docs/clearfix/): Clears floated children using an ::after pseudo-element.
-- [columnizer($params...)](https://docs.gerillass.com/docs/columnizer/): Flexbox grid of equal columns, with an optional gutter and fill behaviour.
+- [columnizer($params...)](https://docs.gerillass.com/docs/columnizer/): Flexbox grid of equal columns, with an optional gutter written as gap and an optional fill for the last row.
 - [container-query($params...)](https://docs.gerillass.com/docs/container-query/): A @container rule, taking the same argument shapes as breakpoint so the two read alike.
 - [container($name: null, $type: inline-size)](https://docs.gerillass.com/docs/container/): Marks an element as a query container, so container-query can ask about its width instead of the viewport's.
 - [counter($params...)](https://docs.gerillass.com/docs/counter/): CSS counter for a list, with optional text before and after the number.
