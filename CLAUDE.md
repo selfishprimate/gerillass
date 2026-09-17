@@ -746,8 +746,12 @@ examine and test each on its own.
   `before-after-content` branch, as a separate `:where(&)::before` rule so any
   `content` set elsewhere wins; measured in all three browsers, it draws empty
   when content comes only from another state, and replaces `q`'s quotes.
-- `font-face-woff2-default.md`: default formats down to `woff2`. The Parcel
-  failure is reproduced; format support is not checked.
+- `font-face-woff2-default.md`: default formats down to `woff2`. Done for 4.0.0
+  on the `font-face-woff2` branch: no browser loads EOT, only Safari an SVG
+  font, all three took only the `.woff2` from the old list, and webpack,
+  esbuild and Parcel failed on a missing `.eot` while Vite shipped broken
+  links. A project shipping only `.woff` now gets no font unless it passes the
+  format.
 - `all-text-inputs-list.md`: `[type=color]` out of the list, `select` open,
   and `[type=datetime]`, removed from HTML, questioned. Not measured.
 - `aspect-ratio-height-auto.md`: `height: auto`, since a `height` attribute
@@ -850,11 +854,13 @@ Two pieces of work are open, and neither is started:
   `gap`, from `todos/columnizer-gap.md`, on `columnizer-gap`, branched from
   `breakpoint-boundaries`; and a default `content` for `before` and `after`,
   from `todos/before-after-default-content.md`, on `before-after-content`,
-  branched from `columnizer-gap`. Each has a `MIGRATION.md` section. The maintainer may add more of the items below to
+  branched from `columnizer-gap`; and `font-face` defaulting to `woff2`, from
+  `todos/font-face-woff2-default.md`, on `font-face-woff2`, branched from
+  `before-after-content`. Each has a `MIGRATION.md` section. The maintainer may add more of the items below to
   the same major.
-- **Behaviour changes for a later major**: four, each in its own file in `todos/` and
+- **Behaviour changes for a later major**: three, each in its own file in `todos/` and
   each to be tested and decided on its own before any is planned:
-  `font-face` formats, `all-text-inputs`, `aspect-ratio` with
+  `all-text-inputs`, `aspect-ratio` with
   a `height` attribute, and `counter`. Each needs a `MIGRATION.md` section.
 - **`todos/design-tokens.md`**: a token layer on `tokens`, starting with the
   decision whether to ship a palette.
