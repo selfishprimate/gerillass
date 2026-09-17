@@ -753,7 +753,10 @@ examine and test each on its own.
   links. A project shipping only `.woff` now gets no font unless it passes the
   format.
 - `all-text-inputs-list.md`: `[type=color]` out of the list, `select` open,
-  and `[type=datetime]`, removed from HTML, questioned. Not measured.
+  and `[type=datetime]`, removed from HTML, questioned. Done for 4.0.0 on the
+  `all-text-inputs` branch: the list is now `:where(input):not(<non-text
+  types>)` and `textarea`, which drops the colour picker whose swatch the styles
+  stretched, adds unknown types browsers draw as text, and leaves `select` out.
 - `aspect-ratio-height-auto.md`: `height: auto`, since a `height` attribute
   defeats `aspect-ratio`. Measured in Chrome only, including the override of an
   earlier `height`.
@@ -856,11 +859,13 @@ Two pieces of work are open, and neither is started:
   from `todos/before-after-default-content.md`, on `before-after-content`,
   branched from `columnizer-gap`; and `font-face` defaulting to `woff2`, from
   `todos/font-face-woff2-default.md`, on `font-face-woff2`, branched from
-  `before-after-content`. Each has a `MIGRATION.md` section. The maintainer may add more of the items below to
+  `before-after-content`; and `all-text-inputs` by exclusion, from
+  `todos/all-text-inputs-list.md`, on `all-text-inputs`, branched from
+  `font-face-woff2`. Each has a `MIGRATION.md` section. The maintainer may add more of the items below to
   the same major.
-- **Behaviour changes for a later major**: three, each in its own file in `todos/` and
+- **Behaviour changes for a later major**: two, each in its own file in `todos/` and
   each to be tested and decided on its own before any is planned:
-  `all-text-inputs`, `aspect-ratio` with
+  `aspect-ratio` with
   a `height` attribute, and `counter`. Each needs a `MIGRATION.md` section.
 - **`todos/design-tokens.md`**: a token layer on `tokens`, starting with the
   decision whether to ship a palette.
