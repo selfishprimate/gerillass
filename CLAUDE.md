@@ -403,7 +403,7 @@ Four levels, and knowing which one covers a member tells you what you can trust:
 | `test/smoke.scss` | the mixin evaluates at all | 55/55 mixins |
 | snapshot of `meta/` examples | the output cannot change unnoticed | 79/79 members |
 | `meta/` rejects | bad input is refused with a real message | 58/79 |
-| sass-true spec in `test/` | the CSS is **correct** | 22/79 |
+| sass-true spec in `test/` | the CSS is **correct** | 32/79 |
 
 Only the last one catches an output that was wrong from the start; a snapshot
 records a wrong value as correct. Hand-written specs are therefore reserved for
@@ -742,8 +742,10 @@ examine and test each on its own.
   clipped container with no positioned ancestor, and that dropping `clip` would
   bring that to Firefox.
 - `before-after-default-content.md`: `content: ""` by default, since a
-  pseudo-element without `content` does not render. Not measured; the risk is
-  overriding content set elsewhere.
+  pseudo-element without `content` does not render. Done for 4.0.0 on the
+  `before-after-content` branch, as a separate `:where(&)::before` rule so any
+  `content` set elsewhere wins; measured in all three browsers, it draws empty
+  when content comes only from another state, and replaces `q`'s quotes.
 - `font-face-woff2-default.md`: default formats down to `woff2`. The Parcel
   failure is reproduced; format support is not checked.
 - `all-text-inputs-list.md`: `[type=color]` out of the list, `select` open,
@@ -846,12 +848,13 @@ Two pieces of work are open, and neither is started:
   `container-query`, from `todos/breakpoint-boundaries.md`, on
   `breakpoint-boundaries`, which is branched from `hide`; and `columnizer` on
   `gap`, from `todos/columnizer-gap.md`, on `columnizer-gap`, branched from
-  `breakpoint-boundaries`. Each has a `MIGRATION.md` section. The maintainer may add more of the items below to
+  `breakpoint-boundaries`; and a default `content` for `before` and `after`,
+  from `todos/before-after-default-content.md`, on `before-after-content`,
+  branched from `columnizer-gap`. Each has a `MIGRATION.md` section. The maintainer may add more of the items below to
   the same major.
-- **Behaviour changes for a later major**: five, each in its own file in `todos/` and
+- **Behaviour changes for a later major**: four, each in its own file in `todos/` and
   each to be tested and decided on its own before any is planned:
-  a default `content` for
-  `before`/`after`, `font-face` formats, `all-text-inputs`, `aspect-ratio` with
+  `font-face` formats, `all-text-inputs`, `aspect-ratio` with
   a `height` attribute, and `counter`. Each needs a `MIGRATION.md` section.
 - **`todos/design-tokens.md`**: a token layer on `tokens`, starting with the
   decision whether to ship a palette.

@@ -2,7 +2,11 @@
 
 Moved out of `todos/fix-plan.md`, where it was B5, on 15 September 2026. The
 maintainer asked for each remaining 3.0.0 item to be examined and tested on its
-own rather than done as a batch. Not planned.
+own rather than done as a batch.
+
+**Status.** Done for 4.0.0 on the `before-after-content` branch, 17 September
+2026, as the proposal below but with the default in a rule of its own inside
+`:where()`. **What was measured and built** at the end has the results.
 
 ## What the mixins do today
 
@@ -68,3 +72,55 @@ from reasoning about the cascade.
 `test/library/after.spec.scss`, plus a test for the default;
 `meta/before.json` and `meta/after.json`; the two documentation pages;
 `MIGRATION.md`.
+
+## What was measured and built, 17 September 2026
+
+The `@warn` alternative cannot be built: a mixin cannot see whether its
+`@content` block writes `content`.
+
+What was built writes, for a call with no argument or `null`,
+`:where(&)::before { content: ""; }` before the mixin's own rule, so the default
+has the specificity of the pseudo-element alone. A call with an argument is
+unchanged: 216 calls compared, both mixins, with and without a block and under
+`gls-`, and only the 32 with no argument changed.
+
+Measured in Chrome 152 and Firefox 156 headless and Safari 26.6.2, identically,
+for both mixins, each case in a frame of its own:
+
+| Case | Old | New |
+|---|---|---|
+| styles only in the block | not drawn | drawn |
+| no block | not drawn | drawn, empty |
+| `content` in the block, or an argument | drawn | drawn, same |
+| `.a::after { content }` before or after the include | wins | wins |
+| `div::after { content }` before the include | wins | wins |
+| `::after { content }` before the include | wins | loses to the default |
+| `::after { content }` after the include | wins | wins |
+| `.a::after { content: none }` after the include | hidden | hidden |
+| content only under `.is-open`, class absent | not drawn | drawn empty, 20px box |
+| content only under `.is-open`, class present | drawn | drawn |
+| content only inside a media query that does not match | not drawn | drawn empty |
+| `q` element, styles only | browser quotes | quotes gone |
+| `q` element with `q::before, q::after { content: none }` | none | none |
+
+The maintainer chose the default over leaving the trap, with the three losses
+in `MIGRATION.md` and on both documentation pages.
+
+**The documentation pages** gained a bell with a notification dot and a
+tooltip with `content: none` in the block and its text on hover (`after`), and
+a status dot and coloured quotation marks on `q` (`before`). Each page's four
+old examples got a working demo, and each page four interface examples: a
+new-tab arrow, a required-field marker, breadcrumb separators and a unit from a
+data attribute (`after`); list markers, numbered steps with `counter()`, badges
+with an icon from `var()` and a category from a data attribute (`before`). Every
+pseudo-element on both pages, 31 of them, was checked in all three browsers for
+its computed `content` and, by turning it off, for the space it takes; only
+glyph widths differed, by up to 2px in Safari. Measured in all
+three browsers: the dots are drawn at 8px, the idle tooltip has `content: none`,
+and `q` keeps `open-quote` and `close-quote`. The hover state was measured in
+Chrome and Firefox only: Safari's WebDriver does not trigger `:hover` at all,
+checked on a plain page with one button.
+
+**Not covered**: a mobile browser; `::marker` and other pseudo-elements, which
+the mixins do not write; how many existing stylesheets style a pseudo-element
+whose content comes from another state.
