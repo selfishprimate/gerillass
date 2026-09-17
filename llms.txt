@@ -65,7 +65,7 @@ Arguments are validated and refused with a message naming what is accepted, so a
 - [text-gradient($colors, $type: linear, $direction: null, $shape: null, $position: null, $from: null, $in: null, $repeating: false)](https://docs.gerillass.com/docs/text-gradient/): Fills the text with a gradient through background-clip: text.
 - [text-image($image: null)](https://docs.gerillass.com/docs/text-image/): Fills the text with an image via background-clip.
 - [text-selection($value: null)](https://docs.gerillass.com/docs/text-selection/): Styles the ::selection pseudo-element.
-- [text-shadow($params...)](https://docs.gerillass.com/docs/text-shadow/): Layered text shadows built from a direction, a colour and an offset.
+- [text-shadow($params...)](https://docs.gerillass.com/docs/text-shadow/): Layered text shadows, each written as a direction or an angle, a colour and a distance.
 - [text-stroke($fallback-color: black, $color: transparent, $stroke-color: black, $stroke-width: 1px)](https://docs.gerillass.com/docs/text-stroke/): Outlines text using the webkit text-stroke properties.
 - [tokens($map, $prefix: null)](https://docs.gerillass.com/docs/tokens/): Writes a Sass map out as CSS custom properties, for any kind of token: colours, spacing, sizes, radii, type, shadows, durations.
 - [triangle($direction: "bottom", $color: black, $size: 10px 8px)](https://docs.gerillass.com/docs/triangle/): Draws a CSS triangle out of borders, pointing in a given direction.

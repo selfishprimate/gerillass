@@ -1,145 +1,207 @@
 @charset "UTF-8";
 
-@use "sass:color";
 @use "sass:list";
+@use "sass:map";
 @use "sass:math";
 @use "sass:meta";
+@use "sass:string";
 @use "../utilities/clear-unit" as *;
+@use "../internal/color-problem" as *;
+@use "../internal/length-problem" as *;
+
+// One or more shadows, each written as `<direction> <colour> <distance>`, with
+// an optional blur and an optional `true` that fills the gap between the text
+// and the shadow's end.
+//
+// Since 4.0.0 the direction may also be an angle, and every direction is one:
+// the keywords are the eight 45 degree steps, measured as `gradient` measures
+// them, 0deg up and clockwise. The offsets are then the sine and cosine of that
+// angle, so a shadow is the same distance from the text whichever way it
+// points. Until 4.0.0 a diagonal keyword wrote the distance on both axes, which
+// put it 1.414 times further out than a straight one.
+//
+// A distance a browser resolves, `var()` or `calc()`, is written as a `calc()`
+// with CSS's own `sin()` and `cos()` rather than computed here.
+$-directions: (
+  "top": 0deg,
+  "top-right": 45deg,
+  "right": 90deg,
+  "bottom-right": 135deg,
+  "bottom": 180deg,
+  "bottom-left": 225deg,
+  "left": 270deg,
+  "top-left": 315deg
+);
+$-angle-units: "deg" "grad" "rad" "turn";
+
+// The keyword directions, for an error message.
+@function -names() {
+  $out: "";
+  @each $name, $angle in $-directions {
+    @if $out != "" {
+      $out: $out + ", ";
+    }
+    $out: $out + "`" + $name + "`";
+  }
+  @return $out;
+}
+
+// The angle a direction stands for, or null when it is neither a keyword nor an
+// angle. A keyword is matched in any case, as CSS matches its own.
+@function -angle($value) {
+  @if meta.type-of($value) == "number" {
+    @if list.index($-angle-units, math.unit($value)) {
+      @return $value;
+    }
+    @return null;
+  }
+  @if meta.type-of($value) != "string" {
+    @return null;
+  }
+  @return map.get($-directions, string.to-lower-case("#{$value}"));
+}
+
+// Sass keeps ten digits, which writes 3.5355339059px into the stylesheet. Four
+// is under a thousandth of a pixel at any distance a shadow is written at.
+@function -round($value) {
+  @return math.div(math.round($value * 10000), 10000);
+}
+
+// One axis of the offset. $ratio is sine for x and minus cosine for y, since
+// the y axis points down. A distance only the browser knows keeps the ratio in
+// a calc(), where 0, 1 and -1 are written without one.
+@function -offset($ratio, $distance) {
+  $ratio: -round($ratio);
+  @if meta.type-of($distance) == "number" {
+    $offset: -round($ratio * $distance);
+    // 0px and 0 are not equal in Sass, and a bare 0 is what the mixin has
+    // always written for an axis the shadow does not move on.
+    @if $offset == $offset * 0 {
+      @return 0;
+    }
+    @return $offset;
+  }
+  @if $ratio == 0 {
+    @return 0;
+  }
+  @if $ratio == 1 {
+    @return $distance;
+  }
+  @return string.unquote("calc(#{$ratio} * #{$distance})");
+}
 
 @mixin text-shadow($params...) {
-  $value: ();
-
-  @for $i from 1 through list.length($params) {
-    // Takes each items come from $params.
-    $item: list.nth($params, $i);
-
-    // Each group must carry at least a direction, a colour and a size. Without
-    // this the list.nth() calls below fail with "Invalid index", which says nothing
-    // about what the mixin wanted.
-    @if list.length($item) < 3 {
-      @error "`#{$item}` is not a valid shadow for `text-shadow`. Each group needs a direction, a colour and a size, such as `bottom-right red 5px`. An optional blur and a fill flag may follow.";
-    }
-
-    // The first value comes from the $item is direction.
-    // This will be used in the @if, @else statements with $size to control the offset of the shadows.
-    $direction: list.nth($item, 1);
-
-    // Second value is the color.
-    $color: list.nth($item, 2);
-
-    // The third value is the actual offset value of the shadows.
-    $size: list.nth($item, 3);
-
-    // Takes the unit of the $size value to use it later to increment the amount of shadow based on the unit.
-    $sizeUnit: math.unit($size);
-
-    // The $blur argument is optional. It controls the size of the blur.
-    $blur: null;
-
-    // The $fill argument is optional. This makes shadow fill the gap between the actual text and shadow's end-point. The default value is set to false.
-    $fill: null;
-
-    // Assigns the optional sub-arguments to the actual argument.
-    @if list.length($item) == 4 and meta.type-of(list.nth($item, 4)) == number {
-      $blur: list.nth($item, list.length($item));
-    } @else if list.length($item) == 4 and meta.type-of(list.nth($item, 4)) == bool {
-      $fill: list.nth($item, list.length($item));
-    } @else if list.length($item) == 5 {
-      $blur: list.nth($item, 4);
-      $fill: list.nth($item, list.length($item));
-    }
-
-    // The code below changes the angle of $direction of the shadow based on the predefined values.
-    @if $direction == "top" {
-      @if $fill == true {
-        // The clearUnit(); function is used here due to it is not possible to count $size with a unit. First, it clears the unit from the $size argument and then adds it back again in the @for loop.
-        @for $i from 1 through clearUnit($size) {
-          $increase: $i * 1 + $sizeUnit;
-          $shadow: 0 -#{$increase} $blur $color;
-          $value: list.append($value, $shadow, comma);
-        }
-      } @else {
-        $shadow: 0 -#{$size} $blur $color;
-        $value: list.append($value, $shadow, comma);
-      }
-    } @else if $direction == "top-left" {
-      @if $fill == true {
-        @for $i from 1 through clearUnit($size) {
-          $increase: $i * 1 + $sizeUnit;
-          $shadow: -#{$increase} -#{$increase} $blur $color;
-          $value: list.append($value, $shadow, comma);
-        }
-      } @else {
-        $shadow: -#{$size} -#{$size} $blur $color;
-        $value: list.append($value, $shadow, comma);
-      }
-    } @else if $direction == "top-right" {
-      @if $fill == true {
-        @for $i from 1 through clearUnit($size) {
-          $increase: $i * 1 + $sizeUnit;
-          $shadow: #{$increase} -#{$increase} $blur $color;
-          $value: list.append($value, $shadow, comma);
-        }
-      } @else {
-        $shadow: #{$size} -#{$size} $blur $color;
-        $value: list.append($value, $shadow, comma);
-      }
-    } @else if $direction == "bottom" {
-      @if $fill == true {
-        @for $i from 1 through clearUnit($size) {
-          $increase: $i * 1 + $sizeUnit;
-          $shadow: 0 #{$increase} $blur $color;
-          $value: list.append($value, $shadow, comma);
-        }
-      } @else {
-        $shadow: 0 #{$size} $blur $color;
-        $value: list.append($value, $shadow, comma);
-      }
-    } @else if $direction == "bottom-left" {
-      @if $fill == true {
-        @for $i from 1 through clearUnit($size) {
-          $increase: $i * 1 + $sizeUnit;
-          $shadow: -#{$increase} #{$increase} $blur $color;
-          $value: list.append($value, $shadow, comma);
-        }
-      } @else {
-        $shadow: -#{$size} #{$size} $blur $color;
-        $value: list.append($value, $shadow, comma);
-      }
-    } @else if $direction == "bottom-right" {
-      @if $fill == true {
-        @for $i from 1 through clearUnit($size) {
-          $increase: $i * 1 + $sizeUnit;
-          $shadow: #{$increase} #{$increase} $blur $color;
-          $value: list.append($value, $shadow, comma);
-        }
-      } @else {
-        $shadow: #{$size} #{$size} $blur $color;
-        $value: list.append($value, $shadow, comma);
-      }
-    } @else if $direction == "left" {
-      @if $fill == true {
-        @for $i from 1 through clearUnit($size) {
-          $increase: $i * 1 + $sizeUnit;
-          $shadow: -#{$increase} 0 $blur $color;
-          $value: list.append($value, $shadow, comma);
-        }
-      } @else {
-        $shadow: -#{$size} 0 $blur $color;
-        $value: list.append($value, $shadow, comma);
-      }
-    } @else if $direction == "right" {
-      @if $fill == true {
-        @for $i from 1 through clearUnit($size) {
-          $increase: $i * 1 + $sizeUnit;
-          $shadow: #{$increase} 0 $blur $color;
-          $value: list.append($value, $shadow, comma);
-        }
-      } @else {
-        $shadow: #{$size} 0 $blur $color;
-        $value: list.append($value, $shadow, comma);
-      }
+  $keywords: meta.keywords($params);
+  @each $key, $value in $keywords {
+    @if $key != "step" {
+      @error "`$#{$key}` is not an argument of `text-shadow`. It takes groups of a direction, a colour and a distance, and `$step` for how far apart a filled shadow's layers sit.";
     }
   }
+  $step: map.get($keywords, "step");
+  @if $step != null {
+    $problem: lengthProblem($step, $percent: false, $negative: false);
+    @if $problem or meta.type-of($step) != "number" or $step == 0 {
+      @error "`#{$step}` is not a valid $step for `text-shadow`. Pass a length greater than zero, such as `1px`, in the same unit as the distance it fills.";
+    }
+  }
+  @if list.length($params) == 0 {
+    @error "`text-shadow` needs at least one shadow, such as `text-shadow(bottom-right rgb(0 0 0 / 0.4) 5px)`.";
+  }
+
+  $value: ();
+  $filled: false;
+
+  @each $item in $params {
+    @if meta.type-of($item) != "list" or list.length($item) < 3 or list.length($item) > 5 {
+      @error "`#{$item}` is not a valid shadow for `text-shadow`. Each group needs a direction, a colour and a distance, such as `bottom-right red 5px`, and may add a blur and `true` to fill the gap.";
+    }
+
+    $direction: list.nth($item, 1);
+    $color: list.nth($item, 2);
+    $size: list.nth($item, 3);
+    $blur: null;
+    $fill: false;
+
+    @if list.length($item) == 4 {
+      @if meta.type-of(list.nth($item, 4)) == "bool" {
+        $fill: list.nth($item, 4);
+      } @else {
+        $blur: list.nth($item, 4);
+      }
+    } @else if list.length($item) == 5 {
+      $blur: list.nth($item, 4);
+      $fill: list.nth($item, 5);
+      @if meta.type-of($fill) != "bool" {
+        @error "`#{$fill}` is not a valid fill flag for `text-shadow`, in `#{$item}`. Pass `true` to fill the gap between the text and the shadow, or leave it out.";
+      }
+    }
+
+    $angle: -angle($direction);
+    @if $angle == null {
+      @error "`#{$direction}` is not a valid direction for `text-shadow`, in `#{$item}`. Pass one of #{-names()}, or an angle such as `45deg`, measured from the top and clockwise.";
+    }
+
+    $problem: colorProblem($color, $css-wide: false);
+    @if $problem {
+      @error "`#{$color}` is not a valid colour for `text-shadow`, in `#{$item}`: #{$problem}.";
+    }
+
+    $problem: lengthProblem($size, $percent: false, $negative: false);
+    @if $problem {
+      $hint: "";
+      @if meta.type-of($size) == "number" and $size < 0 {
+        $hint: " Point the shadow the other way rather than passing a negative distance.";
+      }
+      @error "`#{$size}` is not a valid distance for `text-shadow`, in `#{$item}`: #{$problem}.#{$hint}";
+    }
+    @if $blur != null {
+      $problem: lengthProblem($blur, $percent: false, $negative: false);
+      @if $problem {
+        @error "`#{$blur}` is not a valid blur for `text-shadow`, in `#{$item}`: #{$problem}.";
+      }
+    }
+
+    $sin: math.sin($angle);
+    $cos: -1 * math.cos($angle);
+
+    @if $fill {
+      $filled: true;
+      @if meta.type-of($size) != "number" {
+        @error "`#{$size}` cannot be filled in `text-shadow`, in `#{$item}`. A filled shadow is drawn in steps, which needs a distance this stylesheet can count, such as `5px`.";
+      }
+      // One step of the distance's own unit by default, which is what the
+      // mixin has always drawn for a whole number of pixels. A zero distance
+      // has nothing to fill, and dividing by it would give NaN.
+      $this-step: $step;
+      @if $size == $size * 0 {
+        $this-step: null;
+      } @else if $this-step == null {
+        $this-step: math.div($size, clearUnit($size));
+      }
+      @if $step != null and not math.compatible($step, $size) {
+        @error "`$step: #{$step}` cannot fill `#{$size}` in `text-shadow`. Pass the step in the same unit as the distance.";
+      }
+      $count: 1;
+      @if $this-step != null {
+        $count: math.ceil(math.div($size, $this-step));
+      }
+      @for $i from 1 through $count {
+        $distance: $size;
+        @if $this-step != null {
+          $distance: math.min($i * $this-step, $size);
+        }
+        $shadow: -offset($sin, $distance) -offset($cos, $distance) $blur $color;
+        $value: list.append($value, $shadow, comma);
+      }
+    } @else {
+      $shadow: -offset($sin, $size) -offset($cos, $size) $blur $color;
+      $value: list.append($value, $shadow, comma);
+    }
+  }
+
+  @if $step != null and not $filled {
+    @error "`$step` does nothing in this `text-shadow` call: no shadow is filled. Add `true` to the group you want filled, such as `bottom-right red 20px true`.";
+  }
+
   text-shadow: $value;
 }

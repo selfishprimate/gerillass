@@ -1,8 +1,8 @@
 ---
 title: "Text Shadow"
 page_title: "Text Shadow Sass Mixin"
-page_description: "Add shadows to text with the Text Shadow Sass mixin. It takes a comma separated list of shadows, or a single shadow that can be multiplied."
-page_keywords: "CSS Text Shadow, Sass Text Shadow, CSS Animated Text Shadow, CSS Text Shadow Generator, CSS Text Shadow Examples, CSS Text Shadow Blur, CSS Text Shadow Outline, CSS Text Shadow Opacity, CSS Text Shadow Inset, CSS Text Shadow Effects, CSS Text Shadow Spread"
+page_description: "Add shadows to text with the Text Shadow Sass mixin. Each shadow is a direction or an angle, a colour and a distance, and it can be filled into a long shadow."
+page_keywords: "CSS Text Shadow, Sass Text Shadow, CSS Long Shadow, CSS Text Shadow Generator, CSS Text Shadow Examples, CSS Text Shadow Blur, CSS Text Outline, CSS Neon Text"
 page_image: "gerillass-text-shadow.jpg"
 ---
 
@@ -10,183 +10,426 @@ page_image: "gerillass-text-shadow.jpg"
 
 <Member name="text-shadow">
 
-The **Text Shadow Sass mixin** helps you add shadows to text elements. It accepts a comma separated list of shadows, or a single shadow value that can optionally be multiplied. **It provides an easy one-line method.**
-<Hint kind="info">
-
-The first three arguments (`$direction`, `$color`, `$size`) are required, and they must be given in that order: @include text-shadow(**bottom red 20px**). You cannot swap these three around.
-
-</Hint>
+The **Text Shadow Sass mixin** writes one or more text shadows. Each one is a direction, a colour and a distance, in that order, with an optional blur after them and an optional `true` that fills the gap between the text and the shadow.
 
 </Member>
 
-## Arguments
+<Hint kind="warning">
 
-<Arguments of="text-shadow" footnote="**Design Tip:** You can add multi layered shadows to create fancier effects. Just separate each shadow layer with a comma. See the [examples](#examples) for more.">
-  <Argument name="$direction" type="string">Sets the direction of the shadow. Accepts <code>top</code>, <code>top-right</code>, <code>right</code>, <code>bottom-right</code>, <code>bottom</code>, <code>bottom-left</code>, <code>left</code>, <code>top-left</code>.</Argument>
-  <Argument name="$color" type="color value">Sets the color of the shadow.</Argument>
-  <Argument name="$size" type="number (with unit)">Sets how far the shadow will be from the text. When used with <code>$fill</code>, it also determines how many times the shadow will be multiplied.</Argument>
-  <Argument name="$blur" type="number (with unit)">Optional. Sets the blur value of the shadow. The default value is <code>null</code>.</Argument>
-  <Argument name="$fill" type="boolean">Makes the shadow fill the gap between the text and the shadow. It is optional and <strong>should always come last</strong>. The default value is <code>false</code>.</Argument>
-</Arguments>
-
-<Hint kind="danger">
-
-**Important:** If you use the `$fill` argument, it should always come last.
+**Changed in Gerillass 4.0.0.** A direction may now be an angle, such as `30deg`, and the eight keywords are the 45 degree steps of that same circle, measured from the top and clockwise, as [Gradient](/docs/gradient) measures them. A shadow now sits the same distance from the text whichever way it points, so a diagonal keyword lands closer than it did: multiply an old diagonal distance by `0.7071` to keep the previous look. The mixin also refuses what browsers drop, and `$step` sets how far apart a filled shadow's layers sit.
 
 </Hint>
+
+## Arguments
+
+<Arguments of="text-shadow" footnote="Separate each shadow with a comma to layer them. See the [examples](#examples) for each form.">
+  <Argument name="$direction" type="string, number">Where the shadow goes: <code>top</code>, <code>top-right</code>, <code>right</code>, <code>bottom-right</code>, <code>bottom</code>, <code>bottom-left</code>, <code>left</code>, <code>top-left</code>, or an angle such as <code>30deg</code>, <code>0.25turn</code> or <code>1.2rad</code>, measured from the top and clockwise.</Argument>
+  <Argument name="$color" type="color">The shadow's colour. <code>currentColor</code>, <code>var()</code> and <code>color-mix()</code> are all accepted.</Argument>
+  <Argument name="$size" type="number, function">How far the shadow sits from the text, such as <code>6px</code>. A <code>var()</code> or <code>calc()</code> is written into a <code>calc()</code> the browser resolves.</Argument>
+  <Argument name="$blur" type="number">Optional, after the distance. The default is no blur.</Argument>
+  <Argument name="$fill" type="boolean">Optional, last in the group. <code>true</code> fills the gap between the text and the shadow, which is how a long shadow is drawn.</Argument>
+  <Argument name="$step" type="number">Named argument for the whole call: how far apart a filled shadow's layers sit, in the same unit as the distance. The default is one unit of that unit.</Argument>
+</Arguments>
 
 ## Examples
 
-<Example caption="Let's start with some basic shadow arrangements.">
+<Example caption="A soft shadow under a heading. The three values are the direction, the colour and the distance, in that order.">
 ```scss
-.element{
-  @include text-shadow(bottom rgba(black, 0.3) 6px);
+.title {
+  @include text-shadow(bottom-right rgb(0 0 0 / 0.35) 6px);
 }
 ```
 ```html
-<div class="text-shadow-container">
-  <h1 class="element">Text Shadow is Awesome!</h1>
+<style>
+  .title { margin: 0; font: 700 34px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+</style>
+<h2 class="title">Shadows, in one line</h2>
+```
+</Example>
+
+<Example caption="A blur after the distance softens the edge. This is the everyday drop shadow for text over a busy background.">
+```scss
+.title {
+  @include text-shadow(bottom rgb(0 0 0 / 0.55) 4px 8px);
+}
+```
+```html
+<style>
+  .card { padding: 24px; border-radius: 10px; background: linear-gradient(135deg, #38bdf8, #a78bfa, #f472b6); }
+  .title { margin: 0; font: 700 34px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; color: #fff; }
+</style>
+<div class="card"><h2 class="title">Readable over anything</h2></div>
+```
+</Example>
+
+<Example caption="An angle reaches the directions the keywords do not. `0deg` is straight up and the angle turns clockwise, so `120deg` points down and to the right.">
+```scss
+.a { @include text-shadow(0deg #f97316 8px); }
+.b { @include text-shadow(120deg #0ea5e9 8px); }
+.c { @include text-shadow(240deg #22c55e 8px); }
+```
+```html
+<style>
+  .angles { display: flex; flex-wrap: wrap; gap: 16px; }
+  .angles p { margin: 0; padding: 14px 22px; border-radius: 10px; background: #f4f4f5; font: 700 30px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+</style>
+<div class="angles">
+  <p class="a">0deg</p>
+  <p class="b">120deg</p>
+  <p class="c">240deg</p>
 </div>
 ```
 </Example>
 
-<Example caption="Now, let's **add some $blur** to the shadow.">
+<Example caption="`true` at the end of a group fills the gap between the text and the shadow, one layer per step. That is a long shadow, and it takes one argument rather than a loop.">
 ```scss
-.element{
-  @include text-shadow(bottom rgba(black, 0.3) 6px 4px);
+.title {
+  @include text-shadow(bottom-right #fbbf24 28px true);
 }
 ```
 ```html
-<div class="text-shadow-container">
-  <h1 class="element">Text Shadow is Awesome!</h1>
+<style>
+  .sheet { padding: 20px 24px 36px; border-radius: 10px; background: #1f2937; }
+  .title { margin: 0; font: 800 44px/1.1 Inter, ui-sans-serif, system-ui, sans-serif; color: #fff; }
+</style>
+<div class="sheet"><h2 class="title">Long shadow</h2></div>
+```
+</Example>
+
+<Example caption="The same long shadow written in `rem`, with `$step` setting how fine the layers are. Without `$step` a filled shadow takes one step per unit, which in `rem` would be three coarse layers.">
+```scss
+.title {
+  @include text-shadow(bottom-right rgb(37 99 235 / 0.65) 3rem true, $step: 0.125rem);
+}
+```
+```html
+<style>
+  .title { margin: 0; font: 800 44px/1.1 Inter, ui-sans-serif, system-ui, sans-serif; color: #1d4ed8; }
+</style>
+<h2 class="title">Fine steps</h2>
+```
+</Example>
+
+<Example caption="Four shadows at 1px make an outline, which keeps light text legible on a light photo. Commas separate the layers, and the first one listed sits on top.">
+```scss
+.title {
+  @include text-shadow(
+    top #18181b 1px,
+    right #18181b 1px,
+    bottom #18181b 1px,
+    left #18181b 1px
+  );
+}
+```
+```html
+<style>
+  .photo { padding: 26px 24px; border-radius: 10px; background: linear-gradient(120deg, #fde68a, #fca5a5, #c7d2fe); }
+  .title { margin: 0; font: 700 34px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; color: #fff; }
+</style>
+<div class="photo"><h2 class="title">Outlined, not stroked</h2></div>
+```
+</Example>
+
+<Example caption="A neon glow: a distance of zero with a blur, layered from tight to wide. Each layer is the same colour, and the blur does the work.">
+```scss
+.title {
+  @include text-shadow(
+    top #f0abfc 0px 6px,
+    top #e879f9 0px 18px,
+    top #a21caf 0px 36px
+  );
+}
+```
+```html
+<style>
+  .night { padding: 28px 24px; border-radius: 10px; background: #0b0713; }
+  .title { margin: 0; font: 700 34px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; color: #fdf4ff; }
+</style>
+<div class="night"><h2 class="title">Open all night</h2></div>
+```
+</Example>
+
+<Example caption="A pressed-in look, from one light shadow above and one dark shadow below. It only works on a mid-tone background, which is why both layers are needed.">
+```scss
+.title {
+  @include text-shadow(
+    top rgb(255 255 255 / 0.7) 1px,
+    bottom rgb(0 0 0 / 0.5) 1px
+  );
+}
+```
+```html
+<style>
+  .panel { padding: 26px 24px; border-radius: 10px; background: #cbd5e1; }
+  .title { margin: 0; font: 700 34px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; color: #64748b; }
+</style>
+<div class="panel"><h2 class="title">Letterpress</h2></div>
+```
+</Example>
+
+<Example caption="The distance and the colour read from custom properties, so one rule serves every card and the markup sets the depth. The mixin writes the offsets as a `calc()` the browser resolves, which all three engines do." listing="<div class=&quot;cards&quot;>
+&#32;&#32;<div style=&quot;--shadow-color: #fca5a5; --shadow-size: 3px&quot;><p class=&quot;card-title&quot;>Near</p></div>
+&#32;&#32;<div style=&quot;--shadow-color: #93c5fd; --shadow-size: 6px&quot;><p class=&quot;card-title&quot;>Mid</p></div>
+&#32;&#32;<div style=&quot;--shadow-color: #86efac; --shadow-size: 10px&quot;><p class=&quot;card-title&quot;>Far</p></div>
+</div>">
+```scss
+.card-title {
+  @include text-shadow(135deg var(--shadow-color) var(--shadow-size));
+}
+```
+```html
+<style>
+  .cards { display: flex; flex-wrap: wrap; gap: 20px; }
+  .cards div { padding: 16px 20px; border-radius: 10px; background: #f4f4f5; }
+  .card-title { margin: 0; font: 800 28px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+</style>
+<div class="cards">
+  <div style="--shadow-color: #fca5a5; --shadow-size: 3px"><p class="card-title">Near</p></div>
+  <div style="--shadow-color: #93c5fd; --shadow-size: 6px"><p class="card-title">Mid</p></div>
+  <div style="--shadow-color: #86efac; --shadow-size: 10px"><p class="card-title">Far</p></div>
 </div>
 ```
 </Example>
 
-<Example caption="Now, to understand what `$fill` is for, let's try once more without the `$fill` argument and examine the CSS output.">
+<Example caption="A chromatic split, the look borrowed from 3D glasses: one cyan layer to the left and one magenta to the right, both at a small distance. The text stays black, so it reads at any size.">
 ```scss
-.element{
-  @include text-shadow(bottom #5bc0bb 30px);
+.title {
+  @include text-shadow(
+    left rgb(34 211 238 / 0.9) 3px,
+    right rgb(244 63 94 / 0.9) 3px
+  );
 }
 ```
 ```html
-<div class="text-shadow-container">
-  <h1 class="element">Text Shadow is Awesome!</h1>
+<style>
+  .title { margin: 0; font: 700 34px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; letter-spacing: -0.01em; }
+</style>
+<h2 class="title">Chromatic</h2>
+```
+</Example>
+
+<Example caption="A sticker: eight layers at 2px make the white border, and a soft shadow underneath lifts it off the page. The diagonals sit the same distance away as the straight ones, which is what keeps the border even.">
+```scss
+.sticker {
+  @include text-shadow(
+    top #fff 2px, top-right #fff 2px, right #fff 2px, bottom-right #fff 2px,
+    bottom #fff 2px, bottom-left #fff 2px, left #fff 2px, top-left #fff 2px,
+    bottom rgb(15 23 42 / 0.35) 4px 6px
+  );
+}
+```
+```html
+<style>
+  .board { padding: 26px 24px; border-radius: 10px; background: repeating-linear-gradient(45deg, #fde68a 0 12px, #fcd34d 12px 24px); }
+  .sticker { margin: 0; font: 800 40px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; color: #db2777; }
+</style>
+<div class="board"><h2 class="sticker">Sticker</h2></div>
+```
+</Example>
+
+<Example caption="Extruded type: a filled shadow gives the solid side of the letters, and one blurred layer after it drops the whole block onto the background. Both go in the same call, in the order they should paint.">
+```scss
+.title {
+  @include text-shadow(
+    bottom-right #1e3a8a 14px true,
+    bottom rgb(15 23 42 / 0.45) 18px 12px
+  );
+}
+```
+```html
+<style>
+  .stage { padding: 24px 24px 40px; border-radius: 10px; background: #dbeafe; }
+  .title { margin: 0; font: 800 46px/1.1 Inter, ui-sans-serif, system-ui, sans-serif; color: #3b82f6; }
+</style>
+<div class="stage"><h2 class="title">Extruded</h2></div>
+```
+</Example>
+
+<Example caption="A glow that follows the text colour. `currentColor` in the colour slot means one rule lights every button and heading in whatever colour it already has.">
+```scss
+.glow {
+  @include text-shadow(top currentColor 0px 14px);
+}
+```
+```html
+<style>
+  .neon-row { display: flex; flex-wrap: wrap; gap: 24px; padding: 24px; border-radius: 10px; background: #09090b; }
+  .glow { margin: 0; font: 700 30px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .glow.a { color: #f0abfc; }
+  .glow.b { color: #67e8f9; }
+  .glow.c { color: #bef264; }
+</style>
+<div class="neon-row">
+  <p class="glow a">Pink</p>
+  <p class="glow b">Cyan</p>
+  <p class="glow c">Lime</p>
 </div>
+```
+</Example>
+
+<Example caption="One shadow for both colour schemes. `light-dark()` picks the value, and the colour is passed straight through, so the page needs nothing but a `color-scheme`. The panels below force one scheme each to show the pair.">
+```scss
+.title {
+  @include text-shadow(
+    bottom-right light-dark(rgb(15 23 42 / 0.3), rgb(56 189 248 / 0.55)) 5px
+  );
+}
+```
+```html
+<style>
+  .schemes { display: flex; flex-wrap: wrap; gap: 16px; }
+  .schemes div { flex: 1 1 220px; padding: 20px; border-radius: 10px; }
+  .schemes .light { color-scheme: light; background: #f8fafc; }
+  .schemes .dark { color-scheme: dark; background: #0f172a; }
+  .title { margin: 0; font: 700 28px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; color: light-dark(#0f172a, #e2e8f0); }
+</style>
+<div class="schemes">
+  <div class="light"><h2 class="title">Light</h2></div>
+  <div class="dark"><h2 class="title">Dark</h2></div>
+</div>
+```
+</Example>
+
+<Example caption="A pop art headline: a hard offset in a mixed colour, with no blur at all. `color-mix()` reaches the colour slot untouched, so the shadow can be derived from the brand colour rather than typed again.">
+```scss
+.title {
+  @include text-shadow(135deg color-mix(in oklab, #7c3aed 70%, black) 8px);
+}
+```
+```html
+<style>
+  .pop { padding: 24px; border-radius: 10px; background: #fde68a; }
+  .title { margin: 0; font: 800 44px/1.1 Inter, ui-sans-serif, system-ui, sans-serif; color: #7c3aed; text-transform: uppercase; letter-spacing: -0.02em; }
+</style>
+<div class="pop"><h2 class="title">Pop</h2></div>
+```
+</Example>
+
+## On hover
+
+A `text-shadow` transitions from one layer to another when both states have the **same number of layers**. The distance, the blur and the colour then animate; a state with more layers than the other switches instead of moving. The motion sits inside [Motion Safe](/docs/motion-safe), so a reader who asks for less movement gets the end state with no travel.
+
+<Example caption="A navigation link whose shadow drops and softens on hover. One layer in both states, so the shadow travels.">
+```scss
+.nav a {
+  @include text-shadow(bottom rgb(15 23 42 / 0.25) 2px 2px);
+
+  @include motion-safe {
+    transition: text-shadow 0.25s ease;
+  }
+
+  &:hover,
+  &:focus-visible {
+    @include text-shadow(bottom rgb(37 99 235 / 0.45) 8px 10px);
+  }
+}
+```
+```html
+<style>
+  .nav { display: flex; flex-wrap: wrap; gap: 28px; padding: 18px 20px; border-radius: 10px; background: #f8fafc; }
+  .nav a { color: #0f172a; font: 700 22px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; text-decoration: none; }
+</style>
+<nav class="nav">
+  <a href="#work">Work</a>
+  <a href="#studio">Studio</a>
+  <a href="#journal">Journal</a>
+  <a href="#contact">Contact</a>
+</nav>
+```
+</Example>
+
+<Example caption="A neon sign that brightens when the pointer reaches it. The three layers keep their order and only the blur grows, which is what makes the glow bloom rather than jump.">
+```scss
+.sign {
+  @include text-shadow(
+    top #f0abfc 0px 4px,
+    top #e879f9 0px 10px,
+    top #a21caf 0px 20px
+  );
+
+  @include motion-safe {
+    transition: text-shadow 0.35s ease;
+  }
+
+  &:hover {
+    @include text-shadow(
+      top #f0abfc 0px 10px,
+      top #e879f9 0px 26px,
+      top #a21caf 0px 52px
+    );
+  }
+}
+```
+```html
+<style>
+  .night { padding: 28px 24px; border-radius: 10px; background: #09090b; }
+  .sign { margin: 0; font: 800 40px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; color: #fdf4ff; cursor: pointer; }
+</style>
+<div class="night"><h2 class="sign">Hover me</h2></div>
+```
+</Example>
+
+<Example caption="A chromatic split that opens up on hover, the two coloured layers sliding apart from the text. Each state has the same two layers, so the colours slide instead of blinking.">
+```scss
+.glitch {
+  @include text-shadow(
+    left rgb(34 211 238 / 0.9) 0px,
+    right rgb(244 63 94 / 0.9) 0px
+  );
+
+  @include motion-safe {
+    transition: text-shadow 0.2s ease-out;
+  }
+
+  &:hover {
+    @include text-shadow(
+      left rgb(34 211 238 / 0.9) 6px,
+      right rgb(244 63 94 / 0.9) 6px
+    );
+  }
+}
+```
+```html
+<style>
+  .glitch { margin: 0; font: 800 40px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; cursor: pointer; }
+</style>
+<h2 class="glitch">Hover me</h2>
+```
+</Example>
+
+<Example caption="A long shadow that grows when the card is hovered, at the same `$step` so both states hold the same number of layers. Change the distance without the step and the layer counts differ, which switches rather than grows.">
+```scss
+.promo {
+  @include text-shadow(bottom-right #fbbf24 12px true, $step: 3px);
+
+  @include motion-safe {
+    transition: text-shadow 0.3s ease;
+  }
+
+  &:hover {
+    @include text-shadow(bottom-right #fbbf24 24px true, $step: 6px);
+  }
+}
+```
+```html
+<style>
+  .stage { padding: 24px 24px 40px; border-radius: 10px; background: #1f2937; cursor: pointer; }
+  .promo { margin: 0; font: 800 42px/1.1 Inter, ui-sans-serif, system-ui, sans-serif; color: #fff; }
+</style>
+<div class="stage"><h2 class="promo">Hover me</h2></div>
 ```
 </Example>
 
 <Hint kind="info">
 
-It repeats the shadow one step at a time, up to the `$size` value, to **fill the gap between the actual text and the end point of the shadow**.
+**What the mixin refuses, and why.** Measured in Chrome 152, Firefox 156 and Safari 26.6.2: one broken layer drops the whole `text-shadow` declaration, so a shadow nobody notices is worse than a build that stops. A direction that is neither a keyword nor an angle, a colour a browser does not know, a negative or unitless distance, and a negative blur all raise instead. A distance written as `var()` or `calc()` cannot be filled with `true`, since the number of layers is counted while the stylesheet compiles.
 
 </Hint>
-
-<Example caption="Now let's pass the `true` value at the end of the argument list and watch the CSS output carefully, because this is where the magic starts.">
-```scss
-.element{
-  @include text-shadow(bottom #5bc0bb 30px true);
-}
-```
-```html
-<div class="text-shadow-container">
-  <h1 class="element">Text Shadow is Awesome!</h1>
-</div>
-```
-</Example>
-
-<Example caption="You can **add an alpha value to the colors** to soften the shadow.">
-```scss
-.element{
-  @include text-shadow(bottom rgba(#5bc0bb, 0.04) 30px true);
-}
-```
-```html
-<div class="text-shadow-container">
-  <h1 class="element">Text Shadow is Awesome!</h1>
-</div>
-```
-</Example>
-
-<Example caption="Now let's **add multiple shadow values** with different `$direction`, `$color`, and `$size` values.">
-```scss
-.element{
-  @include text-shadow(
-    top yellow 5px, 
-    right lightseagreen 15px,
-    bottom orange 5px, 
-    left pink 15px,
-  );
-}
-```
-```html
-<div class="text-shadow-container">
-  <h1 class="element">Text Shadow is Awesome!</h1>
-</div>
-```
-</Example>
-
-<Example caption="Let's **add an alpha value to the colors** and set the `$fill` option to `true` to make it look sexier!">
-```scss
-.element{
-  @include text-shadow(
-    top rgba(yellow, 0.1) 10px true, 
-    bottom rgba(orange, 0.1) 10px true, 
-    left rgba(pink, 0.1) 10px true,
-    right rgba(lightseagreen, 0.1) 10px true
-  );
-}
-```
-```html
-<div class="text-shadow-container">
-  <h1 class="element">Text Shadow is Awesome!</h1>
-</div>
-```
-</Example>
-
-<Example caption="You can **use corners** as well.">
-```scss
-.element{
-  color: pink;
-  @include text-shadow(top-left crimson 15px true);
-}
-```
-```html
-<div class="text-shadow-container">
-  <h1 class="element">Text Shadow is Awesome!</h1>
-</div>
-```
-</Example>
-
-<Hint kind="info">
-
-As long as you don't overdo it, the **Text Shadow** mixin can create marvelous effects.
-
-</Hint>
-
-<Example caption="Here's a good example of how easily you can create artistic effects with **Gerillass**. Just hover over the text below and click on it to see the effect!">
-```scss
-.element{
-  transition: .3s;
-  @include text-shadow(left gold 3px true);
-  &:hover{
-    @include text-shadow(right gold 8px true);
-  }
-  &:active{
-    @include text-shadow(right deepskyblue 8px true);
-  }
-}
-```
-```html
-<div class="text-shadow-container">
-  <h1 class="element example09">Text Shadow is Awesome!</h1>
-</div>
-```
-</Example>
-
-Examples are endless. **Just use your imagination.**
 
 ## Related Links
 
 - [Text Stroke](/docs/text-stroke)
+- [Gradient](/docs/gradient)
 - [CSS text-shadow](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/text-shadow)
+- [CSS angle values](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/angle)
+- [CSS sin() and cos()](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/sin)

@@ -1914,19 +1914,46 @@
           "name": "$params",
           "variadic": true,
           "accepts": [
-            "one or more groups of direction, colour and size"
+            "one or more groups of a direction, a colour and a distance",
+            "a direction keyword, or an angle in deg, grad, rad or turn",
+            "a blur after the distance, and `true` after that to fill the gap",
+            "var(), calc() and the other maths functions as the distance",
+            "$step: how far apart a filled shadow's layers sit, in the distance's unit"
           ]
         }
       ],
       "file": "scss/library/_text-shadow.scss",
       "signature": "text-shadow($params...)",
-      "summary": "Layered text shadows built from a direction, a colour and an offset.",
+      "summary": "Layered text shadows, each written as a direction or an angle, a colour and a distance.",
+      "caveats": [
+        "Since 4.0.0 every direction is an angle: the eight keywords are the 45 degree steps, measured as `gradient` measures them, 0deg up and clockwise, and the offsets are the sine and cosine of that angle. A diagonal keyword used to write the distance on both axes, which placed it 1.414 times further out than a straight one; multiply an old diagonal distance by 0.7071 to keep the same look.",
+        "`true` fills the gap between the text and the shadow with one layer per step, one unit of the distance's own unit by default. Pass `$step` for anything else, in the same unit as the distance. A distance of 40px therefore writes 40 layers unless `$step` says otherwise.",
+        "A distance a browser resolves, such as `var()` or `calc()`, is written as a `calc()` holding the sine or cosine, which every engine resolves. It cannot be filled, since the number of layers has to be counted while the stylesheet compiles.",
+        "A `text-shadow` transition, such as one between a resting state and `:hover`, only animates when both states hold the same number of layers. A filled shadow's layer count comes from the distance and `$step`, so change both together, or the shadow switches rather than moves."
+      ],
       "examples": [
-        ".a { @include text-shadow(bottom-right red 5px); }"
+        ".a { @include text-shadow(bottom-right rgb(0 0 0 / 0.35) 6px); }",
+        ".a { @include text-shadow(bottom rgb(0 0 0 / 0.3) 6px 4px); }",
+        ".a { @include text-shadow(30deg #5bc0bb 12px); }",
+        ".a { @include text-shadow(bottom-right #5bc0bb 24px true); }",
+        ".a { @include text-shadow(bottom-right #5bc0bb 2rem true, $step: 0.125rem); }",
+        ".a { @include text-shadow(top crimson 4px, bottom gold 4px); }",
+        ".a { @include text-shadow(top var(--shadow-color) var(--shadow-size)); }"
       ],
       "rejects": [
         ".a { @include text-shadow(42); }",
-        ".a { @include text-shadow(top red); }"
+        ".a { @include text-shadow(top red); }",
+        ".a { @include text-shadow(sideways red 5px); }",
+        ".a { @include text-shadow(top red 5px, sideways blue 3px); }",
+        ".a { @include text-shadow(top notacolor 5px); }",
+        ".a { @include text-shadow(top red -5px); }",
+        ".a { @include text-shadow(top red 5); }",
+        ".a { @include text-shadow(top red 5px -2px); }",
+        ".a { @include text-shadow(top red 5px 2px maybe); }",
+        ".a { @include text-shadow(top red var(--s) true); }",
+        ".a { @include text-shadow(top red 2rem true, $step: 4px); }",
+        ".a { @include text-shadow(top red 5px, $step: 2px); }",
+        ".a { @include text-shadow(top red 5px, $fill: true); }"
       ]
     },
     {

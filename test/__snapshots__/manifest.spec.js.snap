@@ -1886,9 +1886,45 @@ exports[`Manifest examples text-selection: @include text-selection { background:
 }"
 `;
 
-exports[`Manifest examples text-shadow: .a { @include text-shadow(bottom-right red 5px); } 1`] = `
+exports[`Manifest examples text-shadow: .a { @include text-shadow(30deg #5bc0bb 12px); } 1`] = `
 ".a {
-  text-shadow: 5px 5px red;
+  text-shadow: 6px -10.392px #5bc0bb;
+}"
+`;
+
+exports[`Manifest examples text-shadow: .a { @include text-shadow(bottom rgb(0 0 0 / 0.3) 6px 4px); } 1`] = `
+".a {
+  text-shadow: 0 6px 4px rgba(0, 0, 0, 0.3);
+}"
+`;
+
+exports[`Manifest examples text-shadow: .a { @include text-shadow(bottom-right #5bc0bb 2rem true, $step: 0.125 1`] = `
+".a {
+  text-shadow: 0.0884rem 0.0884rem #5bc0bb, 0.1768rem 0.1768rem #5bc0bb, 0.2652rem 0.2652rem #5bc0bb, 0.3535rem 0.3535rem #5bc0bb, 0.4419rem 0.4419rem #5bc0bb, 0.5303rem 0.5303rem #5bc0bb, 0.6187rem 0.6187rem #5bc0bb, 0.7071rem 0.7071rem #5bc0bb, 0.7955rem 0.7955rem #5bc0bb, 0.8839rem 0.8839rem #5bc0bb, 0.9723rem 0.9723rem #5bc0bb, 1.0606rem 1.0606rem #5bc0bb, 1.149rem 1.149rem #5bc0bb, 1.2374rem 1.2374rem #5bc0bb, 1.3258rem 1.3258rem #5bc0bb, 1.4142rem 1.4142rem #5bc0bb;
+}"
+`;
+
+exports[`Manifest examples text-shadow: .a { @include text-shadow(bottom-right #5bc0bb 24px true); } 1`] = `
+".a {
+  text-shadow: 0.7071px 0.7071px #5bc0bb, 1.4142px 1.4142px #5bc0bb, 2.1213px 2.1213px #5bc0bb, 2.8284px 2.8284px #5bc0bb, 3.5355px 3.5355px #5bc0bb, 4.2426px 4.2426px #5bc0bb, 4.9497px 4.9497px #5bc0bb, 5.6568px 5.6568px #5bc0bb, 6.3639px 6.3639px #5bc0bb, 7.071px 7.071px #5bc0bb, 7.7781px 7.7781px #5bc0bb, 8.4852px 8.4852px #5bc0bb, 9.1923px 9.1923px #5bc0bb, 9.8994px 9.8994px #5bc0bb, 10.6065px 10.6065px #5bc0bb, 11.3136px 11.3136px #5bc0bb, 12.0207px 12.0207px #5bc0bb, 12.7278px 12.7278px #5bc0bb, 13.4349px 13.4349px #5bc0bb, 14.142px 14.142px #5bc0bb, 14.8491px 14.8491px #5bc0bb, 15.5562px 15.5562px #5bc0bb, 16.2633px 16.2633px #5bc0bb, 16.9704px 16.9704px #5bc0bb;
+}"
+`;
+
+exports[`Manifest examples text-shadow: .a { @include text-shadow(bottom-right rgb(0 0 0 / 0.35) 6px); } 1`] = `
+".a {
+  text-shadow: 4.2426px 4.2426px rgba(0, 0, 0, 0.35);
+}"
+`;
+
+exports[`Manifest examples text-shadow: .a { @include text-shadow(top crimson 4px, bottom gold 4px); } 1`] = `
+".a {
+  text-shadow: 0 -4px crimson, 0 4px gold;
+}"
+`;
+
+exports[`Manifest examples text-shadow: .a { @include text-shadow(top var(--shadow-color) var(--shadow-size)); 1`] = `
+".a {
+  text-shadow: 0 calc(-1 * var(--shadow-size)) var(--shadow-color);
 }"
 `;
 

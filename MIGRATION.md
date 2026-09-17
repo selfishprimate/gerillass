@@ -2,7 +2,7 @@
 
 Written while 4.0.0 is being prepared, and added to as its changes land. So far
 it covers `hide`, where breakpoint ranges end, `columnizer`, `before` and
-`after`, `font-face`, `all-text-inputs`, `aspect-ratio`, and `counter`. The 3.0.0 and
+`after`, `font-face`, `all-text-inputs`, `aspect-ratio`, `counter`, and `text-shadow`. The 3.0.0 and
 2.0.0 guides follow below, unchanged.
 
 Every claim here was checked by compiling the old call against 3.0.0's source
@@ -26,6 +26,9 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `aspect-ratio` holds its ratio on an element with a `height` attribute | fixes rendering; breaks only a call that relied on the attribute |
 | `counter` numbers the children of its element and reads no classes | breaking, silent |
 | `counter` takes `$name`, `$continue`, `$start` and `$items` | not breaking |
+| `text-shadow` puts a diagonal the same distance away as a straight one | breaking, silent |
+| `text-shadow` refuses a direction, colour, distance or blur a browser drops | breaking, loud |
+| `text-shadow` takes an angle, a `var()` distance and `$step` | not breaking |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -40,6 +43,7 @@ grep -rn "font-face(" --include=*.scss .
 grep -rn "all-text-inputs\|list-of-text-inputs" --include=*.scss .
 grep -rn "counter(" --include=*.scss .
 grep -rn "counter-start\|counter-continue\|counter-item" .
+grep -rn "text-shadow(" --include=*.scss .
 ```
 
 ---
@@ -526,6 +530,78 @@ part correctly, split once or three times.
 - **In Safari, an item that is itself a container** shows 0, where 3.x showed
   1. Put `container-type` on an element inside the item, which numbers
   correctly in all three browsers.
+
+---
+
+## Change: `text-shadow` measures every direction as an angle
+
+A direction may now be an angle, and the eight keywords are the 45 degree steps
+of that same circle, measured from the top and clockwise, as `gradient`
+measures them. The offsets are the sine and cosine of the angle, so a shadow
+sits the same distance from the text whichever way it points.
+
+| Call | 3.x | 4.0.0 |
+|---|---|---|
+| `text-shadow(top red 5px)` | `0 -5px red` | unchanged |
+| `text-shadow(bottom red 5px)` | `0 5px red` | unchanged |
+| `text-shadow(left red 5px)` | `-5px 0 red` | unchanged |
+| `text-shadow(right red 5px)` | `5px 0 red` | unchanged |
+| `text-shadow(bottom-right red 5px)` | `5px 5px red` | `3.5355px 3.5355px red` |
+| `text-shadow(top-left red 5px)` | `-5px -5px red` | `-3.5355px -3.5355px red` |
+| `text-shadow(30deg red 10px)` | `Invalid index` | `5px -8.66px red` |
+
+**Only the four diagonals change.** A diagonal used to write the distance on
+both axes, which put the shadow 1.414 times further out than a straight one at
+the same number. To keep the old look, multiply the distance by `0.7071`, or
+write the diagonal as the angle it is and the distance you want.
+
+```scss
+// 3.x
+.a { @include text-shadow(bottom-right rgb(0 0 0 / 0.35) 5px); }
+
+// 4.0.0, same rendering
+.a { @include text-shadow(bottom-right rgb(0 0 0 / 0.35) 7.071px); }
+```
+
+Filled shadows, `true`, follow the same line, so a long shadow drawn with a
+diagonal is now shorter by the same factor.
+
+## Break: `text-shadow` refuses what a browser drops
+
+One broken layer drops the whole `text-shadow` declaration, so these were
+shadows that never appeared. Measured in Chrome 152, Firefox 156 and Safari
+26.6.2: every value in the table computes to `none` in all three.
+
+| Call | 3.x wrote | 4.0.0 |
+|---|---|---|
+| `text-shadow(top red -5px)` | `0 --5px red` | raises: point the shadow the other way |
+| `text-shadow(top red 5)` | `0 -5 red` | raises: a unitless number is not a length |
+| `text-shadow(top red 5px -2px)` | `0 -5px -2px red` | raises: a blur cannot be negative |
+| `text-shadow(top notacolor 5px)` | `0 -5px notacolor` | raises: not a colour |
+| `text-shadow(top red 5px, sideways blue 3px)` | `0 -5px red`, the second group dropped in silence | raises: names the directions |
+| `text-shadow(sideways red 5px)` | Sass's `() isn't a valid CSS value` | raises with the library's message |
+| `text-shadow(top red 5px 2px maybe)` | `0 -5px 2px red`, the flag ignored | raises: the fill flag must be `true` |
+| `text-shadow()` | Sass's `Invalid index 1` | raises: it needs at least one shadow |
+
+Three calls that used to fail now work: an upper-case keyword such as
+`TOP red 5px`, a distance in a unit that does not divide into whole steps,
+`top red 1.5rem true`, and a distance the browser resolves,
+`top red var(--size)`, which is written as a `calc()` holding the sine and
+cosine.
+
+## Added: `$step`
+
+A filled shadow draws one layer per step, and the step used to be one unit of
+the distance's own unit: 40 layers for `40px`, three for `3em`. `$step` sets it,
+in the same unit as the distance.
+
+```scss
+.a { @include text-shadow(bottom-right #fbbf24 3rem true, $step: 0.125rem); }
+```
+
+`$step` cannot fill a `var()` distance, since the layers are counted while the
+stylesheet compiles, and a `$step` with no filled group raises rather than
+doing nothing.
 
 ---
 

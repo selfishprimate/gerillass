@@ -1,0 +1,105 @@
+// Since 4.0.0 a direction is an angle: the keywords are the eight 45 degree
+// steps and the offsets are the sine and cosine of that angle, so a shadow sits
+// the same distance from the text whichever way it points. Measured in Chrome
+// 152, Firefox 156 and Safari 26.6.2, where the old diagonal output and every
+// value this mixin now refuses are dropped by all three.
+@use 'true' as *;
+@use '../../scss/library/text-shadow' as *;
+
+@include describe('text-shadow()') {
+  @include it('Writes a straight keyword as one axis, with the other at zero.') {
+    @include assert {
+      @include output {
+        .a {
+          @include text-shadow(top red 5px);
+        }
+      }
+      @include expect {
+        .a {
+          text-shadow: 0 -5px red;
+        }
+      }
+    }
+  }
+
+  @include it('Puts a diagonal keyword the same distance away as a straight one.') {
+    @include assert {
+      @include output {
+        .a {
+          @include text-shadow(bottom-right red 5px);
+        }
+      }
+      @include expect {
+        .a {
+          text-shadow: 3.5355px 3.5355px red;
+        }
+      }
+    }
+  }
+
+  @include it('Takes an angle, in any of CSS angle units.') {
+    @include assert {
+      @include output {
+        .a {
+          @include text-shadow(30deg red 10px, 0.25turn blue 4px);
+        }
+      }
+      @include expect {
+        .a {
+          text-shadow: 5px -8.66px red, 4px 0 blue;
+        }
+      }
+    }
+  }
+
+  @include it('Fills the gap in steps of the distance unit, and takes $step.') {
+    @include assert {
+      @include output {
+        .a {
+          @include text-shadow(top red 3px true);
+        }
+        .b {
+          @include text-shadow(top red 1.5rem true, $step: 0.5rem);
+        }
+      }
+      @include expect {
+        .a {
+          text-shadow: 0 -1px red, 0 -2px red, 0 -3px red;
+        }
+        .b {
+          text-shadow: 0 -0.5rem red, 0 -1rem red, 0 -1.5rem red;
+        }
+      }
+    }
+  }
+
+  @include it('Writes a distance only the browser knows as a calc().') {
+    @include assert {
+      @include output {
+        .a {
+          @include text-shadow(45deg red var(--size), top blue var(--size));
+        }
+      }
+      @include expect {
+        .a {
+          text-shadow: calc(0.7071 * var(--size)) calc(-0.7071 * var(--size)) red, 0 calc(-1 * var(--size)) blue;
+        }
+      }
+    }
+  }
+
+  @include it('Matches a keyword in any case, as CSS does.') {
+    @include assert {
+      @include output {
+        .a {
+          @include text-shadow(TOP red 5px);
+        }
+      }
+      @include expect {
+        .a {
+          text-shadow: 0 -5px red;
+        }
+      }
+    }
+  }
+}
