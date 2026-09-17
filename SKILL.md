@@ -133,6 +133,11 @@ a dropped declaration rather than an error.
 - If `content` comes only from another state, such as `.a:hover::after` or a media query, the pseudo-element is now drawn empty the rest of the time. Write `content: none` in the block.
 - On a `q` element the default replaces the browser's quotation marks; pass `open-quote` or `close-quote` in the block to keep them. A bare `::after { content: ... }` rule written before the include loses to the default, since both have the same specificity.
 
+**`all-text-inputs`**
+
+- Matches `:where(input):not([type=button], [type=checkbox], [type=color], [type=file], [type=hidden], [type=image], [type=radio], [type=range], [type=reset], [type=submit])` and `textarea`, so an input with no type or a type the browser does not know, which it draws as a text field, is included. Until 4.0.0 it listed text types instead, which styled `[type=color]` and stretched its swatch, and missed unknown types.
+- `select` is not matched. Style it in a rule of its own beside the mixin.
+
 **`aspect-ratio`**
 
 - On an element with a `height` attribute, such as `<img width="1600" height="900">` or an embed code's `<iframe>`, the attribute height wins and the ratio is ignored. Write `height: auto` after the include.
@@ -210,7 +215,7 @@ a dropped declaration rather than an error.
 | `adaptive($gutter: 30px)` | Centred container whose max-width steps up at every breakpoint. |
 | `after($content: null)` | Styles the ::after pseudo-element. A `data-` argument becomes an attr() content value. |
 | `all-buttons($pseudo: null)` | Targets every button-like element at once, optionally in one pseudo-class state. |
-| `all-text-inputs($pseudo: null)` | Targets every text-like input at once, optionally in one pseudo-class state. |
+| `all-text-inputs($pseudo: null)` | Targets every form control a browser draws as a text field, textarea included, optionally in one pseudo-class state. |
 | `antialias($value: null)` | Turns on subpixel-antialiased text smoothing. |
 | `aspect-ratio($ratio: null, $fit: cover)` | Holds an element to a ratio and adds what CSS aspect-ratio alone leaves out: object-fit so an image is cropped rather than stretched, and border: 0 so an iframe does not overflow its container by 4px. Apply it to the element itself, not to a wrapper. |
 | `background-dots($color: null, $size: 1em, $gutter: null, $diagonal: true, $image: null)` | Repeating dot pattern as a background, optionally over an image. |

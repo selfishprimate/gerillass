@@ -10,89 +10,131 @@ page_image: "gerillass-all-text-inputs.jpg"
 
 <Member name="all-text-inputs">
 
-The **All Text Inputs** Sass mixin helps you target all the text-based HTML input elements in the DOM, so you can easily apply your style rules.
+The **All Text Inputs** Sass mixin selects every form control a browser draws as a text field, so one rule styles them all: text, email, password, search, number, the date and time pickers, and `textarea`. It leaves out the controls that are not text fields, such as checkboxes, radios, colour pickers, range sliders, file pickers and buttons.
 
 </Member>
 
 ## Arguments
 
-<Arguments of="all-text-inputs" footnote="You can call the mixin at the root level of your stylesheet to target all the text-based input elements in the DOM, or call it inside a selector to target only the elements that are children of that selector.">
-  <Argument name="$pseudo" type="string">Sets the pseudo-class selector for the selected text-based input elements. Accepts the values <code>hover</code>, <code>focus</code>, <code>focus-visible</code>, <code>active</code>, <code>invalid</code>, <code>user-invalid</code>, <code>required</code>, and <code>disabled</code>.</Argument>
+<Arguments of="all-text-inputs" footnote="Call the mixin at the root of your stylesheet to style every text field on the page, or inside a selector to style only the ones within it.">
+  <Argument name="$pseudo" type="string">A state to select the fields in. Accepts <code>hover</code>, <code>focus</code>, <code>focus-visible</code>, <code>active</code>, <code>invalid</code>, <code>user-invalid</code>, <code>required</code> and <code>disabled</code>. Leave it out for the plain state.</Argument>
 </Arguments>
+
+## What it matches
+
+Measured in Chrome 152, Firefox 156 and Safari 26.6.2, by giving every kind of control the same text-field styles; `image` and `hidden` are left out by the selector and were not drawn:
+
+| Styled | Left alone |
+|---|---|
+| `text`, `search`, `email`, `url`, `tel`, `password`, `number` | `checkbox`, `radio` |
+| `date`, `datetime-local`, `month`, `week`, `time` | `color`, `range`, `file` |
+| an `input` with no `type`, or a `type` the browser does not know, such as `datetime` | `submit`, `reset`, `button`, `image`, `hidden` |
+| `textarea` | `select`, which is not a text field |
+
+A browser draws an `input` whose `type` it does not recognise as a text field, and all three did, for the removed `datetime` and for a made-up `type="foo"`. Safari draws `month` and `week` as text too. So the mixin selects every `input` except the types that are not text fields, rather than listing the text ones.
+
+<Hint kind="warning">
+
+**Until 4.0.0 a colour picker was styled as a text field**, and the swatch was stretched into a thin bar inside the box in all three browsers. It was on the list of matched types, and an `input` with a `type` the browser does not know, such as `type="foo"`, was not, though it is drawn as a text field. The selector also matched any element with a `type` attribute of those values, not only `input`. It is now `:where(input):not(...)` plus `textarea`, with the same specificity as before for typed inputs.
+
+</Hint>
 
 ## Examples
 
-<Example caption="Simply call the mixin at the root level of your stylesheet **to target all the text-based input elements**.">
+<Example caption="A sign-up form. One rule styles the name, email and password fields, the date and the message, while the colour picker and the checkbox keep their own look. `select` is not a text field, so it gets its own rule; it is written beside the mixin here so the form matches.">
 ```scss
 @include all-text-inputs {
-  background-color: #e6e6e6;
+  width: 100%;
+  height: 38px;
+  padding: 0 12px;
+  border: 1px solid #d4d4d8;
+  border-radius: 6px;
+  background: #fff;
+  font: inherit;
+  color: inherit;
+}
+
+select {
+  width: 100%;
+  height: 38px;
+  padding: 0 8px;
+  border: 1px solid #d4d4d8;
+  border-radius: 6px;
+  background: #fff;
+  font: inherit;
 }
 ```
 ```html
-<input type="text" placeholder="A text input" style="width: 100%; margin-bottom: 8px" />
-<input type="email" placeholder="An email input" style="width: 100%; margin-bottom: 8px" />
-<textarea placeholder="And a textarea" rows="2" style="width: 100%"></textarea>
+<style>
+  .form { display: grid; gap: 12px; max-width: 360px; font: 14px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+  .field { display: grid; gap: 6px; }
+  .field > span { font-weight: 500; }
+  textarea { height: 76px; padding-top: 8px; resize: vertical; }
+  .inline { display: flex; align-items: center; gap: 8px; }
+</style>
+<form class="form" onsubmit="return false">
+  <label class="field"><span>Name</span><input placeholder="Ada Lovelace"></label>
+  <label class="field"><span>Email</span><input type="email" placeholder="ada@example.com"></label>
+  <label class="field"><span>Password</span><input type="password" value="secret"></label>
+  <label class="field"><span>Start date</span><input type="date" value="2026-09-17"></label>
+  <label class="field"><span>Plan</span><select><option>Pro</option><option>Team</option></select></label>
+  <label class="field"><span>Message</span><textarea placeholder="Anything we should know?"></textarea></label>
+  <label class="inline"><input type="color" value="#2563eb"> Accent colour</label>
+  <label class="inline"><input type="checkbox" checked> Send me product news</label>
+</form>
 ```
 </Example>
 
-<Example caption="Let's target all the text-based HTML inputs with the **:hover** pseudo-class selector applied.">
+<Example caption="A focus ring on every text field, with the **Focus Ring** mixin inside this one. **Click into a field, or press the Tab key.** Form fields show `:focus-visible` on a click as well, so the ring appears either way.">
 ```scss
-@include all-text-inputs(hover) {
-  background-color: orange;
+@include all-text-inputs {
+  width: 100%;
+  height: 38px;
+  padding: 0 12px;
+  border: 1px solid #d4d4d8;
+  border-radius: 6px;
+  font: inherit;
+  @include focus-ring(2px, 2px, #2563eb);
 }
 ```
 ```html
-<input type="text" placeholder="A text input" style="width: 100%; margin-bottom: 8px" />
-<input type="email" placeholder="An email input" style="width: 100%; margin-bottom: 8px" />
-<textarea placeholder="And a textarea" rows="2" style="width: 100%"></textarea>
+<style>
+  .form { display: grid; gap: 12px; max-width: 360px; font: 14px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+  .field { display: grid; gap: 6px; }
+  .field > span { font-weight: 500; }
+</style>
+<form class="form" onsubmit="return false">
+  <label class="field"><span>Search</span><input type="search" placeholder="Search the docs"></label>
+  <label class="field"><span>Website</span><input type="url" placeholder="https://"></label>
+</form>
 ```
 </Example>
 
-<Example caption="Let's target all the text-based HTML inputs with the **:focus** pseudo-class selector applied.">
+<Example caption="An error style that waits for the user, with `user-invalid`. Nothing is marked while the form is untouched. **Type something that is not an email address, then click outside the field.**">
 ```scss
-@include all-text-inputs(focus) {
-  background-color: green;
+@include all-text-inputs {
+  width: 100%;
+  height: 38px;
+  padding: 0 12px;
+  border: 1px solid #d4d4d8;
+  border-radius: 6px;
+  font: inherit;
 }
-```
-```html
-<input type="text" placeholder="A text input" style="width: 100%; margin-bottom: 8px" />
-<input type="email" placeholder="An email input" style="width: 100%; margin-bottom: 8px" />
-<textarea placeholder="And a textarea" rows="2" style="width: 100%"></textarea>
-```
-</Example>
 
-<Example caption="Now let's target all the text-based HTML inputs with the **:active** pseudo-class selector applied.">
-```scss
-.element {
-  @include all-text-inputs(active) {
-    background-color: green;
-    color: white;
-  };
+@include all-text-inputs(user-invalid) {
+  border-color: #dc2626;
+  background: #fef2f2;
 }
 ```
 ```html
-<div class="element">
-<input type="text" placeholder="A text input" style="width: 100%; margin-bottom: 8px" />
-<input type="email" placeholder="An email input" style="width: 100%; margin-bottom: 8px" />
-<textarea placeholder="And a textarea" rows="2" style="width: 100%"></textarea>
-</div>
-```
-</Example>
-
-<Example caption="Now let's target all the text-based HTML inputs with the **:invalid** pseudo-class selector applied.">
-```scss
-.element {
-  @include all-text-inputs(invalid) {
-    background-color: red;
-    color: white;
-  };
-}
-```
-```html
-<div class="element">
-  <input type="email" value="not-an-email-address" style="width: 100%; margin-bottom: 8px" />
-  <input type="email" value="valid@example.com" style="width: 100%" />
-</div>
+<style>
+  .form { display: grid; gap: 12px; max-width: 360px; font: 14px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+  .field { display: grid; gap: 6px; }
+  .field > span { font-weight: 500; }
+</style>
+<form class="form" onsubmit="return false">
+  <label class="field"><span>Email</span><input type="email" required placeholder="ada@example.com"></label>
+</form>
 ```
 </Example>
 
@@ -102,76 +144,55 @@ The **All Text Inputs** Sass mixin helps you target all the text-based HTML inpu
 
 </Hint>
 
-<Example caption="The same error style with **:user-invalid**. Nothing is marked while the fields are untouched. Type something that is not an email address into the field, then click outside it.">
+<Example caption="Disabled fields, dimmed so they read as unavailable, with a cursor that says so.">
 ```scss
-.element {
-  @include all-text-inputs(user-invalid) {
-    border-color: crimson;
-    background-color: #fff5f5;
-  };
+@include all-text-inputs(disabled) {
+  background: #f4f4f5;
+  color: #a1a1aa;
+  cursor: not-allowed;
 }
 ```
 ```html
-<div class="element">
-  <input type="email" placeholder="you@example.com" style="width: 100%; border: 2px solid #d4d4d8; padding: 6px" />
-</div>
+<style>
+  .form { display: grid; gap: 12px; max-width: 360px; font: 14px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+  .field { display: grid; gap: 6px; }
+  .field > span { font-weight: 500; }
+  .field input { width: 100%; height: 38px; padding: 0 12px; border: 1px solid #d4d4d8; border-radius: 6px; font: inherit; }
+</style>
+<form class="form" onsubmit="return false">
+  <label class="field"><span>Account ID</span><input value="acc_48213" disabled></label>
+  <label class="field"><span>Display name</span><input value="Ada"></label>
+</form>
 ```
 </Example>
 
-<Example caption="Now let's try it with the **:required** pseudo-class selector applied.">
+<Example caption="Inside a selector, only the fields within it are styled. The search bar's field is borderless to sit inside its pill, and the field below, outside the bar, is untouched.">
 ```scss
-.element {
-  @include all-text-inputs(required) {
-    background-color: orange;
-    color: white;
-  };
-}
-```
-```html
-<div class="element">
-  <input type="text" placeholder="Required" required style="width: 100%; margin-bottom: 8px" />
-  <input type="text" placeholder="Optional" style="width: 100%" />
-</div>
-```
-</Example>
-
-<Example caption="Now let's try it with the **:disabled** pseudo-class selector applied.">
-```scss
-.element {
-  @include all-text-inputs(disabled) {
-    background-color: gray;
-    color: black;
-  };
-}
-```
-```html
-<div class="element">
-  <input type="text" value="Disabled" disabled style="width: 100%; margin-bottom: 8px" />
-  <input type="text" value="Enabled" style="width: 100%" />
-</div>
-```
-</Example>
-
-<Example caption="Call the mixin inside a selector to target only the text-based input elements inside that selector.">
-```scss
-.containing-element {
+.search-bar {
   @include all-text-inputs {
-    background-color: green;
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    background: transparent;
+    font: inherit;
+    outline: none;
   }
 }
 ```
 ```html
-<div class="containing-element">
-<input type="text" placeholder="A text input" style="width: 100%; margin-bottom: 8px" />
-<input type="email" placeholder="An email input" style="width: 100%; margin-bottom: 8px" />
-<textarea placeholder="And a textarea" rows="2" style="width: 100%"></textarea>
-</div>
-<input type="text" placeholder="Outside it, so untouched" style="width: 100%; margin-top: 8px" />
+<style>
+  .search-bar { display: flex; align-items: center; gap: 8px; max-width: 360px; height: 40px; padding: 0 14px; border-radius: 999px; background: #f4f4f5; font: 14px/1 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+  .below { margin-top: 12px; }
+</style>
+<div class="search-bar"><span aria-hidden="true">&#128269;</span><input type="search" placeholder="Search"></div>
+<input class="below" type="text" placeholder="Outside the bar, so untouched">
 ```
 </Example>
 
 ## Related Links
 
 - [All Buttons](/docs/all-buttons)
-- [CSS Attribute Selectors](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/Attribute_selectors)
+- [Focus Ring](/docs/focus-ring)
+- [CSS :where](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:where)
 - [CSS :not](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:not)
+- [CSS :user-invalid](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:user-invalid)

@@ -115,26 +115,32 @@ exports[`Manifest examples all-buttons: @include all-buttons("hover") { opacity:
 }"
 `;
 
+exports[`Manifest examples all-text-inputs: .search-bar { @include all-text-inputs { border: 0; } } 1`] = `
+".search-bar :where(input):not([type=button], [type=checkbox], [type=color], [type=file], [type=hidden], [type=image], [type=radio], [type=range], [type=reset], [type=submit]), .search-bar textarea {
+  border: 0;
+}"
+`;
+
 exports[`Manifest examples all-text-inputs: @include all-text-inputs { border: 1px solid; } 1`] = `
-"[type=color], [type=date], [type=datetime], [type=datetime-local], [type=email], [type=month], [type=number], [type=password], [type=search], [type=tel], [type=text], [type=time], [type=url], [type=week], input:not([type]), textarea {
+":where(input):not([type=button], [type=checkbox], [type=color], [type=file], [type=hidden], [type=image], [type=radio], [type=range], [type=reset], [type=submit]), textarea {
   border: 1px solid;
 }"
 `;
 
 exports[`Manifest examples all-text-inputs: @include all-text-inputs("focus") { outline: 2px solid; } 1`] = `
-"[type=color]:focus, [type=date]:focus, [type=datetime]:focus, [type=datetime-local]:focus, [type=email]:focus, [type=month]:focus, [type=number]:focus, [type=password]:focus, [type=search]:focus, [type=tel]:focus, [type=text]:focus, [type=time]:focus, [type=url]:focus, [type=week]:focus, input:not([type]):focus, textarea:focus {
+":where(input):not([type=button], [type=checkbox], [type=color], [type=file], [type=hidden], [type=image], [type=radio], [type=range], [type=reset], [type=submit]):focus, textarea:focus {
   outline: 2px solid;
 }"
 `;
 
 exports[`Manifest examples all-text-inputs: @include all-text-inputs("focus-visible") { outline: 2px solid; } 1`] = `
-"[type=color]:focus-visible, [type=date]:focus-visible, [type=datetime]:focus-visible, [type=datetime-local]:focus-visible, [type=email]:focus-visible, [type=month]:focus-visible, [type=number]:focus-visible, [type=password]:focus-visible, [type=search]:focus-visible, [type=tel]:focus-visible, [type=text]:focus-visible, [type=time]:focus-visible, [type=url]:focus-visible, [type=week]:focus-visible, input:not([type]):focus-visible, textarea:focus-visible {
+":where(input):not([type=button], [type=checkbox], [type=color], [type=file], [type=hidden], [type=image], [type=radio], [type=range], [type=reset], [type=submit]):focus-visible, textarea:focus-visible {
   outline: 2px solid;
 }"
 `;
 
 exports[`Manifest examples all-text-inputs: @include all-text-inputs("user-invalid") { border-color: crimson; } 1`] = `
-"[type=color]:user-invalid, [type=date]:user-invalid, [type=datetime]:user-invalid, [type=datetime-local]:user-invalid, [type=email]:user-invalid, [type=month]:user-invalid, [type=number]:user-invalid, [type=password]:user-invalid, [type=search]:user-invalid, [type=tel]:user-invalid, [type=text]:user-invalid, [type=time]:user-invalid, [type=url]:user-invalid, [type=week]:user-invalid, input:not([type]):user-invalid, textarea:user-invalid {
+":where(input):not([type=button], [type=checkbox], [type=color], [type=file], [type=hidden], [type=image], [type=radio], [type=range], [type=reset], [type=submit]):user-invalid, textarea:user-invalid {
   border-color: crimson;
 }"
 `;

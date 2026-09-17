@@ -1,6 +1,6 @@
 {
   "name": "all-text-inputs",
-  "summary": "Targets every text-like input at once, optionally in one pseudo-class state.",
+  "summary": "Targets every form control a browser draws as a text field, textarea included, optionally in one pseudo-class state.",
   "arguments": [
     {
       "name": "$pseudo",
@@ -21,9 +21,14 @@
     "@include all-text-inputs { border: 1px solid; }",
     "@include all-text-inputs(\"focus\") { outline: 2px solid; }",
     "@include all-text-inputs(\"focus-visible\") { outline: 2px solid; }",
-    "@include all-text-inputs(\"user-invalid\") { border-color: crimson; }"
+    "@include all-text-inputs(\"user-invalid\") { border-color: crimson; }",
+    ".search-bar { @include all-text-inputs { border: 0; } }"
   ],
   "rejects": [
     "@include all-text-inputs(nonsense) { color: red; }"
+  ],
+  "caveats": [
+    "Matches `:where(input):not([type=button], [type=checkbox], [type=color], [type=file], [type=hidden], [type=image], [type=radio], [type=range], [type=reset], [type=submit])` and `textarea`, so an input with no type or a type the browser does not know, which it draws as a text field, is included. Until 4.0.0 it listed text types instead, which styled `[type=color]` and stretched its swatch, and missed unknown types.",
+    "`select` is not matched. Style it in a rule of its own beside the mixin."
   ]
 }

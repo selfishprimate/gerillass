@@ -2,7 +2,8 @@
 
 Written while 4.0.0 is being prepared, and added to as its changes land. So far
 it covers `hide`, where breakpoint ranges end, `columnizer`, `before` and
-`after`, and `font-face`. The 3.0.0 and 2.0.0 guides follow below, unchanged.
+`after`, `font-face`, and `all-text-inputs`. The 3.0.0 and 2.0.0 guides follow
+below, unchanged.
 
 Every claim here was checked by compiling the old call against 3.0.0's source
 and the new one against 4.0.0's, and the CSS each produces was measured in
@@ -21,6 +22,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `columnizer` refuses a percentage or negative gutter | breaking, loud |
 | `before` and `after` with no argument write an empty `content` | breaking, silent |
 | `font-face` lists only `woff2` unless told otherwise | breaking, silent |
+| `all-text-inputs` excludes the non-text types instead of listing the text ones | breaking, silent |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -32,6 +34,7 @@ grep -rnE "(breakpoint|remove|container-query)\(" --include=*.scss .
 grep -rn "columnizer(" --include=*.scss .
 grep -rnE "include (gls-)?(before|after)( |;|\{|\(\))" --include=*.scss .
 grep -rn "font-face(" --include=*.scss .
+grep -rn "all-text-inputs\|list-of-text-inputs" --include=*.scss .
 ```
 
 ---
@@ -354,6 +357,50 @@ built clean.
   `@include font-face("Inter", "/fonts/inter", $file-formats: woff2 woff);`.
 - **A browser older than WOFF2**, before Chrome 36, Firefox 39 and Safari 10,
   gets the fallback font unless you list `woff` too.
+
+---
+
+## Break: `all-text-inputs` selects by exclusion
+
+`$list-of-text-inputs`, and the selector `all-text-inputs` writes from it, used
+to list fourteen `type` values, `input:not([type])` and `textarea`. It is now:
+
+```css
+:where(input):not([type=button], [type=checkbox], [type=color], [type=file],
+  [type=hidden], [type=image], [type=radio], [type=range], [type=reset],
+  [type=submit]),
+textarea
+```
+
+### What was measured
+
+Every kind of form control, 27 in all, given the same text-field styles in
+Chrome 152, Firefox 156 and Safari 26.6.2, with the old selector and the
+compiled new one:
+
+- **`[type=color]` is no longer styled.** With the old list its swatch was
+  stretched into a thin bar inside a text box in all three.
+- **An `input` with a `type` the browser does not know is now styled.** All
+  three draw `type="foo"` as a text field, and the old list missed it. The
+  removed `datetime`, which the old list named, is covered the same way.
+- **Every other control is unchanged**: the text types, the date and time
+  pickers, an untyped input and `textarea` styled as before, and range, file,
+  checkbox, radio, the buttons and `select` left alone as before. `:focus` and
+  `:focus-visible` states followed the same split.
+
+### What to check
+
+- **A colour picker you styled on purpose** through the mixin needs a rule of
+  its own now.
+- **Specificity.** A typed input is matched at the same specificity as the old
+  `[type='text']`, one attribute. An input with no `type` was `input:not([type])`,
+  one element higher, and is now matched like the typed ones, so a rule of equal
+  weight written later can win where it did not.
+- **A `type` attribute on something other than an input**, such as a
+  hypothetical `<div type="text">`, was matched by the old `[type='text']` and
+  is not now.
+- **A replaced `$list-of-text-inputs`** still works: the mixin writes whatever
+  list you pass, and the output of a custom list is unchanged.
 
 ---
 

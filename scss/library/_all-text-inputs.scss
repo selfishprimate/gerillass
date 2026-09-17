@@ -1,6 +1,7 @@
 @charset "UTF-8";
 
 @use "sass:list";
+@use "sass:meta";
 @use "../lists/list-of-text-inputs" as *;
 @use "../utilities/pseudo-selector" as *;
 
@@ -16,6 +17,6 @@
       @content;
     }
   } @else {
-    @error "The argument must be `null` or one of the followings: #{$list}";
+    @error "`#{meta.inspect($pseudo)}` is not a valid $pseudo for `all-text-inputs`. Pass one of: #{$list}, or nothing for the plain state.";
   }
 }

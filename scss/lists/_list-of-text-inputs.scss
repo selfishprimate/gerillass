@@ -1,20 +1,20 @@
 @charset "UTF-8";
 
+// Every control a browser draws as a text field, for `all-text-inputs`.
+//
+// Until 4.0.0 this named the text types one by one. Measured in Chrome 152,
+// Firefox 156 and Safari 26.6.2 with the same field styles on every control,
+// that list included `[type='color']`, whose swatch the styles stretched into a
+// thin bar inside a text box, and missed any type a browser does not know, such
+// as `type="foo"`, which all three draw as a text field. Excluding the types
+// that are not text fields covers both, and `datetime`, removed from HTML, and
+// `month` and `week`, which Safari draws as text, along with them.
+//
+// :where(input) keeps the specificity of the old `[type='text']`, and limits
+// the match to input elements, where `[type='text']` alone also matched any
+// other element with that attribute. `select` is left out on purpose: its
+// arrow and padding differ from browser to browser, so style it on its own.
 $list-of-text-inputs: (
-  "[type='color']",
-  "[type='date']",
-  "[type='datetime']",
-  "[type='datetime-local']",
-  "[type='email']",
-  "[type='month']",
-  "[type='number']",
-  "[type='password']",
-  "[type='search']",
-  "[type='tel']",
-  "[type='text']",
-  "[type='time']",
-  "[type='url']",
-  "[type='week']",
-  "input:not([type])",
+  ":where(input):not([type='button'], [type='checkbox'], [type='color'], [type='file'], [type='hidden'], [type='image'], [type='radio'], [type='range'], [type='reset'], [type='submit'])",
   "textarea"
 ) !default;
