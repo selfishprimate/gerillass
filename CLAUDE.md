@@ -322,7 +322,7 @@ Until 2.0.0 they carried a `__` prefix. It had to go: under `@use`/`@forward` a 
 
 **A utility that nothing in `scss/` calls is not dead code.** `remify`, `convertToEm`, `fontSizer`, `isNumber`, `tint` and `shade` are called by no mixin at all — they are there for users, and removing them would break stylesheets. Never treat "no internal callers" as a reason to delete a member; the library is the smaller half of its own audience.
 
-Mixins validate their input and `@error` with a message that names the accepted values — 47 of the 48 that take arguments do this, mostly inline. Match that style rather than failing silently.
+Mixins validate their input and `@error` with a message that names the accepted values — every one of the 48 that take arguments does this, mostly inline. Match that style rather than failing silently.
 
 Silent failure is the trap to watch for. A mixin that branches on `type-of` and
 has no `@else` emits nothing at all for an unexpected type, which surfaces as a
@@ -403,7 +403,7 @@ Four levels, and knowing which one covers a member tells you what you can trust:
 | `test/smoke.scss` | the mixin evaluates at all | 55/55 mixins |
 | snapshot of `meta/` examples | the output cannot change unnoticed | 79/79 members |
 | `meta/` rejects | bad input is refused with a real message | 58/79 |
-| sass-true spec in `test/` | the CSS is **correct** | 32/79 |
+| sass-true spec in `test/` | the CSS is **correct** | 33/79 |
 
 Only the last one catches an output that was wrong from the start; a snapshot
 records a wrong value as correct. Hand-written specs are therefore reserved for
@@ -684,11 +684,17 @@ cases in Chrome 152 show B9's fix works for containers on the items and keeps
 continuing lists working, but no method continues a count across list wrappers
 that are themselves containers, a native `<ol start>` included, except an
 explicit start number with `counter-set` on the first item. The classes only
-select; continuing comes from a counter's sibling scope. The file sketches a
-class-free `counter` with `$continue`, `$start` and `$name`, a 3.0.0 change,
-and lists what is still to test first: Firefox and Safari, skipping an item,
-`::marker` for screen readers, nested lists. Not planned yet, at the
-maintainer's request.
+select; continuing comes from a counter's sibling scope.
+
+Done for 4.0.0 on the `counter` branch, 17 September 2026, measured in all
+three browsers. The mixin numbers the direct children of its element with no
+classes, increments on the item, and takes `$name`, `$continue`, `$start` and
+`$items`. `$continue` takes the name of the list to carry on from, not `true`:
+with one shared counter, two split lists interleaved on a page carried on from
+each other in all three browsers. What still fails is recorded there and in
+the caveats: Safari shows 0 when an item is itself a container, and nothing
+continues through a list that is a container or into another section without
+a reset on an ancestor.
 
 ### What `breakpoint-boundaries.md` records
 
@@ -849,7 +855,7 @@ after npm had it, and all 55 demos compile against the published package.
 differs from npm in three `@warn` texts, because it was built from a branch
 holding a commit made after the tag, which `/release` step 6b now prevents.
 
-Two pieces of work are open, and neither is started:
+Two pieces of work are open:
 
 - **4.0.0, not released**: `hide(focusable)` added and `hide(unhide)` removed,
   from `todos/hide-unhide-position.md`, on the `hide` branch; and ranges and
@@ -865,10 +871,9 @@ Two pieces of work are open, and neither is started:
   `todos/all-text-inputs-list.md`, on `all-text-inputs`, branched from
   `font-face-woff2`; and `aspect-ratio` against a `height` attribute, from
   `todos/aspect-ratio-height-auto.md`, on `aspect-ratio-height`, branched from
-  `all-text-inputs`. Each has a `MIGRATION.md` section. The maintainer may add more of the items below to
-  the same major.
-- **Behaviour changes for a later major**: one, in its own file in `todos/`, to be
-  tested and decided on its own before it is planned: `counter`. It needs a `MIGRATION.md` section.
+  `all-text-inputs`; and a class-free `counter`, from
+  `todos/counter-modernisation.md`, on `counter`, branched from
+  `aspect-ratio-height`. Each has a `MIGRATION.md` section.
 - **`todos/design-tokens.md`**: a token layer on `tokens`, starting with the
   decision whether to ship a palette.
 
@@ -879,19 +884,13 @@ Two pieces of work are open, and neither is started:
   a `var()` gutter work at all. Evaluating the expression would simplify
   `calc(100% / 4)` to `25%` and shorten the output, and would break every call
   whose column count or gutter is a custom property. Verified both ways.
-- **One mixin takes arguments and validates none of them** — `counter`.
-  This is mostly deliberate: they pass their arguments straight to CSS, which
-  accepts `var()`, `calc()`, `clamp()` and whatever ships next, so a strict
-  check would reject correct code. Revisit only where the shape of the call can
-  be checked without touching the value. `ellipsis` and `resizable` left this
-  list in S3 of `todos/silent-values-plan.md`: their keyword arguments now
-  check the kind of each word against a measured set and still take `var()`.
-  `brand-logo` and `text-image` left it in S4, when `imageValue` in
-  `scss/internal/` began refusing a list or a non-string image for them.
-  `text-stroke` left it in S6, when its three colours began to be checked by
-  `colorProblem`. `circle` and `sizer` left it in S7, when `sizeProblem` began
-  refusing a width or height a browser drops, and `adaptive` in S7's third
-  chunk, when its gutter began to be checked.
+- **Every mixin that takes arguments now validates some of them.** `counter`
+  was the last that validated none, until 4.0.0 gave it `$continue`, `$start`,
+  `$name` and `$items` and checked those. Its style and text arguments still
+  pass straight to CSS, which is deliberate: they accept `var()`, `attr()` and
+  whatever ships next. Earlier, `ellipsis` and `resizable` left this list in S3
+  of `todos/silent-values-plan.md`, `brand-logo` and `text-image` in S4,
+  `text-stroke` in S6, and `circle`, `sizer` and `adaptive` in S7.
 - **`validateLength` warns rather than errors** on a value that is not a
   length, and stays that way on purpose: it is public, and a caller may want a
   warning. `position` used to route its offsets through it, which warned about

@@ -1,9 +1,11 @@
 # Modernising `counter`
 
-Measured 14 September 2026 in Chrome 152. Not decided and not planned: the
-maintainer asked for more testing and evaluation before this becomes work. It
-replaces the reasoning in B9 of `todos/fix-plan.md`, which turned out to be
-incomplete.
+Measured 14 September 2026 in Chrome 152. It replaces the reasoning in B9 of
+`todos/fix-plan.md`, which turned out to be incomplete.
+
+**Done for 4.0.0 on the `counter` branch, 17 September 2026**, after measuring
+again in Chrome 152, Firefox 156 and Safari 26.6.2. See **What was done** at the
+end; the sections before it are the original research.
 
 ## Why B9 was not enough
 
@@ -85,16 +87,65 @@ markup:
 Removing the classes breaks every existing call, so this is 3.0.0 work. One
 path is to keep the class-based output for a release with a `@warn`.
 
-## Still to test and decide
+## What was done
 
-- Firefox and Safari. Everything above is Chrome only.
-- How to skip an item under an increment on the item, and whether that is
-  worth keeping at all.
-- `$start` together with `$continue`, and with lists that are not siblings.
-- Whether `::marker` on real list items should be the recommended path instead
-  of `::before`, for accessibility: a `::before` number is read as text by
-  screen readers, a marker is announced as a list number. Needs a screen
-  reader to check.
-- Nested lists with separate `$name`s.
-- Whether the `@content` block still belongs on `::before`, and what a
-  migration from `counter-start`/`counter-item` looks like in `MIGRATION.md`.
+The class-free design, with one change to it: `$continue` takes the `$name` of
+the list to carry on from instead of `true`.
+
+```scss
+.tips      { @include counter(upper-roman, $name: tips); }
+.tips-more { @include counter(upper-roman, $continue: tips); }
+.results   { @include counter($start: var(--first)); }
+.faq       { @include counter("Q", decimal, $items: ".question"); }
+```
+
+- `counter-reset` on `&` unless `$continue`, `counter-increment` on
+  `& > #{$items}`, the content and the block on `& > #{$items}::before`.
+- `$start` writes `counter-set` on `& > *:first-child`, or
+  `& > :nth-child(1 of #{$items})` with `$items`, and takes a whole number, an
+  interpolated one, `var()` or a calculation.
+- `$name` and `$continue` are one CSS identifier. `true`, `false`, reserved
+  words, a leading digit, punctuation, a name and a different continue are all
+  refused, as is an unknown keyword argument.
+
+### Why `$continue` takes a name
+
+With `$continue: true`, every list shared `glsCounter`. Two lists split and
+interleaved on one page, A1 B1 A2 B2, gave A2 the count B1 left: 1 2, 1 2 3,
+4 5, 6 7, identical in all three browsers. A reset on a sibling replaces the
+earlier sibling's counter of the same name. With a name per list the same page
+counted 1 2, 1 2 3, 3 4, 4 5.
+
+### Measured, identical in all three browsers unless noted
+
+| Case | Result |
+|---|---|
+| items are containers | 1 2 3 4 in Chrome and Firefox; **0 0 0 0 in Safari** |
+| a container on an element inside each item | 1 2 3 4 |
+| the list is a container | 1 2 3 4 |
+| `$continue`, lists are containers | 1 2 3, 1 2 3 |
+| `$start: 4`, lists are containers | 1 2 3, 4 5 6 |
+| `$start: var(--s)` with 7, `calc(var(--s) + 1)` | 7 8 9, 8 9 10 |
+| `$items`, a heading first, with and without `$start: 4` | 4 5 6, 1 2 3 |
+| nested lists, own `$name` or the same | outer 1 2 3, inner 1 2 |
+| an item with `counter-increment: none` | 1, none, 2 3 |
+| 3.x markup with its classes, items direct children | 1 2 3 |
+| A1 B1 A2 B2 with names | 12, 123, 34, 45 |
+| A1 B1 C1 C2 B2 A2 | 12, 123, 1, 23, 45, 34 |
+| A1 followed by three A2 parts | 1 to 8 |
+| an unnamed list between A1 and A2 | A 12 34, unnamed 123 |
+| A1 and A2 in separate sections | 12, 12 |
+| the same with `counter-reset` on an ancestor and `$continue` on every part | 12, 123, 34, 45 |
+| A2 inside a wrapper after A1 | 12 34 |
+| A2 with `$start: 10` | 12, 10 11 |
+| a list nested in A1's item, then A2 | 1 2 (inner 1 2) 3 4 |
+| A2 before A1 in the page | 12, 12 |
+
+Every example on the documentation page was rendered in all three browsers.
+
+### Not covered
+
+- Screen readers. A `::before` number is text, not a list marker; `::marker`
+  was not adopted because Safari ignores `content` on it.
+- A counter style defined with `@counter-style` by the user, beyond the one
+  used to read the values.
