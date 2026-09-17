@@ -531,7 +531,7 @@
           "accepts": [
             "one breakpoint name, for exactly that width, which prints a warning: write only instead",
             "only plus a breakpoint, for exactly that width",
-            "min or max plus a breakpoint",
+            "min or max plus a breakpoint; max with a key ends just under it",
             "between plus two breakpoints",
             "a start and an end value",
             "a breakpoint is a key from $map-for-breakpoints, or a length in any unit a width condition takes, 0 or a calculation; a percentage, a bare number, another unit and a word that is not a key are refused, because the query would never match"
@@ -543,11 +543,13 @@
       "summary": "Media query built from the breakpoint map, or from raw lengths.",
       "caveats": [
         "With one argument the query matches exactly that width, `(width: 768px)`, which is a single pixel, and the mixin prints a warning. Write `only` for that width, or `min`, `max` or a range for anything wider.",
+        "A range that ends at a key from $map-for-breakpoints, and `max` with a key, end just under the key: `breakpoint(max, medium)` is `(max-width: 767.98px)` and `breakpoint(small, medium)` ends at `767.98px`, or `47.99rem` with a rem map. So `max` and `min` at the same key, and neighbouring ranges, neither overlap nor leave a gap, including at fractional viewport widths. A length written by hand is used as written, and a zero key is left alone. Until 4.0.0 `max` included the key and a range ended 1 below it, which overlapped at the key and left gaps.",
         "Declarations written after the include, in the same rule, are emitted after the `@media` block and win over it. Write them before the include."
       ],
       "examples": [
         ".a { @include breakpoint(\"only\", \"medium\") { color: red; } }",
         ".a { @include breakpoint(\"min\", \"medium\") { color: red; } }",
+        ".a { @include breakpoint(\"max\", \"medium\") { color: red; } }",
         ".a { @include breakpoint(\"between\", \"medium\" \"large\") { color: red; } }"
       ],
       "rejects": [
@@ -700,7 +702,7 @@
           "accepts": [
             "a size, for exactly that width, which prints a warning: write only instead",
             "two sizes for a range",
-            "one of min, max, only or between followed by a size",
+            "one of min, max, only or between followed by a size; max with a key ends before it",
             "a size is a key from $map-for-breakpoints, or a length in any unit a width condition takes, 0 or a calculation; a percentage, a bare number, another unit and a word that is not a key are refused, because the query would never match",
             "$name as a keyword, to query one named container"
           ]
@@ -710,7 +712,8 @@
       "signature": "container-query($params...)",
       "summary": "A @container rule, taking the same argument shapes as breakpoint so the two read alike. Sizes may be a key from $map-for-breakpoints or a raw length, and a length is the common case because a container is usually narrower than the viewport. Nothing matches at all unless an ancestor was declared with the container mixin.",
       "caveats": [
-        "A size on its own matches exactly that width, `(width: 400px)`, which is a single pixel, and the mixin prints a warning. Write `only` for that width, or `min`, `max` or a range for anything wider."
+        "A size on its own matches exactly that width, `(width: 400px)`, which is a single pixel, and the mixin prints a warning. Write `only` for that width, or `min`, `max` or a range for anything wider.",
+        "A range that ends at a key from $map-for-breakpoints, and `max` with a key, end before the key in range syntax: `container-query(max, medium)` is `(width < 768px)` and `container-query(small, medium)` is `(min-width: 576px) and (width < 768px)`. So neighbouring ranges do not both apply at the key. A length written by hand is used as written, so `max, 399px` stays `(max-width: 399px)`, and a zero key is left alone. Until 4.0.0 both ended on the key and overlapped there."
       ],
       "examples": [
         ".title { @include container-query(\"min\", 400px) { font-size: 2rem; } }",
@@ -719,6 +722,7 @@
         ".title { @include container-query(\"between\", 300px 500px) { color: red; } }",
         ".title { @include container-query(300px, 500px) { color: red; } }",
         ".title { @include container-query(\"min\", \"medium\") { color: red; } }",
+        ".title { @include container-query(\"small\", \"medium\") { color: red; } }",
         ".title { @include container-query(\"min\", 400px, $name: \"card\") { color: red; } }"
       ],
       "rejects": [
@@ -1410,6 +1414,7 @@
       "summary": "Hides an element outright, or within a media query: from a breakpoint up with min, up to it with max, or between two breakpoints. One breakpoint on its own hides the element at exactly that width, a single pixel, and prints a warning: pass only for that.",
       "caveats": [
         "With one argument the element is hidden at exactly that width, `(width: 768px)`, which is a single pixel, and the mixin prints a warning. Write `only` for that width, or `min`, `max` or a range for anything wider.",
+        "`max` with a key, and a range ending at a key, end just under the key, as in `breakpoint`: `remove(max, medium)` hides below 768px, `(max-width: 767.98px)`, so it does not overlap `remove(min, medium)`.",
         "A `display` written after the include, in the same rule, is emitted after the `@media` block and wins over it. Write it before the include."
       ],
       "examples": [

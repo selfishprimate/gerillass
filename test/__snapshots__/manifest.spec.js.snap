@@ -473,7 +473,15 @@ exports[`Manifest examples brand-logo: .logo { @include brand-logo(120px, 40px, 
 `;
 
 exports[`Manifest examples breakpoint: .a { @include breakpoint("between", "medium" "large") { color: red; }  1`] = `
-"@media (min-width: 768px) and (max-width: 991px) {
+"@media (min-width: 768px) and (max-width: 991.98px) {
+  .a {
+    color: red;
+  }
+}"
+`;
+
+exports[`Manifest examples breakpoint: .a { @include breakpoint("max", "medium") { color: red; } } 1`] = `
+"@media (max-width: 767.98px) {
   .a {
     color: red;
   }
@@ -797,6 +805,14 @@ exports[`Manifest examples container-query: .title { @include container-query("m
 
 exports[`Manifest examples container-query: .title { @include container-query("only", 400px) { color: red; } } 1`] = `
 "@container (width: 400px) {
+  .title {
+    color: red;
+  }
+}"
+`;
+
+exports[`Manifest examples container-query: .title { @include container-query("small", "medium") { color: red; } } 1`] = `
+"@container (min-width: 576px) and (width < 768px) {
   .title {
     color: red;
   }
@@ -1451,7 +1467,7 @@ exports[`Manifest examples remify: .a { font-size: remify(24px); } 1`] = `
 `;
 
 exports[`Manifest examples remove: .a { @include remove("max", "medium"); } 1`] = `
-"@media (max-width: 768px) {
+"@media (max-width: 767.98px) {
   .a {
     display: none;
   }
@@ -1475,7 +1491,7 @@ exports[`Manifest examples remove: .a { @include remove("only", "medium"); } 1`]
 `;
 
 exports[`Manifest examples remove: .a { @include remove("small", "large"); } 1`] = `
-"@media (min-width: 576px) and (max-width: 991px) {
+"@media (min-width: 576px) and (max-width: 991.98px) {
   .a {
     display: none;
   }

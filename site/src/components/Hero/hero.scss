@@ -130,9 +130,9 @@
       a `button--large` sized in rem came out 59px tall with 23px text, smaller
       than on a desktop, where it is the page's main action.
 
-      A range, not `max`: `breakpoint(max, medium)` is `max-width: 768px` and
-      reached the first width where the buttons sit side by side. The range
-      ends at 767px.
+      A range, not `max`: until 4.0.0 `breakpoint(max, medium)` was
+      `max-width: 768px` and reached the first width where the buttons sit
+      side by side. The range ends just under it, at 767.98px.
 
       The width comes from the column, not from padding: the pair fills the
       space it has up to a maximum, so a narrow phone shrinks the buttons

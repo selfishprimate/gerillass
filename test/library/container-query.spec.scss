@@ -28,6 +28,31 @@
     }
   }
 
+  // Since 4.0.0 a range or a max that ends at a key ends before it, in range
+  // syntax, so neighbouring ranges do not both apply at the key. Measured in
+  // Chrome 152, Firefox 156 and Safari 26.6.2; see the comment in the mixin. A
+  // length written by hand, and a zero key, stay as written.
+  @include it('Ends a range or max at a key before it, and leaves lengths alone.') {
+    @include assert {
+      @include output {
+        .a { @include container-query("small", "medium") { color: red; } }
+        .b { @include container-query("max", "medium") { color: red; } }
+        .c { @include container-query("between", 300px "large") { color: red; } }
+        .d { @include container-query("max", 768px) { color: red; } }
+        .e { @include container-query("max", "xsmall") { color: red; } }
+        .f { @include container-query("min", "medium") { color: red; } }
+      }
+      @include expect {
+        @container (min-width: 576px) and (width < 768px) { .a { color: red; } }
+        @container (width < 768px) { .b { color: red; } }
+        @container (min-width: 300px) and (width < 992px) { .c { color: red; } }
+        @container (max-width: 768px) { .d { color: red; } }
+        @container (max-width: 0) { .e { color: red; } }
+        @container (min-width: 768px) { .f { color: red; } }
+      }
+    }
+  }
+
   // A size that can never match is refused; these were measured in Chrome 152
   // as conditions an @container rule keeps, and must not be.
   @include it('Accepts a quoted length, container units and a calculation.') {

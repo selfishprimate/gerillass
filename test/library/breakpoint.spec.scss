@@ -45,7 +45,7 @@
     }
   }
 
-  @include it('Mixes a key and a length in a range, and takes one off a key end.') {
+  @include it('Mixes a key and a length in a range, and ends just under a key end.') {
     @include assert {
       @include output {
         .a { @include breakpoint("between", "small" 1200px) { color: red; } }
@@ -54,8 +54,30 @@
       }
       @include expect {
         @media (min-width: 576px) and (max-width: 1200px) { .a { color: red; } }
-        @media (min-width: 576px) and (max-width: 991px) { .b { color: red; } }
+        @media (min-width: 576px) and (max-width: 991.98px) { .b { color: red; } }
         @media (min-width: 30em) and (max-width: 60em) { .c { color: red; } }
+      }
+    }
+  }
+
+  // Since 4.0.0 a range or a max that ends at a key stops 0.02px under it, so
+  // `max` and `min` at the same key, and neighbouring ranges, neither overlap
+  // nor leave a gap. Measured in Chrome 152, Firefox 156 and Safari 26.6.2; see
+  // scss/internal/_key-end.scss. A length written by hand, and a zero key, stay
+  // as written.
+  @include it('Ends max with a key just under it, and leaves a length and zero alone.') {
+    @include assert {
+      @include output {
+        .a { @include breakpoint("max", "medium") { color: red; } }
+        .b { @include breakpoint("max", 768px) { color: red; } }
+        .c { @include breakpoint("max", "xsmall") { color: red; } }
+        .d { @include breakpoint("min", "medium") { color: red; } }
+      }
+      @include expect {
+        @media (max-width: 767.98px) { .a { color: red; } }
+        @media (max-width: 768px) { .b { color: red; } }
+        @media (max-width: 0) { .c { color: red; } }
+        @media (min-width: 768px) { .d { color: red; } }
       }
     }
   }

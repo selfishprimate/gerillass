@@ -47,6 +47,27 @@ $-forbidden-in-name: "." "," "/" "#" ":" ";" "(" ")" "[" "]" "{" "}" "!" "@" "$"
   @return null;
 }
 
+// The end of a range, or a `max`. A key from $map-for-breakpoints ends before
+// itself, `(width < 768px)`, so `container-query(small, medium)` and
+// `container-query(medium, large)` do not both apply to a 768px container, as
+// they did until 4.0.0 in Chrome 152, Firefox 156 and Safari 26.6.2. Range
+// syntax rather than the 0.02px `breakpoint` subtracts, measured on containers
+// from 575px to 1000px wide with fractions near every key: Firefox lays widths
+// out in 1/60px and Safari in 1/64px, so a 767.98px end left a container
+// 767.9833px or 767.984375px wide in no range, while `width <` left none in
+// either. Chrome counts widths within about 1/64px of a boundary as equal, so
+// there both methods apply two ranges to a container that close to the key.
+// Range syntax in @container is as old as container queries in all three
+// browsers, unlike in @media. A length written by hand, and a zero key, are
+// used as they are.
+@function -range-end($value) {
+  $width: conditionWidth($value, "container-query", "@container");
+  @if map.has-key($map-for-breakpoints, $value) and meta.type-of($width) == "number" and $width != $width * 0 {
+    @return "width < #{$width}";
+  }
+  @return "max-width: #{$width}";
+}
+
 // A @container rule, taking the same argument shapes as `breakpoint` so the two
 // read alike. Sizes may be a key from $map-for-breakpoints or a raw length; a
 // container is usually narrower than the viewport, so a length is the common
@@ -88,7 +109,7 @@ $-forbidden-in-name: "." "," "/" "#" ":" ";" "(" ")" "[" "]" "{" "}" "!" "@" "$"
     $mode: list.nth($params, 1);
     @if not list.index("only" "min" "max" "between", $mode) {
       // Two bare sizes mean a range, as they do in `breakpoint`.
-      $condition: "(min-width: #{conditionWidth($mode, "container-query", "@container")}) and (max-width: #{conditionWidth(list.nth($params, 2), "container-query", "@container")})";
+      $condition: "(min-width: #{conditionWidth($mode, "container-query", "@container")}) and (#{-range-end(list.nth($params, 2))})";
     } @else {
       $value: list.nth($params, 2);
       @if $mode == "only" {
@@ -96,11 +117,11 @@ $-forbidden-in-name: "." "," "/" "#" ":" ";" "(" ")" "[" "]" "{" "}" "!" "@" "$"
       } @else if $mode == "min" {
         $condition: "(min-width: #{conditionWidth($value, "container-query", "@container")})";
       } @else if $mode == "max" {
-        $condition: "(max-width: #{conditionWidth($value, "container-query", "@container")})";
+        $condition: "(#{-range-end($value)})";
       } @else {
         $start: list.nth($value, 1);
         $end: list.nth($value, 2);
-        $condition: "(min-width: #{conditionWidth($start, "container-query", "@container")}) and (max-width: #{conditionWidth($end, "container-query", "@container")})";
+        $condition: "(min-width: #{conditionWidth($start, "container-query", "@container")}) and (#{-range-end($end)})";
       }
     }
   } @else {

@@ -55,11 +55,24 @@ The **Breakpoint** Sass mixin helps you create scalable media queries and breakp
 ```
 </Example>
 
-<Example caption="For **desktop-first** arrangements, set the `$mode` option to `max`. This time, let's pass a custom value for the second argument.">
+<Example caption="For **desktop-first** arrangements, set the `$mode` option to `max`. This time, let's pass a custom value for the second argument, which is used exactly as written.">
 ```scss
 .element{
   @include breakpoint(max, 1024px) {
     background-color: green;
+  };
+}
+```
+</Example>
+
+<Example caption="With a predefined value, `max` ends **just under** it, at `767.98px` for `medium`, so it hands over to `min, medium` without both applying at 768px.">
+```scss
+.element{
+  @include breakpoint(max, medium) {
+    flex-direction: column;
+  };
+  @include breakpoint(min, medium) {
+    flex-direction: row;
   };
 }
 ```
@@ -87,7 +100,7 @@ The **Breakpoint** Sass mixin helps you create scalable media queries and breakp
 
 </Hint>
 
-<Example caption="**Note that** when you use the `between` mode with predefined values, the `max-width` value is always reduced by one. **This prevents the styles you apply from overlapping each other.**">
+<Example caption="**Note that** a range ending at a predefined value ends **just under** it: 0.02px under in `px`, and 0.01 of a unit under in `rem` or `em`. **So neighbouring ranges neither overlap nor leave a gap between them.**">
 ```scss
 .element{
   @include breakpoint(between, small medium) {
@@ -103,10 +116,10 @@ The **Breakpoint** Sass mixin helps you create scalable media queries and breakp
 ```
 </Example>
 
-<Example caption="**Reducing by one** only happens with **predefined** values. When you work with custom values, you don't have to worry about it!">
+<Example caption="**Ending just under** only happens with **predefined** values. A custom value is used exactly as you write it, so end a range at the value you mean.">
 ```scss
 .element{
-  @include breakpoint(between, small 1199px) {
+  @include breakpoint(between, small 1199.98px) {
     background-color: green;
   };
   @include breakpoint(between, 1200px 1400px) {
@@ -115,6 +128,12 @@ The **Breakpoint** Sass mixin helps you create scalable media queries and breakp
 }
 ```
 </Example>
+
+<Hint kind="warning">
+
+**Why not one pixel under?** Until 4.0.0 a range ended 1 below a predefined value, `767px`, and `max` included the value itself, `768px`. Measured in Chrome 152, Firefox 156 and Safari 26.6.2: `max, medium` and `min, medium` both applied at exactly 768px in all three. Chrome and Firefox lay out fractional viewport widths, such as 767.5px in a frame or 767.27px with the display scaled to 110%, and there no range applied at all. With a map in `rem`, 1 under `48rem` is `47rem`, 16px short, and nothing applied from 752px to 768px. Ending 0.02px under, or 0.01rem under, left no overlap and no gap at any width measured. The CSS range syntax, `(width < 768px)`, measured as clean too, but Safari only supports it in media queries from 16.4 and drops the whole rule before that.
+
+</Hint>
 
 <Hint kind="info">
 

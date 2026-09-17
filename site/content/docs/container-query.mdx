@@ -90,6 +90,25 @@ The markup all of these assume: the container on the parent, the query on the ch
 ```
 </Example>
 
+<Example caption="A range or a `max` that ends at a predefined name ends **before** it, written as `width <`, so a range that starts at the same name takes over without both applying. A length you write yourself is used as written.">
+```scss
+.title {
+  @include container-query("small", "medium") {
+    font-size: 1.25rem;
+  }
+  @include container-query("medium", "large") {
+    font-size: 1.5rem;
+  }
+}
+```
+</Example>
+
+<Hint kind="info">
+
+**Why `width <` rather than a smaller number.** Until 4.0.0 a range ended on the name, `(max-width: 768px)`, and both neighbouring ranges applied to a container exactly 768px wide, measured in Chrome 152, Firefox 156 and Safari 26.6.2. Container widths are often fractional, and browsers store them in small steps: Firefox in 1/60px and Safari in 1/64px. An end of `767.98px` left a 767.984375px container in no range in Safari, while `(width < 768px)` left none in either. Chrome counts widths within about 1/64px of a boundary as equal, so there a container that close to 768px matches both ranges whichever way the end is written. Range syntax works in `@container` in every browser that supports container queries.
+
+</Hint>
+
 <Example caption="Naming the container you mean. Without a name the query resolves to the nearest container ancestor, which is the wrong one as soon as containers are nested.">
 ```scss
 .title {

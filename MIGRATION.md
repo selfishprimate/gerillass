@@ -1,7 +1,8 @@
 # Migrating to Gerillass 4.0.0
 
 Written while 4.0.0 is being prepared, and added to as its changes land. So far
-it covers `hide`. The 3.0.0 and 2.0.0 guides follow below, unchanged.
+it covers `hide` and where breakpoint ranges end. The 3.0.0 and 2.0.0 guides
+follow below, unchanged.
 
 Every claim here was checked by compiling the old call against 3.0.0's source
 and the new one against 4.0.0's, and the CSS each produces was measured in
@@ -15,12 +16,15 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 |---|---|
 | `hide(unhide)` was removed | breaking, loud |
 | `hide(focusable)` was added | not breaking |
+| a range or `max` ending at a breakpoint name ends just under it | breaking, silent |
 
-The break stops the build with a message naming both replacements, so nothing
-fails silently. To find every call first:
+The first break stops the build with a message naming both replacements. The
+second compiles and changes where a query stops, so read its section. To find
+every call either one touches:
 
 ```bash
 grep -rn "unhide" --include=*.scss .
+grep -rnE "(breakpoint|remove|container-query)\(" --include=*.scss .
 ```
 
 ---
@@ -107,6 +111,73 @@ the label came back at 600px and wider with no padding, no border and
 own styles, since nothing overwrote them. The query is the opposite of the old
 one, so check its boundary: `max-width: 599.98px` ends just under the
 `min-width: 600px` that used to start the undo.
+
+---
+
+## Break: a range or `max` ending at a breakpoint name ends just under it
+
+This changes what compiles without an error, so it is the one to read even if
+the build passes. It affects `breakpoint`, `remove`, which is built on it, and
+`container-query`, and only where a range, or `max`, ends at a name from
+`$map-for-breakpoints`. `min`, `only`, one size on its own, and any length you
+wrote yourself compile as before.
+
+| Call | 3.x | 4.0.0 |
+|---|---|---|
+| `breakpoint(max, medium)` | `(max-width: 768px)` | `(max-width: 767.98px)` |
+| `breakpoint(small, medium)` | `(min-width: 576px) and (max-width: 767px)` | `(min-width: 576px) and (max-width: 767.98px)` |
+| `breakpoint(between, 500px large)` | `... and (max-width: 991px)` | `... and (max-width: 991.98px)` |
+| the same with a `rem` map | `(max-width: 47rem)` | `(max-width: 47.99rem)` |
+| `remove(max, medium)`, `remove(small, medium)` | as `breakpoint` | as `breakpoint` |
+| `container-query(max, medium)` | `(max-width: 768px)` | `(width < 768px)` |
+| `container-query(small, medium)` | `(min-width: 576px) and (max-width: 768px)` | `(min-width: 576px) and (width < 768px)` |
+| `breakpoint(max, 768px)`, `container-query(max, 399px)` | unchanged | unchanged |
+| `breakpoint(max, xsmall)`, where the name is `0` | unchanged | unchanged |
+
+### Why
+
+Measured in Chrome 152, Firefox 156 and Safari 26.6.2, at viewport and
+container widths from 575px to 1000px with fractions near every name, and at
+real fractional viewports with the display scaled from 110% to 175% in Chrome
+and Firefox:
+
+- **`max` and `min` at the same name both applied at that width**, in all
+  three browsers, for `@media` and `@container`.
+- **A range ending 1 below a name left gaps.** Chrome and Firefox lay out
+  fractional viewports, and at 767.5px, or 767.27px with the display scaled to
+  110%, neither `small, medium` nor `medium, large` applied. Safari rounds
+  viewports to whole pixels and showed no gap.
+- **With a `rem` map, 1 below `48rem` is `47rem`, 16px short**, and nothing
+  applied from 752px to 768px in all three.
+- **`container-query` subtracted nothing**, so neighbouring ranges both
+  applied to a container exactly at a name.
+
+With the 4.0.0 output, compiled from the library and tested the same way, no
+range overlapped and none left a gap in any of the three, with one exception:
+Chrome treats container widths within about 1/64px of a boundary as equal, so
+a container 767.984375px wide matches both ranges there. No way of writing
+the end avoids that.
+
+`@media` subtracts 0.02px (0.01 of a unit in `rem` or `em`) rather than using
+range syntax, which measured as clean too, because Safari only supports range
+syntax in media queries from 16.4 and drops the whole rule before that.
+`@container` uses range syntax, which every browser has had since it shipped
+container queries, because containers are laid out in 1/60px steps in Firefox
+and 1/64px in Safari, and a `767.98px` end left a container between it and
+768px in no range.
+
+### What to check
+
+- **A rule that relied on `max` including the name.** At exactly 768px,
+  `breakpoint(max, medium)` no longer applies. If a stylesheet paired it with
+  `min, medium`, that is the fix; if it expected the narrow styles at exactly
+  768px, end the range with a length instead, `breakpoint(max, 768px)`.
+- **Ends you corrected by hand.** A range such as `breakpoint(small, 767.98px)`
+  or `breakpoint(max, 991.98px)`, written to work around the old output, still
+  compiles as written and can go back to the name.
+- **A length end in a range you wrote yourself** is not changed, so
+  `breakpoint(between, small 1199px)` still leaves a gap just under 1200px,
+  as a `767px` end did at 767.5px. Write `1199.98px`.
 
 ---
 

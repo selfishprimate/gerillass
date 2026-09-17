@@ -352,7 +352,7 @@
       color: rgba($secondary-color, 0.45);
       /* Stacked, the note took the room the Sass needed, and a block could show
          the description with no code under it. The panes sit side by side from
-         medium, so the range ends at 767px; `max, medium` would include 768. */
+         medium, so the range ends just under 768px, at 767.98px. */
       @include breakpoint(xsmall, medium) {
         display: none;
       }

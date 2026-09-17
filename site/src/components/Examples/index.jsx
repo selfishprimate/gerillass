@@ -118,7 +118,7 @@ class Examples extends Component {
                   </p>
                   <CodeBlock language="css" label="CSS">
                     {
-                      "@media (min-width: 576px) and (max-width: 991px) {\n  .element {\n    background-color: red;\n  }\n}"
+                      "@media (min-width: 576px) and (max-width: 991.98px) {\n  .element {\n    background-color: red;\n  }\n}"
                     }
                   </CodeBlock>
                 </div>

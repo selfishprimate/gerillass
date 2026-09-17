@@ -3,6 +3,7 @@
   "summary": "Media query built from the breakpoint map, or from raw lengths.",
   "caveats": [
     "With one argument the query matches exactly that width, `(width: 768px)`, which is a single pixel, and the mixin prints a warning. Write `only` for that width, or `min`, `max` or a range for anything wider.",
+    "A range that ends at a key from $map-for-breakpoints, and `max` with a key, end just under the key: `breakpoint(max, medium)` is `(max-width: 767.98px)` and `breakpoint(small, medium)` ends at `767.98px`, or `47.99rem` with a rem map. So `max` and `min` at the same key, and neighbouring ranges, neither overlap nor leave a gap, including at fractional viewport widths. A length written by hand is used as written, and a zero key is left alone. Until 4.0.0 `max` included the key and a range ended 1 below it, which overlapped at the key and left gaps.",
     "Declarations written after the include, in the same rule, are emitted after the `@media` block and win over it. Write them before the include."
   ],
   "arguments": [
@@ -11,7 +12,7 @@
       "accepts": [
         "one breakpoint name, for exactly that width, which prints a warning: write only instead",
         "only plus a breakpoint, for exactly that width",
-        "min or max plus a breakpoint",
+        "min or max plus a breakpoint; max with a key ends just under it",
         "between plus two breakpoints",
         "a start and an end value",
         "a breakpoint is a key from $map-for-breakpoints, or a length in any unit a width condition takes, 0 or a calculation; a percentage, a bare number, another unit and a word that is not a key are refused, because the query would never match"
@@ -21,6 +22,7 @@
   "examples": [
     ".a { @include breakpoint(\"only\", \"medium\") { color: red; } }",
     ".a { @include breakpoint(\"min\", \"medium\") { color: red; } }",
+    ".a { @include breakpoint(\"max\", \"medium\") { color: red; } }",
     ".a { @include breakpoint(\"between\", \"medium\" \"large\") { color: red; } }"
   ],
   "rejects": [

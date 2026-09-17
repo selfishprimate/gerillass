@@ -1,0 +1,38 @@
+@charset "UTF-8";
+
+@use "sass:math";
+@use "sass:meta";
+
+// Shared by the mixins and not public API; see _is-css-function.scss.
+
+// Where a @media range that ends at a key from $map-for-breakpoints stops: just
+// under the key, so the range that starts at the same key does not overlap it.
+// Measured in Chrome 152, Firefox 156 and Safari 26.6.2 on 17 September 2026,
+// at viewports from 575px to 1000px with fractions near every key, and at real
+// fractional viewports from scale factors 1.1 to 1.75 in Chrome and Firefox:
+//
+// - Subtracting 1, as `breakpoint` did until 4.0.0, left no range matching at
+//   767.5px, 767.27px or 991.54px in Chrome and Firefox, which lay out
+//   fractional viewports; Safari rounds to whole pixels. With a rem map it
+//   left 752px to 768px unmatched in all three, since 1rem is 16px.
+// - 0.02px left no gap and no overlap anywhere. 0.01px overlapped at the key in
+//   Chrome, which counts widths within about 1/64px of a boundary as equal.
+// - 0.01 of a rem or an em, 0.16px, left no gap and no overlap anywhere.
+//
+// Range syntax, `(width < 768px)`, measured as clean, but a browser without it
+// drops the whole query, and Safari only has it for @media from 16.4.
+//
+// A length in a unit Sass can convert to px has 0.02px taken off, which Sass
+// writes in the key's own unit. Any other unit has 0.01 of itself taken off. A
+// zero key is returned as it was: no width is less than zero, and a unitless 0
+// minus a length is not valid CSS.
+@function keyEnd($width) {
+  @if meta.type-of($width) != "number" or $width == $width * 0 {
+    @return $width;
+  }
+  @if math.compatible($width, 1px) {
+    @return $width - 0.02px;
+  }
+  // `$width * 0 + 1` is 1 in the key's unit, such as 1rem.
+  @return $width - ($width * 0 + 1) * 0.01;
+}
