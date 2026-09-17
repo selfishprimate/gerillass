@@ -36,50 +36,13 @@ The **Background Pattern Sass mixin** draws thirteen geometric patterns with CSS
   <Argument name="$image" type="string">An image path, laid under the pattern as the last layer.</Argument>
 </Arguments>
 
-## Examples
+## Patterns
 
-<Example caption="The thirteen patterns, each one include. Nothing here is an image: every tile is a gradient the browser draws.">
-```scss
-.dots { @include background-pattern(dots, $color: #2563eb #f59e0b #10b981, $background: #f8fafc, $size: 26px); }
-.stripes { @include background-pattern(stripes, $color: #2563eb #f59e0b #10b981, $background: #f8fafc, $size: 26px); }
-.grid { @include background-pattern(grid, $color: #2563eb #f59e0b #10b981, $background: #f8fafc, $size: 26px); }
-.checkerboard { @include background-pattern(checkerboard, $color: #2563eb #f59e0b #10b981, $background: #f8fafc, $size: 26px); }
-.crosshatch { @include background-pattern(crosshatch, $color: #2563eb #f59e0b #10b981, $background: #f8fafc, $size: 26px); }
-.zigzag { @include background-pattern(zigzag, $color: #2563eb #f59e0b #10b981, $background: #f8fafc, $size: 26px); }
-.chevron { @include background-pattern(chevron, $color: #2563eb #f59e0b #10b981, $background: #f8fafc, $size: 26px); }
-.triangles { @include background-pattern(triangles, $color: #2563eb #f59e0b #10b981, $background: #f8fafc, $size: 26px); }
-.isometric { @include background-pattern(isometric, $color: #2563eb #f59e0b #10b981, $background: #f8fafc, $size: 26px); }
-.honeycomb { @include background-pattern(honeycomb, $color: #2563eb #f59e0b #10b981, $background: #f8fafc, $size: 26px); }
-.brick { @include background-pattern(brick, $color: #2563eb #f59e0b #10b981, $background: #f8fafc, $size: 26px); }
-.waves { @include background-pattern(waves, $color: #2563eb #f59e0b #10b981, $background: #f8fafc, $size: 26px); }
-.houndstooth { @include background-pattern(houndstooth, $color: #2563eb #f59e0b #10b981, $background: #f8fafc, $size: 26px); }
-```
-```html
-<style>
-  .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; font: 12px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; color: #52525b; }
-  .gallery figure { margin: 0; }
-  .gallery div { height: 92px; border-radius: 8px; }
-  .gallery figcaption { margin-top: 4px; }
-</style>
-<div class="gallery">
-  <figure><div class="dots"></div><figcaption>dots</figcaption></figure>
-  <figure><div class="stripes"></div><figcaption>stripes</figcaption></figure>
-  <figure><div class="grid"></div><figcaption>grid</figcaption></figure>
-  <figure><div class="checkerboard"></div><figcaption>checkerboard</figcaption></figure>
-  <figure><div class="crosshatch"></div><figcaption>crosshatch</figcaption></figure>
-  <figure><div class="zigzag"></div><figcaption>zigzag</figcaption></figure>
-  <figure><div class="chevron"></div><figcaption>chevron</figcaption></figure>
-  <figure><div class="triangles"></div><figcaption>triangles</figcaption></figure>
-  <figure><div class="isometric"></div><figcaption>isometric</figcaption></figure>
-  <figure><div class="honeycomb"></div><figcaption>honeycomb</figcaption></figure>
-  <figure><div class="brick"></div><figcaption>brick</figcaption></figure>
-  <figure><div class="waves"></div><figcaption>waves</figcaption></figure>
-  <figure><div class="houndstooth"></div><figcaption>houndstooth</figcaption></figure>
-</div>
-```
-</Example>
+Each pattern below is its own section, with the colours and the tile changed from one example to the next.
 
-<Example caption="A hero section with dots behind the text. With no colours the pattern is drawn in `currentColor` at low opacity, so it follows the section's own text colour.">
+### Dots
+
+<Example caption="With no colours the dots are drawn in `currentColor` at low opacity, so they follow the text colour of whatever they sit behind.">
 ```scss
 .hero {
   @include background-pattern(dots, $size: 1.5rem);
@@ -87,8 +50,8 @@ The **Background Pattern Sass mixin** draws thirteen geometric patterns with CSS
 ```
 ```html
 <style>
-  .hero { padding: 32px 24px; border-radius: 10px; color: #1d4ed8; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
-  .hero h2 { margin: 0 0 6px; font-size: 30px; }
+  .hero { padding: 30px 24px; border-radius: 10px; color: #1d4ed8; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .hero h2 { margin: 0 0 6px; font-size: 28px; }
   .hero p { margin: 0; color: #334155; }
 </style>
 <section class="hero">
@@ -98,7 +61,86 @@ The **Background Pattern Sass mixin** draws thirteen geometric patterns with CSS
 ```
 </Example>
 
-<Example caption="Graph paper behind a form, with a heavier line every fifth cell. A second colour draws those major lines.">
+<Example caption="`$size` is the tile and `$thickness` the dot, so a big tile with a big dot gives confetti rather than a texture.">
+```scss
+.confetti {
+  @include background-pattern(dots, $color: #f472b6 #38bdf8, $background: #fdf2f8, $size: 34px, $thickness: 5px);
+}
+```
+```html
+<style>
+  .confetti { height: 150px; border-radius: 10px;  }
+</style>
+<div class="confetti"></div>
+```
+</Example>
+
+<Example caption="`$stagger: false` lines the dots up in a grid instead of offsetting every other row. This is what `background-dots` called `$diagonal` until 4.0.0.">
+```scss
+.card {
+  @include background-pattern(dots, $color: #94a3b8, $background: #f8fafc, $size: 18px, $stagger: false);
+}
+```
+```html
+<style>
+  .card { display: grid; place-items: center; height: 140px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #475569; }
+</style>
+<div class="card">Lined up</div>
+```
+</Example>
+
+### Stripes
+
+<Example caption="A cafe awning. `$angle` turns the stripes and `$thickness` sets how wide each one is.">
+```scss
+.awning {
+  @include background-pattern(stripes, $color: #e11d48 #fff1f2, $thickness: 14px, $angle: 90deg);
+}
+```
+```html
+<style>
+  .shop { max-width: 360px; border-radius: 10px; overflow: hidden; border: 1px solid #fecdd3; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .awning { height: 46px; }
+  .shop div { padding: 16px 18px; color: #881337; }
+</style>
+<div class="shop">
+  <div class="awning"></div>
+  <div><b>Kahve Durağı</b><br>Open until six</div>
+</div>
+```
+</Example>
+
+<Example caption="A fine diagonal texture, where a thin stripe and a pale colour keep it quiet enough to put text on.">
+```scss
+.panel {
+  @include background-pattern(stripes, $color: #e2e8f0, $background: #f8fafc, $thickness: 3px);
+}
+```
+```html
+<style>
+  .panel { display: grid; place-items: center; height: 140px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #475569; }
+</style>
+<div class="panel">Pending review</div>
+```
+</Example>
+
+<Example caption="Three colours become three stripes in turn, each one `$thickness` wide.">
+```scss
+.pole {
+  @include background-pattern(stripes, $color: #ef4444 #ffffff #1d4ed8, $thickness: 10px, $angle: 60deg);
+}
+```
+```html
+<style>
+  .pole { height: 120px; border-radius: 10px;  }
+</style>
+<div class="pole"></div>
+```
+</Example>
+
+### Grid
+
+<Example caption="Graph paper behind a form. A second colour draws a heavier line every fifth cell.">
 ```scss
 .sheet {
   @include background-pattern(grid, $color: #dbeafe #93c5fd, $background: #fff, $size: 1.25rem, $thickness: 1px);
@@ -106,7 +148,7 @@ The **Background Pattern Sass mixin** draws thirteen geometric patterns with CSS
 ```
 ```html
 <style>
-  .sheet { padding: 22px; border-radius: 10px; border: 1px solid #e2e8f0; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .sheet { padding: 22px; border-radius: 10px; border: 1px solid #e2e8f0; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
   .sheet label { display: block; margin-bottom: 6px; font-weight: 600; color: #0f172a; }
   .sheet input { width: 100%; max-width: 260px; padding: 8px 10px; border: 1px solid #94a3b8; border-radius: 6px; background: #fff; font: inherit; }
 </style>
@@ -117,7 +159,21 @@ The **Background Pattern Sass mixin** draws thirteen geometric patterns with CSS
 ```
 </Example>
 
-<Example caption="Ruled paper, which is the grid with one axis switched off. `$axis: block` keeps the horizontal lines only.">
+<Example caption="The same pattern in reverse: pale lines on a dark ground, at a larger tile, which is the blueprint look.">
+```scss
+.blueprint {
+  @include background-pattern(grid, $color: rgb(255 255 255 / 0.28) rgb(255 255 255 / 0.55), $background: #1e3a8a, $size: 2rem, $thickness: 1px);
+}
+```
+```html
+<style>
+  .blueprint { display: grid; place-items: center; height: 160px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #dbeafe; }
+</style>
+<div class="blueprint">Sheet 3 of 9</div>
+```
+</Example>
+
+<Example caption="`$axis: block` keeps the horizontal lines only, which turns the grid into ruled paper.">
 ```scss
 .note {
   @include background-pattern(grid, $axis: block, $color: #bae6fd, $background: #fffbeb, $size: 1.75rem, $thickness: 1px);
@@ -136,7 +192,74 @@ The **Background Pattern Sass mixin** draws thirteen geometric patterns with CSS
 ```
 </Example>
 
-<Example caption="A ticket, cut along the top and bottom with a zigzag strip. The pattern's tile sets how wide each tooth is.">
+### Checkerboard
+
+<Example caption="A finish line above a results card. `$size` is the square, not the tile, so 10px squares repeat every 20px.">
+```scss
+.finish {
+  @include background-pattern(checkerboard, $color: #111827 #f9fafb, $size: 10px);
+}
+```
+```html
+<style>
+  .race { max-width: 360px; border-radius: 10px; overflow: hidden; border: 1px solid #e5e7eb; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .finish { height: 40px; }
+  .race div { padding: 16px 18px; color: #111827; }
+</style>
+<div class="race">
+  <div class="finish"></div>
+  <div><b>Stage 4</b><br>Finished in 2h 14m</div>
+</div>
+```
+</Example>
+
+<Example caption="Bigger squares in two soft colours read as a tablecloth rather than a flag.">
+```scss
+.cloth {
+  @include background-pattern(checkerboard, $color: #fecaca #fff7ed, $size: 26px);
+}
+```
+```html
+<style>
+  .cloth { height: 150px; border-radius: 10px;  }
+</style>
+<div class="cloth"></div>
+```
+</Example>
+
+### Crosshatch
+
+<Example caption="An empty state marked out with hatching rather than a grey box. `$angle` turns both sets of lines together.">
+```scss
+.empty {
+  @include background-pattern(crosshatch, $color: #e2e8f0, $background: #f8fafc, $size: 14px, $thickness: 1px, $angle: 30deg);
+}
+```
+```html
+<style>
+  .empty { display: grid; place-items: center; height: 150px; border-radius: 10px; border: 1px dashed #cbd5e1; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #64748b; }
+</style>
+<div class="empty">Drop a file here</div>
+```
+</Example>
+
+<Example caption="A tighter tile and a thicker line give a woven texture. The two colours are the two directions, so they read as threads crossing.">
+```scss
+.weave {
+  @include background-pattern(crosshatch, $color: #a16207 #ea580c, $background: #fffbeb, $size: 10px, $thickness: 3px);
+}
+```
+```html
+<style>
+  .weave { height: 150px; border-radius: 10px;  }
+</style>
+<div class="weave"></div>
+```
+</Example>
+
+### Zigzag
+
+<Example caption="A ticket, cut along the top and the bottom. The tile sets how wide each tooth is.">
 ```scss
 .ticket-edge {
   @include background-pattern(zigzag, $color: #fff, $background: #f43f5e, $size: 18px);
@@ -144,7 +267,7 @@ The **Background Pattern Sass mixin** draws thirteen geometric patterns with CSS
 ```
 ```html
 <style>
-  .ticket { max-width: 320px; border-radius: 10px; overflow: hidden; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .ticket { max-width: 320px; border-radius: 10px; overflow: hidden; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
   .ticket-edge { height: 14px; }
   .ticket-body { padding: 16px 18px; background: #f43f5e; color: #fff; }
   .ticket-body b { display: block; font-size: 20px; }
@@ -157,21 +280,107 @@ The **Background Pattern Sass mixin** draws thirteen geometric patterns with CSS
 ```
 </Example>
 
-<Example caption="An empty state, marked out with a crosshatch rather than a grey box. The angle turns the hatching.">
+<Example caption="At a larger tile the same pattern is a knitted band.">
 ```scss
-.empty {
-  @include background-pattern(crosshatch, $color: #e2e8f0, $background: #f8fafc, $size: 14px, $thickness: 1px, $angle: 30deg);
+.knit {
+  @include background-pattern(zigzag, $color: #7c3aed, $background: #ede9fe, $size: 40px);
 }
 ```
 ```html
 <style>
-  .empty { display: grid; place-items: center; height: 150px; border-radius: 10px; border: 1px dashed #cbd5e1; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #64748b; }
+  .knit { height: 150px; border-radius: 10px;  }
 </style>
-<div class="empty">Drop a file here</div>
+<div class="knit"></div>
 ```
 </Example>
 
-<Example caption="A pricing card on an isometric field of cubes. Three colours, seven gradient layers, one include.">
+### Chevron
+
+<Example caption="A band of arrows under a step heading, pointing the way through a flow.">
+```scss
+.flow-band {
+  @include background-pattern(chevron, $color: #0ea5e9, $background: #e0f2fe, $size: 22px);
+}
+```
+```html
+<style>
+  .flow { border-radius: 10px; overflow: hidden; border: 1px solid #bae6fd; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .flow p { margin: 0; padding: 14px 18px; color: #0c4a6e; }
+  .flow-band { height: 44px; }
+</style>
+<div class="flow">
+  <p><b>Step 2</b> Connect your repository</p>
+  <div class="flow-band"></div>
+</div>
+```
+</Example>
+
+<Example caption="A large tile in two close colours turns the arrows into a woven chevron cloth.">
+```scss
+.cloth {
+  @include background-pattern(chevron, $color: #b45309, $background: #fef3c7, $size: 44px);
+}
+```
+```html
+<style>
+  .cloth { height: 160px; border-radius: 10px;  }
+</style>
+<div class="cloth"></div>
+```
+</Example>
+
+### Triangles
+
+<Example caption="A festival poster header. The angle rotates the triangle, so a quarter turn points it at another edge.">
+```scss
+.poster-top {
+  @include background-pattern(triangles, $color: #16a34a, $background: #dcfce7, $size: 26px, $angle: 135deg);
+}
+```
+```html
+<style>
+  .poster { max-width: 360px; border-radius: 10px; overflow: hidden; border: 1px solid #bbf7d0; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .poster-top { height: 70px; }
+  .poster div { padding: 16px 18px; color: #14532d; }
+</style>
+<div class="poster">
+  <div class="poster-top"></div>
+  <div><b>Open Air</b><br>Three days of noise</div>
+</div>
+```
+</Example>
+
+<Example caption="Pointed the other way, at a smaller tile, in two strong colours.">
+```scss
+.flags {
+  @include background-pattern(triangles, $color: #ea580c, $background: #fff7ed, $size: 16px, $angle: 315deg);
+}
+```
+```html
+<style>
+  .flags { height: 150px; border-radius: 10px;  }
+</style>
+<div class="flags"></div>
+```
+</Example>
+
+<Example caption="The tile and the colour from custom properties. Every offset is derived from the tile in `calc()`, which is what keeps the tiles lined up when the browser is the one that knows the size." listing="<div class=&quot;tile&quot; style=&quot;--tile: 30px; --ink: #34d399&quot;></div>">
+```scss
+.tile {
+  @include background-pattern(triangles, $size: var(--tile), $color: var(--ink), $background: #fff);
+}
+```
+```html
+<style>
+  .tile { height: 140px; border-radius: 10px; }
+</style>
+<div class="tile" style="--tile: 30px; --ink: #34d399"></div>
+```
+</Example>
+
+### Isometric
+
+<Example caption="A pricing card on a field of cubes. Three colours, seven gradient layers, one include.">
 ```scss
 .plan {
   @include background-pattern(isometric, $color: #c4b5fd #a78bfa #7c3aed, $size: 26px);
@@ -179,7 +388,7 @@ The **Background Pattern Sass mixin** draws thirteen geometric patterns with CSS
 ```
 ```html
 <style>
-  .plan { padding: 24px; border-radius: 12px; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .plan { padding: 24px; border-radius: 12px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
   .plan div { padding: 18px; border-radius: 10px; background: rgb(255 255 255 / 0.92); }
   .plan b { display: block; font-size: 26px; color: #4c1d95; }
 </style>
@@ -187,24 +396,85 @@ The **Background Pattern Sass mixin** draws thirteen geometric patterns with CSS
 ```
 </Example>
 
-<Example caption="A honeycomb band behind a section heading, and a brick wall beside it. Both are fixed-ratio tiles the mixin works out from the size.">
+<Example caption="Three greys at a small tile give the same cubes as a quiet texture. The order of the colours is the order the faces are lit.">
 ```scss
-.comb { @include background-pattern(honeycomb, $color: #fde68a #fbbf24 #f59e0b, $size: 26px); }
-.wall { @include background-pattern(brick, $color: #b91c1c #7f1d1d, $background: #fee2e2, $size: 40px); }
+.stone {
+  @include background-pattern(isometric, $color: #e5e7eb #d1d5db #9ca3af, $size: 16px);
+}
 ```
 ```html
 <style>
-  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .pair > div { height: 130px; border-radius: 10px; }
+  .stone { height: 150px; border-radius: 10px;  }
 </style>
-<div class="pair">
-  <div class="comb"></div>
-  <div class="wall"></div>
-</div>
+<div class="stone"></div>
 ```
 </Example>
 
-<Example caption="Scalloped waves as a section divider, over the colour underneath.">
+### Honeycomb
+
+<Example caption="A community panel, where the three colours give the cells their depth.">
+```scss
+.community {
+  @include background-pattern(honeycomb, $color: #fde68a #fbbf24 #f59e0b, $size: 26px);
+}
+```
+```html
+<style>
+  .community { display: grid; place-items: center; height: 150px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .community span { padding: 10px 16px; border-radius: 999px; background: rgb(255 255 255 / 0.92); font-weight: 600; color: #78350f; }
+</style>
+<div class="community"><span>1,248 contributors</span></div>
+```
+</Example>
+
+<Example caption="A larger tile in three blues, which reads as tiling rather than as a texture.">
+```scss
+.hive {
+  @include background-pattern(honeycomb, $color: #bfdbfe #60a5fa #1d4ed8, $size: 44px);
+}
+```
+```html
+<style>
+  .hive { height: 160px; border-radius: 10px;  }
+</style>
+<div class="hive"></div>
+```
+</Example>
+
+### Brick
+
+<Example caption="A wall behind a quotation. `$size` is the brick and the ground shows through as the mortar.">
+```scss
+.wall {
+  @include background-pattern(brick, $color: #b91c1c #7f1d1d, $background: #fee2e2, $size: 44px);
+}
+```
+```html
+<style>
+  .wall { display: grid; place-items: center; padding: 26px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .wall blockquote { margin: 0; padding: 14px 18px; border-radius: 8px; background: rgb(255 255 255 / 0.92); color: #7f1d1d; font-style: italic; }
+</style>
+<div class="wall"><blockquote>Another brick in the stylesheet.</blockquote></div>
+```
+</Example>
+
+<Example caption="Smaller bricks in two greys give a pavement rather than a wall.">
+```scss
+.pavement {
+  @include background-pattern(brick, $color: #9ca3af #6b7280, $background: #e5e7eb, $size: 24px);
+}
+```
+```html
+<style>
+  .pavement { height: 150px; border-radius: 10px;  }
+</style>
+<div class="pavement"></div>
+```
+</Example>
+
+### Waves
+
+<Example caption="Scallops as a section divider, between two blocks of colour.">
 ```scss
 .divider {
   @include background-pattern(waves, $color: #0ea5e9, $background: #e0f2fe, $size: 34px);
@@ -212,7 +482,7 @@ The **Background Pattern Sass mixin** draws thirteen geometric patterns with CSS
 ```
 ```html
 <style>
-  .stack { border-radius: 10px; overflow: hidden; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .stack { border-radius: 10px; overflow: hidden; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
   .stack .top { padding: 16px 18px; background: #0ea5e9; color: #fff; }
   .divider { height: 34px; }
   .stack .bottom { padding: 16px 18px; background: #e0f2fe; color: #0c4a6e; }
@@ -225,50 +495,61 @@ The **Background Pattern Sass mixin** draws thirteen geometric patterns with CSS
 ```
 </Example>
 
-<Example caption="Houndstooth on a fashion card, at two sizes. Two colours are all it takes, and the second one becomes the ground.">
+<Example caption="A smaller tile fills a panel with fish scales.">
 ```scss
-.swatch-sm { @include background-pattern(houndstooth, $color: #111827 #f5f5f4, $size: 10px); }
-.swatch-lg { @include background-pattern(houndstooth, $color: #7c2d12 #fed7aa, $size: 22px); }
-```
-```html
-<style>
-  .swatches { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .swatches div { height: 130px; border-radius: 10px; }
-</style>
-<div class="swatches">
-  <div class="swatch-sm"></div>
-  <div class="swatch-lg"></div>
-</div>
-```
-</Example>
-
-<Example caption="The tile and the colour from custom properties, so one rule serves every card and the markup sets the scale. Every offset is derived from the tile in `calc()`, which is what keeps the tiles lined up when the browser is the one that knows the size." listing="<div class=&quot;tiles&quot;>
-&#32;&#32;<div class=&quot;tile&quot; style=&quot;--tile: 14px; --ink: #f472b6&quot;></div>
-&#32;&#32;<div class=&quot;tile&quot; style=&quot;--tile: 24px; --ink: #34d399&quot;></div>
-&#32;&#32;<div class=&quot;tile&quot; style=&quot;--tile: 38px; --ink: #60a5fa&quot;></div>
-</div>">
-```scss
-.tile {
-  @include background-pattern(triangles, $size: var(--tile), $color: var(--ink), $background: #fff);
+.scales {
+  @include background-pattern(waves, $color: #14b8a6, $background: #ccfbf1, $size: 18px);
 }
 ```
 ```html
 <style>
-  .tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-  .tiles div { height: 120px; border-radius: 10px; }
+  .scales { height: 150px; border-radius: 10px;  }
 </style>
-<div class="tiles">
-  <div class="tile" style="--tile: 14px; --ink: #f472b6"></div>
-  <div class="tile" style="--tile: 24px; --ink: #34d399"></div>
-  <div class="tile" style="--tile: 38px; --ink: #60a5fa"></div>
+<div class="scales"></div>
+```
+</Example>
+
+### Houndstooth
+
+<Example caption="A fabric swatch on a product card. Two colours are all it takes, and the second becomes the ground.">
+```scss
+.swatch {
+  @include background-pattern(houndstooth, $color: #111827 #f5f5f4, $size: 12px);
+}
+```
+```html
+<style>
+  .product { max-width: 320px; border-radius: 10px; overflow: hidden; border: 1px solid #e5e7eb; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .swatch { height: 140px; }
+  .product div { padding: 14px 18px; color: #111827; }
+</style>
+<div class="product">
+  <div class="swatch"></div>
+  <div><b>Wool coat</b><br>Houndstooth, made in Bursa</div>
 </div>
 ```
 </Example>
 
-<Example caption="A photograph under the pattern. The image is the last layer, covering the box, with the pattern drawn over it.">
+<Example caption="The same weave at twice the size, in brown on sand.">
+```scss
+.tweed {
+  @include background-pattern(houndstooth, $color: #7c2d12 #fed7aa, $size: 24px);
+}
+```
+```html
+<style>
+  .tweed { height: 150px; border-radius: 10px;  }
+</style>
+<div class="tweed"></div>
+```
+</Example>
+
+### With a photograph
+
+<Example caption="`$image` lays a picture under the pattern as the last layer, covering the box. The old mixins put it in a `::before` at `z-index: -1`, where an ancestor's own background could hide it.">
 ```scss
 .card {
-  @include background-pattern(stripes, $color: rgb(15 23 42 / 0.55), $size: 16px, $image: "/images/backgrounds/02.jpg");
+  @include background-pattern(stripes, $color: rgb(15 23 42 / 0.55), $thickness: 3px, $image: "/images/backgrounds/02.jpg");
 }
 ```
 ```html

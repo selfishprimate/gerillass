@@ -393,7 +393,7 @@ exports[`Manifest examples background-pattern: .a { @include background-pattern(
 ".a {
   background-image: repeating-linear-gradient(-45deg, #2563eb 0rem 0.25rem, #f59e0b 0.25rem 0.5rem), url(/img/a.png);
   background-size: auto, cover;
-  background-position: auto, center;
+  background-position: 0 0, center;
   background-repeat: repeat;
 }"
 `;

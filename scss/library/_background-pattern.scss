@@ -340,8 +340,8 @@ $-defaults: (1: 12%, 2: 6%, 3: 18%);
   // behind an ancestor's background, and stripes layered it here.
   @if $image {
     $images: list.append($images, "#{imageValue($image, "background-pattern", "$image", $unquote: true)}", comma);
-    $sizes: list.append(-fill($sizes, list.length($images) - 1), "cover", comma);
-    $positions: list.append(-fill($positions, list.length($images) - 1), "center", comma);
+    $sizes: list.append(-fill($sizes, list.length($images) - 1, "auto"), "cover", comma);
+    $positions: list.append(-fill($positions, list.length($images) - 1, "0 0"), "center", comma);
   }
 
   background-image: string.unquote(-join($images));
@@ -377,15 +377,17 @@ $-defaults: (1: 12%, 2: 6%, 3: 18%);
   @return $out;
 }
 
-// background-size and background-position are per layer, so a list shorter than
-// the layers is padded with `auto` rather than repeating and shifting the rest.
-@function -fill($list, $length) {
+// background-size and background-position are read layer by layer, so a list
+// shorter than the layers is padded rather than repeating and shifting the
+// rest. The two properties pad with different values: `auto` is a size and not
+// a position, and one invalid value drops the whole declaration.
+@function -fill($list, $length, $pad) {
   $out: $list;
   @if list.length($out) == 0 {
     $out: ();
   }
   @while list.length($out) < $length {
-    $out: list.append($out, "auto", comma);
+    $out: list.append($out, $pad, comma);
   }
   @return $out;
 }

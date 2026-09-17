@@ -90,7 +90,7 @@
         .a {
           background-image: #{"repeating-linear-gradient(-45deg, red 0px 2px, #0000 0 4px), url(/img/a.png)"};
           background-size: auto, cover;
-          background-position: auto, center;
+          background-position: 0 0, center;
           background-repeat: repeat;
         }
       }
