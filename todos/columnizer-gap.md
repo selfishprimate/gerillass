@@ -2,7 +2,12 @@
 
 Moved out of `todos/fix-plan.md`, where it was B3, on 15 September 2026. The
 maintainer asked for each remaining 3.0.0 item to be examined and tested on its
-own rather than done as a batch. Not planned.
+own rather than done as a batch.
+
+**Status.** Done for 4.0.0 on the `columnizer-gap` branch, 17 September 2026,
+after testing every scenario below in Chrome 152, Firefox 156 and Safari
+26.6.2. **What was measured and built** at the end has the results; the
+sections in between are the proposal as it was written.
 
 ## What the mixin does today
 
@@ -110,3 +115,91 @@ margin. The `gap` version was flush in both directions and 70px tall.
 `scss/library/_columnizer.scss`; the three tests in
 `test/library/columnizer.spec.scss` and the one added in 2.3.1; the manifest
 snapshots; the documentation page; `MIGRATION.md`.
+
+## What was measured and built, 17 September 2026
+
+Chrome and Firefox headless, Safari in one batch. The old output was compiled
+from the library before the change, the new from the branch.
+
+**The matrix.** One to six columns; no gutter, `0`, `20px`, `1.5rem`, `5%`,
+`calc(1rem + 4px)`, `var()` and `-10px`; fill on and off; left to right and
+right to left; containers 333.333px, 767.5px and 1000.3px wide, with two full
+rows and an orphan. Each call was checked for the count per row, both edges
+flush, the column and row gaps, equal widths, nothing under the last row, the
+orphan's width with and without fill, and overflow.
+
+| | Chrome | Firefox | Safari |
+|---|---|---|---|
+| old, 576 calls | 432 with issues | 432 | 432 |
+| new, 432 calls | 0 | 0 | 0 |
+
+The old issues: in right to left every row started a gutter in and the gutter
+sat on the wrong side; every call with a gutter left it under the last row; and
+`-10px` overflowed in right to left. An early prototype that also wrote `gap`
+for `5%` and `-10px` showed why those two are now refused: rows touched with
+`5%` in all three, and `-10px` was dropped and broke the rows.
+
+**The scenarios**, old against new, all three browsers alike unless said:
+
+| Scenario | Old | New |
+|---|---|---|
+| container with its own `gap: 16px` | 2 per row, overflow | 3 per row, flush |
+| `gap` written after the include | 2 per row | 3 per row, rows 8px short, the widths assume 20px |
+| a hidden column (`display: none`) | rows 20px short of the edge | flush |
+| columns with padding and a border | fit | fit |
+| input with `width: 100%` and padding inside a column, no page reset | fit | fits; with no rule for the contents at all it overflowed by 24px |
+| container with `width: 100%` and padding | fits | fits; without its box-sizing it overflowed by 44px (Chrome, Firefox) |
+| long unbreakable word in a column | column 457px, rows 2/3/1 | 3/3, text overflows |
+| 400px image, no max-width | column 400px, rows 2/3/1 | 3/3, image overflows |
+| 400px image with `max-width: 100%` | Chrome 2/3/1; Firefox and Safari 3/3 | 3/3 everywhere |
+| `margin: 8px` on the columns | 2 per row | 2 per row |
+| `var(--cols)` with a gutter | does not compile | 4/4, flush |
+| `var()` gutter, `clamp()` gutter, fill with orphans, nested, inline-flex and grid parents | right, gutter under the last row | right |
+| vertical writing mode, 400px tall | 2 per line, 140px left over | 3 per line, flush |
+| chains across 400, 800 and 1200px, mobile first, desktop first, fill then not | right, gutter under the last row | right |
+
+`min-width: 0` was measured as a variant before it went in, in Chrome and
+Firefox, and went in as `min-inline-size: 0` so it holds on the main axis in a
+vertical writing mode; the branch's output with it was then measured in all
+three. Dropping box-sizing from the container was measured the same way, in
+Chrome and Firefox only, and kept.
+
+**box-sizing inside the columns.** The first version of the branch dropped
+the rule for the contents and an input overflowed, so the maintainer asked for
+it back without the old rule's side effect. It is now
+`:where(.grid) *` and the pseudo-elements, which have no specificity. Measured
+in all three browsers, identically: with no page reset everything fits, as
+before; `input { box-sizing: content-box }` and `.field { ... }` written before
+the include now win, where `.grid *` overrode them; a component with its own
+`content-box` keeps it, and with the `*, *::before, *::after { box-sizing:
+inherit }` pattern its children inherit it when the pattern comes after the
+include and do not when it comes before, since both selectors have no
+specificity and source order decides. The old rule overrode all of these.
+
+**The site** uses `columnizer` in the footer, the testimonials and the
+benefits. Compared with gerillass.com at 400, 700, 1000 and 1300px, every
+column is where it was, and the lists are shorter by the gutter that used to sit
+under the last row, except the benefits, whose items' own 64px bottom margin
+now added to the 48px gap. That margin is now removed where `columnizer`
+applies.
+
+**Calls compared**: 17 counts × 29 gutters × 3 fill values, 1479 calls. 72 start
+raising, every one a percentage or negative gutter. 276 stop raising: a
+`var()`, `env()`, `attr()` or `calc()` count with a gutter, which failed with
+Sass's `Expected "n"`, `Expected "even"` or `expected ")"`, and an interpolated
+gutter, which the old `isGutter` check refused with a message asking for exactly
+that value.
+
+**The documentation page** gained four interface examples: a two-column form
+with `width: 100%` inputs, right-to-left cards, a `var(--cols)` count with a
+gutter at two counts, and a long link. All nine examples on the page were
+measured in all three browsers, Chrome and Firefox at 1280px and 375px wide and
+Safari in its window: every full row flush with both edges, nothing under the
+last row, inputs inside their columns, and the first right-to-left card against
+the right edge. The frames on the page have a border-box reset of their own, so
+the form example shows the result rather than the case without one, which the
+box-sizing measurements above cover.
+
+**Not covered**: a mobile browser; right to left combined with a vertical
+writing mode; `order` on the columns; a custom property holding a percentage or
+a negative gutter, which cannot be checked at compile time.

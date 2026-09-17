@@ -725,8 +725,13 @@ still has to be tested. None is planned, and the maintainer's instruction is to
 examine and test each on its own.
 
 - `columnizer-gap.md`: gutters as `gap` instead of margins and an
-  `:nth-child` reset, and no universal `box-sizing`. Reviewing it found that
-  `columnizer(var(--cols), 20px)` fails with Sass's own `Expected "n"`.
+  `:nth-child` reset, and no universal `box-sizing`. Done for 4.0.0 on the
+  `columnizer-gap` branch after a 432-call matrix and 22 scenarios in all three
+  browsers: `gap`, box-sizing on the container and the columns, and on their
+  contents through `:where()` so a page's own rule wins,
+  `min-inline-size: 0` on the columns, and a percentage or negative gutter
+  refused, since as a `gap` the first leaves rows touching and the second is
+  dropped.
 - `hide-unhide-position.md`: rewritten 17 September 2026 as research for
   modernising `hide`, with 19 libraries read and measurements in all three
   browsers. It is done on the `hide` branch for 4.0.0: `hide(focusable)`,
@@ -839,12 +844,13 @@ Two pieces of work are open, and neither is started:
   from `todos/hide-unhide-position.md`, on the `hide` branch; and ranges and
   `max` ending just under a key in `breakpoint`, `remove` and
   `container-query`, from `todos/breakpoint-boundaries.md`, on
-  `breakpoint-boundaries`, which is branched from `hide`. Each has a
-  `MIGRATION.md` section. The maintainer may add more of the items below to
+  `breakpoint-boundaries`, which is branched from `hide`; and `columnizer` on
+  `gap`, from `todos/columnizer-gap.md`, on `columnizer-gap`, branched from
+  `breakpoint-boundaries`. Each has a `MIGRATION.md` section. The maintainer may add more of the items below to
   the same major.
-- **Behaviour changes for a later major**: six, each in its own file in `todos/` and
+- **Behaviour changes for a later major**: five, each in its own file in `todos/` and
   each to be tested and decided on its own before any is planned:
-  `columnizer` on `gap`, a default `content` for
+  a default `content` for
   `before`/`after`, `font-face` formats, `all-text-inputs`, `aspect-ratio` with
   a `height` attribute, and `counter`. Each needs a `MIGRATION.md` section.
 - **`todos/design-tokens.md`**: a token layer on `tokens`, starting with the
