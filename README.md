@@ -114,7 +114,7 @@ To use a `pkg:` URL, create the importer in a `.sassrc.js`. Setting `pkgImporter
 
 Two more things worth knowing:
 
-- **Pass the font formats you actually have to `font-face`.** It lists five by default, and Parcel resolves every `url()` in the output, so a folder holding only `.woff2` fails with `Failed to resolve './fonts/inter.eot'`. `$file-formats: woff2` fixes it.
+- **Pass the font formats you actually have to `font-face`.** It writes only `woff2` by default since 4.0.0, and Parcel resolves every `url()` in the output, so a format with no file fails the build with `Failed to resolve`. Until 4.0.0 the default listed five formats, and a folder holding only `.woff2` failed on the missing `.eot`.
 - **`quietDeps` hides the library's own deprecation warnings.** Dart Sass reports its `if()` deprecation from inside the package on every build. A `.sassrc.json` of `{ "quietDeps": true }` silences those and still reports the ones in your own files.
 
 ### Using with Next.js

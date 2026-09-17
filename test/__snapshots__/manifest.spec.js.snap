@@ -1000,8 +1000,7 @@ exports[`Manifest examples focus-ring: .card-link { @include focus-ring(3px, 4px
 exports[`Manifest examples font-face: @include font-face("Inter", "/fonts/inter"); 1`] = `
 "@font-face {
   font-family: "Inter";
-  src: url("/fonts/inter.eot");
-  src: url("/fonts/inter.eot?#iefix") format("embedded-opentype"), url("/fonts/inter.woff2") format("woff2"), url("/fonts/inter.woff") format("woff"), url("/fonts/inter.ttf") format("truetype"), url("/fonts/inter.svg#Inter") format("svg");
+  src: url("/fonts/inter.woff2") format("woff2");
   font-style: normal;
   font-weight: 400;
 }"

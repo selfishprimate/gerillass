@@ -110,12 +110,22 @@
   @return null;
 }
 
+// $file-formats defaults to woff2. Until 4.0.0 it was eot woff2 woff ttf svg,
+// which pointed at five files where a project usually ships one. With only a
+// .woff2 on disk, webpack 5, esbuild 0.28 and Parcel 2.16 failed to build on
+// the missing .eot, and Vite 7 built with four broken url()s left in.
+//
+// Measured in Chrome 152, Firefox 156 and Safari 26.6.2: none loads an EOT,
+// only Safari loads an SVG font, and from the old list all three requested the
+// .woff2 and nothing else. A project that ships only .woff or .ttf, though,
+// got its font from the old list's fallbacks and gets none from woff2 alone,
+// in all three: pass the formats you ship.
 @mixin font-face(
   $font-family,
   $file-path,
   $font-style: normal,
   $font-weight: 400,
-  $file-formats: eot woff2 woff ttf svg,
+  $file-formats: woff2,
   $font-display: null
 ) {
   @if & {

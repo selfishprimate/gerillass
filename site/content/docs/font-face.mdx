@@ -10,7 +10,7 @@ page_image: "gerillass-font-face.jpg"
 
 <Member name="font-face">
 
-The **Font Face** Sass mixin helps you generate a cross-browser compatible @font-face declaration.
+The **Font Face** Sass mixin writes an `@font-face` rule for one font file: the family, the path to the file, its style and weight, and the formats you ship. It checks the style, weight and `font-display` against what a browser keeps, so a typo stops the build instead of leaving a font that never matches.
 <Hint kind="info">
 
 **Important:** The mixin must be called at the root level of your stylesheet.
@@ -26,124 +26,128 @@ The **Font Face** Sass mixin helps you generate a cross-browser compatible @font
   <Argument name="$file-path" type="string">Sets the path and the name of the font file. The file name must be written without the extension. It cannot be a custom property: the path is written into <code>url()</code> as text.</Argument>
   <Argument name="$font-style" type="string">Sets the <code>font-style</code> property. The default value is <code>normal</code>. If there is an <code>italic</code> version of the font, you can set the value to <code>italic</code> or <code>oblique</code>, and <code>oblique</code> takes one or two angles between <code>-90deg</code> and <code>90deg</code>, such as <code>oblique 10deg 20deg</code>. <code>auto</code> works too. A number here is read as the weight. A quoted value such as <code>"italic"</code> is written without its quotes, which a browser would drop. It cannot be a custom property.</Argument>
   <Argument name="$font-weight" type="number">Sets the weight of the font. The default value is <code>400</code>. Accepts <code>normal</code>, <code>bold</code>, <code>auto</code>, any number from <code>1</code> to <code>1000</code>, such as <code>700</code> or <code>450</code>, or a range such as <code>160 700</code> for a variable font. <code>bolder</code>, <code>lighter</code> and the CSS-wide keywords are refused, because a <code>@font-face</code> rule drops them. A quoted value is written without its quotes. It cannot be a custom property, even as one end of a range: measured in Chrome 152, a <code>@font-face</code> rule dropped <code>var()</code> in <code>font-family</code>, <code>font-style</code> and <code>font-weight</code>.</Argument>
-  <Argument name="$file-formats" type="string | list">Sets the font file formats you want to include. The default value is <code>eot woff2 woff ttf svg</code>. A format outside that list is refused with an error. Pass only the formats you have files for: a bundler such as Parcel resolves every <code>url()</code> and fails on a missing file.</Argument>
+  <Argument name="$file-formats" type="string | list">Sets the font file formats you want to include, from <code>eot woff2 woff ttf svg</code>. The default is <code>woff2</code>; until 4.0.0 it was all five. A format outside that list is refused with an error. Pass the formats you have files for: a bundler resolves every <code>url()</code> and fails on a missing file, and a browser gets no font from a format you do not ship.</Argument>
   <Argument name="$font-display" type="string">Sets the <code>font-display</code> descriptor, which decides what the text does while the font is still loading. Accepts <code>auto</code>, <code>block</code>, <code>swap</code>, <code>fallback</code> and <code>optional</code>. The default is <code>null</code>, which leaves it out, so the browser's own behaviour applies.</Argument>
 </Arguments>
 
 ## Examples
 
-<Example caption="Let's call the mixin and pass values for the required arguments: `$font-family` and `$file-path`.">
+The demos below load the fonts this site serves from `/fonts/`, so what you see is the file the rule points at.
+
+<Example caption="Pass the family name and the path to the file without its extension. With no formats given, the mixin writes the `.woff2`.">
 ```scss
-@include font-face("Fanwood Text", "fonts/fanwood-text/fanwood-text-regular");
+@include font-face("Roboto", "/fonts/roboto/roboto-v20-latin-ext_latin-regular");
+```
+```html
+<style>
+  p { margin: 0; font: 22px/1.4 "Roboto", serif; color: #18181b; }
+</style>
+<p>The quick brown fox jumps over the lazy dog.</p>
 ```
 </Example>
 
-<Example caption="Now let's add the `italic` version of the family.">
+<Example caption="A whole family is one rule per file, all under the same name. The browser picks the file whose `font-style` and `font-weight` match the text, so `em` gets the italic and `strong` the bold, instead of a slanted or thickened copy of the regular.">
 ```scss
-@include font-face("Fanwood Text", "fonts/fanwood-text/fanwood-text-regular", italic);
+@include font-face("Roboto", "/fonts/roboto/roboto-v20-latin-ext_latin-regular");
+@include font-face("Roboto", "/fonts/roboto/roboto-v20-latin-ext_latin-italic", italic);
+@include font-face("Roboto", "/fonts/roboto/roboto-v20-latin-ext_latin-700", 700);
+@include font-face("Roboto", "/fonts/roboto/roboto-v20-latin-ext_latin-700italic", italic, 700);
 ```
-</Example>
-
-<Example caption="Now let's add the `bold` version of the `Fanwood Text` font-family (if there is one) by passing `700` for the `$font-weight` argument.">
-```scss
-@include font-face("Fanwood Text", "fonts/fanwood-text/fanwood-text-bold", 700);
-```
-</Example>
-
-<Example caption="If you pass values for both the `$font-style` and `$font-weight` arguments, the `$font-weight` value should always come last, unless you also pass a value for `$file-formats`.">
-```scss
-@include font-face("Fanwood Text", "fonts/fanwood-text/fanwood-text-bold-italic", italic, 700);
-```
-</Example>
-
-<Hint kind="info">
-
-Things get trickier when you want to pass a value for `$file-formats`. The examples below show the ways to do it.
-
-</Hint>
-
-<Example caption="Suppose you only have three file formats: `woff2`, `woff`, and `ttf`.">
-```scss
-@include font-face("Fanwood Text", "fonts/fanwood-text/fanwood-text-regular", woff2 woff ttf);
-```
-</Example>
-
-<Example caption="If you want to pass values for all the arguments, the order must be `$font-family`, `$file-path`, `$font-style`, `$font-weight`, `$file-formats`, like in the example below.">
-```scss
-@include font-face("Fanwood Text", "fonts/fanwood-text/fanwood-text-bold-italic", italic, 700, woff2 woff);
+```html
+<style>
+  p { margin: 0; font: 22px/1.5 "Roboto", serif; color: #18181b; }
+</style>
+<p>Regular, <em>italic</em>, <strong>bold</strong> and <strong><em>bold italic</em></strong>.</p>
 ```
 </Example>
 
 <Hint kind="info">
 
-**Tip:** Do you know what is beautiful about named arguments? **They are order-independent**, which makes them very useful when it is hard to stick to the argument order.
+**A weight in the style's place is read as the weight.** `font-face("Roboto", "...", 700)` is the same as passing `$font-weight: 700`, so a family can be written without naming the style every time.
 
 </Hint>
 
-<Example caption="If you are having trouble passing the arguments by position, try **named arguments**.">
+<Example caption="A **variable font** covers every weight in one file: pass the range it supports. Google Fonts serves Inter split into files by alphabet, and `unicode-range`, passed in the block, tells the browser which file to fetch for which characters; this one covers Latin. `$font-display: swap` shows the text in a fallback font until the file arrives, rather than hiding it.">
 ```scss
-@include font-face (
-  $font-family: "Fanwood Text", 
-  $file-path: "fonts/fanwood-text/fanwood-text-bold-italic",
-  $font-style: italic, 
-  $font-weight: 700,
-  $file-formats: eot woff2 woff
-);
-```
-</Example>
-
-<Example caption="Try changing the order of the arguments. Whatever order you use, the result is the same.">
-```scss
-@include font-face (
-  $font-weight: 700,
-  $font-style: italic,
-  $file-formats: eot woff2 woff, 
-  $font-family: "Fanwood Text",
-  $file-path: "fonts/fanwood-text/fanwood-text-bold-italic",
-);
-```
-</Example>
-
-<Example caption="Now let's use the `@content` directive to pass a content block into the mixin.">
-```scss
-@include font-face ("Fanwood Text", "fonts/fanwood-text/fanwood-text-regular") {
-  font-display: fallback;
+@include font-face("Inter", "/fonts/inter/inter-latin", $font-weight: 100 900, $font-display: swap) {
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+2000-206F, U+20AC, U+2122, U+2212;
 }
 ```
+```html
+<style>
+  p { margin: 0; font: 20px/1.4 "Inter", serif; color: #18181b; }
+</style>
+<p style="font-weight: 100">Weight 100</p>
+<p style="font-weight: 400">Weight 400</p>
+<p style="font-weight: 650">Weight 650</p>
+<p style="font-weight: 900">Weight 900</p>
+```
 </Example>
 
-If you don't have all the font varieties, or you have a font you want to convert into a **web font** (embeddable with @font-face), try **Font Squirrel**'s [Webfont Generator](https://www.fontsquirrel.com/tools/webfont-generator).
+<Example caption="Pass the formats you ship. Listing `woff` after `woff2` gives a browser a second file to try when it cannot use the first; every current browser takes the `woff2`.">
+```scss
+@include font-face("Roboto Mono", "/fonts/roboto-mono/roboto-mono-v7-latin-regular", $file-formats: woff2 woff);
+```
+```html
+<style>
+  code { font: 18px/1.4 "Roboto Mono", monospace; color: #18181b; }
+</style>
+<code>@include font-face("Roboto Mono", "...");</code>
+```
+</Example>
 
-<Example caption="A **variable font** in one file. The weight range is written through as it is, and `$font-display: swap` shows the text in a fallback font until the file arrives, rather than hiding it.">
+<Hint kind="warning">
+
+**The default is `woff2` since 4.0.0, so pass the formats you ship.** Measured in Chrome 152, Firefox 156 and Safari 26.6.2, with the same font in all five formats: none of them loads an EOT, only Safari loads an SVG font, and given the old five-format list all three requested the `.woff2` and nothing else. With only a `.woff2` on disk, the old default made webpack, esbuild and Parcel fail to build on the missing `.eot`, and Vite built with four broken links. But a project that ships only `.woff` or `.ttf` got its font from the old list's fallbacks, and with the new default gets none, in all three browsers, without a warning. Write `$file-formats: woff` or `woff2 woff` for that.
+
+</Hint>
+
+## Passing the arguments
+
+The arguments go in the order `$font-family`, `$file-path`, `$font-style`, `$font-weight`, `$file-formats`, `$font-display`. When that gets long, name them: named arguments can come in any order. Anything else a `@font-face` rule takes goes in the block, as `unicode-range` does in the Inter example.
+
+<Example caption="Every argument by position.">
+```scss
+@include font-face("Roboto", "/fonts/roboto/roboto-v20-latin-ext_latin-700italic", italic, 700, woff2 woff);
+```
+</Example>
+
+<Example caption="The same rule with named arguments, in a different order.">
 ```scss
 @include font-face(
-  "Readex Pro",
-  "/fonts/readex-pro",
-  $font-weight: 160 700,
-  $file-formats: woff2,
-  $font-display: swap
+  $font-weight: 700,
+  $font-style: italic,
+  $file-formats: woff2 woff,
+  $font-family: "Roboto",
+  $file-path: "/fonts/roboto/roboto-v20-latin-ext_latin-700italic"
 );
 ```
 </Example>
+
+<Hint kind="info">
+
+**Only have a `.ttf` or `.otf`?** Compress it to WOFF2, which is a fraction of the size, for example with [fontTools](https://github.com/fonttools/fonttools): `pip install fonttools brotli`, then `fonttools ttLib.woff2 compress font.ttf` writes `font.woff2` next to it. Font services such as Google Fonts already serve WOFF2.
+
+</Hint>
 
 ## What it refuses
 
 A style or a weight that a `@font-face` rule drops stops the build. Measured in Chrome 152 by inserting the rule and reading it back, the rule keeps the values listed under Arguments and drops the rest, such as `bolder`, `inherit`, `0` or an oblique angle past 90 degrees. Until 2.3.1 they compiled, and the font was then matched with the browser's default for that descriptor instead.
 
 ```scss
-@include font-face("Fanwood Text", "fonts/fanwood-text/fanwood-text-regular", $font-weight: bolder);
+@include font-face("Roboto", "/fonts/roboto/roboto-v20-latin-ext_latin-regular", $font-weight: bolder);
 ```
 ```text
 Error: `bolder` is not a valid $font-weight for `font-face`: a weight is normal, bold, auto or a number from 1 to 1000; bolder, lighter and the CSS-wide keywords are dropped. A @font-face rule drops the descriptor.
 ```
 
-A weight passed in the style's place is read as the weight. That used to work only for the hundreds, so `font-face("Fanwood Text", "...", 450)` wrote `font-style: 450`; it now writes `font-weight: 450`.
+A weight passed in the style's place is read as the weight. That used to work only for the hundreds, so `font-face("Roboto", "...", 450)` wrote `font-style: 450`; it now writes `font-weight: 450`.
 
 A quoted number is checked for its shape and not its range, because Sass cannot turn the text of a number into one: `$font-weight: "1001"` is let through.
 
 ## Related Links
-* [Font Face](https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face)  
-* [Font Weight](https://developer.mozilla.org/en-US/docs/Web/CSS/font-weight)
-* [Font Style](https://developer.mozilla.org/en-US/docs/Web/CSS/font-style)
 
-
+- [CSS @font-face](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@font-face)
+- [CSS font-weight](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/font-weight)
+- [CSS font-style](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/font-style)
+- [unicode-range](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@font-face/unicode-range)

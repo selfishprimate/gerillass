@@ -1014,9 +1014,10 @@
         },
         {
           "name": "$file-formats",
-          "default": "eot woff2 woff ttf svg",
+          "default": "woff2",
           "accepts": [
-            "any of eot, woff2, woff, ttf, svg"
+            "any of eot, woff2, woff, ttf, svg",
+            "woff2, the default"
           ]
         },
         {
@@ -1029,8 +1030,12 @@
         }
       ],
       "file": "scss/library/_font-face.scss",
-      "signature": "font-face($font-family, $file-path, $font-style: normal, $font-weight: 400, $file-formats: eot woff2 woff ttf svg, $font-display: null)",
+      "signature": "font-face($font-family, $file-path, $font-style: normal, $font-weight: 400, $file-formats: woff2, $font-display: null)",
       "summary": "Emits an @font-face rule for one family across several file formats. Must be called at the root.",
+      "caveats": [
+        "`$file-formats` defaults to `woff2`. A project that ships only `.woff` or `.ttf` and passes no formats gets no font, silently, in Chrome, Firefox and Safari. Pass the formats you have files for. Until 4.0.0 the default was `eot woff2 woff ttf svg`, which made webpack, esbuild and Parcel fail on a missing `.eot`.",
+        "Must be called at the root of a stylesheet, not inside a selector."
+      ],
       "examples": [
         "@include font-face(\"Inter\", \"/fonts/inter\");",
         "@include font-face(\"Inter\", \"/fonts/inter\", italic, 700, woff2 woff);",

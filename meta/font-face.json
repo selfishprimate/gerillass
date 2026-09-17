@@ -32,7 +32,8 @@
     {
       "name": "$file-formats",
       "accepts": [
-        "any of eot, woff2, woff, ttf, svg"
+        "any of eot, woff2, woff, ttf, svg",
+        "woff2, the default"
       ]
     },
     {
@@ -75,5 +76,9 @@
     "@include font-face(\"Inter\", \"/fonts/inter\", $font-weight: bolder, $file-formats: woff2);",
     "@include font-face(\"Inter\", \"/fonts/inter\", $font-weight: 0, $file-formats: woff2);",
     "@include font-face(\"Inter\", \"/fonts/inter\", $font-weight: 100 200 300, $file-formats: woff2);"
+  ],
+  "caveats": [
+    "`$file-formats` defaults to `woff2`. A project that ships only `.woff` or `.ttf` and passes no formats gets no font, silently, in Chrome, Firefox and Safari. Pass the formats you have files for. Until 4.0.0 the default was `eot woff2 woff ttf svg`, which made webpack, esbuild and Parcel fail on a missing `.eot`.",
+    "Must be called at the root of a stylesheet, not inside a selector."
   ]
 }

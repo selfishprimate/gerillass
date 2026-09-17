@@ -1,8 +1,8 @@
 # Migrating to Gerillass 4.0.0
 
 Written while 4.0.0 is being prepared, and added to as its changes land. So far
-it covers `hide`, where breakpoint ranges end, `columnizer`, and `before` and
-`after`. The 3.0.0 and 2.0.0 guides follow below, unchanged.
+it covers `hide`, where breakpoint ranges end, `columnizer`, `before` and
+`after`, and `font-face`. The 3.0.0 and 2.0.0 guides follow below, unchanged.
 
 Every claim here was checked by compiling the old call against 3.0.0's source
 and the new one against 4.0.0's, and the CSS each produces was measured in
@@ -20,6 +20,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `columnizer` writes its gutter as `gap` | breaking, silent |
 | `columnizer` refuses a percentage or negative gutter | breaking, loud |
 | `before` and `after` with no argument write an empty `content` | breaking, silent |
+| `font-face` lists only `woff2` unless told otherwise | breaking, silent |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -30,6 +31,7 @@ grep -rn "unhide" --include=*.scss .
 grep -rnE "(breakpoint|remove|container-query)\(" --include=*.scss .
 grep -rn "columnizer(" --include=*.scss .
 grep -rnE "include (gls-)?(before|after)( |;|\{|\(\))" --include=*.scss .
+grep -rn "font-face(" --include=*.scss .
 ```
 
 ---
@@ -299,6 +301,59 @@ or after the include, and `content: none` written elsewhere still hides it.
 - **A bare `::after { content: ... }` rule** written before the include loses,
   since both have the same specificity and the later one wins. Written after
   the include, or with a class or element in front, it wins.
+
+---
+
+## Break: `font-face` lists only `woff2` unless told otherwise
+
+`$file-formats` defaulted to `eot woff2 woff ttf svg`, and now defaults to
+`woff2`. A call that passes formats compiles as before; of 36 calls compared,
+only the 18 without formats changed.
+
+```css
+/* @include font-face("Inter", "/fonts/inter"); */
+
+/* 3.x */
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/inter.eot");
+  src: url("/fonts/inter.eot?#iefix") format("embedded-opentype"),
+       url("/fonts/inter.woff2") format("woff2"),
+       url("/fonts/inter.woff") format("woff"),
+       url("/fonts/inter.ttf") format("truetype"),
+       url("/fonts/inter.svg#Inter") format("svg");
+  font-style: normal;
+  font-weight: 400;
+}
+
+/* 4.0.0 */
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/inter.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+}
+```
+
+### Why
+
+Measured with one font converted to all five formats. In Chrome 152, Firefox
+156 and Safari 26.6.2, none loaded the EOT, only Safari loaded the SVG font,
+and given the five-format list all three requested the `.woff2` and nothing
+else. With only a `.woff2` on disk, the five-format list made webpack 5,
+esbuild 0.28 and Parcel 2.16 fail to build on the missing `.eot`, and Vite 7
+built with four broken `url()`s left in the CSS. With `woff2` alone all four
+built clean.
+
+### What to check
+
+- **A project that ships only `.woff` or `.ttf`** and passes no formats gets no
+  font now. The old list fell back to them when the `.woff2` was missing, and
+  all three browsers loaded the `.woff`; with `woff2` alone they loaded
+  nothing, and nothing says so. Pass what you ship:
+  `@include font-face("Inter", "/fonts/inter", $file-formats: woff2 woff);`.
+- **A browser older than WOFF2**, before Chrome 36, Firefox 39 and Safari 10,
+  gets the fallback font unless you list `woff` too.
 
 ---
 
