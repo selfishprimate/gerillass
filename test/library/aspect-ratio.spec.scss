@@ -1,7 +1,9 @@
 // A snapshot would record whatever the mixin emits as correct, so the values
 // here are written out by hand. Sass reads `4 / 3` in a declaration as
 // division and would render it as 1.3333, which is why the expected ratio is
-// built with list.slash.
+// built with list.slash. Since 4.0.0 a `height: auto` follows in a rule of its
+// own inside :where(): sass-true wraps the output in .test-output, which the
+// mixin's :where(&) takes inside the parentheses.
 @use 'sass:list';
 @use 'true' as *;
 @use '../../scss/gerillass' as *;
@@ -22,6 +24,9 @@
           border: 0;
           object-fit: cover;
         }
+        @at-root :where(.test-output .thumb) {
+          height: auto;
+        }
       }
     }
   }
@@ -40,6 +45,9 @@
           aspect-ratio: list.slash(16, 9);
           border: 0;
           object-fit: cover;
+        }
+        @at-root :where(.test-output .default) {
+          height: auto;
         }
       }
     }
@@ -60,6 +68,9 @@
           border: 0;
           object-fit: cover;
         }
+        @at-root :where(.test-output .wide) {
+          height: auto;
+        }
       }
     }
   }
@@ -77,6 +88,9 @@
           width: 100%;
           aspect-ratio: list.slash(16, 9);
           border: 0;
+        }
+        @at-root :where(.test-output .plain) {
+          height: auto;
         }
       }
     }
@@ -96,6 +110,9 @@
           aspect-ratio: var(--ratio);
           border: 0;
           object-fit: cover;
+        }
+        @at-root :where(.test-output .media) {
+          height: auto;
         }
       }
     }

@@ -140,7 +140,7 @@ a dropped declaration rather than an error.
 
 **`aspect-ratio`**
 
-- On an element with a `height` attribute, such as `<img width="1600" height="900">` or an embed code's `<iframe>`, the attribute height wins and the ratio is ignored. Write `height: auto` after the include.
+- An element with a `height` attribute, such as `<img width="1600" height="900">` or an embed code's `<iframe width="560" height="315">`, keeps the ratio: the mixin writes `height: auto` inside `:where()`, which overrides the attribute but loses to any `height` a stylesheet sets, before or after the include. Until 4.0.0 the attribute height won and the ratio was ignored.
 
 **`before`**
 

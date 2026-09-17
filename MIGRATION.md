@@ -2,8 +2,8 @@
 
 Written while 4.0.0 is being prepared, and added to as its changes land. So far
 it covers `hide`, where breakpoint ranges end, `columnizer`, `before` and
-`after`, `font-face`, and `all-text-inputs`. The 3.0.0 and 2.0.0 guides follow
-below, unchanged.
+`after`, `font-face`, `all-text-inputs`, and `aspect-ratio`. The 3.0.0 and
+2.0.0 guides follow below, unchanged.
 
 Every claim here was checked by compiling the old call against 3.0.0's source
 and the new one against 4.0.0's, and the CSS each produces was measured in
@@ -23,6 +23,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `before` and `after` with no argument write an empty `content` | breaking, silent |
 | `font-face` lists only `woff2` unless told otherwise | breaking, silent |
 | `all-text-inputs` excludes the non-text types instead of listing the text ones | breaking, silent |
+| `aspect-ratio` holds its ratio on an element with a `height` attribute | fixes rendering; breaks only a call that relied on the attribute |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -401,6 +402,39 @@ compiled new one:
   is not now.
 - **A replaced `$list-of-text-inputs`** still works: the mixin writes whatever
   list you pass, and the output of a custom list is unchanged.
+
+---
+
+## Change: `aspect-ratio` holds its ratio against a `height` attribute
+
+Every call gains one rule:
+
+```css
+:where(.thumb) { height: auto; }
+```
+
+An `<img width="1600" height="900">`, or an embed code's
+`<iframe width="560" height="315">`, has a definite height from its attribute,
+and with `width: 100%` the browser ignored the ratio. Measured in Chrome 152,
+Firefox 156 and Safari 26.6.2, in a 300px box:
+
+| Element | 3.x | 4.0.0 |
+|---|---|---|
+| `<img>` with `width` and `height`, ratio 4:3 | 300 × 900 | 300 × 225 |
+| the same in `<picture>`, a flex item, a column flex item or a grid item | 300 × 900 | 300 × 225 |
+| `<iframe width="560" height="315">`, ratio 16:9 | 300 × 315 | 300 × 169 |
+| `<video width="640" height="480">`, ratio 16:9 | 300 × 480 | 300 × 169 |
+| an element with no `height` attribute | unchanged | unchanged |
+
+### What to check
+
+- **A `height` your stylesheet sets is kept.** `:where()` has no specificity,
+  so a height written before the include, after it, in an earlier rule or
+  through an element selector wins, as before: a `<div>` with `height: 400px`
+  stayed 400px tall in all three. A `max-height` still applies.
+- **A `height` attribute meant to override the ratio** no longer does. Move
+  that height into CSS.
+- **`height: auto` written after the include** as a workaround can go.
 
 ---
 

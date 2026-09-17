@@ -168,6 +168,9 @@ exports[`Manifest examples aspect-ratio: .a { @include aspect-ratio(var(--ratio)
   aspect-ratio: var(--ratio);
   border: 0;
   object-fit: cover;
+}
+:where(.a) {
+  height: auto;
 }"
 `;
 
@@ -178,6 +181,9 @@ exports[`Manifest examples aspect-ratio: .default { @include aspect-ratio; } 1`]
   aspect-ratio: 16 / 9;
   border: 0;
   object-fit: cover;
+}
+:where(.default) {
+  height: auto;
 }"
 `;
 
@@ -187,6 +193,9 @@ exports[`Manifest examples aspect-ratio: .plain { @include aspect-ratio(1.5, nul
   width: 100%;
   aspect-ratio: 1.5;
   border: 0;
+}
+:where(.plain) {
+  height: auto;
 }"
 `;
 
@@ -197,6 +206,9 @@ exports[`Manifest examples aspect-ratio: .thumb { @include aspect-ratio("16:9");
   aspect-ratio: 16 / 9;
   border: 0;
   object-fit: cover;
+}
+:where(.thumb) {
+  height: auto;
 }"
 `;
 
@@ -207,6 +219,9 @@ exports[`Manifest examples aspect-ratio: .tile { @include aspect-ratio("1:1", co
   aspect-ratio: 1 / 1;
   border: 0;
   object-fit: contain;
+}
+:where(.tile) {
+  height: auto;
 }"
 `;
 
@@ -217,6 +232,9 @@ exports[`Manifest examples aspect-ratio: .video { @include aspect-ratio("16/9");
   aspect-ratio: 16 / 9;
   border: 0;
   object-fit: cover;
+}
+:where(.video) {
+  height: auto;
 }"
 `;
 

@@ -24,4 +24,12 @@
   @if $fit {
     object-fit: $fit;
   }
+  // A `height` attribute, as on <img width="1600" height="900"> or a YouTube
+  // <iframe width="560" height="315">, is a definite height, and with the
+  // width set the browser ignores `aspect-ratio`. `height: auto` inside
+  // :where() overrides the attribute, which counts for less than any rule,
+  // and loses to any `height` a stylesheet sets.
+  :where(&) {
+    height: auto;
+  }
 }

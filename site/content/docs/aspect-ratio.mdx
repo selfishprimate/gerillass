@@ -14,7 +14,7 @@ aliases:
 <Member name="aspect-ratio">
 
 The **Aspect Ratio Sass mixin** holds an element to the ratio you give it. CSS
-has an `aspect-ratio` property of its own, and this mixin adds the three things
+has an `aspect-ratio` property of its own, and this mixin adds the four things
 that property leaves out.
 
 </Member>
@@ -33,7 +33,11 @@ or Responsive Video](#coming-from-ratio-box-or-responsive-video).
 **Why the extra declarations?** An `<img>` given a ratio but no `object-fit` is
 stretched rather than cropped, and an `<iframe>` carries a 2px default border,
 so `width: 100%` makes it overflow its container by 4px. The mixin sets
-`object-fit` and `border: 0` to close both gaps.
+`object-fit` and `border: 0` to close both gaps. And an element with a `height`
+attribute, which images and embed codes usually have, ignores the ratio
+altogether, so the mixin also writes `height: auto`, in a way that a height you
+set yourself still wins. See [Images and embeds with a height
+attribute](#images-and-embeds-with-a-height-attribute).
 
 </Hint>
 
@@ -114,7 +118,8 @@ so `width: 100%` makes it overflow its container by 4px. The mixin sets
 
 <Example
   title="An embedded video"
-  caption="Apply the mixin to the iframe itself. There is no wrapper element and no padding hack."
+  caption="Apply the mixin to the iframe itself, and paste the embed code as it comes, `width` and `height` attributes included. There is no wrapper element and no padding hack."
+  listing="<iframe class=&quot;element&quot; width=&quot;560&quot; height=&quot;315&quot; src=&quot;https://www.youtube.com/embed/JBc6JiRlsOU&quot; title=&quot;YouTube video player&quot; allowfullscreen></iframe>"
   interactive
   height={420}
 >
@@ -124,7 +129,50 @@ so `width: 100%` makes it overflow its container by 4px. The mixin sets
 }
 ```
 ```html
-<iframe class="element" src="https://www.youtube.com/embed/JBc6JiRlsOU" title="YouTube video player" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe class="element" width="560" height="315" src="https://www.youtube.com/embed/JBc6JiRlsOU" title="YouTube video player" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+```
+</Example>
+
+## Images and embeds with a height attribute
+
+Writing `width` and `height` on an `<img>` is the usual advice against layout
+shift, and embed codes write them on their `<iframe>`. A `height` attribute is a
+definite height, though, and with `width: 100%` also definite the browser
+ignores `aspect-ratio`. Measured in Chrome 152, Firefox 156 and Safari 26.6.2 in
+a 300px box, before 4.0.0:
+
+| Element | Before 4.0.0 | Since 4.0.0 |
+|---|---|---|
+| `<img width="1600" height="900">`, ratio 4:3 | 300 × 900 | 300 × 225 |
+| the same image inside `<picture>`, a flex item or a grid item | 300 × 900 | 300 × 225 |
+| `<iframe width="560" height="315">`, ratio 16:9 | 300 × 315 | 300 × 169 |
+| `<video width="640" height="480">`, ratio 16:9 | 300 × 480 | 300 × 169 |
+
+Since 4.0.0 the mixin writes `height: auto` in a rule of its own, inside
+`:where()`:
+
+```css
+:where(.element) { height: auto; }
+```
+
+A `height` attribute counts for less than any rule, so this one overrides it.
+But `:where()` has no specificity, so a `height` your stylesheet sets, before
+the include, after it, or through an element selector, still wins: a `<div>`
+with `height: 400px` stayed 400px tall in all three browsers. A plain
+`height: auto` in the mixin's own rule would have shrunk it to 225px.
+
+<Example
+  title="An image with its dimensions in the markup"
+  caption="The width and height attributes stay, so the browser reserves the space before the file arrives, and the ratio still holds."
+  listing="<img class=&quot;element&quot; src=&quot;/images/landscape.webp&quot; width=&quot;1400&quot; height=&quot;933&quot; alt=&quot;…&quot;>"
+>
+```scss
+.element {
+  @include aspect-ratio("4:3");
+}
+```
+```html
+<img class="element" src="/images/landscape.webp" width="1400" height="933" alt="A 4 by 3 box holding a cropped photograph" />
 ```
 </Example>
 
@@ -174,5 +222,6 @@ If you have a wrapper `<div>` around a video embed only to hold its ratio,
 remove the wrapper along with the old mixin.
 
 ## Related Links
-- [aspect-ratio](https://developer.mozilla.org/en-US/docs/Web/CSS/aspect-ratio)
-- [object-fit](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit)
+- [aspect-ratio](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/aspect-ratio)
+- [object-fit](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/object-fit)
+- [CSS :where](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:where)
