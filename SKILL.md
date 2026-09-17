@@ -5,7 +5,7 @@ description: Use the Gerillass Sass mixin library — loading it, the mixin cata
 
 # Gerillass
 
-A Sass mixin library: 55 mixins and 24 functions that emit CSS from
+A Sass mixin library: 54 mixins and 24 functions that emit CSS from
 semantic declarations. It is Sass source only — there is no runtime and no
 utility classes, so styles live in your stylesheet and your markup stays clean.
 
@@ -81,9 +81,8 @@ a dropped declaration rather than an error.
 | `all-text-inputs` | `@include all-text-inputs(nonsense) { color: red; }` |
 | `antialias` | `@include antialias(only);` |
 | `aspect-ratio` | `.thumb { @include aspect-ratio("16:9", nonsense); }` |
-| `background-dots` | `.a { @include background-dots(red, 1em, 5em, maybe); }` |
 | `background-image` | `.a { @include background-image("/img/a.png", (red, blue), sideways); }` |
-| `background-stripes` | `.a { @include background-stripes(red, 2em, nonsense); }` |
+| `background-pattern` | `.a { @include background-pattern(spiral); }` |
 | `before` | `.a { @include before(42) { color: red; } }` |
 | `border-box` | `@include border-box(only);` |
 | `border-radius` | `.a { @include border-radius(1px, 2px, 3px); }` |
@@ -142,6 +141,15 @@ a dropped declaration rather than an error.
 **`aspect-ratio`**
 
 - An element with a `height` attribute, such as `<img width="1600" height="900">` or an embed code's `<iframe width="560" height="315">`, keeps the ratio: the mixin writes `height: auto` inside `:where()`, which overrides the attribute but loses to any `height` a stylesheet sets, before or after the include. Until 4.0.0 the attribute height won and the ratio was ignored.
+
+**`background-pattern`**
+
+- It replaces `background-dots` and `background-stripes`, which are removed in 4.0.0. `background-pattern(dots, ...)` and `background-pattern(stripes, ...)` take their place, with the arguments named rather than positional.
+- A pattern is decorative. In forced colours mode a browser sets `background-image` to `none` for anything that is not a `url()`, so every pattern here disappears: never carry meaning in one.
+- The colours default to `currentColor` mixed with transparency, so a pattern follows the text colour in either colour scheme. Pass `$color` for one to three colours, in the order the pattern layers them.
+- Only `background-image`, `background-size`, `background-position`, `background-repeat` and, when asked for, `background-color` are written. The `background` shorthand would reset a `background-color` set before the include.
+- A diagonal hard edge is drawn with stair steps in Firefox 156 and smoothly in Chrome 152 and Safari 26.6.2, which shows in `zigzag`, `chevron` and `triangles`. Feathering the stop by half a pixel was measured and did not change it.
+- Each kind reads only the arguments it needs, and an argument it ignores raises rather than doing nothing: `$angle` belongs to `stripes`, `crosshatch`, `zigzag` and `triangles`, `$thickness` to `dots`, `stripes`, `grid`, `crosshatch`, `zigzag`, `brick` and `waves`, `$axis` to `grid`, and `$stagger` to `dots`.
 
 **`before`**
 
@@ -237,9 +245,8 @@ a dropped declaration rather than an error.
 | `all-text-inputs($pseudo: null)` | Targets every form control a browser draws as a text field, textarea included, optionally in one pseudo-class state. |
 | `antialias($value: null)` | Turns on subpixel-antialiased text smoothing. |
 | `aspect-ratio($ratio: null, $fit: cover)` | Holds an element to a ratio and adds what CSS aspect-ratio alone leaves out: object-fit so an image is cropped rather than stretched, and border: 0 so an iframe does not overflow its container by 4px. Apply it to the element itself, not to a wrapper. |
-| `background-dots($color: null, $size: 1em, $gutter: null, $diagonal: true, $image: null)` | Repeating dot pattern as a background, optionally over an image. |
 | `background-image($image-url: null, $filter-color: null, $filter-direction: null)` | Background image with an optional colour or gradient filter laid over it. |
-| `background-stripes($color: null, $thickness: 1em, $rotation: -45deg, $image: null)` | Repeating stripe pattern as a background, optionally over an image. |
+| `background-pattern($kind: dots, $params...)` | Thirteen geometric background patterns drawn with gradients alone: dots, stripes, grid, checkerboard, crosshatch, zigzag, chevron, triangles, isometric, honeycomb, brick, waves and houndstooth. |
 | `before($content: null)` | Styles the ::before pseudo-element. A `data-` argument becomes an attr() content value. |
 | `border-box($value: null)` | Applies box-sizing: border-box. |
 | `border-radius($args...)` | Rounds corners, either all of them, one named corner, or all four individually. |

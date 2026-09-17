@@ -29,7 +29,7 @@
   $gap: 4rem;
   padding: 8rem 2rem ($reach + $gap);
   margin-bottom: -$reach;
-  @include background-dots(rgba($alabaster, 1), 15rem);
+  @include background-pattern(dots, $color: rgba($alabaster, 1), $size: 15rem, $thickness: 1.5rem);
   @include breakpoint(min, xlarge) {
     padding-top: 12rem;
     /*
@@ -37,7 +37,7 @@
       two have x and y apart, which no single $gutter produces, so the
       placement is set here and the mixin keeps the rest.
     */
-    @include background-dots(rgba($alabaster, 1), 20rem, 105rem);
+    @include background-pattern(dots, $color: rgba($alabaster, 1), $size: 105rem, $thickness: 20rem);
     background-position: 46rem 56rem, 200rem 225rem;
   }
 

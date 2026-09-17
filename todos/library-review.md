@@ -110,7 +110,7 @@ refused. `$step` was added for how far apart a filled shadow's layers sit, a
 | Merge | Sketch | Note |
 |---|---|---|
 | `text-gradient` + `text-image` | `text-fill($source, $size, $position, $fallback: currentColor)` | one member for gradients, images and `image-set()`, writing `background-image` rather than the shorthand, with the forced-colours fallback |
-| `background-dots` + `background-stripes` | `background-pattern($kind: dots \| stripes, $color, $size, $gap, $rotation, $image)` | the two are inconsistent today: dots layer an image through a `::before` at `z-index: -1`, stripes through a second background layer |
+| ~~`background-dots` + `background-stripes`~~ | **done for 4.0.0 on the `background-pattern` branch**: one mixin, thirteen patterns, an image as a background layer rather than a `::before`, longhands only, and colours that follow `currentColor` | |
 | `only` + `except` | `nth($positions..., $not: false, $of: null)` | `$of` writes `:nth-child(n of .item)`, which counts by class rather than by tag, the thing `-of-type` gets wrong |
 | `ellipsis` + `line-clamp` | `truncate($lines: 1, $width: 100%)` | one line is the nowrap method, more lines the clamp method |
 | `placeholder` + `placeholder-shown` | `placeholder($state: text \| shown)` | or deprecate both |

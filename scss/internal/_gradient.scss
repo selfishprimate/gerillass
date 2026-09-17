@@ -17,7 +17,7 @@
 // Builds a linear, radial or conic gradient, plain or repeating, with an
 // optional colour interpolation space, and checks every part of it. The
 // gradient mixin, the gradientValue function, text-gradient, background-image,
-// background-dots and background-stripes all write their gradients through it.
+// and background-pattern all write their gradients through it.
 //
 // What Chrome 152 kept and dropped, checked with CSS.supports in
 // background-image:

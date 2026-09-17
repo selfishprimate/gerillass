@@ -214,75 +214,6 @@
       ]
     },
     {
-      "name": "background-dots",
-      "kind": "mixin",
-      "arguments": [
-        {
-          "name": "$color",
-          "default": "null",
-          "accepts": [
-            "one colour, or two for the diagonal variant, each a colour, currentColor, a system colour or a function such as var() or light-dark()",
-            "null for a translucent black"
-          ]
-        },
-        {
-          "name": "$size",
-          "default": "1em",
-          "accepts": [
-            "dot radius: a length, or var(), env() or a calculation such as calc() or clamp()"
-          ]
-        },
-        {
-          "name": "$gutter",
-          "default": "null",
-          "accepts": [
-            "spacing between dots, in the same forms as $size",
-            "null, the default, for five times $size"
-          ]
-        },
-        {
-          "name": "$diagonal",
-          "default": "true",
-          "accepts": [
-            "true",
-            "false"
-          ]
-        },
-        {
-          "name": "$image",
-          "default": "null",
-          "accepts": [
-            "an image path to sit behind the dots, written unquoted unless it holds a space, a parenthesis or a quote, which are quoted",
-            "var(), url(), image-set() or a gradient, written as they are rather than wrapped in url()"
-          ]
-        }
-      ],
-      "file": "scss/library/_background-dots.scss",
-      "signature": "background-dots($color: null, $size: 1em, $gutter: null, $diagonal: true, $image: null)",
-      "summary": "Repeating dot pattern as a background, optionally over an image.",
-      "examples": [
-        ".a { @include background-dots; }",
-        ".a { @include background-dots(red); }",
-        ".a { @include background-dots(red, 1em, 5em, false); }",
-        ".a { @include background-dots(red, var(--dot), calc(var(--dot) * 6)); }",
-        ".a { @include background-dots(red, clamp(2px, 0.5vw, 6px)); }",
-        ".a { @include background-dots(red, $image: var(--photo)); }"
-      ],
-      "rejects": [
-        ".a { @include background-dots(red, 1em, 5em, maybe); }",
-        ".a { @include background-dots(red, 1em, 5em, true, 42); }",
-        ".a { @include background-dots(red, nonsense); }",
-        ".a { @include background-dots(red, 1em, nonsense); }",
-        ".a { @include background-dots(huge); }",
-        ".a { @include background-dots(red 10px); }",
-        ".a { @include background-dots(inherit); }",
-        ".a { @include background-dots(red, -1em); }",
-        ".a { @include background-dots(red, 10deg); }",
-        ".a { @include background-dots(red, 2); }",
-        ".a { @include background-dots(red, 1em, -5em); }"
-      ]
-    },
-    {
       "name": "background-image",
       "kind": "mixin",
       "arguments": [
@@ -339,61 +270,66 @@
       ]
     },
     {
-      "name": "background-stripes",
+      "name": "background-pattern",
       "kind": "mixin",
       "arguments": [
         {
-          "name": "$color",
-          "default": "null",
+          "name": "$kind",
+          "default": "dots",
           "accepts": [
-            "one colour, or several for a multi-stripe pattern, each a colour, currentColor, a system colour or a function such as var() or color-mix()",
-            "null for a translucent black"
+            "dots, stripes, grid, checkerboard, crosshatch, zigzag, chevron, triangles, isometric, honeycomb, brick, waves, houndstooth",
+            "the name in any case; anything else is refused with the list"
           ]
         },
         {
-          "name": "$thickness",
-          "default": "1em",
-          "accepts": [
-            "stripe thickness: a length, or var(), env() or a calculation such as calc() or clamp()"
-          ]
-        },
-        {
-          "name": "$rotation",
-          "default": "-45deg",
-          "accepts": [
-            "an angle in deg, grad, rad or turn, in any case, written as it is",
-            "a unitless number, which is treated as degrees",
-            "any other unit, such as px or %, is refused, because the gradient would be dropped"
-          ]
-        },
-        {
-          "name": "$image",
-          "default": "null",
-          "accepts": [
-            "an image path to sit behind the stripes, written unquoted unless it holds a space, a parenthesis or a quote, which are quoted",
-            "var(), url(), image-set() or a gradient, written as they are rather than wrapped in url()"
-          ]
+          "name": "$params",
+          "variadic": true
         }
       ],
-      "file": "scss/library/_background-stripes.scss",
-      "signature": "background-stripes($color: null, $thickness: 1em, $rotation: -45deg, $image: null)",
-      "summary": "Repeating stripe pattern as a background, optionally over an image.",
+      "file": "scss/library/_background-pattern.scss",
+      "signature": "background-pattern($kind: dots, $params...)",
+      "summary": "Thirteen geometric background patterns drawn with gradients alone: dots, stripes, grid, checkerboard, crosshatch, zigzag, chevron, triangles, isometric, honeycomb, brick, waves and houndstooth.",
+      "caveats": [
+        "It replaces `background-dots` and `background-stripes`, which are removed in 4.0.0. `background-pattern(dots, ...)` and `background-pattern(stripes, ...)` take their place, with the arguments named rather than positional.",
+        "A pattern is decorative. In forced colours mode a browser sets `background-image` to `none` for anything that is not a `url()`, so every pattern here disappears: never carry meaning in one.",
+        "The colours default to `currentColor` mixed with transparency, so a pattern follows the text colour in either colour scheme. Pass `$color` for one to three colours, in the order the pattern layers them.",
+        "Only `background-image`, `background-size`, `background-position`, `background-repeat` and, when asked for, `background-color` are written. The `background` shorthand would reset a `background-color` set before the include.",
+        "A diagonal hard edge is drawn with stair steps in Firefox 156 and smoothly in Chrome 152 and Safari 26.6.2, which shows in `zigzag`, `chevron` and `triangles`. Feathering the stop by half a pixel was measured and did not change it.",
+        "Each kind reads only the arguments it needs, and an argument it ignores raises rather than doing nothing: `$angle` belongs to `stripes`, `crosshatch`, `zigzag` and `triangles`, `$thickness` to `dots`, `stripes`, `grid`, `crosshatch`, `zigzag`, `brick` and `waves`, `$axis` to `grid`, and `$stagger` to `dots`."
+      ],
       "examples": [
-        ".a { @include background-stripes; }",
-        ".a { @include background-stripes(red, 2em, -30deg); }",
-        ".a { @include background-stripes(red blue, var(--stripe)); }",
-        ".a { @include background-stripes(red, 2em, -30deg, var(--photo)); }"
+        ".a { @include background-pattern(dots); }",
+        ".a { @include background-pattern(stripes, $color: #2563eb, $size: 24px); }",
+        ".a { @include background-pattern(grid, $color: #cbd5e1 #94a3b8, $size: 1.5rem, $thickness: 1px); }",
+        ".a { @include background-pattern(checkerboard, $color: #111 #eee, $size: 12px); }",
+        ".a { @include background-pattern(crosshatch, $size: 20px, $angle: 30deg); }",
+        ".a { @include background-pattern(zigzag, $color: #f97316, $background: #fff7ed, $size: 28px); }",
+        ".a { @include background-pattern(chevron, $color: #0ea5e9, $background: #e0f2fe); }",
+        ".a { @include background-pattern(triangles, $color: #16a34a, $size: 28px, $angle: 135deg); }",
+        ".a { @include background-pattern(isometric, $color: #a78bfa #7c3aed #4c1d95, $size: 32px); }",
+        ".a { @include background-pattern(honeycomb, $color: #fbbf24 #f59e0b #b45309, $size: 30px); }",
+        ".a { @include background-pattern(brick, $color: #b91c1c #7f1d1d, $background: #fee2e2, $size: 48px); }",
+        ".a { @include background-pattern(waves, $color: #0ea5e9, $background: #e0f2fe, $size: 32px); }",
+        ".a { @include background-pattern(houndstooth, $color: #111 #fff, $size: 18px); }",
+        ".a { @include background-pattern(grid, $axis: block, $color: #bae6fd, $size: 1.75rem, $thickness: 1px); }",
+        ".a { @include background-pattern(dots, $size: var(--tile), $color: var(--ink)); }",
+        ".a { @include background-pattern(stripes, $color: #2563eb #f59e0b, $image: \"/img/a.png\"); }",
+        ".a { @include background-pattern(dots, $color: #94a3b8, $size: 18px, $stagger: false); }"
       ],
       "rejects": [
-        ".a { @include background-stripes(red, 2em, nonsense); }",
-        ".a { @include background-stripes(red, 2em, -45deg, 42); }",
-        ".a { @include background-stripes(red, nonsense); }",
-        ".a { @include background-stripes(red, 2em, -10px); }",
-        ".a { @include background-stripes(red, 2em, 10%); }",
-        ".a { @include background-stripes(huge); }",
-        ".a { @include background-stripes(red \"blue\"); }",
-        ".a { @include background-stripes(red, 10deg); }",
-        ".a { @include background-stripes(red, 2); }"
+        ".a { @include background-pattern(spiral); }",
+        ".a { @include background-pattern(dots, $color: notacolor); }",
+        ".a { @include background-pattern(dots, $size: -2rem); }",
+        ".a { @include background-pattern(dots, $size: 42); }",
+        ".a { @include background-pattern(dots, $angle: 30deg); }",
+        ".a { @include background-pattern(checkerboard, $thickness: 2px); }",
+        ".a { @include background-pattern(stripes, $angle: 10px); }",
+        ".a { @include background-pattern(grid, $axis: sideways); }",
+        ".a { @include background-pattern(dots, $image: 42); }",
+        ".a { @include background-pattern(dots, $tile: 2rem); }",
+        ".a { @include background-pattern(dots, 2rem); }",
+        ".a { @include background-pattern(dots, $thickness: -2px); }",
+        ".a { @include background-pattern(stripes, $stagger: false); }"
       ]
     },
     {

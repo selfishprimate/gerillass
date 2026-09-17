@@ -238,75 +238,6 @@ exports[`Manifest examples aspect-ratio: .video { @include aspect-ratio("16/9");
 }"
 `;
 
-exports[`Manifest examples background-dots: .a { @include background-dots(red); } 1`] = `
-".a {
-  background-image: radial-gradient(red 1em, transparent 0), radial-gradient(red 1em, transparent 0);
-  background-position: 2.5em 2.5em, 10em 10em;
-  background-size: 5em 5em;
-  background-repeat: repeat;
-}"
-`;
-
-exports[`Manifest examples background-dots: .a { @include background-dots(red, $image: var(--photo)); } 1`] = `
-".a {
-  background-image: radial-gradient(red 1em, transparent 0), radial-gradient(red 1em, transparent 0);
-  background-position: 2.5em 2.5em, 10em 10em;
-  background-size: 5em 5em;
-  background-repeat: repeat;
-  position: relative;
-}
-.a::before {
-  content: "";
-  display: block;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  background-image: var(--photo);
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  z-index: -1;
-}"
-`;
-
-exports[`Manifest examples background-dots: .a { @include background-dots(red, 1em, 5em, false); } 1`] = `
-".a {
-  background-image: radial-gradient(red 1em, transparent 0);
-  background-position: 2.5em 2.5em;
-  background-size: 5em 5em;
-  background-repeat: repeat;
-}"
-`;
-
-exports[`Manifest examples background-dots: .a { @include background-dots(red, clamp(2px, 0.5vw, 6px)); } 1`] = `
-".a {
-  background-image: radial-gradient(red clamp(2px, 0.5vw, 6px), transparent 0), radial-gradient(red clamp(2px, 0.5vw, 6px), transparent 0);
-  background-position: calc(clamp(2px, 0.5vw, 6px) * 5 / 2) calc(clamp(2px, 0.5vw, 6px) * 5 / 2), calc(clamp(2px, 0.5vw, 6px) * 5 * 2) calc(clamp(2px, 0.5vw, 6px) * 5 * 2);
-  background-size: calc(clamp(2px, 0.5vw, 6px) * 5) calc(clamp(2px, 0.5vw, 6px) * 5);
-  background-repeat: repeat;
-}"
-`;
-
-exports[`Manifest examples background-dots: .a { @include background-dots(red, var(--dot), calc(var(--dot) * 6));  1`] = `
-".a {
-  background-image: radial-gradient(red var(--dot), transparent 0), radial-gradient(red var(--dot), transparent 0);
-  background-position: calc(var(--dot) * 6 / 2) calc(var(--dot) * 6 / 2), calc(var(--dot) * 6 * 2) calc(var(--dot) * 6 * 2);
-  background-size: calc(var(--dot) * 6) calc(var(--dot) * 6);
-  background-repeat: repeat;
-}"
-`;
-
-exports[`Manifest examples background-dots: .a { @include background-dots; } 1`] = `
-".a {
-  background-image: radial-gradient(rgba(0, 0, 0, 0.1) 1em, transparent 0), radial-gradient(rgba(0, 0, 0, 0.1) 1em, transparent 0);
-  background-position: 2.5em 2.5em, 10em 10em;
-  background-size: 5em 5em;
-  background-repeat: repeat;
-}"
-`;
-
 exports[`Manifest examples background-image: .a { @include background-image("/img/a.png"); } 1`] = `
 ".a {
   background-image: url("/img/a.png");
@@ -352,30 +283,152 @@ exports[`Manifest examples background-image: .a { @include background-image(var(
 }"
 `;
 
-exports[`Manifest examples background-stripes: .a { @include background-stripes(red blue, var(--stripe)); } 1`] = `
+exports[`Manifest examples background-pattern: .a { @include background-pattern(brick, $color: #b91c1c #7f1d1d, $back 1`] = `
 ".a {
-  background-image: repeating-linear-gradient(-45deg, red calc(var(--stripe) * 1 - var(--stripe)), red calc(var(--stripe) * 1), blue calc(var(--stripe) * 2 - var(--stripe)), blue calc(var(--stripe) * 2));
+  background-image: linear-gradient(335deg, #b91c1c 19.0344827586px, #0000 0), linear-gradient(155deg, #7f1d1d 19.0344827586px, #0000 0), linear-gradient(335deg, #b91c1c 19.0344827586px, #0000 0), linear-gradient(155deg, #7f1d1d 19.0344827586px, #0000 0);
+  background-size: 48px 48px, 48px 48px, 48px 48px, 48px 48px;
+  background-position: 0 1.6551724138px, 3.3103448276px 28.9655172414px, 24px 25.6551724138px, 28.1379310345px 4.9655172414px;
+  background-repeat: repeat;
+  background-color: #fee2e2;
 }"
 `;
 
-exports[`Manifest examples background-stripes: .a { @include background-stripes(red, 2em, -30deg); } 1`] = `
+exports[`Manifest examples background-pattern: .a { @include background-pattern(checkerboard, $color: #111 #eee, $siz 1`] = `
 ".a {
-  background-image: repeating-linear-gradient(-30deg, red 0, red 2em, transparent 2em, transparent 4em);
+  background-image: repeating-conic-gradient(#111 0 25%, #eee 0 50%);
+  background-size: 24px 24px;
+  background-repeat: repeat;
 }"
 `;
 
-exports[`Manifest examples background-stripes: .a { @include background-stripes(red, 2em, -30deg, var(--photo)); } 1`] = `
+exports[`Manifest examples background-pattern: .a { @include background-pattern(chevron, $color: #0ea5e9, $background 1`] = `
 ".a {
-  background-image: repeating-linear-gradient(-30deg, red 0, red 2em, transparent 2em, transparent 4em), var(--photo);
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
+  background-image: conic-gradient(from -45deg at 50% 25%, #0ea5e9 90deg, #0000 0), conic-gradient(from -45deg at 50% 75%, #0ea5e9 90deg, #0000 0);
+  background-size: 2rem 2rem, 2rem 2rem;
+  background-repeat: repeat;
+  background-color: #e0f2fe;
 }"
 `;
 
-exports[`Manifest examples background-stripes: .a { @include background-stripes; } 1`] = `
+exports[`Manifest examples background-pattern: .a { @include background-pattern(crosshatch, $size: 20px, $angle: 30de 1`] = `
 ".a {
-  background-image: repeating-linear-gradient(-45deg, rgba(0, 0, 0, 0.1) 0, rgba(0, 0, 0, 0.1) 1em, transparent 1em, transparent 2em);
+  background-image: repeating-linear-gradient(30deg, color-mix(in oklab, currentColor 12%, transparent) 0 2.5px, #0000 0 20px), repeating-linear-gradient(-30deg, color-mix(in oklab, currentColor 6%, transparent) 0 2.5px, #0000 0 20px);
+  background-repeat: repeat;
+}"
+`;
+
+exports[`Manifest examples background-pattern: .a { @include background-pattern(dots); } 1`] = `
+".a {
+  background-image: radial-gradient(color-mix(in oklab, currentColor 12%, transparent) 0.2rem, #0000 0), radial-gradient(color-mix(in oklab, currentColor 6%, transparent) 0.2rem, #0000 0);
+  background-size: 2rem 2rem, 2rem 2rem;
+  background-position: 0 0, 1rem 1rem;
+  background-repeat: repeat;
+}"
+`;
+
+exports[`Manifest examples background-pattern: .a { @include background-pattern(dots, $color: #94a3b8, $size: 18px, $ 1`] = `
+".a {
+  background-image: radial-gradient(#94a3b8 1.8px, #0000 0);
+  background-size: 18px 18px;
+  background-position: 0 0;
+  background-repeat: repeat;
+}"
+`;
+
+exports[`Manifest examples background-pattern: .a { @include background-pattern(dots, $size: var(--tile), $color: var 1`] = `
+".a {
+  background-image: radial-gradient(var(--ink) calc(var(--tile) * 0.1), #0000 0), radial-gradient(var(--ink) calc(var(--tile) * 0.1), #0000 0);
+  background-size: var(--tile) var(--tile), var(--tile) var(--tile);
+  background-position: 0 0, calc(var(--tile) * 0.5) calc(var(--tile) * 0.5);
+  background-repeat: repeat;
+}"
+`;
+
+exports[`Manifest examples background-pattern: .a { @include background-pattern(grid, $axis: block, $color: #bae6fd,  1`] = `
+".a {
+  background-image: linear-gradient(#bae6fd 1px, #0000 0);
+  background-size: 1.75rem 1.75rem;
+  background-position: -0.5px -0.5px;
+  background-repeat: repeat;
+}"
+`;
+
+exports[`Manifest examples background-pattern: .a { @include background-pattern(grid, $color: #cbd5e1 #94a3b8, $size: 1`] = `
+".a {
+  background-image: linear-gradient(90deg, #94a3b8 2px, #0000 0), linear-gradient(#94a3b8 2px, #0000 0), linear-gradient(90deg, #cbd5e1 1px, #0000 0), linear-gradient(#cbd5e1 1px, #0000 0);
+  background-size: 7.5rem 7.5rem, 7.5rem 7.5rem, 1.5rem 1.5rem, 1.5rem 1.5rem;
+  background-position: -1px -1px, -1px -1px, -0.5px -0.5px, -0.5px -0.5px;
+  background-repeat: repeat;
+}"
+`;
+
+exports[`Manifest examples background-pattern: .a { @include background-pattern(honeycomb, $color: #fbbf24 #f59e0b #b 1`] = `
+".a {
+  background-image: repeating-conic-gradient(from 30deg, #0000 0 120deg, #b45309 0 180deg), repeating-conic-gradient(from 30deg, #fbbf24 0 60deg, #f59e0b 0 120deg, #b45309 0 180deg);
+  background-size: 30px 17.320509px, 30px 17.320509px;
+  background-position: 15px 8.660253px, 0 0;
+  background-repeat: repeat;
+}"
+`;
+
+exports[`Manifest examples background-pattern: .a { @include background-pattern(houndstooth, $color: #111 #fff, $size 1`] = `
+".a {
+  background-image: linear-gradient(-45deg, #fff 25%, #0000 25% 75%, #111 75%), linear-gradient(-45deg, #111 25%, #0000 25% 75%, #fff 75%), linear-gradient(45deg, #111 17%, #0000 17% 25%, #111 25% 36%, #0000 36% 64%, #111 64% 75%, #0000 75% 83%, #111 83%);
+  background-size: 36px 36px, 36px 36px, 36px 36px;
+  background-position: 0 0, 18px 18px, 18px 18px;
+  background-repeat: repeat;
+  background-color: #fff;
+}"
+`;
+
+exports[`Manifest examples background-pattern: .a { @include background-pattern(isometric, $color: #a78bfa #7c3aed #4 1`] = `
+".a {
+  background-image: conic-gradient(from 0deg at calc(500% / 6) calc(100% / 3), #4c1d95 0 120deg, #0000 0), conic-gradient(from -120deg at calc(100% / 6) calc(100% / 3), #7c3aed 0 120deg, #0000 0), conic-gradient(from 120deg at calc(100% / 3) calc(500% / 6), #a78bfa 0 120deg, #0000 0), conic-gradient(from 120deg at calc(200% / 3) calc(500% / 6), #a78bfa 0 120deg, #0000 0), conic-gradient(from -180deg at calc(100% / 3) 50%, #7c3aed 60deg, #a78bfa 0 120deg, #0000 0), conic-gradient(from 60deg at calc(200% / 3) 50%, #a78bfa 60deg, #4c1d95 0 120deg, #0000 0), conic-gradient(from -60deg at 50% calc(100% / 3), #a78bfa 120deg, #7c3aed 0 240deg, #4c1d95 0);
+  background-size: 55.4256256px 32px;
+  background-repeat: repeat;
+}"
+`;
+
+exports[`Manifest examples background-pattern: .a { @include background-pattern(stripes, $color: #2563eb #f59e0b, $im 1`] = `
+".a {
+  background-image: repeating-linear-gradient(-45deg, #2563eb 0rem 0.25rem, #f59e0b 0.25rem 0.5rem), url(/img/a.png);
+  background-size: auto, cover;
+  background-position: auto, center;
+  background-repeat: repeat;
+}"
+`;
+
+exports[`Manifest examples background-pattern: .a { @include background-pattern(stripes, $color: #2563eb, $size: 24px 1`] = `
+".a {
+  background-image: repeating-linear-gradient(-45deg, #2563eb 0px 3px, #0000 0 6px);
+  background-repeat: repeat;
+}"
+`;
+
+exports[`Manifest examples background-pattern: .a { @include background-pattern(triangles, $color: #16a34a, $size: 28 1`] = `
+".a {
+  background-image: conic-gradient(from -135deg, #16a34a 90deg, #0000 0);
+  background-size: 28px 28px;
+  background-repeat: repeat;
+}"
+`;
+
+exports[`Manifest examples background-pattern: .a { @include background-pattern(waves, $color: #0ea5e9, $background:  1`] = `
+".a {
+  background-image: radial-gradient(circle at 50% 100%, #0ea5e9 45%, #0000 46%);
+  background-size: 32px 32px;
+  background-repeat: repeat;
+  background-color: #e0f2fe;
+}"
+`;
+
+exports[`Manifest examples background-pattern: .a { @include background-pattern(zigzag, $color: #f97316, $background: 1`] = `
+".a {
+  background-image: linear-gradient(135deg, #f97316 25%, #0000 0), linear-gradient(225deg, #f97316 25%, #0000 0), linear-gradient(315deg, #f97316 25%, #0000 0), linear-gradient(45deg, #f97316 25%, #0000 0);
+  background-size: 28px 28px, 28px 28px, 28px 28px, 28px 28px;
+  background-position: -14px 0, -14px 0, 0 0, 0 0;
+  background-repeat: repeat;
+  background-color: #fff7ed;
 }"
 `;
 

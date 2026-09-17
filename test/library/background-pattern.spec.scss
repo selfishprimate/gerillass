@@ -1,0 +1,99 @@
+// One mixin for thirteen patterns, replacing background-dots and
+// background-stripes. Every offset is derived from $size inside calc(), so a
+// var() tile keeps its tiles lined up, and only longhands are written, since
+// the `background` shorthand would reset a background-color set before the
+// include. Rendered in Chrome 152, Firefox 156 and Safari 26.6.2.
+@use 'true' as *;
+@use '../../scss/library/background-pattern' as *;
+
+@include describe('background-pattern()') {
+  @include it('Draws dots as two staggered layers, half a tile apart.') {
+    @include assert {
+      @include output {
+        .a {
+          @include background-pattern(dots, $color: red blue, $size: 20px, $thickness: 2px);
+        }
+      }
+      @include expect {
+        .a {
+          background-image: #{"radial-gradient(red 2px, #0000 0), radial-gradient(blue 2px, #0000 0)"};
+          background-size: 20px 20px, 20px 20px;
+          background-position: 0 0, 10px 10px;
+          background-repeat: repeat;
+        }
+      }
+    }
+  }
+
+  @include it('Leaves the arithmetic to the browser, and one colour fills both layers.') {
+    @include assert {
+      @include output {
+        .a {
+          @include background-pattern(dots, $color: var(--ink), $size: var(--tile));
+        }
+      }
+      @include expect {
+        .a {
+          background-image: #{"radial-gradient(var(--ink) calc(var(--tile) * 0.1), #0000 0), radial-gradient(var(--ink) calc(var(--tile) * 0.1), #0000 0)"};
+          background-size: var(--tile) var(--tile), var(--tile) var(--tile);
+          background-position: 0 0, calc(var(--tile) * 0.5) calc(var(--tile) * 0.5);
+          background-repeat: repeat;
+        }
+      }
+    }
+  }
+
+  @include it('Writes a grid as one layer per axis, and $axis drops one.') {
+    @include assert {
+      @include output {
+        .a {
+          @include background-pattern(grid, $color: #ccc, $size: 10px, $thickness: 1px, $axis: block);
+        }
+      }
+      @include expect {
+        .a {
+          background-image: #{"linear-gradient(#ccc 1px, #0000 0)"};
+          background-size: 10px 10px;
+          background-position: -0.5px -0.5px;
+          background-repeat: repeat;
+        }
+      }
+    }
+  }
+
+  @include it('Writes the ground as background-color, never the shorthand.') {
+    @include assert {
+      @include output {
+        .a {
+          @include background-pattern(checkerboard, $color: #111 #eee, $background: #fff, $size: 8px);
+        }
+      }
+      @include expect {
+        .a {
+          background-image: repeating-conic-gradient(#111 0 25%, #eee 0 50%);
+          background-size: 16px 16px;
+          background-repeat: repeat;
+          background-color: #fff;
+        }
+      }
+    }
+  }
+
+  @include it('Lays an image under the pattern as the last layer.') {
+    @include assert {
+      @include output {
+        .a {
+          @include background-pattern(stripes, $color: red, $size: 10px, $thickness: 2px, $image: "/img/a.png");
+        }
+      }
+      @include expect {
+        .a {
+          background-image: #{"repeating-linear-gradient(-45deg, red 0px 2px, #0000 0 4px), url(/img/a.png)"};
+          background-size: auto, cover;
+          background-position: auto, center;
+          background-repeat: repeat;
+        }
+      }
+    }
+  }
+}

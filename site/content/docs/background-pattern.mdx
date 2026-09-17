@@ -1,0 +1,300 @@
+---
+title: "Background Pattern"
+page_title: "Background Pattern Sass Mixin"
+page_description: "Thirteen geometric background patterns from one line of Sass: dots, stripes, grid, checkerboard, crosshatch, zigzag, chevron, triangles, isometric, honeycomb, brick, waves and houndstooth, drawn with CSS gradients alone."
+page_keywords: "CSS Background Pattern, CSS Pattern Generator, Sass Background Pattern, CSS Polka Dots, CSS Stripes, CSS Grid Background, CSS Checkerboard, CSS Isometric Pattern, CSS Honeycomb, CSS Houndstooth, CSS Gradient Patterns"
+page_image: "gerillass-background-pattern.jpg"
+aliases:
+  - /docs/background-dots/
+  - /docs/background-stripes/
+---
+
+# Background Pattern
+
+<Member name="background-pattern">
+
+The **Background Pattern Sass mixin** draws thirteen geometric patterns with CSS gradients alone: no image file, no SVG, and nothing to download. Pass the pattern's name, and optionally its colours, its tile and the line inside it.
+
+</Member>
+
+<Hint kind="warning">
+
+**New in Gerillass 4.0.0.** This mixin replaces **Background Dots** and **Background Stripes**, which are both removed. `background-pattern(dots, ...)` and `background-pattern(stripes, ...)` take their place, with the arguments named rather than positional. See the migration guide.
+
+</Hint>
+
+## Arguments
+
+<Arguments of="background-pattern" footnote="Each pattern reads only the arguments it needs, and passing one it ignores raises rather than doing nothing quietly.">
+  <Argument name="$kind" type="string">Which pattern: <code>dots</code>, <code>stripes</code>, <code>grid</code>, <code>checkerboard</code>, <code>crosshatch</code>, <code>zigzag</code>, <code>chevron</code>, <code>triangles</code>, <code>isometric</code>, <code>honeycomb</code>, <code>brick</code>, <code>waves</code> or <code>houndstooth</code>.</Argument>
+  <Argument name="$color" type="color, list">One colour, or two or three for the patterns that layer them. The default is <code>currentColor</code> mixed with transparency, so a pattern follows the text colour.</Argument>
+  <Argument name="$background" type="color">The colour under the pattern, written as <code>background-color</code>.</Argument>
+  <Argument name="$size" type="number">The tile. The default is <code>2rem</code>. A <code>var()</code> or <code>calc()</code> works, and every offset is derived from it.</Argument>
+  <Argument name="$thickness" type="number">The line, dot or mortar inside the tile. The default is a tenth of the tile for <code>dots</code> and an eighth for the rest.</Argument>
+  <Argument name="$angle" type="number">For <code>stripes</code>, <code>crosshatch</code>, <code>zigzag</code> and <code>triangles</code>: an angle such as <code>-45deg</code>, or a unitless number read as degrees.</Argument>
+  <Argument name="$axis" type="string">For <code>grid</code>: <code>both</code>, <code>block</code> for horizontal lines only, or <code>inline</code> for vertical lines only.</Argument>
+  <Argument name="$image" type="string">An image path, laid under the pattern as the last layer.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="The thirteen patterns, each one include. Nothing here is an image: every tile is a gradient the browser draws.">
+```scss
+.dots { @include background-pattern(dots, $color: #2563eb #f59e0b #10b981, $background: #f8fafc, $size: 26px); }
+.stripes { @include background-pattern(stripes, $color: #2563eb #f59e0b #10b981, $background: #f8fafc, $size: 26px); }
+.grid { @include background-pattern(grid, $color: #2563eb #f59e0b #10b981, $background: #f8fafc, $size: 26px); }
+.checkerboard { @include background-pattern(checkerboard, $color: #2563eb #f59e0b #10b981, $background: #f8fafc, $size: 26px); }
+.crosshatch { @include background-pattern(crosshatch, $color: #2563eb #f59e0b #10b981, $background: #f8fafc, $size: 26px); }
+.zigzag { @include background-pattern(zigzag, $color: #2563eb #f59e0b #10b981, $background: #f8fafc, $size: 26px); }
+.chevron { @include background-pattern(chevron, $color: #2563eb #f59e0b #10b981, $background: #f8fafc, $size: 26px); }
+.triangles { @include background-pattern(triangles, $color: #2563eb #f59e0b #10b981, $background: #f8fafc, $size: 26px); }
+.isometric { @include background-pattern(isometric, $color: #2563eb #f59e0b #10b981, $background: #f8fafc, $size: 26px); }
+.honeycomb { @include background-pattern(honeycomb, $color: #2563eb #f59e0b #10b981, $background: #f8fafc, $size: 26px); }
+.brick { @include background-pattern(brick, $color: #2563eb #f59e0b #10b981, $background: #f8fafc, $size: 26px); }
+.waves { @include background-pattern(waves, $color: #2563eb #f59e0b #10b981, $background: #f8fafc, $size: 26px); }
+.houndstooth { @include background-pattern(houndstooth, $color: #2563eb #f59e0b #10b981, $background: #f8fafc, $size: 26px); }
+```
+```html
+<style>
+  .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; font: 12px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; color: #52525b; }
+  .gallery figure { margin: 0; }
+  .gallery div { height: 92px; border-radius: 8px; }
+  .gallery figcaption { margin-top: 4px; }
+</style>
+<div class="gallery">
+  <figure><div class="dots"></div><figcaption>dots</figcaption></figure>
+  <figure><div class="stripes"></div><figcaption>stripes</figcaption></figure>
+  <figure><div class="grid"></div><figcaption>grid</figcaption></figure>
+  <figure><div class="checkerboard"></div><figcaption>checkerboard</figcaption></figure>
+  <figure><div class="crosshatch"></div><figcaption>crosshatch</figcaption></figure>
+  <figure><div class="zigzag"></div><figcaption>zigzag</figcaption></figure>
+  <figure><div class="chevron"></div><figcaption>chevron</figcaption></figure>
+  <figure><div class="triangles"></div><figcaption>triangles</figcaption></figure>
+  <figure><div class="isometric"></div><figcaption>isometric</figcaption></figure>
+  <figure><div class="honeycomb"></div><figcaption>honeycomb</figcaption></figure>
+  <figure><div class="brick"></div><figcaption>brick</figcaption></figure>
+  <figure><div class="waves"></div><figcaption>waves</figcaption></figure>
+  <figure><div class="houndstooth"></div><figcaption>houndstooth</figcaption></figure>
+</div>
+```
+</Example>
+
+<Example caption="A hero section with dots behind the text. With no colours the pattern is drawn in `currentColor` at low opacity, so it follows the section's own text colour.">
+```scss
+.hero {
+  @include background-pattern(dots, $size: 1.5rem);
+}
+```
+```html
+<style>
+  .hero { padding: 32px 24px; border-radius: 10px; color: #1d4ed8; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .hero h2 { margin: 0 0 6px; font-size: 30px; }
+  .hero p { margin: 0; color: #334155; }
+</style>
+<section class="hero">
+  <h2>Patterns, not pictures</h2>
+  <p>Drawn by the browser, in one line of Sass.</p>
+</section>
+```
+</Example>
+
+<Example caption="Graph paper behind a form, with a heavier line every fifth cell. A second colour draws those major lines.">
+```scss
+.sheet {
+  @include background-pattern(grid, $color: #dbeafe #93c5fd, $background: #fff, $size: 1.25rem, $thickness: 1px);
+}
+```
+```html
+<style>
+  .sheet { padding: 22px; border-radius: 10px; border: 1px solid #e2e8f0; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .sheet label { display: block; margin-bottom: 6px; font-weight: 600; color: #0f172a; }
+  .sheet input { width: 100%; max-width: 260px; padding: 8px 10px; border: 1px solid #94a3b8; border-radius: 6px; background: #fff; font: inherit; }
+</style>
+<div class="sheet">
+  <label for="bp-name">Project name</label>
+  <input id="bp-name" type="text" value="Gerillass 4.0.0">
+</div>
+```
+</Example>
+
+<Example caption="Ruled paper, which is the grid with one axis switched off. `$axis: block` keeps the horizontal lines only.">
+```scss
+.note {
+  @include background-pattern(grid, $axis: block, $color: #bae6fd, $background: #fffbeb, $size: 1.75rem, $thickness: 1px);
+}
+```
+```html
+<style>
+  .note { padding: 14px 18px; border-radius: 10px; font: 17px/1.75rem "Segoe Print", Bradley Hand, cursive, sans-serif; color: #0f172a; }
+  .note p { margin: 0; }
+</style>
+<div class="note">
+  <p>Buy milk</p>
+  <p>Ship 4.0.0</p>
+  <p>Write the migration guide</p>
+</div>
+```
+</Example>
+
+<Example caption="A ticket, cut along the top and bottom with a zigzag strip. The pattern's tile sets how wide each tooth is.">
+```scss
+.ticket-edge {
+  @include background-pattern(zigzag, $color: #fff, $background: #f43f5e, $size: 18px);
+}
+```
+```html
+<style>
+  .ticket { max-width: 320px; border-radius: 10px; overflow: hidden; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .ticket-edge { height: 14px; }
+  .ticket-body { padding: 16px 18px; background: #f43f5e; color: #fff; }
+  .ticket-body b { display: block; font-size: 20px; }
+</style>
+<div class="ticket">
+  <div class="ticket-edge"></div>
+  <div class="ticket-body"><b>Admit one</b>Row F, seat 12</div>
+  <div class="ticket-edge"></div>
+</div>
+```
+</Example>
+
+<Example caption="An empty state, marked out with a crosshatch rather than a grey box. The angle turns the hatching.">
+```scss
+.empty {
+  @include background-pattern(crosshatch, $color: #e2e8f0, $background: #f8fafc, $size: 14px, $thickness: 1px, $angle: 30deg);
+}
+```
+```html
+<style>
+  .empty { display: grid; place-items: center; height: 150px; border-radius: 10px; border: 1px dashed #cbd5e1; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #64748b; }
+</style>
+<div class="empty">Drop a file here</div>
+```
+</Example>
+
+<Example caption="A pricing card on an isometric field of cubes. Three colours, seven gradient layers, one include.">
+```scss
+.plan {
+  @include background-pattern(isometric, $color: #c4b5fd #a78bfa #7c3aed, $size: 26px);
+}
+```
+```html
+<style>
+  .plan { padding: 24px; border-radius: 12px; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .plan div { padding: 18px; border-radius: 10px; background: rgb(255 255 255 / 0.92); }
+  .plan b { display: block; font-size: 26px; color: #4c1d95; }
+</style>
+<div class="plan"><div><b>$19</b>per editor, per month</div></div>
+```
+</Example>
+
+<Example caption="A honeycomb band behind a section heading, and a brick wall beside it. Both are fixed-ratio tiles the mixin works out from the size.">
+```scss
+.comb { @include background-pattern(honeycomb, $color: #fde68a #fbbf24 #f59e0b, $size: 26px); }
+.wall { @include background-pattern(brick, $color: #b91c1c #7f1d1d, $background: #fee2e2, $size: 40px); }
+```
+```html
+<style>
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .pair > div { height: 130px; border-radius: 10px; }
+</style>
+<div class="pair">
+  <div class="comb"></div>
+  <div class="wall"></div>
+</div>
+```
+</Example>
+
+<Example caption="Scalloped waves as a section divider, over the colour underneath.">
+```scss
+.divider {
+  @include background-pattern(waves, $color: #0ea5e9, $background: #e0f2fe, $size: 34px);
+}
+```
+```html
+<style>
+  .stack { border-radius: 10px; overflow: hidden; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .stack .top { padding: 16px 18px; background: #0ea5e9; color: #fff; }
+  .divider { height: 34px; }
+  .stack .bottom { padding: 16px 18px; background: #e0f2fe; color: #0c4a6e; }
+</style>
+<div class="stack">
+  <div class="top">Above the fold</div>
+  <div class="divider"></div>
+  <div class="bottom">Below it</div>
+</div>
+```
+</Example>
+
+<Example caption="Houndstooth on a fashion card, at two sizes. Two colours are all it takes, and the second one becomes the ground.">
+```scss
+.swatch-sm { @include background-pattern(houndstooth, $color: #111827 #f5f5f4, $size: 10px); }
+.swatch-lg { @include background-pattern(houndstooth, $color: #7c2d12 #fed7aa, $size: 22px); }
+```
+```html
+<style>
+  .swatches { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .swatches div { height: 130px; border-radius: 10px; }
+</style>
+<div class="swatches">
+  <div class="swatch-sm"></div>
+  <div class="swatch-lg"></div>
+</div>
+```
+</Example>
+
+<Example caption="The tile and the colour from custom properties, so one rule serves every card and the markup sets the scale. Every offset is derived from the tile in `calc()`, which is what keeps the tiles lined up when the browser is the one that knows the size." listing="<div class=&quot;tiles&quot;>
+&#32;&#32;<div class=&quot;tile&quot; style=&quot;--tile: 14px; --ink: #f472b6&quot;></div>
+&#32;&#32;<div class=&quot;tile&quot; style=&quot;--tile: 24px; --ink: #34d399&quot;></div>
+&#32;&#32;<div class=&quot;tile&quot; style=&quot;--tile: 38px; --ink: #60a5fa&quot;></div>
+</div>">
+```scss
+.tile {
+  @include background-pattern(triangles, $size: var(--tile), $color: var(--ink), $background: #fff);
+}
+```
+```html
+<style>
+  .tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .tiles div { height: 120px; border-radius: 10px; }
+</style>
+<div class="tiles">
+  <div class="tile" style="--tile: 14px; --ink: #f472b6"></div>
+  <div class="tile" style="--tile: 24px; --ink: #34d399"></div>
+  <div class="tile" style="--tile: 38px; --ink: #60a5fa"></div>
+</div>
+```
+</Example>
+
+<Example caption="A photograph under the pattern. The image is the last layer, covering the box, with the pattern drawn over it.">
+```scss
+.card {
+  @include background-pattern(stripes, $color: rgb(15 23 42 / 0.55), $size: 16px, $image: "/images/backgrounds/02.jpg");
+}
+```
+```html
+<style>
+  .card { display: grid; align-items: end; height: 170px; padding: 18px; border-radius: 10px; font: 700 22px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; color: #fff; }
+</style>
+<div class="card">Shot on location</div>
+```
+</Example>
+
+<Hint kind="danger">
+
+**A pattern is decoration.** In forced colours mode a browser replaces `background-image` with `none` for everything that is not a `url()`, so every pattern here disappears. Never let one carry meaning, and keep the contrast between text and the colour underneath.
+
+</Hint>
+
+<Hint kind="info">
+
+**What was measured.** Every pattern was drawn in Chrome 152, Firefox 156 and Safari 26.6.2, and all three lay the tiles out the same. One difference: Firefox draws a hard diagonal edge with visible stair steps, where Chrome and Safari smooth it, which shows in `zigzag`, `chevron` and `triangles`. Feathering the colour stop by half a pixel was tried and changed nothing.
+
+</Hint>
+
+## Related Links
+
+- [Gradient](/docs/gradient)
+- [Background Image](/docs/background-image)
+- [CSS conic-gradient()](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/conic-gradient)
+- [CSS repeating-linear-gradient()](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/repeating-linear-gradient)
+- [CSS background-size](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/background-size)

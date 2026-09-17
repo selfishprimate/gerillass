@@ -10,7 +10,7 @@
 // already an image, and wrapping it produced url(var(--x)), which loads nothing.
 //
 // $unquote is there because the copies this replaced differed:
-// background-dots and background-stripes wrote `url(a.png)`, the other three
+// background-pattern writes `url(a.png)`, the other three
 // `url("a.png")`. Both load the same file, and keeping each as it was means no
 // stylesheet changes.
 //
@@ -19,8 +19,8 @@
 // - a list where one image is meant: `url(16 9)` was dropped;
 // - a number, a colour or a boolean: `url(42)`, `url(#ff0000)` and `url(true)`
 //   are kept, but ask for a file named 42, a fragment of the page, or a file
-//   named true, which is never the image meant. background-dots and
-//   background-stripes refused these already.
+//   named true, which is never the image meant. The pattern mixins refused
+//   these already.
 //
 // And an unquoted path is quoted when it has to be: `url(a b)`, `url(a(1).png)`
 // and `url(a'b.png)` were dropped, while the same paths in quotes were kept and

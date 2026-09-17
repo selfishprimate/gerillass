@@ -29,20 +29,10 @@
     "description": "The Aspect Ratio Sass mixin holds an element to a ratio and adds what the CSS aspect-ratio property leaves out. It replaces Ratio Box and Responsive Video.",
     "scss": "@use \"gerillass\" as *;\n\n.video iframe {\n  @include aspect-ratio(\"16/9\");\n}\n\n.avatar {\n  @include aspect-ratio(\"1:1\", contain);\n}\n\n.panel {\n  @include aspect-ratio(1.5, null);\n}\n"
   },
-  "background-dots": {
-    "title": "Background Dots",
-    "description": "The Background Dots Sass mixin allows you to create stylish, colorful dotted background patterns (also known as polka dots).",
-    "scss": "@use \"gerillass\" as *;\n\n.element{\n  @include background-dots(\n    $color: rgba(black, 0.1) rgba(green, 0.2),\n    $size: 4px,\n    $gutter: 20px,\n    $image: \"/images/backgrounds/03.jpg\"\n  );\n}\n"
-  },
   "background-image": {
     "title": "Background Image",
     "description": "The Background Image Sass mixin allows you to apply the background-image CSS property to the selected elements.",
     "scss": "@use \"gerillass\" as *;\n\n.element{\n  @include background-image(\"/images/backgrounds/07.jpg\", rgba(0, 128, 128, 0.7) rgba(255, 192, 203, 0.8), right);\n}\n"
-  },
-  "background-stripes": {
-    "title": "Background Stripes",
-    "description": "Create colourful striped backgrounds with the Background Stripes Sass mixin, which writes the repeating-linear-gradient that plain CSS makes fiddly.",
-    "scss": "@use \"gerillass\" as *;\n\n.element{\n  @include background-stripes(\n    $color: rgba(blue, 0.4),\n    $thickness: 3px,\n    $rotation: 45deg,\n    $image: \"/images/backgrounds/05.jpg\"\n  );\n}\n"
   },
   "before": {
     "title": "Before",
@@ -273,5 +263,10 @@
     "title": "Triangle",
     "description": "The Triangle Sass mixin helps you generate triangles using the ::before or ::after CSS pseudo-elements.",
     "scss": "@use \"gerillass\" as *;\n\n.element{\n  &::after {\n    @include triangle(\n      $direction: \"bottom\",\n      $color: crimson,\n      $size: 10px 6px\n    ) {\n      position: relative;\n      margin-left: 6px;\n      top: -2px;\n    };\n  }\n}\n"
+  },
+  "background-pattern": {
+    "title": "Background Pattern",
+    "description": "Thirteen geometric patterns drawn with gradients alone.",
+    "scss": "@use \"gerillass\" as *;\n\n.element{\n  @include background-pattern(\n    isometric,\n    $color: #c4b5fd #a78bfa #7c3aed,\n    $size: 26px\n  );\n}\n"
   }
 }

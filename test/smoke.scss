@@ -29,10 +29,9 @@
 .all-text-inputs { @include all-text-inputs { color: red; } }
 .antialias { @include antialias; }
 .aspect-ratio { @include aspect-ratio("16:9"); }
-.background-dots { @include background-dots; }
+.background-pattern { @include background-pattern(dots); }
 .background-image { @include background-image("/img/a.png"); }
 .background-image-filtered { @include background-image("/img/a.png", rgba(0, 0, 0, 0.5)); }
-.background-stripes { @include background-stripes; }
 .before { @include before("data-content") { color: red; } }
 .border-box { @include border-box; }
 .border-radius { @include border-radius(10px); }

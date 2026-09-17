@@ -2,7 +2,7 @@
 
 Written while 4.0.0 is being prepared, and added to as its changes land. So far
 it covers `hide`, where breakpoint ranges end, `columnizer`, `before` and
-`after`, `font-face`, `all-text-inputs`, `aspect-ratio`, `counter`, `text-shadow`, and `text-stroke`. The 3.0.0 and
+`after`, `font-face`, `all-text-inputs`, `aspect-ratio`, `counter`, `text-shadow`, `text-stroke`, and the background patterns. The 3.0.0 and
 2.0.0 guides follow below, unchanged.
 
 Every claim here was checked by compiling the old call against 3.0.0's source
@@ -31,6 +31,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `text-shadow` takes an angle, a `var()` distance and `$step` | not breaking |
 | `text-stroke` takes `$width` first and a `$style` | breaking, loud |
 | `text-stroke` with no arguments outlines in `currentColor`, not black | breaking, silent |
+| `background-dots` and `background-stripes` became `background-pattern` | breaking, loud |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -47,6 +48,7 @@ grep -rn "counter(" --include=*.scss .
 grep -rn "counter-start\|counter-continue\|counter-item" .
 grep -rn "text-shadow(" --include=*.scss .
 grep -rn "text-stroke(" --include=*.scss .
+grep -rn "background-dots\|background-stripes" --include=*.scss .
 ```
 
 ---
@@ -670,6 +672,63 @@ Unchanged from 3.x, and now with the width in a new place: a colour that is not
 a colour, a quoted colour, two colours side by side, a percentage, a negative
 width and a unitless number all raise. `$style` is checked as well, so a typo
 such as `inside` names the three that exist.
+
+---
+
+## Break: `background-dots` and `background-stripes` became `background-pattern`
+
+Both are removed, as `linear-gradient` and `radial-gradient` were in 3.0.0, and
+a call to either stops the build with Sass's `Undefined mixin`. One mixin now
+draws thirteen patterns, and its arguments are named rather than positional.
+
+| 3.x | 4.0.0 |
+|---|---|
+| `background-dots` | `background-pattern(dots)` |
+| `background-dots(red)` | `background-pattern(dots, $color: red)` |
+| `background-dots(red, 4px, 20px)` | `background-pattern(dots, $color: red, $thickness: 4px, $size: 20px)` |
+| `background-dots(red, 4px, 20px, false)` | `background-pattern(dots, $color: red, $thickness: 4px, $size: 20px, $stagger: false)` |
+| `background-stripes(red, 12px)` | `background-pattern(stripes, $color: red, $thickness: 12px)` |
+| `background-stripes(red, 12px, 90deg)` | `background-pattern(stripes, $color: red, $thickness: 12px, $angle: 90deg)` |
+| `background-stripes(red, 12px, 45deg, "/a.jpg")` | `background-pattern(stripes, $color: red, $thickness: 12px, $angle: 45deg, $image: "/a.jpg")` |
+
+**The names of the two size arguments swapped places.** In `background-dots`,
+`$size` was the dot and `$gutter` the tile; here `$size` is the tile for every
+pattern and `$thickness` is the dot, the line or the mortar inside it. Read an
+old call right to left when you move it.
+
+`$rotation` is `$angle`, and it still takes a unitless number as degrees.
+
+### What else changed
+
+- **An image now sits in the background layers.** `background-dots` put it in a
+  `::before` at `z-index: -1`, where an ancestor's own background could cover
+  it; `background-stripes` layered it as a second background. Both now write
+  the image as the last layer, with `cover` and `center`, and no pseudo-element
+  is created, so a `::before` of your own is free again.
+- **Only longhands are written.** `background-image`, `background-size`,
+  `background-position`, `background-repeat`, and `background-color` when
+  `$background` is passed. Nothing resets a background colour set before the
+  include.
+- **The default colours follow the text.** Where the old mixins fell back to
+  `rgba(0, 0, 0, 0.1)`, the new one uses `currentColor` mixed with
+  transparency, which works on either colour scheme. Pass `$color` for the old
+  look.
+- **Dots are staggered by default**, as before, and the two layers now sit half
+  a tile apart rather than at a half and a double offset, so the arrangement is
+  even. `$stagger: false` is the old `$diagonal: false`.
+
+### The eleven new patterns
+
+`grid`, `checkerboard`, `crosshatch`, `zigzag`, `chevron`, `triangles`,
+`isometric`, `honeycomb`, `brick`, `waves` and `houndstooth`, each one include.
+All thirteen were drawn in Chrome 152, Firefox 156 and Safari 26.6.2, and the
+three lay them out identically; Firefox draws a hard diagonal edge with visible
+stair steps where the other two smooth it, which shows in `zigzag`, `chevron`
+and `triangles`.
+
+In forced colours mode a browser replaces `background-image` with `none` for
+anything that is not a `url()`, so every pattern disappears there. This was true
+of the old two as well, and it is now written down: a pattern is decoration.
 
 ---
 

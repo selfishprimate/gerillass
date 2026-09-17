@@ -9,7 +9,7 @@ Gerillass is a **pure Sass library** — a toolkit of mixins and functions, in t
 Two consequences follow from this and drive most decisions in the repo:
 
 1. **`package.json` must have no `dependencies`.** Everything (`jest`, `sass`, `sass-true`, `glob`) belongs in `devDependencies`. Consumers get only `.scss` files, so a runtime dependency here forces the entire test toolchain onto every downstream project. This was the cause of 24 Dependabot alerts fixed in v1.3.3 — do not reintroduce it.
-2. **Only `scss/` ships.** `.npmignore` excludes `test`, `assets`, `meta`, `tools`, dotfiles and `*.md`; npm always adds `README.md`, `LICENSE.md` and `package.json` back. Verify with `npm pack --dry-run` before any release (115 files, an 86 kB tarball, since `scss/internal/_key-end.scss` was added for 4.0.0).
+2. **Only `scss/` ships.** `.npmignore` excludes `test`, `assets`, `meta`, `tools`, dotfiles and `*.md`; npm always adds `README.md`, `LICENSE.md` and `package.json` back. Verify with `npm pack --dry-run` before any release (114 files, an 86 kB tarball, since `background-dots` and `background-stripes` became one `background-pattern` in 4.0.0).
 3. **The gem is the same library, not a port.** `gerillass.gemspec` ships `scss/`, `gerillass.json` and `SKILL.md`, plus `lib/`, `LICENSE.md` and `README.md`, reads its version from `package.json`, and has no runtime dependencies. `lib/` only tells Rails, Jekyll or a plain `sass-embedded` compile where `scss/` is. `.npmignore` keeps `lib`, the gemspec and `*.gem` out of the npm package. Keep the gemspec ASCII: RubyGems reads it in the locale's encoding, and a literal non-ASCII character fails to load.
 
 Dart Sass only. LibSass/node-sass has been unsupported since v1.3.0.
@@ -299,7 +299,7 @@ Four layers, loaded in dependency order by `scss/_gerillass.scss`. The order is 
 | 1 | `scss/lists/` | flat value lists (`$list-of-buttons`) | `list-of-` prefix, `!default` |
 | 2 | `scss/maps/` | keyed config (`$map-for-breakpoints`) | `map-for-` prefix, `!default` |
 | 3 | `scss/utilities/` | 24 helper **functions** | `camelCase` |
-| 4 | `scss/library/` | 55 **mixins** — the bulk of the API | `kebab-case` |
+| 4 | `scss/library/` | 54 **mixins** — the bulk of the API | `kebab-case` |
 
 `_gerillass.scss` lists every partial explicitly. **A new file is invisible until you add its `@import` line there**, in the correct layer block.
 
@@ -400,15 +400,15 @@ Four levels, and knowing which one covers a member tells you what you can trust:
 
 | Level | Proves | Coverage |
 |---|---|---|
-| `test/smoke.scss` | the mixin evaluates at all | 55/55 mixins |
-| snapshot of `meta/` examples | the output cannot change unnoticed | 79/79 members |
-| `meta/` rejects | bad input is refused with a real message | 58/79 |
-| sass-true spec in `test/` | the CSS is **correct** | 33/79 |
+| `test/smoke.scss` | the mixin evaluates at all | 54/54 mixins |
+| snapshot of `meta/` examples | the output cannot change unnoticed | 78/78 members |
+| `meta/` rejects | bad input is refused with a real message | 57/78 |
+| sass-true spec in `test/` | the CSS is **correct** | 33/78 |
 
 Only the last one catches an output that was wrong from the start; a snapshot
 records a wrong value as correct. Hand-written specs are therefore reserved for
 members that compute something — `triangle`, `scissors`, `columnizer`,
-`position`, `background-dots`, `aspect-ratio`, `container-query`. Use `/sass-test`.
+`position`, `background-pattern`, `aspect-ratio`, `container-query`. Use `/sass-test`.
 
 A spec has a second use once a member starts refusing values: it pins the
 values that must stay accepted. `breakpoint`, `screen-agent` and
@@ -696,6 +696,18 @@ the caveats: Safari shows 0 when an item is itself a container, and nothing
 continues through a list that is a container or into another section without
 a reset on an ancestor.
 
+### What `library-review.md` records
+
+Written 17 September 2026, when the maintainer asked for a reading of the whole
+library. Every mixin, function, list and map was read with probe calls
+compiled, and comparable projects and modern CSS were surveyed beside it. It
+holds ten reproduced defects, the outdated CSS worth a major, eight merges in
+the shape of the 3.0.0 gradient work, eleven new members that are Baseline
+today and the ones still too new, and the leverage ranking the maintainer's
+north star produced. `text-shadow`, `text-stroke` and the
+`background-pattern` merge are done from it and marked there; the rest is the
+list the next items come from.
+
 ### What `breakpoint-boundaries.md` records
 
 B1 of `fix-plan.md` until 15 September 2026, when the maintainer moved it out
@@ -873,7 +885,13 @@ Two pieces of work are open:
   `todos/aspect-ratio-height-auto.md`, on `aspect-ratio-height`, branched from
   `all-text-inputs`; and a class-free `counter`, from
   `todos/counter-modernisation.md`, on `counter`, branched from
-  `aspect-ratio-height`. Each has a `MIGRATION.md` section.
+  `aspect-ratio-height`; and `text-shadow` measuring its directions as angles,
+  on `text-shadow`, branched from `counter`; and `text-stroke` with a `$style`
+  that keeps the letterform, on `text-stroke`, branched from `text-shadow`; and
+  `background-dots` and `background-stripes` merged into a thirteen-pattern
+  `background-pattern`, on `background-pattern`, branched from `text-stroke`.
+  The last three come from `todos/library-review.md`. Each has a
+  `MIGRATION.md` section.
 - **`todos/design-tokens.md`**: a token layer on `tokens`, starting with the
   decision whether to ship a palette.
 
@@ -933,7 +951,7 @@ each one closes:
    by 70px, while `minmax(min(100%, 20rem), 1fr)` fits at 250px. Forgetting the
    `min()` is what produces horizontal scrolling on phones. Different enough
    from `columnizer`, which is flexbox and wants a column count.
-2. **Decorative, in the spirit of `background-dots` and `scissors`:** `glass`
+2. **Decorative, in the spirit of `background-pattern` and `scissors`:** `glass`
    (`backdrop-filter` with a `@supports` fallback, which is unreadable without
    it), `edge-fade` (`mask-image` on a scroll container), `theme`
    (`color-scheme` plus `light-dark()`, where forgetting the first makes the
