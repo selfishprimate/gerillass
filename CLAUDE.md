@@ -905,6 +905,15 @@ earns its place when it encodes something a user gets wrong, across more than
 one declaration. `ratio-box` was deleted for failing that test and
 `aspect-ratio` was written to pass it.
 
+**Leverage is the other half of the bar**, and the maintainer named it on
+17 September 2026 after `text-shadow` was modernised: one or two lines of Sass
+should write dozens of lines of CSS that a designer would want, so the library
+cuts the effort of writing modern, good looking CSS rather than renaming it.
+`text-shadow`, where `bottom-right #fbbf24 28px true` becomes a 28 layer long
+shadow, is the example to aim at. A member that wraps one declaration fails
+this even when it closes a trap; a member that computes a layered effect passes
+twice over.
+
 Sixteen areas of modern CSS were checked against the 50 mixins and **every one
 had zero coverage**: `prefers-reduced-motion`, `focus-visible`, `line-clamp`,
 `@container`, `@starting-style`, `light-dark()`, `color-scheme`, safe-area
