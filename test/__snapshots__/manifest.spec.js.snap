@@ -53,7 +53,10 @@ exports[`Manifest examples adaptive: .wrap { @include adaptive; } 1`] = `
 `;
 
 exports[`Manifest examples after: .a { @include after { content: "x"; } } 1`] = `
-".a::after {
+":where(.a)::after {
+  content: "";
+}
+.a::after {
   content: "x";
 }"
 `;
@@ -84,6 +87,19 @@ exports[`Manifest examples after: .a { @include after(var(--label)) { color: red
 ".a::after {
   content: var(--label);
   color: red;
+}"
+`;
+
+exports[`Manifest examples after: .badge { @include after { display: block; width: 8px; height: 8px; bor 1`] = `
+":where(.badge)::after {
+  content: "";
+}
+.badge::after {
+  display: block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: red;
 }"
 `;
 
@@ -358,6 +374,19 @@ exports[`Manifest examples before: .a { @include before(var(--label)) { color: r
 ".a::before {
   content: var(--label);
   color: red;
+}"
+`;
+
+exports[`Manifest examples before: .badge { @include before { display: block; width: 8px; height: 8px; bo 1`] = `
+":where(.badge)::before {
+  content: "";
+}
+.badge::before {
+  display: block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: red;
 }"
 `;
 

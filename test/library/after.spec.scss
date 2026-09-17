@@ -30,9 +30,59 @@
         }
       }
       @include expect {
+        // sass-true wraps the output in .test-output, which the mixin's
+        // :where(&) takes inside the parentheses
+        @at-root :where(.test-output .element)::after {
+          content: "";
+        }
         .element::after{
           content: "Test content.";
           color: orange;
+        }
+      }
+    }
+  }
+
+  // Since 4.0.0 no argument also writes `content: ""`, so a block of styles
+  // alone draws the pseudo-element. It sits in a rule of its own inside
+  // :where(), so a content written in the block or by another rule wins.
+  // Measured in Chrome 152, Firefox 156 and Safari 26.6.2.
+  @include it('With no argument, writes an empty content with no specificity.') {
+    @include assert {
+      @include output {
+        .element {
+          @include after {
+            color: orange;
+          };
+        }
+        .bare {
+          @include after;
+        }
+      }
+      @include expect {
+        @at-root :where(.test-output .element)::after {
+          content: "";
+        }
+        .element::after {
+          color: orange;
+        }
+        @at-root :where(.test-output .bare)::after {
+          content: "";
+        }
+      }
+    }
+  }
+
+  @include it('With an argument, writes no default.') {
+    @include assert {
+      @include output {
+        .element {
+          @include after("→");
+        }
+      }
+      @include expect {
+        .element::after {
+          content: "→";
         }
       }
     }

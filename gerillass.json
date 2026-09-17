@@ -48,7 +48,7 @@
           "accepts": [
             "a string used as the content value",
             "a data- attribute name, rendered as attr()",
-            "null to write content yourself",
+            "nothing or null, which writes an empty content that a content in the block or another rule overrides",
             "var(), attr(), counter() or counters(), written as they are"
           ]
         }
@@ -57,9 +57,12 @@
       "signature": "after($content: null)",
       "summary": "Styles the ::after pseudo-element. A `data-` argument becomes an attr() content value.",
       "caveats": [
-        "With no argument no `content` is emitted, so the pseudo-element does not render unless the block sets `content`. Pass `\"\"` for an empty one."
+        "With no argument the mixin also writes `content: \"\"` in a rule of its own, `:where(.a)::after`, so a block of styles alone draws the pseudo-element. A `content` written in the block, or by another rule for the element with a class or an element selector, still wins. Until 4.0.0 nothing was written and the pseudo-element was not drawn.",
+        "If `content` comes only from another state, such as `.a:hover::after` or a media query, the pseudo-element is now drawn empty the rest of the time. Write `content: none` in the block.",
+        "On a `q` element the default replaces the browser's quotation marks; pass `open-quote` or `close-quote` in the block to keep them. A bare `::after { content: ... }` rule written before the include loses to the default, since both have the same specificity."
       ],
       "examples": [
+        ".badge { @include after { display: block; width: 8px; height: 8px; border-radius: 50%; background: red; } }",
         ".a { @include after(\"→\") { color: red; } }",
         ".a { @include after(\"data-label\") { color: red; } }",
         ".a { @include after { content: \"x\"; } }",
@@ -398,7 +401,7 @@
           "accepts": [
             "a string used as the content value",
             "a data- attribute name, rendered as attr()",
-            "null to write content yourself",
+            "nothing or null, which writes an empty content that a content in the block or another rule overrides",
             "var(), attr(), counter() or counters(), written as they are"
           ]
         }
@@ -407,9 +410,12 @@
       "signature": "before($content: null)",
       "summary": "Styles the ::before pseudo-element. A `data-` argument becomes an attr() content value.",
       "caveats": [
-        "With no argument no `content` is emitted, so the pseudo-element does not render unless the block sets `content`. Pass `\"\"` for an empty one."
+        "With no argument the mixin also writes `content: \"\"` in a rule of its own, `:where(.a)::before`, so a block of styles alone draws the pseudo-element. A `content` written in the block, or by another rule for the element with a class or an element selector, still wins. Until 4.0.0 nothing was written and the pseudo-element was not drawn.",
+        "If `content` comes only from another state, such as `.a:hover::before` or a media query, the pseudo-element is now drawn empty the rest of the time. Write `content: none` in the block.",
+        "On a `q` element the default replaces the browser's quotation marks; pass `open-quote` or `close-quote` in the block to keep them. A bare `::before { content: ... }` rule written before the include loses to the default, since both have the same specificity."
       ],
       "examples": [
+        ".badge { @include before { display: block; width: 8px; height: 8px; border-radius: 50%; background: red; } }",
         ".a { @include before(\"→\") { color: red; } }",
         ".a { @include before(\"data-label\") { color: red; } }",
         ".a { @include before(var(--label)) { color: red; } }"

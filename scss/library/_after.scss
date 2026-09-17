@@ -4,7 +4,18 @@
 @use "sass:string";
 @use "../internal/is-css-function" as *;
 
+// With no argument the mixin writes `content: ""` as well, in a rule of its
+// own inside :where(). A pseudo-element with no `content` is not drawn, so
+// until 4.0.0 `@include after { color: red; }` drew nothing, and an agent trial
+// hit that four times in one session. Inside :where() the default has the
+// specificity of the pseudo-element alone, so a `content` written in the block
+// or by any other rule for the element still wins.
 @mixin after($content: null) {
+  @if $content == null {
+    :where(&)::after {
+      content: "";
+    }
+  }
   &::after {
     @if $content == null {
       @content;

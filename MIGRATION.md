@@ -1,8 +1,8 @@
 # Migrating to Gerillass 4.0.0
 
 Written while 4.0.0 is being prepared, and added to as its changes land. So far
-it covers `hide`, where breakpoint ranges end, and `columnizer`. The 3.0.0 and
-2.0.0 guides follow below, unchanged.
+it covers `hide`, where breakpoint ranges end, `columnizer`, and `before` and
+`after`. The 3.0.0 and 2.0.0 guides follow below, unchanged.
 
 Every claim here was checked by compiling the old call against 3.0.0's source
 and the new one against 4.0.0's, and the CSS each produces was measured in
@@ -19,6 +19,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | a range or `max` ending at a breakpoint name ends just under it | breaking, silent |
 | `columnizer` writes its gutter as `gap` | breaking, silent |
 | `columnizer` refuses a percentage or negative gutter | breaking, loud |
+| `before` and `after` with no argument write an empty `content` | breaking, silent |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -28,6 +29,7 @@ every call either one touches:
 grep -rn "unhide" --include=*.scss .
 grep -rnE "(breakpoint|remove|container-query)\(" --include=*.scss .
 grep -rn "columnizer(" --include=*.scss .
+grep -rnE "include (gls-)?(before|after)( |;|\{|\(\))" --include=*.scss .
 ```
 
 ---
@@ -257,6 +259,46 @@ the columns no longer fitted their rows. Both now stop the build and say why.
 
 A custom property holding a percentage or a negative length is not checked,
 since its value is only known in the browser.
+
+---
+
+## Break: `before` and `after` with no argument write an empty `content`
+
+A pseudo-element with no `content` is not drawn, so until 4.0.0
+`@include after { width: 8px; height: 8px; background: red; }` drew nothing.
+With no argument, or `null`, both mixins now also write:
+
+```css
+:where(.a)::after { content: ""; }
+```
+
+`:where()` gives it only the pseudo-element's specificity, so it fills in when
+nothing else sets `content` and loses to anything that does. A call with an
+argument compiles as before: 184 calls with every kind of argument, with and
+without a block, compiled the same, and only the 32 with no argument changed.
+
+### What was measured
+
+Chrome 152, Firefox 156 and Safari 26.6.2, identically, for both mixins. A block
+of styles alone is now drawn. A `content` still wins when it is written in the
+block, or in a rule for the element with a class or an element selector, before
+or after the include, and `content: none` written elsewhere still hides it.
+
+### What to check
+
+- **`content` that comes only from another state.** A tooltip styled in the
+  block, with its text added by `.a:hover::after { content: attr(data-tip); }`,
+  or a label added inside a media query, was invisible the rest of the time. It
+  is now drawn empty the rest of the time, with its padding and background.
+  Measured: a 20px box appeared. Write `content: none` in the block, and the
+  other state's rule, which is more specific, still sets it.
+- **A `q` element.** The browser draws its quotation marks as `::before` and
+  `::after`, and `q { @include before { color: red; } }` now replaces them
+  with nothing. Write `content: open-quote` (or `close-quote` for `after`) in
+  the block.
+- **A bare `::after { content: ... }` rule** written before the include loses,
+  since both have the same specificity and the later one wins. Written after
+  the include, or with a class or element in front, it wins.
 
 ---
 

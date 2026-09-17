@@ -129,7 +129,9 @@ a dropped declaration rather than an error.
 
 **`after`**
 
-- With no argument no `content` is emitted, so the pseudo-element does not render unless the block sets `content`. Pass `""` for an empty one.
+- With no argument the mixin also writes `content: ""` in a rule of its own, `:where(.a)::after`, so a block of styles alone draws the pseudo-element. A `content` written in the block, or by another rule for the element with a class or an element selector, still wins. Until 4.0.0 nothing was written and the pseudo-element was not drawn.
+- If `content` comes only from another state, such as `.a:hover::after` or a media query, the pseudo-element is now drawn empty the rest of the time. Write `content: none` in the block.
+- On a `q` element the default replaces the browser's quotation marks; pass `open-quote` or `close-quote` in the block to keep them. A bare `::after { content: ... }` rule written before the include loses to the default, since both have the same specificity.
 
 **`aspect-ratio`**
 
@@ -137,7 +139,9 @@ a dropped declaration rather than an error.
 
 **`before`**
 
-- With no argument no `content` is emitted, so the pseudo-element does not render unless the block sets `content`. Pass `""` for an empty one.
+- With no argument the mixin also writes `content: ""` in a rule of its own, `:where(.a)::before`, so a block of styles alone draws the pseudo-element. A `content` written in the block, or by another rule for the element with a class or an element selector, still wins. Until 4.0.0 nothing was written and the pseudo-element was not drawn.
+- If `content` comes only from another state, such as `.a:hover::before` or a media query, the pseudo-element is now drawn empty the rest of the time. Write `content: none` in the block.
+- On a `q` element the default replaces the browser's quotation marks; pass `open-quote` or `close-quote` in the block to keep them. A bare `::before { content: ... }` rule written before the include loses to the default, since both have the same specificity.
 
 **`breakpoint`**
 

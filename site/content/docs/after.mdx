@@ -16,8 +16,8 @@ The **After** Sass mixin helps you generate content or a style element after the
 
 ## Arguments
 
-<Arguments of="after" footnote="When you want to fetch a value using a custom property, the name of the property must start with the 'data-' prefix. See the examples for more.">
-  <Argument name="$content" type="string, function">You can pass content as a string, or fetch a value using a custom property such as <code>data-content</code>. A CSS function, <code>var()</code>, <code>attr()</code>, <code>counter()</code> or <code>counters()</code>, is written as it is rather than quoted into text.</Argument>
+<Arguments of="after" footnote="To render the value of a data attribute, pass its name, which must start with `data-`. See the examples for more.">
+  <Argument name="$content" type="string, function">You can pass content as a string, or the name of a data attribute such as <code>data-content</code> to render its value. A CSS function, <code>var()</code>, <code>attr()</code>, <code>counter()</code> or <code>counters()</code>, is written as it is rather than quoted into text. With no argument the mixin writes an empty <code>content</code> that anything else sets overrides; see below.</Argument>
 </Arguments>
 
 ## Examples
@@ -25,8 +25,14 @@ The **After** Sass mixin helps you generate content or a style element after the
 <Example caption="Simply pass a value as a string.">
 ```scss
 .element{
-  @include after("Text to use!");
+  @include after(" – Text to use!");
 }
+```
+```html
+<style>
+  .element { font: 16px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+</style>
+<p class="element">Some text</p>
 ```
 </Example>
 
@@ -34,38 +40,215 @@ The **After** Sass mixin helps you generate content or a style element after the
 ```scss
 .element{
   @include after{
-    content: "Easy to use!";
+    content: " Easy to use!";
     font-style: italic;
     color: red;
   };
 }
 ```
+```html
+<style>
+  .element { font: 16px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+</style>
+<p class="element">Some text</p>
+```
 </Example>
 
-<Example caption="You can fetch a value using a custom property. One important thing to remember is that the name of the property must start with the 'data-' prefix." listing="<div class=&quot;element&quot; data-currency=&quot;TL&quot;>200</div>">
+<Example caption="You can render the value of a data attribute. One important thing to remember is that the name of the attribute must start with the 'data-' prefix." listing="<div class=&quot;element&quot; data-currency=&quot; TL&quot;>200</div>">
 ```scss
 .element{
   @include after("data-currency");
 }
 ```
 ```html
-<div class="element" data-currency="TL">200</div>
+<style>
+  .element { font: 600 20px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+</style>
+<div class="element" data-currency=" TL">200</div>
 ```
 </Example>
 
-<Example caption="You can pass a value for the CSS content property as a string, and a declaration block between the opening and closing curly braces.">
+<Example caption="You can pass a value for the CSS content property as a string, and a declaration block between the opening and closing curly braces." listing="<div class=&quot;element&quot; data-currency=&quot;TL&quot;>200</div>">
 ```scss
 .element{
   @include after("data-currency"){
-    font-size: .8em;
+    margin-left: 4px;
+    font-size: .6em;
     color: red;
   };
 }
 ```
+```html
+<style>
+  .element { font: 600 20px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+</style>
+<div class="element" data-currency="TL">200</div>
+```
 </Example>
+
+## Interface examples
+
+<Example caption="An arrow after every link that opens in a new tab, so a reader knows before clicking. The selector picks the links; the mixin writes the arrow.">
+```scss
+a[target="_blank"] {
+  @include after(" ↗") {
+    font-size: 0.85em;
+  }
+}
+```
+```html
+<style>
+  p { font: 15px/1.6 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+  a { color: #2563eb; }
+</style>
+<p>Read the <a href="#">installation guide</a> first, then the <a href="#" target="_blank">release notes on GitHub</a>.</p>
+```
+</Example>
+
+<Example caption="A required-field marker. The asterisk is decoration, and the input itself says `required`, which is what a screen reader announces.">
+```scss
+.label-required {
+  @include after(" *") {
+    color: #dc2626;
+  }
+}
+```
+```html
+<style>
+  form { display: grid; gap: 12px; max-width: 280px; font: 14px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+  label { display: grid; gap: 6px; font-weight: 500; }
+  input { height: 34px; padding: 0 10px; border: 1px solid #e4e4e7; border-radius: 6px; font: inherit; }
+</style>
+<form onsubmit="return false">
+  <label><span class="label-required">Email</span><input type="email" required></label>
+  <label><span>Company</span><input></label>
+</form>
+```
+</Example>
+
+<Example caption="Separators in a breadcrumb trail, after every item but the last, with [Except](/docs/except) choosing the items. They live in CSS, so the markup stays a plain list.">
+```scss
+.crumb {
+  @include except(last) {
+    @include after("/") {
+      margin: 0 8px;
+      color: #a1a1aa;
+    }
+  }
+}
+```
+```html
+<style>
+  .crumbs { display: flex; list-style: none; margin: 0; padding: 0; font: 14px/1 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .crumb a { color: #52525b; text-decoration: none; }
+  .crumb:last-child { color: #18181b; font-weight: 500; }
+</style>
+<ol class="crumbs">
+  <li class="crumb"><a href="#">Home</a></li>
+  <li class="crumb"><a href="#">Docs</a></li>
+  <li class="crumb">After</li>
+</ol>
+```
+</Example>
+
+<Example caption="A unit read from a data attribute, so each figure in a list can carry its own." listing="<div class=&quot;metrics&quot;>
+  <div><span class=&quot;metric-value&quot; data-unit=&quot;ms&quot;>184</span>Response time</div>
+  <div><span class=&quot;metric-value&quot; data-unit=&quot;%&quot;>99.9</span>Uptime</div>
+  <div><span class=&quot;metric-value&quot; data-unit=&quot;GB&quot;>12</span>Storage</div>
+</div>">
+```scss
+.metric-value {
+  @include after("data-unit") {
+    margin-left: 2px;
+    font-size: 0.55em;
+    font-weight: 500;
+    color: #71717a;
+  }
+}
+```
+```html
+<style>
+  .metrics { display: flex; gap: 24px; font: 14px/1.3 Inter, ui-sans-serif, system-ui, sans-serif; color: #71717a; }
+  .metric-value { display: block; font-size: 28px; font-weight: 700; color: #18181b; }
+</style>
+<div class="metrics">
+  <div><span class="metric-value" data-unit="ms">184</span>Response time</div>
+  <div><span class="metric-value" data-unit="%">99.9</span>Uptime</div>
+  <div><span class="metric-value" data-unit="GB">12</span>Storage</div>
+</div>
+```
+</Example>
+
+## Drawing with no content
+
+<Example caption="A notification dot on a bell icon. With no argument the mixin writes `content: &quot;&quot;` for you, so a block of styles alone draws the dot. Until 4.0.0 this drew nothing, because a pseudo-element with no `content` is not rendered.">
+```scss
+.bell {
+  @include after {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ef4444;
+  }
+}
+```
+```html
+<style>
+  .bell {
+    position: relative; display: inline-flex; align-items: center; justify-content: center;
+    width: 40px; height: 40px; border: 1px solid #e4e4e7; border-radius: 8px;
+    background: #fff; font-size: 18px; color: #18181b;
+  }
+</style>
+<button class="bell" aria-label="Notifications">&#128276;</button>
+```
+</Example>
+
+<Example caption="A tooltip whose text appears on hover. The `content` comes from the hover rule only, so the block says `content: none`: without it the default would draw the empty tooltip box all the time. **Hover over the button in the result.**" listing="<button class=&quot;tip&quot; data-tip=&quot;Copied to clipboard&quot;>Copy link</button>">
+```scss
+.tip {
+  @include after {
+    content: none;
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    translate: -50% 0;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background: #18181b;
+    color: #fafafa;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+  &:hover::after {
+    content: attr(data-tip);
+  }
+}
+```
+```html
+<style>
+  .row { padding-top: 36px; font: 14px/1 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .tip {
+    position: relative; height: 36px; padding: 0 14px; border: 1px solid #e4e4e7;
+    border-radius: 6px; background: #fff; color: #18181b; font: inherit; cursor: pointer;
+  }
+</style>
+<div class="row"><button class="tip" data-tip="Copied to clipboard">Copy link</button></div>
+```
+</Example>
+
+<Hint kind="warning">
+
+**What the default overrides, and what it does not.** Measured in Chrome 152, Firefox 156 and Safari 26.6.2: the default is written as `:where(.bell)::after`, which has only the pseudo-element's specificity, so a `content` in the block, or in any rule for the element with a class or an element selector, before or after the include, still wins. Three things lose to it. A `content` that only comes from another state, such as `:hover` or a media query, leaves the empty box drawn the rest of the time, so write `content: none` in the block, as above. On a `q` element it replaces the browser's quotation marks; write `content: close-quote` in the block to keep them. And a bare `::after { content: ... }` rule written before the include loses, since both have the same specificity.
+
+</Hint>
 
 ## Related Links
 
 - [Before](/docs/before)
+- [Except](/docs/except)
 - [CSS ::after](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/::after)
 - [CSS content](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/content)
