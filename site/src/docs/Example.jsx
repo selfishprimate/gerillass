@@ -146,7 +146,52 @@ function Example({ source, css, html, listing, title, caption, height, interacti
     };
   }, [srcDocKey]);
 
-  const srcDoc = `<!doctype html><html><head><meta charset="utf-8"><style>${FRAME_BASE}${css}</style></head><body>${rendered}</body></html>`;
+  /*
+    A link in a demo must not navigate the frame. A srcdoc document takes its
+    base URL from this page, so `href="#content"` resolves to
+    `/docs/hide#content`: activating a skip link loaded the whole site into
+    the frame, where scripts are off, and the result read "You need to enable
+    JavaScript to run this app". A base of `about:srcdoc` would keep fragments
+    in the frame but break every `/images/...` path the demos use.
+
+    So the click is handled from here, which the same-origin sandbox allows.
+    Enter on a focused link fires the same click. A fragment moves focus to
+    its target, as a skip link does, and every other link does nothing.
+  */
+  useEffect(() => {
+    const el = frame.current;
+    if (!el) return undefined;
+
+    let doc = null;
+    const onClick = (event) => {
+      const link = event.target.closest?.("a[href]");
+      if (!link) return;
+      event.preventDefault();
+      const href = link.getAttribute("href");
+      if (!href.startsWith("#") || href.length < 2) return;
+      const target = doc.getElementById(decodeURIComponent(href.slice(1)));
+      if (!target) return;
+      target.scrollIntoView({ block: "nearest" });
+      target.focus({ preventScroll: true });
+    };
+    const attach = () => {
+      const next = el.contentDocument;
+      if (!next || next === doc) return;
+      doc?.removeEventListener("click", onClick);
+      doc = next;
+      doc.addEventListener("click", onClick);
+    };
+
+    attach();
+    el.addEventListener("load", attach);
+
+    return () => {
+      el.removeEventListener("load", attach);
+      doc?.removeEventListener("click", onClick);
+    };
+  }, [srcDocKey]);
+
+  const srcDoc =`<!doctype html><html><head><meta charset="utf-8"><style>${FRAME_BASE}${css}</style></head><body>${rendered}</body></html>`;
 
   return (
     <figure className="example">
