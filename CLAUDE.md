@@ -9,7 +9,7 @@ Gerillass is a **pure Sass library** — a toolkit of mixins and functions, in t
 Two consequences follow from this and drive most decisions in the repo:
 
 1. **`package.json` must have no `dependencies`.** Everything (`jest`, `sass`, `sass-true`, `glob`) belongs in `devDependencies`. Consumers get only `.scss` files, so a runtime dependency here forces the entire test toolchain onto every downstream project. This was the cause of 24 Dependabot alerts fixed in v1.3.3 — do not reintroduce it.
-2. **Only `scss/` ships.** `.npmignore` excludes `test`, `assets`, `meta`, `tools`, dotfiles and `*.md`; npm always adds `README.md`, `LICENSE.md` and `package.json` back. Verify with `npm pack --dry-run` before any release (114 files, an 82 kB tarball, since `gradient` replaced the two old gradient mixins).
+2. **Only `scss/` ships.** `.npmignore` excludes `test`, `assets`, `meta`, `tools`, dotfiles and `*.md`; npm always adds `README.md`, `LICENSE.md` and `package.json` back. Verify with `npm pack --dry-run` before any release (115 files, an 86 kB tarball, since `scss/internal/_key-end.scss` was added for 4.0.0).
 3. **The gem is the same library, not a port.** `gerillass.gemspec` ships `scss/`, `gerillass.json` and `SKILL.md`, plus `lib/`, `LICENSE.md` and `README.md`, reads its version from `package.json`, and has no runtime dependencies. `lib/` only tells Rails, Jekyll or a plain `sass-embedded` compile where `scss/` is. `.npmignore` keeps `lib`, the gemspec and `*.gem` out of the npm package. Keep the gemspec ASCII: RubyGems reads it in the locale's encoding, and a literal non-ASCII character fails to load.
 
 Dart Sass only. LibSass/node-sass has been unsupported since v1.3.0.
@@ -702,8 +702,18 @@ records the prototype of ending just under the key in its own unit (`.98` in
 px, `.99` otherwise), the defect that prototype has with the unitless
 `xsmall: 0`, the finding that Chrome compares boundaries with about 1/64px of
 tolerance while Safari compares exactly, and the choices still open: whether
-`max` changes, and subtraction or range syntax for `@container`. Not planned
-yet, at the maintainer's request.
+`max` changes, and subtraction or range syntax for `@container`.
+
+Done for 4.0.0 on the `breakpoint-boundaries` branch, 17 September 2026, after
+measuring again in all three browsers, Firefox included, at device pixel ratios
+from 1 to 3 and at real fractional viewports from display scales of 1.1 to
+1.75. `max` changes too. `@media` ends 0.02px under a key, 0.01 of a unit in
+`rem` or `em`, through `scss/internal/_key-end.scss`; range syntax measured as
+clean but Safari lacks it in `@media` before 16.4. `@container` ends with
+`width <`, because Firefox and Safari lay containers out in 1/60px and 1/64px
+steps and a `.98` end left a gap there, and WebKit has parsed range syntax in
+container queries since before Safari 16. A zero key and every hand-written
+length compile as before.
 
 ### What the 3.0.0 files record
 
@@ -825,13 +835,16 @@ holding a commit made after the tag, which `/release` step 6b now prevents.
 
 Two pieces of work are open, and neither is started:
 
-- **4.0.0, on the `hide` branch**: `hide(focusable)` added and `hide(unhide)`
-  removed, from `todos/hide-unhide-position.md`, with a `MIGRATION.md` section.
-  Not released. The maintainer may add more of the items below to the same
-  major.
-- **Behaviour changes for a later major**: seven, each in its own file in `todos/` and
-  each to be tested and decided on its own before any is planned: breakpoint
-  boundaries, `columnizer` on `gap`, a default `content` for
+- **4.0.0, not released**: `hide(focusable)` added and `hide(unhide)` removed,
+  from `todos/hide-unhide-position.md`, on the `hide` branch; and ranges and
+  `max` ending just under a key in `breakpoint`, `remove` and
+  `container-query`, from `todos/breakpoint-boundaries.md`, on
+  `breakpoint-boundaries`, which is branched from `hide`. Each has a
+  `MIGRATION.md` section. The maintainer may add more of the items below to
+  the same major.
+- **Behaviour changes for a later major**: six, each in its own file in `todos/` and
+  each to be tested and decided on its own before any is planned:
+  `columnizer` on `gap`, a default `content` for
   `before`/`after`, `font-face` formats, `all-text-inputs`, `aspect-ratio` with
   a `height` attribute, and `counter`. Each needs a `MIGRATION.md` section.
 - **`todos/design-tokens.md`**: a token layer on `tokens`, starting with the

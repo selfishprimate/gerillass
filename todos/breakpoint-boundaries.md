@@ -1,10 +1,14 @@
 # Where a breakpoint ends
 
-Measured 14 and 15 September 2026 in Chrome 152 and Safari 26.6.2. Not decided
-and not planned: the maintainer took this out of `todos/fix-plan.md`, where it
-was B1, to be looked at as a piece of work of its own. It changes what
-`breakpoint(max, …)` and every range built from the map emit, so it belongs in
-a major version.
+Measured 14 and 15 September 2026 in Chrome 152 and Safari 26.6.2. The
+maintainer took this out of `todos/fix-plan.md`, where it was B1, to be looked
+at as a piece of work of its own. It changes what `breakpoint(max, …)` and every
+range built from the map emit, so it belongs in a major version.
+
+**Status.** Done for 4.0.0 on the `breakpoint-boundaries` branch, 17 September
+2026. The sections below are the first round; **The second round** at the end
+records the measurements the decision was made from, with Firefox, and what was
+built.
 
 ## How the mixins decide today
 
@@ -162,3 +166,58 @@ maps.
 `remove` through `breakpoint`; the manifest snapshots; the `breakpoint`,
 `remove` and `container-query` documentation pages; a `MIGRATION.md` section,
 since it is a major change.
+
+## The second round, 17 September 2026
+
+Chrome 152, Firefox 156 and Safari 26.6.2, Chrome and Firefox headless. Every
+scenario was written as its own conditions, one custom property or `matchMedia`
+call each, so an overlap reads as two matching and a gap as none.
+
+- **Frames at 50 widths** from 575px to 1000px, with steps of 1/2, 1/4, 1/10,
+  1/60, 1/64 and 1/128px around 576, 768 and 992, and **containers at the same
+  widths**, at device pixel ratios 1, 1.25, 1.5, 2 and 3 in Chrome and Firefox
+  and 2 in Safari. The ratio changed nothing: frames in Chrome and Firefox
+  snapped to half pixels whatever the ratio, and Safari to whole ones.
+- **Real fractional viewports**: Chrome with `--force-device-scale-factor` and
+  Firefox with `layout.css.devPixelsPerPx` at 1.1, 1.25, 1.3, 1.5 and 1.75,
+  their windows resized a pixel at a time across 755 to 780 and 980 to 1004,
+  which gave viewports such as 767.27px and 991.54px.
+- **The compiled output** of the branch and of the library before it, px and
+  rem maps, measured the same way in all three.
+
+| Scenario | Chrome | Firefox | Safari |
+|---|---|---|---|
+| `@media` ranges ending 1 under a key | gap at x.5 and at scaled viewports | same | none, whole pixels |
+| `@media` ranges ending 0.02px under | clean | clean | clean |
+| `@media` ranges ending 0.01px under | overlap at the key | clean | clean |
+| `@media` range syntax | clean | clean | clean |
+| `@media` `max` + `min` at a key, today | overlap | overlap | overlap |
+| `@media` rem ranges ending 1rem under | gap 752 to 768 | same | same |
+| `@media` rem ranges ending 0.01rem under | clean | clean | clean |
+| `@container` ranges ending on the key, today | overlap at the key | overlap at the key | overlap at the key |
+| `@container` ranges ending 0.02px under | overlap within 1/64px | gap at 767.98 to 767.99 | gap within 1/64px |
+| `@container` range syntax | overlap within 1/64px | clean | clean |
+
+Containers are laid out in 1/64px in Chrome and Safari and in 1/60px in
+Firefox, which is why a 0.02px end leaves Firefox and Safari a sliver. Chrome's
+overlap within 1/64px of a key is its comparison tolerance and appears with any
+way of writing the end.
+
+**Support.** `@mdn/browser-compat-data` 8.1.1: range syntax in `@media` from
+Chrome 104, Firefox 102 and Safari 16.4. Container queries from Chrome 105,
+Firefox 110 and Safari 16. WebKit added range operators to container size
+queries in February 2022 (commits 075de8b and 2ccd179), before Safari 16
+shipped them.
+
+**What was built.** `scss/internal/_key-end.scss` takes 0.02px off a key in any
+unit Sass converts to px and 0.01 of the unit off any other, and returns a zero
+key unchanged. `breakpoint` uses it for `max` with a key and for a range ending
+at a key; `remove` follows. `container-query` writes `width <` for the same
+cases. A hand-written length and a zero key compile as before. Compared on 228
+calls before and after, `gls-` included and with a px and a rem map: the 88
+that changed are exactly those cases. The site was checked at 768px and 576px
+wide, where its own `max` rules now hand over to the wider styles, with no
+overflow.
+
+**Not covered.** Page zoom in Safari, which cannot be driven; a mobile browser;
+Safari before 16.4 and 16; layouts beyond which conditions match.
