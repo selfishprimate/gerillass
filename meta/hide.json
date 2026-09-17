@@ -1,20 +1,31 @@
 {
   "name": "hide",
-  "summary": "Visually hides an element while keeping it available to screen readers, or reverses that.",
+  "summary": "Visually hides an element while keeping it available to screen readers, either always or until it or anything inside it has keyboard focus.",
+  "caveats": [
+    "The hidden element is absolutely positioned. With no positioned ancestor it escapes a container that clips it, such as a horizontal carousel or a collapsed `height: 0; overflow: hidden` panel, and widens or lengthens the page in Chrome and Safari. Put `position: relative` on that container.",
+    "`focusable` hides the element only while neither it nor anything inside it has focus, so the element's own styles, such as `position: fixed` and padding for a skip link, apply as they are once it is focused. Write them in the same rule.",
+    "To hide an element only at some widths, put `@include hide` inside that media query. Hiding it everywhere and undoing it elsewhere cannot give back the position, padding and border `hide` overwrites, which is why `unhide` was removed in 4.0.0.",
+    "An element with `display: contents` has no box to hide, so its children stay visible."
+  ],
   "arguments": [
     {
       "name": "$toggle",
       "accepts": [
-        "hide",
-        "unhide"
+        "hide, the default",
+        "focusable, hidden until it or anything inside it has focus, for a skip link or a group of them",
+        "unhide was removed in 4.0.0 and raises an error that names both replacements"
       ]
     }
   ],
   "examples": [
-    ".a { @include hide; }",
-    ".a { @include hide(\"unhide\"); }"
+    ".icon-button-label { @include hide; }",
+    ".skip-link { position: fixed; top: 1rem; left: 1rem; padding: 0.75rem 1rem; @include hide(focusable); }",
+    ".skip-links { @include hide(focusable); }",
+    "@media (max-width: 599.98px) { .nav-label { @include hide; } }"
   ],
   "rejects": [
-    ".a { @include hide(nonsense); }"
+    ".a { @include hide(nonsense); }",
+    ".a { @include hide(unhide); }",
+    ".a { @include hide(null); }"
   ]
 }

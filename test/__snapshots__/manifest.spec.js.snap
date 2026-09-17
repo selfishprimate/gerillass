@@ -1083,20 +1083,8 @@ exports[`Manifest examples gradientValue: .a { mask-image: gradientValue((#000 6
 }"
 `;
 
-exports[`Manifest examples hide: .a { @include hide("unhide"); } 1`] = `
-".a {
-  position: static;
-  width: auto;
-  height: auto;
-  overflow: visible;
-  clip: auto;
-  clip-path: none;
-  white-space: inherit;
-}"
-`;
-
-exports[`Manifest examples hide: .a { @include hide; } 1`] = `
-".a {
+exports[`Manifest examples hide: .icon-button-label { @include hide; } 1`] = `
+".icon-button-label {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -1106,6 +1094,56 @@ exports[`Manifest examples hide: .a { @include hide; } 1`] = `
   clip: rect(1px, 1px, 1px, 1px);
   clip-path: inset(100%);
   white-space: nowrap;
+}"
+`;
+
+exports[`Manifest examples hide: .skip-link { position: fixed; top: 1rem; left: 1rem; padding: 0.75rem  1`] = `
+".skip-link {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  padding: 0.75rem 1rem;
+}
+.skip-link:not(:focus-within):not(:active) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(100%);
+  white-space: nowrap;
+}"
+`;
+
+exports[`Manifest examples hide: .skip-links { @include hide(focusable); } 1`] = `
+".skip-links:not(:focus-within):not(:active) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(100%);
+  white-space: nowrap;
+}"
+`;
+
+exports[`Manifest examples hide: @media (max-width: 599.98px) { .nav-label { @include hide; } } 1`] = `
+"@media (max-width: 599.98px) {
+  .nav-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    clip: rect(1px, 1px, 1px, 1px);
+    clip-path: inset(100%);
+    white-space: nowrap;
+  }
 }"
 `;
 

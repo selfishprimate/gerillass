@@ -714,7 +714,7 @@ part that does not depend on remembering.
 
 ### Which pages still have no demo
 
-160 of the 239 examples render one. Twelve mixins still show none, and the
+160 of the 239 examples render one. Eleven mixins still show none, and the
 reason differs:
 
 - **A viewport is the subject.** `breakpoint`, `smartphone`, `tablet`,
@@ -724,8 +724,10 @@ reason differs:
 - **The subject is a comparison.** `border-box` and `antialias` change one box
   in a way that only reads against an unchanged one, and building the pair
   means writing CSS the mixin did not emit.
-- **Nothing is meant to be visible.** `hide` hides, and `container` sets
-  `container-type`, which shows nothing until a `@container` rule reads it.
+- **Nothing is meant to be visible.** `container` sets `container-type`,
+  which shows nothing until a `@container` rule reads it. `hide` was on this
+  list until 4.0.0, when its page gained an icon toolbar, skip links revealed
+  with the Tab key, and labels hidden on narrow screens.
 - **It needs something the frame has not got.** `font-face` wants font files,
   `escape-to-parent` an ancestor from another part of the page, `reset-css` a
   page to reset.

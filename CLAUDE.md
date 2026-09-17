@@ -717,8 +717,15 @@ examine and test each on its own.
 - `columnizer-gap.md`: gutters as `gap` instead of margins and an
   `:nth-child` reset, and no universal `box-sizing`. Reviewing it found that
   `columnizer(var(--cols), 20px)` fails with Sass's own `Expected "n"`.
-- `hide-unhide-position.md`: `unhide` stops writing `position: static`, which
-  breaks the skip-link pattern, and `clip` goes. Not measured.
+- `hide-unhide-position.md`: rewritten 17 September 2026 as research for
+  modernising `hide`, with 19 libraries read and measurements in all three
+  browsers. It is done on the `hide` branch for 4.0.0: `hide(focusable)`,
+  written as `:not(:focus-within):not(:active)`, the only form that survived a
+  click in Safari and a container of links, and `hide(unhide)` removed with an
+  error naming both replacements. It also records that `hide`
+  widens the page in Chrome and Safari when the hidden element sits in a
+  clipped container with no positioned ancestor, and that dropping `clip` would
+  bring that to Firefox.
 - `before-after-default-content.md`: `content: ""` by default, since a
   pseudo-element without `content` does not render. Not measured; the risk is
   overriding content set elsewhere.
@@ -818,9 +825,13 @@ holding a commit made after the tag, which `/release` step 6b now prevents.
 
 Two pieces of work are open, and neither is started:
 
-- **Behaviour changes for a later major**: eight, each in its own file in `todos/` and
+- **4.0.0, on the `hide` branch**: `hide(focusable)` added and `hide(unhide)`
+  removed, from `todos/hide-unhide-position.md`, with a `MIGRATION.md` section.
+  Not released. The maintainer may add more of the items below to the same
+  major.
+- **Behaviour changes for a later major**: seven, each in its own file in `todos/` and
   each to be tested and decided on its own before any is planned: breakpoint
-  boundaries, `columnizer` on `gap`, `hide("unhide")`, a default `content` for
+  boundaries, `columnizer` on `gap`, a default `content` for
   `before`/`after`, `font-face` formats, `all-text-inputs`, `aspect-ratio` with
   a `height` attribute, and `counter`. Each needs a `MIGRATION.md` section.
 - **`todos/design-tokens.md`**: a token layer on `tokens`, starting with the

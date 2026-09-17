@@ -1,3 +1,115 @@
+# Migrating to Gerillass 4.0.0
+
+Written while 4.0.0 is being prepared, and added to as its changes land. So far
+it covers `hide`. The 3.0.0 and 2.0.0 guides follow below, unchanged.
+
+Every claim here was checked by compiling the old call against 3.0.0's source
+and the new one against 4.0.0's, and the CSS each produces was measured in
+Chrome 152, Firefox 156 and Safari 26.6.2.
+
+---
+
+## The short version
+
+| | |
+|---|---|
+| `hide(unhide)` was removed | breaking, loud |
+| `hide(focusable)` was added | not breaking |
+
+The break stops the build with a message naming both replacements, so nothing
+fails silently. To find every call first:
+
+```bash
+grep -rn "unhide" --include=*.scss .
+```
+
+---
+
+## Break: `hide(unhide)` was removed
+
+`unhide` undid `hide` by writing `position: static`, `width: auto`,
+`height: auto` and the rest back. It could not give back what `hide` had
+overwritten, so every call to it lost the element's own position, padding and
+border. There are two cases it was used for, and each has a replacement that
+overwrites nothing.
+
+### Shown on keyboard focus
+
+```scss
+// 3.x
+.skip-link {
+  @include hide;
+
+  &:focus {
+    @include hide(unhide);
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    padding: 0.75rem 1rem;
+  }
+}
+
+// 4.0.0
+.skip-link {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  padding: 0.75rem 1rem;
+  @include hide(focusable);
+}
+```
+
+`focusable` hides the element only while neither it nor anything inside it has
+focus, as `.skip-link:not(:focus-within):not(:active)`, so the element's own
+styles apply untouched once it has. Two things change in the result, and both
+were measured:
+
+- **A click on the revealed link now works in Safari.** Safari does not focus
+  a link on click, so with the 3.x form the link hid again on mouse-down and
+  the click was lost. `:active` holds it open. Chrome and Firefox behaved the
+  same with either form.
+- **A container of skip links can be revealed as a whole**, because
+  `:focus-within` matches while any link inside has focus. `unhide` on
+  `:focus` never showed a container, since the container itself is not what
+  gets focus.
+
+Without the declarations written again after `unhide`, the 3.x form showed the
+link `static`, with no padding or border, and pushed the page down; in the
+measurement, by 22px. The 4.0.0 form has nothing to write again.
+
+### Hidden only at some widths
+
+```scss
+// 3.x
+.nav-label {
+  padding: 4px 8px;
+  @include hide;
+
+  @media (min-width: 600px) {
+    @include hide(unhide);
+  }
+}
+
+// 4.0.0
+.nav-label {
+  padding: 4px 8px;
+
+  @media (max-width: 599.98px) {
+    @include hide;
+  }
+}
+```
+
+Put the hiding inside the query for the widths where the element is hidden,
+instead of hiding it everywhere and undoing it outside them. With the 3.x form
+the label came back at 600px and wider with no padding, no border and
+`position: static`, in all three browsers; with the 4.0.0 form it keeps its
+own styles, since nothing overwrote them. The query is the opposite of the old
+one, so check its boundary: `max-width: 599.98px` ends just under the
+`min-width: 600px` that used to start the undo.
+
+---
+
 # Migrating to Gerillass 3.0.0
 
 Written while 3.0.0 is being prepared, and added to as its changes land. So far

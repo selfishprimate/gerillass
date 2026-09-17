@@ -55,6 +55,7 @@
 .focus-ring { @include focus-ring; }
 .gradient { @include gradient((red, blue), conic, $from: 45deg, $in: oklab); }
 .hide { @include hide; }
+.hide-focusable { @include hide(focusable); }
 .line-clamp { @include line-clamp(3); }
 .motion-safe { @include motion-safe { transition: opacity 0.2s; } }
 .only { @include only("first") { color: red; } }

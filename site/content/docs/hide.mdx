@@ -1,8 +1,8 @@
 ---
 title: "Hide"
 page_title: "Hide Sass Mixin"
-page_description: "Hide an element visually while keeping it available to screen readers, with the Hide Sass mixin. The accessible way to take something out of view."
-page_keywords: "Gerillass hide, Hide Sass mixin, Sass hide, SCSS hide, CSS clip-path, CSS position, CSS overflow"
+page_description: "Hide an element visually while keeping it available to screen readers, with the Hide Sass mixin, or keep it hidden until it has keyboard focus, for skip links."
+page_keywords: "Gerillass hide, Hide Sass mixin, visually hidden CSS, sr-only, screen reader only, skip link CSS, focusable visually hidden"
 page_image: "gerillass-hide.jpg"
 ---
 
@@ -10,37 +10,178 @@ page_image: "gerillass-hide.jpg"
 
 <Member name="hide">
 
-The **Hide** Sass mixin allows you to improve web accessibility by hiding elements. It hides content visually on a web page while keeping it accessible to assistive technologies such as screen readers.
+The **Hide Sass mixin** takes an element out of sight without taking it away from screen readers. It is what the label of an icon-only button needs, or a form label the design leaves out, or a note such as "opens in a new tab".
+
+With `focusable`, the element stays hidden until it or anything inside it has keyboard focus, which is how a skip link works.
 
 </Member>
+
+## What goes wrong by hand
+
+Measured in Chrome 152, Firefox 156 and Safari 26.6.2, with the same result in each. The first row was read from Chrome's accessibility tree, the only one the test could reach.
+
+| Written by hand | What happens |
+|---|---|
+| `display: none` or `visibility: hidden` on a button's label | the label leaves the accessibility tree too, and the button is named by its icon alone |
+| a 1px box without `white-space: nowrap` | the text breaks into one line per word, which screen readers have been reported to read run together |
+| a 1px box with `overflow: hidden` but no `clip` or `clip-path` | the element's outline and box shadow still paint around it |
+| hidden, then undone on `:focus` | the element comes back `static`, with no padding or border, and pushes the page down |
+| hidden on `:not(:focus-within)` | in Safari, clicking the revealed link hides it again on mouse-down, and the click is lost |
+| hidden on `:not(:focus-visible)` | a link focused from a script stays invisible while it has focus |
+
+<Hint kind="info">
+
+**Safari skips links on Tab by default.** To try the skip link examples in Safari, press <kbd>Option</kbd>+<kbd>Tab</kbd>, or turn on "Press Tab to highlight each item" in its settings.
+
+</Hint>
 
 ## Arguments
 
 <Arguments of="hide">
-  <Argument name="$toggle" type="string">Accepts the values <code>hide</code> and <code>unhide</code>. The default value is <code>hide</code>. Use <code>unhide</code> to reverse the effect.</Argument>
+  <Argument name="$toggle (hide)" type="string">Accepts <code>hide</code> and <code>focusable</code>. <code>hide</code> hides the element always. <code>focusable</code> hides it only while neither it nor anything inside it has focus, and leaves the element's own styles to apply once it has. <code>unhide</code> was removed in 4.0.0; see below.</Argument>
 </Arguments>
 
 ## Examples
 
-<Example caption="Simply call the mixin to make the selected element and all of its children visually hidden (but still accessible to screen readers).">
+<Example caption="Icon buttons. Each label is still in the page, so a screen reader announces the buttons as Bold, Italic and Link, while only the icons are seen.">
 ```scss
-.element {
+.toolbar-label {
   @include hide;
 }
 ```
+```html
+<style>
+  .toolbar { display: inline-flex; gap: 4px; padding: 4px; border: 1px solid #e4e4e7; border-radius: 8px; background: #fff; }
+  .toolbar-button {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 36px; height: 36px; border: 0; border-radius: 6px;
+    background: transparent; color: #18181b; font: 600 16px/1 Georgia, serif; cursor: pointer;
+  }
+  .toolbar-button:hover { background: #f4f4f5; }
+</style>
+<div class="toolbar">
+  <button class="toolbar-button"><b aria-hidden="true">B</b><span class="toolbar-label">Bold</span></button>
+  <button class="toolbar-button"><i aria-hidden="true">I</i><span class="toolbar-label">Italic</span></button>
+  <button class="toolbar-button"><span aria-hidden="true">&#128279;</span><span class="toolbar-label">Link</span></button>
+</div>
+```
 </Example>
 
-<Example caption="Now let's pass the `unhide` value to reverse the effect.">
+<Example caption="A skip link. The position, padding and colours are the link's own, and they apply as they are once it has focus. **Click an empty spot in the result, then press the Tab key on your keyboard.**">
+```scss
+.skip-link {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 10px 16px;
+  border-radius: 6px;
+  background: #18181b;
+  color: #fafafa;
+  @include hide(focusable);
+}
+```
+```html
+<style>
+  .page { position: relative; min-height: 160px; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+  .skip-link { font-weight: 500; text-decoration: none; }
+  .site-header { display: flex; gap: 16px; align-items: center; height: 52px; padding: 0 16px; border-bottom: 1px solid #e4e4e7; }
+  .site-header a { color: #18181b; text-decoration: none; }
+  .content { padding: 16px; }
+</style>
+<div class="page">
+  <a class="skip-link" href="#content">Skip to content</a>
+  <header class="site-header"><strong>Acme</strong><a href="#">Products</a><a href="#">Pricing</a><a href="#">About</a></header>
+  <main class="content" id="content" tabindex="-1">The page starts here.</main>
+</div>
+```
+</Example>
+
+<Example caption="Several skip links in one container. `focusable` on the container shows the whole group while any link inside it has focus. **Click an empty spot in the result, then press the Tab key twice.**">
+```scss
+.skip-links {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  display: flex;
+  gap: 8px;
+  @include hide(focusable);
+}
+```
+```html
+<style>
+  .page { position: relative; min-height: 160px; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+  .skip-links a { padding: 10px 16px; border-radius: 6px; background: #18181b; color: #fafafa; font-weight: 500; text-decoration: none; }
+  .site-header { display: flex; gap: 16px; align-items: center; height: 52px; padding: 0 16px; border-bottom: 1px solid #e4e4e7; }
+  .site-header a { color: #18181b; text-decoration: none; }
+  .content { padding: 16px; }
+</style>
+<div class="page">
+  <nav class="skip-links"><a href="#content">Skip to content</a><a href="#navigation">Skip to navigation</a></nav>
+  <header class="site-header" id="navigation"><strong>Acme</strong><a href="#">Products</a><a href="#">Pricing</a></header>
+  <main class="content" id="content" tabindex="-1">The page starts here.</main>
+</div>
+```
+</Example>
+
+<Example caption="Labels hidden only on narrow screens. The hiding goes inside the media query, so on a wider screen nothing was overwritten and each label shows as it is. The result below is a frame of its own, so on a phone its labels are hidden and only the icons show.">
+```scss
+@media (max-width: 419.98px) {
+  .nav-label {
+    @include hide;
+  }
+}
+```
+```html
+<style>
+  .tabs { display: flex; gap: 4px; font: 500 14px/1 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .tab { display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 6px; color: #18181b; text-decoration: none; }
+  .tab:hover { background: #f4f4f5; }
+  .tab-icon { font-size: 18px; }
+</style>
+<nav class="tabs">
+  <a class="tab" href="#"><span class="tab-icon" aria-hidden="true">&#8962;</span><span class="nav-label">Home</span></a>
+  <a class="tab" href="#"><span class="tab-icon" aria-hidden="true">&#9993;</span><span class="nav-label">Messages</span></a>
+  <a class="tab" href="#"><span class="tab-icon" aria-hidden="true">&#9881;</span><span class="nav-label">Settings</span></a>
+</nav>
+```
+</Example>
+
+<Hint kind="warning">
+
+**Give a container that clips its content `position: relative`.** A hidden element is absolutely positioned, and with no positioned ancestor it escapes a horizontal carousel or a collapsed `height: 0; overflow: hidden` panel. Chrome and Safari then make the page wider or longer to reach it: measured, a hidden label on the fourth card of a carousel made a 1024px page 1549px wide, and one in a collapsed panel made it 3227px long. Firefox does not. `position: relative` on the container fixed both in all three browsers.
+
+</Hint>
+
+## `unhide`
+
+`hide(unhide)` undid `hide`, and it was removed in 4.0.0. It wrote `position: static`, `width: auto` and `height: auto`, and could not give back the position, padding or border `hide` had overwritten: a skip link revealed with it lost its styles and pushed the page down. `focusable` covers the focus case, and a media query covers hiding at some widths, as in the examples above. A call to it stops the build and names both.
+
 ```scss
 .element {
   @include hide(unhide);
 }
 ```
-</Example>
+```text
+Error: `hide(unhide)` was removed in 4.0.0: it could not give back the position, padding or border `hide` had overwritten. To show the element on keyboard focus, write `@include hide(focusable)`. To hide it only at some widths, put `@include hide` inside that media query instead of undoing it outside.
+```
+
+## What it refuses
+
+Any other value stops the build.
+
+```scss
+.element {
+  @include hide(visible);
+}
+```
+```text
+Error: `visible` is not a valid value for the `$toggle` argument of `hide`. The value must be `hide` or `focusable`.
+```
 
 ## Related Links
 
 - [Remove](/docs/remove)
+- [Focus Ring](/docs/focus-ring)
+- [CSS :focus-within](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:focus-within)
 - [CSS clip-path](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/clip-path)
-- [CSS position](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/position)
-- [CSS overflow](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/overflow)
+- [CSS white-space](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/white-space)

@@ -1,5 +1,29 @@
 @charset "UTF-8";
 
+@use "sass:meta";
+
+// Hides an element from sight but not from a screen reader. `display: none`
+// and `visibility: hidden` take it out of the accessibility tree as well.
+//
+// Measured in Chrome 152, Firefox 156 and Safari 26.6.2:
+// - `clip` and `clip-path` each hide the text, an outline, a box-shadow and a
+//   fixed child on their own. `clip` stays anyway: Firefox leaves a clipped
+//   element out of the page's scrollable area, the other two do not.
+// - Without `white-space: nowrap` the text breaks into one word per line,
+//   which a screen reader can read run together.
+// - With no positioned ancestor, the 1px box escapes a clipping container,
+//   such as a carousel or a collapsed panel, and widens or lengthens the page
+//   in Chrome and Safari. `position: relative` on that container fixes it.
+//
+// `unhide` was removed in 4.0.0. It wrote `position: static` and could not
+// restore padding or a border, so a skip link it revealed pushed the page
+// down, unstyled. Scoping the hiding, as `focusable` does, overwrites nothing.
+//
+// `focusable` reveals the element while it or anything inside it has focus,
+// by not hiding it then, so its own styles apply untouched. `:active` holds
+// it open through a click in Safari, which does not focus a link on click:
+// without it the link hides again on mouse-down and the click is lost.
+
 @mixin hide($toggle: "hide") {
   @if $toggle == "hide" {
     position: absolute;
@@ -11,15 +35,13 @@
     clip: rect(1px, 1px, 1px, 1px);
     clip-path: inset(100%);
     white-space: nowrap;
+  } @else if $toggle == "focusable" {
+    &:not(:focus-within):not(:active) {
+      @include hide;
+    }
   } @else if $toggle == "unhide" {
-    position: static;
-    width: auto;
-    height: auto;
-    overflow: visible;
-    clip: auto;
-    clip-path: none;
-    white-space: inherit;
-  } @else if not index ("hide" "unhide", $toggle) {
-    @error "#{$toggle} is not a valid value for the `$toggle` argument. The value must be either `hide` or `unhide`.";
+    @error "`hide(unhide)` was removed in 4.0.0: it could not give back the position, padding or border `hide` had overwritten. To show the element on keyboard focus, write `@include hide(focusable)`. To hide it only at some widths, put `@include hide` inside that media query instead of undoing it outside.";
+  } @else {
+    @error "`#{meta.inspect($toggle)}` is not a valid value for the `$toggle` argument of `hide`. The value must be `hide` or `focusable`.";
   }
 }
