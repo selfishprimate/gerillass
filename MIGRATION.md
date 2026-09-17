@@ -2,7 +2,7 @@
 
 Written while 4.0.0 is being prepared, and added to as its changes land. So far
 it covers `hide`, where breakpoint ranges end, `columnizer`, `before` and
-`after`, `font-face`, `all-text-inputs`, and `aspect-ratio`. The 3.0.0 and
+`after`, `font-face`, `all-text-inputs`, `aspect-ratio`, and `counter`. The 3.0.0 and
 2.0.0 guides follow below, unchanged.
 
 Every claim here was checked by compiling the old call against 3.0.0's source
@@ -24,6 +24,8 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `font-face` lists only `woff2` unless told otherwise | breaking, silent |
 | `all-text-inputs` excludes the non-text types instead of listing the text ones | breaking, silent |
 | `aspect-ratio` holds its ratio on an element with a `height` attribute | fixes rendering; breaks only a call that relied on the attribute |
+| `counter` numbers the children of its element and reads no classes | breaking, silent |
+| `counter` takes `$name`, `$continue`, `$start` and `$items` | not breaking |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -36,6 +38,8 @@ grep -rn "columnizer(" --include=*.scss .
 grep -rnE "include (gls-)?(before|after)( |;|\{|\(\))" --include=*.scss .
 grep -rn "font-face(" --include=*.scss .
 grep -rn "all-text-inputs\|list-of-text-inputs" --include=*.scss .
+grep -rn "counter(" --include=*.scss .
+grep -rn "counter-start\|counter-continue\|counter-item" .
 ```
 
 ---
@@ -435,6 +439,93 @@ Firefox 156 and Safari 26.6.2, in a 300px box:
 - **A `height` attribute meant to override the ratio** no longer does. Move
   that height into CSS.
 - **`height: auto` written after the include** as a workaround can go.
+
+---
+
+## Break: `counter` numbers the children of its element, with no classes
+
+3.x read three classes in the markup. 4.0.0 reads none: it numbers the direct
+children of the element it is included in.
+
+```css
+/* 3.x, from .list { @include counter; } */
+.list.counter-start { counter-reset: glsCounter; }
+.list.counter-start .counter-item::before,
+.list.counter-continue .counter-item::before {
+  content: counter(glsCounter);
+  counter-increment: glsCounter;
+}
+
+/* 4.0.0 */
+.list { counter-reset: glsCounter; }
+.list > * { counter-increment: glsCounter; }
+.list > *::before { content: counter(glsCounter); }
+```
+
+The style and the text around the number are passed as before, and the block
+still styles the `::before`.
+
+### Why
+
+3.x incremented the counter inside each item's `::before`. Once the items were
+containers (`container-type`), style containment kept that increment inside
+the item, and every item showed 1. Measured in Chrome 152, Firefox 156 and
+Safari 26.6.2. 4.0.0 increments on the item itself, which Chrome and Firefox
+count correctly. Safari still does not: see the last point under **What to check**.
+
+### Moving a list across
+
+```scss
+// 3.x: <div class="list counter-start"><div class="counter-item">…
+.list { @include counter(decimal-leading-zero); }
+
+// 4.0.0: <div class="list"><div>…
+.list { @include counter(decimal-leading-zero); }
+```
+
+The Sass for a list that starts a count does not change. Markup whose items
+are all direct children of that element keeps working with the classes still
+in it, which was measured: they are read by nothing and can be removed.
+
+A list that continued with `counter-continue` needs a name on the list it
+continues, and `$continue` with that name:
+
+```scss
+// 3.x: <div class="list counter-start">…</div> <figure/> <div class="list counter-continue">…</div>
+.list { @include counter; }
+
+// 4.0.0: <ol class="tips">…</ol> <figure/> <ol class="tips-more">…</ol>
+.tips      { @include counter($name: tips); }
+.tips-more { @include counter($continue: tips); }
+```
+
+`$continue` takes a name rather than `true` on purpose. Every list without a
+name shares one counter, so with two split lists interleaved on a page, the
+second part of one carried on from the other: steps 1 2, notes 1 2 3, then
+steps 4 5 instead of 3 4. With a name each, all three browsers counted every
+part correctly, split once or three times.
+
+### What to check
+
+- **Every direct child is numbered now.** A heading, an image or an ad inside
+  the list element, which 3.x skipped because it had no `counter-item`, takes a
+  number. Pass `$items` with a selector for the items, such as
+  `$items: ".step"`.
+- **Items that were not direct children**, `counter-item` deeper inside the
+  list element, are no longer numbered. Include the mixin on their own parent,
+  or pass `$items`.
+- **A hidden item still spends a number.** 3.x skipped an item whose `::before`
+  had `content: none`; since the count now advances on the item, write
+  `counter-increment: none` on it as well.
+- **Parts in separate sections** restart at 1. Reset the
+  counter on an element around all of them, `.article { counter-reset: tips; }`,
+  and give every part `$continue: tips`.
+- **A list that is a container** cannot carry a count on to the next one in any
+  browser. Pass `$start` with the first number instead, which
+  works there.
+- **In Safari, an item that is itself a container** shows 0, where 3.x showed
+  1. Put `container-type` on an element inside the item, which numbers
+  correctly in all three browsers.
 
 ---
 

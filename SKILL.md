@@ -95,6 +95,7 @@ a dropped declaration rather than an error.
 | `columnizer` | `.grid { @include columnizer(3, 20px, true, 9); }` |
 | `container-query` | `.title { @include container-query("min", 400px, 800px) { color: red; } }` |
 | `container` | `.card { @include container("card", sideways); }` |
+| `counter` | `.list { @include counter(decimal, $start: 1.5); }` |
 | `ellipsis` | `.a { @include ellipsis(100%, huge); }` |
 | `escape-to-parent` | `.a { @include escape-to-parent(42) { color: red; } }` |
 | `except` | `.a { @include except(#ff0000) { margin: 0; } }` |
@@ -172,7 +173,11 @@ a dropped declaration rather than an error.
 
 **`counter`**
 
-- Numbering restarts on every item, each showing the first number, when the items are size containers (`container-type: inline-size`): containment scopes counters to each item.
+- Since 4.0.0 the mixin numbers every direct child of the element it is included in. The `counter-start`, `counter-continue` and `counter-item` classes are no longer read. Pass `$items` to number only some children, such as `$items: "li"`.
+- `$continue` takes the `$name` of the list to carry on from, not `true`. Lists with no `$name` share one counter, so give every list that is split a name of its own: with two split lists interleaved on a page, the second part of one would otherwise carry on from the other.
+- A continued list must come after the named list, as a later sibling of it or of an element around it. Parts in separate `section`s restart at 1; reset the counter on an element around all of them, such as `.article { counter-reset: tips; }`, and pass `$continue: tips` to every part. Nothing carries a count into or out of a list that is a container (`container-type`); pass `$start` with the first number instead.
+- In Safari the number reads 0 when a numbered child is itself a container, since the `::before` inside it cannot see the list's counter. Chrome and Firefox show the right number. Put `container-type` on an element inside the child instead.
+- A child hidden with `content: none` on its `::before` still takes a number. Write `counter-increment: none` on it as well to skip it.
 
 **`except`**
 
@@ -233,7 +238,7 @@ a dropped declaration rather than an error.
 | `columnizer($params...)` | Flexbox grid of equal columns, with an optional gutter written as gap and an optional fill for the last row. |
 | `container-query($params...)` | A @container rule, taking the same argument shapes as breakpoint so the two read alike. Sizes may be a key from $map-for-breakpoints or a raw length, and a length is the common case because a container is usually narrower than the viewport. Nothing matches at all unless an ancestor was declared with the container mixin. |
 | `container($name: null, $type: inline-size)` | Marks an element as a query container, so container-query can ask about its width instead of the viewport's. The rule that asks has to sit on a descendant: an element is never matched by a @container rule reading its own container, and nothing warns you when it is not. |
-| `counter($params...)` | CSS counter for a list, with optional text before and after the number. |
+| `counter($params...)` | Numbers the children of the element it is included in, with optional text before and after each number. No classes in the markup. |
 | `ellipsis($width: 100%, $display: inline-block)` | Truncates a single line of text with an ellipsis. |
 | `escape-to-parent($selector: null)` | Re-roots the current selector under another one using @at-root. |
 | `except($params...)` | Selects every sibling except the ones named. |

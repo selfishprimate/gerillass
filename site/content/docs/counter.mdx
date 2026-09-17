@@ -1,8 +1,8 @@
 ---
 title: "Counter"
 page_title: "Counter Sass Mixin"
-page_description: "Number your content automatically with the Counter Sass mixin, which wraps the CSS counter properties for listicles and step by step layouts."
-page_keywords: "Gerillass counter, Counter Sass mixin, Sass counter, SCSS counter, CSS counter-reset, CSS counter-increment, CSS counter"
+page_description: "Number the children of any element with the Counter Sass mixin: steps, rankings, chapters and search results, continued across content or started at any number, with no classes in the markup."
+page_keywords: "Gerillass counter, Counter Sass mixin, Sass counter, SCSS counter, CSS counter-reset, CSS counter-increment, CSS counter-set, CSS numbered list"
 page_image: "gerillass-counter.jpg"
 ---
 
@@ -10,323 +10,499 @@ page_image: "gerillass-counter.jpg"
 
 <Member name="counter">
 
-The **Counter** Sass mixin allows you to present your content in a **listicle** format. 
-<Hint kind="info">
-
-**Important:** The mixin must be applied to the parent element that has the `counter-start` class on it, so that all the children with the `counter-item` class are affected.
-
-</Hint>
-
-<Hint kind="warning">
-
-**Tip:** **If you want to continue a list** that is interrupted by other content, simply give the containing element the **'counter-continue'** class instead of **'counter-start'**.
-
-</Hint>
-
-The markup should look like the example below:
-```html
-<div class="listicle-wrapper counter-start">
-  <div class="item counter-item">LISTICLE ITEM 01</div>
-  <div class="item counter-item">LISTICLE ITEM 02</div>
-  <div class="item counter-item">LISTICLE ITEM 03</div>
-</div>
-```
+The **Counter** Sass mixin numbers the children of the element you include it in. It creates a CSS counter on that element, advances it on each child, and writes the number into the child's `::before`, with optional text around it and your own styles in a block. The markup needs no classes.
 
 </Member>
 
+<Hint kind="warning">
+
+**Changed in Gerillass 4.0.0.** The mixin used to read three classes, `counter-start`, `counter-continue` and `counter-item`. It now numbers the direct children of the element it is included in, and `$name`, `$continue`, `$start` and `$items` do what the classes did and more. A list carries on from another by naming it, `$continue: tips`, so several split lists on one page keep their own counts. The numbers also survive children that are containers, which showed 1 on every item before. See the migration guide.
+
+</Hint>
+
 ## Arguments
 
-<Arguments of="counter" footnote="See the [examples](#examples) to learn how these arguments behave.">
-  <Argument name="$counter" type="string">Sets the style of the counter. The default value is <code>decimal</code>. Check out the [links](#related-links) at the end of the article to learn more about counter styles.</Argument>
-  <Argument name="$counter-before" type="string, function">Adds a string before the counter. A <code>var()</code>, <code>attr()</code>, <code>counter()</code> or <code>counters()</code> is written as it is.</Argument>
-  <Argument name="$counter-after" type="string, function">Adds a string after the counter. A <code>var()</code>, <code>attr()</code>, <code>counter()</code> or <code>counters()</code> is written as it is.</Argument>
+<Arguments of="counter" footnote="The counter style and the text around the number are positional, as before. The rest are named. See the [examples](#examples) for each.">
+  <Argument name="$counter" type="string">The counter style, such as <code>decimal-leading-zero</code>, <code>upper-roman</code> or <code>lower-alpha</code>. The default is <code>decimal</code>.</Argument>
+  <Argument name="$counter-before" type="string, function">Text before the number. A <code>var()</code>, <code>attr()</code>, <code>counter()</code> or <code>counters()</code> is written as it is.</Argument>
+  <Argument name="$counter-after" type="string, function">Text after the number. With only one text and no style it goes after the number.</Argument>
+  <Argument name="$continue" type="string">The <code>$name</code> of an earlier list to carry on from, instead of starting at 1.</Argument>
+  <Argument name="$start" type="number, function">The first child's number, such as <code>4</code>, or a <code>var()</code> the markup sets.</Argument>
+  <Argument name="$name" type="string">The counter's name, one word. Give one to a list that another list continues, and to a list inside another list. Lists with no name share one counter.</Argument>
+  <Argument name="$items" type="string">A selector for the children to number, such as <code>"li"</code> or <code>".step"</code>. The default is every direct child.</Argument>
 </Arguments>
 
 ## Examples
 
-Suppose you have markup like the one below and you want to present it in a listicle format. (The same markup is used for all the examples.)
-
-```html
-<div class="listicle-wrapper counter-start">
-  <div class="item counter-item">As an alternative theory, (and because Latin scholars do this sort of thing) someone.</div>
-  <div class="item counter-item">The purpose of lorem ipsum is to create a natural looking block of text.</div>
-  <div class="item counter-item">More difficult to find examples of lorem ipsum in use before Letraset made it popular.</div>
-  <div class="item counter-item">McClintock says he remembers coming across the lorem ipsum passage in a book of old metal.</div>
-  <div class="item counter-item">It's difficult to find examples of lorem ipsum in use before Letraset made it.</div>
-</div>
-```
-
-<Example caption="Simply call the mixin inside the parent element's selector without passing any arguments.">
+<Example caption="An onboarding checklist. Include the mixin in the list's selector and every child gets a number, drawn in its `::before`. The block styles that number, here as a badge." listing="<ol class=&quot;onboarding&quot;>
+&#32;&#32;<li>Create your workspace</li>
+&#32;&#32;<li>Invite your team</li>
+&#32;&#32;<li>Connect a repository</li>
+</ol>">
 ```scss
-.listicle-wrapper {
-  @include counter;
-}
-```
-```html
-<div class="sandbox listicle-wrapper counter-start example01">
-  <div class="item counter-item">As an alternative theory, (and because Latin scholars do this sort of thing) someone.</div>
-  <div class="item counter-item">The purpose of lorem ipsum is to create a natural looking block of text.</div>
-  <div class="item counter-item">More difficult to find examples of lorem ipsum in use before Letraset made it popular.</div>
-  <div class="item counter-item">McClintock says he remembers coming across the lorem ipsum passage in a book of old metal.</div>
-  <div class="item counter-item">It's difficult to find examples of lorem ipsum in use before Letraset made it.</div>
-</div>
-```
-</Example>
-
-<Example caption="Now let's highlight the counter a little more. **You can pass a declaration block into the mixin** to do that easily.">
-```scss
-.listicle-wrapper {
+.onboarding {
   @include counter {
-    color: rgb(0, 85, 187);
-    font-size: 1.1em;
-    font-weight: bold;
-    margin-right: 5px;
-  };
+    display: inline-grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    margin-right: 12px;
+    border-radius: 50%;
+    background: #18181b;
+    color: #fafafa;
+    font-size: 12px;
+    font-weight: 600;
+  }
 }
 ```
 ```html
-<div class="sandbox listicle-wrapper counter-start example02">
-  <div class="item counter-item">As an alternative theory, (and because Latin scholars do this sort of thing) someone.</div>
-  <div class="item counter-item">The purpose of lorem ipsum is to create a natural looking block of text.</div>
-  <div class="item counter-item">More difficult to find examples of lorem ipsum in use before Letraset made it popular.</div>
-  <div class="item counter-item">McClintock says he remembers coming across the lorem ipsum passage in a book of old metal.</div>
-  <div class="item counter-item">It's difficult to find examples of lorem ipsum in use before Letraset made it.</div>
-</div>
+<style>
+  .onboarding { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+  .onboarding li { display: flex; align-items: center; }
+</style>
+<ol class="onboarding">
+  <li>Create your workspace</li>
+  <li>Invite your team</li>
+  <li>Connect a repository</li>
+</ol>
 ```
 </Example>
 
-<Example caption="Now let's **change the counter style from `decimal` to `upper-roman`** (the default is always `decimal`).">
+<Example caption="A checkout progress bar laid out in a row. The number sits on its own line above each label, and nothing in the markup says which step is which." listing="<ol class=&quot;checkout&quot;>
+&#32;&#32;<li>Cart</li>
+&#32;&#32;<li>Shipping</li>
+&#32;&#32;<li>Payment</li>
+&#32;&#32;<li>Review</li>
+</ol>">
 ```scss
-.listicle-wrapper {
-  @include counter(upper-roman) {
-    color: rgb(0, 85, 187);
-    font-size: 1.1em;
-    font-weight: bold;
-    margin-right: 5px;
-  };
+.checkout {
+  @include counter(decimal-leading-zero) {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 22px;
+    font-weight: 800;
+    color: #2563eb;
+  }
 }
 ```
 ```html
-<div class="sandbox listicle-wrapper counter-start example03">
-  <div class="item counter-item">As an alternative theory, (and because Latin scholars do this sort of thing) someone.</div>
-  <div class="item counter-item">The purpose of lorem ipsum is to create a natural looking block of text.</div>
-  <div class="item counter-item">More difficult to find examples of lorem ipsum in use before Letraset made it popular.</div>
-  <div class="item counter-item">McClintock says he remembers coming across the lorem ipsum passage in a book of old metal.</div>
-  <div class="item counter-item">It's difficult to find examples of lorem ipsum in use before Letraset made it.</div>
+<style>
+  .checkout { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; font-size: 13px; }
+  .checkout li { padding-top: 10px; border-top: 3px solid #2563eb; }
+  .checkout li:nth-child(n + 3) { border-color: #e4e4e7; color: #a1a1aa; }
+  .checkout li:nth-child(n + 3)::before { color: #a1a1aa; }
+</style>
+<ol class="checkout">
+  <li>Cart</li>
+  <li>Shipping</li>
+  <li>Payment</li>
+  <li>Review</li>
+</ol>
+```
+</Example>
+
+<Example caption="The articles of a contract, with text on both sides of a Roman numeral. With a counter style between two strings, the first goes before the number and the second after it." listing="<div class=&quot;terms&quot;>
+&#32;&#32;<p>The licensee may use the software on any number of devices.</p>
+&#32;&#32;<p>The licensor provides updates for twelve months.</p>
+&#32;&#32;<p>Either party may end this agreement with thirty days of notice.</p>
+</div>">
+```scss
+.terms {
+  @include counter("Article ", upper-roman, ".") {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #71717a;
+  }
+}
+```
+```html
+<style>
+  .terms { margin: 0; padding: 0; display: grid; gap: 14px; font: 15px/1.5 Georgia, serif; color: #18181b; }
+  .terms p { margin: 0; }
+</style>
+<div class="terms">
+  <p>The licensee may use the software on any number of devices.</p>
+  <p>The licensor provides updates for twelve months.</p>
+  <p>Either party may end this agreement with thirty days of notice.</p>
 </div>
 ```
 </Example>
 
-<Hint kind="info">
+<Example caption="A listicle broken up three times, by a pull quote, a photo and a newsletter box. The first part names its counter, and every later part carries on from it with `$continue`, however many times the list is interrupted. One class serves all the later parts." listing="<ol class=&quot;habits&quot;>…</ol>
+<blockquote>…</blockquote>
+<ol class=&quot;habits-more&quot;>…</ol>
+<div class=&quot;photo&quot;></div>
+<ol class=&quot;habits-more&quot;>…</ol>
+<div class=&quot;newsletter&quot;>…</div>
+<ol class=&quot;habits-more&quot;>…</ol>">
+```scss
+.habits {
+  @include counter(decimal, ".", $name: habits) {
+    margin-right: 8px;
+    font-weight: 800;
+    color: #ea580c;
+  }
+}
 
-**Important:** Values that you pass outside the predefined **counter style** values are placed either **before** or **after** the counter. If you pass **only one** value, **it is placed after the counter**. If you pass **two values**, the **first one** is placed **before** the counter and the **second one after** it.
+.habits-more {
+  @include counter(decimal, ".", $continue: habits) {
+    margin-right: 8px;
+    font-weight: 800;
+    color: #ea580c;
+  }
+}
+```
+```html
+<style>
+  .post { font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+  .post ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+  .post blockquote { margin: 12px 0; padding-left: 12px; border-left: 3px solid #ea580c; font-style: italic; color: #52525b; }
+  .post .photo { margin: 12px 0; height: 56px; border-radius: 6px; background: linear-gradient(135deg, #fed7aa, #fecdd3); }
+  .post .newsletter { margin: 12px 0; padding: 10px 12px; border-radius: 6px; background: #f4f4f5; font-size: 13px; color: #52525b; }
+</style>
+<div class="post">
+  <ol class="habits">
+    <li>Write the markup first</li>
+    <li>Name things by what they are</li>
+  </ol>
+  <blockquote>Good CSS is mostly deleted CSS.</blockquote>
+  <ol class="habits-more">
+    <li>Prefer gap to margins</li>
+  </ol>
+  <div class="photo"></div>
+  <ol class="habits-more">
+    <li>Use logical properties</li>
+    <li>Keep specificity flat</li>
+  </ol>
+  <div class="newsletter">Get one habit a week by email.</div>
+  <ol class="habits-more">
+    <li>Test in three browsers</li>
+  </ol>
+</div>
+```
+</Example>
+
+<Example caption="A recipe in three stages, where the ingredients and the method take turns. Two lists split into three parts each, and each keeps its own count because each has its own name: ingredients run a to g, steps 1 to 5. Lists without names share one counter, so the steps of the filling would carry on from the ingredients." listing="<div class=&quot;recipe&quot;>
+&#32;&#32;<h4>Dough</h4>
+&#32;&#32;<ol class=&quot;ingredients&quot;>…</ol>
+&#32;&#32;<ol class=&quot;method&quot;>…</ol>
+&#32;&#32;<h4>Filling</h4>
+&#32;&#32;<ol class=&quot;ingredients-more&quot;>…</ol>
+&#32;&#32;<ol class=&quot;method-more&quot;>…</ol>
+&#32;&#32;<h4>Glaze</h4>
+&#32;&#32;<ol class=&quot;ingredients-more&quot;>…</ol>
+&#32;&#32;<ol class=&quot;method-more&quot;>…</ol>
+</div>">
+```scss
+.ingredients {
+  @include counter("(", lower-alpha, ")", $name: ingredients) {
+    margin-right: 6px;
+    color: #a16207;
+  }
+}
+
+.ingredients-more {
+  @include counter("(", lower-alpha, ")", $continue: ingredients) {
+    margin-right: 6px;
+    color: #a16207;
+  }
+}
+
+.method {
+  @include counter(decimal, ".", $name: method) {
+    margin-right: 6px;
+    font-weight: 700;
+  }
+}
+
+.method-more {
+  @include counter(decimal, ".", $continue: method) {
+    margin-right: 6px;
+    font-weight: 700;
+  }
+}
+```
+```html
+<style>
+  .recipe { display: grid; grid-template-columns: 1fr 1.4fr; gap: 4px 20px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; font-size: 13px; }
+  .recipe h4 { grid-column: 1 / -1; margin: 10px 0 2px; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: #71717a; }
+  .recipe h4:first-child { margin-top: 0; }
+  .recipe ol { list-style: none; margin: 0; padding: 0; }
+  .recipe ol:nth-of-type(odd) { color: #52525b; }
+</style>
+<div class="recipe">
+  <h4>Dough</h4>
+  <ol class="ingredients"><li>Flour</li><li>Butter</li><li>Water</li></ol>
+  <ol class="method"><li>Rub the butter into the flour</li><li>Add water and chill</li></ol>
+  <h4>Filling</h4>
+  <ol class="ingredients-more"><li>Apples</li><li>Sugar</li></ol>
+  <ol class="method-more"><li>Slice and toss the apples</li><li>Fill the lined tin</li></ol>
+  <h4>Glaze</h4>
+  <ol class="ingredients-more"><li>Egg</li><li>Milk</li></ol>
+  <ol class="method-more"><li>Brush and bake for 40 minutes</li></ol>
+</div>
+```
+</Example>
+
+<Example caption="Figures numbered through every chapter of a book. A count only carries on to later siblings of a list, so a gallery in the next `section` would start at 1 again. Create the counter on the element around every chapter with `counter-reset`, and give every gallery `$continue` with that name." listing="<article class=&quot;book&quot;>
+&#32;&#32;<section>
+&#32;&#32;&#32;&#32;<h4>1. The first frost</h4>
+&#32;&#32;&#32;&#32;<div class=&quot;gallery&quot;><figure>…</figure><figure>…</figure></div>
+&#32;&#32;</section>
+&#32;&#32;<section>
+&#32;&#32;&#32;&#32;<h4>2. The long winter</h4>
+&#32;&#32;&#32;&#32;<div class=&quot;gallery&quot;><figure>…</figure><figure>…</figure><figure>…</figure></div>
+&#32;&#32;</section>
+</article>">
+```scss
+.book {
+  counter-reset: figure;
+}
+
+.gallery {
+  @include counter("Figure ", decimal, $continue: figure) {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #52525b;
+  }
+}
+```
+```html
+<style>
+  .book { font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+  .book h4 { margin: 0 0 8px; font-size: 14px; }
+  .book section + section { margin-top: 16px; }
+  .gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .gallery figure { margin: 0; }
+  .gallery figure div { height: 48px; border-radius: 6px; background: linear-gradient(135deg, #bbf7d0, #bfdbfe); }
+</style>
+<article class="book">
+  <section>
+    <h4>1. The first frost</h4>
+    <div class="gallery">
+      <figure><div></div></figure>
+      <figure><div></div></figure>
+    </div>
+  </section>
+  <section>
+    <h4>2. The long winter</h4>
+    <div class="gallery">
+      <figure><div></div></figure>
+      <figure><div></div></figure>
+      <figure><div></div></figure>
+    </div>
+  </section>
+</article>
+```
+</Example>
+
+<Example caption="The second page of search results, numbered from 11. `$start` takes a `var()`, so the server writes the first number into the markup and one rule serves every page. A start number also works where `$continue` cannot, when the list is a container." listing="<ol class=&quot;results&quot; style=&quot;--first: 11&quot;>
+&#32;&#32;<li>Container queries in practice</li>
+&#32;&#32;<li>Fluid type without media queries</li>
+&#32;&#32;<li>Counters that survive containment</li>
+</ol>">
+```scss
+.results {
+  @include counter(".", $start: var(--first)) {
+    min-width: 32px;
+    color: #71717a;
+  }
+}
+```
+```html
+<style>
+  .results { list-style: none; margin: 0; padding: 0; container-type: inline-size; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; color: #1d4ed8; }
+  .results li { display: flex; padding: 6px 0; }
+</style>
+<ol class="results" style="--first: 11">
+  <li>Container queries in practice</li>
+  <li>Fluid type without media queries</li>
+  <li>Counters that survive containment</li>
+</ol>
+```
+</Example>
+
+<Example caption="A help page where group headings sit among the questions. `$items` numbers only the children that match, so the headings take no number and the questions count straight through the groups." listing="<div class=&quot;faq&quot;>
+&#32;&#32;<h4>Billing</h4>
+&#32;&#32;<p class=&quot;question&quot;>Can I pay yearly?</p>
+&#32;&#32;<p class=&quot;question&quot;>Do you offer refunds?</p>
+&#32;&#32;<h4>Account</h4>
+&#32;&#32;<p class=&quot;question&quot;>How do I change my email?</p>
+&#32;&#32;<p class=&quot;question&quot;>Can I delete my data?</p>
+</div>">
+```scss
+.faq {
+  @include counter("Q", decimal, ".", $items: ".question") {
+    margin-right: 8px;
+    font-weight: 700;
+    color: #7c3aed;
+  }
+}
+```
+```html
+<style>
+  .faq { font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+  .faq h4 { margin: 12px 0 4px; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: #71717a; }
+  .faq h4:first-child { margin-top: 0; }
+  .faq p { margin: 0 0 4px; }
+</style>
+<div class="faq">
+  <h4>Billing</h4>
+  <p class="question">Can I pay yearly?</p>
+  <p class="question">Do you offer refunds?</p>
+  <h4>Account</h4>
+  <p class="question">How do I change my email?</p>
+  <p class="question">Can I delete my data?</p>
+</div>
+```
+</Example>
+
+<Example caption="A table of contents with sections inside chapters. The inner list has a `$name` of its own, so it counts a, b in every chapter without touching the chapter count. Only direct children are numbered, so the outer counter never reaches the inner items." listing="<ol class=&quot;toc&quot;>
+&#32;&#32;<li>Getting started
+&#32;&#32;&#32;&#32;<ol class=&quot;toc-sections&quot;>
+&#32;&#32;&#32;&#32;&#32;&#32;<li>Installation</li>
+&#32;&#32;&#32;&#32;&#32;&#32;<li>Your first mixin</li>
+&#32;&#32;&#32;&#32;</ol>
+&#32;&#32;</li>
+&#32;&#32;<li>Layout
+&#32;&#32;&#32;&#32;<ol class=&quot;toc-sections&quot;>…</ol>
+&#32;&#32;</li>
+&#32;&#32;<li>Reference</li>
+</ol>">
+```scss
+.toc {
+  @include counter(upper-roman, ".", $name: chapter) {
+    min-width: 28px;
+    font-weight: 700;
+  }
+}
+
+.toc-sections {
+  @include counter(lower-alpha, ")", $name: section) {
+    min-width: 20px;
+    color: #71717a;
+  }
+}
+```
+```html
+<style>
+  .toc, .toc-sections { list-style: none; margin: 0; padding: 0; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+  .toc > li::before, .toc-sections > li::before { display: inline-block; }
+  .toc-sections { padding-left: 28px; font-size: 14px; color: #3f3f46; }
+</style>
+<ol class="toc">
+  <li>Getting started
+    <ol class="toc-sections">
+      <li>Installation</li>
+      <li>Your first mixin</li>
+    </ol>
+  </li>
+  <li>Layout
+    <ol class="toc-sections">
+      <li>Columns</li>
+      <li>Container queries</li>
+    </ol>
+  </li>
+  <li>Reference</li>
+</ol>
+```
+</Example>
+
+<Example caption="A travel ranking with a large number behind each card, placed by the block. The cards carry only their content." listing="<div class=&quot;destinations&quot;>
+&#32;&#32;<article>Lisbon</article>
+&#32;&#32;<article>Kyoto</article>
+&#32;&#32;<article>Cape Town</article>
+</div>">
+```scss
+.destinations {
+  @include counter(decimal-leading-zero) {
+    position: absolute;
+    right: 12px;
+    bottom: -6px;
+    font-size: 56px;
+    font-weight: 800;
+    line-height: 1;
+    color: rgb(255 255 255 / 0.35);
+  }
+}
+```
+```html
+<style>
+  .destinations { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+  .destinations article { position: relative; overflow: hidden; height: 110px; padding: 12px; border-radius: 10px; color: #fff; font-weight: 600; }
+  .destinations article:nth-child(1) { background: linear-gradient(160deg, #0ea5e9, #1e3a8a); }
+  .destinations article:nth-child(2) { background: linear-gradient(160deg, #f97316, #9f1239); }
+  .destinations article:nth-child(3) { background: linear-gradient(160deg, #22c55e, #14532d); }
+</style>
+<div class="destinations">
+  <article>Lisbon</article>
+  <article>Kyoto</article>
+  <article>Cape Town</article>
+</div>
+```
+</Example>
+
+## Skipping an item
+
+<Example caption="A conference programme with a break between the talks. Since 4.0.0 the count advances on the item itself, so hiding the number with `content: none` alone still spends one. Write `counter-increment: none` as well, and the next talk takes the number instead." listing="<ol class=&quot;programme&quot;>
+&#32;&#32;<li>Designing with constraints</li>
+&#32;&#32;<li>CSS that ages well</li>
+&#32;&#32;<li class=&quot;break&quot;>Coffee break</li>
+&#32;&#32;<li>Counters in the wild</li>
+</ol>">
+```scss
+.programme {
+  @include counter("Talk ", decimal) {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    color: #0891b2;
+  }
+
+  > .break {
+    counter-increment: none;
+
+    &::before {
+      content: none;
+    }
+  }
+}
+```
+```html
+<style>
+  .programme { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+  .programme .break { padding: 6px 10px; border-radius: 6px; background: #f4f4f5; font-size: 13px; color: #71717a; }
+</style>
+<ol class="programme">
+  <li>Designing with constraints</li>
+  <li>CSS that ages well</li>
+  <li class="break">Coffee break</li>
+  <li>Counters in the wild</li>
+</ol>
+```
+</Example>
+
+<Hint kind="warning">
+
+**Containers, measured in Chrome 152, Firefox 156 and Safari 26.6.2.** A list that is a container numbers its items in all three. Two things do not work. `$continue` cannot carry a count into or out of a list that is a container, since containment keeps the count inside it; pass `$start` with the first number instead. And in Safari a number reads 0 when **the numbered item itself** is a container, while Chrome and Firefox show the right number; put `container-type` on an element inside the item instead, which works in all three.
 
 </Hint>
 
-<Example caption="Now let's try something different.">
-```scss
-.listicle-wrapper {
-  @include counter("____") {
-    color: rgb(0, 85, 187);
-    font-size: 1.1em;
-    font-weight: bold;
-    margin-right: 5px;
-  };
-}
-```
-```html
-<div class="sandbox listicle-wrapper counter-start example04">
-  <div class="item counter-item">As an alternative theory, (and because Latin scholars do this sort of thing) someone.</div>
-  <div class="item counter-item">The purpose of lorem ipsum is to create a natural looking block of text.</div>
-  <div class="item counter-item">More difficult to find examples of lorem ipsum in use before Letraset made it popular.</div>
-  <div class="item counter-item">McClintock says he remembers coming across the lorem ipsum passage in a book of old metal.</div>
-  <div class="item counter-item">It's difficult to find examples of lorem ipsum in use before Letraset made it.</div>
-</div>
-```
-</Example>
+<Hint kind="info">
 
-<Example caption="Now let's pass two values, one for before the counter and the other for after it.">
-```scss
-.listicle-wrapper {
-  @include counter("( ", " ) ") {
-    color: rgb(0, 85, 187);
-    font-size: 1.1em;
-    font-weight: bold;
-    margin-right: 5px;
-  };
-}
-```
-```html
-<div class="sandbox listicle-wrapper counter-start example05">
-  <div class="item counter-item">As an alternative theory, (and because Latin scholars do this sort of thing) someone.</div>
-  <div class="item counter-item">The purpose of lorem ipsum is to create a natural looking block of text.</div>
-  <div class="item counter-item">More difficult to find examples of lorem ipsum in use before Letraset made it popular.</div>
-  <div class="item counter-item">McClintock says he remembers coming across the lorem ipsum passage in a book of old metal.</div>
-  <div class="item counter-item">It's difficult to find examples of lorem ipsum in use before Letraset made it.</div>
-</div>
-```
-</Example>
+**This mixin and CSS's `counter()`.** The mixin writes `counter-reset`, `counter-increment` and `content: counter(...)` for you. To show the same count somewhere else, such as a total in a heading, give it a `$name` and read it with `counter()` in your own CSS or through the [Before](/docs/before) mixin.
 
-<Example caption="Now let's change the counter style to `decimal` again and add a string after it!">
-```scss
-.listicle-wrapper {
-  @include counter(decimal, "th ") {
-    color: rgb(0, 85, 187);
-    font-size: 1.1em;
-    font-weight: bold;
-    margin-right: 5px;
-  };
-}
-```
-```html
-<div class="sandbox listicle-wrapper counter-start example06">
-  <div class="item counter-item">As an alternative theory, (and because Latin scholars do this sort of thing) someone.</div>
-  <div class="item counter-item">The purpose of lorem ipsum is to create a natural looking block of text.</div>
-  <div class="item counter-item">More difficult to find examples of lorem ipsum in use before Letraset made it popular.</div>
-  <div class="item counter-item">McClintock says he remembers coming across the lorem ipsum passage in a book of old metal.</div>
-  <div class="item counter-item">It's difficult to find examples of lorem ipsum in use before Letraset made it.</div>
-</div>
-```
-</Example>
-
-<Example caption="Now let's **add a string before the counter** and pass the `decimal-leading-zero` value for the counter style.">
-```scss
-.listicle-wrapper {
-  @include counter("Section ", decimal-leading-zero) {
-    color: rgb(0, 85, 187);
-    font-size: 1.1em;
-    font-weight: bold;
-    margin-right: 5px;
-  };
-}
-```
-```html
-<div class="sandbox listicle-wrapper counter-start example07">
-  <div class="item counter-item">As an alternative theory, (and because Latin scholars do this sort of thing) someone.</div>
-  <div class="item counter-item">The purpose of lorem ipsum is to create a natural looking block of text.</div>
-  <div class="item counter-item">More difficult to find examples of lorem ipsum in use before Letraset made it popular.</div>
-  <div class="item counter-item">McClintock says he remembers coming across the lorem ipsum passage in a book of old metal.</div>
-  <div class="item counter-item">It's difficult to find examples of lorem ipsum in use before Letraset made it.</div>
-</div>
-```
-</Example>
-
-<Example caption="Now let's add a string both before and after the counter.">
-```scss
-.listicle-wrapper {
-  @include counter("[ Section ", decimal-leading-zero, " ]") {
-    color: rgb(0, 85, 187);
-    font-size: 1.1em;
-    font-weight: bold;
-    margin-right: 5px;
-  };
-}
-```
-```html
-<div class="sandbox listicle-wrapper counter-start example08">
-  <div class="item counter-item">As an alternative theory, (and because Latin scholars do this sort of thing) someone.</div>
-  <div class="item counter-item">The purpose of lorem ipsum is to create a natural looking block of text.</div>
-  <div class="item counter-item">More difficult to find examples of lorem ipsum in use before Letraset made it popular.</div>
-  <div class="item counter-item">McClintock says he remembers coming across the lorem ipsum passage in a book of old metal.</div>
-  <div class="item counter-item">It's difficult to find examples of lorem ipsum in use before Letraset made it.</div>
-</div>
-```
-</Example>
-
-<Example caption="The examples shown so far were about how to use this mixin. **So where can you go from here?** Here is an example!" listing="<div class=&quot;listicle-wrapper counter-start&quot;>
-&#32;&#32;<div class=&quot;item counter-item&quot;>The passage experienced a surge in popularity during the 1960s when Letraset used it on their dry-transfer sheets, and again during the 90s as desktop publishers bundled the text with their software. Today it's seen all around the web; on templates, websites, and stock designs. Use our generator to get your own, or read on for the authoritative history of lorem ipsum.</div>
-&#32;&#32;<div class=&quot;item counter-item&quot;>Until recently, the prevailing view assumed lorem ipsum was born as a nonsense text. “It's not Latin, though it looks like it, and it actually says nothing,” Before & After magazine answered a curious reader, “Its ‘words’ loosely approximate the frequency with which letters occur in English, which is why at a glance it looks pretty real.”</div>
-&#32;&#32;<div class=&quot;item counter-item&quot;>Richard McClintock, a Latin scholar from Hampden-Sydney College, is credited with discovering the source behind the ubiquitous filler text. In seeing a sample of lorem ipsum, his interest was piqued by consectetur—a genuine, albeit rare, Latin word. Consulting a Latin dictionary led McClintock to a passage from De Finibus Bonorum et Malorum (“On the Extremes of Good and Evil”), a first-century B.C. text from the Roman philosopher Cicero.</div>
-&#32;&#32;<div class=&quot;item counter-item&quot;>It's difficult to find examples of lorem ipsum in use before Letraset made it popular as a dummy text in the 1960s, although McClintock says he remembers coming across the lorem ipsum passage in a book of old metal type samples. So far he hasn't relocated where he once saw the passage, but the popularity of Cicero in the 15th century supports the theory that the filler text has been used for centuries.</div>
-&#32;&#32;<div class=&quot;item counter-item&quot;>As an alternative theory, (and because Latin scholars do this sort of thing) someone tracked down a 1914 Latin edition of De Finibus which challenges McClintock's 15th century claims and suggests that the dawn of lorem ipsum was as recent as the 20th century. The 1914 Loeb Classical Library Edition ran out of room on page 34 for the Latin phrase “dolorem ipsum” (sorrow in itself). Thus, the truncated phrase leaves one page dangling with “do-”, while another begins with the now ubiquitous “lorem ipsum”.</div>
-</div>">
-```scss
-.listicle-wrapper {
-  @include counter {
-    position: absolute;
-    top: 0;
-    left: 0;
-    font-size: 7em;
-    font-weight: bold;
-    font-style: italic;
-    font-family: "Jumble", sans-serif;
-    transform: translateY(-20%);
-    color: rgb(230,230,230);
-    line-height: 1;
-    z-index: -1;
-  };
-  .item {
-    position: relative;
-    padding-left: 50px;
-    &:not(:last-child) {
-        margin-bottom: 3rem;
-    }
-  }
-}
-```
-```html
-<div class="listicle-wrapper counter-start example09">
-  <div class="item counter-item"><strong>The passage experienced a surge in popularity</strong> during the 1960s when Letraset used it on their dry-transfer sheets, and again during the 90s as desktop publishers bundled the text with their software. Today it's seen all around the web; on templates, websites, and stock designs. Use our generator to get your own, or read on for the authoritative history of lorem ipsum.</div>
-  <div class="item counter-item"><strong>Until recently</strong>, the prevailing view assumed lorem ipsum was born as a nonsense text. “It's not Latin, though it looks like it, and it actually says nothing,” Before & After magazine answered a curious reader, “Its ‘words’ loosely approximate the frequency with which letters occur in English, which is why at a glance it looks pretty real.”</div>
-  <div class="item counter-item"><strong>Richard McClintock</strong>, a Latin scholar from Hampden-Sydney College, is credited with discovering the source behind the ubiquitous filler text. In seeing a sample of lorem ipsum, his interest was piqued by consectetur—a genuine, albeit rare, Latin word. Consulting a Latin dictionary led McClintock to a passage from De Finibus Bonorum et Malorum (“On the Extremes of Good and Evil”), a first-century B.C. text from the <strong>Roman philosopher Cicero</strong>.</div>
-  <div class="item counter-item"><strong>It's difficult to find examples of lorem ipsum in use before Letraset made it popular as a dummy text in the 1960s, although McClintock says he remembers coming across the lorem ipsum passage in a book of old metal type samples</strong>. So far he hasn't relocated where he once saw the passage, but the popularity of Cicero in the 15th century supports the theory that the filler text has been used for centuries.</div>
-  <div class="item counter-item"><strong>As an alternative theory</strong>, (and because Latin scholars do this sort of thing) someone tracked down a 1914 Latin edition of De Finibus which challenges McClintock's 15th century claims and suggests that the dawn of lorem ipsum was as recent as the 20th century. The 1914 Loeb Classical Library Edition ran out of room on page 34 for the Latin phrase “dolorem ipsum” (sorrow in itself). Thus, the truncated phrase leaves one page dangling with “do-”, while another begins with the now ubiquitous “lorem ipsum”.</div>
-</div>
-```
-</Example>
-
-<Example caption="**To continue a list that other content interrupts**, such as an image or an ad, give the wrapper that carries on the `counter-continue` class instead of `counter-start`. Its numbers pick up where the first list stopped." listing="<div class=&quot;listicle-wrapper counter-start&quot;>
-&#32;&#32;<div class=&quot;item counter-item&quot;>The passage experienced a surge in popularity during the 1960s when Letraset used it on their dry-transfer sheets, and again during the 90s as desktop publishers bundled the text with their software. Today it's seen all around the web; on templates, websites, and stock designs. Use our generator to get your own, or read on for the authoritative history of lorem ipsum.</div>
-&#32;&#32;<div class=&quot;item counter-item&quot;>Until recently, the prevailing view assumed lorem ipsum was born as a nonsense text. “It's not Latin, though it looks like it, and it actually says nothing,” Before &amp; After magazine answered a curious reader, “Its ‘words’ loosely approximate the frequency with which letters occur in English, which is why at a glance it looks pretty real.”</div>
-&#32;&#32;<div class=&quot;item counter-item&quot;>Richard McClintock, a Latin scholar from Hampden-Sydney College, is credited with discovering the source behind the ubiquitous filler text. In seeing a sample of lorem ipsum, his interest was piqued by consectetur—a genuine, albeit rare, Latin word. Consulting a Latin dictionary led McClintock to a passage from De Finibus Bonorum et Malorum (“On the Extremes of Good and Evil”), a first-century B.C. text from the Roman philosopher Cicero.</div>
-</div>
-<div class=&quot;image-container&quot; style=&quot;height: 300px; margin-bottom: 16px; background-image: url(/images/backgrounds/02.jpg); background-size:cover; background-position: center;&quot;></div>
-<div class=&quot;listicle-wrapper counter-continue&quot;>
-&#32;&#32;<div class=&quot;item counter-item&quot;>The passage experienced a surge in popularity during the 1960s when Letraset used it on their dry-transfer sheets, and again during the 90s as desktop publishers bundled the text with their software. Today it's seen all around the web; on templates, websites, and stock designs. Use our generator to get your own, or read on for the authoritative history of lorem ipsum.</div>
-&#32;&#32;<div class=&quot;item counter-item&quot;>Until recently, the prevailing view assumed lorem ipsum was born as a nonsense text. “It's not Latin, though it looks like it, and it actually says nothing,” Before &amp; After magazine answered a curious reader, “Its ‘words’ loosely approximate the frequency with which letters occur in English, which is why at a glance it looks pretty real.”</div>
-&#32;&#32;<div class=&quot;item counter-item&quot;>Richard McClintock, a Latin scholar from Hampden-Sydney College, is credited with discovering the source behind the ubiquitous filler text. In seeing a sample of lorem ipsum, his interest was piqued by consectetur—a genuine, albeit rare, Latin word. Consulting a Latin dictionary led McClintock to a passage from De Finibus Bonorum et Malorum (“On the Extremes of Good and Evil”), a first-century B.C. text from the Roman philosopher Cicero.</div>
-</div>">
-```scss
-.listicle-wrapper {
-  @include counter {
-    position: absolute;
-    top: 0;
-    left: 0;
-    font-size: 7em;
-    font-weight: bold;
-    font-style: italic;
-    font-family: "Jumble", sans-serif;
-    transform: translateY(-20%);
-    color: rgb(230,230,230);
-    line-height: 1;
-    z-index: -1;
-  };
-  .item {
-    position: relative;
-    padding-left: 50px;
-    &:not(:last-child) {
-        margin-bottom: 3rem;
-    }
-  }
-}
-```
-```html
-<div class="listicle-wrapper counter-start example10">
-  <div class="item counter-item"><strong>The passage experienced a surge in popularity</strong> during the 1960s when Letraset used it on their dry-transfer sheets, and again during the 90s as desktop publishers bundled the text with their software.</div>
-  <div class="item counter-item"><strong>Until recently</strong>, the prevailing view assumed lorem ipsum was born as a nonsense text.</div>
-  <div class="item counter-item"><strong>Richard McClintock</strong>, a Latin scholar from Hampden-Sydney College, is credited with discovering the source behind the ubiquitous filler text.</div>
-</div>
-<div class="image-container" style="height: 200px; margin: 3rem 0; border-radius: 6px; background-image: url(/images/backgrounds/02.jpg); background-size: cover; background-position: center;"></div>
-<div class="listicle-wrapper counter-continue example10">
-  <div class="item counter-item"><strong>It is difficult to find examples of lorem ipsum</strong> in use before Letraset made it popular as a dummy text in the 1960s.</div>
-  <div class="item counter-item"><strong>As an alternative theory</strong>, someone tracked down a 1914 Latin edition of De Finibus which challenges McClintock&#39;s 15th century claims.</div>
-  <div class="item counter-item"><strong>The 1914 Loeb Classical Library Edition</strong> ran out of room on page 34 for the Latin phrase dolorem ipsum.</div>
-</div>
-```
-</Example>
+</Hint>
 
 ## Related Links
 
+- [Before](/docs/before)
 - [Using CSS Counters](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Counter_styles/Using_counters)
-* [CSS Pseudo Element Counters...](https://stackoverflow.com/questions/16943805/css-pseudo-element-counters-can-you-increment-an-alphabet-letter-a-b-c)
-* [Numbering in Style](https://css-tricks.com/numbering-in-style/)
+- [CSS counter-set](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/counter-set)
+- [CSS @counter-style](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@counter-style)
+- [Numbering in Style](https://css-tricks.com/numbering-in-style/)

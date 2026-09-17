@@ -1,10 +1,112 @@
 @charset "UTF-8";
 
 @use "sass:list";
+@use "sass:map";
+@use "sass:math";
+@use "sass:meta";
+@use "sass:string";
 @use "../lists/list-of-counter-styles" as *;
 @use "../internal/is-css-function" as *;
 
+// Numbers the children of the element it is included in, with no classes in
+// the markup. Until 4.0.0 it needed `counter-start` on the list and
+// `counter-item` on each item, and incremented the counter in the item's
+// ::before. Measured in Chrome 152, Firefox 156 and Safari 26.6.2, that showed
+// 1 on every item once the items were containers (`container-type`), because
+// style containment scopes a counter-increment to the element's own subtree.
+// Incrementing on the item itself keeps the count in the list's scope.
+//
+// $continue takes the $name of the list to carry on from and leaves out the
+// counter-reset, so the count goes on from that list, which is how
+// `counter-continue` worked. It takes a name rather than `true` because every
+// list shares a counter unless named: with two lists split and interleaved on
+// one page, the second part of the first carried on from the other list. The
+// count reaches a later sibling of the list, or of an element around it, but not
+// one inside a sibling of an ancestor, nor through a list that is itself a
+// container. $start sets the first item's number with counter-set, which does
+// work there. All measured in Chrome 152, Firefox 156 and Safari 26.6.2.
+$-keywords: "continue" "start" "name" "items";
+$-reserved-names: "none" "inherit" "initial" "unset" "revert" "revert-layer" "default";
+
+// A whole number, or an unquoted string of one, which is what an interpolated
+// number such as `#{$n}` reaches the mixin as.
+@function -is-whole-number($value) {
+  @if meta.type-of($value) == "number" {
+    @return math.is-unitless($value) and math.round($value) == $value;
+  }
+  @if meta.type-of($value) == "calculation" {
+    @return true;
+  }
+  @if meta.type-of($value) != "string" or string.slice(meta.inspect($value), 1, 1) == "\"" {
+    @return false;
+  }
+  $text: $value;
+  @if string.slice($text, 1, 1) == "-" {
+    $text: string.slice($text, 2);
+  }
+  @if string.length($text) == 0 {
+    @return false;
+  }
+  @for $i from 1 through string.length($text) {
+    @if not string.index("0123456789", string.slice($text, $i, $i)) {
+      @return false;
+    }
+  }
+  @return true;
+}
+
+// Why a counter name is not usable, or null. A name is one CSS identifier.
+@function -name-problem($name) {
+  @if meta.type-of($name) != "string" or list.length($name) != 1 {
+    @return "not one word";
+  }
+  $text: "#{$name}";
+  @if string.length($text) == 0 or list.index($-reserved-names, string.to-lower-case($text)) {
+    @return "reserved";
+  }
+  @if string.index("0123456789", string.slice($text, 1, 1)) or (string.slice($text, 1, 1) == "-" and string.length($text) > 1 and string.index("0123456789", string.slice($text, 2, 2))) {
+    @return "starts with a digit";
+  }
+  @each $char in "(" ")" " " "." "," "/" "#" ":" ";" "[" "]" "{" "}" "!" "@" "$" "%" "^" "&" "*" "+" "=" "<" ">" "?" "|" "~" "`" "'" "\"" {
+    @if string.index($text, $char) {
+      @return "holds `#{$char}`";
+    }
+  }
+  @return null;
+}
+
 @mixin counter($params...) {
+  $keywords: meta.keywords($params);
+  @each $key, $value in $keywords {
+    @if not list.index($-keywords, $key) {
+      @error "`$#{$key}` is not an argument of `counter`. It takes a counter style, text before and after the number, `$continue`, `$start`, `$name` and `$items`.";
+    }
+  }
+  $continue: map.get($keywords, "continue");
+  $start: map.get($keywords, "start");
+  $name: map.get($keywords, "name");
+  $items: map.get($keywords, "items") or "*";
+
+  @if meta.type-of($continue) == "bool" {
+    @error "`$continue: #{$continue}` is not valid for `counter`. Pass the $name of the list to carry on from, such as `$continue: steps`, and give that list `$name: steps`.";
+  }
+  @if $continue != null and -name-problem($continue) {
+    @error "`#{$continue}` is not a valid $continue for `counter`. Pass the $name of the list to carry on from, one word such as `steps`.";
+  }
+  @if $name != null and -name-problem($name) {
+    @error "`#{$name}` is not a valid $name for `counter`. Pass one word, such as `steps`.";
+  }
+  @if $name != null and $continue != null and "#{$name}" != "#{$continue}" {
+    @error "`counter` was given `$name: #{$name}` and `$continue: #{$continue}`. A list that carries on counts with the counter it continues, so pass only `$continue: #{$continue}`.";
+  }
+  @if $start != null and not isCssFunction($start, "var" "calc" "min" "max" "clamp" "round" "attr") and not -is-whole-number($start) {
+    @error "`#{$start}` is not a valid $start for `counter`. Pass the first item's number as a whole number, such as `4`.";
+  }
+  $name: string.unquote("#{$continue or $name or glsCounter}");
+  @if meta.type-of($items) != "string" or string.length($items) == 0 {
+    @error "`#{$items}` is not a valid $items for `counter`. Pass a selector for the numbered children, such as `\"li\"` or `\".step\"`.";
+  }
+
   $counter: null;
   $counter-before: null;
   $counter-after: null;
@@ -44,16 +146,29 @@
   @if isCssFunction($counter-after, "var" "attr" "counter" "counters") {
     $quote-after: "";
   }
-  &.counter-start {
-    counter-reset: glsCounter;
+
+  @if $continue == null {
+    counter-reset: $name;
   }
-  &.counter-start .counter-item::before,
-  &.counter-continue .counter-item::before {
+  & > #{$items} {
+    counter-increment: $name;
+  }
+  // counter-set is applied after counter-increment, so the first item shows
+  // $start itself.
+  @if $start != null {
+    $first: ":nth-child(1 of #{$items})";
+    @if $items == "*" {
+      $first: "*:first-child";
+    }
+    & > #{$first} {
+      counter-set: $name $start;
+    }
+  }
+  & > #{$items}::before {
     content: #{if($counter-before, $quote-before + $counter-before + $quote-before + " ", null)}counter(
-        glsCounter#{if($counter, ", " + $counter, null)}
+        #{$name}#{if($counter, ", " + $counter, null)}
       )
       #{if($counter-after, " " + $quote-after + $counter-after + $quote-after, null)};
-    counter-increment: glsCounter;
     @content;
   }
 }

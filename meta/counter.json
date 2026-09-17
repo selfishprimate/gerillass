@@ -1,8 +1,12 @@
 {
   "name": "counter",
-  "summary": "CSS counter for a list, with optional text before and after the number.",
+  "summary": "Numbers the children of the element it is included in, with optional text before and after each number. No classes in the markup.",
   "caveats": [
-    "Numbering restarts on every item, each showing the first number, when the items are size containers (`container-type: inline-size`): containment scopes counters to each item."
+    "Since 4.0.0 the mixin numbers every direct child of the element it is included in. The `counter-start`, `counter-continue` and `counter-item` classes are no longer read. Pass `$items` to number only some children, such as `$items: \"li\"`.",
+    "`$continue` takes the `$name` of the list to carry on from, not `true`. Lists with no `$name` share one counter, so give every list that is split a name of its own: with two split lists interleaved on a page, the second part of one would otherwise carry on from the other.",
+    "A continued list must come after the named list, as a later sibling of it or of an element around it. Parts in separate `section`s restart at 1; reset the counter on an element around all of them, such as `.article { counter-reset: tips; }`, and pass `$continue: tips` to every part. Nothing carries a count into or out of a list that is a container (`container-type`); pass `$start` with the first number instead.",
+    "In Safari the number reads 0 when a numbered child is itself a container, since the `::before` inside it cannot see the list's counter. Chrome and Firefox show the right number. Put `container-type` on an element inside the child instead.",
+    "A child hidden with `content: none` on its `::before` still takes a number. Write `counter-increment: none` on it as well to skip it."
   ],
   "arguments": [
     {
@@ -11,7 +15,11 @@
         "a counter style name",
         "a prefix and/or suffix string",
         "a prefix, a counter style and a suffix",
-        "var(), attr(), counter() or counters() in place of a prefix or suffix, written as they are"
+        "var(), attr(), counter() or counters() in place of a prefix or suffix, written as they are",
+        "$name: the counter's name, one word, for a list that another list continues or that sits inside another list",
+        "$continue: the $name of an earlier list to carry on from instead of starting at 1",
+        "$start: the first child's number, a whole number, var() or a calculation",
+        "$items: a selector for the children to number, such as \"li\" or \".step\""
       ]
     }
   ],
@@ -19,7 +27,22 @@
     ".list { @include counter(\"decimal\"); }",
     ".list { @include counter(\".\"); }",
     ".list { @include counter(\"(\", \"decimal\", \")\"); }",
-    ".list { @include counter(var(--prefix), \"decimal\"); }"
+    ".list { @include counter(var(--prefix), \"decimal\"); }",
+    ".list { @include counter(decimal-leading-zero, $name: tips); }",
+    ".list-2 { @include counter(decimal-leading-zero, $continue: tips); }",
+    ".chapter-2 { @include counter(\"Step\", decimal, $start: 4); }",
+    ".steps { @include counter(decimal, $name: steps, $items: \".step\") { font-weight: 700; } }"
   ],
-  "rejects": []
+  "rejects": [
+    ".list { @include counter(decimal, $start: 1.5); }",
+    ".list { @include counter(decimal, $start: 4px); }",
+    ".list { @include counter(decimal, $name: none); }",
+    ".list { @include counter(decimal, $name: \"two words\"); }",
+    ".list { @include counter(decimal, $items: \"\"); }",
+    ".list { @include counter(decimal, $reset: true); }",
+    ".list { @include counter(decimal, $continue: true); }",
+    ".list { @include counter(decimal, $continue: \"a.b\"); }",
+    ".list { @include counter(decimal, $name: tips, $continue: faq); }",
+    ".list { @include counter(decimal, $name: 2x); }"
+  ]
 }

@@ -885,43 +885,100 @@ exports[`Manifest examples convertToNumber: .a { z-index: convertToNumber("42");
 }"
 `;
 
-exports[`Manifest examples counter: .list { @include counter("(", "decimal", ")"); } 1`] = `
-".list.counter-start {
+exports[`Manifest examples counter: .chapter-2 { @include counter("Step", decimal, $start: 4); } 1`] = `
+".chapter-2 {
   counter-reset: glsCounter;
 }
-.list.counter-start .counter-item::before, .list.counter-continue .counter-item::before {
-  content: "(" counter(glsCounter, decimal)  ")";
+.chapter-2 > * {
   counter-increment: glsCounter;
+}
+.chapter-2 > *:first-child {
+  counter-set: glsCounter 4;
+}
+.chapter-2 > *::before {
+  content: "Step" counter(glsCounter, decimal);
+}"
+`;
+
+exports[`Manifest examples counter: .list { @include counter("(", "decimal", ")"); } 1`] = `
+".list {
+  counter-reset: glsCounter;
+}
+.list > * {
+  counter-increment: glsCounter;
+}
+.list > *::before {
+  content: "(" counter(glsCounter, decimal)  ")";
 }"
 `;
 
 exports[`Manifest examples counter: .list { @include counter("."); } 1`] = `
-".list.counter-start {
+".list {
   counter-reset: glsCounter;
 }
-.list.counter-start .counter-item::before, .list.counter-continue .counter-item::before {
-  content: counter(glsCounter)  ".";
+.list > * {
   counter-increment: glsCounter;
+}
+.list > *::before {
+  content: counter(glsCounter)  ".";
 }"
 `;
 
 exports[`Manifest examples counter: .list { @include counter("decimal"); } 1`] = `
-".list.counter-start {
+".list {
   counter-reset: glsCounter;
 }
-.list.counter-start .counter-item::before, .list.counter-continue .counter-item::before {
-  content: counter(glsCounter, decimal);
+.list > * {
   counter-increment: glsCounter;
+}
+.list > *::before {
+  content: counter(glsCounter, decimal);
+}"
+`;
+
+exports[`Manifest examples counter: .list { @include counter(decimal-leading-zero, $name: tips); } 1`] = `
+".list {
+  counter-reset: tips;
+}
+.list > * {
+  counter-increment: tips;
+}
+.list > *::before {
+  content: counter(tips, decimal-leading-zero);
 }"
 `;
 
 exports[`Manifest examples counter: .list { @include counter(var(--prefix), "decimal"); } 1`] = `
-".list.counter-start {
+".list {
   counter-reset: glsCounter;
 }
-.list.counter-start .counter-item::before, .list.counter-continue .counter-item::before {
-  content: var(--prefix) counter(glsCounter, decimal);
+.list > * {
   counter-increment: glsCounter;
+}
+.list > *::before {
+  content: var(--prefix) counter(glsCounter, decimal);
+}"
+`;
+
+exports[`Manifest examples counter: .list-2 { @include counter(decimal-leading-zero, $continue: tips); } 1`] = `
+".list-2 > * {
+  counter-increment: tips;
+}
+.list-2 > *::before {
+  content: counter(tips, decimal-leading-zero);
+}"
+`;
+
+exports[`Manifest examples counter: .steps { @include counter(decimal, $name: steps, $items: ".step") { fo 1`] = `
+".steps {
+  counter-reset: steps;
+}
+.steps > .step {
+  counter-increment: steps;
+}
+.steps > .step::before {
+  content: counter(steps, decimal);
+  font-weight: 700;
 }"
 `;
 

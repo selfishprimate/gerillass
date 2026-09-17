@@ -155,7 +155,7 @@ The **Before** Sass mixin helps you generate content or a style element before t
 
 **This `counter()` is not the [Counter](/docs/counter) mixin.** `counter(step)` above is the CSS function that reads a counter's current value, and `before` passes it through, as it does `var()`, `attr()` and `counters()`. The counter itself, `step`, is created by `counter-reset: step` on the list and advanced by `counter-increment: step` on each item, which you write yourself, as in the Sass above.
 
-The Counter mixin does all three for you: it resets a counter on an element with the `counter-start` class, advances it on each child with the `counter-item` class, and writes the number into that child's `::before`, with optional text around it and your styles in the block. Reach for it when numbering a list is the whole job. Use `before` with `counter()` when the markup already has its own classes, when the number is one part of a longer `content`, or when you need a counter with a name of your own, for example to number two lists independently.
+The Counter mixin does all three for you: it resets a counter on the element you include it in, advances it on each child, and writes the number into that child's `::before`, with optional text around it and your styles in the block. Reach for it when numbering a list is the whole job. Use `before` with `counter()` when the number is one part of a longer `content`, or when the element that shows the number is not the one being counted.
 
 </Hint>
 

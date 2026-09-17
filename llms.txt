@@ -35,7 +35,7 @@ Arguments are validated and refused with a message naming what is accepted, so a
 - [columnizer($params...)](https://docs.gerillass.com/docs/columnizer/): Flexbox grid of equal columns, with an optional gutter written as gap and an optional fill for the last row.
 - [container-query($params...)](https://docs.gerillass.com/docs/container-query/): A @container rule, taking the same argument shapes as breakpoint so the two read alike.
 - [container($name: null, $type: inline-size)](https://docs.gerillass.com/docs/container/): Marks an element as a query container, so container-query can ask about its width instead of the viewport's.
-- [counter($params...)](https://docs.gerillass.com/docs/counter/): CSS counter for a list, with optional text before and after the number.
+- [counter($params...)](https://docs.gerillass.com/docs/counter/): Numbers the children of the element it is included in, with optional text before and after each number.
 - [ellipsis($width: 100%, $display: inline-block)](https://docs.gerillass.com/docs/ellipsis/): Truncates a single line of text with an ellipsis.
 - [escape-to-parent($selector: null)](https://docs.gerillass.com/docs/escape-to-parent/): Re-roots the current selector under another one using @at-root.
 - [except($params...)](https://docs.gerillass.com/docs/except/): Selects every sibling except the ones named.

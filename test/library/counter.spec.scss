@@ -1,0 +1,98 @@
+// Since 4.0.0 `counter` numbers the children of the element it is included in,
+// with no classes, and increments on the child rather than in its ::before, so
+// the count survives children that are containers. Measured in Chrome 152,
+// Firefox 156 and Safari 26.6.2.
+@use 'true' as *;
+@use '../../scss/library/counter' as *;
+
+@include describe('counter()') {
+  @include it('Resets on the list and numbers every direct child.') {
+    @include assert {
+      @include output {
+        .list {
+          @include counter(decimal-leading-zero);
+        }
+      }
+      @include expect {
+        .list {
+          counter-reset: glsCounter;
+        }
+        .list > * {
+          counter-increment: glsCounter;
+        }
+        .list > *::before {
+          content: counter(glsCounter, decimal-leading-zero);
+        }
+      }
+    }
+  }
+
+  @include it('With $continue, counts with the named counter and writes no reset.') {
+    @include assert {
+      @include output {
+        .list {
+          @include counter($continue: tips);
+        }
+      }
+      @include expect {
+        .list > * {
+          counter-increment: tips;
+        }
+        .list > *::before {
+          content: counter(tips);
+        }
+      }
+    }
+  }
+
+  @include it('With $start, sets the first child, which then shows that number.') {
+    @include assert {
+      @include output {
+        .list {
+          @include counter(decimal, $start: 4);
+        }
+      }
+      @include expect {
+        .list {
+          counter-reset: glsCounter;
+        }
+        .list > * {
+          counter-increment: glsCounter;
+        }
+        .list > *:first-child {
+          counter-set: glsCounter 4;
+        }
+        .list > *::before {
+          content: counter(glsCounter, decimal);
+        }
+      }
+    }
+  }
+
+  @include it('With $items and $name, numbers only matching children and sets the first of them.') {
+    @include assert {
+      @include output {
+        .steps {
+          @include counter("Step", decimal, $name: steps, $items: ".step", $start: #{2}) {
+            color: red;
+          }
+        }
+      }
+      @include expect {
+        .steps {
+          counter-reset: steps;
+        }
+        .steps > .step {
+          counter-increment: steps;
+        }
+        .steps > :nth-child(1 of .step) {
+          counter-set: steps 2;
+        }
+        .steps > .step::before {
+          content: "Step" counter(steps, decimal);
+          color: red;
+        }
+      }
+    }
+  }
+}
