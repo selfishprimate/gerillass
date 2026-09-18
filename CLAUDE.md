@@ -888,10 +888,11 @@ Two pieces of work are open:
   `aspect-ratio-height`; and `text-shadow` measuring its directions as angles,
   on `text-shadow`, branched from `counter`; and `text-stroke` with a `$style`
   that keeps the letterform, on `text-stroke`, branched from `text-shadow`; and
-  `background-dots` and `background-stripes` merged into a thirteen-pattern
+  `background-dots` and `background-stripes` merged into a twenty-pattern
   `background-pattern`, on `background-pattern`, branched from `text-stroke`.
-  The last three come from `todos/library-review.md`. Each has a
-  `MIGRATION.md` section.
+  The last three come from `todos/library-review.md`, and the last three
+  patterns, `glow`, `vignette` and `mesh`, from the survey in
+  `todos/saas-hero-backgrounds.md`. Each has a `MIGRATION.md` section.
 - **`todos/design-tokens.md`**: a token layer on `tokens`, starting with the
   decision whether to ship a palette.
 

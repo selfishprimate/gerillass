@@ -151,6 +151,8 @@ a dropped declaration rather than an error.
 - A diagonal hard edge is drawn with stair steps in Firefox 156 and smoothly in Chrome 152 and Safari 26.6.2, which shows in `zigzag`, `chevron` and `triangles`. Feathering the stop by half a pixel was measured and did not change it.
 - `gingham` draws its two bands at 55% of the colour, so the crossings darken on their own and an opaque colour still reads as cloth.
 - `sunburst` and `concentric` are drawn from the middle of the box rather than from a tile, so they do not repeat: `sunburst` takes `$angle` as the width of one ray, and `concentric` takes `$size` as the gap between rings.
+- `glow`, `vignette` and `mesh` are drawn once at the size of the box rather than tiled, so `$size` is how far the light reaches, one value or two, and `$origin` is where it comes from. They are what premium marketing pages use behind a hero, measured from what attio.com, retool.com and raycast.com actually serve; none of them blurs anything, since a radial gradient is already soft.
+- A mixin call writes `background-image`, so two calls on the same element replace one another rather than stacking. To fade a tiled pattern into the page, put the pattern on one element and a `vignette` in the page's colour on an element over it.
 
 **`before`**
 
@@ -247,7 +249,7 @@ a dropped declaration rather than an error.
 | `antialias($value: null)` | Turns on subpixel-antialiased text smoothing. |
 | `aspect-ratio($ratio: null, $fit: cover)` | Holds an element to a ratio and adds what CSS aspect-ratio alone leaves out: object-fit so an image is cropped rather than stretched, and border: 0 so an iframe does not overflow its container by 4px. Apply it to the element itself, not to a wrapper. |
 | `background-image($image-url: null, $filter-color: null, $filter-direction: null)` | Background image with an optional colour or gradient filter laid over it. |
-| `background-pattern($kind: dots, $params...)` | Seventeen geometric background patterns drawn with gradients alone: dots, stripes, grid, checkerboard, crosshatch, zigzag, chevron, triangles, isometric, honeycomb, brick, waves, houndstooth, gingham, harlequin, sunburst and concentric. |
+| `background-pattern($kind: dots, $params...)` | Twenty background patterns drawn with gradients alone: seventeen that tile, from dots and stripes to houndstooth and harlequin, and glow, vignette and mesh, which light the whole box. |
 | `before($content: null)` | Styles the ::before pseudo-element. A `data-` argument becomes an attr() content value. |
 | `border-box($value: null)` | Applies box-sizing: border-box. |
 | `border-radius($args...)` | Rounds corners, either all of them, one named corner, or all four individually. |

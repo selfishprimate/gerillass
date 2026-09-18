@@ -10,7 +10,8 @@
 @use "../internal/color-problem" as *;
 @use "../internal/length-problem" as *;
 
-// Seventeen geometric patterns drawn with gradients alone, no image and no SVG.
+// Twenty patterns drawn with gradients alone, no image and no SVG: seventeen
+// that tile, and three that light the whole box rather than repeat.
 // It replaces `background-dots` and `background-stripes`, which were the same
 // job written twice and disagreed on how an image underneath was layered.
 //
@@ -24,7 +25,7 @@
 //
 // The colours default to `currentColor` mixed with transparency, so a pattern
 // follows the text colour and needs nothing to work in dark mode.
-$-kinds: "dots" "stripes" "grid" "checkerboard" "crosshatch" "zigzag" "chevron" "triangles" "isometric" "honeycomb" "brick" "waves" "houndstooth" "gingham" "harlequin" "sunburst" "concentric";
+$-kinds: "dots" "stripes" "grid" "checkerboard" "crosshatch" "zigzag" "chevron" "triangles" "isometric" "honeycomb" "brick" "waves" "houndstooth" "gingham" "harlequin" "sunburst" "concentric" "glow" "vignette" "mesh";
 $-angle-units: "deg" "grad" "rad" "turn";
 
 // What each kind reads, so an argument it ignores can be refused rather than
@@ -46,8 +47,15 @@ $-takes: (
   "gingham": "color" "size" "thickness",
   "harlequin": "color" "size",
   "sunburst": "color" "angle",
-  "concentric": "color" "size" "thickness"
+  "concentric": "color" "size" "thickness",
+  "glow": "color" "size" "origin",
+  "vignette": "color" "size" "origin",
+  "mesh": "color"
 );
+
+// The three that light the box are drawn once, at its own size, rather than
+// tiled, so their $size is how far the light reaches and not a tile.
+$-lights: "glow" "vignette" "mesh";
 
 @function -name($value) {
   @return string.to-lower-case("#{$value}");
@@ -94,10 +102,10 @@ $-defaults: (1: 12%, 2: 6%, 3: 18%);
 
 @mixin background-pattern($kind: dots, $params...) {
   $keywords: meta.keywords($params);
-  $known: "color" "background" "size" "thickness" "angle" "axis" "stagger" "image";
+  $known: "color" "background" "size" "thickness" "angle" "axis" "stagger" "origin" "image";
   @each $key, $value in $keywords {
     @if not list.index($known, $key) {
-      @error "`$#{$key}` is not an argument of `background-pattern`. It takes a kind, then `$color`, `$background`, `$size`, `$thickness`, `$angle`, `$axis`, `$stagger` and `$image`.";
+      @error "`$#{$key}` is not an argument of `background-pattern`. It takes a kind, then `$color`, `$background`, `$size`, `$thickness`, `$angle`, `$axis`, `$stagger`, `$origin` and `$image`.";
     }
   }
   @if list.length($params) > 0 and list.length($keywords) != list.length($params) {
@@ -116,6 +124,7 @@ $-defaults: (1: 12%, 2: 6%, 3: 18%);
   $angle: map.get($keywords, "angle");
   $axis: map.get($keywords, "axis");
   $stagger: map.get($keywords, "stagger");
+  $origin: map.get($keywords, "origin");
   $image: map.get($keywords, "image");
 
   $takes: map.get($-takes, $name);
@@ -141,14 +150,29 @@ $-defaults: (1: 12%, 2: 6%, 3: 18%);
     }
   }
 
-  // The tile, and the line or dot inside it.
-  $size: $size or 2rem;
-  @if not isSize($size) {
-    @error "`#{meta.inspect($size)}` is not a valid $size for `background-pattern`. Pass a length, or var(), env() or a calculation such as `clamp()`.";
-  }
-  $problem: lengthProblem($size, $negative: false);
-  @if $problem {
-    @error "`#{meta.inspect($size)}` is not a valid $size for `background-pattern`: #{$problem}. A browser drops the pattern.";
+  // The tile, and the line or dot inside it. For the three that light the box
+  // the size is how far the light reaches, one value or two, and a percentage
+  // of the box is the usual way to write it.
+  @if list.index($-lights, $name) {
+    $size: $size or (90% 80%);
+    @if list.length($size) > 2 {
+      @error "`#{meta.inspect($size)}` is not a valid $size for the `#{$name}` pattern in `background-pattern`. Pass how far the light reaches, one value or two, such as `90% 80%`.";
+    }
+    @each $part in $size {
+      $problem: lengthProblem($part, $negative: false);
+      @if $problem {
+        @error "`#{meta.inspect($part)}` is not a valid $size for `background-pattern`: #{$problem}. A browser drops the gradient.";
+      }
+    }
+  } @else {
+    $size: $size or 2rem;
+    @if not isSize($size) {
+      @error "`#{meta.inspect($size)}` is not a valid $size for `background-pattern`. Pass a length, or var(), env() or a calculation such as `clamp()`.";
+    }
+    $problem: lengthProblem($size, $negative: false);
+    @if $problem {
+      @error "`#{meta.inspect($size)}` is not a valid $size for `background-pattern`: #{$problem}. A browser drops the pattern.";
+    }
   }
   // Checked before the default is derived: the default is a calc() this file
   // writes, which lengthProblem would read as a string rather than a size.
@@ -167,7 +191,10 @@ $-defaults: (1: 12%, 2: 6%, 3: 18%);
     } @else if $name == "gingham" {
       $factor: 0.5;
     }
-    $thickness: -times($size, $factor);
+    $thickness: 0;
+    @if not list.index($-lights, $name) {
+      $thickness: -times($size, $factor);
+    }
   }
 
   // An angle in any CSS unit, or a unitless number read as degrees, as
@@ -195,6 +222,23 @@ $-defaults: (1: 12%, 2: 6%, 3: 18%);
     @error "`#{meta.inspect($axis)}` is not a valid $axis for `background-pattern`. Pass `both`, `block` for horizontal lines only, or `inline` for vertical lines only.";
   }
   $axis: -name($axis or both);
+
+  @if $origin != null {
+    @if list.length($origin) > 2 {
+      @error "`#{meta.inspect($origin)}` is not a valid $origin for `background-pattern`. Pass where the light comes from, such as `50% 100%` or `top left`.";
+    }
+    @each $part in $origin {
+      @if meta.type-of($part) != "number" and not list.index("top" "right" "bottom" "left" "center", -name($part)) and not isSize($part) {
+        @error "`#{meta.inspect($part)}` is not a valid $origin for `background-pattern`. Pass a length, a percentage, or one of `top`, `right`, `bottom`, `left` and `center`.";
+      }
+    }
+  }
+  @if $origin == null {
+    $origin: 50% 100%;
+    @if $name == "vignette" {
+      $origin: 50% 50%;
+    }
+  }
 
   @if $stagger != null and meta.type-of($stagger) != "bool" {
     @error "`#{meta.inspect($stagger)}` is not a valid $stagger for `background-pattern`. Pass `false` to line the dots up in a grid rather than staggering them.";
@@ -376,6 +420,29 @@ $-defaults: (1: 12%, 2: 6%, 3: 18%);
     $images: ("repeating-conic-gradient(from 0deg at 50% 50%, #{$c1} 0 #{$angle}, #{$none} 0 #{-times($angle, 2)})");
   } @else if $name == "concentric" {
     $images: ("repeating-radial-gradient(circle at 50% 50%, #{$c1} 0 #{$t}, #{$none} #{$t} #{$s})");
+  } @else if $name == "glow" {
+    // One ellipse of light, as attio.com and retool.com draw theirs: no blur,
+    // just a gradient that stops before the edges of the box.
+    $stops: "#{$c1} 0%, #{$c2} 45%, #{$none} 100%";
+    $images: ("radial-gradient(#{$size} at #{$origin}, #{$stops})");
+  } @else if $name == "vignette" {
+    // The other way round: clear in the middle and the colour at the edges,
+    // which is how a pattern is faded into the page without a mask.
+    $images: ("radial-gradient(#{$size} at #{$origin}, #{$none} 40%, #{$c1} 100%)");
+  } @else if $name == "mesh" {
+    // Blobs of colour in the corners and the middle, the static half of the
+    // aurora look. The blur everyone reaches for is not needed: a radial
+    // gradient is already soft.
+    $places: "20% 25%", "80% 20%", "65% 80%";
+    $colors: $c1, $c2, $c3;
+    @if $color != null and list.length($color) > 3 {
+      $places: "18% 22%", "82% 18%", "70% 82%", "25% 85%";
+      $colors: list.append($colors, list.nth($color, 4), comma);
+    }
+    $images: ();
+    @for $i from 1 through list.length($places) {
+      $images: list.append($images, "radial-gradient(at #{list.nth($places, $i)}, #{list.nth($colors, $i)} 0px, #{$none} 55%)", comma);
+    }
   } @else if $name == "houndstooth" {
     // Antoine Bernier's three layers, where the second colour is the ground the
     // teeth sit on, so it is written as the background colour when none is given.

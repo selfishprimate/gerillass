@@ -679,7 +679,7 @@ such as `inside` names the three that exist.
 
 Both are removed, as `linear-gradient` and `radial-gradient` were in 3.0.0, and
 a call to either stops the build with Sass's `Undefined mixin`. One mixin now
-draws thirteen patterns, and its arguments are named rather than positional.
+draws twenty patterns, and its arguments are named rather than positional.
 
 | 3.x | 4.0.0 |
 |---|---|
@@ -717,12 +717,18 @@ old call right to left when you move it.
   a tile apart rather than at a half and a double offset, so the arrangement is
   even. `$stagger: false` is the old `$diagonal: false`.
 
-### The fifteen new patterns
+### The eighteen new patterns
 
-`grid`, `checkerboard`, `crosshatch`, `zigzag`, `chevron`, `triangles`,
-`isometric`, `honeycomb`, `brick`, `waves`, `houndstooth`, `gingham`,
-`harlequin`, `sunburst` and `concentric`, each one include.
-All thirteen were drawn in Chrome 152, Firefox 156 and Safari 26.6.2, and the
+Fifteen that tile: `grid`, `checkerboard`, `crosshatch`, `zigzag`, `chevron`,
+`triangles`, `isometric`, `honeycomb`, `brick`, `waves`, `houndstooth`,
+`gingham`, `harlequin`, `sunburst` and `concentric`, each one include. And
+three that light the whole box rather than tiling, which is what the premium
+marketing pages put behind a hero: `glow`, one ellipse of light, `vignette`,
+the same gradient turned round so the colour sits at the edges, and `mesh`,
+three or four blobs of colour. Those three read `$origin`, where the light
+comes from, and their `$size` is how far it reaches rather than a tile.
+
+All twenty were drawn in Chrome 152, Firefox 156 and Safari 26.6.2, and the
 three lay them out identically; Firefox draws a hard diagonal edge with visible
 stair steps where the other two smooth it, which shows in `zigzag`, `chevron`
 and `triangles`.

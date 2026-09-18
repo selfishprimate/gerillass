@@ -1,8 +1,8 @@
 ---
 title: "Background Pattern"
 page_title: "Background Pattern Sass Mixin"
-page_description: "Seventeen geometric background patterns from one line of Sass: dots, stripes, grid, checkerboard, crosshatch, zigzag, chevron, triangles, isometric, honeycomb, brick, waves, houndstooth, gingham, harlequin, sunburst and concentric, all drawn with CSS gradients."
-page_keywords: "CSS Background Pattern, CSS Pattern Generator, Sass Background Pattern, CSS Polka Dots, CSS Stripes, CSS Grid Background, CSS Checkerboard, CSS Isometric Pattern, CSS Honeycomb, CSS Houndstooth, CSS Gradient Patterns"
+page_description: "Twenty background patterns from one line of Sass: dots, stripes, grid, checkerboard, crosshatch, zigzag, chevron, triangles, isometric, honeycomb, brick, waves, houndstooth, gingham, harlequin, sunburst, concentric, glow, vignette and mesh, all drawn with CSS gradients."
+page_keywords: "CSS Background Pattern, CSS Pattern Generator, Sass Background Pattern, CSS Polka Dots, CSS Stripes, CSS Grid Background, CSS Checkerboard, CSS Isometric Pattern, CSS Honeycomb, CSS Houndstooth, CSS Gradient Patterns, CSS Mesh Gradient, CSS Glow Background, CSS Vignette"
 page_image: "gerillass-background-pattern.jpg"
 aliases:
   - /docs/background-dots/
@@ -13,7 +13,7 @@ aliases:
 
 <Member name="background-pattern">
 
-The **Background Pattern Sass mixin** draws seventeen geometric patterns with CSS gradients alone: no image file, no SVG, and nothing to download. Pass the pattern's name, and optionally its colours, its tile and the line inside it.
+The **Background Pattern Sass mixin** draws twenty patterns with CSS gradients alone: no image file, no SVG, and nothing to download. Seventeen of them tile, from dots and stripes to houndstooth and harlequin, and three light the whole box, which is what the expensive looking marketing pages put behind a hero. Pass the pattern's name, and optionally its colours, its tile and the line inside it.
 
 </Member>
 
@@ -26,20 +26,21 @@ The **Background Pattern Sass mixin** draws seventeen geometric patterns with CS
 ## Arguments
 
 <Arguments of="background-pattern" footnote="Each pattern reads only the arguments it needs, and passing one it ignores raises rather than doing nothing quietly.">
-  <Argument name="$kind" type="string">Which pattern: <code>dots</code>, <code>stripes</code>, <code>grid</code>, <code>checkerboard</code>, <code>crosshatch</code>, <code>zigzag</code>, <code>chevron</code>, <code>triangles</code>, <code>isometric</code>, <code>honeycomb</code>, <code>brick</code>, <code>waves</code>, <code>houndstooth</code>, <code>gingham</code>, <code>harlequin</code>, <code>sunburst</code> or <code>concentric</code>.</Argument>
+  <Argument name="$kind" type="string">Which pattern: <code>dots</code>, <code>stripes</code>, <code>grid</code>, <code>checkerboard</code>, <code>crosshatch</code>, <code>zigzag</code>, <code>chevron</code>, <code>triangles</code>, <code>isometric</code>, <code>honeycomb</code>, <code>brick</code>, <code>waves</code>, <code>houndstooth</code>, <code>gingham</code>, <code>harlequin</code>, <code>sunburst</code>, <code>concentric</code>, <code>glow</code>, <code>vignette</code> or <code>mesh</code>.</Argument>
   <Argument name="$color" type="color, list">One colour, or two or three for the patterns that layer them. The default is <code>currentColor</code> mixed with transparency, so a pattern follows the text colour.</Argument>
   <Argument name="$background" type="color">The colour under the pattern, written as <code>background-color</code>.</Argument>
-  <Argument name="$size" type="number">The tile. The default is <code>2rem</code>. A <code>var()</code> or <code>calc()</code> works, and every offset is derived from it.</Argument>
+  <Argument name="$size" type="number">The tile. The default is <code>2rem</code>. A <code>var()</code> or <code>calc()</code> works, and every offset is derived from it. For <code>glow</code> and <code>vignette</code> there is no tile: it is how far the light reaches, one value or two, and the default is <code>90% 80%</code>.</Argument>
   <Argument name="$thickness" type="number">The line, dot or mortar inside the tile. The default is a tenth of the tile for <code>dots</code> and an eighth for the rest.</Argument>
   <Argument name="$angle" type="number">For <code>stripes</code>, <code>crosshatch</code>, <code>zigzag</code> and <code>triangles</code>: an angle such as <code>-45deg</code>, or a unitless number read as degrees. For <code>sunburst</code>: how wide one ray is.</Argument>
   <Argument name="$axis" type="string">For <code>grid</code>: <code>both</code>, <code>block</code> for horizontal lines only, or <code>inline</code> for vertical lines only.</Argument>
   <Argument name="$stagger" type="boolean">For <code>dots</code>, <code>false</code> lines them up in a grid instead of offsetting every other row.</Argument>
+  <Argument name="$origin" type="string">For <code>glow</code> and <code>vignette</code>: where the light comes from, such as <code>50% 100%</code> or <code>top left</code>. The default is the bottom edge for <code>glow</code> and the middle for <code>vignette</code>.</Argument>
   <Argument name="$image" type="string">An image path, laid under the pattern as the last layer. Refused by the patterns that paint every pixel, since it would never be seen.</Argument>
 </Arguments>
 
 ## Patterns
 
-Each pattern below is its own section, with the colours and the tile changed from one example to the next.
+Each pattern below is its own section, with the colours and the tile changed from one example to the next. The last three, `glow`, `vignette` and `mesh`, are drawn once at the size of the box rather than tiled.
 
 ### Dots
 
@@ -726,9 +727,147 @@ Each pattern below is its own section, with the colours and the tile changed fro
 ```
 </Example>
 
+### Glow
+
+<Example caption="One ellipse of light rising from the bottom edge, which is the hero background attio.com ships. Nothing is blurred: a radial gradient is already soft. `$color` takes two, the middle of the light and the colour it fades through.">
+```scss
+.hero {
+  @include background-pattern(glow, $color: #e6ecff #bccbff, $background: #f8fafc);
+}
+```
+```html
+<style>
+  .hero { display: grid; place-items: center; gap: 14px; height: 220px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; text-align: center; }
+  .hero h4 { margin: 0; font-size: 26px; font-weight: 700; color: #1e1b4b; }
+  .hero span { padding: 10px 18px; border-radius: 999px; background: #1e1b4b; font-weight: 600; color: #fff; }
+</style>
+<div class="hero">
+  <h4>Every account, one place</h4>
+  <span>Start for free</span>
+</div>
+```
+</Example>
+
+<Example caption="`$origin` is where the light comes from and `$size` how far it reaches, so a corner bloom on a dark page is two arguments. This is retool.com's, one layer of it.">
+```scss
+.panel {
+  @include background-pattern(glow, $color: #2d4c71 #14243a, $background: #0b1220, $origin: 0% 100%, $size: 80% 70%);
+}
+```
+```html
+<style>
+  .panel { display: grid; align-content: end; gap: 8px; height: 220px; padding: 24px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #cbd5e1; }
+  .panel h4 { margin: 0; font-size: 22px; font-weight: 700; color: #f8fafc; }
+</style>
+<div class="panel">
+  <h4>Built for the back office</h4>
+  <p>Ship the internal tool this afternoon.</p>
+</div>
+```
+</Example>
+
+<Example caption="A warm glow from the top right, over a photograph. The picture is the last layer, so the light sits on it.">
+```scss
+.cover {
+  @include background-pattern(glow, $color: rgb(251 191 36 / 0.55) rgb(249 115 22 / 0.3), $origin: 100% 0%, $size: 70% 90%, $image: "/images/backgrounds/06.jpg");
+}
+```
+```html
+<style>
+  .cover { aspect-ratio: 4 / 3; border-radius: 10px; }
+</style>
+<div class="cover"></div>
+```
+</Example>
+
+### Vignette
+
+<Example caption="The other way round: clear in the middle, the colour at the edges. Over a photograph it is the oldest trick there is for keeping the eye off the corners.">
+```scss
+.photo {
+  @include background-pattern(vignette, $color: rgb(2 6 23 / 0.8), $size: 78% 72%, $image: "/images/backgrounds/04.jpg");
+}
+```
+```html
+<style>
+  .photo { aspect-ratio: 4 / 3; border-radius: 10px; }
+</style>
+<div class="photo"></div>
+```
+</Example>
+
+<Example caption="With no image it lights a flat panel, which is enough to put a quote in the middle of.">
+```scss
+.quote {
+  @include background-pattern(vignette, $color: rgb(2 6 23 / 0.8), $background: #1e293b, $size: 70% 70%);
+}
+```
+```html
+<style>
+  .quote { display: grid; place-items: center; height: 200px; padding: 32px; border-radius: 10px; font: 17px/1.6 Inter, ui-sans-serif, system-ui, sans-serif; text-align: center; color: #e2e8f0; }
+</style>
+<div class="quote">“We replaced four spreadsheets with one page.”</div>
+```
+</Example>
+
+<Example caption="A vignette in the page's own colour fades a pattern out at the edges. It takes two elements, since a second call would replace the first: one mixin call writes one `background-image`.">
+```scss
+.plan {
+  @include background-pattern(grid, $color: rgb(30 64 175 / 0.35), $background: #f8fafc, $size: 22px, $thickness: 1px);
+}
+
+.plan__fade {
+  @include background-pattern(vignette, $color: #f8fafc, $size: 60% 55%);
+}
+```
+```html
+<style>
+  .plan { height: 200px; border-radius: 10px; }
+  .plan__fade { display: grid; place-items: center; height: 100%; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; font-weight: 600; color: #1e3a8a; }
+</style>
+<div class="plan"><div class="plan__fade">Draw the floor plan</div></div>
+```
+</Example>
+
+### Mesh
+
+<Example caption="Three blobs of colour and a ground, the static half of the aurora look. Every colour after the first moves to its own corner.">
+```scss
+.aurora {
+  @include background-pattern(mesh, $color: #f0abfc #67e8f9 #fdba74, $background: #faf5ff);
+}
+```
+```html
+<style>
+  .aurora { display: grid; place-items: center; gap: 12px; height: 220px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; text-align: center; }
+  .aurora h4 { margin: 0; font-size: 26px; font-weight: 700; color: #3b0764; }
+  .aurora p { margin: 0; color: #6b21a8; }
+</style>
+<div class="aurora">
+  <h4>Design without the file</h4>
+  <p>Open it anywhere, it is already there.</p>
+</div>
+```
+</Example>
+
+<Example caption="A fourth colour adds a fourth blob, in the bottom left. Saturated colours on a dark ground are what the app screenshot pages use.">
+```scss
+.stage {
+  @include background-pattern(mesh, $color: rgb(124 58 237 / 0.55) rgb(14 165 233 / 0.5) rgb(244 63 94 / 0.45) rgb(34 197 94 / 0.4), $background: #0b1220);
+}
+```
+```html
+<style>
+  .stage { display: grid; place-items: center; height: 220px; padding: 24px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .stage span { padding: 18px 26px; border-radius: 12px; background: rgb(15 23 42 / 0.72); font-weight: 600; color: #e2e8f0; }
+</style>
+<div class="stage"><span>Your dashboard, on a good day</span></div>
+```
+</Example>
+
 <Hint kind="info">
 
-**Which patterns let an image through.** The image is the last background layer, so it shows wherever the pattern leaves a gap. Rendered in Chrome 152, Firefox 156 and Safari 26.6.2: `dots`, `grid`, `crosshatch`, `zigzag`, `chevron`, `triangles`, `waves`, `brick`, `houndstooth`, `gingham`, `harlequin` and `stripes` in one colour show the picture through. Four cover every pixel of it: `checkerboard`, `isometric` and `honeycomb` with their solid faces, and `stripes` with more than one colour, since the colours fill the whole period. Those four refuse `$image` instead of hiding it, and the message says what to do: a pattern with gaps, or one colour.
+**Which patterns let an image through.** The image is the last background layer, so it shows wherever the pattern leaves a gap. Rendered in Chrome 152, Firefox 156 and Safari 26.6.2: `dots`, `grid`, `crosshatch`, `zigzag`, `chevron`, `triangles`, `waves`, `brick`, `houndstooth`, `gingham`, `harlequin`, `glow`, `vignette`, `mesh` and `stripes` in one colour show the picture through. Four cover every pixel of it: `checkerboard`, `isometric` and `honeycomb` with their solid faces, and `stripes` with more than one colour, since the colours fill the whole period. Those four refuse `$image` instead of hiding it, and the message says what to do: a pattern with gaps, or one colour.
 
 </Hint>
 
