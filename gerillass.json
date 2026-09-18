@@ -277,7 +277,7 @@
           "name": "$kind",
           "default": "dots",
           "accepts": [
-            "dots, stripes, grid, checkerboard, crosshatch, zigzag, chevron, triangles, isometric, honeycomb, brick, waves, houndstooth, gingham, harlequin, terrazzo",
+            "dots, stripes, grid, checkerboard, crosshatch, zigzag, chevron, triangles, isometric, honeycomb, brick, waves, houndstooth, gingham, harlequin, terrazzo, confetti",
             "the name in any case; anything else is refused with the list"
           ]
         },
@@ -288,17 +288,14 @@
       ],
       "file": "scss/library/_background-pattern.scss",
       "signature": "background-pattern($kind: dots, $params...)",
-      "summary": "Sixteen geometric background patterns: dots, stripes, grid, checkerboard, crosshatch, zigzag, chevron, triangles, isometric, honeycomb, brick, waves, houndstooth, gingham, harlequin and terrazzo.",
+      "summary": "Seventeen geometric background patterns drawn with gradients alone: dots, stripes, grid, checkerboard, crosshatch, zigzag, chevron, triangles, isometric, honeycomb, brick, waves, houndstooth, gingham, harlequin, terrazzo and confetti.",
       "caveats": [
         "It replaces `background-dots` and `background-stripes`, which are removed in 4.0.0. `background-pattern(dots, ...)` and `background-pattern(stripes, ...)` take their place, with the arguments named rather than positional.",
         "A pattern is decorative. In forced colours mode a browser sets `background-image` to `none` for anything that is not a `url()`, so every pattern here disappears: never carry meaning in one.",
         "The colours default to `currentColor` mixed with transparency, so a pattern follows the text colour in either colour scheme. Pass `$color` for one to three colours, in the order the pattern layers them.",
         "Only `background-image`, `background-size`, `background-position`, `background-repeat` and, when asked for, `background-color` are written. The `background` shorthand would reset a `background-color` set before the include.",
         "A diagonal hard edge is drawn with stair steps in Firefox 156 and smoothly in Chrome 152 and Safari 26.6.2, which shows in `zigzag`, `chevron` and `triangles`. Feathering the stop by half a pixel was measured and did not change it.",
-        "Each kind reads only the arguments it needs, and an argument it ignores raises rather than doing nothing: `$angle` belongs to `stripes`, `crosshatch`, `zigzag` and `triangles`, `$thickness` to `dots`, `stripes`, `grid`, `crosshatch`, `zigzag`, `brick` and `waves`, `$axis` to `grid`, `$stagger` to `dots`, and `$style` to `isometric`, `honeycomb` and `brick`.",
-        "`isometric`, `honeycomb` and `brick` draw solid shapes by default, and `$style: line` draws the same shapes as an outline: cubes, a hexagon grid, and a running bond of mortar lines. A gradient cannot draw that outline, since its lines have to break along their own direction, so the tile is written as an inline SVG data URI. That tile carries its own colour and its own line width, which a browser value cannot reach inside: with `$style: line` the colour must be a real colour rather than `currentColor`, `var()` or `color-mix()`, and the size and the thickness must be lengths this stylesheet can resolve. All of it raises rather than drawing nothing.",
-        "An image goes under the pattern as the last background layer, so it is only seen where the pattern leaves a gap. Rendered in Chrome 152, Firefox 156 and Safari 26.6.2: dots, grid, crosshatch, zigzag, chevron, triangles, waves, brick, houndstooth, one-colour stripes and every `$style: line` pattern show it; checkerboard, solid isometric and honeycomb, and stripes with more than one colour cover it completely, and those four refuse `$image` rather than hiding it.",
-        "`gingham` draws its two bands at 55% of the colour, so the crossings darken on their own and an opaque colour still reads as cloth. `terrazzo` is an inline SVG like the `$style: line` patterns, so its chips need real colours and a size this stylesheet can resolve; their places in the tile are fixed, so the same call always draws the same floor."
+        "`gingham` draws its two bands at 55% of the colour, so the crossings darken on their own and an opaque colour still reads as cloth. `terrazzo` and `confetti` scatter one radial gradient per chip, at places written into the mixin rather than drawn at random, so the same call always gives the same floor; each chip is an ellipse, because a circle's radius cannot be a percentage."
       ],
       "examples": [
         ".a { @include background-pattern(dots); }",
@@ -317,13 +314,11 @@
         ".a { @include background-pattern(grid, $axis: block, $color: #bae6fd, $size: 1.75rem, $thickness: 1px); }",
         ".a { @include background-pattern(dots, $size: var(--tile), $color: var(--ink)); }",
         ".a { @include background-pattern(dots, $color: #94a3b8, $size: 18px, $stagger: false); }",
-        ".a { @include background-pattern(isometric, $style: line, $color: #334155, $background: #f8fafc, $size: 22px, $thickness: 1px); }",
-        ".a { @include background-pattern(honeycomb, $style: line, $color: #b45309, $background: #fffbeb, $size: 24px, $thickness: 1.5px); }",
-        ".a { @include background-pattern(brick, $style: line, $color: #b91c1c, $background: #fee2e2, $size: 60px, $thickness: 2px); }",
         ".a { @include background-pattern(dots, $color: rgb(255 255 255 / 0.5), $size: 22px, $image: \"/img/a.png\"); }",
         ".a { @include background-pattern(gingham, $color: #1d4ed8, $size: 40px); }",
         ".a { @include background-pattern(harlequin, $color: #0f766e, $background: #ccfbf1, $size: 44px); }",
-        ".a { @include background-pattern(terrazzo, $color: #f97316 #0ea5e9 #16a34a, $background: #f8fafc, $size: 140px); }"
+        ".a { @include background-pattern(terrazzo, $color: #f97316 #0ea5e9 #16a34a, $background: #f8fafc, $size: 140px); }",
+        ".a { @include background-pattern(confetti, $color: #f43f5e #22d3ee #a3e635, $size: 120px); }"
       ],
       "rejects": [
         ".a { @include background-pattern(spiral); }",
@@ -339,17 +334,10 @@
         ".a { @include background-pattern(dots, 2rem); }",
         ".a { @include background-pattern(dots, $thickness: -2px); }",
         ".a { @include background-pattern(stripes, $stagger: false); }",
-        ".a { @include background-pattern(isometric, $style: outline); }",
-        ".a { @include background-pattern(dots, $style: line); }",
-        ".a { @include background-pattern(isometric, $style: line, $color: currentColor); }",
-        ".a { @include background-pattern(isometric, $style: line, $size: var(--tile)); }",
-        ".a { @include background-pattern(honeycomb, $style: line, $color: var(--ink)); }",
-        ".a { @include background-pattern(brick, $style: line, $size: var(--tile)); }",
         ".a { @include background-pattern(checkerboard, $image: \"/img/a.png\"); }",
         ".a { @include background-pattern(isometric, $image: \"/img/a.png\"); }",
         ".a { @include background-pattern(stripes, $color: red blue, $image: \"/img/a.png\"); }",
-        ".a { @include background-pattern(terrazzo, $color: currentColor); }",
-        ".a { @include background-pattern(gingham, $style: line); }"
+        ".a { @include background-pattern(terrazzo, $thickness: 2px); }"
       ]
     },
     {

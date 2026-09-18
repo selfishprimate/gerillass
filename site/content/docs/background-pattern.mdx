@@ -1,7 +1,7 @@
 ---
 title: "Background Pattern"
 page_title: "Background Pattern Sass Mixin"
-page_description: "Sixteen geometric background patterns from one line of Sass: dots, stripes, grid, checkerboard, crosshatch, zigzag, chevron, triangles, isometric, honeycomb, brick, waves, houndstooth, gingham, harlequin and terrazzo."
+page_description: "Seventeen geometric background patterns from one line of Sass: dots, stripes, grid, checkerboard, crosshatch, zigzag, chevron, triangles, isometric, honeycomb, brick, waves, houndstooth, gingham, harlequin, terrazzo and confetti, all drawn with CSS gradients."
 page_keywords: "CSS Background Pattern, CSS Pattern Generator, Sass Background Pattern, CSS Polka Dots, CSS Stripes, CSS Grid Background, CSS Checkerboard, CSS Isometric Pattern, CSS Honeycomb, CSS Houndstooth, CSS Gradient Patterns"
 page_image: "gerillass-background-pattern.jpg"
 aliases:
@@ -13,7 +13,7 @@ aliases:
 
 <Member name="background-pattern">
 
-The **Background Pattern Sass mixin** draws sixteen geometric patterns, thirteen of them with CSS gradients alone and the rest from an inline SVG tile. No image file, and nothing to download. Pass the pattern's name, and optionally its colours, its tile and the line inside it.
+The **Background Pattern Sass mixin** draws seventeen geometric patterns with CSS gradients alone: no image file, no SVG, and nothing to download. Pass the pattern's name, and optionally its colours, its tile and the line inside it.
 
 </Member>
 
@@ -26,7 +26,7 @@ The **Background Pattern Sass mixin** draws sixteen geometric patterns, thirteen
 ## Arguments
 
 <Arguments of="background-pattern" footnote="Each pattern reads only the arguments it needs, and passing one it ignores raises rather than doing nothing quietly.">
-  <Argument name="$kind" type="string">Which pattern: <code>dots</code>, <code>stripes</code>, <code>grid</code>, <code>checkerboard</code>, <code>crosshatch</code>, <code>zigzag</code>, <code>chevron</code>, <code>triangles</code>, <code>isometric</code>, <code>honeycomb</code>, <code>brick</code>, <code>waves</code>, <code>houndstooth</code>, <code>gingham</code>, <code>harlequin</code> or <code>terrazzo</code>.</Argument>
+  <Argument name="$kind" type="string">Which pattern: <code>dots</code>, <code>stripes</code>, <code>grid</code>, <code>checkerboard</code>, <code>crosshatch</code>, <code>zigzag</code>, <code>chevron</code>, <code>triangles</code>, <code>isometric</code>, <code>honeycomb</code>, <code>brick</code>, <code>waves</code>, <code>houndstooth</code>, <code>gingham</code>, <code>harlequin</code>, <code>terrazzo</code> or <code>confetti</code>.</Argument>
   <Argument name="$color" type="color, list">One colour, or two or three for the patterns that layer them. The default is <code>currentColor</code> mixed with transparency, so a pattern follows the text colour.</Argument>
   <Argument name="$background" type="color">The colour under the pattern, written as <code>background-color</code>.</Argument>
   <Argument name="$size" type="number">The tile. The default is <code>2rem</code>. A <code>var()</code> or <code>calc()</code> works, and every offset is derived from it.</Argument>
@@ -34,7 +34,6 @@ The **Background Pattern Sass mixin** draws sixteen geometric patterns, thirteen
   <Argument name="$angle" type="number">For <code>stripes</code>, <code>crosshatch</code>, <code>zigzag</code> and <code>triangles</code>: an angle such as <code>-45deg</code>, or a unitless number read as degrees.</Argument>
   <Argument name="$axis" type="string">For <code>grid</code>: <code>both</code>, <code>block</code> for horizontal lines only, or <code>inline</code> for vertical lines only.</Argument>
   <Argument name="$stagger" type="boolean">For <code>dots</code>: <code>false</code> lines the dots up in a grid instead of offsetting every other row.</Argument>
-  <Argument name="$style" type="string">For <code>isometric</code>, <code>honeycomb</code> and <code>brick</code>: <code>fill</code>, the default, or <code>line</code>, which draws the same shapes as an outline through an inline SVG tile.</Argument>
   <Argument name="$image" type="string">An image path, laid under the pattern as the last layer. Refused by the patterns that paint every pixel, since it would never be seen.</Argument>
 </Arguments>
 
@@ -469,42 +468,6 @@ Each pattern below is its own section, with the colours and the tile changed fro
 ```
 </Example>
 
-<Example caption="`$style: line` draws the same cubes as an outline, so the pattern keeps its depth without filling anything. `$size` is the cube's side and `$thickness` the line.">
-```scss
-.grid-paper {
-  @include background-pattern(isometric, $style: line, $color: #94a3b8, $background: #fff, $size: 24px, $thickness: 1px);
-}
-```
-```html
-<style>
-  .grid-paper { display: grid; place-items: center; height: 170px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #475569; }
-</style>
-<div class="grid-paper">Sketch here</div>
-```
-</Example>
-
-<Example caption="The same outline in reverse, pale lines on a dark ground, at a larger cube.">
-```scss
-.blueprint {
-  @include background-pattern(isometric, $style: line, $color: rgb(255 255 255 / 0.4), $background: #0f172a, $size: 34px, $thickness: 1px);
-}
-```
-```html
-<style>
-  .blueprint { display: grid; place-items: center; height: 170px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #e2e8f0; }
-</style>
-<div class="blueprint">Warehouse plan</div>
-```
-</Example>
-
-<Hint kind="info">
-
-**How the outline is drawn.** This is the one thing on the page that is not a gradient. Gradients cannot draw it: an outline needs each line broken along its own direction, and a gradient varies across its direction, not along it. Stacking the filled pattern over an offset copy hides the lower one entirely, and thin conic spokes give lines that thicken as they leave the centre of each tile; both were tried. So `$style: line`, on `isometric`, `honeycomb` and `brick`, writes the tile as an inline SVG, drawn in the stylesheet and carried in the `url()` itself, with no file to download.
-
-That tile is its own little document, and the page's colours do not reach inside it. With `$style: line` the colour has to be a real colour rather than `currentColor`, `var()` or `color-mix()`, and the size and the line have to be lengths, not `var()`. Each of those raises rather than drawing nothing. Everything else on this page is gradients only.
-
-</Hint>
-
 ### Honeycomb
 
 <Example caption="A community panel, where the three colours give the cells their depth.">
@@ -536,34 +499,6 @@ That tile is its own little document, and the page's colours do not reach inside
 ```
 </Example>
 
-<Example caption="`$style: line` draws the cells as an outline instead of filling them, which is the chicken wire look.">
-```scss
-.comb-lines {
-  @include background-pattern(honeycomb, $style: line, $color: #b45309, $background: #fffbeb, $size: 24px, $thickness: 1.5px);
-}
-```
-```html
-<style>
-  .comb-lines { display: grid; place-items: center; height: 170px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #78350f; }
-</style>
-<div class="comb-lines">Hive status</div>
-```
-</Example>
-
-<Example caption="The hexagon outline over a photograph, which needs `$style: line`: the solid honeycomb covers every pixel and refuses an image.">
-```scss
-.hex-photo {
-  @include background-pattern(honeycomb, $style: line, $color: rgb(255 255 255 / 0.3), $size: 26px, $thickness: 1px, $image: "/images/backgrounds/06.jpg");
-}
-```
-```html
-<style>
-  .hex-photo { aspect-ratio: 4 / 3; border-radius: 10px; }
-</style>
-<div class="hex-photo"></div>
-```
-</Example>
-
 ### Brick
 
 <Example caption="A wall behind a quotation. `$size` is the brick and the ground shows through as the mortar.">
@@ -592,20 +527,6 @@ That tile is its own little document, and the page's colours do not reach inside
   .pavement { height: 150px; border-radius: 10px;  }
 </style>
 <div class="pavement"></div>
-```
-</Example>
-
-<Example caption="`$style: line` draws the bond as mortar lines with nothing filled, which is the glazed tile look rather than a wall.">
-```scss
-.tiles {
-  @include background-pattern(brick, $style: line, $color: #94a3b8, $background: #fff, $size: 44px, $thickness: 1px);
-}
-```
-```html
-<style>
-  .tiles { display: grid; place-items: center; height: 170px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #475569; }
-</style>
-<div class="tiles">Kitchen</div>
 ```
 </Example>
 
@@ -745,7 +666,7 @@ That tile is its own little document, and the page's colours do not reach inside
 
 ### Terrazzo
 
-<Example caption="Chips of three colours scattered over a ground, the floor of every new coffee shop. The chips are an inline SVG, drawn at fixed places, so the same call always gives the same floor.">
+<Example caption="Chips of three colours scattered over a ground, the floor of every new coffee shop. Each chip is a radial gradient of its own, at a place written into the mixin rather than drawn at random, so the same call always gives the same floor.">
 ```scss
 .floor {
   @include background-pattern(terrazzo, $color: #f97316 #0ea5e9 #16a34a, $background: #f8fafc, $size: 140px);
@@ -774,9 +695,40 @@ That tile is its own little document, and the page's colours do not reach inside
 ```
 </Example>
 
+### Confetti
+
+<Example caption="Slivers and dots thrown across the box, one radial gradient each. Like terrazzo the places are fixed, so the same call always throws the same handful.">
+```scss
+.party {
+  @include background-pattern(confetti, $color: #f43f5e #22d3ee #a3e635, $size: 120px);
+}
+```
+```html
+<style>
+  .party { display: grid; place-items: center; height: 180px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .party span { padding: 10px 18px; border-radius: 999px; background: #18181b; color: #fff; font-weight: 600; }
+</style>
+<div class="party"><span>4.0.0 is out</span></div>
+```
+</Example>
+
+<Example caption="The same scatter on a dark ground, at a smaller tile, which reads as a night sky of paper.">
+```scss
+.night {
+  @include background-pattern(confetti, $color: #fbbf24 #f472b6 #38bdf8, $background: #0f172a, $size: 90px);
+}
+```
+```html
+<style>
+  .night { height: 170px; border-radius: 10px; }
+</style>
+<div class="night"></div>
+```
+</Example>
+
 <Hint kind="info">
 
-**Which patterns let an image through.** The image is the last background layer, so it shows wherever the pattern leaves a gap. Rendered in Chrome 152, Firefox 156 and Safari 26.6.2: `dots`, `grid`, `crosshatch`, `zigzag`, `chevron`, `triangles`, `waves`, `brick`, `houndstooth`, `stripes` in one colour and every `$style: line` pattern show the picture through. Four cover every pixel of it: `checkerboard`, `isometric` and `honeycomb` with their solid faces, and `stripes` with more than one colour, since the colours fill the whole period. Those four refuse `$image` instead of hiding it, and the message says what to do: a pattern with gaps, one colour, or `$style: line`.
+**Which patterns let an image through.** The image is the last background layer, so it shows wherever the pattern leaves a gap. Rendered in Chrome 152, Firefox 156 and Safari 26.6.2: `dots`, `grid`, `crosshatch`, `zigzag`, `chevron`, `triangles`, `waves`, `brick`, `houndstooth`, `gingham`, `harlequin`, `terrazzo`, `confetti` and `stripes` in one colour show the picture through. Four cover every pixel of it: `checkerboard`, `isometric` and `honeycomb` with their solid faces, and `stripes` with more than one colour, since the colours fill the whole period. Those four refuse `$image` instead of hiding it, and the message says what to do: a pattern with gaps, or one colour.
 
 </Hint>
 

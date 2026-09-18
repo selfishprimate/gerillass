@@ -293,15 +293,6 @@ exports[`Manifest examples background-pattern: .a { @include background-pattern(
 }"
 `;
 
-exports[`Manifest examples background-pattern: .a { @include background-pattern(brick, $style: line, $color: #b91c1c, 1`] = `
-".a {
-  background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='1'%20height='1'%20viewBox='0%200%201%201'%3E%3Cpath%20d='M0,0L1,0M0,0.5L1,0.5M0,1L1,1M0,0L0,0.5M1,0L1,0.5M0.5,0.5L0.5,1'%20fill='none'%20stroke='%23b91c1c'%20stroke-width='0.0333333333'/%3E%3C/svg%3E");
-  background-size: 60px 60px;
-  background-repeat: repeat;
-  background-color: #fee2e2;
-}"
-`;
-
 exports[`Manifest examples background-pattern: .a { @include background-pattern(checkerboard, $color: #111 #eee, $siz 1`] = `
 ".a {
   background-image: repeating-conic-gradient(#111 0 25%, #eee 0 50%);
@@ -316,6 +307,14 @@ exports[`Manifest examples background-pattern: .a { @include background-pattern(
   background-size: 2rem 2rem, 2rem 2rem;
   background-repeat: repeat;
   background-color: #e0f2fe;
+}"
+`;
+
+exports[`Manifest examples background-pattern: .a { @include background-pattern(confetti, $color: #f43f5e #22d3ee #a3 1`] = `
+".a {
+  background-image: radial-gradient(ellipse 5% 2% at 14% 12%, #f43f5e 99%, #0000), radial-gradient(ellipse 4.5% 2% at 67% 8%, #22d3ee 99%, #0000), radial-gradient(ellipse 5.5% 2% at 40% 32%, #a3e635 99%, #0000), radial-gradient(ellipse 5% 2% at 84% 40%, #f43f5e 99%, #0000), radial-gradient(ellipse 4.5% 2% at 19% 56%, #22d3ee 99%, #0000), radial-gradient(ellipse 5.5% 2% at 58% 68%, #f43f5e 99%, #0000), radial-gradient(ellipse 4.5% 2% at 91% 76%, #a3e635 99%, #0000), radial-gradient(ellipse 5% 2% at 34% 88%, #22d3ee 99%, #0000), radial-gradient(ellipse 2.6% 2.6% at 70% 22%, #a3e635 99%, #0000), radial-gradient(ellipse 2.2% 2.2% at 22% 38%, #f43f5e 99%, #0000), radial-gradient(ellipse 2.8% 2.8% at 58% 48%, #22d3ee 99%, #0000), radial-gradient(ellipse 2.4% 2.4% at 8% 76%, #a3e635 99%, #0000), radial-gradient(ellipse 2.2% 2.2% at 44% 94%, #f43f5e 99%, #0000), radial-gradient(ellipse 2.6% 2.6% at 92% 58%, #22d3ee 99%, #0000);
+  background-size: 120px 120px, 120px 120px, 120px 120px, 120px 120px, 120px 120px, 120px 120px, 120px 120px, 120px 120px, 120px 120px, 120px 120px, 120px 120px, 120px 120px, 120px 120px, 120px 120px;
+  background-repeat: repeat;
 }"
 `;
 
@@ -405,15 +404,6 @@ exports[`Manifest examples background-pattern: .a { @include background-pattern(
 }"
 `;
 
-exports[`Manifest examples background-pattern: .a { @include background-pattern(honeycomb, $style: line, $color: #b45 1`] = `
-".a {
-  background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='1.7320508'%20height='3'%20viewBox='0%200%201.7320508%203'%3E%3Cpath%20d='M-0.8660254,-2.5L0,-2L0,-1L-0.8660254,-0.5L-1.7320508,-1L-1.7320508,-2ZM0.8660254,-2.5L1.7320508,-2L1.7320508,-1L0.8660254,-0.5L0,-1L0,-2ZM2.5980762,-2.5L3.4641016,-2L3.4641016,-1L2.5980762,-0.5L1.7320508,-1L1.7320508,-2ZM4.330127,-2.5L5.1961524,-2L5.1961524,-1L4.330127,-0.5L3.4641016,-1L3.4641016,-2ZM-1.7320508,-1L-0.8660254,-0.5L-0.8660254,0.5L-1.7320508,1L-2.5980762,0.5L-2.5980762,-0.5ZM0,-1L0.8660254,-0.5L0.8660254,0.5L0,1L-0.8660254,0.5L-0.8660254,-0.5ZM1.7320508,-1L2.5980762,-0.5L2.5980762,0.5L1.7320508,1L0.8660254,0.5L0.8660254,-0.5ZM3.4641016,-1L4.330127,-0.5L4.330127,0.5L3.4641016,1L2.5980762,0.5L2.5980762,-0.5ZM-0.8660254,0.5L0,1L0,2L-0.8660254,2.5L-1.7320508,2L-1.7320508,1ZM0.8660254,0.5L1.7320508,1L1.7320508,2L0.8660254,2.5L0,2L0,1ZM2.5980762,0.5L3.4641016,1L3.4641016,2L2.5980762,2.5L1.7320508,2L1.7320508,1ZM4.330127,0.5L5.1961524,1L5.1961524,2L4.330127,2.5L3.4641016,2L3.4641016,1ZM-1.7320508,2L-0.8660254,2.5L-0.8660254,3.5L-1.7320508,4L-2.5980762,3.5L-2.5980762,2.5ZM0,2L0.8660254,2.5L0.8660254,3.5L0,4L-0.8660254,3.5L-0.8660254,2.5ZM1.7320508,2L2.5980762,2.5L2.5980762,3.5L1.7320508,4L0.8660254,3.5L0.8660254,2.5ZM3.4641016,2L4.330127,2.5L4.330127,3.5L3.4641016,4L2.5980762,3.5L2.5980762,2.5Z'%20fill='none'%20stroke='%23b45309'%20stroke-width='0.0625'/%3E%3C/svg%3E");
-  background-size: 41.5692192px 72px;
-  background-repeat: repeat;
-  background-color: #fffbeb;
-}"
-`;
-
 exports[`Manifest examples background-pattern: .a { @include background-pattern(houndstooth, $color: #111 #fff, $size 1`] = `
 ".a {
   background-image: linear-gradient(-45deg, #fff 25%, #0000 25% 75%, #111 75%), linear-gradient(-45deg, #111 25%, #0000 25% 75%, #fff 75%), linear-gradient(45deg, #111 17%, #0000 17% 25%, #111 25% 36%, #0000 36% 64%, #111 64% 75%, #0000 75% 83%, #111 83%);
@@ -432,15 +422,6 @@ exports[`Manifest examples background-pattern: .a { @include background-pattern(
 }"
 `;
 
-exports[`Manifest examples background-pattern: .a { @include background-pattern(isometric, $style: line, $color: #334 1`] = `
-".a {
-  background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='1.7320508'%20height='3'%20viewBox='0%200%201.7320508%203'%3E%3Cpath%20d='M-0.8660254,-2.5L0,-2L0,-1L-0.8660254,-0.5L-1.7320508,-1L-1.7320508,-2ZM-0.8660254,-1.5L-0.8660254,-2.5M-0.8660254,-1.5L-1.7320508,-1M-0.8660254,-1.5L0,-1M0.8660254,-2.5L1.7320508,-2L1.7320508,-1L0.8660254,-0.5L0,-1L0,-2ZM0.8660254,-1.5L0.8660254,-2.5M0.8660254,-1.5L0,-1M0.8660254,-1.5L1.7320508,-1M2.5980762,-2.5L3.4641016,-2L3.4641016,-1L2.5980762,-0.5L1.7320508,-1L1.7320508,-2ZM2.5980762,-1.5L2.5980762,-2.5M2.5980762,-1.5L1.7320508,-1M2.5980762,-1.5L3.4641016,-1M4.330127,-2.5L5.1961524,-2L5.1961524,-1L4.330127,-0.5L3.4641016,-1L3.4641016,-2ZM4.330127,-1.5L4.330127,-2.5M4.330127,-1.5L3.4641016,-1M4.330127,-1.5L5.1961524,-1M-1.7320508,-1L-0.8660254,-0.5L-0.8660254,0.5L-1.7320508,1L-2.5980762,0.5L-2.5980762,-0.5ZM-1.7320508,0L-1.7320508,-1M-1.7320508,0L-2.5980762,0.5M-1.7320508,0L-0.8660254,0.5M0,-1L0.8660254,-0.5L0.8660254,0.5L0,1L-0.8660254,0.5L-0.8660254,-0.5ZM0,0L0,-1M0,0L-0.8660254,0.5M0,0L0.8660254,0.5M1.7320508,-1L2.5980762,-0.5L2.5980762,0.5L1.7320508,1L0.8660254,0.5L0.8660254,-0.5ZM1.7320508,0L1.7320508,-1M1.7320508,0L0.8660254,0.5M1.7320508,0L2.5980762,0.5M3.4641016,-1L4.330127,-0.5L4.330127,0.5L3.4641016,1L2.5980762,0.5L2.5980762,-0.5ZM3.4641016,0L3.4641016,-1M3.4641016,0L2.5980762,0.5M3.4641016,0L4.330127,0.5M-0.8660254,0.5L0,1L0,2L-0.8660254,2.5L-1.7320508,2L-1.7320508,1ZM-0.8660254,1.5L-0.8660254,0.5M-0.8660254,1.5L-1.7320508,2M-0.8660254,1.5L0,2M0.8660254,0.5L1.7320508,1L1.7320508,2L0.8660254,2.5L0,2L0,1ZM0.8660254,1.5L0.8660254,0.5M0.8660254,1.5L0,2M0.8660254,1.5L1.7320508,2M2.5980762,0.5L3.4641016,1L3.4641016,2L2.5980762,2.5L1.7320508,2L1.7320508,1ZM2.5980762,1.5L2.5980762,0.5M2.5980762,1.5L1.7320508,2M2.5980762,1.5L3.4641016,2M4.330127,0.5L5.1961524,1L5.1961524,2L4.330127,2.5L3.4641016,2L3.4641016,1ZM4.330127,1.5L4.330127,0.5M4.330127,1.5L3.4641016,2M4.330127,1.5L5.1961524,2M-1.7320508,2L-0.8660254,2.5L-0.8660254,3.5L-1.7320508,4L-2.5980762,3.5L-2.5980762,2.5ZM-1.7320508,3L-1.7320508,2M-1.7320508,3L-2.5980762,3.5M-1.7320508,3L-0.8660254,3.5M0,2L0.8660254,2.5L0.8660254,3.5L0,4L-0.8660254,3.5L-0.8660254,2.5ZM0,3L0,2M0,3L-0.8660254,3.5M0,3L0.8660254,3.5M1.7320508,2L2.5980762,2.5L2.5980762,3.5L1.7320508,4L0.8660254,3.5L0.8660254,2.5ZM1.7320508,3L1.7320508,2M1.7320508,3L0.8660254,3.5M1.7320508,3L2.5980762,3.5M3.4641016,2L4.330127,2.5L4.330127,3.5L3.4641016,4L2.5980762,3.5L2.5980762,2.5ZM3.4641016,3L3.4641016,2M3.4641016,3L2.5980762,3.5M3.4641016,3L4.330127,3.5'%20fill='none'%20stroke='%23334155'%20stroke-width='0.0454545455'/%3E%3C/svg%3E");
-  background-size: 38.1051176px 66px;
-  background-repeat: repeat;
-  background-color: #f8fafc;
-}"
-`;
-
 exports[`Manifest examples background-pattern: .a { @include background-pattern(stripes, $color: #2563eb, $size: 24px 1`] = `
 ".a {
   background-image: repeating-linear-gradient(-45deg, #2563eb 0px 3px, #0000 0 6px);
@@ -450,8 +431,8 @@ exports[`Manifest examples background-pattern: .a { @include background-pattern(
 
 exports[`Manifest examples background-pattern: .a { @include background-pattern(terrazzo, $color: #f97316 #0ea5e9 #16 1`] = `
 ".a {
-  background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='64'%20height='64'%20viewBox='0%200%2064%2064'%3E%3Ccircle%20cx='10'%20cy='12'%20r='3'%20fill='%23f97316'/%3E%3Ccircle%20cx='42'%20cy='30'%20r='4'%20fill='%230ea5e9'/%3E%3Ccircle%20cx='25'%20cy='48'%20r='2.5'%20fill='%2316a34a'/%3E%3Ccircle%20cx='56'%20cy='54'%20r='3'%20fill='%23f97316'/%3E%3Ccircle%20cx='34'%20cy='8'%20r='2'%20fill='%2316a34a'/%3E%3Crect%20x='48'%20y='8'%20width='7'%20height='4'%20rx='1'%20fill='%2316a34a'%20transform='rotate(24%2051%2010)'/%3E%3Crect%20x='14'%20y='34'%20width='8'%20height='3.5'%20rx='1'%20fill='%230ea5e9'%20transform='rotate(-38%2017%2035)'/%3E%3Crect%20x='4'%20y='56'%20width='7'%20height='3'%20rx='1'%20fill='%230ea5e9'%20transform='rotate(12%207%2057)'/%3E%3Crect%20x='58'%20y='20'%20width='6'%20height='3'%20rx='1'%20fill='%23f97316'%20transform='rotate(-20%2060%2021)'/%3E%3C/svg%3E");
-  background-size: 140px 140px;
+  background-image: radial-gradient(ellipse 4% 4% at 16% 19%, #f97316 99%, #0000), radial-gradient(ellipse 5% 5% at 66% 47%, #0ea5e9 99%, #0000), radial-gradient(ellipse 3.5% 3.5% at 39% 75%, #16a34a 99%, #0000), radial-gradient(ellipse 4% 4% at 88% 84%, #f97316 99%, #0000), radial-gradient(ellipse 2.5% 2.5% at 53% 12%, #16a34a 99%, #0000), radial-gradient(ellipse 6% 2.5% at 80% 16%, #16a34a 99%, #0000), radial-gradient(ellipse 6.5% 2.5% at 26% 55%, #0ea5e9 99%, #0000), radial-gradient(ellipse 5.5% 2% at 9% 88%, #0ea5e9 99%, #0000), radial-gradient(ellipse 5% 2% at 94% 33%, #f97316 99%, #0000);
+  background-size: 140px 140px, 140px 140px, 140px 140px, 140px 140px, 140px 140px, 140px 140px, 140px 140px, 140px 140px, 140px 140px;
   background-repeat: repeat;
   background-color: #f8fafc;
 }"

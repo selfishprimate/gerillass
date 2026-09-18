@@ -10,8 +10,7 @@
 @use "../internal/color-problem" as *;
 @use "../internal/length-problem" as *;
 
-// Sixteen patterns, drawn with gradients where gradients can draw them and an
-// inline SVG tile where they cannot.
+// Seventeen geometric patterns drawn with gradients alone, no image and no SVG.
 // It replaces `background-dots` and `background-stripes`, which were the same
 // job written twice and disagreed on how an image underneath was layered.
 //
@@ -25,7 +24,7 @@
 //
 // The colours default to `currentColor` mixed with transparency, so a pattern
 // follows the text colour and needs nothing to work in dark mode.
-$-kinds: "dots" "stripes" "grid" "checkerboard" "crosshatch" "zigzag" "chevron" "triangles" "isometric" "honeycomb" "brick" "waves" "houndstooth" "gingham" "harlequin" "terrazzo";
+$-kinds: "dots" "stripes" "grid" "checkerboard" "crosshatch" "zigzag" "chevron" "triangles" "isometric" "honeycomb" "brick" "waves" "houndstooth" "gingham" "harlequin" "terrazzo" "confetti";
 $-angle-units: "deg" "grad" "rad" "turn";
 
 // What each kind reads, so an argument it ignores can be refused rather than
@@ -39,14 +38,15 @@ $-takes: (
   "zigzag": "color" "size" "thickness" "angle",
   "chevron": "color" "size",
   "triangles": "color" "size" "angle",
-  "isometric": "color" "size" "thickness" "style",
-  "honeycomb": "color" "size" "thickness" "style",
-  "brick": "color" "size" "thickness" "style",
+  "isometric": "color" "size",
+  "honeycomb": "color" "size",
+  "brick": "color" "size" "thickness",
   "waves": "color" "size" "thickness",
   "houndstooth": "color" "size",
   "gingham": "color" "size" "thickness",
   "harlequin": "color" "size",
-  "terrazzo": "color" "size"
+  "terrazzo": "color" "size",
+  "confetti": "color" "size"
 );
 
 @function -name($value) {
@@ -92,70 +92,44 @@ $-defaults: (1: 12%, 2: 6%, 3: 18%);
   @return string.unquote("calc(tan(#{$angle}) * #{$size})");
 }
 
-// A data URI for a tile the gradients cannot draw. Only the characters a CSS
-// url() and Firefox object to are encoded, so the value stays readable in the
-// compiled stylesheet.
-@function -encode($text) {
-  $out: "";
-  $pairs: ("%": "%25", "#": "%23", "<": "%3C", ">": "%3E", '"': "%22", " ": "%20");
-  @for $i from 1 through string.length($text) {
-    $char: string.slice($text, $i, $i);
-    $out: $out + (map.get($pairs, $char) or $char);
+// One scattered chip: a radial gradient of its own, placed in the tile by
+// percentage so it scales with it. A circle's radius cannot be a percentage in
+// CSS, measured in Chrome 152, so every chip is written as an ellipse.
+@function -chip($rx, $ry, $x, $y, $color) {
+  @return "radial-gradient(ellipse #{$rx}% #{$ry}% at #{$x}% #{$y}%, #{$color} 99%, #0000)";
+}
+
+// Chips of three colours at places typed out rather than drawn at random, so
+// the same call always gives the same floor. Terrazzo mixes rounds and
+// slivers; confetti is lighter and busier.
+@function -scatter($kind, $c1, $c2, $c3) {
+  $chips: (
+    (4, 4, 16, 19, $c1), (5, 5, 66, 47, $c2), (3.5, 3.5, 39, 75, $c3),
+    (4, 4, 88, 84, $c1), (2.5, 2.5, 53, 12, $c3), (6, 2.5, 80, 16, $c3),
+    (6.5, 2.5, 26, 55, $c2), (5.5, 2, 9, 88, $c2), (5, 2, 94, 33, $c1)
+  );
+  @if $kind == "confetti" {
+    $chips: (
+      (5, 2, 14, 12, $c1), (4.5, 2, 67, 8, $c2), (5.5, 2, 40, 32, $c3),
+      (5, 2, 84, 40, $c1), (4.5, 2, 19, 56, $c2), (5.5, 2, 58, 68, $c1),
+      (4.5, 2, 91, 76, $c3), (5, 2, 34, 88, $c2), (2.6, 2.6, 70, 22, $c3),
+      (2.2, 2.2, 22, 38, $c1), (2.8, 2.8, 58, 48, $c2), (2.4, 2.4, 8, 76, $c3),
+      (2.2, 2.2, 44, 94, $c1), (2.6, 2.6, 92, 58, $c2)
+    );
+  }
+  $out: ();
+  @each $chip in $chips {
+    $out: list.append($out, -chip(list.nth($chip, 1), list.nth($chip, 2), list.nth($chip, 3), list.nth($chip, 4), list.nth($chip, 5)), comma);
   }
   @return $out;
 }
 
-// Hexagons drawn as an outline, with the three spokes that turn them into
-// cubes when $spokes is true. A gradient cannot draw either, since the lines
-// have to break along their own direction, so the tile is an inline SVG.
-// $side is the hexagon's side; the tile is sqrt(3) by 3 sides.
-@function -hex-tile($color, $side, $thickness, $spokes: true) {
-  $w: 1.7320508;
-  $stroke: math.div($thickness, $side);
-  $paths: "";
-  @for $row from -1 through 2 {
-    @for $column from -1 through 2 {
-      $cx: $column * $w;
-      @if $row % 2 != 0 {
-        $cx: $cx + math.div($w, 2);
-      }
-      $cy: $row * 1.5;
-      $paths: $paths + "M#{$cx},#{$cy - 1}L#{$cx + math.div($w, 2)},#{$cy - 0.5}L#{$cx + math.div($w, 2)},#{$cy + 0.5}L#{$cx},#{$cy + 1}L#{$cx - math.div($w, 2)},#{$cy + 0.5}L#{$cx - math.div($w, 2)},#{$cy - 0.5}Z";
-      @if $spokes {
-        $paths: $paths + "M#{$cx},#{$cy}L#{$cx},#{$cy - 1}M#{$cx},#{$cy}L#{$cx - math.div($w, 2)},#{$cy + 0.5}M#{$cx},#{$cy}L#{$cx + math.div($w, 2)},#{$cy + 0.5}";
-      }
-    }
-  }
-  $svg: "<svg xmlns='http://www.w3.org/2000/svg' width='#{$w}' height='3' viewBox='0 0 #{$w} 3'><path d='#{$paths}' fill='none' stroke='#{$color}' stroke-width='#{$stroke}'/></svg>";
-  @return "url(\"data:image/svg+xml,#{-encode($svg)}\")";
-}
-
-// A running bond drawn as an outline: two courses per tile, the second offset
-// by half a brick, which is what a gradient cannot place without a layer that
-// is limited on both axes. $side is the brick's length and the tile is square,
-// two courses tall.
-@function -brick-tile($color, $side, $thickness) {
-  $stroke: math.div($thickness, $side);
-  $paths: "M0,0L1,0M0,0.5L1,0.5M0,1L1,1M0,0L0,0.5M1,0L1,0.5M0.5,0.5L0.5,1";
-  $svg: "<svg xmlns='http://www.w3.org/2000/svg' width='1' height='1' viewBox='0 0 1 1'><path d='#{$paths}' fill='none' stroke='#{$color}' stroke-width='#{$stroke}'/></svg>";
-  @return "url(\"data:image/svg+xml,#{-encode($svg)}\")";
-}
-
-// Terrazzo chips: circles and slivers at fixed places in the tile, in three
-// colours. Their positions are typed out rather than random, so the same call
-// always draws the same floor.
-@function -terrazzo-tile($c1, $c2, $c3, $size) {
-  $chips: "<circle cx='10' cy='12' r='3' fill='#{$c1}'/><circle cx='42' cy='30' r='4' fill='#{$c2}'/><circle cx='25' cy='48' r='2.5' fill='#{$c3}'/><circle cx='56' cy='54' r='3' fill='#{$c1}'/><circle cx='34' cy='8' r='2' fill='#{$c3}'/><rect x='48' y='8' width='7' height='4' rx='1' fill='#{$c3}' transform='rotate(24 51 10)'/><rect x='14' y='34' width='8' height='3.5' rx='1' fill='#{$c2}' transform='rotate(-38 17 35)'/><rect x='4' y='56' width='7' height='3' rx='1' fill='#{$c2}' transform='rotate(12 7 57)'/><rect x='58' y='20' width='6' height='3' rx='1' fill='#{$c1}' transform='rotate(-20 60 21)'/>";
-  $svg: "<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'>#{$chips}</svg>";
-  @return "url(\"data:image/svg+xml,#{-encode($svg)}\")";
-}
-
 @mixin background-pattern($kind: dots, $params...) {
   $keywords: meta.keywords($params);
-  $known: "color" "background" "size" "thickness" "angle" "axis" "stagger" "style" "image";
+  $known: "color" "background" "size" "thickness" "angle" "axis" "stagger" "image";
   @each $key, $value in $keywords {
     @if not list.index($known, $key) {
-      @error "`$#{$key}` is not an argument of `background-pattern`. It takes a kind, then `$color`, `$background`, `$size`, `$thickness`, `$angle`, `$axis`, `$stagger`, `$style` and `$image`.";
+      @error "`$#{$key}` is not an argument of `background-pattern`. It takes a kind, then `$color`, `$background`, `$size`, `$thickness`, `$angle`, `$axis`, `$stagger` and `$image`.";
     }
   }
   @if list.length($params) > 0 and list.length($keywords) != list.length($params) {
@@ -174,7 +148,6 @@ $-defaults: (1: 12%, 2: 6%, 3: 18%);
   $angle: map.get($keywords, "angle");
   $axis: map.get($keywords, "axis");
   $stagger: map.get($keywords, "stagger");
-  $style: map.get($keywords, "style");
   $image: map.get($keywords, "image");
 
   $takes: map.get($-takes, $name);
@@ -256,11 +229,6 @@ $-defaults: (1: 12%, 2: 6%, 3: 18%);
     $stagger: true;
   }
 
-  @if $style != null and not list.index("fill" "line", -name($style)) {
-    @error "`#{meta.inspect($style)}` is not a valid $style for `background-pattern`. Pass `fill` for solid faces or `line` for the shapes drawn as an outline.";
-  }
-  $style: -name($style or fill);
-
   @if $image != null and meta.type-of($image) != "string" {
     @error "`#{meta.inspect($image)}` is not a valid $image for `background-pattern`. Pass an image path as a string.";
   }
@@ -268,19 +236,19 @@ $-defaults: (1: 12%, 2: 6%, 3: 18%);
   // Four patterns paint every pixel, so an image under them is never seen.
   // Rendered in Chrome 152, Firefox 156 and Safari 26.6.2: with an image
   // underneath, dots, grid, crosshatch, zigzag, chevron, triangles, waves,
-  // brick, houndstooth, one-colour stripes and every `$style: line` pattern
-  // show it through their gaps, and these four do not.
+  // brick, houndstooth, gingham, harlequin, terrazzo, confetti and one-colour
+  // stripes show it through their gaps, and these four do not.
   @if $image != null {
     $covers: null;
     @if $name == "checkerboard" {
       $covers: "the two colours meet with no gap";
-    } @else if ($name == "isometric" or $name == "honeycomb") and $style == "fill" {
+    } @else if $name == "isometric" or $name == "honeycomb" {
       $covers: "the faces are solid";
     } @else if $name == "stripes" and $color != null and list.length($color) > 1 {
       $covers: "several colours fill the whole period, leaving no gap between the stripes";
     }
     @if $covers {
-      @error "`$image` cannot be seen under the `#{$name}` pattern in `background-pattern`: #{$covers}, so the image would never show. Use a pattern that leaves gaps, pass one colour, or draw this one as an outline with `$style: line`.";
+      @error "`$image` cannot be seen under the `#{$name}` pattern in `background-pattern`: #{$covers}, so the image would never show. Use a pattern that leaves gaps, or pass one colour.";
     }
   }
 
@@ -374,78 +342,41 @@ $-defaults: (1: 12%, 2: 6%, 3: 18%);
     $images: ("conic-gradient(from #{-negate($angle)}, #{$c1} 90deg, #{$none} 0)");
     $sizes: ("#{$s} #{$s}");
   } @else if $name == "isometric" {
-    @if $style == "line" {
-      // The outline keeps the cubes, and a gradient cannot draw it: the lines
-      // have to break along their own direction. The tile is an inline SVG, so
-      // the colour and the sizes have to be values this stylesheet can write
-      // into it, and a var() cannot reach inside a data URI.
-      @if meta.type-of($size) != "number" or meta.type-of($thickness) != "number" {
-        @error "`isometric` with `$style: line` needs a $size and a $thickness this stylesheet can resolve, such as `24px`: the tile is drawn as an SVG, and a browser value such as `var()` cannot reach inside it.";
-      }
-      @if meta.type-of($c1) != "color" {
-        @error "`#{meta.inspect($c1)}` cannot be used with `isometric` and `$style: line`. The tile is drawn as an SVG, which does not inherit the page's colours, so pass a colour such as `#334155` rather than `currentColor`, `var()` or `color-mix()`.";
-      }
-      $images: (-hex-tile($c1, $size, $thickness));
-      $sizes: ("#{-times($s, 1.7320508)} #{-times($s, 3)}");
-    } @else {
-      $g: "0 120deg, #{$none} 0";
-      $images: (
-        "conic-gradient(from 0deg at calc(500% / 6) calc(100% / 3), #{$c3} #{$g})",
-        "conic-gradient(from -120deg at calc(100% / 6) calc(100% / 3), #{$c2} #{$g})",
-        "conic-gradient(from 120deg at calc(100% / 3) calc(500% / 6), #{$c1} #{$g})",
-        "conic-gradient(from 120deg at calc(200% / 3) calc(500% / 6), #{$c1} #{$g})",
-        "conic-gradient(from -180deg at calc(100% / 3) 50%, #{$c2} 60deg, #{$c1} #{$g})",
-        "conic-gradient(from 60deg at calc(200% / 3) 50%, #{$c1} 60deg, #{$c3} #{$g})",
-        "conic-gradient(from -60deg at 50% calc(100% / 3), #{$c1} 120deg, #{$c2} 0 240deg, #{$c3} 0)"
-      );
-      $sizes: ("#{-times($s, 1.7320508)} #{$s}");
-    }
+    $g: "0 120deg, #{$none} 0";
+    $images: (
+      "conic-gradient(from 0deg at calc(500% / 6) calc(100% / 3), #{$c3} #{$g})",
+      "conic-gradient(from -120deg at calc(100% / 6) calc(100% / 3), #{$c2} #{$g})",
+      "conic-gradient(from 120deg at calc(100% / 3) calc(500% / 6), #{$c1} #{$g})",
+      "conic-gradient(from 120deg at calc(200% / 3) calc(500% / 6), #{$c1} #{$g})",
+      "conic-gradient(from -180deg at calc(100% / 3) 50%, #{$c2} 60deg, #{$c1} #{$g})",
+      "conic-gradient(from 60deg at calc(200% / 3) 50%, #{$c1} 60deg, #{$c3} #{$g})",
+      "conic-gradient(from -60deg at 50% calc(100% / 3), #{$c1} 120deg, #{$c2} 0 240deg, #{$c3} 0)"
+    );
+    $sizes: ("#{-times($s, 1.7320508)} #{$s}");
   } @else if $name == "honeycomb" {
-    @if $style == "line" {
-      @if meta.type-of($size) != "number" or meta.type-of($thickness) != "number" {
-        @error "`honeycomb` with `$style: line` needs a $size and a $thickness this stylesheet can resolve, such as `24px`: the tile is drawn as an SVG, and a browser value such as `var()` cannot reach inside it.";
-      }
-      @if meta.type-of($c1) != "color" {
-        @error "`#{meta.inspect($c1)}` cannot be used with `honeycomb` and `$style: line`. The tile is drawn as an SVG, which does not inherit the page's colours, so pass a colour such as `#334155` rather than `currentColor`, `var()` or `color-mix()`.";
-      }
-      $images: (-hex-tile($c1, $size, $thickness, $spokes: false));
-      $sizes: ("#{-times($s, 1.7320508)} #{-times($s, 3)}");
-    } @else {
-      $images: (
-        "repeating-conic-gradient(from 30deg, #{$none} 0 120deg, #{$c3} 0 180deg)",
-        "repeating-conic-gradient(from 30deg, #{$c1} 0 60deg, #{$c2} 0 120deg, #{$c3} 0 180deg)"
-      );
-      $sizes: ("#{$s} #{-times($s, 0.5773503)}", "#{$s} #{-times($s, 0.5773503)}");
-      $positions: ("#{-times($s, 0.5)} #{-times($s, 0.2886751)}", "0 0");
-    }
+    $images: (
+      "repeating-conic-gradient(from 30deg, #{$none} 0 120deg, #{$c3} 0 180deg)",
+      "repeating-conic-gradient(from 30deg, #{$c1} 0 60deg, #{$c2} 0 120deg, #{$c3} 0 180deg)"
+    );
+    $sizes: ("#{$s} #{-times($s, 0.5773503)}", "#{$s} #{-times($s, 0.5773503)}");
+    $positions: ("#{-times($s, 0.5)} #{-times($s, 0.2886751)}", "0 0");
   } @else if $name == "brick" {
-    @if $style == "line" {
-      @if meta.type-of($size) != "number" or meta.type-of($thickness) != "number" {
-        @error "`brick` with `$style: line` needs a $size and a $thickness this stylesheet can resolve, such as `48px`: the tile is drawn as an SVG, and a browser value such as `var()` cannot reach inside it.";
-      }
-      @if meta.type-of($c1) != "color" {
-        @error "`#{meta.inspect($c1)}` cannot be used with `brick` and `$style: line`. The tile is drawn as an SVG, which does not inherit the page's colours, so pass a colour such as `#b91c1c` rather than `currentColor`, `var()` or `color-mix()`.";
-      }
-      $images: (-brick-tile($c1, $size, $thickness));
-      $sizes: ("#{$s} #{$s}");
-    } @else {
-      // The proportions of the 58px tile the pattern was drawn at, kept as
-      // fractions of $size so any size lays out the same.
-      $brick: -times($s, math.div(23, 58));
-      $images: (
-        "linear-gradient(335deg, #{$c1} #{$brick}, #{$none} 0)",
-        "linear-gradient(155deg, #{$c2} #{$brick}, #{$none} 0)",
-        "linear-gradient(335deg, #{$c1} #{$brick}, #{$none} 0)",
-        "linear-gradient(155deg, #{$c2} #{$brick}, #{$none} 0)"
-      );
-      $sizes: -repeat("#{$s} #{$s}", 4);
-      $positions: (
-        "0 #{-times($s, math.div(2, 58))}",
-        "#{-times($s, math.div(4, 58))} #{-times($s, math.div(35, 58))}",
-        "#{-times($s, math.div(29, 58))} #{-times($s, math.div(31, 58))}",
-        "#{-times($s, math.div(34, 58))} #{-times($s, math.div(6, 58))}"
-      );
-    }
+    // The proportions of the 58px tile the pattern was drawn at, kept as
+    // fractions of $size so any size lays out the same.
+    $brick: -times($s, math.div(23, 58));
+    $images: (
+      "linear-gradient(335deg, #{$c1} #{$brick}, #{$none} 0)",
+      "linear-gradient(155deg, #{$c2} #{$brick}, #{$none} 0)",
+      "linear-gradient(335deg, #{$c1} #{$brick}, #{$none} 0)",
+      "linear-gradient(155deg, #{$c2} #{$brick}, #{$none} 0)"
+    );
+    $sizes: -repeat("#{$s} #{$s}", 4);
+    $positions: (
+      "0 #{-times($s, math.div(2, 58))}",
+      "#{-times($s, math.div(4, 58))} #{-times($s, math.div(35, 58))}",
+      "#{-times($s, math.div(29, 58))} #{-times($s, math.div(31, 58))}",
+      "#{-times($s, math.div(34, 58))} #{-times($s, math.div(6, 58))}"
+    );
   } @else if $name == "waves" {
     // Scallops: one circle per tile, cut at the tile's edge.
     $images: ("radial-gradient(circle at 50% 100%, #{$c1} 45%, #{$none} 46%)");
@@ -465,17 +396,9 @@ $-defaults: (1: 12%, 2: 6%, 3: 18%);
       "linear-gradient(-45deg, #{$c1} 25%, #{$none} 0 75%, #{$c1} 0)"
     );
     $sizes: -repeat("#{$s} #{$s}", 2);
-  } @else if $name == "terrazzo" {
-    @if meta.type-of($size) != "number" {
-      @error "`terrazzo` needs a $size this stylesheet can resolve, such as `120px`: its chips are drawn as an SVG, and a browser value such as `var()` cannot reach inside it.";
-    }
-    @each $chip in ($c1, $c2, $c3) {
-      @if meta.type-of($chip) != "color" {
-        @error "`#{meta.inspect($chip)}` cannot be used for `terrazzo`. Its chips are drawn as an SVG, which does not inherit the page's colours, so pass colours such as `#f97316 #0ea5e9 #16a34a` rather than `currentColor`, `var()` or `color-mix()`.";
-      }
-    }
-    $images: (-terrazzo-tile($c1, $c2, $c3, $size));
-    $sizes: ("#{$s} #{$s}");
+  } @else if $name == "terrazzo" or $name == "confetti" {
+    $images: -scatter($name, $c1, $c2, $c3);
+    $sizes: -repeat("#{$s} #{$s}", list.length($images));
   } @else if $name == "houndstooth" {
     // Antoine Bernier's three layers, where the second colour is the ground the
     // teeth sit on, so it is written as the background colour when none is given.
