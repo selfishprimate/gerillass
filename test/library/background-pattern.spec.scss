@@ -79,6 +79,22 @@
     }
   }
 
+  @include it('Draws the isometric grid with $style: line, in three line families.') {
+    @include assert {
+      @include output {
+        .a {
+          @include background-pattern(isometric, $style: line, $color: #334155, $size: 60px, $thickness: 2px);
+        }
+      }
+      @include expect {
+        .a {
+          background-image: #{"repeating-linear-gradient(90deg, #334155 0 2px, #0000 0 51.961524px), repeating-linear-gradient(30deg, #334155 0 2px, #0000 0 60px), repeating-linear-gradient(-30deg, #334155 0 2px, #0000 0 60px)"};
+          background-repeat: repeat;
+        }
+      }
+    }
+  }
+
   @include it('Lays an image under the pattern as the last layer.') {
     @include assert {
       @include output {

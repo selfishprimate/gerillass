@@ -410,6 +410,40 @@ Each pattern below is its own section, with the colours and the tile changed fro
 ```
 </Example>
 
+<Example caption="`$style: line` draws the isometric grid instead of filling the faces, which is the look of isometric graph paper. `$thickness` is the line.">
+```scss
+.grid-paper {
+  @include background-pattern(isometric, $style: line, $color: #94a3b8, $background: #fff, $size: 36px, $thickness: 1px);
+}
+```
+```html
+<style>
+  .grid-paper { display: grid; place-items: center; height: 170px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #475569; }
+</style>
+<div class="grid-paper">Sketch here</div>
+```
+</Example>
+
+<Example caption="The same grid in reverse, pale lines on a dark ground, at a larger tile.">
+```scss
+.blueprint {
+  @include background-pattern(isometric, $style: line, $color: rgb(255 255 255 / 0.35), $background: #0f172a, $size: 52px, $thickness: 1px);
+}
+```
+```html
+<style>
+  .blueprint { display: grid; place-items: center; height: 170px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #e2e8f0; }
+</style>
+<div class="blueprint">Warehouse plan</div>
+```
+</Example>
+
+<Hint kind="info">
+
+**Cubes outlined rather than filled** are not something gradients can draw. An outline of even width would need each line broken along its own direction, which a gradient cannot do: a gradient varies across its direction, not along it. Drawing it needs `mask-composite`, and this mixin writes background properties only. `$style: line` gives the grid the cubes are drawn on, which is the closest pure-background answer. Measured by trying it: stacking the filled pattern over an offset copy hides the lower one entirely, and thin conic spokes give lines that thicken as they leave the centre of each tile.
+
+</Hint>
+
 ### Honeycomb
 
 <Example caption="A community panel, where the three colours give the cells their depth.">

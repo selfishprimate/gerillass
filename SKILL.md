@@ -149,7 +149,8 @@ a dropped declaration rather than an error.
 - The colours default to `currentColor` mixed with transparency, so a pattern follows the text colour in either colour scheme. Pass `$color` for one to three colours, in the order the pattern layers them.
 - Only `background-image`, `background-size`, `background-position`, `background-repeat` and, when asked for, `background-color` are written. The `background` shorthand would reset a `background-color` set before the include.
 - A diagonal hard edge is drawn with stair steps in Firefox 156 and smoothly in Chrome 152 and Safari 26.6.2, which shows in `zigzag`, `chevron` and `triangles`. Feathering the stop by half a pixel was measured and did not change it.
-- Each kind reads only the arguments it needs, and an argument it ignores raises rather than doing nothing: `$angle` belongs to `stripes`, `crosshatch`, `zigzag` and `triangles`, `$thickness` to `dots`, `stripes`, `grid`, `crosshatch`, `zigzag`, `brick` and `waves`, `$axis` to `grid`, and `$stagger` to `dots`.
+- Each kind reads only the arguments it needs, and an argument it ignores raises rather than doing nothing: `$angle` belongs to `stripes`, `crosshatch`, `zigzag` and `triangles`, `$thickness` to `dots`, `stripes`, `grid`, `crosshatch`, `zigzag`, `brick` and `waves`, `$axis` to `grid`, `$stagger` to `dots`, and `$style` to `isometric`.
+- `isometric` draws solid cube faces by default and the isometric grid with `$style: line`. Cubes outlined in a line of even width are not reachable with gradients: the lines would have to be broken along their own direction, which needs `mask-composite`, and this mixin writes background properties only.
 
 **`before`**
 

@@ -38,7 +38,7 @@ $-takes: (
   "zigzag": "color" "size" "thickness" "angle",
   "chevron": "color" "size",
   "triangles": "color" "size" "angle",
-  "isometric": "color" "size",
+  "isometric": "color" "size" "thickness" "style",
   "honeycomb": "color" "size",
   "brick": "color" "size" "thickness",
   "waves": "color" "size" "thickness",
@@ -90,10 +90,10 @@ $-defaults: (1: 12%, 2: 6%, 3: 18%);
 
 @mixin background-pattern($kind: dots, $params...) {
   $keywords: meta.keywords($params);
-  $known: "color" "background" "size" "thickness" "angle" "axis" "stagger" "image";
+  $known: "color" "background" "size" "thickness" "angle" "axis" "stagger" "style" "image";
   @each $key, $value in $keywords {
     @if not list.index($known, $key) {
-      @error "`$#{$key}` is not an argument of `background-pattern`. It takes a kind, then `$color`, `$background`, `$size`, `$thickness`, `$angle`, `$axis`, `$stagger` and `$image`.";
+      @error "`$#{$key}` is not an argument of `background-pattern`. It takes a kind, then `$color`, `$background`, `$size`, `$thickness`, `$angle`, `$axis`, `$stagger`, `$style` and `$image`.";
     }
   }
   @if list.length($params) > 0 and list.length($keywords) != list.length($params) {
@@ -112,6 +112,7 @@ $-defaults: (1: 12%, 2: 6%, 3: 18%);
   $angle: map.get($keywords, "angle");
   $axis: map.get($keywords, "axis");
   $stagger: map.get($keywords, "stagger");
+  $style: map.get($keywords, "style");
   $image: map.get($keywords, "image");
 
   $takes: map.get($-takes, $name);
@@ -186,6 +187,11 @@ $-defaults: (1: 12%, 2: 6%, 3: 18%);
   @if $stagger == null {
     $stagger: true;
   }
+
+  @if $style != null and not list.index("fill" "line", -name($style)) {
+    @error "`#{meta.inspect($style)}` is not a valid $style for `background-pattern`. Pass `fill` for solid faces or `line` for the drawn grid.";
+  }
+  $style: -name($style or fill);
 
   @if $image != null and meta.type-of($image) != "string" {
     @error "`#{meta.inspect($image)}` is not a valid $image for `background-pattern`. Pass an image path as a string.";
@@ -281,17 +287,31 @@ $-defaults: (1: 12%, 2: 6%, 3: 18%);
     $images: ("conic-gradient(from #{-negate($angle)}, #{$c1} 90deg, #{$none} 0)");
     $sizes: ("#{$s} #{$s}");
   } @else if $name == "isometric" {
-    $g: "0 120deg, #{$none} 0";
-    $images: (
-      "conic-gradient(from 0deg at calc(500% / 6) calc(100% / 3), #{$c3} #{$g})",
-      "conic-gradient(from -120deg at calc(100% / 6) calc(100% / 3), #{$c2} #{$g})",
-      "conic-gradient(from 120deg at calc(100% / 3) calc(500% / 6), #{$c1} #{$g})",
-      "conic-gradient(from 120deg at calc(200% / 3) calc(500% / 6), #{$c1} #{$g})",
-      "conic-gradient(from -180deg at calc(100% / 3) 50%, #{$c2} 60deg, #{$c1} #{$g})",
-      "conic-gradient(from 60deg at calc(200% / 3) 50%, #{$c1} 60deg, #{$c3} #{$g})",
-      "conic-gradient(from -60deg at 50% calc(100% / 3), #{$c1} 120deg, #{$c2} 0 240deg, #{$c3} 0)"
-    );
-    $sizes: ("#{-times($s, 1.7320508)} #{$s}");
+    @if $style == "line" {
+      // The isometric grid, drawn rather than filled: one upright family of
+      // lines and two at 30 degrees, which is isometric graph paper. A cube
+      // drawn as an outline, with each rhombus edged and nothing filled, needs
+      // its lines broken into dashes, and a gradient cannot break a line along
+      // its own direction; that wants mask-composite, which this mixin does
+      // not write.
+      $images: (
+        "repeating-linear-gradient(90deg, #{$c1} 0 #{$t}, #{$none} 0 #{-times($s, 0.8660254)})",
+        "repeating-linear-gradient(30deg, #{$c1} 0 #{$t}, #{$none} 0 #{$s})",
+        "repeating-linear-gradient(-30deg, #{$c1} 0 #{$t}, #{$none} 0 #{$s})"
+      );
+    } @else {
+      $g: "0 120deg, #{$none} 0";
+      $images: (
+        "conic-gradient(from 0deg at calc(500% / 6) calc(100% / 3), #{$c3} #{$g})",
+        "conic-gradient(from -120deg at calc(100% / 6) calc(100% / 3), #{$c2} #{$g})",
+        "conic-gradient(from 120deg at calc(100% / 3) calc(500% / 6), #{$c1} #{$g})",
+        "conic-gradient(from 120deg at calc(200% / 3) calc(500% / 6), #{$c1} #{$g})",
+        "conic-gradient(from -180deg at calc(100% / 3) 50%, #{$c2} 60deg, #{$c1} #{$g})",
+        "conic-gradient(from 60deg at calc(200% / 3) 50%, #{$c1} 60deg, #{$c3} #{$g})",
+        "conic-gradient(from -60deg at 50% calc(100% / 3), #{$c1} 120deg, #{$c2} 0 240deg, #{$c3} 0)"
+      );
+      $sizes: ("#{-times($s, 1.7320508)} #{$s}");
+    }
   } @else if $name == "honeycomb" {
     $images: (
       "repeating-conic-gradient(from 30deg, #{$none} 0 120deg, #{$c3} 0 180deg)",
