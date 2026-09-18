@@ -310,6 +310,14 @@ exports[`Manifest examples background-pattern: .a { @include background-pattern(
 }"
 `;
 
+exports[`Manifest examples background-pattern: .a { @include background-pattern(concentric, $color: #be123c, $backgro 1`] = `
+".a {
+  background-image: repeating-radial-gradient(circle at 50% 50%, #be123c 0 2px, #0000 2px 16px);
+  background-repeat: repeat;
+  background-color: #fff1f2;
+}"
+`;
+
 exports[`Manifest examples background-pattern: .a { @include background-pattern(crosshatch, $size: 20px, $angle: 30de 1`] = `
 ".a {
   background-image: repeating-linear-gradient(30deg, color-mix(in oklab, currentColor 12%, transparent) 0 2.5px, #0000 0 20px), repeating-linear-gradient(-30deg, color-mix(in oklab, currentColor 6%, transparent) 0 2.5px, #0000 0 20px);
@@ -414,9 +422,41 @@ exports[`Manifest examples background-pattern: .a { @include background-pattern(
 }"
 `;
 
+exports[`Manifest examples background-pattern: .a { @include background-pattern(lattice, $color: #0f766e, $background 1`] = `
+".a {
+  background-image: radial-gradient(ellipse 45% 45% at 50% 50%, #0000 calc(84% - 3px), #0f766e 0 84%, #0000 0), radial-gradient(ellipse 45% 45% at 0% 50%, #0000 calc(84% - 3px), #0f766e 0 84%, #0000 0), radial-gradient(ellipse 45% 45% at 100% 50%, #0000 calc(84% - 3px), #0f766e 0 84%, #0000 0);
+  background-size: 56px 56px, 56px 56px, 56px 56px;
+  background-repeat: repeat;
+  background-color: #f0fdfa;
+}"
+`;
+
+exports[`Manifest examples background-pattern: .a { @include background-pattern(lattice, $color: #1d4ed8, $size: 48px 1`] = `
+".a {
+  background-image: radial-gradient(ellipse 45% 45% at 50% 30%, #0000 calc(84% - 3px), #1d4ed8 0 84%, #0000 0), radial-gradient(ellipse 45% 45% at 0% 30%, #0000 calc(84% - 3px), #1d4ed8 0 84%, #0000 0), radial-gradient(ellipse 45% 45% at 100% 30%, #0000 calc(84% - 3px), #1d4ed8 0 84%, #0000 0), radial-gradient(ellipse 45% 45% at 25% 80%, #0000 calc(84% - 3px), #1d4ed8 0 84%, #0000 0), radial-gradient(ellipse 45% 45% at 75% 80%, #0000 calc(84% - 3px), #1d4ed8 0 84%, #0000 0);
+  background-size: 48px 48px, 48px 48px, 48px 48px, 48px 48px, 48px 48px;
+  background-repeat: repeat;
+}"
+`;
+
 exports[`Manifest examples background-pattern: .a { @include background-pattern(stripes, $color: #2563eb, $size: 24px 1`] = `
 ".a {
   background-image: repeating-linear-gradient(-45deg, #2563eb 0px 3px, #0000 0 6px);
+  background-repeat: repeat;
+}"
+`;
+
+exports[`Manifest examples background-pattern: .a { @include background-pattern(sunburst, $color: #b45309, $backgroun 1`] = `
+".a {
+  background-image: repeating-conic-gradient(from 0deg at 50% 50%, #b45309 0 6deg, #0000 0 12deg);
+  background-repeat: repeat;
+  background-color: #fffbeb;
+}"
+`;
+
+exports[`Manifest examples background-pattern: .a { @include background-pattern(sunburst, $color: rgb(29 78 216 / 0.3 1`] = `
+".a {
+  background-image: repeating-conic-gradient(from 0deg at 50% 50%, rgba(29, 78, 216, 0.3) 0 3deg, #0000 0 6deg);
   background-repeat: repeat;
 }"
 `;

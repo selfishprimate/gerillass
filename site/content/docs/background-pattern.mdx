@@ -1,7 +1,7 @@
 ---
 title: "Background Pattern"
 page_title: "Background Pattern Sass Mixin"
-page_description: "Fifteen geometric background patterns from one line of Sass: dots, stripes, grid, checkerboard, crosshatch, zigzag, chevron, triangles, isometric, honeycomb, brick, waves, houndstooth, gingham and harlequin, all drawn with CSS gradients."
+page_description: "Eighteen geometric background patterns from one line of Sass: dots, stripes, grid, checkerboard, crosshatch, zigzag, chevron, triangles, isometric, honeycomb, brick, waves, houndstooth, gingham, harlequin, lattice, sunburst and concentric, all drawn with CSS gradients."
 page_keywords: "CSS Background Pattern, CSS Pattern Generator, Sass Background Pattern, CSS Polka Dots, CSS Stripes, CSS Grid Background, CSS Checkerboard, CSS Isometric Pattern, CSS Honeycomb, CSS Houndstooth, CSS Gradient Patterns"
 page_image: "gerillass-background-pattern.jpg"
 aliases:
@@ -13,7 +13,7 @@ aliases:
 
 <Member name="background-pattern">
 
-The **Background Pattern Sass mixin** draws fifteen geometric patterns with CSS gradients alone: no image file, no SVG, and nothing to download. Pass the pattern's name, and optionally its colours, its tile and the line inside it.
+The **Background Pattern Sass mixin** draws eighteen geometric patterns with CSS gradients alone: no image file, no SVG, and nothing to download. Pass the pattern's name, and optionally its colours, its tile and the line inside it.
 
 </Member>
 
@@ -26,14 +26,14 @@ The **Background Pattern Sass mixin** draws fifteen geometric patterns with CSS 
 ## Arguments
 
 <Arguments of="background-pattern" footnote="Each pattern reads only the arguments it needs, and passing one it ignores raises rather than doing nothing quietly.">
-  <Argument name="$kind" type="string">Which pattern: <code>dots</code>, <code>stripes</code>, <code>grid</code>, <code>checkerboard</code>, <code>crosshatch</code>, <code>zigzag</code>, <code>chevron</code>, <code>triangles</code>, <code>isometric</code>, <code>honeycomb</code>, <code>brick</code>, <code>waves</code>, <code>houndstooth</code>, <code>gingham</code> or <code>harlequin</code>.</Argument>
+  <Argument name="$kind" type="string">Which pattern: <code>dots</code>, <code>stripes</code>, <code>grid</code>, <code>checkerboard</code>, <code>crosshatch</code>, <code>zigzag</code>, <code>chevron</code>, <code>triangles</code>, <code>isometric</code>, <code>honeycomb</code>, <code>brick</code>, <code>waves</code>, <code>houndstooth</code>, <code>gingham</code>, <code>harlequin</code>, <code>lattice</code>, <code>sunburst</code> or <code>concentric</code>.</Argument>
   <Argument name="$color" type="color, list">One colour, or two or three for the patterns that layer them. The default is <code>currentColor</code> mixed with transparency, so a pattern follows the text colour.</Argument>
   <Argument name="$background" type="color">The colour under the pattern, written as <code>background-color</code>.</Argument>
   <Argument name="$size" type="number">The tile. The default is <code>2rem</code>. A <code>var()</code> or <code>calc()</code> works, and every offset is derived from it.</Argument>
   <Argument name="$thickness" type="number">The line, dot or mortar inside the tile. The default is a tenth of the tile for <code>dots</code> and an eighth for the rest.</Argument>
-  <Argument name="$angle" type="number">For <code>stripes</code>, <code>crosshatch</code>, <code>zigzag</code> and <code>triangles</code>: an angle such as <code>-45deg</code>, or a unitless number read as degrees.</Argument>
+  <Argument name="$angle" type="number">For <code>stripes</code>, <code>crosshatch</code>, <code>zigzag</code> and <code>triangles</code>: an angle such as <code>-45deg</code>, or a unitless number read as degrees. For <code>sunburst</code>: how wide one ray is.</Argument>
   <Argument name="$axis" type="string">For <code>grid</code>: <code>both</code>, <code>block</code> for horizontal lines only, or <code>inline</code> for vertical lines only.</Argument>
-  <Argument name="$stagger" type="boolean">For <code>dots</code>: <code>false</code> lines the dots up in a grid instead of offsetting every other row.</Argument>
+  <Argument name="$stagger" type="boolean">For <code>dots</code>, <code>false</code> lines them up in a grid instead of offsetting every other row. For <code>lattice</code>, <code>true</code> shifts the rows until the rings lock into one another.</Argument>
   <Argument name="$image" type="string">An image path, laid under the pattern as the last layer. Refused by the patterns that paint every pixel, since it would never be seen.</Argument>
 </Arguments>
 
@@ -661,6 +661,99 @@ Each pattern below is its own section, with the colours and the tile changed fro
   .texture { height: 160px; border-radius: 10px; }
 </style>
 <div class="texture"></div>
+```
+</Example>
+
+### Lattice
+
+<Example caption="Rings chained along each row, each one a gradient of its own. The tile draws a ring at each edge as well as in the middle, so the rings of neighbouring tiles overlap.">
+```scss
+.chain {
+  @include background-pattern(lattice, $color: #0f766e, $background: #f0fdfa, $size: 56px, $thickness: 3px);
+}
+```
+```html
+<style>
+  .chain { display: grid; place-items: center; height: 180px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .chain span { padding: 10px 16px; border-radius: 8px; background: rgb(255 255 255 / 0.92); font-weight: 600; color: #134e4a; }
+</style>
+<div class="chain"><span>Linked</span></div>
+```
+</Example>
+
+<Example caption="`$stagger: true` shifts the rows until the rings lock into one another, the way the Olympic rings do.">
+```scss
+.mesh {
+  @include background-pattern(lattice, $color: #1d4ed8, $background: #eff6ff, $size: 48px, $thickness: 3px, $stagger: true);
+}
+```
+```html
+<style>
+  .mesh { height: 180px; border-radius: 10px; }
+</style>
+<div class="mesh"></div>
+```
+</Example>
+
+### Sunburst
+
+<Example caption="Rays from the middle of the box, not a tile, so nothing here repeats. `$angle` is how wide one ray is and they repeat at twice that.">
+```scss
+.hero {
+  @include background-pattern(sunburst, $color: #b45309, $background: #fffbeb);
+}
+```
+```html
+<style>
+  .hero { display: grid; place-items: center; height: 190px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .hero span { padding: 12px 20px; border-radius: 999px; background: #fffbeb; font-weight: 700; color: #7c2d12; }
+</style>
+<div class="hero"><span>Grand opening</span></div>
+```
+</Example>
+
+<Example caption="A narrow ray in a pale colour is quiet enough to put a whole section on.">
+```scss
+.section {
+  @include background-pattern(sunburst, $color: rgb(29 78 216 / 0.14), $background: #eff6ff, $angle: 3deg);
+}
+```
+```html
+<style>
+  .section { display: grid; place-items: center; height: 180px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #1e3a8a; }
+</style>
+<div class="section">Everything in one place</div>
+```
+</Example>
+
+### Concentric
+
+<Example caption="Rings spreading from the middle, again drawn from the box rather than a tile. `$size` is the gap between them and `$thickness` the line.">
+```scss
+.radar {
+  @include background-pattern(concentric, $color: #be123c, $background: #fff1f2, $size: 16px, $thickness: 2px);
+}
+```
+```html
+<style>
+  .radar { display: grid; place-items: center; height: 190px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .radar span { padding: 10px 16px; border-radius: 8px; background: rgb(255 255 255 / 0.92); font-weight: 600; color: #881337; }
+</style>
+<div class="radar"><span>Signal found</span></div>
+```
+</Example>
+
+<Example caption="A wider gap and a hairline turn it into a contour map rather than a target.">
+```scss
+.contour {
+  @include background-pattern(concentric, $color: rgb(15 118 110 / 0.5), $background: #ecfeff, $size: 34px, $thickness: 1px);
+}
+```
+```html
+<style>
+  .contour { height: 180px; border-radius: 10px; }
+</style>
+<div class="contour"></div>
 ```
 </Example>
 

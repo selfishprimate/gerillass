@@ -277,7 +277,7 @@
           "name": "$kind",
           "default": "dots",
           "accepts": [
-            "dots, stripes, grid, checkerboard, crosshatch, zigzag, chevron, triangles, isometric, honeycomb, brick, waves, houndstooth, gingham, harlequin",
+            "dots, stripes, grid, checkerboard, crosshatch, zigzag, chevron, triangles, isometric, honeycomb, brick, waves, houndstooth, gingham, harlequin, lattice, sunburst, concentric",
             "the name in any case; anything else is refused with the list"
           ]
         },
@@ -288,14 +288,15 @@
       ],
       "file": "scss/library/_background-pattern.scss",
       "signature": "background-pattern($kind: dots, $params...)",
-      "summary": "Fifteen geometric background patterns drawn with gradients alone: dots, stripes, grid, checkerboard, crosshatch, zigzag, chevron, triangles, isometric, honeycomb, brick, waves, houndstooth, gingham and harlequin.",
+      "summary": "Eighteen geometric background patterns drawn with gradients alone: dots, stripes, grid, checkerboard, crosshatch, zigzag, chevron, triangles, isometric, honeycomb, brick, waves, houndstooth, gingham, harlequin, lattice, sunburst and concentric.",
       "caveats": [
         "It replaces `background-dots` and `background-stripes`, which are removed in 4.0.0. `background-pattern(dots, ...)` and `background-pattern(stripes, ...)` take their place, with the arguments named rather than positional.",
         "A pattern is decorative. In forced colours mode a browser sets `background-image` to `none` for anything that is not a `url()`, so every pattern here disappears: never carry meaning in one.",
         "The colours default to `currentColor` mixed with transparency, so a pattern follows the text colour in either colour scheme. Pass `$color` for one to three colours, in the order the pattern layers them.",
         "Only `background-image`, `background-size`, `background-position`, `background-repeat` and, when asked for, `background-color` are written. The `background` shorthand would reset a `background-color` set before the include.",
         "A diagonal hard edge is drawn with stair steps in Firefox 156 and smoothly in Chrome 152 and Safari 26.6.2, which shows in `zigzag`, `chevron` and `triangles`. Feathering the stop by half a pixel was measured and did not change it.",
-        "`gingham` draws its two bands at 55% of the colour, so the crossings darken on their own and an opaque colour still reads as cloth."
+        "`gingham` draws its two bands at 55% of the colour, so the crossings darken on their own and an opaque colour still reads as cloth.",
+        "`sunburst` and `concentric` are drawn from the middle of the box rather than from a tile, so they do not repeat: `sunburst` takes `$angle` as the width of one ray, and `concentric` takes `$size` as the gap between rings. `lattice` draws a ring at each edge of its tile as well as in the middle, so the rings of neighbouring tiles overlap, and `$stagger: true` shifts the rows until they lock into one another."
       ],
       "examples": [
         ".a { @include background-pattern(dots); }",
@@ -316,7 +317,12 @@
         ".a { @include background-pattern(dots, $color: #94a3b8, $size: 18px, $stagger: false); }",
         ".a { @include background-pattern(dots, $color: rgb(255 255 255 / 0.5), $size: 22px, $image: \"/img/a.png\"); }",
         ".a { @include background-pattern(gingham, $color: #1d4ed8, $size: 40px); }",
-        ".a { @include background-pattern(harlequin, $color: #0f766e, $background: #ccfbf1, $size: 44px); }"
+        ".a { @include background-pattern(harlequin, $color: #0f766e, $background: #ccfbf1, $size: 44px); }",
+        ".a { @include background-pattern(lattice, $color: #0f766e, $background: #f0fdfa, $size: 56px, $thickness: 3px); }",
+        ".a { @include background-pattern(lattice, $color: #1d4ed8, $size: 48px, $thickness: 3px, $stagger: true); }",
+        ".a { @include background-pattern(sunburst, $color: #b45309, $background: #fffbeb); }",
+        ".a { @include background-pattern(sunburst, $color: rgb(29 78 216 / 0.3), $angle: 3deg); }",
+        ".a { @include background-pattern(concentric, $color: #be123c, $background: #fff1f2, $size: 16px, $thickness: 2px); }"
       ],
       "rejects": [
         ".a { @include background-pattern(spiral); }",
@@ -334,7 +340,9 @@
         ".a { @include background-pattern(stripes, $stagger: false); }",
         ".a { @include background-pattern(checkerboard, $image: \"/img/a.png\"); }",
         ".a { @include background-pattern(isometric, $image: \"/img/a.png\"); }",
-        ".a { @include background-pattern(stripes, $color: red blue, $image: \"/img/a.png\"); }"
+        ".a { @include background-pattern(stripes, $color: red blue, $image: \"/img/a.png\"); }",
+        ".a { @include background-pattern(sunburst, $size: 20px); }",
+        ".a { @include background-pattern(concentric, $angle: 30deg); }"
       ]
     },
     {
