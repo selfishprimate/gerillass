@@ -150,7 +150,7 @@ a dropped declaration rather than an error.
 - Only `background-image`, `background-size`, `background-position`, `background-repeat` and, when asked for, `background-color` are written. The `background` shorthand would reset a `background-color` set before the include.
 - A diagonal hard edge is drawn with stair steps in Firefox 156 and smoothly in Chrome 152 and Safari 26.6.2, which shows in `zigzag`, `chevron` and `triangles`. Feathering the stop by half a pixel was measured and did not change it.
 - Each kind reads only the arguments it needs, and an argument it ignores raises rather than doing nothing: `$angle` belongs to `stripes`, `crosshatch`, `zigzag` and `triangles`, `$thickness` to `dots`, `stripes`, `grid`, `crosshatch`, `zigzag`, `brick` and `waves`, `$axis` to `grid`, `$stagger` to `dots`, and `$style` to `isometric`.
-- `isometric` draws solid cube faces by default and the isometric grid with `$style: line`. Cubes outlined in a line of even width are not reachable with gradients: the lines would have to be broken along their own direction, which needs `mask-composite`, and this mixin writes background properties only.
+- `isometric` draws solid cube faces by default, and `$style: line` draws the same cubes as an outline. A gradient cannot draw that outline, since its lines have to break along their own direction, so the tile is written as an inline SVG data URI. That tile carries its own colour and its own line width, which a browser value cannot reach inside: with `$style: line` the colour must be a real colour rather than `currentColor`, `var()` or `color-mix()`, and the size and the thickness must be lengths this stylesheet can resolve. All of it raises rather than drawing nothing.
 
 **`before`**
 

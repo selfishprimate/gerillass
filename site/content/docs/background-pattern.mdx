@@ -410,10 +410,10 @@ Each pattern below is its own section, with the colours and the tile changed fro
 ```
 </Example>
 
-<Example caption="`$style: line` draws the isometric grid instead of filling the faces, which is the look of isometric graph paper. `$thickness` is the line.">
+<Example caption="`$style: line` draws the same cubes as an outline, so the pattern keeps its depth without filling anything. `$size` is the cube's side and `$thickness` the line.">
 ```scss
 .grid-paper {
-  @include background-pattern(isometric, $style: line, $color: #94a3b8, $background: #fff, $size: 36px, $thickness: 1px);
+  @include background-pattern(isometric, $style: line, $color: #94a3b8, $background: #fff, $size: 24px, $thickness: 1px);
 }
 ```
 ```html
@@ -424,10 +424,10 @@ Each pattern below is its own section, with the colours and the tile changed fro
 ```
 </Example>
 
-<Example caption="The same grid in reverse, pale lines on a dark ground, at a larger tile.">
+<Example caption="The same outline in reverse, pale lines on a dark ground, at a larger cube.">
 ```scss
 .blueprint {
-  @include background-pattern(isometric, $style: line, $color: rgb(255 255 255 / 0.35), $background: #0f172a, $size: 52px, $thickness: 1px);
+  @include background-pattern(isometric, $style: line, $color: rgb(255 255 255 / 0.4), $background: #0f172a, $size: 34px, $thickness: 1px);
 }
 ```
 ```html
@@ -440,7 +440,9 @@ Each pattern below is its own section, with the colours and the tile changed fro
 
 <Hint kind="info">
 
-**Cubes outlined rather than filled** are not something gradients can draw. An outline of even width would need each line broken along its own direction, which a gradient cannot do: a gradient varies across its direction, not along it. Drawing it needs `mask-composite`, and this mixin writes background properties only. `$style: line` gives the grid the cubes are drawn on, which is the closest pure-background answer. Measured by trying it: stacking the filled pattern over an offset copy hides the lower one entirely, and thin conic spokes give lines that thicken as they leave the centre of each tile.
+**How the outline is drawn.** Gradients cannot draw it: an outline needs each line broken along its own direction, and a gradient varies across its direction, not along it. Stacking the filled pattern over an offset copy hides the lower one entirely, and thin conic spokes give lines that thicken as they leave the centre of each tile; both were tried. So `$style: line` writes the tile as an inline SVG, drawn in the stylesheet and carried in the `url()` itself, with no file to download.
+
+That tile is its own little document, and the page's colours do not reach inside it. With `$style: line` the colour has to be a real colour rather than `currentColor`, `var()` or `color-mix()`, and the size and the line have to be lengths, not `var()`. Each of those raises rather than drawing nothing. Everything else on this page is gradients only.
 
 </Hint>
 

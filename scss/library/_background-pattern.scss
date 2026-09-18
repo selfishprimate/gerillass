@@ -88,6 +88,42 @@ $-defaults: (1: 12%, 2: 6%, 3: 18%);
   @return string.unquote("calc(tan(#{$angle}) * #{$size})");
 }
 
+// A data URI for a tile the gradients cannot draw. Only the characters a CSS
+// url() and Firefox object to are encoded, so the value stays readable in the
+// compiled stylesheet.
+@function -encode($text) {
+  $out: "";
+  $pairs: ("%": "%25", "#": "%23", "<": "%3C", ">": "%3E", '"': "%22", " ": "%20");
+  @for $i from 1 through string.length($text) {
+    $char: string.slice($text, $i, $i);
+    $out: $out + (map.get($pairs, $char) or $char);
+  }
+  @return $out;
+}
+
+// The isometric cubes drawn as an outline: hexagons with three spokes, which
+// is the rhombille tiling. A gradient cannot draw it, since the lines have to
+// break along their own direction, so the tile is an inline SVG.
+// $side is the cube's side; the tile is sqrt(3) by 3 sides.
+@function -cube-tile($color, $side, $thickness) {
+  $w: 1.7320508;
+  $stroke: math.div($thickness, $side);
+  $paths: "";
+  @for $row from -1 through 2 {
+    @for $column from -1 through 2 {
+      $cx: $column * $w;
+      @if $row % 2 != 0 {
+        $cx: $cx + math.div($w, 2);
+      }
+      $cy: $row * 1.5;
+      $paths: $paths + "M#{$cx},#{$cy - 1}L#{$cx + math.div($w, 2)},#{$cy - 0.5}L#{$cx + math.div($w, 2)},#{$cy + 0.5}L#{$cx},#{$cy + 1}L#{$cx - math.div($w, 2)},#{$cy + 0.5}L#{$cx - math.div($w, 2)},#{$cy - 0.5}Z";
+      $paths: $paths + "M#{$cx},#{$cy}L#{$cx},#{$cy - 1}M#{$cx},#{$cy}L#{$cx - math.div($w, 2)},#{$cy + 0.5}M#{$cx},#{$cy}L#{$cx + math.div($w, 2)},#{$cy + 0.5}";
+    }
+  }
+  $svg: "<svg xmlns='http://www.w3.org/2000/svg' width='#{$w}' height='3' viewBox='0 0 #{$w} 3'><path d='#{$paths}' fill='none' stroke='#{$color}' stroke-width='#{$stroke}'/></svg>";
+  @return "url(\"data:image/svg+xml,#{-encode($svg)}\")";
+}
+
 @mixin background-pattern($kind: dots, $params...) {
   $keywords: meta.keywords($params);
   $known: "color" "background" "size" "thickness" "angle" "axis" "stagger" "style" "image";
@@ -288,17 +324,18 @@ $-defaults: (1: 12%, 2: 6%, 3: 18%);
     $sizes: ("#{$s} #{$s}");
   } @else if $name == "isometric" {
     @if $style == "line" {
-      // The isometric grid, drawn rather than filled: one upright family of
-      // lines and two at 30 degrees, which is isometric graph paper. A cube
-      // drawn as an outline, with each rhombus edged and nothing filled, needs
-      // its lines broken into dashes, and a gradient cannot break a line along
-      // its own direction; that wants mask-composite, which this mixin does
-      // not write.
-      $images: (
-        "repeating-linear-gradient(90deg, #{$c1} 0 #{$t}, #{$none} 0 #{-times($s, 0.8660254)})",
-        "repeating-linear-gradient(30deg, #{$c1} 0 #{$t}, #{$none} 0 #{$s})",
-        "repeating-linear-gradient(-30deg, #{$c1} 0 #{$t}, #{$none} 0 #{$s})"
-      );
+      // The outline keeps the cubes, and a gradient cannot draw it: the lines
+      // have to break along their own direction. The tile is an inline SVG, so
+      // the colour and the sizes have to be values this stylesheet can write
+      // into it, and a var() cannot reach inside a data URI.
+      @if meta.type-of($size) != "number" or meta.type-of($thickness) != "number" {
+        @error "`isometric` with `$style: line` needs a $size and a $thickness this stylesheet can resolve, such as `24px`: the tile is drawn as an SVG, and a browser value such as `var()` cannot reach inside it.";
+      }
+      @if meta.type-of($c1) != "color" {
+        @error "`#{meta.inspect($c1)}` cannot be used with `isometric` and `$style: line`. The tile is drawn as an SVG, which does not inherit the page's colours, so pass a colour such as `#334155` rather than `currentColor`, `var()` or `color-mix()`.";
+      }
+      $images: (-cube-tile($c1, $size, $thickness));
+      $sizes: ("#{-times($s, 1.7320508)} #{-times($s, 3)}");
     } @else {
       $g: "0 120deg, #{$none} 0";
       $images: (

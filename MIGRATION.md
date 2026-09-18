@@ -721,6 +721,9 @@ old call right to left when you move it.
 
 `grid`, `checkerboard`, `crosshatch`, `zigzag`, `chevron`, `triangles`,
 `isometric`, `honeycomb`, `brick`, `waves` and `houndstooth`, each one include.
+`isometric` also takes `$style: line`, which draws the cubes as an outline
+through an inline SVG tile, since a gradient cannot break a line along its own
+direction.
 All thirteen were drawn in Chrome 152, Firefox 156 and Safari 26.6.2, and the
 three lay them out identically; Firefox draws a hard diagonal edge with visible
 stair steps where the other two smooth it, which shows in `zigzag`, `chevron`
