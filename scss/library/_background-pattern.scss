@@ -10,7 +10,7 @@
 @use "../internal/color-problem" as *;
 @use "../internal/length-problem" as *;
 
-// Eighteen geometric patterns drawn with gradients alone, no image and no SVG.
+// Seventeen geometric patterns drawn with gradients alone, no image and no SVG.
 // It replaces `background-dots` and `background-stripes`, which were the same
 // job written twice and disagreed on how an image underneath was layered.
 //
@@ -24,7 +24,7 @@
 //
 // The colours default to `currentColor` mixed with transparency, so a pattern
 // follows the text colour and needs nothing to work in dark mode.
-$-kinds: "dots" "stripes" "grid" "checkerboard" "crosshatch" "zigzag" "chevron" "triangles" "isometric" "honeycomb" "brick" "waves" "houndstooth" "gingham" "harlequin" "lattice" "sunburst" "concentric";
+$-kinds: "dots" "stripes" "grid" "checkerboard" "crosshatch" "zigzag" "chevron" "triangles" "isometric" "honeycomb" "brick" "waves" "houndstooth" "gingham" "harlequin" "sunburst" "concentric";
 $-angle-units: "deg" "grad" "rad" "turn";
 
 // What each kind reads, so an argument it ignores can be refused rather than
@@ -45,7 +45,6 @@ $-takes: (
   "houndstooth": "color" "size",
   "gingham": "color" "size" "thickness",
   "harlequin": "color" "size",
-  "lattice": "color" "size" "thickness" "stagger",
   "sunburst": "color" "angle",
   "concentric": "color" "size" "thickness"
 );
@@ -201,9 +200,7 @@ $-defaults: (1: 12%, 2: 6%, 3: 18%);
     @error "`#{meta.inspect($stagger)}` is not a valid $stagger for `background-pattern`. Pass `false` to line the dots up in a grid rather than staggering them.";
   }
   @if $stagger == null {
-    // Dots are staggered by default, as `background-dots` drew them; the
-    // lattice is not, since its rings chain along a row.
-    $stagger: $name == "dots";
+    $stagger: true;
   }
 
   @if $image != null and meta.type-of($image) != "string" {
@@ -373,24 +370,6 @@ $-defaults: (1: 12%, 2: 6%, 3: 18%);
       "linear-gradient(-45deg, #{$c1} 25%, #{$none} 0 75%, #{$c1} 0)"
     );
     $sizes: -repeat("#{$s} #{$s}", 2);
-  } @else if $name == "lattice" {
-    // A ring per place in the tile, each one a gradient of its own. The rings
-    // are smaller than the tile and their places overlap, so the rings of
-    // neighbouring tiles interlock. Staggered, the rows shift and lock into
-    // one another as the Olympic rings do.
-    // The ring sits inside the gradient's own ellipse, which is smaller than
-    // the tile, and a ring is drawn at each edge as well as in the middle, so
-    // the rings overlap where the tiles meet.
-    $ring: "#{$none} calc(84% - #{$t}), #{$c1} 0 84%, #{$none} 0";
-    $places: "50% 50%", "0% 50%", "100% 50%";
-    @if $stagger {
-      $places: "50% 30%", "0% 30%", "100% 30%", "25% 80%", "75% 80%";
-    }
-    $images: ();
-    @each $place in $places {
-      $images: list.append($images, "radial-gradient(ellipse 45% 45% at #{$place}, #{$ring})", comma);
-    }
-    $sizes: -repeat("#{$s} #{$s}", list.length($images));
   } @else if $name == "sunburst" {
     // Rays from the middle of the box rather than from a tile, so there is
     // nothing to size and $size is refused.

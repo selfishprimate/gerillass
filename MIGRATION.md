@@ -717,11 +717,11 @@ old call right to left when you move it.
   a tile apart rather than at a half and a double offset, so the arrangement is
   even. `$stagger: false` is the old `$diagonal: false`.
 
-### The sixteen new patterns
+### The fifteen new patterns
 
 `grid`, `checkerboard`, `crosshatch`, `zigzag`, `chevron`, `triangles`,
 `isometric`, `honeycomb`, `brick`, `waves`, `houndstooth`, `gingham`,
-`harlequin`, `lattice`, `sunburst` and `concentric`, each one include.
+`harlequin`, `sunburst` and `concentric`, each one include.
 All thirteen were drawn in Chrome 152, Firefox 156 and Safari 26.6.2, and the
 three lay them out identically; Firefox draws a hard diagonal edge with visible
 stair steps where the other two smooth it, which shows in `zigzag`, `chevron`

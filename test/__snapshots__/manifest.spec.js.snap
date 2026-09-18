@@ -422,23 +422,6 @@ exports[`Manifest examples background-pattern: .a { @include background-pattern(
 }"
 `;
 
-exports[`Manifest examples background-pattern: .a { @include background-pattern(lattice, $color: #0f766e, $background 1`] = `
-".a {
-  background-image: radial-gradient(ellipse 45% 45% at 50% 50%, #0000 calc(84% - 3px), #0f766e 0 84%, #0000 0), radial-gradient(ellipse 45% 45% at 0% 50%, #0000 calc(84% - 3px), #0f766e 0 84%, #0000 0), radial-gradient(ellipse 45% 45% at 100% 50%, #0000 calc(84% - 3px), #0f766e 0 84%, #0000 0);
-  background-size: 56px 56px, 56px 56px, 56px 56px;
-  background-repeat: repeat;
-  background-color: #f0fdfa;
-}"
-`;
-
-exports[`Manifest examples background-pattern: .a { @include background-pattern(lattice, $color: #1d4ed8, $size: 48px 1`] = `
-".a {
-  background-image: radial-gradient(ellipse 45% 45% at 50% 30%, #0000 calc(84% - 3px), #1d4ed8 0 84%, #0000 0), radial-gradient(ellipse 45% 45% at 0% 30%, #0000 calc(84% - 3px), #1d4ed8 0 84%, #0000 0), radial-gradient(ellipse 45% 45% at 100% 30%, #0000 calc(84% - 3px), #1d4ed8 0 84%, #0000 0), radial-gradient(ellipse 45% 45% at 25% 80%, #0000 calc(84% - 3px), #1d4ed8 0 84%, #0000 0), radial-gradient(ellipse 45% 45% at 75% 80%, #0000 calc(84% - 3px), #1d4ed8 0 84%, #0000 0);
-  background-size: 48px 48px, 48px 48px, 48px 48px, 48px 48px, 48px 48px;
-  background-repeat: repeat;
-}"
-`;
-
 exports[`Manifest examples background-pattern: .a { @include background-pattern(stripes, $color: #2563eb, $size: 24px 1`] = `
 ".a {
   background-image: repeating-linear-gradient(-45deg, #2563eb 0px 3px, #0000 0 6px);
