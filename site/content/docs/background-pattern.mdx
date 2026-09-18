@@ -333,7 +333,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 
 ### Chevron
 
-<Example caption="A ticket, cut along the top and the bottom. The tile sets how wide each tooth is.">
+<Example caption="A ticket, cut along the top and the bottom. The tile sets how wide each tooth is, and the lower strip is the same include flipped, so the teeth meet the body from the other side.">
 ```scss
 .ticket-edge {
   @include background-pattern(chevron, $color: #fff, $background: #f43f5e, $size: 18px);
@@ -343,13 +343,14 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <style>
   .ticket { max-width: 320px; border-radius: 10px; overflow: hidden; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
   .ticket-edge { height: 14px; }
+  .ticket-edge.bottom { transform: scaleY(-1); }
   .ticket-body { padding: 16px 18px; background: #f43f5e; color: #fff; }
   .ticket-body b { display: block; font-size: 20px; }
 </style>
 <div class="ticket">
   <div class="ticket-edge"></div>
   <div class="ticket-body"><b>Admit one</b>Row F, seat 12</div>
-  <div class="ticket-edge"></div>
+  <div class="ticket-edge bottom"></div>
 </div>
 ```
 </Example>
