@@ -10,7 +10,8 @@
 @use "../internal/color-problem" as *;
 @use "../internal/length-problem" as *;
 
-// Thirteen geometric patterns drawn with gradients alone, no image and no SVG.
+// Sixteen patterns, drawn with gradients where gradients can draw them and an
+// inline SVG tile where they cannot.
 // It replaces `background-dots` and `background-stripes`, which were the same
 // job written twice and disagreed on how an image underneath was layered.
 //
@@ -24,7 +25,7 @@
 //
 // The colours default to `currentColor` mixed with transparency, so a pattern
 // follows the text colour and needs nothing to work in dark mode.
-$-kinds: "dots" "stripes" "grid" "checkerboard" "crosshatch" "zigzag" "chevron" "triangles" "isometric" "honeycomb" "brick" "waves" "houndstooth";
+$-kinds: "dots" "stripes" "grid" "checkerboard" "crosshatch" "zigzag" "chevron" "triangles" "isometric" "honeycomb" "brick" "waves" "houndstooth" "gingham" "harlequin" "terrazzo";
 $-angle-units: "deg" "grad" "rad" "turn";
 
 // What each kind reads, so an argument it ignores can be refused rather than
@@ -42,7 +43,10 @@ $-takes: (
   "honeycomb": "color" "size" "thickness" "style",
   "brick": "color" "size" "thickness" "style",
   "waves": "color" "size" "thickness",
-  "houndstooth": "color" "size"
+  "houndstooth": "color" "size",
+  "gingham": "color" "size" "thickness",
+  "harlequin": "color" "size",
+  "terrazzo": "color" "size"
 );
 
 @function -name($value) {
@@ -137,6 +141,15 @@ $-defaults: (1: 12%, 2: 6%, 3: 18%);
   @return "url(\"data:image/svg+xml,#{-encode($svg)}\")";
 }
 
+// Terrazzo chips: circles and slivers at fixed places in the tile, in three
+// colours. Their positions are typed out rather than random, so the same call
+// always draws the same floor.
+@function -terrazzo-tile($c1, $c2, $c3, $size) {
+  $chips: "<circle cx='10' cy='12' r='3' fill='#{$c1}'/><circle cx='42' cy='30' r='4' fill='#{$c2}'/><circle cx='25' cy='48' r='2.5' fill='#{$c3}'/><circle cx='56' cy='54' r='3' fill='#{$c1}'/><circle cx='34' cy='8' r='2' fill='#{$c3}'/><rect x='48' y='8' width='7' height='4' rx='1' fill='#{$c3}' transform='rotate(24 51 10)'/><rect x='14' y='34' width='8' height='3.5' rx='1' fill='#{$c2}' transform='rotate(-38 17 35)'/><rect x='4' y='56' width='7' height='3' rx='1' fill='#{$c2}' transform='rotate(12 7 57)'/><rect x='58' y='20' width='6' height='3' rx='1' fill='#{$c1}' transform='rotate(-20 60 21)'/>";
+  $svg: "<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'>#{$chips}</svg>";
+  @return "url(\"data:image/svg+xml,#{-encode($svg)}\")";
+}
+
 @mixin background-pattern($kind: dots, $params...) {
   $keywords: meta.keywords($params);
   $known: "color" "background" "size" "thickness" "angle" "axis" "stagger" "style" "image";
@@ -207,7 +220,13 @@ $-defaults: (1: 12%, 2: 6%, 3: 18%);
       @error "`#{meta.inspect($thickness)}` is not a valid $thickness for `background-pattern`: #{$problem}. A browser drops the pattern.";
     }
   } @else {
-    $thickness: -times($size, if($name == "dots", 0.1, 0.125));
+    $factor: 0.125;
+    @if $name == "dots" {
+      $factor: 0.1;
+    } @else if $name == "gingham" {
+      $factor: 0.5;
+    }
+    $thickness: -times($size, $factor);
   }
 
   // An angle in any CSS unit, or a unitless number read as degrees, as
@@ -430,6 +449,32 @@ $-defaults: (1: 12%, 2: 6%, 3: 18%);
   } @else if $name == "waves" {
     // Scallops: one circle per tile, cut at the tile's edge.
     $images: ("radial-gradient(circle at 50% 100%, #{$c1} 45%, #{$none} 46%)");
+    $sizes: ("#{$s} #{$s}");
+  } @else if $name == "gingham" {
+    // Two translucent bands crossing, so the crossings darken on their own,
+    // which is what makes the cloth read as gingham rather than as a grid.
+    $band: "color-mix(in srgb, #{$c1} 55%, transparent)";
+    $period: -times($t, 2);
+    $images: (
+      "repeating-linear-gradient(90deg, #{$band} 0 #{$t}, #{$none} 0 #{$period})",
+      "repeating-linear-gradient(0deg, #{$band} 0 #{$t}, #{$none} 0 #{$period})"
+    );
+  } @else if $name == "harlequin" {
+    $images: (
+      "linear-gradient(45deg, #{$c1} 25%, #{$none} 0 75%, #{$c1} 0)",
+      "linear-gradient(-45deg, #{$c1} 25%, #{$none} 0 75%, #{$c1} 0)"
+    );
+    $sizes: -repeat("#{$s} #{$s}", 2);
+  } @else if $name == "terrazzo" {
+    @if meta.type-of($size) != "number" {
+      @error "`terrazzo` needs a $size this stylesheet can resolve, such as `120px`: its chips are drawn as an SVG, and a browser value such as `var()` cannot reach inside it.";
+    }
+    @each $chip in ($c1, $c2, $c3) {
+      @if meta.type-of($chip) != "color" {
+        @error "`#{meta.inspect($chip)}` cannot be used for `terrazzo`. Its chips are drawn as an SVG, which does not inherit the page's colours, so pass colours such as `#f97316 #0ea5e9 #16a34a` rather than `currentColor`, `var()` or `color-mix()`.";
+      }
+    }
+    $images: (-terrazzo-tile($c1, $c2, $c3, $size));
     $sizes: ("#{$s} #{$s}");
   } @else if $name == "houndstooth" {
     // Antoine Bernier's three layers, where the second colour is the ground the

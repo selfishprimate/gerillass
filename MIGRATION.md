@@ -717,10 +717,11 @@ old call right to left when you move it.
   a tile apart rather than at a half and a double offset, so the arrangement is
   even. `$stagger: false` is the old `$diagonal: false`.
 
-### The eleven new patterns
+### The fourteen new patterns
 
 `grid`, `checkerboard`, `crosshatch`, `zigzag`, `chevron`, `triangles`,
-`isometric`, `honeycomb`, `brick`, `waves` and `houndstooth`, each one include.
+`isometric`, `honeycomb`, `brick`, `waves`, `houndstooth`, `gingham`,
+`harlequin` and `terrazzo`, each one include.
 `isometric` also takes `$style: line`, which draws the cubes as an outline
 through an inline SVG tile, since a gradient cannot break a line along its own
 direction.

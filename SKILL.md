@@ -152,6 +152,7 @@ a dropped declaration rather than an error.
 - Each kind reads only the arguments it needs, and an argument it ignores raises rather than doing nothing: `$angle` belongs to `stripes`, `crosshatch`, `zigzag` and `triangles`, `$thickness` to `dots`, `stripes`, `grid`, `crosshatch`, `zigzag`, `brick` and `waves`, `$axis` to `grid`, `$stagger` to `dots`, and `$style` to `isometric`, `honeycomb` and `brick`.
 - `isometric`, `honeycomb` and `brick` draw solid shapes by default, and `$style: line` draws the same shapes as an outline: cubes, a hexagon grid, and a running bond of mortar lines. A gradient cannot draw that outline, since its lines have to break along their own direction, so the tile is written as an inline SVG data URI. That tile carries its own colour and its own line width, which a browser value cannot reach inside: with `$style: line` the colour must be a real colour rather than `currentColor`, `var()` or `color-mix()`, and the size and the thickness must be lengths this stylesheet can resolve. All of it raises rather than drawing nothing.
 - An image goes under the pattern as the last background layer, so it is only seen where the pattern leaves a gap. Rendered in Chrome 152, Firefox 156 and Safari 26.6.2: dots, grid, crosshatch, zigzag, chevron, triangles, waves, brick, houndstooth, one-colour stripes and every `$style: line` pattern show it; checkerboard, solid isometric and honeycomb, and stripes with more than one colour cover it completely, and those four refuse `$image` rather than hiding it.
+- `gingham` draws its two bands at 55% of the colour, so the crossings darken on their own and an opaque colour still reads as cloth. `terrazzo` is an inline SVG like the `$style: line` patterns, so its chips need real colours and a size this stylesheet can resolve; their places in the tile are fixed, so the same call always draws the same floor.
 
 **`before`**
 
@@ -248,7 +249,7 @@ a dropped declaration rather than an error.
 | `antialias($value: null)` | Turns on subpixel-antialiased text smoothing. |
 | `aspect-ratio($ratio: null, $fit: cover)` | Holds an element to a ratio and adds what CSS aspect-ratio alone leaves out: object-fit so an image is cropped rather than stretched, and border: 0 so an iframe does not overflow its container by 4px. Apply it to the element itself, not to a wrapper. |
 | `background-image($image-url: null, $filter-color: null, $filter-direction: null)` | Background image with an optional colour or gradient filter laid over it. |
-| `background-pattern($kind: dots, $params...)` | Thirteen geometric background patterns drawn with gradients alone: dots, stripes, grid, checkerboard, crosshatch, zigzag, chevron, triangles, isometric, honeycomb, brick, waves and houndstooth. |
+| `background-pattern($kind: dots, $params...)` | Sixteen geometric background patterns: dots, stripes, grid, checkerboard, crosshatch, zigzag, chevron, triangles, isometric, honeycomb, brick, waves, houndstooth, gingham, harlequin and terrazzo. |
 | `before($content: null)` | Styles the ::before pseudo-element. A `data-` argument becomes an attr() content value. |
 | `border-box($value: null)` | Applies box-sizing: border-box. |
 | `border-radius($args...)` | Rounds corners, either all of them, one named corner, or all four individually. |

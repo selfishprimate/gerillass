@@ -1,7 +1,7 @@
 ---
 title: "Background Pattern"
 page_title: "Background Pattern Sass Mixin"
-page_description: "Thirteen geometric background patterns from one line of Sass: dots, stripes, grid, checkerboard, crosshatch, zigzag, chevron, triangles, isometric, honeycomb, brick, waves and houndstooth, drawn with CSS gradients alone."
+page_description: "Sixteen geometric background patterns from one line of Sass: dots, stripes, grid, checkerboard, crosshatch, zigzag, chevron, triangles, isometric, honeycomb, brick, waves, houndstooth, gingham, harlequin and terrazzo."
 page_keywords: "CSS Background Pattern, CSS Pattern Generator, Sass Background Pattern, CSS Polka Dots, CSS Stripes, CSS Grid Background, CSS Checkerboard, CSS Isometric Pattern, CSS Honeycomb, CSS Houndstooth, CSS Gradient Patterns"
 page_image: "gerillass-background-pattern.jpg"
 aliases:
@@ -13,7 +13,7 @@ aliases:
 
 <Member name="background-pattern">
 
-The **Background Pattern Sass mixin** draws thirteen geometric patterns with CSS gradients alone: no image file, no SVG, and nothing to download. Pass the pattern's name, and optionally its colours, its tile and the line inside it.
+The **Background Pattern Sass mixin** draws sixteen geometric patterns, thirteen of them with CSS gradients alone and the rest from an inline SVG tile. No image file, and nothing to download. Pass the pattern's name, and optionally its colours, its tile and the line inside it.
 
 </Member>
 
@@ -26,7 +26,7 @@ The **Background Pattern Sass mixin** draws thirteen geometric patterns with CSS
 ## Arguments
 
 <Arguments of="background-pattern" footnote="Each pattern reads only the arguments it needs, and passing one it ignores raises rather than doing nothing quietly.">
-  <Argument name="$kind" type="string">Which pattern: <code>dots</code>, <code>stripes</code>, <code>grid</code>, <code>checkerboard</code>, <code>crosshatch</code>, <code>zigzag</code>, <code>chevron</code>, <code>triangles</code>, <code>isometric</code>, <code>honeycomb</code>, <code>brick</code>, <code>waves</code> or <code>houndstooth</code>.</Argument>
+  <Argument name="$kind" type="string">Which pattern: <code>dots</code>, <code>stripes</code>, <code>grid</code>, <code>checkerboard</code>, <code>crosshatch</code>, <code>zigzag</code>, <code>chevron</code>, <code>triangles</code>, <code>isometric</code>, <code>honeycomb</code>, <code>brick</code>, <code>waves</code>, <code>houndstooth</code>, <code>gingham</code>, <code>harlequin</code> or <code>terrazzo</code>.</Argument>
   <Argument name="$color" type="color, list">One colour, or two or three for the patterns that layer them. The default is <code>currentColor</code> mixed with transparency, so a pattern follows the text colour.</Argument>
   <Argument name="$background" type="color">The colour under the pattern, written as <code>background-color</code>.</Argument>
   <Argument name="$size" type="number">The tile. The default is <code>2rem</code>. A <code>var()</code> or <code>calc()</code> works, and every offset is derived from it.</Argument>
@@ -678,6 +678,99 @@ That tile is its own little document, and the page's colours do not reach inside
   .tweed { height: 150px; border-radius: 10px;  }
 </style>
 <div class="tweed"></div>
+```
+</Example>
+
+### Gingham
+
+<Example caption="Two translucent bands crossing, so the crossings darken on their own. That is what makes it read as cloth rather than as a grid, and an opaque colour still works.">
+```scss
+.picnic {
+  @include background-pattern(gingham, $color: #1d4ed8, $size: 40px);
+}
+```
+```html
+<style>
+  .picnic { display: grid; place-items: center; height: 170px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .picnic span { padding: 10px 16px; border-radius: 8px; background: rgb(255 255 255 / 0.92); font-weight: 600; color: #1e3a8a; }
+</style>
+<div class="picnic"><span>Table for two</span></div>
+```
+</Example>
+
+<Example caption="A smaller check in red on cream is the tablecloth of every trattoria. `$thickness` is the band, and it defaults to half the tile.">
+```scss
+.cloth {
+  @include background-pattern(gingham, $color: #b91c1c, $background: #fff7ed, $size: 22px);
+}
+```
+```html
+<style>
+  .cloth { height: 160px; border-radius: 10px; }
+</style>
+<div class="cloth"></div>
+```
+</Example>
+
+### Harlequin
+
+<Example caption="Diamonds in two colours, the pattern of a jester's coat. One colour draws the diamonds and `$background` is what shows between them.">
+```scss
+.jester {
+  @include background-pattern(harlequin, $color: #0f766e, $background: #ccfbf1, $size: 44px);
+}
+```
+```html
+<style>
+  .jester { display: grid; place-items: center; height: 170px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .jester span { padding: 10px 16px; border-radius: 999px; background: rgb(255 255 255 / 0.92); font-weight: 600; color: #134e4a; }
+</style>
+<div class="jester"><span>Carnival</span></div>
+```
+</Example>
+
+<Example caption="At a smaller tile in two close colours it is a quiet argyle-ish texture rather than a costume.">
+```scss
+.texture {
+  @include background-pattern(harlequin, $color: #e2e8f0, $background: #f8fafc, $size: 22px);
+}
+```
+```html
+<style>
+  .texture { height: 160px; border-radius: 10px; }
+</style>
+<div class="texture"></div>
+```
+</Example>
+
+### Terrazzo
+
+<Example caption="Chips of three colours scattered over a ground, the floor of every new coffee shop. The chips are an inline SVG, drawn at fixed places, so the same call always gives the same floor.">
+```scss
+.floor {
+  @include background-pattern(terrazzo, $color: #f97316 #0ea5e9 #16a34a, $background: #f8fafc, $size: 140px);
+}
+```
+```html
+<style>
+  .floor { display: grid; place-items: center; height: 180px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .floor span { padding: 10px 16px; border-radius: 8px; background: rgb(255 255 255 / 0.9); font-weight: 600; color: #334155; }
+</style>
+<div class="floor"><span>Now serving</span></div>
+```
+</Example>
+
+<Example caption="Three tones of one colour on a dark ground, at a smaller tile, which reads as stone rather than as confetti.">
+```scss
+.stone {
+  @include background-pattern(terrazzo, $color: #cbd5e1 #94a3b8 #64748b, $background: #1e293b, $size: 90px);
+}
+```
+```html
+<style>
+  .stone { height: 170px; border-radius: 10px; }
+</style>
+<div class="stone"></div>
 ```
 </Example>
 
