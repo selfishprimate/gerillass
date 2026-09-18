@@ -94,12 +94,12 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="Dots over a photograph, which is the halftone trick: a light dot at a small tile breaks the picture up without hiding it.">
 ```scss
 .halftone {
-  @include background-pattern(dots, $color: rgb(255 255 255 / 0.65), $size: 10px, $thickness: 2px, $image: "/images/backgrounds/03.jpg");
+  @include background-pattern(dots, $color: rgb(255 255 255 / 0.22), $size: 10px, $thickness: 1.4px, $image: "/images/backgrounds/03.jpg");
 }
 ```
 ```html
 <style>
-  .halftone { aspect-ratio: 4 / 3; max-width: 420px; border-radius: 10px; }
+  .halftone { aspect-ratio: 4 / 3; border-radius: 10px; }
 </style>
 <div class="halftone"></div>
 ```
@@ -157,12 +157,12 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="A photograph under the stripes. `$image` lays the picture in as the last background layer, so the pattern reads as a screen over it. The old mixins put it in a `::before` at `z-index: -1`, where an ancestor's own background could hide it.">
 ```scss
 .cover {
-  @include background-pattern(stripes, $color: rgb(15 23 42 / 0.55), $thickness: 3px, $image: "/images/backgrounds/02.jpg");
+  @include background-pattern(stripes, $color: rgb(15 23 42 / 0.22), $thickness: 2px, $image: "/images/backgrounds/02.jpg");
 }
 ```
 ```html
 <style>
-  .cover { display: grid; align-items: end; aspect-ratio: 4 / 3; max-width: 420px; padding: 18px; border-radius: 10px; font: 700 22px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; color: #fff; }
+  .cover { display: grid; align-items: end; aspect-ratio: 4 / 3; padding: 18px; border-radius: 10px; font: 700 22px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; color: #fff; }
 </style>
 <div class="cover">Shot on location</div>
 ```
@@ -225,12 +225,12 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="Scan lines over a picture: the grid with one axis, a thin dark line and a small tile, which is the old television look.">
 ```scss
 .crt {
-  @include background-pattern(grid, $axis: block, $color: rgb(0 0 0 / 0.45), $size: 4px, $thickness: 2px, $image: "/images/backgrounds/05.jpg");
+  @include background-pattern(grid, $axis: block, $color: rgb(0 0 0 / 0.28), $size: 4px, $thickness: 1px, $image: "/images/backgrounds/05.jpg");
 }
 ```
 ```html
 <style>
-  .crt { aspect-ratio: 4 / 3; max-width: 420px; border-radius: 10px; }
+  .crt { aspect-ratio: 4 / 3; border-radius: 10px; }
 </style>
 <div class="crt"></div>
 ```
@@ -552,12 +552,12 @@ That tile is its own little document, and the page's colours do not reach inside
 <Example caption="The hexagon outline over a photograph, which needs `$style: line`: the solid honeycomb covers every pixel and refuses an image.">
 ```scss
 .hex-photo {
-  @include background-pattern(honeycomb, $style: line, $color: rgb(255 255 255 / 0.55), $size: 26px, $thickness: 1.5px, $image: "/images/backgrounds/06.jpg");
+  @include background-pattern(honeycomb, $style: line, $color: rgb(255 255 255 / 0.3), $size: 26px, $thickness: 1px, $image: "/images/backgrounds/06.jpg");
 }
 ```
 ```html
 <style>
-  .hex-photo { aspect-ratio: 4 / 3; max-width: 420px; border-radius: 10px; }
+  .hex-photo { aspect-ratio: 4 / 3; border-radius: 10px; }
 </style>
 <div class="hex-photo"></div>
 ```
