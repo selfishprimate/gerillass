@@ -39,8 +39,8 @@ $-takes: (
   "chevron": "color" "size",
   "triangles": "color" "size" "angle",
   "isometric": "color" "size" "thickness" "style",
-  "honeycomb": "color" "size",
-  "brick": "color" "size" "thickness",
+  "honeycomb": "color" "size" "thickness" "style",
+  "brick": "color" "size" "thickness" "style",
   "waves": "color" "size" "thickness",
   "houndstooth": "color" "size"
 );
@@ -101,11 +101,11 @@ $-defaults: (1: 12%, 2: 6%, 3: 18%);
   @return $out;
 }
 
-// The isometric cubes drawn as an outline: hexagons with three spokes, which
-// is the rhombille tiling. A gradient cannot draw it, since the lines have to
-// break along their own direction, so the tile is an inline SVG.
-// $side is the cube's side; the tile is sqrt(3) by 3 sides.
-@function -cube-tile($color, $side, $thickness) {
+// Hexagons drawn as an outline, with the three spokes that turn them into
+// cubes when $spokes is true. A gradient cannot draw either, since the lines
+// have to break along their own direction, so the tile is an inline SVG.
+// $side is the hexagon's side; the tile is sqrt(3) by 3 sides.
+@function -hex-tile($color, $side, $thickness, $spokes: true) {
   $w: 1.7320508;
   $stroke: math.div($thickness, $side);
   $paths: "";
@@ -117,10 +117,23 @@ $-defaults: (1: 12%, 2: 6%, 3: 18%);
       }
       $cy: $row * 1.5;
       $paths: $paths + "M#{$cx},#{$cy - 1}L#{$cx + math.div($w, 2)},#{$cy - 0.5}L#{$cx + math.div($w, 2)},#{$cy + 0.5}L#{$cx},#{$cy + 1}L#{$cx - math.div($w, 2)},#{$cy + 0.5}L#{$cx - math.div($w, 2)},#{$cy - 0.5}Z";
-      $paths: $paths + "M#{$cx},#{$cy}L#{$cx},#{$cy - 1}M#{$cx},#{$cy}L#{$cx - math.div($w, 2)},#{$cy + 0.5}M#{$cx},#{$cy}L#{$cx + math.div($w, 2)},#{$cy + 0.5}";
+      @if $spokes {
+        $paths: $paths + "M#{$cx},#{$cy}L#{$cx},#{$cy - 1}M#{$cx},#{$cy}L#{$cx - math.div($w, 2)},#{$cy + 0.5}M#{$cx},#{$cy}L#{$cx + math.div($w, 2)},#{$cy + 0.5}";
+      }
     }
   }
   $svg: "<svg xmlns='http://www.w3.org/2000/svg' width='#{$w}' height='3' viewBox='0 0 #{$w} 3'><path d='#{$paths}' fill='none' stroke='#{$color}' stroke-width='#{$stroke}'/></svg>";
+  @return "url(\"data:image/svg+xml,#{-encode($svg)}\")";
+}
+
+// A running bond drawn as an outline: two courses per tile, the second offset
+// by half a brick, which is what a gradient cannot place without a layer that
+// is limited on both axes. $side is the brick's length and the tile is square,
+// two courses tall.
+@function -brick-tile($color, $side, $thickness) {
+  $stroke: math.div($thickness, $side);
+  $paths: "M0,0L1,0M0,0.5L1,0.5M0,1L1,1M0,0L0,0.5M1,0L1,0.5M0.5,0.5L0.5,1";
+  $svg: "<svg xmlns='http://www.w3.org/2000/svg' width='1' height='1' viewBox='0 0 1 1'><path d='#{$paths}' fill='none' stroke='#{$color}' stroke-width='#{$stroke}'/></svg>";
   @return "url(\"data:image/svg+xml,#{-encode($svg)}\")";
 }
 
@@ -225,7 +238,7 @@ $-defaults: (1: 12%, 2: 6%, 3: 18%);
   }
 
   @if $style != null and not list.index("fill" "line", -name($style)) {
-    @error "`#{meta.inspect($style)}` is not a valid $style for `background-pattern`. Pass `fill` for solid faces or `line` for the drawn grid.";
+    @error "`#{meta.inspect($style)}` is not a valid $style for `background-pattern`. Pass `fill` for solid faces or `line` for the shapes drawn as an outline.";
   }
   $style: -name($style or fill);
 
@@ -334,7 +347,7 @@ $-defaults: (1: 12%, 2: 6%, 3: 18%);
       @if meta.type-of($c1) != "color" {
         @error "`#{meta.inspect($c1)}` cannot be used with `isometric` and `$style: line`. The tile is drawn as an SVG, which does not inherit the page's colours, so pass a colour such as `#334155` rather than `currentColor`, `var()` or `color-mix()`.";
       }
-      $images: (-cube-tile($c1, $size, $thickness));
+      $images: (-hex-tile($c1, $size, $thickness));
       $sizes: ("#{-times($s, 1.7320508)} #{-times($s, 3)}");
     } @else {
       $g: "0 120deg, #{$none} 0";
@@ -350,29 +363,51 @@ $-defaults: (1: 12%, 2: 6%, 3: 18%);
       $sizes: ("#{-times($s, 1.7320508)} #{$s}");
     }
   } @else if $name == "honeycomb" {
-    $images: (
-      "repeating-conic-gradient(from 30deg, #{$none} 0 120deg, #{$c3} 0 180deg)",
-      "repeating-conic-gradient(from 30deg, #{$c1} 0 60deg, #{$c2} 0 120deg, #{$c3} 0 180deg)"
-    );
-    $sizes: ("#{$s} #{-times($s, 0.5773503)}", "#{$s} #{-times($s, 0.5773503)}");
-    $positions: ("#{-times($s, 0.5)} #{-times($s, 0.2886751)}", "0 0");
+    @if $style == "line" {
+      @if meta.type-of($size) != "number" or meta.type-of($thickness) != "number" {
+        @error "`honeycomb` with `$style: line` needs a $size and a $thickness this stylesheet can resolve, such as `24px`: the tile is drawn as an SVG, and a browser value such as `var()` cannot reach inside it.";
+      }
+      @if meta.type-of($c1) != "color" {
+        @error "`#{meta.inspect($c1)}` cannot be used with `honeycomb` and `$style: line`. The tile is drawn as an SVG, which does not inherit the page's colours, so pass a colour such as `#334155` rather than `currentColor`, `var()` or `color-mix()`.";
+      }
+      $images: (-hex-tile($c1, $size, $thickness, $spokes: false));
+      $sizes: ("#{-times($s, 1.7320508)} #{-times($s, 3)}");
+    } @else {
+      $images: (
+        "repeating-conic-gradient(from 30deg, #{$none} 0 120deg, #{$c3} 0 180deg)",
+        "repeating-conic-gradient(from 30deg, #{$c1} 0 60deg, #{$c2} 0 120deg, #{$c3} 0 180deg)"
+      );
+      $sizes: ("#{$s} #{-times($s, 0.5773503)}", "#{$s} #{-times($s, 0.5773503)}");
+      $positions: ("#{-times($s, 0.5)} #{-times($s, 0.2886751)}", "0 0");
+    }
   } @else if $name == "brick" {
-    // The proportions of the 58px tile the pattern was drawn at, kept as
-    // fractions of $size so any size lays out the same.
-    $brick: -times($s, math.div(23, 58));
-    $images: (
-      "linear-gradient(335deg, #{$c1} #{$brick}, #{$none} 0)",
-      "linear-gradient(155deg, #{$c2} #{$brick}, #{$none} 0)",
-      "linear-gradient(335deg, #{$c1} #{$brick}, #{$none} 0)",
-      "linear-gradient(155deg, #{$c2} #{$brick}, #{$none} 0)"
-    );
-    $sizes: -repeat("#{$s} #{$s}", 4);
-    $positions: (
-      "0 #{-times($s, math.div(2, 58))}",
-      "#{-times($s, math.div(4, 58))} #{-times($s, math.div(35, 58))}",
-      "#{-times($s, math.div(29, 58))} #{-times($s, math.div(31, 58))}",
-      "#{-times($s, math.div(34, 58))} #{-times($s, math.div(6, 58))}"
-    );
+    @if $style == "line" {
+      @if meta.type-of($size) != "number" or meta.type-of($thickness) != "number" {
+        @error "`brick` with `$style: line` needs a $size and a $thickness this stylesheet can resolve, such as `48px`: the tile is drawn as an SVG, and a browser value such as `var()` cannot reach inside it.";
+      }
+      @if meta.type-of($c1) != "color" {
+        @error "`#{meta.inspect($c1)}` cannot be used with `brick` and `$style: line`. The tile is drawn as an SVG, which does not inherit the page's colours, so pass a colour such as `#b91c1c` rather than `currentColor`, `var()` or `color-mix()`.";
+      }
+      $images: (-brick-tile($c1, $size, $thickness));
+      $sizes: ("#{$s} #{$s}");
+    } @else {
+      // The proportions of the 58px tile the pattern was drawn at, kept as
+      // fractions of $size so any size lays out the same.
+      $brick: -times($s, math.div(23, 58));
+      $images: (
+        "linear-gradient(335deg, #{$c1} #{$brick}, #{$none} 0)",
+        "linear-gradient(155deg, #{$c2} #{$brick}, #{$none} 0)",
+        "linear-gradient(335deg, #{$c1} #{$brick}, #{$none} 0)",
+        "linear-gradient(155deg, #{$c2} #{$brick}, #{$none} 0)"
+      );
+      $sizes: -repeat("#{$s} #{$s}", 4);
+      $positions: (
+        "0 #{-times($s, math.div(2, 58))}",
+        "#{-times($s, math.div(4, 58))} #{-times($s, math.div(35, 58))}",
+        "#{-times($s, math.div(29, 58))} #{-times($s, math.div(31, 58))}",
+        "#{-times($s, math.div(34, 58))} #{-times($s, math.div(6, 58))}"
+      );
+    }
   } @else if $name == "waves" {
     // Scallops: one circle per tile, cut at the tile's edge.
     $images: ("radial-gradient(circle at 50% 100%, #{$c1} 45%, #{$none} 46%)");

@@ -33,6 +33,8 @@ The **Background Pattern Sass mixin** draws thirteen geometric patterns with CSS
   <Argument name="$thickness" type="number">The line, dot or mortar inside the tile. The default is a tenth of the tile for <code>dots</code> and an eighth for the rest.</Argument>
   <Argument name="$angle" type="number">For <code>stripes</code>, <code>crosshatch</code>, <code>zigzag</code> and <code>triangles</code>: an angle such as <code>-45deg</code>, or a unitless number read as degrees.</Argument>
   <Argument name="$axis" type="string">For <code>grid</code>: <code>both</code>, <code>block</code> for horizontal lines only, or <code>inline</code> for vertical lines only.</Argument>
+  <Argument name="$stagger" type="boolean">For <code>dots</code>: <code>false</code> lines the dots up in a grid instead of offsetting every other row.</Argument>
+  <Argument name="$style" type="string">For <code>isometric</code>, <code>honeycomb</code> and <code>brick</code>: <code>fill</code>, the default, or <code>line</code>, which draws the same shapes as an outline through an inline SVG tile.</Argument>
   <Argument name="$image" type="string">An image path, laid under the pattern as the last layer.</Argument>
 </Arguments>
 
@@ -440,7 +442,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 
 <Hint kind="info">
 
-**How the outline is drawn.** Gradients cannot draw it: an outline needs each line broken along its own direction, and a gradient varies across its direction, not along it. Stacking the filled pattern over an offset copy hides the lower one entirely, and thin conic spokes give lines that thicken as they leave the centre of each tile; both were tried. So `$style: line` writes the tile as an inline SVG, drawn in the stylesheet and carried in the `url()` itself, with no file to download.
+**How the outline is drawn.** This is the one thing on the page that is not a gradient. Gradients cannot draw it: an outline needs each line broken along its own direction, and a gradient varies across its direction, not along it. Stacking the filled pattern over an offset copy hides the lower one entirely, and thin conic spokes give lines that thicken as they leave the centre of each tile; both were tried. So `$style: line`, on `isometric`, `honeycomb` and `brick`, writes the tile as an inline SVG, drawn in the stylesheet and carried in the `url()` itself, with no file to download.
 
 That tile is its own little document, and the page's colours do not reach inside it. With `$style: line` the colour has to be a real colour rather than `currentColor`, `var()` or `color-mix()`, and the size and the line have to be lengths, not `var()`. Each of those raises rather than drawing nothing. Everything else on this page is gradients only.
 
@@ -477,6 +479,20 @@ That tile is its own little document, and the page's colours do not reach inside
 ```
 </Example>
 
+<Example caption="`$style: line` draws the cells as an outline instead of filling them, which is the chicken wire look.">
+```scss
+.comb-lines {
+  @include background-pattern(honeycomb, $style: line, $color: #b45309, $background: #fffbeb, $size: 24px, $thickness: 1.5px);
+}
+```
+```html
+<style>
+  .comb-lines { display: grid; place-items: center; height: 170px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #78350f; }
+</style>
+<div class="comb-lines">Hive status</div>
+```
+</Example>
+
 ### Brick
 
 <Example caption="A wall behind a quotation. `$size` is the brick and the ground shows through as the mortar.">
@@ -505,6 +521,20 @@ That tile is its own little document, and the page's colours do not reach inside
   .pavement { height: 150px; border-radius: 10px;  }
 </style>
 <div class="pavement"></div>
+```
+</Example>
+
+<Example caption="`$style: line` draws the bond as mortar lines with nothing filled, which is the glazed tile look rather than a wall.">
+```scss
+.tiles {
+  @include background-pattern(brick, $style: line, $color: #94a3b8, $background: #fff, $size: 44px, $thickness: 1px);
+}
+```
+```html
+<style>
+  .tiles { display: grid; place-items: center; height: 170px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #475569; }
+</style>
+<div class="tiles">Kitchen</div>
 ```
 </Example>
 
