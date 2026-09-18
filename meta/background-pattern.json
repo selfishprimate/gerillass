@@ -8,7 +8,8 @@
     "Only `background-image`, `background-size`, `background-position`, `background-repeat` and, when asked for, `background-color` are written. The `background` shorthand would reset a `background-color` set before the include.",
     "A diagonal hard edge is drawn with stair steps in Firefox 156 and smoothly in Chrome 152 and Safari 26.6.2, which shows in `zigzag`, `chevron` and `triangles`. Feathering the stop by half a pixel was measured and did not change it.",
     "Each kind reads only the arguments it needs, and an argument it ignores raises rather than doing nothing: `$angle` belongs to `stripes`, `crosshatch`, `zigzag` and `triangles`, `$thickness` to `dots`, `stripes`, `grid`, `crosshatch`, `zigzag`, `brick` and `waves`, `$axis` to `grid`, `$stagger` to `dots`, and `$style` to `isometric`, `honeycomb` and `brick`.",
-    "`isometric`, `honeycomb` and `brick` draw solid shapes by default, and `$style: line` draws the same shapes as an outline: cubes, a hexagon grid, and a running bond of mortar lines. A gradient cannot draw that outline, since its lines have to break along their own direction, so the tile is written as an inline SVG data URI. That tile carries its own colour and its own line width, which a browser value cannot reach inside: with `$style: line` the colour must be a real colour rather than `currentColor`, `var()` or `color-mix()`, and the size and the thickness must be lengths this stylesheet can resolve. All of it raises rather than drawing nothing."
+    "`isometric`, `honeycomb` and `brick` draw solid shapes by default, and `$style: line` draws the same shapes as an outline: cubes, a hexagon grid, and a running bond of mortar lines. A gradient cannot draw that outline, since its lines have to break along their own direction, so the tile is written as an inline SVG data URI. That tile carries its own colour and its own line width, which a browser value cannot reach inside: with `$style: line` the colour must be a real colour rather than `currentColor`, `var()` or `color-mix()`, and the size and the thickness must be lengths this stylesheet can resolve. All of it raises rather than drawing nothing.",
+    "An image goes under the pattern as the last background layer, so it is only seen where the pattern leaves a gap. Rendered in Chrome 152, Firefox 156 and Safari 26.6.2: dots, grid, crosshatch, zigzag, chevron, triangles, waves, brick, houndstooth, one-colour stripes and every `$style: line` pattern show it; checkerboard, solid isometric and honeycomb, and stripes with more than one colour cover it completely, and those four refuse `$image` rather than hiding it."
   ],
   "arguments": [
     {
@@ -73,7 +74,8 @@
     {
       "name": "$image",
       "accepts": [
-        "an image path as a string, laid under the pattern as the last layer"
+        "an image path as a string, laid under the pattern as the last layer",
+        "refused for the patterns that paint every pixel: checkerboard, isometric and honeycomb with their solid faces, and stripes with more than one colour"
       ]
     }
   ],
@@ -93,11 +95,11 @@
     ".a { @include background-pattern(houndstooth, $color: #111 #fff, $size: 18px); }",
     ".a { @include background-pattern(grid, $axis: block, $color: #bae6fd, $size: 1.75rem, $thickness: 1px); }",
     ".a { @include background-pattern(dots, $size: var(--tile), $color: var(--ink)); }",
-    ".a { @include background-pattern(stripes, $color: #2563eb #f59e0b, $image: \"/img/a.png\"); }",
     ".a { @include background-pattern(dots, $color: #94a3b8, $size: 18px, $stagger: false); }",
     ".a { @include background-pattern(isometric, $style: line, $color: #334155, $background: #f8fafc, $size: 22px, $thickness: 1px); }",
     ".a { @include background-pattern(honeycomb, $style: line, $color: #b45309, $background: #fffbeb, $size: 24px, $thickness: 1.5px); }",
-    ".a { @include background-pattern(brick, $style: line, $color: #b91c1c, $background: #fee2e2, $size: 60px, $thickness: 2px); }"
+    ".a { @include background-pattern(brick, $style: line, $color: #b91c1c, $background: #fee2e2, $size: 60px, $thickness: 2px); }",
+    ".a { @include background-pattern(dots, $color: rgb(255 255 255 / 0.5), $size: 22px, $image: \"/img/a.png\"); }"
   ],
   "rejects": [
     ".a { @include background-pattern(spiral); }",
@@ -118,6 +120,9 @@
     ".a { @include background-pattern(isometric, $style: line, $color: currentColor); }",
     ".a { @include background-pattern(isometric, $style: line, $size: var(--tile)); }",
     ".a { @include background-pattern(honeycomb, $style: line, $color: var(--ink)); }",
-    ".a { @include background-pattern(brick, $style: line, $size: var(--tile)); }"
+    ".a { @include background-pattern(brick, $style: line, $size: var(--tile)); }",
+    ".a { @include background-pattern(checkerboard, $image: \"/img/a.png\"); }",
+    ".a { @include background-pattern(isometric, $image: \"/img/a.png\"); }",
+    ".a { @include background-pattern(stripes, $color: red blue, $image: \"/img/a.png\"); }"
   ]
 }

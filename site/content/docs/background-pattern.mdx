@@ -35,7 +35,7 @@ The **Background Pattern Sass mixin** draws thirteen geometric patterns with CSS
   <Argument name="$axis" type="string">For <code>grid</code>: <code>both</code>, <code>block</code> for horizontal lines only, or <code>inline</code> for vertical lines only.</Argument>
   <Argument name="$stagger" type="boolean">For <code>dots</code>: <code>false</code> lines the dots up in a grid instead of offsetting every other row.</Argument>
   <Argument name="$style" type="string">For <code>isometric</code>, <code>honeycomb</code> and <code>brick</code>: <code>fill</code>, the default, or <code>line</code>, which draws the same shapes as an outline through an inline SVG tile.</Argument>
-  <Argument name="$image" type="string">An image path, laid under the pattern as the last layer.</Argument>
+  <Argument name="$image" type="string">An image path, laid under the pattern as the last layer. Refused by the patterns that paint every pixel, since it would never be seen.</Argument>
 </Arguments>
 
 ## Patterns
@@ -91,6 +91,20 @@ Each pattern below is its own section, with the colours and the tile changed fro
 ```
 </Example>
 
+<Example caption="Dots over a photograph, which is the halftone trick: a light dot at a small tile breaks the picture up without hiding it.">
+```scss
+.halftone {
+  @include background-pattern(dots, $color: rgb(255 255 255 / 0.65), $size: 10px, $thickness: 2px, $image: "/images/backgrounds/03.jpg");
+}
+```
+```html
+<style>
+  .halftone { aspect-ratio: 4 / 3; max-width: 420px; border-radius: 10px; }
+</style>
+<div class="halftone"></div>
+```
+</Example>
+
 ### Stripes
 
 <Example caption="A cafe awning. `$angle` turns the stripes and `$thickness` sets how wide each one is.">
@@ -137,6 +151,20 @@ Each pattern below is its own section, with the colours and the tile changed fro
   .pole { height: 120px; border-radius: 10px;  }
 </style>
 <div class="pole"></div>
+```
+</Example>
+
+<Example caption="A photograph under the stripes. `$image` lays the picture in as the last background layer, so the pattern reads as a screen over it. The old mixins put it in a `::before` at `z-index: -1`, where an ancestor's own background could hide it.">
+```scss
+.cover {
+  @include background-pattern(stripes, $color: rgb(15 23 42 / 0.55), $thickness: 3px, $image: "/images/backgrounds/02.jpg");
+}
+```
+```html
+<style>
+  .cover { display: grid; align-items: end; aspect-ratio: 4 / 3; max-width: 420px; padding: 18px; border-radius: 10px; font: 700 22px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; color: #fff; }
+</style>
+<div class="cover">Shot on location</div>
 ```
 </Example>
 
@@ -191,6 +219,20 @@ Each pattern below is its own section, with the colours and the tile changed fro
   <p>Ship 4.0.0</p>
   <p>Write the migration guide</p>
 </div>
+```
+</Example>
+
+<Example caption="Scan lines over a picture: the grid with one axis, a thin dark line and a small tile, which is the old television look.">
+```scss
+.crt {
+  @include background-pattern(grid, $axis: block, $color: rgb(0 0 0 / 0.45), $size: 4px, $thickness: 2px, $image: "/images/backgrounds/05.jpg");
+}
+```
+```html
+<style>
+  .crt { aspect-ratio: 4 / 3; max-width: 420px; border-radius: 10px; }
+</style>
+<div class="crt"></div>
 ```
 </Example>
 
@@ -261,10 +303,40 @@ Each pattern below is its own section, with the colours and the tile changed fro
 
 ### Zigzag
 
+<Example caption="A knitted band across a card. The tile sets how wide each stitch is.">
+```scss
+.knit {
+  @include background-pattern(zigzag, $color: #7c3aed, $background: #ede9fe, $size: 40px);
+}
+```
+```html
+<style>
+  .knit { height: 150px; border-radius: 10px;  }
+</style>
+<div class="knit"></div>
+```
+</Example>
+
+<Example caption="A smaller tile in two colours turns the same pattern into a woven trim.">
+```scss
+.trim {
+  @include background-pattern(zigzag, $color: #0f766e, $background: #ccfbf1, $size: 18px);
+}
+```
+```html
+<style>
+  .trim { height: 150px; border-radius: 10px; }
+</style>
+<div class="trim"></div>
+```
+</Example>
+
+### Chevron
+
 <Example caption="A ticket, cut along the top and the bottom. The tile sets how wide each tooth is.">
 ```scss
 .ticket-edge {
-  @include background-pattern(zigzag, $color: #fff, $background: #f43f5e, $size: 18px);
+  @include background-pattern(chevron, $color: #fff, $background: #f43f5e, $size: 18px);
 }
 ```
 ```html
@@ -281,22 +353,6 @@ Each pattern below is its own section, with the colours and the tile changed fro
 </div>
 ```
 </Example>
-
-<Example caption="At a larger tile the same pattern is a knitted band.">
-```scss
-.knit {
-  @include background-pattern(zigzag, $color: #7c3aed, $background: #ede9fe, $size: 40px);
-}
-```
-```html
-<style>
-  .knit { height: 150px; border-radius: 10px;  }
-</style>
-<div class="knit"></div>
-```
-</Example>
-
-### Chevron
 
 <Example caption="A band of arrows under a step heading, pointing the way through a flow.">
 ```scss
@@ -493,6 +549,20 @@ That tile is its own little document, and the page's colours do not reach inside
 ```
 </Example>
 
+<Example caption="The hexagon outline over a photograph, which needs `$style: line`: the solid honeycomb covers every pixel and refuses an image.">
+```scss
+.hex-photo {
+  @include background-pattern(honeycomb, $style: line, $color: rgb(255 255 255 / 0.55), $size: 26px, $thickness: 1.5px, $image: "/images/backgrounds/06.jpg");
+}
+```
+```html
+<style>
+  .hex-photo { aspect-ratio: 4 / 3; max-width: 420px; border-radius: 10px; }
+</style>
+<div class="hex-photo"></div>
+```
+</Example>
+
 ### Brick
 
 <Example caption="A wall behind a quotation. `$size` is the brick and the ground shows through as the mortar.">
@@ -610,21 +680,11 @@ That tile is its own little document, and the page's colours do not reach inside
 ```
 </Example>
 
-### With a photograph
+<Hint kind="info">
 
-<Example caption="`$image` lays a picture under the pattern as the last layer, covering the box. The old mixins put it in a `::before` at `z-index: -1`, where an ancestor's own background could hide it.">
-```scss
-.card {
-  @include background-pattern(stripes, $color: rgb(15 23 42 / 0.55), $thickness: 3px, $image: "/images/backgrounds/02.jpg");
-}
-```
-```html
-<style>
-  .card { display: grid; align-items: end; height: 170px; padding: 18px; border-radius: 10px; font: 700 22px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; color: #fff; }
-</style>
-<div class="card">Shot on location</div>
-```
-</Example>
+**Which patterns let an image through.** The image is the last background layer, so it shows wherever the pattern leaves a gap. Rendered in Chrome 152, Firefox 156 and Safari 26.6.2: `dots`, `grid`, `crosshatch`, `zigzag`, `chevron`, `triangles`, `waves`, `brick`, `houndstooth`, `stripes` in one colour and every `$style: line` pattern show the picture through. Four cover every pixel of it: `checkerboard`, `isometric` and `honeycomb` with their solid faces, and `stripes` with more than one colour, since the colours fill the whole period. Those four refuse `$image` instead of hiding it, and the message says what to do: a pattern with gaps, one colour, or `$style: line`.
+
+</Hint>
 
 <Hint kind="danger">
 

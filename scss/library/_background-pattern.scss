@@ -246,6 +246,25 @@ $-defaults: (1: 12%, 2: 6%, 3: 18%);
     @error "`#{meta.inspect($image)}` is not a valid $image for `background-pattern`. Pass an image path as a string.";
   }
 
+  // Four patterns paint every pixel, so an image under them is never seen.
+  // Rendered in Chrome 152, Firefox 156 and Safari 26.6.2: with an image
+  // underneath, dots, grid, crosshatch, zigzag, chevron, triangles, waves,
+  // brick, houndstooth, one-colour stripes and every `$style: line` pattern
+  // show it through their gaps, and these four do not.
+  @if $image != null {
+    $covers: null;
+    @if $name == "checkerboard" {
+      $covers: "the two colours meet with no gap";
+    } @else if ($name == "isometric" or $name == "honeycomb") and $style == "fill" {
+      $covers: "the faces are solid";
+    } @else if $name == "stripes" and $color != null and list.length($color) > 1 {
+      $covers: "several colours fill the whole period, leaving no gap between the stripes";
+    }
+    @if $covers {
+      @error "`$image` cannot be seen under the `#{$name}` pattern in `background-pattern`: #{$covers}, so the image would never show. Use a pattern that leaves gaps, pass one colour, or draw this one as an outline with `$style: line`.";
+    }
+  }
+
   $c1: -color($color, 1);
   $c2: -color($color, 2);
   $c3: -color($color, 3);

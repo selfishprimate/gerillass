@@ -344,6 +344,15 @@ exports[`Manifest examples background-pattern: .a { @include background-pattern(
 }"
 `;
 
+exports[`Manifest examples background-pattern: .a { @include background-pattern(dots, $color: rgb(255 255 255 / 0.5), 1`] = `
+".a {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.5) 2.2px, #0000 0), radial-gradient(rgba(255, 255, 255, 0.5) 2.2px, #0000 0), url(/img/a.png);
+  background-size: 22px 22px, 22px 22px, cover;
+  background-position: 0 0, 11px 11px, center;
+  background-repeat: repeat;
+}"
+`;
+
 exports[`Manifest examples background-pattern: .a { @include background-pattern(dots, $size: var(--tile), $color: var 1`] = `
 ".a {
   background-image: radial-gradient(var(--ink) calc(var(--tile) * 0.1), #0000 0), radial-gradient(var(--ink) calc(var(--tile) * 0.1), #0000 0);
@@ -413,15 +422,6 @@ exports[`Manifest examples background-pattern: .a { @include background-pattern(
   background-size: 38.1051176px 66px;
   background-repeat: repeat;
   background-color: #f8fafc;
-}"
-`;
-
-exports[`Manifest examples background-pattern: .a { @include background-pattern(stripes, $color: #2563eb #f59e0b, $im 1`] = `
-".a {
-  background-image: repeating-linear-gradient(-45deg, #2563eb 0rem 0.25rem, #f59e0b 0.25rem 0.5rem), url(/img/a.png);
-  background-size: auto, cover;
-  background-position: 0 0, center;
-  background-repeat: repeat;
 }"
 `;
 
