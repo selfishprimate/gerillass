@@ -310,14 +310,6 @@ exports[`Manifest examples background-pattern: .a { @include background-pattern(
 }"
 `;
 
-exports[`Manifest examples background-pattern: .a { @include background-pattern(confetti, $color: #f43f5e #22d3ee #a3 1`] = `
-".a {
-  background-image: radial-gradient(ellipse 5% 2% at 14% 12%, #f43f5e 99%, #0000), radial-gradient(ellipse 4.5% 2% at 67% 8%, #22d3ee 99%, #0000), radial-gradient(ellipse 5.5% 2% at 40% 32%, #a3e635 99%, #0000), radial-gradient(ellipse 5% 2% at 84% 40%, #f43f5e 99%, #0000), radial-gradient(ellipse 4.5% 2% at 19% 56%, #22d3ee 99%, #0000), radial-gradient(ellipse 5.5% 2% at 58% 68%, #f43f5e 99%, #0000), radial-gradient(ellipse 4.5% 2% at 91% 76%, #a3e635 99%, #0000), radial-gradient(ellipse 5% 2% at 34% 88%, #22d3ee 99%, #0000), radial-gradient(ellipse 2.6% 2.6% at 70% 22%, #a3e635 99%, #0000), radial-gradient(ellipse 2.2% 2.2% at 22% 38%, #f43f5e 99%, #0000), radial-gradient(ellipse 2.8% 2.8% at 58% 48%, #22d3ee 99%, #0000), radial-gradient(ellipse 2.4% 2.4% at 8% 76%, #a3e635 99%, #0000), radial-gradient(ellipse 2.2% 2.2% at 44% 94%, #f43f5e 99%, #0000), radial-gradient(ellipse 2.6% 2.6% at 92% 58%, #22d3ee 99%, #0000);
-  background-size: 120px 120px, 120px 120px, 120px 120px, 120px 120px, 120px 120px, 120px 120px, 120px 120px, 120px 120px, 120px 120px, 120px 120px, 120px 120px, 120px 120px, 120px 120px, 120px 120px;
-  background-repeat: repeat;
-}"
-`;
-
 exports[`Manifest examples background-pattern: .a { @include background-pattern(crosshatch, $size: 20px, $angle: 30de 1`] = `
 ".a {
   background-image: repeating-linear-gradient(30deg, color-mix(in oklab, currentColor 12%, transparent) 0 2.5px, #0000 0 20px), repeating-linear-gradient(-30deg, color-mix(in oklab, currentColor 6%, transparent) 0 2.5px, #0000 0 20px);
@@ -426,15 +418,6 @@ exports[`Manifest examples background-pattern: .a { @include background-pattern(
 ".a {
   background-image: repeating-linear-gradient(-45deg, #2563eb 0px 3px, #0000 0 6px);
   background-repeat: repeat;
-}"
-`;
-
-exports[`Manifest examples background-pattern: .a { @include background-pattern(terrazzo, $color: #f97316 #0ea5e9 #16 1`] = `
-".a {
-  background-image: radial-gradient(ellipse 4% 4% at 16% 19%, #f97316 99%, #0000), radial-gradient(ellipse 5% 5% at 66% 47%, #0ea5e9 99%, #0000), radial-gradient(ellipse 3.5% 3.5% at 39% 75%, #16a34a 99%, #0000), radial-gradient(ellipse 4% 4% at 88% 84%, #f97316 99%, #0000), radial-gradient(ellipse 2.5% 2.5% at 53% 12%, #16a34a 99%, #0000), radial-gradient(ellipse 6% 2.5% at 80% 16%, #16a34a 99%, #0000), radial-gradient(ellipse 6.5% 2.5% at 26% 55%, #0ea5e9 99%, #0000), radial-gradient(ellipse 5.5% 2% at 9% 88%, #0ea5e9 99%, #0000), radial-gradient(ellipse 5% 2% at 94% 33%, #f97316 99%, #0000);
-  background-size: 140px 140px, 140px 140px, 140px 140px, 140px 140px, 140px 140px, 140px 140px, 140px 140px, 140px 140px, 140px 140px;
-  background-repeat: repeat;
-  background-color: #f8fafc;
 }"
 `;
 

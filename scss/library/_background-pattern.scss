@@ -10,7 +10,7 @@
 @use "../internal/color-problem" as *;
 @use "../internal/length-problem" as *;
 
-// Seventeen geometric patterns drawn with gradients alone, no image and no SVG.
+// Fifteen geometric patterns drawn with gradients alone, no image and no SVG.
 // It replaces `background-dots` and `background-stripes`, which were the same
 // job written twice and disagreed on how an image underneath was layered.
 //
@@ -24,7 +24,7 @@
 //
 // The colours default to `currentColor` mixed with transparency, so a pattern
 // follows the text colour and needs nothing to work in dark mode.
-$-kinds: "dots" "stripes" "grid" "checkerboard" "crosshatch" "zigzag" "chevron" "triangles" "isometric" "honeycomb" "brick" "waves" "houndstooth" "gingham" "harlequin" "terrazzo" "confetti";
+$-kinds: "dots" "stripes" "grid" "checkerboard" "crosshatch" "zigzag" "chevron" "triangles" "isometric" "honeycomb" "brick" "waves" "houndstooth" "gingham" "harlequin";
 $-angle-units: "deg" "grad" "rad" "turn";
 
 // What each kind reads, so an argument it ignores can be refused rather than
@@ -44,9 +44,7 @@ $-takes: (
   "waves": "color" "size" "thickness",
   "houndstooth": "color" "size",
   "gingham": "color" "size" "thickness",
-  "harlequin": "color" "size",
-  "terrazzo": "color" "size",
-  "confetti": "color" "size"
+  "harlequin": "color" "size"
 );
 
 @function -name($value) {
@@ -90,38 +88,6 @@ $-defaults: (1: 12%, 2: 6%, 3: 18%);
     @return $size * math.tan($angle);
   }
   @return string.unquote("calc(tan(#{$angle}) * #{$size})");
-}
-
-// One scattered chip: a radial gradient of its own, placed in the tile by
-// percentage so it scales with it. A circle's radius cannot be a percentage in
-// CSS, measured in Chrome 152, so every chip is written as an ellipse.
-@function -chip($rx, $ry, $x, $y, $color) {
-  @return "radial-gradient(ellipse #{$rx}% #{$ry}% at #{$x}% #{$y}%, #{$color} 99%, #0000)";
-}
-
-// Chips of three colours at places typed out rather than drawn at random, so
-// the same call always gives the same floor. Terrazzo mixes rounds and
-// slivers; confetti is lighter and busier.
-@function -scatter($kind, $c1, $c2, $c3) {
-  $chips: (
-    (4, 4, 16, 19, $c1), (5, 5, 66, 47, $c2), (3.5, 3.5, 39, 75, $c3),
-    (4, 4, 88, 84, $c1), (2.5, 2.5, 53, 12, $c3), (6, 2.5, 80, 16, $c3),
-    (6.5, 2.5, 26, 55, $c2), (5.5, 2, 9, 88, $c2), (5, 2, 94, 33, $c1)
-  );
-  @if $kind == "confetti" {
-    $chips: (
-      (5, 2, 14, 12, $c1), (4.5, 2, 67, 8, $c2), (5.5, 2, 40, 32, $c3),
-      (5, 2, 84, 40, $c1), (4.5, 2, 19, 56, $c2), (5.5, 2, 58, 68, $c1),
-      (4.5, 2, 91, 76, $c3), (5, 2, 34, 88, $c2), (2.6, 2.6, 70, 22, $c3),
-      (2.2, 2.2, 22, 38, $c1), (2.8, 2.8, 58, 48, $c2), (2.4, 2.4, 8, 76, $c3),
-      (2.2, 2.2, 44, 94, $c1), (2.6, 2.6, 92, 58, $c2)
-    );
-  }
-  $out: ();
-  @each $chip in $chips {
-    $out: list.append($out, -chip(list.nth($chip, 1), list.nth($chip, 2), list.nth($chip, 3), list.nth($chip, 4), list.nth($chip, 5)), comma);
-  }
-  @return $out;
 }
 
 @mixin background-pattern($kind: dots, $params...) {
@@ -236,7 +202,7 @@ $-defaults: (1: 12%, 2: 6%, 3: 18%);
   // Four patterns paint every pixel, so an image under them is never seen.
   // Rendered in Chrome 152, Firefox 156 and Safari 26.6.2: with an image
   // underneath, dots, grid, crosshatch, zigzag, chevron, triangles, waves,
-  // brick, houndstooth, gingham, harlequin, terrazzo, confetti and one-colour
+  // brick, houndstooth, gingham, harlequin and one-colour
   // stripes show it through their gaps, and these four do not.
   @if $image != null {
     $covers: null;
@@ -396,9 +362,6 @@ $-defaults: (1: 12%, 2: 6%, 3: 18%);
       "linear-gradient(-45deg, #{$c1} 25%, #{$none} 0 75%, #{$c1} 0)"
     );
     $sizes: -repeat("#{$s} #{$s}", 2);
-  } @else if $name == "terrazzo" or $name == "confetti" {
-    $images: -scatter($name, $c1, $c2, $c3);
-    $sizes: -repeat("#{$s} #{$s}", list.length($images));
   } @else if $name == "houndstooth" {
     // Antoine Bernier's three layers, where the second colour is the ground the
     // teeth sit on, so it is written as the background colour when none is given.

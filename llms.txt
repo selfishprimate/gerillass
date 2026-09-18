@@ -21,7 +21,7 @@ Arguments are validated and refused with a message naming what is accepted, so a
 - [antialias($value: null)](https://docs.gerillass.com/docs/antialias/): Turns on subpixel-antialiased text smoothing.
 - [aspect-ratio($ratio: null, $fit: cover)](https://docs.gerillass.com/docs/aspect-ratio/): Holds an element to a ratio and adds what CSS aspect-ratio alone leaves out: object-fit so an image is cropped rather than stretched, and border: 0 so an iframe does not overflow its container by 4px.
 - [background-image($image-url: null, $filter-color: null, $filter-direction: null)](https://docs.gerillass.com/docs/background-image/): Background image with an optional colour or gradient filter laid over it.
-- [background-pattern($kind: dots, $params...)](https://docs.gerillass.com/docs/background-pattern/): Seventeen geometric background patterns drawn with gradients alone: dots, stripes, grid, checkerboard, crosshatch, zigzag, chevron, triangles, isometric, honeycomb, brick, waves, houndstooth, gingham, harlequin, terrazzo and confetti.
+- [background-pattern($kind: dots, $params...)](https://docs.gerillass.com/docs/background-pattern/): Fifteen geometric background patterns drawn with gradients alone: dots, stripes, grid, checkerboard, crosshatch, zigzag, chevron, triangles, isometric, honeycomb, brick, waves, houndstooth, gingham and harlequin.
 - [before($content: null)](https://docs.gerillass.com/docs/before/): Styles the ::before pseudo-element.
 - [border-box($value: null)](https://docs.gerillass.com/docs/border-box/): Applies box-sizing: border-box.
 - [border-radius($args...)](https://docs.gerillass.com/docs/border-radius/): Rounds corners, either all of them, one named corner, or all four individually.
