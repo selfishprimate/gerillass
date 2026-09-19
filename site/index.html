@@ -116,6 +116,42 @@
       document.head.appendChild(ioniconsScript);
     </script>
 
+    <script>
+      /*
+        Puts the scroll position back before the page is painted.
+
+        One page saves a position, `/docs/loadify`, whose subject is an
+        animation that runs on load: see src/docs/KeepScroll.jsx. Doing it in
+        React was too late. The component runs after hydration, so the page
+        painted at the top first and jumped afterwards, which was visible.
+
+        Here the document is parsed and the stylesheet is in, so the height is
+        known and the scroll can be taken before the first paint. Every other
+        page is untouched: nothing else writes a key, and a key is only read
+        after a reload.
+      */
+      (function () {
+        try {
+          var nav = performance.getEntriesByType("navigation")[0];
+          if (!nav || nav.type !== "reload") return;
+          var saved = Number(sessionStorage.getItem("gerillass:scroll:" + location.pathname));
+          if (!saved) return;
+          if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+          // `html` carries scroll-behavior: smooth, and a restore under it
+          // travels rather than lands.
+          var root = document.documentElement;
+          var behaviour = root.style.scrollBehavior;
+          root.style.scrollBehavior = "auto";
+          window.scrollTo(0, saved);
+          setTimeout(function () {
+            root.style.scrollBehavior = behaviour;
+          }, 1500);
+        } catch (error) {
+          /* a private window, or blocked site data: the page simply opens at the top */
+        }
+      })();
+    </script>
+
     <script type="module" src="/src/index.jsx"></script>
   </body>
 
