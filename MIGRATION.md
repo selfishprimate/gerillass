@@ -727,6 +727,9 @@ marketing pages put behind a hero: `glow`, one ellipse of light, `vignette`,
 the same gradient turned round so the colour sits at the edges, and `mesh`,
 three or four blobs of colour. Those three read `$origin`, where the light
 comes from, and their `$size` is how far it reaches rather than a tile.
+`sunburst` and `concentric` read `$origin` too, since they are drawn from a
+point as well: from the top edge a sunburst is beams fanning down, and an
+off-centre `concentric` reads as a contour map.
 
 All twenty were drawn in Chrome 152, Firefox 156 and Safari 26.6.2, and the
 three lay them out identically; Firefox draws a hard diagonal edge with visible

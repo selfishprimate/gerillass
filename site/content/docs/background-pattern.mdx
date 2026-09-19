@@ -34,7 +34,7 @@ The **Background Pattern Sass mixin** draws twenty patterns with CSS gradients a
   <Argument name="$angle" type="number">For <code>stripes</code>, <code>crosshatch</code>, <code>zigzag</code> and <code>triangles</code>: an angle such as <code>-45deg</code>, or a unitless number read as degrees. For <code>sunburst</code>: how wide one ray is.</Argument>
   <Argument name="$axis" type="string">For <code>grid</code>: <code>both</code>, <code>block</code> for horizontal lines only, or <code>inline</code> for vertical lines only.</Argument>
   <Argument name="$stagger" type="boolean">For <code>dots</code>, <code>false</code> lines them up in a grid instead of offsetting every other row.</Argument>
-  <Argument name="$origin" type="string">For <code>glow</code> and <code>vignette</code>: where the light comes from, such as <code>50% 100%</code> or <code>top left</code>. The default is the bottom edge for <code>glow</code> and the middle for <code>vignette</code>.</Argument>
+  <Argument name="$origin" type="string">Where a pattern drawn from a point starts: the light for <code>glow</code> and <code>vignette</code>, the rays for <code>sunburst</code>, the rings for <code>concentric</code>. A background position, such as <code>50% 100%</code> or <code>top left</code>. The default is the middle, and the bottom edge for <code>glow</code>.</Argument>
   <Argument name="$image" type="string">An image path, laid under the pattern as the last layer. Refused by the patterns that paint every pixel, since it would never be seen.</Argument>
 </Arguments>
 
@@ -696,6 +696,21 @@ Each pattern below is its own section, with the colours and the tile changed fro
 ```
 </Example>
 
+<Example caption="`$origin` moves the point the rays come from. At the top edge they fan downwards, which is the light behind a hero rather than a starburst.">
+```scss
+.beams {
+  @include background-pattern(sunburst, $color: rgb(56 189 248 / 0.35), $background: #0b1220, $angle: 5deg, $origin: 50% 0%);
+}
+```
+```html
+<style>
+  .beams { display: grid; place-items: center; height: 200px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .beams h4 { margin: 0; font-size: 24px; font-weight: 700; color: #f8fafc; }
+</style>
+<div class="beams"><h4>Ship it tonight</h4></div>
+```
+</Example>
+
 ### Concentric
 
 <Example caption="Rings spreading from the middle, again drawn from the box rather than a tile. `$size` is the gap between them and `$thickness` the line.">
@@ -724,6 +739,20 @@ Each pattern below is its own section, with the colours and the tile changed fro
   .contour { height: 180px; border-radius: 10px; }
 </style>
 <div class="contour"></div>
+```
+</Example>
+
+<Example caption="An origin off the middle, and outside the box, turns the rings into a hillside on a map rather than a target.">
+```scss
+.map {
+  @include background-pattern(concentric, $color: rgb(120 53 15 / 0.45), $background: #fef3c7, $size: 26px, $thickness: 1.5px, $origin: 12% 115%);
+}
+```
+```html
+<style>
+  .map { height: 190px; border-radius: 10px; }
+</style>
+<div class="map"></div>
 ```
 </Example>
 

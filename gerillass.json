@@ -297,7 +297,7 @@
         "A diagonal hard edge is drawn with stair steps in Firefox 156 and smoothly in Chrome 152 and Safari 26.6.2, which shows in `zigzag`, `chevron` and `triangles`. Feathering the stop by half a pixel was measured and did not change it.",
         "`gingham` draws its two bands at 55% of the colour, so the crossings darken on their own and an opaque colour still reads as cloth.",
         "`sunburst` and `concentric` are drawn from the middle of the box rather than from a tile, so they do not repeat: `sunburst` takes `$angle` as the width of one ray, and `concentric` takes `$size` as the gap between rings.",
-        "`glow`, `vignette` and `mesh` are drawn once at the size of the box rather than tiled, so `$size` is how far the light reaches, one value or two, and `$origin` is where it comes from. They are what premium marketing pages use behind a hero, measured from what attio.com, retool.com and raycast.com actually serve; none of them blurs anything, since a radial gradient is already soft.",
+        "`glow`, `vignette` and `mesh` are drawn once at the size of the box rather than tiled, so `$size` is how far the light reaches, one value or two, and `$origin` is where it comes from. `sunburst` and `concentric` read `$origin` too, since they are drawn from a point rather than tiled: from the top edge a sunburst becomes beams fanning down, and an off-centre `concentric` reads as a contour map rather than as a target. They are what premium marketing pages use behind a hero, measured from what attio.com, retool.com and raycast.com actually serve; none of them blurs anything, since a radial gradient is already soft.",
         "A mixin call writes `background-image`, so two calls on the same element replace one another rather than stacking. To fade a tiled pattern into the page, put the pattern on one element and a `vignette` in the page's colour on an element over it."
       ],
       "examples": [
@@ -327,7 +327,9 @@
         ".a { @include background-pattern(glow, $color: #2d4c71 #0b1220, $background: #0b1220, $origin: 0% 100%, $size: 80% 70%); }",
         ".a { @include background-pattern(vignette, $color: rgb(2 6 23 / 0.75), $background: #1e293b); }",
         ".a { @include background-pattern(mesh, $color: #f0abfc #67e8f9 #fdba74, $background: #faf5ff); }",
-        ".a { @include background-pattern(mesh, $color: #7c3aed #0ea5e9 #f43f5e #22c55e, $background: #0b1220); }"
+        ".a { @include background-pattern(mesh, $color: #7c3aed #0ea5e9 #f43f5e #22c55e, $background: #0b1220); }",
+        ".a { @include background-pattern(sunburst, $color: #f59e0b, $angle: 4deg, $origin: 50% 0%); }",
+        ".a { @include background-pattern(concentric, $color: #0f766e, $size: 30px, $thickness: 1px, $origin: 15% 110%); }"
       ],
       "rejects": [
         ".a { @include background-pattern(spiral); }",

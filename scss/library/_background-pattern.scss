@@ -46,8 +46,8 @@ $-takes: (
   "houndstooth": "color" "size",
   "gingham": "color" "size" "thickness",
   "harlequin": "color" "size",
-  "sunburst": "color" "angle",
-  "concentric": "color" "size" "thickness",
+  "sunburst": "color" "angle" "origin",
+  "concentric": "color" "size" "thickness" "origin",
   "glow": "color" "size" "origin",
   "vignette": "color" "size" "origin",
   "mesh": "color"
@@ -223,9 +223,11 @@ $-defaults: (1: 12%, 2: 6%, 3: 18%);
   }
   $axis: -name($axis or both);
 
+  // Where the rays, the rings or the light come from. A background position,
+  // so one value or two, which is what every engine takes after `at`.
   @if $origin != null {
     @if list.length($origin) > 2 {
-      @error "`#{meta.inspect($origin)}` is not a valid $origin for `background-pattern`. Pass where the light comes from, such as `50% 100%` or `top left`.";
+      @error "`#{meta.inspect($origin)}` is not a valid $origin for `background-pattern`. Pass where the pattern is drawn from, such as `50% 100%` or `top left`.";
     }
     @each $part in $origin {
       @if meta.type-of($part) != "number" and not list.index("top" "right" "bottom" "left" "center", -name($part)) and not isSize($part) {
@@ -234,9 +236,11 @@ $-defaults: (1: 12%, 2: 6%, 3: 18%);
     }
   }
   @if $origin == null {
-    $origin: 50% 100%;
-    @if $name == "vignette" {
-      $origin: 50% 50%;
+    // The middle for everything drawn from a point, the bottom edge for a
+    // glow, which is where a hero's light comes from.
+    $origin: 50% 50%;
+    @if $name == "glow" {
+      $origin: 50% 100%;
     }
   }
 
@@ -415,11 +419,14 @@ $-defaults: (1: 12%, 2: 6%, 3: 18%);
     );
     $sizes: -repeat("#{$s} #{$s}", 2);
   } @else if $name == "sunburst" {
-    // Rays from the middle of the box rather than from a tile, so there is
-    // nothing to size and $size is refused.
-    $images: ("repeating-conic-gradient(from 0deg at 50% 50%, #{$c1} 0 #{$angle}, #{$none} 0 #{-times($angle, 2)})");
+    // Rays from a point in the box rather than from a tile, so there is
+    // nothing to size and $size is refused. $origin moves that point, which
+    // is what turns a starburst into beams fanning down from the top edge.
+    $images: ("repeating-conic-gradient(from 0deg at #{$origin}, #{$c1} 0 #{$angle}, #{$none} 0 #{-times($angle, 2)})");
   } @else if $name == "concentric" {
-    $images: ("repeating-radial-gradient(circle at 50% 50%, #{$c1} 0 #{$t}, #{$none} #{$t} #{$s})");
+    // Two calls at different origins read as a contour map rather than as a
+    // target, which is why the origin is worth having here.
+    $images: ("repeating-radial-gradient(circle at #{$origin}, #{$c1} 0 #{$t}, #{$none} #{$t} #{$s})");
   } @else if $name == "glow" {
     // One ellipse of light, as attio.com and retool.com draw theirs: no blur,
     // just a gradient that stops before the edges of the box.
