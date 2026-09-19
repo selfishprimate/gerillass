@@ -147,10 +147,16 @@ refused. `$step` was added for how far apart a filled shadow's layers sit, a
   `paint-order: stroke fill` at twice the width, which keeps the letterform. The
   ink counts behind that are in `MIGRATION.md`. Its remaining idea, a
   `paint-order` shorthand for other members, was not pursued.
-- **`text-gradient` and `text-image`** set `color: transparent` with no guard,
-  so the text is invisible wherever the background does not paint, forced
-  colours included, and `text-image` loses its text when the image 404s.
-  [source] [measure]
+- ~~**`text-gradient` and `text-image`** set `color: transparent` with no
+  guard~~ **done for 4.0.0 on the `text-fill-guard` branch**, and kept as two
+  mixins at the maintainer's decision rather than merged into `text-fill`.
+  Both write a `@media (forced-colors: active)` block that reverts the fill
+  colour and the colour, and `text-image` takes a `$fallback` colour written
+  under the image. Measured in Chrome 152: a 404 image left the box pixel for
+  pixel an empty one, and renders its letters in the fallback colour now. With
+  forced colours on, in Chrome and Firefox 156, the computed fill colour was
+  transparent before and is black now; Safari cannot be put into forced
+  colours from automation.
 - ~~**`all-buttons`** selects `[type='button']` without `input`~~ **done for
   4.0.0 on the `all-buttons` branch**: every type is written with `input`,
   `input[type='image']` joins the list, and `$pseudo` takes `focus-visible`

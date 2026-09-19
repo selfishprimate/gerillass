@@ -75,5 +75,8 @@
   ],
   "warns": [
     ".a { @include text-gradient(red); }"
+  ],
+  "caveats": [
+    "The letters have no colour of their own: the gradient is the only thing painting them. In forced colours the browser forces `background-image: none` and forces `color`, but `-webkit-text-fill-color` is not a forced property, so the transparent fill survived and the text disappeared. Since 4.0.0 a `@media (forced-colors: active)` block gives both back: measured with forced colours on, the computed fill colour was `rgba(0, 0, 0, 0)` before and is black now, in Chrome 152 and Firefox 156. Safari has no way to turn forced colours on from automation, so it was not measured there."
   ]
 }

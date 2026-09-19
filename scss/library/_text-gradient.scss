@@ -45,4 +45,16 @@
   -webkit-text-fill-color: transparent;
   background-clip: text;
   color: transparent;
+
+  // The letters have no colour of their own here: the gradient is the only
+  // thing painting them. In forced colours the browser forces
+  // `background-image: none` and forces `color`, but
+  // `-webkit-text-fill-color` is not a forced property, so the transparent
+  // fill survives and the text disappears. Measured in Chrome 152: with this
+  // block the computed fill colour goes from `rgba(0, 0, 0, 0)` to black.
+  @media (forced-colors: active) {
+    -webkit-text-fill-color: revert;
+    color: revert;
+    background-image: none;
+  }
 }

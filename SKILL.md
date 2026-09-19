@@ -293,6 +293,15 @@ a dropped declaration rather than an error.
 - `iPad` and `iPadPro` keep the sizes they have always had, the 7th to 9th generation iPad at 810x1080 and the 12.9-inch Pro, so no existing call changes. The current iPad is `iPad-A16` or `iPad10`, and the 11-inch Pro is `iPadPro-11` or `iPadPro-11-M4`.
 - Since 4.0.0 an entry in the map is the screen as two lengths, `iPad10: 820px 1180px`, rather than a map of `width` and `height`. A map that still holds the old shape raises with a message saying so.
 
+**`text-gradient`**
+
+- The letters have no colour of their own: the gradient is the only thing painting them. In forced colours the browser forces `background-image: none` and forces `color`, but `-webkit-text-fill-color` is not a forced property, so the transparent fill survived and the text disappeared. Since 4.0.0 a `@media (forced-colors: active)` block gives both back: measured with forced colours on, the computed fill colour was `rgba(0, 0, 0, 0)` before and is black now, in Chrome 152 and Firefox 156. Safari has no way to turn forced colours on from automation, so it was not measured there.
+
+**`text-image`**
+
+- The letters have no colour of their own: `color` and `-webkit-text-fill-color` are transparent and the image is the only thing painting them. With a path that 404s the heading is **gone**, not broken: measured in Chrome 152, the box was pixel for pixel one whose text is transparent and which has no background at all. `$fallback` writes a `background-color` under the image, and with it the same box rendered its letters in that colour.
+- Forced colours used to lose the text as well: the browser forces `background-image: none` and forces `color`, but `-webkit-text-fill-color` is not a forced property, so the transparent fill survived. Since 4.0.0 a `@media (forced-colors: active)` block gives both back. Measured with forced colours on: the computed fill colour was `rgba(0, 0, 0, 0)` before and is black now, in Chrome 152 and Firefox 156. It could not be measured in Safari, which has no way to turn forced colours on from automation.
+
 **`text-shadow`**
 
 - Since 4.0.0 every direction is an angle: the eight keywords are the 45 degree steps, measured as `gradient` measures them, 0deg up and clockwise, and the offsets are the sine and cosine of that angle. A diagonal keyword used to write the distance on both axes, which placed it 1.414 times further out than a straight one; multiply an old diagonal distance by 0.7071 to keep the same look.
@@ -382,7 +391,7 @@ a dropped declaration rather than an error.
 | `stretched-link($value: "before")` | Spreads a link over its positioned parent, so the whole card is clickable. |
 | `tablet($device, $orientation: null)` | Media query for one tablet's screen, by name, from $map-for-tablets. |
 | `text-gradient($colors, $type: linear, $direction: null, $shape: null, $position: null, $from: null, $in: null, $repeating: false)` | Fills the text with a gradient through background-clip: text. It takes the gradient mixin's arguments, colours first: a linear, radial or conic gradient, plain or repeating, with an optional colour space. |
-| `text-image($image: null)` | Fills the text with an image via background-clip. |
+| `text-image($image: null, $fallback: null)` | Fills the letters with an image, with a colour to fall back to. |
 | `text-selection($value: null)` | Styles the ::selection pseudo-element. |
 | `text-shadow($params...)` | Layered text shadows, each written as a direction or an angle, a colour and a distance. |
 | `text-stroke($width: 1px, $color: currentColor, $style: hollow, $fill: null)` | An outline on text, in three looks: outside the letter, straddling it, or the letter left unfilled. |

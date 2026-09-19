@@ -18,6 +18,7 @@ The **Text Image** Sass mixin helps you clip the background image of a selected 
 
 <Arguments of="text-image" footnote="**Important:** Pass the URL of the image in quotation marks. A `var()`, `url()`, `image-set()` or gradient is written as it is, without quotes.">
   <Argument name="$image" type="string (quoted), function">The URL of the clipping image. A value that already is an image, <code>var()</code>, <code>url()</code>, <code>image-set()</code> or a gradient, is written as it is rather than wrapped in <code>url()</code>. A list, a number, a colour or a boolean is refused.</Argument>
+  <Argument name="$fallback" type="color">The colour the letters take when the image does not arrive, written as a <code>background-color</code> under it. Without one, an image that fails to load leaves no visible text at all.</Argument>
 </Arguments>
 
 ## Examples
@@ -43,6 +44,32 @@ The **Text Image** Sass mixin helps you clip the background image of a selected 
 <h2 class="element sandbox text" style="background-image: url(/images/backgrounds/02.jpg)">Text Image is Awesome!</h2>
 ```
 </Example>
+
+<Example caption="Pass a `$fallback` colour and the letters have something to fall back to. The colour goes under the image as a `background-color`, so it fills them whenever the image does not arrive: a 404, a blocked host, a slow connection." listing="<h2 class=&quot;title&quot;>Text Image is Awesome!</h2>">
+```scss
+.title {
+  @include text-image("/images/backgrounds/02.jpg", $fallback: #b45309);
+}
+```
+```html
+<style>
+  .title { margin: 0; font: 800 44px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; }
+</style>
+<h2 class="title">Text Image is Awesome!</h2>
+```
+</Example>
+
+<Hint kind="danger">
+
+**Without a fallback, an image that does not load takes the text with it.** The mixin makes the letters transparent and the image is the only thing painting them. Measured in Chrome 152 with a path that 404s: the box was pixel for pixel one whose text is transparent and which has no background at all, so a broken image is not a broken image, it is a lost heading. With `$fallback` the same box rendered its letters in that colour.
+
+</Hint>
+
+<Hint kind="info">
+
+**Forced colours are handled since 4.0.0.** In that mode the browser forces `background-image: none` and forces `color`, but `-webkit-text-fill-color` is not a forced property, so the transparent fill survived and the text disappeared. The mixin now writes a `@media (forced-colors: active)` block that gives both properties back: measured with forced colours on, the computed fill colour was `rgba(0, 0, 0, 0)` before and is black now, in Chrome 152 and Firefox 156.
+
+</Hint>
 
 ## What it refuses
 

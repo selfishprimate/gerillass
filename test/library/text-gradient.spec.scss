@@ -15,6 +15,14 @@
           background-clip: text;
           color: transparent;
         }
+
+        @media (forced-colors: active) {
+          .a {
+            -webkit-text-fill-color: revert;
+            color: revert;
+            background-image: none;
+          }
+        }
       }
     }
   }

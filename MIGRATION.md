@@ -5,7 +5,7 @@ it covers `hide`, where breakpoint ranges end, `columnizer`, `before` and
 `after`, `font-face`, `all-text-inputs`, `aspect-ratio`, `counter`, `text-shadow`, `text-stroke`, the background patterns,
 `escape-to-parent`, `sprite`, four of the utility functions, the device maps,
 `responsive-image`, `border-box`, `antialias`, `center`, `all-buttons`,
-`loadify` and `stretched-link`. The 3.0.0 and
+`loadify`, `stretched-link`, `text-gradient` and `text-image`. The 3.0.0 and
 2.0.0 guides follow below, unchanged.
 
 Every claim here was checked by compiling the old call against 3.0.0's source
@@ -48,6 +48,8 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `all-buttons` selects the input types with `input`, and adds the image button | breaking, silent |
 | `loadify` leaves the element visible and only fades it in | fixes a disappearing-content defect; silent |
 | `stretched-link` drops an IE10 line and writes `inset: 0` | not breaking |
+| `text-gradient` and `text-image` keep their text in forced colours | not breaking |
+| `text-image` takes a `$fallback` colour | not breaking |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -1183,6 +1185,43 @@ new, in all three, and the computed offsets are the same four zeros.
 `pointer-events: auto` stays, because it is the line that does something: with
 an ancestor at `pointer-events: none`, the corner answers the link with it and
 the body without it.
+
+---
+
+## Change: `text-gradient` and `text-image` stop losing their text
+
+Both fill the letters with a background and make the letters themselves
+transparent, so the background is the only thing painting them. Two things stop
+it painting, and the text goes with it.
+
+**Forced colours.** The browser forces `background-image: none` and forces
+`color`, but `-webkit-text-fill-color` is not a forced property, so the
+transparent fill survived and the heading disappeared. Both mixins now write:
+
+```css
+@media (forced-colors: active) {
+  .title { -webkit-text-fill-color: revert; color: revert; background-image: none; }
+}
+```
+
+Measured with forced colours on, in Chrome 152 and Firefox 156: the computed
+fill colour was `rgba(0, 0, 0, 0)` before and is black now. Safari has no way
+to turn forced colours on from automation, so it was not measured there.
+
+**An image that does not arrive.** `text-image` takes a `$fallback` colour,
+written as a `background-color` under the image, so the letters have something
+to fall back to:
+
+```scss
+.title {
+  @include text-image("/img/hero.jpg", $fallback: #b45309);
+}
+```
+
+Measured in Chrome 152 with a path that 404s: without the fallback the box was
+pixel for pixel one whose text is transparent and which has no background at
+all, and with it the letters rendered in that colour. Nothing changes for a
+call that passes no fallback, beyond the forced-colours block.
 
 ---
 

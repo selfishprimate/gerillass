@@ -247,6 +247,12 @@ A colour stop the browser drops stops the build too. Here it matters twice: the 
 Error: `huge, blue` is not a valid $colors for `text-gradient`: `huge` is not a colour stop: it is not a colour. A browser drops the whole gradient.
 ```
 
+<Hint kind="info">
+
+**Forced colours are handled since 4.0.0.** The letters have no colour of their own here: the gradient is the only thing painting them. In that mode the browser forces `background-image: none` and forces `color`, but `-webkit-text-fill-color` is not a forced property, so the transparent fill survived and the heading disappeared. The mixin now writes a `@media (forced-colors: active)` block that gives both back: measured with forced colours on, the computed fill colour was `rgba(0, 0, 0, 0)` before and is black now, in Chrome 152 and Firefox 156. Safari has no way to turn forced colours on from automation, so it was not measured there.
+
+</Hint>
+
 ## Related Links
 * [Using CSS Gradients](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Images/Using_CSS_gradients)
 * [Linear Gradient](https://developer.mozilla.org/en-US/docs/Web/CSS/linear-gradient)

@@ -1,10 +1,36 @@
 @charset "UTF-8";
 
+@use "sass:meta";
+@use "../internal/color-problem" as *;
 @use "../internal/image-value" as *;
 
-@mixin text-image($image: null) {
+// Fills the letters with an image, through `background-clip: text`.
+//
+// The trap is that the letters have no colour of their own: `color` and
+// `-webkit-text-fill-color` are transparent, and the only thing painting them
+// is the background. Two things stop the background painting, both measured in
+// Chrome 152 by comparing the rendered box with one whose text is transparent
+// and which has no background at all:
+//
+// - the image not arriving. With a path that 404s the box was pixel for pixel
+//   the empty one, so a broken image is not a broken image, it is a lost
+//   heading. `$fallback` writes a `background-color` under the image, which
+//   fills the letters when the image does not arrive;
+// - forced colours. There the browser forces `background-image: none` and
+//   forces `color`, but `-webkit-text-fill-color` is not a forced property, so
+//   the transparent fill survives and nothing paints the letters. The media
+//   block gives both properties back: measured, the computed fill colour goes
+//   from `rgba(0, 0, 0, 0)` to black.
+@mixin text-image($image: null, $fallback: null) {
   @if $image {
     background-image: imageValue($image, "text-image", "$image");
+  }
+  @if $fallback != null {
+    $problem: colorProblem($fallback);
+    @if $problem {
+      @error "`#{meta.inspect($fallback)}` is not a valid $fallback for `text-image`: #{$problem}. Pass the colour the letters take when the image does not arrive, such as `#333`.";
+    }
+    background-color: $fallback;
   }
   background-size: cover;
   background-position: center;
@@ -12,4 +38,10 @@
   -webkit-text-fill-color: transparent;
   background-clip: text;
   color: transparent;
+
+  @media (forced-colors: active) {
+    -webkit-text-fill-color: revert;
+    color: revert;
+    background-image: none;
+  }
 }

@@ -909,7 +909,9 @@ Two pieces of work are open:
   `loadify` leaving its elements visible and dropping the `%loadify`
   placeholder, on `loadify-visible`, branched from `all-buttons`; and
   `stretched-link` losing its IE10 line, on `stretched-link`, branched from
-  `loadify-visible`.
+  `loadify-visible`; and `text-gradient` and `text-image` keeping their text in
+  forced colours, with a `$fallback` colour for the image, on
+  `text-fill-guard`, branched from `stretched-link`.
   The last three come from `todos/library-review.md`, and the last three
   patterns, `glow`, `vignette` and `mesh`, from the survey in
   `todos/saas-hero-backgrounds.md`. Each has a `MIGRATION.md` section.

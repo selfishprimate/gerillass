@@ -2170,6 +2170,13 @@ exports[`Manifest examples text-gradient: .a { @include text-gradient((red, blue
   -webkit-text-fill-color: transparent;
   background-clip: text;
   color: transparent;
+}
+@media (forced-colors: active) {
+  .a {
+    -webkit-text-fill-color: revert;
+    color: revert;
+    background-image: none;
+  }
 }"
 `;
 
@@ -2181,6 +2188,13 @@ exports[`Manifest examples text-gradient: .a { @include text-gradient(blue yello
   -webkit-text-fill-color: transparent;
   background-clip: text;
   color: transparent;
+}
+@media (forced-colors: active) {
+  .a {
+    -webkit-text-fill-color: revert;
+    color: revert;
+    background-image: none;
+  }
 }"
 `;
 
@@ -2191,6 +2205,13 @@ exports[`Manifest examples text-gradient: .a { @include text-gradient(red yellow
   -webkit-text-fill-color: transparent;
   background-clip: text;
   color: transparent;
+}
+@media (forced-colors: active) {
+  .a {
+    -webkit-text-fill-color: revert;
+    color: revert;
+    background-image: none;
+  }
 }"
 `;
 
@@ -2203,18 +2224,53 @@ exports[`Manifest examples text-image: .a { @include text-image("/img/t.png"); }
   -webkit-text-fill-color: transparent;
   background-clip: text;
   color: transparent;
+}
+@media (forced-colors: active) {
+  .a {
+    -webkit-text-fill-color: revert;
+    color: revert;
+    background-image: none;
+  }
 }"
 `;
 
-exports[`Manifest examples text-image: .a { @include text-image(var(--texture)); } 1`] = `
+exports[`Manifest examples text-image: .a { @include text-image("/img/t.png", $fallback: #333); } 1`] = `
 ".a {
-  background-image: var(--texture);
+  background-image: url("/img/t.png");
+  background-color: #333;
   background-size: cover;
   background-position: center;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   color: transparent;
+}
+@media (forced-colors: active) {
+  .a {
+    -webkit-text-fill-color: revert;
+    color: revert;
+    background-image: none;
+  }
+}"
+`;
+
+exports[`Manifest examples text-image: .a { @include text-image(var(--texture), $fallback: currentColor); } 1`] = `
+".a {
+  background-image: var(--texture);
+  background-color: currentColor;
+  background-size: cover;
+  background-position: center;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+@media (forced-colors: active) {
+  .a {
+    -webkit-text-fill-color: revert;
+    color: revert;
+    background-image: none;
+  }
 }"
 `;
 
@@ -2554,5 +2610,12 @@ exports[`Manifest warnings text-gradient warns: .a { @include text-gradient(red)
   -webkit-text-fill-color: transparent;
   background-clip: text;
   color: transparent;
+}
+@media (forced-colors: active) {
+  .a {
+    -webkit-text-fill-color: revert;
+    color: revert;
+    background-image: none;
+  }
 }"
 `;
