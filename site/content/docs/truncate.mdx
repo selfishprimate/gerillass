@@ -1,0 +1,161 @@
+---
+title: "Truncate"
+page_title: "Truncate Sass Mixin"
+page_description: "Truncate text with the Truncate Sass mixin: one line with an ellipsis, or several with a clamp. The line count picks the technique and writes every declaration it needs."
+page_keywords: "CSS Truncate Text, Sass Truncate, CSS Ellipsis, CSS Line Clamp, webkit-line-clamp, Multiline Ellipsis CSS, CSS text-overflow, Sass Text Truncation"
+page_image: "gerillass-ellipsis.jpg"
+aliases:
+  - /docs/ellipsis/
+  - /docs/line-clamp/
+---
+
+# Truncate
+
+<Member name="truncate">
+
+The **Truncate** Sass mixin cuts text off where it runs out of room: one line ending in an ellipsis, or several lines ending in one. You say how many lines you want, and the mixin writes the technique that does it.
+
+</Member>
+
+<Hint kind="warning">
+
+**New in Gerillass 4.0.0.** This replaces **Ellipsis** and **Line Clamp**, which are both removed. `truncate` is the old `ellipsis` and `truncate(3)` is the old `line-clamp(3)`, both compiling to exactly the CSS they did. See the migration guide.
+
+</Hint>
+
+## Arguments
+
+<Arguments of="truncate" footnote="One line and several lines are different techniques, so a couple of the arguments only apply to one of them.">
+  <Argument name="$lines" type="number | keyword">How many lines to keep. <code>1</code> is the default and gives the one-line ellipsis; a larger whole number clamps to that many lines; <code>none</code> undoes a clamp, which is what a media query needs. A <code>var()</code> is written as it is, since the browser resolves it.</Argument>
+  <Argument name="$width" type="number">A <code>max-width</code> for the element. One line defaults to <code>100%</code>, because an inline box ignores a width it was never given; several lines write no width unless you pass one.</Argument>
+  <Argument name="$display" type="string">The display for the one-line form, <code>inline-block</code> by default. Passing it with more than one line raises: the clamp takes the display over.</Argument>
+</Arguments>
+
+## Why the line count changes the technique
+
+One line is `white-space: nowrap` with `text-overflow: ellipsis`, and the element keeps whatever display you give it. Several lines is the `-webkit-box` trio, which takes the display over. Measured in Chrome 152, Firefox 156 and Safari 26.6.2, on a 320px box:
+
+| | One line | Three lines |
+|---|---|---|
+| Lines drawn | 1 | 3 |
+| Ellipsis | yes | yes |
+| The element's `display` | what you set, `inline-block` by default | `-webkit-box` in Safari, `flow-root` in Chrome and Firefox |
+
+So at one line the two look the same and differ in what the element becomes, which is why the mixin writes one or the other rather than letting you pick both.
+
+## Examples
+
+<Example caption="One line. The default, and the shortest call there is." listing="<h4 class=&quot;title&quot;>A headline long enough to run out of room on one line</h4>">
+```scss
+.title {
+  @include truncate;
+}
+```
+```html
+<style>
+  .title { margin: 0; width: 320px; font: 700 18px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; }
+</style>
+<h4 class="title">A headline long enough to run out of room on one line</h4>
+```
+</Example>
+
+<Example caption="Three lines, for a summary under a card's title. The ellipsis lands at the end of the third line." listing="<p class=&quot;summary&quot;>…</p>">
+```scss
+.summary {
+  @include truncate(3);
+}
+```
+```html
+<style>
+  .summary { margin: 0; width: 320px; font: 15px/1.6 Inter, ui-sans-serif, system-ui, sans-serif; color: #334155; }
+</style>
+<p class="summary">Gerillass is a set of Sass mixins and functions for modern web design, with a manifest the test suite verifies, so a coding agent cannot work from stale docs and every call it writes compiles the first time.</p>
+```
+</Example>
+
+<Example caption="A width with either technique. Here the text is held to forty characters and two lines, which is the shape a table cell or a compact card wants." listing="<p class=&quot;cell&quot;>…</p>">
+```scss
+.cell {
+  @include truncate(2, 40ch);
+}
+```
+```html
+<style>
+  .cell { margin: 0; font: 15px/1.6 Inter, ui-sans-serif, system-ui, sans-serif; color: #334155; }
+</style>
+<p class="cell">scss/library/_background-pattern.scss draws twenty patterns with CSS gradients alone, no image file and nothing to download.</p>
+```
+</Example>
+
+<Example caption="A card: the title on one line, the summary on three. This pair is what the mixin is for, and the two calls write different CSS from the same name." listing="<article class=&quot;card&quot;>
+&#32;&#32;<h4 class=&quot;card__title&quot;>…</h4>
+&#32;&#32;<p class=&quot;card__text&quot;>…</p>
+</article>">
+```scss
+.card__title {
+  @include truncate;
+}
+
+.card__text {
+  @include truncate(3);
+}
+```
+```html
+<style>
+  .card { width: 340px; padding: 18px 20px; border-radius: 12px; background: #f1f5f9; font: 15px/1.6 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .card__title { margin: 0 0 8px; font-size: 18px; font-weight: 700; color: #0f172a; }
+  .card__text { margin: 0; color: #475569; }
+</style>
+<article class="card">
+  <h4 class="card__title">Twenty background patterns, drawn with gradients alone</h4>
+  <p class="card__text">Dots, stripes, houndstooth, harlequin, sunburst and glow, all of them pure CSS, all of them one line of Sass. The image an older version needed is gone, and so is the request for it.</p>
+</article>
+```
+</Example>
+
+<Example caption="`none` undoes a clamp, which is how a summary opens up on a wider screen." listing="<p class=&quot;teaser&quot;>…</p>">
+```scss
+.teaser {
+  @include truncate(2);
+
+  @include breakpoint(large) {
+    @include truncate(none);
+  }
+}
+```
+```html
+<style>
+  .teaser { margin: 0; font: 15px/1.6 Inter, ui-sans-serif, system-ui, sans-serif; color: #334155; }
+</style>
+<p class="teaser">On a narrow screen this is two lines and then an ellipsis. From the large breakpoint up, the clamp is lifted and the whole paragraph is shown, which is what `none` is for.</p>
+```
+</Example>
+
+## What it refuses
+
+A line count a browser cannot use stops the build, and so does an argument that belongs to the other technique.
+
+```scss
+.a { @include truncate(0); }
+.b { @include truncate(1.5); }
+.c { @include truncate(3px); }
+.d { @include truncate(3, 100%, block); }
+```
+
+```text
+Error: `0` is not a valid $lines for `truncate`. Pass a whole number of lines that is at least 1, or `none` to undo a clamp.
+Error: `$display` does nothing for `truncate(3)`: clamping more than one line takes the display over, and the element is drawn as a box. Pass `$display` with one line, or leave it out.
+```
+
+<Hint kind="info">
+
+**All five declarations of the clamp are needed.** Measured on a paragraph running to five lines, clamped to three: without `-webkit-box-orient: vertical`, without `display: -webkit-box`, or with the standard `line-clamp` alone, all five lines were drawn and nothing warned; without `overflow: hidden` the box was three lines tall and the rest of the text spilled out below it. `CSS.supports("line-clamp: 3")` still answers false in Chrome 152, Firefox 156 and Safari 26.6.2, so the standard property is written for the future and the prefixed trio does the work.
+
+</Hint>
+
+## Related Links
+
+- [Breakpoint](/docs/breakpoint)
+- [CSS text-overflow](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/text-overflow)
+- [CSS -webkit-line-clamp](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/-webkit-line-clamp)
+- [CSS white-space](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/white-space)

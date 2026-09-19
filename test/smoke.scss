@@ -47,14 +47,14 @@
 .container { @include container("card"); }
 .container-query { @include container-query("min", 400px) { color: red; } }
 .counter { @include counter("decimal"); }
-.ellipsis { @include ellipsis; }
+.truncate-one { @include truncate; }
 .escape-to-parent { @include escape-to-parent(".parent") { color: red; } }
 .except { @include except("first") { color: red; } }
 .focus-ring { @include focus-ring; }
 .gradient { @include gradient((red, blue), conic, $from: 45deg, $in: oklab); }
 .hide { @include hide; }
 .hide-focusable { @include hide(focusable); }
-.line-clamp { @include line-clamp(3); }
+.truncate-many { @include truncate(3); }
 .motion-safe { @include motion-safe { transition: opacity 0.2s; } }
 .only { @include only("first") { color: red; } }
 .placeholder { @include placeholder { color: gray; } }

@@ -1,0 +1,48 @@
+{
+  "name": "truncate",
+  "summary": "Truncates text: one line with an ellipsis, or several with a clamp.",
+  "arguments": [
+    {
+      "name": "$lines",
+      "accepts": [
+        "1, the default, for the one-line ellipsis",
+        "a whole number of lines for the clamp",
+        "none to undo a clamp, inside a media query",
+        "var() or env(), which the browser resolves"
+      ]
+    },
+    {
+      "name": "$width",
+      "accepts": [
+        "a max-width; one line defaults to 100%, several lines to none at all"
+      ]
+    },
+    {
+      "name": "$display",
+      "accepts": [
+        "the display for the one-line form, inline-block by default",
+        "refused with more than one line, where the clamp takes the display over"
+      ]
+    }
+  ],
+  "examples": [
+    ".a { @include truncate; }",
+    ".a { @include truncate(3); }",
+    ".a { @include truncate(2, 40ch); }",
+    ".a { @include truncate(1, 100%, block); }",
+    ".a { @include truncate(none); }"
+  ],
+  "rejects": [
+    ".a { @include truncate(0); }",
+    ".a { @include truncate(1.5); }",
+    ".a { @include truncate(3px); }",
+    ".a { @include truncate(3, 10deg); }",
+    ".a { @include truncate(3, 100%, block); }",
+    ".a { @include truncate(1, 100%, nonsense); }"
+  ],
+  "caveats": [
+    "One line and several lines are different techniques, and that is why this replaced `ellipsis` and `line-clamp` in 4.0.0. One line is `white-space: nowrap` with `text-overflow`, which leaves the display alone; several is the `-webkit-box` trio, which takes the display over. Measured in Chrome 152, Firefox 156 and Safari 26.6.2 on a 320px box, they look the same at one line and the element differs: `inline-block` against Safari's `-webkit-box`.",
+    "The standard `line-clamp` property is written beside the prefixed one for the future. `CSS.supports(\"line-clamp: 3\")` still answers false in all three browsers, so the prefixed trio is what does the work.",
+    "All five declarations of the clamp are needed: measured on a paragraph of five lines with a clamp of three, dropping `-webkit-box-orient`, `display: -webkit-box` or using the standard property alone left all five lines showing, and dropping `overflow: hidden` left the box three lines tall with the rest spilling out below it."
+  ]
+}

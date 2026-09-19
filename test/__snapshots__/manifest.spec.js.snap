@@ -2565,6 +2565,59 @@ exports[`Manifest examples triangle: .sort { @include triangle("block-start", cu
 }"
 `;
 
+exports[`Manifest examples truncate: .a { @include truncate(1, 100%, block); } 1`] = `
+".a {
+  display: block;
+  max-width: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  word-wrap: normal;
+}"
+`;
+
+exports[`Manifest examples truncate: .a { @include truncate(2, 40ch); } 1`] = `
+".a {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  max-width: 40ch;
+}"
+`;
+
+exports[`Manifest examples truncate: .a { @include truncate(3); } 1`] = `
+".a {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  overflow: hidden;
+}"
+`;
+
+exports[`Manifest examples truncate: .a { @include truncate(none); } 1`] = `
+".a {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: none;
+  line-clamp: none;
+  overflow: hidden;
+}"
+`;
+
+exports[`Manifest examples truncate: .a { @include truncate; } 1`] = `
+".a {
+  display: inline-block;
+  max-width: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  word-wrap: normal;
+}"
+`;
+
 exports[`Manifest examples validateBreakpoint: .a { width: validateBreakpoint("medium"); } 1`] = `
 ".a {
   width: 768px;

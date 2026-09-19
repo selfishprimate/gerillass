@@ -5,7 +5,7 @@ description: Use the Gerillass Sass mixin library — loading it, the mixin cata
 
 # Gerillass
 
-A Sass mixin library: 53 mixins and 24 functions that emit CSS from
+A Sass mixin library: 52 mixins and 24 functions that emit CSS from
 semantic declarations. It is Sass source only — there is no runtime and no
 utility classes, so styles live in your stylesheet and your markup stays clean.
 
@@ -95,14 +95,12 @@ a dropped declaration rather than an error.
 | `container-query` | `.title { @include container-query("min", 400px, 800px) { color: red; } }` |
 | `container` | `.card { @include container("card", sideways); }` |
 | `counter` | `.list { @include counter(decimal, $start: 1.5); }` |
-| `ellipsis` | `.a { @include ellipsis(100%, huge); }` |
 | `escape-to-parent` | `.a { @include escape-to-parent(42) { color: red; } }` |
 | `except` | `.a { @include except(#ff0000) { margin: 0; } }` |
 | `focus-ring` | `@include focus-ring;` |
 | `font-face` | `.a { @include font-face("Inter", "/fonts/inter"); }` |
 | `gradient` | `.a { @include gradient((red, blue), sideways); }` |
 | `hide` | `.a { @include hide(nonsense); }` |
-| `line-clamp` | `.a { @include line-clamp(0); }` |
 | `loadify` | `@include loadify(nonsense);` |
 | `motion-safe` | `.card { @include motion-safe; }` |
 | `only` | `.a { @include only(#ff0000) { margin: 0; } }` |
@@ -124,6 +122,7 @@ a dropped declaration rather than an error.
 | `text-stroke` | `.a { @include text-stroke(black, transparent, red, 2px); }` |
 | `tokens` | `:root { @include tokens(#fff); }` |
 | `triangle` | `.caret { @include triangle(sideways); }` |
+| `truncate` | `.a { @include truncate(0); }` |
 
 ## Traps a signature does not show
 
@@ -343,6 +342,12 @@ a dropped declaration rather than an error.
 - `$style: outside` doubles the width it writes, since half of the stroke is then hidden behind the letter: a 40px stroke drawn that way left 17006 pixels of ink against a centred 20px stroke's 15915. A keyword width, `thin`, `medium` or `thick`, cannot be doubled and raises; a `var()` width is doubled by the browser through `calc()`.
 - Unprefixed `text-stroke` is supported by no engine, checked with `CSS.supports` in all three, so the mixin writes the `-webkit-` properties only. In an engine that has neither, `hollow` still shows solid text, because it writes `color` as well.
 
+**`truncate`**
+
+- One line and several lines are different techniques, and that is why this replaced `ellipsis` and `line-clamp` in 4.0.0. One line is `white-space: nowrap` with `text-overflow`, which leaves the display alone; several is the `-webkit-box` trio, which takes the display over. Measured in Chrome 152, Firefox 156 and Safari 26.6.2 on a 320px box, they look the same at one line and the element differs: `inline-block` against Safari's `-webkit-box`.
+- The standard `line-clamp` property is written beside the prefixed one for the future. `CSS.supports("line-clamp: 3")` still answers false in all three browsers, so the prefixed trio is what does the work.
+- All five declarations of the clamp are needed: measured on a paragraph of five lines with a clamp of three, dropping `-webkit-box-orient`, `display: -webkit-box` or using the standard property alone left all five lines showing, and dropping `overflow: hidden` left the box three lines tall with the rest spilling out below it.
+
 **`convertToEm`**
 
 - Until 4.0.0 the unit was added as text, so the function returned the string `1.5em` rather than a number: it printed the same, and `convertToEm(24px) * 2` stopped the build with Sass's "Undefined operation". It now returns a number, as `remify` always has.
@@ -390,14 +395,12 @@ a dropped declaration rather than an error.
 | `container-query($params...)` | A @container rule, taking the same argument shapes as breakpoint so the two read alike. Sizes may be a key from $map-for-breakpoints or a raw length, and a length is the common case because a container is usually narrower than the viewport. Nothing matches at all unless an ancestor was declared with the container mixin. |
 | `container($name: null, $type: inline-size)` | Marks an element as a query container, so container-query can ask about its width instead of the viewport's. The rule that asks has to sit on a descendant: an element is never matched by a @container rule reading its own container, and nothing warns you when it is not. |
 | `counter($params...)` | Numbers the children of the element it is included in, with optional text before and after each number. No classes in the markup. |
-| `ellipsis($width: 100%, $display: inline-block)` | Truncates a single line of text with an ellipsis. |
 | `escape-to-parent($selector: null)` | Writes the rule again with another selector attached to its outermost element, so a theme or state class can switch what a nested rule does. |
 | `except($params...)` | Selects every sibling but the ones named, counted by tag or by a selector you name. |
 | `focus-ring($width: 2px, $offset: 2px, $color: currentColor)` | Draws a keyboard focus ring with outline on :focus-visible, which survives forced-colors mode where a box-shadow ring disappears. |
 | `font-face($font-family, $file-path, $font-style: normal, $font-weight: 400, $file-formats: woff2, $font-display: null)` | Emits an @font-face rule for one family across several file formats. Must be called at the root. |
 | `gradient($colors, $type: linear, $direction: null, $shape: null, $position: null, $from: null, $in: null, $repeating: false)` | A linear, radial or conic gradient as background-image, plain or repeating, with an optional colour interpolation space. Replaced linear-gradient and radial-gradient in 3.0.0. |
 | `hide($toggle: "hide")` | Visually hides an element while keeping it available to screen readers, either always or until it or anything inside it has keyboard focus. |
-| `line-clamp($lines: 3)` | Truncates text after a number of lines, where ellipsis truncates one. It emits five declarations rather than one because -webkit-line-clamp does nothing on its own: without display: -webkit-box or without -webkit-box-orient: vertical the text is not clamped at all and nothing warns you, and without overflow: hidden the clamped text spills out below the box. The unprefixed line-clamp is emitted too, for when it becomes Baseline. |
 | `loadify($params...)` | Fades elements in on page load. Call `loadify(init)` once at the root to write the keyframes, then the mixin on each element. |
 | `motion-safe` | Wraps its content in @media (prefers-reduced-motion: no-preference), so motion is opt-in: a user who asked their system for less motion gets none of it. |
 | `only($params...)` | Selects only the siblings named, counted by tag or by a selector you name. |
@@ -423,6 +426,7 @@ a dropped declaration rather than an error.
 | `text-stroke($width: 1px, $color: currentColor, $style: hollow, $fill: null)` | An outline on text, in three looks: outside the letter, straddling it, or the letter left unfilled. |
 | `tokens($map, $prefix: null)` | Writes a Sass map out as CSS custom properties, for any kind of token: colours, spacing, sizes, radii, type, shadows, durations. With the prefix space, (4: 1rem) becomes --space-4: 1rem. A null value is skipped, and a quoted string keeps its quotes. |
 | `triangle($direction: "bottom", $color: black, $size: 10px 8px)` | Draws a CSS triangle out of borders, pointing in a given direction. |
+| `truncate($lines: 1, $width: null, $display: inline-block)` | Truncates text: one line with an ellipsis, or several with a clamp. |
 
 ## Functions
 

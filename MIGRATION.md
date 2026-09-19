@@ -6,8 +6,8 @@ it covers `hide`, where breakpoint ranges end, `columnizer`, `before` and
 `escape-to-parent`, `sprite`, four of the utility functions, the device maps,
 `responsive-image`, `border-box`, `antialias`, `center`, `all-buttons`,
 `loadify`, `stretched-link`, `text-gradient`, `text-image`, `placeholder` and
-the removal of `clearfix`, `adaptive`, `reset-css` and the `$of` argument on
-`only` and `except`. The 3.0.0 and
+the removal of `clearfix`, `adaptive`, `reset-css`, the `$of` argument on
+`only` and `except`, and `truncate`. The 3.0.0 and
 2.0.0 guides follow below, unchanged.
 
 Every claim here was checked by compiling the old call against 3.0.0's source
@@ -57,6 +57,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `adaptive` skips a zero breakpoint by value, not by the name `xsmall` | fixes a lost container; no change with the default map |
 | `reset-css` is a modern reset rather than Meyer's 2011 one | breaking, silent, and visible |
 | `only` and `except` take `$of`, the selector to count by | not breaking |
+| `ellipsis` and `line-clamp` became `truncate` | breaking, loud |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -1462,6 +1463,43 @@ compiled before and after, and every one is byte for byte what it was.
 The two mixins stay separate. Merging them into one `nth($positions..., $not:
 …)` was the proposal in `todos/library-review.md`, and the maintainer turned it
 down: `only` and `except` read as English where a boolean flag does not.
+
+---
+
+## Break: `ellipsis` and `line-clamp` became `truncate`
+
+Both are removed, and a call to either stops the build with Sass's
+`Undefined mixin`. One mixin does both, and the line count picks the technique:
+
+| 3.x | 4.0.0 |
+|---|---|
+| `ellipsis` | `truncate` |
+| `ellipsis(40ch)` | `truncate(1, 40ch)` |
+| `ellipsis(100%, block)` | `truncate(1, 100%, block)` |
+| `line-clamp(3)` | `truncate(3)` |
+| `line-clamp(none)` | `truncate(none)` |
+| `line-clamp(var(--lines))` | `truncate(var(--lines))` |
+
+**The CSS is unchanged.** `truncate` compiles to what `ellipsis` compiled to,
+and `truncate(3)` to what `line-clamp(3)` compiled to, declaration for
+declaration.
+
+The argument order is the one thing to read twice: `$lines` comes first now, so
+`ellipsis(40ch)` is `truncate(1, 40ch)` rather than `truncate(40ch)`, which
+would be asking for a clamp of 40ch lines and raises.
+
+### Why one mixin rather than two
+
+They are two techniques for the same job, and which one you need depends only
+on how many lines you want. Measured in Chrome 152, Firefox 156 and Safari
+26.6.2 on a 320px box: at one line they look the same, an ellipsis at the end,
+and the element differs, `inline-block` against Safari's `-webkit-box`. So the
+call now says what you want, one line or three, and the mixin writes the CSS
+that does it.
+
+`$display` belongs to the one-line form and raises with a clamp, which takes
+the display over. `/docs/ellipsis` and `/docs/line-clamp` redirect to
+`/docs/truncate`.
 
 ---
 

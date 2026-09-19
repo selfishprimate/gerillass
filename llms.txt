@@ -1,6 +1,6 @@
 # Gerillass
 
-> A Sass toolkit of 53 mixins and 24 functions, built to be read by coding agents as well as by people. Every member is described in a machine-readable manifest whose examples and refusals are executed by the test suite, so the documentation cannot drift away from the code.
+> A Sass toolkit of 52 mixins and 24 functions, built to be read by coding agents as well as by people. Every member is described in a machine-readable manifest whose examples and refusals are executed by the test suite, so the documentation cannot drift away from the code.
 
 Gerillass is a pure Sass library. There is no build step and no runtime dependency: the `.scss` sources are the deliverable, and the package installs nothing else. It needs Dart Sass; LibSass and node-sass are not supported. This file describes Gerillass 3.0.0.
 
@@ -34,14 +34,12 @@ Arguments are validated and refused with a message naming what is accepted, so a
 - [container-query($params...)](https://docs.gerillass.com/docs/container-query/): A @container rule, taking the same argument shapes as breakpoint so the two read alike.
 - [container($name: null, $type: inline-size)](https://docs.gerillass.com/docs/container/): Marks an element as a query container, so container-query can ask about its width instead of the viewport's.
 - [counter($params...)](https://docs.gerillass.com/docs/counter/): Numbers the children of the element it is included in, with optional text before and after each number.
-- [ellipsis($width: 100%, $display: inline-block)](https://docs.gerillass.com/docs/ellipsis/): Truncates a single line of text with an ellipsis.
 - [escape-to-parent($selector: null)](https://docs.gerillass.com/docs/escape-to-parent/): Writes the rule again with another selector attached to its outermost element, so a theme or state class can switch what a nested rule does.
 - [except($params...)](https://docs.gerillass.com/docs/except/): Selects every sibling but the ones named, counted by tag or by a selector you name.
 - [focus-ring($width: 2px, $offset: 2px, $color: currentColor)](https://docs.gerillass.com/docs/focus-ring/): Draws a keyboard focus ring with outline on :focus-visible, which survives forced-colors mode where a box-shadow ring disappears.
 - [font-face($font-family, $file-path, $font-style: normal, $font-weight: 400, $file-formats: woff2, $font-display: null)](https://docs.gerillass.com/docs/font-face/): Emits an @font-face rule for one family across several file formats.
 - [gradient($colors, $type: linear, $direction: null, $shape: null, $position: null, $from: null, $in: null, $repeating: false)](https://docs.gerillass.com/docs/gradient/): A linear, radial or conic gradient as background-image, plain or repeating, with an optional colour interpolation space.
 - [hide($toggle: "hide")](https://docs.gerillass.com/docs/hide/): Visually hides an element while keeping it available to screen readers, either always or until it or anything inside it has keyboard focus.
-- [line-clamp($lines: 3)](https://docs.gerillass.com/docs/line-clamp/): Truncates text after a number of lines, where ellipsis truncates one.
 - [loadify($params...)](https://docs.gerillass.com/docs/loadify/): Fades elements in on page load.
 - [motion-safe](https://docs.gerillass.com/docs/motion-safe/): Wraps its content in @media (prefers-reduced-motion: no-preference), so motion is opt-in: a user who asked their system for less motion gets none of it.
 - [only($params...)](https://docs.gerillass.com/docs/only/): Selects only the siblings named, counted by tag or by a selector you name.
@@ -67,6 +65,7 @@ Arguments are validated and refused with a message naming what is accepted, so a
 - [text-stroke($width: 1px, $color: currentColor, $style: hollow, $fill: null)](https://docs.gerillass.com/docs/text-stroke/): An outline on text, in three looks: outside the letter, straddling it, or the letter left unfilled.
 - [tokens($map, $prefix: null)](https://docs.gerillass.com/docs/tokens/): Writes a Sass map out as CSS custom properties, for any kind of token: colours, spacing, sizes, radii, type, shadows, durations.
 - [triangle($direction: "bottom", $color: black, $size: 10px 8px)](https://docs.gerillass.com/docs/triangle/): Draws a CSS triangle out of borders, pointing in a given direction.
+- [truncate($lines: 1, $width: null, $display: inline-block)](https://docs.gerillass.com/docs/truncate/): Truncates text: one line with an ellipsis, or several with a clamp.
 
 ## Functions
 

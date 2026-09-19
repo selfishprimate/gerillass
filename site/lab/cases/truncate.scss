@@ -1,0 +1,23 @@
+// One line with an ellipsis, and several with a clamp. The same mixin: the
+// line count picks the technique.
+@use "gerillass" as *;
+
+.box {
+  width: 260px;
+  padding: 10px;
+  margin-bottom: 10px;
+  background: #f2f2eb;
+  border-radius: 6px;
+}
+
+.one {
+  @include truncate;
+}
+
+.three {
+  @include truncate(3);
+}
+
+.plain {
+  // Nothing truncated, for comparison.
+}

@@ -1,0 +1,136 @@
+@charset "UTF-8";
+
+@use "sass:list";
+@use "sass:meta";
+@use "sass:string";
+@use "sass:math";
+@use "../internal/is-css-function" as *;
+@use "../internal/keyword-value" as *;
+@use "../internal/length-problem" as *;
+@use "../internal/words" as *;
+
+// Truncates text: one line with an ellipsis, or several with a clamp.
+//
+// The two are different techniques and it used to take two mixins to say so.
+// `ellipsis` wrote `white-space: nowrap` with `text-overflow`, and `line-clamp`
+// wrote the -webkit-box trio. Measured in Chrome 152, Firefox 156 and Safari
+// 26.6.2 on a 320px box: at one line the two look the same, an ellipsis at the
+// end, and differ in what the element becomes, since the clamp takes the
+// display over. So the line count picks the technique and the caller says what
+// they want rather than which CSS to write.
+//
+// The display keywords, sorted by the part of the value each one fills.
+// Measured in Chrome 152, one keyword, or two or three in any order, were kept
+// when they named at most one outer type, one inner type and one list-item:
+// `inline flex`, `flex block`, `block flow list-item`, `list-item inline flow`.
+// These were dropped: two of a kind (`block inline`, `flex grid`,
+// `block block`), `list-item` beside an inner type other than flow or
+// flow-root (`list-item flex`), and a compound keyword such as `inline-block`
+// beside anything. Chrome also dropped `run-in`, the ruby-base family and the
+// -moz- and -ms- boxes; they are in the specification or used by other
+// engines, so they are let through.
+$-outer: "block" "inline" "run-in";
+$-inner: "flow" "flow-root" "table" "flex" "grid" "ruby" "math";
+$-alone: "none" "contents" "inline-block" "inline-table" "inline-flex" "inline-grid" "table-row-group" "table-header-group" "table-footer-group" "table-row" "table-cell" "table-column-group" "table-column" "table-caption" "ruby-base" "ruby-text" "ruby-base-container" "ruby-text-container";
+
+@function -display-problem($display) {
+  $keywords: list.join(list.join(list.join($-outer, $-inner), $-alone), ("list-item",));
+  $problem: keywordProblem($display, $keywords, 3, $vendor: true);
+  @if $problem or $display == null {
+    @return $problem;
+  }
+  $words: wordsOf($display);
+  $outer: 0;
+  $inner: null;
+  $inners: 0;
+  $list-items: 0;
+  @each $word in $words {
+    @if string.index($word, "(") {
+      @return null;
+    }
+    $lower: string.to-lower-case(string.unquote($word));
+    @if list.length($words) > 1 and not list.index($-outer, $lower) and not list.index($-inner, $lower) and $lower != "list-item" {
+      @return "`#{$lower}` only works as the whole value";
+    }
+    @if list.index($-outer, $lower) {
+      $outer: $outer + 1;
+    } @else if list.index($-inner, $lower) {
+      $inners: $inners + 1;
+      $inner: $lower;
+    } @else if $lower == "list-item" {
+      $list-items: $list-items + 1;
+    }
+  }
+  @if $outer > 1 {
+    @return "it names two outer display types; pass one of block, inline or run-in";
+  }
+  @if $inners > 1 {
+    @return "it names two inner display types; pass one of flow, flow-root, table, flex, grid, ruby or math";
+  }
+  @if $list-items > 1 {
+    @return "it names list-item twice";
+  }
+  @if $list-items == 1 and $inner and not list.index("flow" "flow-root", $inner) {
+    @return "`list-item` only goes with flow or flow-root, not `#{$inner}`";
+  }
+  @return null;
+}
+
+@mixin truncate($lines: 1, $width: null, $display: inline-block) {
+  // `none` undoes a clamp, which is what a media query needs; var() is
+  // resolved by the browser, so only a literal count is checked.
+  $literal: $lines != none and not isCssFunction($lines, "var" "env");
+  @if $literal {
+    @if meta.type-of($lines) != "number" or not math.is-unitless($lines) {
+      @error "`#{meta.inspect($lines)}` is not a valid $lines for `truncate`. Pass a whole number of lines, or `none` to undo a clamp.";
+    }
+    @if $lines < 1 or $lines != math.round($lines) {
+      @error "`#{meta.inspect($lines)}` is not a valid $lines for `truncate`. Pass a whole number of lines that is at least 1, or `none` to undo a clamp.";
+    }
+  }
+
+  $one-line: $literal and $lines == 1;
+
+  @if not $one-line and $display != inline-block {
+    @error "`$display` does nothing for `truncate(#{meta.inspect($lines)})`: clamping more than one line takes the display over, and the element is drawn as a box. Pass `$display` with one line, or leave it out.";
+  }
+
+  $problem: sizeProblem(if($width == null, 100%, $width), $max: true);
+  @if $problem {
+    @error "`#{meta.inspect($width)}` is not a valid $width for `truncate`, which sets max-width: #{$problem}. A browser drops the declaration.";
+  }
+
+  @if $one-line {
+    $problem: -display-problem($display);
+    @if $problem {
+      @error "`#{meta.inspect($display)}` is not a valid $display for `truncate`: #{$problem}. A browser drops the declaration.";
+    }
+    // Written without quotes, since `display: "block"` was dropped.
+    @if meta.type-of($display) == "string" {
+      display: string.unquote($display);
+    } @else {
+      display: $display;
+    }
+    max-width: if($width == null, 100%, $width);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    word-wrap: normal;
+  } @else {
+    // All five declarations were measured on a paragraph that runs to five
+    // lines with a clamp of three: without -webkit-box-orient, or without
+    // display: -webkit-box, or with the standard line-clamp alone, the text
+    // ran to five lines and nothing warned; without overflow: hidden the box
+    // was three lines tall and the rest spilled out below it. `CSS.supports`
+    // still answers false for the standard property in all three browsers, so
+    // it is written for the future and the prefixed trio does the work.
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: $lines;
+    line-clamp: $lines;
+    overflow: hidden;
+    @if $width != null {
+      max-width: $width;
+    }
+  }
+}

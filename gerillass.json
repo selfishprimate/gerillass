@@ -838,46 +838,6 @@
       ]
     },
     {
-      "name": "ellipsis",
-      "kind": "mixin",
-      "arguments": [
-        {
-          "name": "$width",
-          "default": "100%",
-          "accepts": [
-            "a max-width"
-          ]
-        },
-        {
-          "name": "$display",
-          "default": "inline-block",
-          "accepts": [
-            "a display keyword, or two or three in any order naming at most one outer type, one inner type and list-item, such as inline flex",
-            "a vendor keyword such as -webkit-box, a CSS-wide keyword, or var()",
-            "null to leave display out",
-            "a quoted value is written without its quotes; a combination the browser drops, such as block inline, is refused"
-          ]
-        }
-      ],
-      "file": "scss/library/_ellipsis.scss",
-      "signature": "ellipsis($width: 100%, $display: inline-block)",
-      "summary": "Truncates a single line of text with an ellipsis.",
-      "examples": [
-        ".a { @include ellipsis; }",
-        ".a { @include ellipsis(200px); }"
-      ],
-      "rejects": [
-        ".a { @include ellipsis(100%, huge); }",
-        ".a { @include ellipsis(100%, block inline); }",
-        ".a { @include ellipsis(100%, inline-block flow); }",
-        ".a { @include ellipsis(100%, 10px); }",
-        ".a { @include ellipsis(huge); }",
-        ".a { @include ellipsis(auto); }",
-        ".a { @include ellipsis(-10px); }",
-        ".a { @include ellipsis(200); }"
-      ]
-    },
-    {
       "name": "escape-to-parent",
       "kind": "mixin",
       "arguments": [
@@ -1252,38 +1212,6 @@
         ".a { @include hide(nonsense); }",
         ".a { @include hide(unhide); }",
         ".a { @include hide(null); }"
-      ]
-    },
-    {
-      "name": "line-clamp",
-      "kind": "mixin",
-      "arguments": [
-        {
-          "name": "$lines",
-          "default": "3",
-          "accepts": [
-            "a whole number of lines, at least 1",
-            "none, to undo a clamp",
-            "var(), written as it is"
-          ]
-        }
-      ],
-      "file": "scss/library/_line-clamp.scss",
-      "signature": "line-clamp($lines: 3)",
-      "summary": "Truncates text after a number of lines, where ellipsis truncates one. It emits five declarations rather than one because -webkit-line-clamp does nothing on its own: without display: -webkit-box or without -webkit-box-orient: vertical the text is not clamped at all and nothing warns you, and without overflow: hidden the clamped text spills out below the box. The unprefixed line-clamp is emitted too, for when it becomes Baseline.",
-      "examples": [
-        ".excerpt { @include line-clamp(3); }",
-        ".title { @include line-clamp(2); }",
-        ".full { @include line-clamp(none); }",
-        ".default { @include line-clamp; }",
-        ".a { @include line-clamp(var(--lines)); }"
-      ],
-      "rejects": [
-        ".a { @include line-clamp(0); }",
-        ".a { @include line-clamp(2.5); }",
-        ".a { @include line-clamp(3px); }",
-        ".a { @include line-clamp(\"three\"); }",
-        ".a { @include line-clamp(url(a.png)); }"
       ]
     },
     {
@@ -2238,6 +2166,60 @@
         ".caret { @include triangle(\"top\", red, thin); }",
         ".caret { @include triangle(\"top\", red, 10); }",
         ".caret { @include triangle(\"top\", red, 10px 10deg); }"
+      ]
+    },
+    {
+      "name": "truncate",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$lines",
+          "default": "1",
+          "accepts": [
+            "1, the default, for the one-line ellipsis",
+            "a whole number of lines for the clamp",
+            "none to undo a clamp, inside a media query",
+            "var() or env(), which the browser resolves"
+          ]
+        },
+        {
+          "name": "$width",
+          "default": "null",
+          "accepts": [
+            "a max-width; one line defaults to 100%, several lines to none at all"
+          ]
+        },
+        {
+          "name": "$display",
+          "default": "inline-block",
+          "accepts": [
+            "the display for the one-line form, inline-block by default",
+            "refused with more than one line, where the clamp takes the display over"
+          ]
+        }
+      ],
+      "file": "scss/library/_truncate.scss",
+      "signature": "truncate($lines: 1, $width: null, $display: inline-block)",
+      "summary": "Truncates text: one line with an ellipsis, or several with a clamp.",
+      "caveats": [
+        "One line and several lines are different techniques, and that is why this replaced `ellipsis` and `line-clamp` in 4.0.0. One line is `white-space: nowrap` with `text-overflow`, which leaves the display alone; several is the `-webkit-box` trio, which takes the display over. Measured in Chrome 152, Firefox 156 and Safari 26.6.2 on a 320px box, they look the same at one line and the element differs: `inline-block` against Safari's `-webkit-box`.",
+        "The standard `line-clamp` property is written beside the prefixed one for the future. `CSS.supports(\"line-clamp: 3\")` still answers false in all three browsers, so the prefixed trio is what does the work.",
+        "All five declarations of the clamp are needed: measured on a paragraph of five lines with a clamp of three, dropping `-webkit-box-orient`, `display: -webkit-box` or using the standard property alone left all five lines showing, and dropping `overflow: hidden` left the box three lines tall with the rest spilling out below it."
+      ],
+      "examples": [
+        ".a { @include truncate; }",
+        ".a { @include truncate(3); }",
+        ".a { @include truncate(2, 40ch); }",
+        ".a { @include truncate(1, 100%, block); }",
+        ".a { @include truncate(none); }"
+      ],
+      "rejects": [
+        ".a { @include truncate(0); }",
+        ".a { @include truncate(1.5); }",
+        ".a { @include truncate(3px); }",
+        ".a { @include truncate(3, 10deg); }",
+        ".a { @include truncate(3, 100%, block); }",
+        ".a { @include truncate(1, 100%, nonsense); }"
       ]
     },
     {
