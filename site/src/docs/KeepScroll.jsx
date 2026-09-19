@@ -1,4 +1,12 @@
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
+
+/*
+  The restore has to run before the browser paints, or the page shows the top
+  of itself for a frame and then jumps. That is a layout effect. On the server
+  there is no layout to run it in, and React says so, so the plain effect
+  stands in there: it never runs, since the prerender does not mount.
+*/
+const useBeforePaint = typeof window === "undefined" ? useEffect : useLayoutEffect;
 
 /*
   Keeps the reader where they were when they refresh the page.
@@ -29,7 +37,7 @@ import { useEffect } from "react";
   a reader of that page will see it.
 */
 function KeepScroll() {
-  useEffect(() => {
+  useBeforePaint(() => {
     const key = `gerillass:scroll:${window.location.pathname}`;
 
     const read = () => {

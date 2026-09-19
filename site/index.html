@@ -96,6 +96,31 @@
     <link rel="manifest" href="/manifest.json"/>
     <link rel="author" href="/humans.txt"/>
 
+    <script>
+      /*
+        Half of the refresh restore; the other half is at the end of the body,
+        and src/docs/KeepScroll.jsx is what saves the position.
+
+        This half runs before anything is parsed, and its whole job is to hold
+        the page back: a browser keeps the previous page on screen until the
+        new one paints, so a document hidden from the first byte means the
+        reader never sees the top of the new one. Doing it further down leaves
+        a window where the new document exists, is empty and is visible, which
+        is what Safari was painting.
+      */
+      (function () {
+        try {
+          var nav = performance.getEntriesByType("navigation")[0];
+          if (!nav || nav.type !== "reload") return;
+          if (!Number(sessionStorage.getItem("gerillass:scroll:" + location.pathname))) return;
+          if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+          document.documentElement.style.visibility = "hidden";
+        } catch (error) {
+          /* a private window, or blocked site data: the page opens as it always did */
+        }
+      })();
+    </script>
+
   </head>
 
   <body>
@@ -118,36 +143,59 @@
 
     <script>
       /*
-        Puts the scroll position back before the page is painted.
+        The other half: the position itself. Here the document is parsed and
+        the stylesheet is in, so the page has its height and the scroll can be
+        taken before the first paint. The page is revealed the moment it lands,
+        and unconditionally after 800ms, so nothing can leave it hidden.
 
-        One page saves a position, `/docs/loadify`, whose subject is an
-        animation that runs on load: see src/docs/KeepScroll.jsx. Doing it in
-        React was too late. The component runs after hydration, so the page
-        painted at the top first and jumped afterwards, which was visible.
-
-        Here the document is parsed and the stylesheet is in, so the height is
-        known and the scroll can be taken before the first paint. Every other
-        page is untouched: nothing else writes a key, and a key is only read
-        after a reload.
+        One page asks for this, `/docs/loadify`, whose subject is an animation
+        that runs on load. It is here rather than in the app because the app
+        runs after the first paint, so the page showed the top of itself and
+        then jumped. Every other page is untouched: nothing else saves a
+        position, and a saved one is only read after a reload.
       */
       (function () {
+        var root = document.documentElement;
+        var hidden = root.style.visibility === "hidden";
+        var shown = false;
+        var behaviour = root.style.scrollBehavior;
+
+        function reveal() {
+          if (shown) return;
+          shown = true;
+          root.style.visibility = "";
+          root.style.scrollBehavior = behaviour;
+        }
+
+        if (!hidden) return;
+        // Whatever happens below, the page is never left hidden.
+        setTimeout(reveal, 800);
+
         try {
-          var nav = performance.getEntriesByType("navigation")[0];
-          if (!nav || nav.type !== "reload") return;
           var saved = Number(sessionStorage.getItem("gerillass:scroll:" + location.pathname));
-          if (!saved) return;
-          if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+          if (!saved) {
+            reveal();
+            return;
+          }
+
           // `html` carries scroll-behavior: smooth, and a restore under it
           // travels rather than lands.
-          var root = document.documentElement;
-          var behaviour = root.style.scrollBehavior;
           root.style.scrollBehavior = "auto";
-          window.scrollTo(0, saved);
-          setTimeout(function () {
-            root.style.scrollBehavior = behaviour;
-          }, 1500);
+
+          var tries = 0;
+          function land() {
+            window.scrollTo(0, saved);
+            tries += 1;
+            if (Math.abs(window.scrollY - saved) <= 2 || tries > 50) reveal();
+          }
+
+          land();
+          var timer = setInterval(function () {
+            land();
+            if (shown) clearInterval(timer);
+          }, 16);
         } catch (error) {
-          /* a private window, or blocked site data: the page simply opens at the top */
+          reveal();
         }
       })();
     </script>
