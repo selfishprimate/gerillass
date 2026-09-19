@@ -114,7 +114,7 @@ a dropped declaration rather than an error.
 | `screen-agent` | `.a { @include screen-agent(var(--density)) { color: red; } }` |
 | `sizer` | `.a { @include sizer(huge); }` |
 | `smartphone` | `.a { @include smartphone(Nokia3310) { display: none; } }` |
-| `sprite` | `.icon { @include sprite("/img/sprite.txt"); }` |
+| `sprite` | `.icon { @include sprite("/img/a.png" "/img/b.png", 0 -40px); }` |
 | `stretched-link` | `.card a { @include stretched-link(middle); }` |
 | `tablet` | `.a { @include tablet(Surface) { display: none; } }` |
 | `text-gradient` | `.a { @include text-gradient("top", (red, blue)); }` |
@@ -231,6 +231,12 @@ a dropped declaration rather than an error.
 - `max` with a key, and a range ending at a key, end just under the key, as in `breakpoint`: `remove(max, medium)` hides below 768px, `(max-width: 767.98px)`, so it does not overlap `remove(min, medium)`.
 - A `display` written after the include, in the same rule, is emitted after the `@media` block and wins over it. Write it before the include.
 
+**`sprite`**
+
+- With one argument the mixin has to tell an image from a position, and both can be strings. Until 4.0.0 it read the last four characters and took only `.png`, `.jpg` and `.svg`, so `.webp`, `.avif`, `.gif`, `.jpeg`, an upper case `.PNG`, a path with a query such as `a.png?v=2` and a data URI were all refused. It now asks whether the value is a position, and a string that is not one is the path.
+- A `var()` with one argument is read as the position, since that is what a single `var()` usually is. For an image in a custom property, pass it with a position: `sprite(var(--sprite), 0 0)`.
+- A quoted position is unquoted rather than refused: `background-position: "center"` is dropped in Chrome 152, Firefox 156 and Safari 26.6.2, all three falling back to `0% 0%`.
+
 **`text-shadow`**
 
 - Since 4.0.0 every direction is an angle: the eight keywords are the 45 degree steps, measured as `gradient` measures them, 0deg up and clockwise, and the offsets are the sine and cosine of that angle. A diagonal keyword used to write the distance on both axes, which placed it 1.414 times further out than a straight one; multiply an old diagonal distance by 0.7071 to keep the same look.
@@ -244,6 +250,25 @@ a dropped declaration rather than an error.
 - A bare `-webkit-text-stroke` is centred on the glyph outline, so half of it is painted over the letter: measured at 200px in Chrome 152, Firefox 156 and Safari 26.6.2, a 20px stroke cut the letter's own ink from 11213 to 3174 pixels and a 40px stroke left none. `$style: outside` writes `paint-order: stroke fill`, which keeps the letterform whole in all three.
 - `$style: outside` doubles the width it writes, since half of the stroke is then hidden behind the letter: a 40px stroke drawn that way left 17006 pixels of ink against a centred 20px stroke's 15915. A keyword width, `thin`, `medium` or `thick`, cannot be doubled and raises; a `var()` width is doubled by the browser through `calc()`.
 - Unprefixed `text-stroke` is supported by no engine, checked with `CSS.supports` in all three, so the mixin writes the `-webkit-` properties only. In an engine that has neither, `hollow` still shows solid text, because it writes `color` as well.
+
+**`convertToEm`**
+
+- Until 4.0.0 the unit was added as text, so the function returned the string `1.5em` rather than a number: it printed the same, and `convertToEm(24px) * 2` stopped the build with Sass's "Undefined operation". It now returns a number, as `remify` always has.
+
+**`isNumber`**
+
+- Until 4.0.0 a value that was not a number only warned, and the function then ended with nothing to return, so the build stopped with Sass's own "Function finished without @return" instead of a message naming the argument. It now raises, which is what `isColor` and `isTime` do.
+- A `var()` or a `calc()` is not a Sass number and is refused. Pass those straight to the property rather than through a type guard.
+
+**`pixelify`**
+
+- Until 4.0.0 the unit was thrown away and `px` written in its place, so `2rem` gave `2px`, `1in` gave `1px`, `12pt` gave `12px` and `50%` gave `50px`. The conversions are now real: measured in Chrome 152, Firefox 156 and Safari 26.6.2, `2rem` is 32px, `1in` is 96px and `12pt` is 16px in all three.
+- `em`, `%` and the viewport units are refused rather than guessed at: they are measured against the element's own font size, its parent and the window, none of which Sass can know. `rem` is converted against a 16px root, the same assumption `remify` and `convertToEm` make, so it is wrong for a page that sets another root size.
+
+**`shorthandProperty`**
+
+- Until 4.0.0 only a fifth value was checked. An empty list ended the build with Sass's own "Function finished without @return", and a map was read as its keys and values in turn, so `(a: 1, b: 2)` came out as `a 1 b 2 a 1 b 2`. Both raise now.
+- A `null` is passed through on purpose, because a caller can read the four values back and skip the ones that are unset, which is what `position` does: `position(absolute, null)` writes the position and no offsets. In a declaration of your own a `null` simply disappears from the list, so `margin: shorthandProperty(1px null)` is `margin: 1px 1px`.
 
 ## Mixins
 
@@ -322,10 +347,10 @@ and camelCase is what tells them apart from the kebab-case mixins above.
 | `gradientValue($colors, $type: linear, $direction: null, $shape: null, $position: null, $from: null, $in: null, $repeating: false)` | The gradient mixin's gradient as a value, for layering it with an image in one background-image, or using it as a mask-image or border-image. It takes the same arguments and refuses the same input, but cannot write the fallback the mixin writes before a gradient with $in. |
 | `isColor($value)` | Returns the value if every item in it is a colour, and errors otherwise. |
 | `isGutter($value)` | True for anything that can sit where a CSS length is expected: a number, a calculation, or a CSS function such as var(). |
-| `isNumber($value)` | Returns the value if it is a number. |
+| `isNumber($value)` | Returns the value when it is a number, and raises when it is not. |
 | `isTime($value)` | Returns the value if it is a time in s or ms, and errors otherwise. |
 | `mapDeepGet($map, $keys...)` | Reads a value out of a nested map by following a chain of keys. |
-| `pixelify($value)` | Returns the value with a px unit, adding one if it is missing. |
+| `pixelify($value)` | Returns the value in pixels: a unitless number takes a px, and a length in another unit is converted. |
 | `pseudoSelector($elements, $pseudo: null)` | Appends a pseudo-class to every selector in a list. |
 | `remify($value)` | Converts a pixel length to rem, against a 16px root. |
 | `shade($color, $percentage)` | Mixes a colour towards black by a percentage. |

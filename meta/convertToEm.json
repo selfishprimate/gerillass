@@ -10,10 +10,14 @@
     }
   ],
   "examples": [
-    ".a { margin: convertToEm(24px); }"
+    ".a { margin: convertToEm(24px); }",
+    ".a { margin: convertToEm(24px) * 2; }"
   ],
   "rejects": [
     ".a { margin: convertToEm(nonsense); }",
     ".a { margin: convertToEm(24); }"
+  ],
+  "caveats": [
+    "Until 4.0.0 the unit was added as text, so the function returned the string `1.5em` rather than a number: it printed the same, and `convertToEm(24px) * 2` stopped the build with Sass's \"Undefined operation\". It now returns a number, as `remify` always has."
   ]
 }

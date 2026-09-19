@@ -40,6 +40,19 @@ changed, every one of them from a selector that leaked or matched nothing, and
 32 now raise, all with the library's own message. It also gained a sass-true
 spec and its documentation page's first demos.
 
+**Rows 5, 8, 9 and 10 are done for 4.0.0 on the `library-defects` branch.**
+`sprite` tells an image from a position by asking whether the value is a
+position, rather than by reading the last four characters, so every format a
+browser loads works and a quoted position is unquoted; `pixelify` converts the
+unit rather than replacing it, exactly for the absolute units and against a
+16px root for `rem`, and refuses `em`, `%` and the viewport units; `isNumber`
+raises as `isColor` and `isTime` do; `shorthandProperty` raises on an empty
+list and on a map, and still carries a `null` through, which `position`
+depends on; and `convertToEm` returns a number. A 155 call matrix compiled
+against 3.x and the branch: 102 unchanged, 53 changed, and `2rem` as 32px,
+`1in` as 96px, `12pt` as 16px and a quoted `background-position` being dropped
+were measured in Chrome 152, Firefox 156 and Safari 26.6.2.
+
 `text-shadow` is the worst of these: it is in the SILENT and BROKEN OUTPUT
 buckets that `tools/audit.js` is supposed to keep empty, and
 `todos/silent-values.md` lists it as refusing every bad value, which only held

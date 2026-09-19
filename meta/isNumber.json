@@ -1,6 +1,6 @@
 {
   "name": "isNumber",
-  "summary": "Returns the value if it is a number.",
+  "summary": "Returns the value when it is a number, and raises when it is not.",
   "arguments": [
     {
       "name": "$value",
@@ -10,7 +10,17 @@
     }
   ],
   "examples": [
-    ".a { z-index: isNumber(5); }"
+    ".a { z-index: isNumber(5); }",
+    ".a { width: isNumber(1.5rem); }"
   ],
-  "rejects": []
+  "rejects": [
+    ".a { z-index: isNumber(\"5\"); }",
+    ".a { z-index: isNumber(red); }",
+    ".a { z-index: isNumber(null); }",
+    ".a { z-index: isNumber(var(--z)); }"
+  ],
+  "caveats": [
+    "Until 4.0.0 a value that was not a number only warned, and the function then ended with nothing to return, so the build stopped with Sass's own \"Function finished without @return\" instead of a message naming the argument. It now raises, which is what `isColor` and `isTime` do.",
+    "A `var()` or a `calc()` is not a Sass number and is refused. Pass those straight to the property rather than through a type guard."
+  ]
 }

@@ -30,6 +30,12 @@ Converts a pixel length to em, against a 16px base.
 ```
 </Example>
 
+<Hint kind="warning">
+
+**Changed in Gerillass 4.0.0.** The unit used to be added as text, so the function returned the string `1.5em` rather than a number. It printed the same, and `convertToEm(24px) * 2` stopped the build with Sass's "Undefined operation". It now returns a number, as [remify](/docs/remify) always has, so it can be used in arithmetic.
+
+</Hint>
+
 ## Related Links
 
 - [Remify](/docs/remify)

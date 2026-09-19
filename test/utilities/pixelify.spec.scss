@@ -1,0 +1,29 @@
+// Since 4.0.0 the unit is converted rather than thrown away. The numbers below
+// were measured in Chrome 152, Firefox 156 and Safari 26.6.2, where 2rem is
+// 32px, 1in is 96px and 12pt is 16px with a 16px root.
+@use 'true' as *;
+@use '../../scss/utilities/pixelify' as *;
+@use '../../scss/utilities/remify' as *;
+
+@include describe('pixelify()') {
+  @include it('Adds px to a unitless number and leaves a pixel length alone.') {
+    @include assert-equal(pixelify(24), 24px);
+    @include assert-equal(pixelify(24px), 24px);
+    @include assert-equal(pixelify(0), 0px);
+  }
+
+  @include it('Converts an absolute unit exactly.') {
+    @include assert-equal(pixelify(1in), 96px);
+    @include assert-equal(pixelify(12pt), 16px);
+    @include assert-equal(pixelify(1pc), 16px);
+  }
+
+  @include it('Converts rem against the 16px base remify assumes.') {
+    @include assert-equal(pixelify(2rem), 32px);
+    @include assert-equal(pixelify(remify(24px)), 24px);
+  }
+
+  @include it('Returns a number, so it can be used in arithmetic.') {
+    @include assert-equal(pixelify(2rem) * 2, 64px);
+  }
+}

@@ -29,6 +29,15 @@ Expands one to four values into the four-value CSS shorthand order.
 ```
 </Example>
 
+<Example caption="A `null` is carried through to the position it belongs in, which is what lets a caller skip a side. [Position](/docs/position) reads the four values back and writes a declaration only for the ones that are set.">
+```scss
+.card {
+  padding: shorthandProperty(16px);
+  margin: shorthandProperty(8px 12px 16px);
+}
+```
+</Example>
+
 ## What it refuses
 
 Arguments are checked, so a wrong value stops the build with a message instead of quietly producing the wrong CSS.
@@ -39,8 +48,16 @@ Arguments are checked, so a wrong value stops the build with a message instead o
 }
 ```
 ```text
-Error: You've passed 5 arguments. Please do not pass more than 4.
+Error: `shorthandProperty` was given 5 values. Pass one to four, in the order CSS reads them: all, block and inline, top and sides and bottom, or top right bottom left.
 ```
+
+An empty list and a map raise as well.
+
+<Hint kind="warning">
+
+**Changed in Gerillass 4.0.0.** Only a fifth value used to be checked. An empty list ended the build with Sass's own "Function finished without @return", and a map was read as its keys and values in turn, so `(a: 1, b: 2)` came out as `a 1 b 2 a 1 b 2`. A `null` is still passed through, on purpose.
+
+</Hint>
 
 ## Related Links
 

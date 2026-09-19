@@ -3,6 +3,7 @@
 @use "sass:list";
 @use "sass:meta";
 @use "sass:string";
+@use "../internal/image-value" as *;
 @use "../internal/length-problem" as *;
 
 $-places: "left" "center" "right" "top" "bottom";
@@ -53,36 +54,47 @@ $-places: "left" "center" "right" "top" "bottom";
   @return null;
 }
 
+// One argument is either the image or the position, and both can be strings,
+// so the mixin has to tell them apart. Until 4.0.0 it read the last four
+// characters and took `.png`, `.jpg` or `.svg` as the path, which refused every
+// other format a browser loads: `.webp`, `.avif`, `.gif`, `.jpeg`, an upper
+// case `.PNG`, a path with a query such as `a.png?v=2`, and a data URI. The
+// question is not what the file is called but whether the value is a position,
+// which `-position-problem` already answers, so a string that is not a position
+// is the path.
+//
+// A position in quotes is written with them, `background-position: "center"`,
+// which a browser drops, so a quoted position is unquoted rather than refused,
+// as the keyword arguments of the other mixins have been since 2.3.1.
+@function -unquoted($value) {
+  @if meta.type-of($value) == "string" {
+    @return string.unquote($value);
+  }
+  @return $value;
+}
+
 @mixin sprite($params...) {
   @if list.length($params) == 1 {
-    @if meta.type-of(list.nth($params, 1)) == "string" {
-      $str-length: string.length(list.nth($params, 1));
-      $str-end: string.slice(list.nth($params, 1), $str-length - 3);
-      @if list.index(".png" ".jpg" ".svg", $str-end) {
-        $image-url: list.nth($params, 1);
-        display: inline-block;
-        background-image: url($image-url);
-        background-repeat: no-repeat;
-      } @else {
-        @error "`#{list.nth($params, 1)}` is not a valid image path for `sprite`. The path must end in .png, .jpg or .svg.";
-      }
-    } @else {
-      $position: list.nth($params, 1);
+    $value: list.nth($params, 1);
+    $position: -unquoted($value);
+    @if meta.type-of($value) != "string" or -position-problem($position) == null {
       $problem: -position-problem($position);
       @if $problem {
-        @error "`#{meta.inspect($position)}` is not a valid position for `sprite`: #{$problem}. A browser drops the declaration.";
+        @error "`#{meta.inspect($value)}` is not a valid position for `sprite`: #{$problem}. A browser drops the declaration.";
       }
       background-position: $position;
+    } @else {
+      display: inline-block;
+      background-image: imageValue($value, "sprite", "image path");
+      background-repeat: no-repeat;
     }
   } @else if list.length($params) == 2 {
     $image-url: list.nth($params, 1);
-    $position: list.nth($params, 2);
+    $position: -unquoted(list.nth($params, 2));
     // The one-argument form checks its path; this one did not, so a list was
     // written into url(), which a browser drops, and a number asked for a file
     // of that name. Measured in Chrome 152: `url(16 9)` was dropped.
-    @if meta.type-of($image-url) != "string" {
-      @error "`#{meta.inspect($image-url)}` is not a valid image path for `sprite`: with two arguments the first is one path as a string, and a browser drops a list in `url()`. Pass a path such as `\"/img/sprite.png\"`, then the position.";
-    }
+    $image: imageValue($image-url, "sprite", "image path");
     @if $position != null {
       $problem: -position-problem($position);
       @if $problem {
@@ -90,7 +102,7 @@ $-places: "left" "center" "right" "top" "bottom";
       }
     }
     display: inline-block;
-    background-image: url($image-url);
+    background-image: $image;
     background-position: $position;
     background-repeat: no-repeat;
   } @else {

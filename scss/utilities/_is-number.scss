@@ -2,10 +2,16 @@
 
 @use "sass:meta";
 
+// Returns the value when it is a number, and raises when it is not, which is
+// what `isColor` and `isTime` do with their own types.
+//
+// Until 4.0.0 the else branch only warned, and then fell out of the function
+// with nothing to return, so `isNumber("a")` ended the build with Sass's own
+// "Function finished without @return" rather than with a message naming the
+// argument.
 @function isNumber($value) {
-  @if meta.type-of($value) == "number" {
-    @return $value;
-  } @else {
-    @warn "Please make sure you pass a valid number!";
+  @if meta.type-of($value) != "number" {
+    @error "`#{meta.inspect($value)}` is not a number. Pass a number, with or without a unit, such as `100` or `1.5rem`.";
   }
+  @return $value;
 }

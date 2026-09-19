@@ -1667,7 +1667,7 @@
           "name": "$params",
           "variadic": true,
           "accepts": [
-            "an image path ending in .png, .jpg or .svg",
+            "an image path as a string, in any format a browser loads, or a `url()`, `image-set()` or `var()`",
             "a background position",
             "both, image first, where the image is one path as a string"
           ]
@@ -1676,20 +1676,29 @@
       "file": "scss/library/_sprite.scss",
       "signature": "sprite($params...)",
       "summary": "Sets up an element as a sprite tile: an image, a background position, or both.",
+      "caveats": [
+        "With one argument the mixin has to tell an image from a position, and both can be strings. Until 4.0.0 it read the last four characters and took only `.png`, `.jpg` and `.svg`, so `.webp`, `.avif`, `.gif`, `.jpeg`, an upper case `.PNG`, a path with a query such as `a.png?v=2` and a data URI were all refused. It now asks whether the value is a position, and a string that is not one is the path.",
+        "A `var()` with one argument is read as the position, since that is what a single `var()` usually is. For an image in a custom property, pass it with a position: `sprite(var(--sprite), 0 0)`.",
+        "A quoted position is unquoted rather than refused: `background-position: \"center\"` is dropped in Chrome 152, Firefox 156 and Safari 26.6.2, all three falling back to `0% 0%`."
+      ],
       "examples": [
         ".icon { @include sprite(\"/img/sprite.png\"); }",
         ".icon { @include sprite(\"/img/sprite.png\", 0 -40px); }",
-        ".icon { @include sprite(0 -40px); }"
+        ".icon { @include sprite(0 -40px); }",
+        ".icon { @include sprite(\"/img/sprite.webp\"); }",
+        ".icon { @include sprite(\"/img/sprite.png?v=2\"); }",
+        ".icon { @include sprite(center); }",
+        ".icon { @include sprite(\"/img/sprite.png\", left 10px top 5px); }"
       ],
       "rejects": [
-        ".icon { @include sprite(\"/img/sprite.txt\"); }",
         ".icon { @include sprite(\"/img/a.png\" \"/img/b.png\", 0 -40px); }",
         ".icon { @include sprite(42, 0 -40px); }",
         ".icon { @include sprite(0 red); }",
         ".icon { @include sprite(\"/img/sprite.png\", 10deg); }",
         ".icon { @include sprite(\"/img/sprite.png\", 1); }",
         ".icon { @include sprite(\"/img/sprite.png\", 10px 20px 30px 40px); }",
-        ".icon { @include sprite(\"/img/sprite.png\", auto); }"
+        ".icon { @include sprite(\"/img/sprite.png\", auto); }",
+        ".icon { @include sprite(42); }"
       ]
     },
     {
@@ -2174,8 +2183,12 @@
       "file": "scss/utilities/_convert-to-em.scss",
       "signature": "convertToEm($value)",
       "summary": "Converts a pixel length to em, against a 16px base.",
+      "caveats": [
+        "Until 4.0.0 the unit was added as text, so the function returned the string `1.5em` rather than a number: it printed the same, and `convertToEm(24px) * 2` stopped the build with Sass's \"Undefined operation\". It now returns a number, as `remify` always has."
+      ],
       "examples": [
-        ".a { margin: convertToEm(24px); }"
+        ".a { margin: convertToEm(24px); }",
+        ".a { margin: convertToEm(24px) * 2; }"
       ],
       "rejects": [
         ".a { margin: convertToEm(nonsense); }",
@@ -2497,11 +2510,21 @@
       ],
       "file": "scss/utilities/_is-number.scss",
       "signature": "isNumber($value)",
-      "summary": "Returns the value if it is a number.",
-      "examples": [
-        ".a { z-index: isNumber(5); }"
+      "summary": "Returns the value when it is a number, and raises when it is not.",
+      "caveats": [
+        "Until 4.0.0 a value that was not a number only warned, and the function then ended with nothing to return, so the build stopped with Sass's own \"Function finished without @return\" instead of a message naming the argument. It now raises, which is what `isColor` and `isTime` do.",
+        "A `var()` or a `calc()` is not a Sass number and is refused. Pass those straight to the property rather than through a type guard."
       ],
-      "rejects": []
+      "examples": [
+        ".a { z-index: isNumber(5); }",
+        ".a { width: isNumber(1.5rem); }"
+      ],
+      "rejects": [
+        ".a { z-index: isNumber(\"5\"); }",
+        ".a { z-index: isNumber(red); }",
+        ".a { z-index: isNumber(null); }",
+        ".a { z-index: isNumber(var(--z)); }"
+      ]
     },
     {
       "name": "isTime",
@@ -2560,18 +2583,32 @@
           "name": "$value",
           "required": true,
           "accepts": [
-            "a number, with or without a unit"
+            "a unitless number, which takes a `px`",
+            "a length in `px`, or in an absolute unit: `in`, `cm`, `mm`, `pt`, `pc`, `q`",
+            "a `rem`, converted against a 16px base, as `remify` assumes"
           ]
         }
       ],
       "file": "scss/utilities/_pixelify.scss",
       "signature": "pixelify($value)",
-      "summary": "Returns the value with a px unit, adding one if it is missing.",
+      "summary": "Returns the value in pixels: a unitless number takes a px, and a length in another unit is converted.",
+      "caveats": [
+        "Until 4.0.0 the unit was thrown away and `px` written in its place, so `2rem` gave `2px`, `1in` gave `1px`, `12pt` gave `12px` and `50%` gave `50px`. The conversions are now real: measured in Chrome 152, Firefox 156 and Safari 26.6.2, `2rem` is 32px, `1in` is 96px and `12pt` is 16px in all three.",
+        "`em`, `%` and the viewport units are refused rather than guessed at: they are measured against the element's own font size, its parent and the window, none of which Sass can know. `rem` is converted against a 16px root, the same assumption `remify` and `convertToEm` make, so it is wrong for a page that sets another root size."
+      ],
       "examples": [
-        ".a { width: pixelify(24); }"
+        ".a { width: pixelify(24); }",
+        ".a { width: pixelify(24px); }",
+        ".a { width: pixelify(2rem); }",
+        ".a { width: pixelify(12pt); }",
+        ".a { width: pixelify(pixelify(1in)); }"
       ],
       "rejects": [
-        ".a { --x: #{pixelify(nonsense)}; }"
+        ".a { --x: #{pixelify(nonsense)}; }",
+        ".a { width: pixelify(2em); }",
+        ".a { width: pixelify(50%); }",
+        ".a { width: pixelify(10vw); }",
+        ".a { width: pixelify(10deg); }"
       ]
     },
     {
@@ -2670,11 +2707,20 @@
       "file": "scss/utilities/_shorthand-property.scss",
       "signature": "shorthandProperty($value)",
       "summary": "Expands one to four values into the four-value CSS shorthand order.",
+      "caveats": [
+        "Until 4.0.0 only a fifth value was checked. An empty list ended the build with Sass's own \"Function finished without @return\", and a map was read as its keys and values in turn, so `(a: 1, b: 2)` came out as `a 1 b 2 a 1 b 2`. Both raise now.",
+        "A `null` is passed through on purpose, because a caller can read the four values back and skip the ones that are unset, which is what `position` does: `position(absolute, null)` writes the position and no offsets. In a declaration of your own a `null` simply disappears from the list, so `margin: shorthandProperty(1px null)` is `margin: 1px 1px`."
+      ],
       "examples": [
-        ".a { margin: shorthandProperty(10px 20px); }"
+        ".a { margin: shorthandProperty(10px 20px); }",
+        ".a { padding: shorthandProperty(16px); }",
+        ".a { padding: shorthandProperty(8px 12px 16px); }",
+        ".a { border-radius: shorthandProperty(4px 8px 12px 16px); }"
       ],
       "rejects": [
-        ".a { margin: shorthandProperty(1px 2px 3px 4px 5px); }"
+        ".a { margin: shorthandProperty(1px 2px 3px 4px 5px); }",
+        ".a { margin: shorthandProperty(()); }",
+        ".a { margin: shorthandProperty((a: 1, b: 2)); }"
       ]
     },
     {

@@ -4,17 +4,32 @@
 @use "sass:meta";
 @use "../utilities/clear-unit" as *;
 
-// This function checks if the argument has a px unit. If not, it adds a px unit to the end of the argument.
-
+// Returns the value in pixels: a unitless number takes a `px`, and a length in
+// another unit is converted.
+//
+// Until 4.0.0 the conversion was `clearUnit($value) * 1px`, which threw the
+// unit away and wrote the bare number back with `px` on it. Every one of these
+// compiled, and every one is wrong: `2rem` gave `2px` rather than 32px, `1in`
+// gave `1px` rather than 96px, `12pt` gave `12px` rather than 16px, and `50%`
+// and `10vw` gave `50px` and `10px`, which cannot be worked out at all.
+//
+// Sass converts the absolute units itself, so `in`, `cm`, `mm`, `pt`, `pc` and
+// `q` are exact. `rem` is converted against the same 16px base `remify` and
+// `convertToEm` assume, so `pixelify(remify(24px))` is `24px` again. The rest
+// are refused: `em` follows the element's own font size, `%` its parent, and
+// the viewport units the window, none of which Sass can know.
 @function pixelify($value) {
   @if meta.type-of($value) != "number" {
-    @error "`#{$value}` is not a valid $value for `pixelify`. Pass a number, with or without a unit.";
+    @error "`#{meta.inspect($value)}` is not a valid $value for `pixelify`. Pass a number, with or without a unit.";
   }
-  @if math.unit($value) == "px" {
-    @return $value;
-  } @else if math.unit($value) != "px" {
-    @return clearUnit($value) * 1px;
-  } @else if math.is-unitless($value) == true {
+  @if math.is-unitless($value) {
     @return $value * 1px;
   }
+  @if math.compatible($value, 1px) {
+    @return math.div($value, 1px) * 1px;
+  }
+  @if math.unit($value) == "rem" {
+    @return clearUnit($value) * 16px;
+  }
+  @error "`#{meta.inspect($value)}` cannot be converted to pixels by `pixelify`: `#{math.unit($value)}` is measured against something only the browser knows, the element's own font size for `em`, its parent for `%`, and the window for the viewport units. Pass a unitless number, or a length in `px`, `rem`, or an absolute unit such as `in`, `cm`, `mm`, `pt`, `pc` or `q`.";
 }

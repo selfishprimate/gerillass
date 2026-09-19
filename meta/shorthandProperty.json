@@ -10,9 +10,18 @@
     }
   ],
   "examples": [
-    ".a { margin: shorthandProperty(10px 20px); }"
+    ".a { margin: shorthandProperty(10px 20px); }",
+    ".a { padding: shorthandProperty(16px); }",
+    ".a { padding: shorthandProperty(8px 12px 16px); }",
+    ".a { border-radius: shorthandProperty(4px 8px 12px 16px); }"
   ],
   "rejects": [
-    ".a { margin: shorthandProperty(1px 2px 3px 4px 5px); }"
+    ".a { margin: shorthandProperty(1px 2px 3px 4px 5px); }",
+    ".a { margin: shorthandProperty(()); }",
+    ".a { margin: shorthandProperty((a: 1, b: 2)); }"
+  ],
+  "caveats": [
+    "Until 4.0.0 only a fifth value was checked. An empty list ended the build with Sass's own \"Function finished without @return\", and a map was read as its keys and values in turn, so `(a: 1, b: 2)` came out as `a 1 b 2 a 1 b 2`. Both raise now.",
+    "A `null` is passed through on purpose, because a caller can read the four values back and skip the ones that are unset, which is what `position` does: `position(absolute, null)` writes the position and no offsets. In a declaration of your own a `null` simply disappears from the list, so `margin: shorthandProperty(1px null)` is `margin: 1px 1px`."
   ]
 }

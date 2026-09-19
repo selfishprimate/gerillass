@@ -82,10 +82,10 @@ Arguments are validated and refused with a message naming what is accepted, so a
 - [gradientValue($colors, $type: linear, $direction: null, $shape: null, $position: null, $from: null, $in: null, $repeating: false)](https://docs.gerillass.com/docs/gradient-value/): The gradient mixin's gradient as a value, for layering it with an image in one background-image, or using it as a mask-image or border-image.
 - [isColor($value)](https://docs.gerillass.com/docs/is-color/): Returns the value if every item in it is a colour, and errors otherwise.
 - [isGutter($value)](https://docs.gerillass.com/docs/is-gutter/): True for anything that can sit where a CSS length is expected: a number, a calculation, or a CSS function such as var().
-- [isNumber($value)](https://docs.gerillass.com/docs/is-number/): Returns the value if it is a number.
+- [isNumber($value)](https://docs.gerillass.com/docs/is-number/): Returns the value when it is a number, and raises when it is not.
 - [isTime($value)](https://docs.gerillass.com/docs/is-time/): Returns the value if it is a time in s or ms, and errors otherwise.
 - [mapDeepGet($map, $keys...)](https://docs.gerillass.com/docs/map-deep-get/): Reads a value out of a nested map by following a chain of keys.
-- [pixelify($value)](https://docs.gerillass.com/docs/pixelify/): Returns the value with a px unit, adding one if it is missing.
+- [pixelify($value)](https://docs.gerillass.com/docs/pixelify/): Returns the value in pixels: a unitless number takes a px, and a length in another unit is converted.
 - [pseudoSelector($elements, $pseudo: null)](https://docs.gerillass.com/docs/pseudo-selector/): Appends a pseudo-class to every selector in a list.
 - [remify($value)](https://docs.gerillass.com/docs/remify/): Converts a pixel length to rem, against a 16px root.
 - [shade($color, $percentage)](https://docs.gerillass.com/docs/shade/): Mixes a colour towards black by a percentage.

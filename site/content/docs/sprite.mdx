@@ -17,7 +17,7 @@ The **Sprite** Sass mixin helps you apply background images to the selected elem
 ## Arguments
 
 <Arguments of="sprite" footnote="To learn more about the `background-position` property values, check out the [links](#related-links) at the end of the page.">
-  <Argument name="$image-url" type="string">The URL of the sprite image. <strong>Important:</strong> Don't forget that the image link must be either absolute or relative to the generated CSS file.</Argument>
+  <Argument name="$image-url" type="string">The URL of the sprite image, in any format a browser loads, or a <code>url()</code>, <code>image-set()</code> or <code>var()</code>. <strong>Important:</strong> Don't forget that the image link must be either absolute or relative to the generated CSS file.</Argument>
   <Argument name="$position" type="number | string">Sets the position of the <code>background-image</code>. <strong>Multiple values must be separated by a space.</strong> Each is a length, a percentage, <code>left</code>, <code>center</code>, <code>right</code>, <code>top</code>, <code>bottom</code>, <code>var()</code> or a maths function; a CSS-wide keyword works alone.</Argument>
 </Arguments>
 
@@ -101,6 +101,12 @@ With two arguments the first has to be one path. Until 2.3.1 it was not checked,
 Error: `"/img/a.png" "/img/b.png"` is not a valid image path for `sprite`: with two arguments the first is one path as a string, and a browser drops a list in `url()`. Pass a path such as `"/img/sprite.png"`, then the position.
 ```
 
+<Hint kind="warning">
+
+**Changed in Gerillass 4.0.0.** With one argument the mixin has to tell an image from a position, and both can be strings. It used to read the last four characters and take only `.png`, `.jpg` and `.svg`, so `.webp`, `.avif`, `.gif`, `.jpeg`, an upper case `.PNG`, a path with a query such as `sprite.png?v=2` and a data URI were all refused. It now asks whether the value is a position, and a string that is not one is the path. A single `var()` is read as the position; for an image held in a custom property, pass it with a position: `sprite(var(--sprite), 0 0)`.
+
+</Hint>
+
 A position the browser drops stops the build too. Measured in Chrome 152, `background-position` drops a word other than `left`, `center`, `right`, `top` or `bottom`, a unitless number other than `0`, a unit that is not a length, and three or four lengths with no keyword. Until 2.3.1 these compiled, and the browser dropped the declaration without a word.
 
 ```scss
@@ -116,3 +122,4 @@ Error: `auto` is not a valid position for `sprite`: `auto` is not a length or on
 
 - [Implementing Image Sprites in CSS](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Images/Implementing_image_sprites_in_CSS)
 - [background-position](https://developer.mozilla.org/en-US/docs/Web/CSS/background-position)
+- [CSS url()](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/url_function)

@@ -1,0 +1,17 @@
+// Since 4.0.0 the function returns a number rather than the string "1.5em",
+// which is what `remify` has always done. The string printed the same and
+// failed as soon as it was used in arithmetic.
+@use 'true' as *;
+@use '../../scss/utilities/convert-to-em' as *;
+
+@include describe('convertToEm()') {
+  @include it('Converts a pixel length against a 16px base.') {
+    @include assert-equal(convertToEm(24px), 1.5em);
+    @include assert-equal(convertToEm(16px), 1em);
+    @include assert-equal(convertToEm(8px), 0.5em);
+  }
+
+  @include it('Returns a number, so it can be used in arithmetic.') {
+    @include assert-equal(convertToEm(24px) * 2, 3em);
+  }
+}

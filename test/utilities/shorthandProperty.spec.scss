@@ -1,0 +1,21 @@
+// The four-value order, and the null that `position` depends on: it reads the
+// four values back and writes a declaration only for the ones that are set.
+@use 'true' as *;
+@use '../../scss/utilities/shorthand-property' as *;
+
+@include describe('shorthandProperty()') {
+  @include it('Expands one, two and three values into four.') {
+    @include assert-equal(shorthandProperty(16px), 16px 16px 16px 16px);
+    @include assert-equal(shorthandProperty(16px 24px), 16px 24px 16px 24px);
+    @include assert-equal(shorthandProperty(8px 12px 16px), 8px 12px 16px 12px);
+  }
+
+  @include it('Leaves four values in the order they were given.') {
+    @include assert-equal(shorthandProperty(4px 8px 12px 16px), 4px 8px 12px 16px);
+  }
+
+  @include it('Carries a null through to every position it belongs in.') {
+    @include assert-equal(shorthandProperty(null), null null null null);
+    @include assert-equal(shorthandProperty(1px null), 1px null 1px null);
+  }
+}

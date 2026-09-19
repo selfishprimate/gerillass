@@ -1,17 +1,38 @@
 @charset "UTF-8";
 
 @use "sass:list";
+@use "sass:meta";
 
+// Expands one to four values into the four-value shorthand order, the way CSS
+// reads `margin`, `padding` and their neighbours.
+//
+// Until 4.0.0 only the fifth value was checked, and two shapes below that went
+// through silently: an empty list matched no branch and ended the build with
+// Sass's own "Function finished without @return", and a map was read as its
+// keys and values in turn, so `(a: 1, b: 2)` came out as `a 1 b 2 a 1 b 2`.
+//
+// `null` is left alone, and that is deliberate: `position` reads the four
+// offsets back out and writes a declaration only for the ones that are set, so
+// `position(absolute, null)` is `position: absolute` with no offsets at all.
 @function shorthandProperty($value) {
-  @if list.length($value) == 1 {
-    @return list.nth($value, 1) list.nth($value, 1) list.nth($value, 1) list.nth($value, 1);
-  } @else if list.length($value) == 2 {
-    @return list.nth($value, 1) list.nth($value, 2) list.nth($value, 1) list.nth($value, 2);
-  } @else if list.length($value) == 3 {
-    @return list.nth($value, 1) list.nth($value, 2) list.nth($value, 3) list.nth($value, 2);
-  } @else if list.length($value) == 4 {
-    @return list.nth($value, 1) list.nth($value, 2) list.nth($value, 3) list.nth($value, 4);
-  } @else if list.length($value) > 4 {
-    @error "You've passed #{list.length($value)} arguments. Please do not pass more than 4.";
+  @if meta.type-of($value) == "map" {
+    @error "`#{meta.inspect($value)}` is not a valid $value for `shorthandProperty`: a map is read as its keys and values in turn. Pass one to four values, such as `16px 24px`.";
   }
+  $length: list.length($value);
+  @if $length == 0 {
+    @error "`shorthandProperty` was given an empty list. Pass one to four values, such as `16px 24px`.";
+  }
+  @if $length > 4 {
+    @error "`shorthandProperty` was given #{$length} values. Pass one to four, in the order CSS reads them: all, block and inline, top and sides and bottom, or top right bottom left.";
+  }
+
+  @if $length == 1 {
+    $all: list.nth($value, 1);
+    @return $all $all $all $all;
+  } @else if $length == 2 {
+    @return list.nth($value, 1) list.nth($value, 2) list.nth($value, 1) list.nth($value, 2);
+  } @else if $length == 3 {
+    @return list.nth($value, 1) list.nth($value, 2) list.nth($value, 3) list.nth($value, 2);
+  }
+  @return list.nth($value, 1) list.nth($value, 2) list.nth($value, 3) list.nth($value, 4);
 }

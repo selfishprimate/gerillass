@@ -403,7 +403,7 @@ Four levels, and knowing which one covers a member tells you what you can trust:
 | `test/smoke.scss` | the mixin evaluates at all | 54/54 mixins |
 | snapshot of `meta/` examples | the output cannot change unnoticed | 78/78 members |
 | `meta/` rejects | bad input is refused with a real message | 57/78 |
-| sass-true spec in `test/` | the CSS is **correct** | 34/78 |
+| sass-true spec in `test/` | the CSS is **correct** | 37/78 |
 
 Only the last one catches an output that was wrong from the start; a snapshot
 records a wrong value as correct. Hand-written specs are therefore reserved for
@@ -706,8 +706,9 @@ holds ten reproduced defects, the outdated CSS worth a major, eight merges in
 the shape of the 3.0.0 gradient work, eleven new members that are Baseline
 today and the ones still too new, and the leverage ranking the maintainer's
 north star produced. `text-shadow`, `text-stroke`, the
-`background-pattern` merge and `escape-to-parent`, defects 6 and 7, are done
-from it and marked there; the rest is the list the next items come from.
+`background-pattern` merge, `escape-to-parent` and the five members of defects
+5 and 8 to 10 are done from it and marked there, which is every defect in its
+first section; the rest is the list the next items come from.
 
 ### What `breakpoint-boundaries.md` records
 
@@ -893,7 +894,9 @@ Two pieces of work are open:
   `background-pattern`, on `background-pattern`, branched from `text-stroke`;
   and `escape-to-parent` attaching its argument with `sass:selector` rather
   than pasting it on as text, on `escape-to-parent`, branched from
-  `background-pattern`.
+  `background-pattern`; and `sprite`, `pixelify`, `isNumber`,
+  `shorthandProperty` and `convertToEm`, defects 5 and 8 to 10 of the library
+  review, on `library-defects`, branched from `escape-to-parent`.
   The last three come from `todos/library-review.md`, and the last three
   patterns, `glow`, `vignette` and `mesh`, from the survey in
   `todos/saas-hero-backgrounds.md`. Each has a `MIGRATION.md` section.

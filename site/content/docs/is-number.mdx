@@ -9,7 +9,7 @@ page_keywords: "Gerillass isNumber, Sass isNumber, Sass Functions, SCSS Function
 
 <Member name="isNumber">
 
-Returns the value if it is a number.
+Returns the value when it is a number, and stops the build with a message when it is not.
 
 </Member>
 
@@ -32,6 +32,25 @@ Returns the value if it is a number.
 }
 ```
 </Example>
+
+## What it refuses
+
+Anything that is not a Sass number, `var()` and `calc()` included, since neither is a number Sass can read.
+
+```scss
+.modal {
+  z-index: isNumber("100");
+}
+```
+```text
+Error: `"100"` is not a number. Pass a number, with or without a unit, such as `100` or `1.5rem`.
+```
+
+<Hint kind="warning">
+
+**Changed in Gerillass 4.0.0.** A value that was not a number used to print a warning and then fall out of the function with nothing to return, so the build stopped with Sass's own "Function finished without @return" rather than a message naming the argument. It now raises, which is what [isColor](/docs/is-color) and [isTime](/docs/is-time) do.
+
+</Hint>
 
 ## Related Links
 

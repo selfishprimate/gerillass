@@ -1,9 +1,14 @@
 @charset "UTF-8";
 
-@use "sass:string";
 @use "sass:math";
 @use "sass:meta";
 
+// Converts a pixel length to em against a 16px base.
+//
+// Until 4.0.0 the last line added the string "em" to the ratio, so the
+// function returned the string `1.5em` rather than the number: it printed
+// the same, and `convertToEm(24px) * 2` failed with Sass's "Undefined
+// operation". `remify` has always returned a number, and this now matches it.
 @function convertToEm($value) {
   // Only a pixel length converts cleanly. A unitless number or another unit
   // compiled to `calc(1.5 / 1px)em`, and a word or var() to `var(--x)/16pxem`.
@@ -11,6 +16,5 @@
     @error "`#{meta.inspect($value)}` is not a valid $value for `convertToEm`. Pass a pixel length, such as `24px`.";
   }
   $base-value: 16px;
-  $rem-value: math.div($value, $base-value);
-  @return $rem-value + string.unquote("em");
+  @return math.div($value, $base-value) * 1em;
 }

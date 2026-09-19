@@ -2,8 +2,8 @@
 
 Written while 4.0.0 is being prepared, and added to as its changes land. So far
 it covers `hide`, where breakpoint ranges end, `columnizer`, `before` and
-`after`, `font-face`, `all-text-inputs`, `aspect-ratio`, `counter`, `text-shadow`, `text-stroke`, the background patterns and
-`escape-to-parent`. The 3.0.0 and
+`after`, `font-face`, `all-text-inputs`, `aspect-ratio`, `counter`, `text-shadow`, `text-stroke`, the background patterns,
+`escape-to-parent`, `sprite` and four of the utility functions. The 3.0.0 and
 2.0.0 guides follow below, unchanged.
 
 Every claim here was checked by compiling the old call against 3.0.0's source
@@ -35,6 +35,10 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `background-dots` and `background-stripes` became `background-pattern` | breaking, loud |
 | `escape-to-parent` attaches its selector to every branch of the parent | breaking, silent |
 | `escape-to-parent` refuses an argument that cannot be attached | breaking, loud |
+| `sprite` takes an image in any format, and reads one argument as a position | fixes refused calls; breaking, silent for a single `var()` |
+| `pixelify` converts the unit instead of replacing it | breaking, silent |
+| `convertToEm` returns a number rather than a string | not breaking in CSS |
+| `isNumber` and `shorthandProperty` raise where they used to crash | breaking, loud |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -787,6 +791,86 @@ grep -rn "escape-to-parent(" --include=*.scss .
 
 Nothing changes for the ordinary case, a single class on a single parent:
 `.a .b` with `".theme"` is `.theme.a .b` as before.
+
+---
+
+## Break: `sprite` tells an image from a position by what it is
+
+With one argument the mixin has to decide whether it was given the sheet or a
+position, and both can be strings. It used to read the last four characters and
+take `.png`, `.jpg` or `.svg` as the path, which refused every other format a
+browser loads.
+
+These all raised in 3.x and work now:
+
+```scss
+.icon { @include sprite("/img/sprite.webp"); }
+.icon { @include sprite("/img/sprite.avif"); }
+.icon { @include sprite("/img/sprite.gif"); }
+.icon { @include sprite("/img/sprite.jpeg"); }
+.icon { @include sprite("/img/Sprite.PNG"); }
+.icon { @include sprite("/img/sprite.png?v=2"); }
+.icon { @include sprite("data:image/svg+xml;base64,…"); }
+.icon { @include sprite(url("/img/sprite.png")); }
+.icon { @include sprite(center); }
+```
+
+The one thing to check in an existing stylesheet is a **single `var()`**:
+`sprite(var(--x))` was refused before and is now read as the position, since
+that is what one `var()` usually is. For an image in a custom property, pass a
+position with it:
+
+```scss
+.icon { @include sprite(var(--sprite), 0 0); }
+```
+
+A quoted position is unquoted rather than refused, because
+`background-position: "center"` is dropped: measured in Chrome 152, Firefox 156
+and Safari 26.6.2, all three fall back to `0% 0%`.
+
+---
+
+## Break: `pixelify` converts the unit
+
+It used to throw the unit away and write `px` in its place, which was wrong for
+every unit except `px` itself:
+
+| Call | 3.x | 4.0.0 |
+|---|---|---|
+| `pixelify(24)` | `24px` | `24px` |
+| `pixelify(2rem)` | `2px` | `32px` |
+| `pixelify(1in)` | `1px` | `96px` |
+| `pixelify(12pt)` | `12px` | `16px` |
+| `pixelify(10mm)` | `10px` | `37.7952755906px` |
+| `pixelify(2em)` | `2px` | raises |
+| `pixelify(50%)` | `50px` | raises |
+| `pixelify(10vw)` | `10px` | raises |
+| `pixelify(10deg)` | `10px` | raises |
+
+The absolute units are exact, and `rem` is converted against a 16px root, the
+same assumption `remify` and `convertToEm` make. `em`, `%` and the viewport
+units raise, since each is measured against something only the browser knows.
+The three figures above were measured in Chrome 152, Firefox 156 and Safari
+26.6.2, where `2rem` is 32px, `1in` is 96px and `12pt` is 16px in all three.
+
+---
+
+## Change: three utilities stop the build with a message
+
+Each of these ended in Sass's own error, or in silence, and each now raises
+with a message naming the argument:
+
+| Call | 3.x | 4.0.0 |
+|---|---|---|
+| `isNumber("a")` | a warning, then `Function finished without @return` | the library's message |
+| `shorthandProperty(())` | `Function finished without @return` | the library's message |
+| `shorthandProperty((a: 1, b: 2))` | `a 1 b 2 a 1 b 2` | the library's message |
+| `convertToEm(24px)` | the string `1.5em` | the number `1.5em` |
+
+`convertToEm` writes the same CSS as before; what changes is that its result
+can be used in arithmetic, as `remify`'s always could. A `null` passed to
+`shorthandProperty` is still carried through, because `position` depends on it:
+`position(absolute, null)` writes the position and no offsets.
 
 ---
 

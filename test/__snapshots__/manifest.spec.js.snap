@@ -1026,6 +1026,12 @@ exports[`Manifest examples container-query: .title { @include container-query(30
 }"
 `;
 
+exports[`Manifest examples convertToEm: .a { margin: convertToEm(24px) * 2; } 1`] = `
+".a {
+  margin: 3em;
+}"
+`;
+
 exports[`Manifest examples convertToEm: .a { margin: convertToEm(24px); } 1`] = `
 ".a {
   margin: 1.5em;
@@ -1460,6 +1466,12 @@ exports[`Manifest examples isGutter: .a { --x: #{isGutter(var(--gap))}; } 1`] = 
 }"
 `;
 
+exports[`Manifest examples isNumber: .a { width: isNumber(1.5rem); } 1`] = `
+".a {
+  width: 1.5rem;
+}"
+`;
+
 exports[`Manifest examples isNumber: .a { z-index: isNumber(5); } 1`] = `
 ".a {
   z-index: 5;
@@ -1628,9 +1640,33 @@ exports[`Manifest examples only: .a { @include only(3n) { margin: 0; } } 1`] = `
 }"
 `;
 
+exports[`Manifest examples pixelify: .a { width: pixelify(2rem); } 1`] = `
+".a {
+  width: 32px;
+}"
+`;
+
+exports[`Manifest examples pixelify: .a { width: pixelify(12pt); } 1`] = `
+".a {
+  width: 16px;
+}"
+`;
+
 exports[`Manifest examples pixelify: .a { width: pixelify(24); } 1`] = `
 ".a {
   width: 24px;
+}"
+`;
+
+exports[`Manifest examples pixelify: .a { width: pixelify(24px); } 1`] = `
+".a {
+  width: 24px;
+}"
+`;
+
+exports[`Manifest examples pixelify: .a { width: pixelify(pixelify(1in)); } 1`] = `
+".a {
+  width: 96px;
 }"
 `;
 
@@ -1893,9 +1929,27 @@ exports[`Manifest examples shade: .a { color: shade(red, 20%); } 1`] = `
 }"
 `;
 
+exports[`Manifest examples shorthandProperty: .a { border-radius: shorthandProperty(4px 8px 12px 16px); } 1`] = `
+".a {
+  border-radius: 4px 8px 12px 16px;
+}"
+`;
+
 exports[`Manifest examples shorthandProperty: .a { margin: shorthandProperty(10px 20px); } 1`] = `
 ".a {
   margin: 10px 20px 10px 20px;
+}"
+`;
+
+exports[`Manifest examples shorthandProperty: .a { padding: shorthandProperty(8px 12px 16px); } 1`] = `
+".a {
+  padding: 8px 12px 16px 12px;
+}"
+`;
+
+exports[`Manifest examples shorthandProperty: .a { padding: shorthandProperty(16px); } 1`] = `
+".a {
+  padding: 16px 16px 16px 16px;
 }"
 `;
 
@@ -1946,9 +2000,40 @@ exports[`Manifest examples sprite: .icon { @include sprite("/img/sprite.png", 0 
 }"
 `;
 
+exports[`Manifest examples sprite: .icon { @include sprite("/img/sprite.png", left 10px top 5px); } 1`] = `
+".icon {
+  display: inline-block;
+  background-image: url("/img/sprite.png");
+  background-position: left 10px top 5px;
+  background-repeat: no-repeat;
+}"
+`;
+
+exports[`Manifest examples sprite: .icon { @include sprite("/img/sprite.png?v=2"); } 1`] = `
+".icon {
+  display: inline-block;
+  background-image: url("/img/sprite.png?v=2");
+  background-repeat: no-repeat;
+}"
+`;
+
+exports[`Manifest examples sprite: .icon { @include sprite("/img/sprite.webp"); } 1`] = `
+".icon {
+  display: inline-block;
+  background-image: url("/img/sprite.webp");
+  background-repeat: no-repeat;
+}"
+`;
+
 exports[`Manifest examples sprite: .icon { @include sprite(0 -40px); } 1`] = `
 ".icon {
   background-position: 0 -40px;
+}"
+`;
+
+exports[`Manifest examples sprite: .icon { @include sprite(center); } 1`] = `
+".icon {
+  background-position: center;
 }"
 `;
 

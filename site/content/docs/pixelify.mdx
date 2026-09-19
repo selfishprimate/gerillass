@@ -1,7 +1,7 @@
 ---
 title: "Pixelify"
 page_title: "Pixelify Sass Function"
-page_description: "The pixelify Sass function returns a value with a px unit, adding one when it is missing, so a bare number can be used where a length is required."
+page_description: "The pixelify Sass function returns a value in pixels: a unitless number takes a px, and a length in rem or an absolute unit is converted."
 page_keywords: "Gerillass pixelify, Sass pixelify, Sass Functions, SCSS Functions, Sass Utility Functions, Gerillass Utilities"
 ---
 
@@ -9,14 +9,14 @@ page_keywords: "Gerillass pixelify, Sass pixelify, Sass Functions, SCSS Function
 
 <Member name="pixelify">
 
-Returns the value with a px unit, adding one if it is missing.
+Returns the value in pixels. A unitless number takes a `px`, a pixel length is returned as it is, and a length in another unit is converted.
 
 </Member>
 
 ## Arguments
 
 <Arguments of="pixelify">
-  <Argument name="$value" type="number">Accepts a number, with or without a unit.</Argument>
+  <Argument name="$value" type="number">Accepts a unitless number, a pixel length, a <code>rem</code>, or an absolute unit: <code>in</code>, <code>cm</code>, <code>mm</code>, <code>pt</code>, <code>pc</code> or <code>q</code>.</Argument>
 </Arguments>
 
 ## Examples
@@ -30,6 +30,22 @@ Returns the value with a px unit, adding one if it is missing.
 ```
 </Example>
 
+<Example caption="Another unit is converted rather than relabelled. Measured in Chrome 152, Firefox 156 and Safari 26.6.2: 2rem is 32px, 1in is 96px and 12pt is 16px, all three agreeing.">
+```scss
+.icon {
+  width: pixelify(2rem);
+  height: pixelify(12pt);
+  margin: pixelify(1in);
+}
+```
+</Example>
+
+<Hint kind="warning">
+
+**Changed in Gerillass 4.0.0.** The unit used to be thrown away and `px` written in its place, so `pixelify(2rem)` gave `2px`, `pixelify(1in)` gave `1px` and `pixelify(50%)` gave `50px`. The conversions are real now, and the units that cannot be converted raise. `rem` is converted against a 16px root, the same assumption [remify](/docs/remify) makes.
+
+</Hint>
+
 ## What it refuses
 
 Arguments are checked, so a wrong value stops the build with a message instead of quietly producing the wrong CSS.
@@ -40,7 +56,18 @@ Arguments are checked, so a wrong value stops the build with a message instead o
 }
 ```
 ```text
-Error: `24` is not a valid $value for `pixelify`. Pass a number, with or without a unit.
+Error: `"24"` is not a valid $value for `pixelify`. Pass a number, with or without a unit.
+```
+
+`em`, `%`, `vw`, `vh`, `ch` and `ex` are refused as well, since each is measured against something only the browser knows: the element's own font size, its parent, or the window.
+
+```scss
+.icon {
+  width: pixelify(2em);
+}
+```
+```text
+Error: `2em` cannot be converted to pixels by `pixelify`: `em` is measured against something only the browser knows, the element's own font size for `em`, its parent for `%`, and the window for the viewport units. Pass a unitless number, or a length in `px`, `rem`, or an absolute unit such as `in`, `cm`, `mm`, `pt`, `pc` or `q`.
 ```
 
 ## Related Links
