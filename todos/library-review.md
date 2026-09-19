@@ -140,8 +140,14 @@ refused. `$step` was added for how far apart a filled shadow's layers sit, a
   so the text is invisible wherever the background does not paint, forced
   colours included, and `text-image` loses its text when the image 404s.
   [source] [measure]
-- **`all-buttons`** selects `[type='button']` without `input`, the defect
-  `all-text-inputs` fixed for 4.0.0, and has no `focus-visible`. [source]
+- ~~**`all-buttons`** selects `[type='button']` without `input`~~ **done for
+  4.0.0 on the `all-buttons` branch**: every type is written with `input`,
+  `input[type='image']` joins the list, and `$pseudo` takes `focus-visible`
+  and `focus-within`. Measured in Chrome 152, Firefox 156 and Safari 26.6.2:
+  `<a type="button">` and a custom element took the styles in all three and no
+  longer do, the image button was in no rule and now is. The click against Tab
+  comparison for `focus-visible` was measured in Chrome and Firefox; macOS
+  Safari does not focus a button on click unless full keyboard access is on.
 
 ## 3. Merges, in the shape of the 3.0.0 gradient work
 

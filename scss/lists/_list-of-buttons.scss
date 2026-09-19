@@ -1,8 +1,20 @@
 @charset "UTF-8";
 
+// Every element a browser draws and treats as a button.
+//
+// Until 4.0.0 the three input types were written without `input`, as
+// `[type='button']`, which matches anything carrying that attribute: measured
+// in Chrome 152, Firefox 156 and Safari 26.6.2, `<a type="button">` and a
+// custom element with the same attribute both matched and took the button
+// styles. This is the defect `list-of-all-text-inputs` had until 4.0.0.
+//
+// `input[type='image']` is new here. It is a submit button drawn as an image,
+// and it matched none of the old entries, so it fell outside every rule the
+// mixin wrote.
 $list-of-buttons: (
   "button",
-  "[type='button']",
-  "[type='reset']",
-  "[type='submit']"
+  "input[type='button']",
+  "input[type='reset']",
+  "input[type='submit']",
+  "input[type='image']"
 ) !default;

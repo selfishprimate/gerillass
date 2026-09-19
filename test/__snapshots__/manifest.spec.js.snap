@@ -103,14 +103,27 @@ exports[`Manifest examples after: .badge { @include after { display: block; widt
 }"
 `;
 
+exports[`Manifest examples all-buttons: .toolbar { @include all-buttons { border-radius: 6px; } } 1`] = `
+".toolbar button, .toolbar input[type=button], .toolbar input[type=reset], .toolbar input[type=submit], .toolbar input[type=image] {
+  border-radius: 6px;
+}"
+`;
+
 exports[`Manifest examples all-buttons: @include all-buttons { cursor: pointer; } 1`] = `
-"button, [type=button], [type=reset], [type=submit] {
+"button, input[type=button], input[type=reset], input[type=submit], input[type=image] {
   cursor: pointer;
 }"
 `;
 
+exports[`Manifest examples all-buttons: @include all-buttons("focus-visible") { outline: 2px solid; outline-of 1`] = `
+"button:focus-visible, input[type=button]:focus-visible, input[type=reset]:focus-visible, input[type=submit]:focus-visible, input[type=image]:focus-visible {
+  outline: 2px solid;
+  outline-offset: 2px;
+}"
+`;
+
 exports[`Manifest examples all-buttons: @include all-buttons("hover") { opacity: 0.8; } 1`] = `
-"button:hover, [type=button]:hover, [type=reset]:hover, [type=submit]:hover {
+"button:hover, input[type=button]:hover, input[type=reset]:hover, input[type=submit]:hover, input[type=image]:hover {
   opacity: 0.8;
 }"
 `;

@@ -84,6 +84,8 @@
           "accepts": [
             "hover",
             "focus",
+            "focus-visible",
+            "focus-within",
             "active",
             "disabled",
             "null for the plain state"
@@ -92,10 +94,18 @@
       ],
       "file": "scss/library/_all-buttons.scss",
       "signature": "all-buttons($pseudo: null)",
-      "summary": "Targets every button-like element at once, optionally in one pseudo-class state.",
+      "summary": "Targets every button element at once, optionally in one pseudo-class state.",
+      "caveats": [
+        "The list is `button` and the four button `input` types, and each type is written with `input` since 4.0.0. Until then it was `[type='button']`, which matches anything carrying that attribute: measured in Chrome 152, Firefox 156 and Safari 26.6.2, `<a type=\"button\">` and a custom element with the same attribute both took the button styles in all three, and now neither does.",
+        "`input[type='image']` is new to the list. It is a submit button drawn as an image, and it matched none of the old entries, so it fell outside every rule the mixin wrote.",
+        "Reach for `focus-visible` rather than `focus` for a ring. Measured in Chrome 152 and Firefox 156: a mouse click matched `:focus` but not `:focus-visible`, while arriving with the Tab key matched both, so a ring written for `focus` is shown to everyone who clicks. It could not be measured in Safari, where macOS does not focus a button on click unless the system's full keyboard access is switched on.",
+        "A `[role=button]` element is not in the list, and a `<div>` acting as a button is not styled: it is not a button to the browser either."
+      ],
       "examples": [
         "@include all-buttons { cursor: pointer; }",
-        "@include all-buttons(\"hover\") { opacity: 0.8; }"
+        "@include all-buttons(\"hover\") { opacity: 0.8; }",
+        "@include all-buttons(\"focus-visible\") { outline: 2px solid; outline-offset: 2px; }",
+        ".toolbar { @include all-buttons { border-radius: 6px; } }"
       ],
       "rejects": [
         "@include all-buttons(nonsense) { color: red; }"

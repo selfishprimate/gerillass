@@ -4,7 +4,8 @@ Written while 4.0.0 is being prepared, and added to as its changes land. So far
 it covers `hide`, where breakpoint ranges end, `columnizer`, `before` and
 `after`, `font-face`, `all-text-inputs`, `aspect-ratio`, `counter`, `text-shadow`, `text-stroke`, the background patterns,
 `escape-to-parent`, `sprite`, four of the utility functions, the device maps,
-`responsive-image`, `border-box`, `antialias` and `center`. The 3.0.0 and
+`responsive-image`, `border-box`, `antialias`, `center` and `all-buttons`.
+The 3.0.0 and
 2.0.0 guides follow below, unchanged.
 
 Every claim here was checked by compiling the old call against 3.0.0's source
@@ -44,6 +45,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `responsive-image` fits an image without upscaling it | breaking, silent |
 | `border-box` and `antialias` write their descendants inside `:where()` | fixes a cascade defect; silent |
 | `center` offsets with `translate` rather than `transform` | breaking, silent, and only if you touched its transform |
+| `all-buttons` selects the input types with `input`, and adds the image button | breaking, silent |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -1036,6 +1038,52 @@ before.
 **What to check in a stylesheet**: a rule that overrode the mixin's
 `transform` on purpose, and a `transition: transform` that was animating the
 centring itself. Transitioning the centring now means `transition: translate`.
+
+---
+
+## Break: `all-buttons` selects buttons, and only buttons
+
+`$list-of-buttons` wrote the three input types without `input`:
+
+```css
+button, [type=button], [type=reset], [type=submit] { … }
+```
+
+An attribute selector on its own matches any element carrying the attribute.
+Measured in Chrome 152, Firefox 156 and Safari 26.6.2, these two took the
+button styles in all three:
+
+```html
+<a type="button" href="/download">Download</a>
+<x-btn type="button">A custom element</x-btn>
+```
+
+The list now names the element, and gains the button that was missing:
+
+```css
+button, input[type=button], input[type=reset], input[type=submit], input[type=image] { … }
+```
+
+`input[type=image]` is a submit button drawn as an image. It matched none of
+the old entries, so it sat outside every rule the mixin wrote, and it is styled
+now. This is the same fix `all-text-inputs` had for 4.0.0.
+
+### `focus-visible` is available
+
+`$pseudo` takes `focus-visible` and `focus-within` as well as the four it had.
+Measured in Chrome 152 and Firefox 156: a mouse click matches `:focus` but not
+`:focus-visible`, while arriving with the Tab key matches both. So a ring
+written for `focus` is shown to everyone who clicks, and
+
+```scss
+@include all-buttons("focus-visible") {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+```
+
+shows it to the people who need it. It could not be measured in Safari, where
+macOS does not focus a button on click unless full keyboard access is on.
 
 ---
 

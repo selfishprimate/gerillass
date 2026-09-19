@@ -133,6 +133,13 @@ a dropped declaration rather than an error.
 - If `content` comes only from another state, such as `.a:hover::after` or a media query, the pseudo-element is now drawn empty the rest of the time. Write `content: none` in the block.
 - On a `q` element the default replaces the browser's quotation marks; pass `open-quote` or `close-quote` in the block to keep them. A bare `::after { content: ... }` rule written before the include loses to the default, since both have the same specificity.
 
+**`all-buttons`**
+
+- The list is `button` and the four button `input` types, and each type is written with `input` since 4.0.0. Until then it was `[type='button']`, which matches anything carrying that attribute: measured in Chrome 152, Firefox 156 and Safari 26.6.2, `<a type="button">` and a custom element with the same attribute both took the button styles in all three, and now neither does.
+- `input[type='image']` is new to the list. It is a submit button drawn as an image, and it matched none of the old entries, so it fell outside every rule the mixin wrote.
+- Reach for `focus-visible` rather than `focus` for a ring. Measured in Chrome 152 and Firefox 156: a mouse click matched `:focus` but not `:focus-visible`, while arriving with the Tab key matched both, so a ring written for `focus` is shown to everyone who clicks. It could not be measured in Safari, where macOS does not focus a button on click unless the system's full keyboard access is switched on.
+- A `[role=button]` element is not in the list, and a `<div>` acting as a button is not styled: it is not a button to the browser either.
+
 **`all-text-inputs`**
 
 - Matches `:where(input):not([type=button], [type=checkbox], [type=color], [type=file], [type=hidden], [type=image], [type=radio], [type=range], [type=reset], [type=submit])` and `textarea`, so an input with no type or a type the browser does not know, which it draws as a text field, is included. Until 4.0.0 it listed text types instead, which styled `[type=color]` and stretched its swatch, and missed unknown types.
@@ -320,7 +327,7 @@ a dropped declaration rather than an error.
 |---|---|
 | `adaptive($gutter: 30px)` | Centred container whose max-width steps up at every breakpoint. |
 | `after($content: null)` | Styles the ::after pseudo-element. A `data-` argument becomes an attr() content value. |
-| `all-buttons($pseudo: null)` | Targets every button-like element at once, optionally in one pseudo-class state. |
+| `all-buttons($pseudo: null)` | Targets every button element at once, optionally in one pseudo-class state. |
 | `all-text-inputs($pseudo: null)` | Targets every form control a browser draws as a text field, textarea included, optionally in one pseudo-class state. |
 | `antialias($value: null)` | Draws text with greyscale antialiasing instead of subpixel, which makes it look thinner. |
 | `aspect-ratio($ratio: null, $fit: cover)` | Holds an element to a ratio and adds what CSS aspect-ratio alone leaves out: object-fit so an image is cropped rather than stretched, and border: 0 so an iframe does not overflow its container by 4px. Apply it to the element itself, not to a wrapper. |

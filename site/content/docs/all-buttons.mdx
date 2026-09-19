@@ -17,7 +17,7 @@ The **All Buttons** Sass mixin helps you target all the HTML button elements in 
 ## Arguments
 
 <Arguments of="all-buttons" footnote="You can call the mixin at the root level of your stylesheet to target all the HTML button elements in the DOM, or call it inside a parent selector to target only its children.">
-  <Argument name="$pseudo" type="string">Sets the pseudo-class selector for the selected button elements. Accepts the values <code>hover</code>, <code>focus</code>, <code>active</code>, and <code>disabled</code>.</Argument>
+  <Argument name="$pseudo" type="string">Sets the pseudo-class selector for the selected button elements. Accepts the values <code>hover</code>, <code>focus</code>, <code>focus-visible</code>, <code>focus-within</code>, <code>active</code> and <code>disabled</code>.</Argument>
 </Arguments>
 
 ## Examples
@@ -98,8 +98,28 @@ The **All Buttons** Sass mixin helps you target all the HTML button elements in 
 ```
 </Example>
 
+<Example caption="For a focus ring, reach for `focus-visible` rather than `focus`. Measured in Chrome 152 and Firefox 156: a mouse click matches `:focus` but not `:focus-visible`, while arriving with the Tab key matches both, so a ring written for `focus` is shown to everyone who clicks.">
+```scss
+@include all-buttons("focus-visible") {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+```
+```html
+<button type="button">Tab to me</button>
+<button type="button">Then to me</button>
+```
+</Example>
+
+<Hint kind="warning">
+
+**Changed in Gerillass 4.0.0.** The three input types used to be written without `input`, as `[type='button']`, which matches anything carrying that attribute: measured in Chrome 152, Firefox 156 and Safari 26.6.2, `<a type="button">` and a custom element with the same attribute both took the button styles in all three. They are `input[type='button']` and so on now. `input[type='image']`, a submit button drawn as an image, has joined the list: it matched none of the old entries, so it was left out of every rule the mixin wrote.
+
+</Hint>
+
 ## Related Links
 
 - [All Text Inputs](/docs/all-text-inputs)
 - [CSS :is](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:is)
+- [CSS :focus-visible](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:focus-visible)
 - [CSS cursor](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/cursor)
