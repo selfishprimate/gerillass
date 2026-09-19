@@ -698,6 +698,12 @@ old call right to left when you move it.
 
 `$rotation` is `$angle`, and it still takes a unitless number as degrees.
 
+**`stripes` now reads its line and its period apart.** `$thickness` is the
+line, as `background-stripes`'s `$size` was, and `$size` is one line plus its
+gap, so a 1px line on a 10px tile is `$size: 10px, $thickness: 1px`, which the
+old mixin could not be asked for. A call that passes no `$size` keeps the even
+stripe it drew.
+
 ### What else changed
 
 - **An image now sits in the background layers.** `background-dots` put it in a

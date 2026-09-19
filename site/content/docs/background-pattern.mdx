@@ -29,8 +29,8 @@ The **Background Pattern Sass mixin** draws twenty patterns with CSS gradients a
   <Argument name="$kind" type="string">Which pattern: <code>dots</code>, <code>stripes</code>, <code>grid</code>, <code>checkerboard</code>, <code>crosshatch</code>, <code>zigzag</code>, <code>chevron</code>, <code>triangles</code>, <code>isometric</code>, <code>honeycomb</code>, <code>brick</code>, <code>waves</code>, <code>houndstooth</code>, <code>gingham</code>, <code>harlequin</code>, <code>sunburst</code>, <code>concentric</code>, <code>glow</code>, <code>vignette</code> or <code>mesh</code>.</Argument>
   <Argument name="$color" type="color, list">One colour, or two or three for the patterns that layer them. The default is <code>currentColor</code> mixed with transparency, so a pattern follows the text colour.</Argument>
   <Argument name="$background" type="color">The colour under the pattern, written as <code>background-color</code>.</Argument>
-  <Argument name="$size" type="number">The tile. The default is <code>2rem</code>. A <code>var()</code> or <code>calc()</code> works, and every offset is derived from it. For <code>glow</code> and <code>vignette</code> there is no tile: it is how far the light reaches, one value or two, and the default is <code>90% 80%</code>.</Argument>
-  <Argument name="$thickness" type="number">The line, dot or mortar inside the tile. The default is a tenth of the tile for <code>dots</code> and an eighth for the rest.</Argument>
+  <Argument name="$size" type="number">The tile. The default is <code>2rem</code>. A <code>var()</code> or <code>calc()</code> works, and every offset is derived from it. For <code>stripes</code> it is the period, one line plus its gap. For <code>glow</code> and <code>vignette</code> there is no tile: it is how far the light reaches, one value or two, and the default is <code>90% 80%</code>.</Argument>
+  <Argument name="$thickness" type="number">The line, dot or mortar inside the tile. The default is a tenth of the tile for <code>dots</code> and an eighth for the rest. For <code>stripes</code> it is the width of each coloured line, and with no <code>$size</code> the period stays twice it.</Argument>
   <Argument name="$angle" type="number">For <code>stripes</code>, <code>crosshatch</code>, <code>zigzag</code> and <code>triangles</code>: an angle such as <code>-45deg</code>, or a unitless number read as degrees. For <code>sunburst</code>: how wide one ray is.</Argument>
   <Argument name="$axis" type="string">For <code>grid</code>: <code>both</code>, <code>block</code> for horizontal lines only, or <code>inline</code> for vertical lines only.</Argument>
   <Argument name="$stagger" type="boolean">For <code>dots</code>, <code>false</code> lines them up in a grid instead of offsetting every other row.</Argument>
@@ -165,6 +165,21 @@ Each pattern below is its own section, with the colours and the tile changed fro
   .cover { display: grid; align-items: end; aspect-ratio: 4 / 3; padding: 18px; border-radius: 10px; font: 700 22px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; color: #fff; }
 </style>
 <div class="cover">Shot on location</div>
+```
+</Example>
+
+<Example caption="The line and the period are set apart, so a hairline on a wide tile is two arguments: `$thickness` is the line and `$size` is one line plus its gap. This is the hatch the marketing pages fill their gutters with.">
+```scss
+.gutter {
+  @include background-pattern(stripes, $color: rgb(15 23 42 / 0.5), $background: #f8fafc, $size: 10px, $thickness: 1px, $angle: 315deg);
+}
+```
+```html
+<style>
+  .gutter { display: grid; place-items: center; height: 170px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .gutter span { padding: 10px 18px; border-radius: 8px; background: #f8fafc; font-weight: 600; color: #0f172a; }
+</style>
+<div class="gutter"><span>Nothing here yet</span></div>
 ```
 </Example>
 

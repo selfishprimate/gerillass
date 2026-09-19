@@ -463,7 +463,14 @@ exports[`Manifest examples background-pattern: .a { @include background-pattern(
 
 exports[`Manifest examples background-pattern: .a { @include background-pattern(stripes, $color: #2563eb, $size: 24px 1`] = `
 ".a {
-  background-image: repeating-linear-gradient(-45deg, #2563eb 0px 3px, #0000 0 6px);
+  background-image: repeating-linear-gradient(-45deg, #2563eb 0px 3px, #0000 3px 24px);
+  background-repeat: repeat;
+}"
+`;
+
+exports[`Manifest examples background-pattern: .a { @include background-pattern(stripes, $color: rgb(15 23 42 / 0.5), 1`] = `
+".a {
+  background-image: repeating-linear-gradient(315deg, rgba(15, 23, 42, 0.5) 0px 1px, #0000 1px 10px);
   background-repeat: repeat;
 }"
 `;

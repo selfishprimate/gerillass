@@ -122,8 +122,14 @@ mixin call writes one `background-image` and two calls on the same element
 replace each other. All three were drawn in Chrome 152, Firefox 156 and Safari
 26.6.2, which agree.
 
-The rest of the list stands: the line and gap of a hatch, `$origin` for
-`sunburst` and `concentric`, `background-attachment`, `contours` and `rings`.
+**Item 1 shipped too**, the only real gap the survey found: `stripes` reads
+its line and its period apart, `$thickness` and `$size`, so the 1px line on a
+10px period that tailwindcss.com fills its gutters with is one include. A line
+as wide as the period is refused, because Chrome 152, Firefox 156 and Safari
+26.6.2 all clamp the last stop and paint a solid colour with no stripes at all.
+And `$origin`, item 6, now reaches `sunburst` and `concentric`.
+
+The rest of the list stands: `background-attachment`, `contours` and `rings`.
 
 ## Ranked, for this mixin
 
