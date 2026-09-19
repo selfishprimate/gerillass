@@ -21,6 +21,14 @@ The **Loadify Sass mixin** is a handy tool that helps you make a page element lo
 
 </Member>
 
+<KeepScroll />
+
+<Hint kind="info">
+
+**Refreshing keeps your place on this page.** The effect only runs when the page loads, so every example below asks you to refresh. This one page puts the scroll position back where it was, which the rest of the site does not do, so the demo you are looking at is the one that replays.
+
+</Hint>
+
 ## Arguments
 
 <Arguments of="loadify" footnote="The time value must be given in either seconds (s) or milliseconds (ms). The value must be zero or positive, and the unit is always required.">
@@ -51,7 +59,7 @@ The **Loadify Sass mixin** is a handy tool that helps you make a page element lo
 
 <Example caption="Let's see the animation on an image element. Call the Loadify mixin inside the element's selector and **do not pass any arguments** yet, just to see the loading effect with the default timing values. 
 
-**Now scroll to the image and refresh the page to see how smooth the image appears on the page.**" setup="@include loadify(init);">
+**Refresh the page to see it, and the page will keep your place.**" setup="@include loadify(init);">
 ```scss
 .loadify-img {
   @include loadify();
@@ -84,8 +92,10 @@ Suppose you have a group of items like the ones below, and you want them to appe
 }
 ```
 ```html
-**Now scroll to the elements and refresh the page to see how smooth the elements appear on the page.**
-
+<style>
+  .parent-element { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; font: 15px/1 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .item { display: grid; place-items: center; height: 64px; border-radius: 8px; background: #e2e8f0; font-weight: 700; color: #0f172a; }
+</style>
 <div class="parent-element example-02">
   <div class="item">01</div>
   <div class="item">02</div>
@@ -128,6 +138,10 @@ Suppose you have a group of items like the ones below, and you want them to appe
 }
 ```
 ```html
+<style>
+  .parent-element { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; font: 15px/1 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .item { display: grid; place-items: center; height: 64px; border-radius: 8px; background: #e2e8f0; font-weight: 700; color: #0f172a; }
+</style>
 <div class="parent-element example-03">
   <div class="item">01</div>
   <div class="item">02</div>
@@ -138,8 +152,6 @@ Suppose you have a group of items like the ones below, and you want them to appe
   <div class="item">07</div>
   <div class="item">08</div>
 </div>
-
-It's getting more interesting, isn't it?
 ```
 </Example>
 
@@ -147,7 +159,7 @@ It's getting more interesting, isn't it?
 
 We will use the `only` mixin to select items in the list based on their index positions, and then call the `loadify` mixin inside each of those selectors to make the elements appear at different times (with different delay and duration values).
 
-**Scroll to the bottom of this example and refresh the page to see the effect.**" setup="@include loadify(init);">
+**Refresh the page to see the effect.**" setup="@include loadify(init);">
 ```scss
 .parent-element {
   .item {
@@ -179,6 +191,10 @@ We will use the `only` mixin to select items in the list based on their index po
 }
 ```
 ```html
+<style>
+  .parent-element { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; font: 15px/1 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .item { display: grid; place-items: center; height: 64px; border-radius: 8px; background: #e2e8f0; font-weight: 700; color: #0f172a; }
+</style>
 <div class="parent-element example-04">
   <div class="item">01</div>
   <div class="item">02</div>
@@ -196,7 +212,7 @@ We will use the `only` mixin to select items in the list based on their index po
 
 The display order will be as follows: &quot;**1**&quot;, &quot;**6**&quot;, &quot;**3**&quot;, &quot;**8**&quot;, &quot;**5**&quot;, &quot;**2**&quot;, &quot;**7**&quot;, &quot;**4**&quot; 
 
-**Scroll to the bottom of this example and refresh the page to see the effect.**" setup="@include loadify(init);">
+**Refresh the page to see the effect.**" setup="@include loadify(init);">
 ```scss
 .parent-element {
   .item {
@@ -228,6 +244,10 @@ The display order will be as follows: &quot;**1**&quot;, &quot;**6**&quot;, &quo
 }
 ```
 ```html
+<style>
+  .parent-element { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; font: 15px/1 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .item { display: grid; place-items: center; height: 64px; border-radius: 8px; background: #e2e8f0; font-weight: 700; color: #0f172a; }
+</style>
 <div class="parent-element example-05">
   <div class="item">01</div>
   <div class="item">02</div>

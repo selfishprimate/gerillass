@@ -6,6 +6,7 @@ import Example from "./Example";
 import Member from "./Member";
 import Arguments, { Argument } from "./Arguments";
 import Hint from "./Hint";
+import KeepScroll from "./KeepScroll";
 import DocLink from "./DocLink";
 import { CodeIcon, EditIcon } from "components/Icons";
 import { DocsLinksContext, useDocsLinks } from "./links";
@@ -110,6 +111,7 @@ const components = {
   Arguments,
   Argument,
   Hint,
+  KeepScroll,
 
   h1: Title,
   h2: heading(3),
