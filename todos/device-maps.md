@@ -133,11 +133,18 @@ and a screen size passed instead of a name is refused. Done for 4.0.0 on the
    a default. Either the maps carry Apple only, or the Android entries are
    marked as approximate.
 
-## What `todos/library-review.md` proposed instead
+## What `todos/library-review.md` proposed instead, and the answer
 
 Deprecating both mixins with a `@warn` naming `breakpoint`,
 `container-query`, `(pointer: coarse)` and `(hover: none)`, and removing them
-with the two maps. The measurements above do not settle that either way: the
-feature works, and the mixins do what they say, but what they say is tied to a
-list that ages every September and to names that cannot be told apart by their
-dimensions.
+with the two maps.
+
+**The maintainer decided on 20 September 2026 that they stay**, with no
+deprecation and no warning. The measurements support that as far as they go:
+`device-width` resolves in all three engines, the maps are current again, and
+both pages say what the query does and does not do. What is still open is only
+decision 3 below, whether the maps carry Android models beyond the Galaxy
+entries they have always had.
+
+The case for deprecating is on the record here rather than acted on: the list
+ages every September, and a name cannot be told from another of the same size.

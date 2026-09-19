@@ -80,8 +80,9 @@ refused. `$step` was added for how far apart a filled shadow's layers sit, a
   to keep the two and refresh them: `device-width` still resolves in all three
   engines, the maps are current again and flat, and both pages say that a size
   is not a model and that the query reads the screen rather than the window.
-  Deprecating them is still open, and so is Android; `todos/device-maps.md`
-  has the measurements.
+  **The maintainer decided on 20 September 2026 that both stay**, with no
+  deprecation and no warning; only the Android side of the maps is still open.
+  `todos/device-maps.md` has the measurements.
 - ~~**`reset-css`** is Meyer's 2011 reset~~ **rewritten for 4.0.0 on the
   `reset-modern` branch**. The maintainer chose one member rather than two:
   two baselines is one too many, so `reset-css` carries the modern rules and
