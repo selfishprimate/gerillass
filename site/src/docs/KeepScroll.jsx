@@ -59,14 +59,30 @@ function KeepScroll() {
     */
     const timers = [];
     if (reloaded && saved > 0) {
-      // The two-argument form rather than the options object: `behavior:
-      // "instant"` throws a TypeError where it is not recognised, and a
-      // restore that throws is a restore that does not happen. Measured in
-      // Safari 26.6.2, where the options form left the page at the top.
+      /*
+        `html` carries `scroll-behavior: smooth` for the rest of the site, and
+        a restore under it is an animation: the page starts at the top and
+        glides down, which on this page means the fade has played by the time
+        it arrives. The root is put on `auto` for the length of the restore
+        and back afterwards, so the position is taken in one step.
+
+        The two-argument `scrollTo` rather than the options object: `behavior:
+        "instant"` throws a TypeError where it is not recognised, and a restore
+        that throws is a restore that does not happen.
+      */
+      const root = document.documentElement;
+      const behaviour = root.style.scrollBehavior;
+      root.style.scrollBehavior = "auto";
+
       const restore = () => window.scrollTo(0, saved);
       restore();
       requestAnimationFrame(restore);
       [100, 300, 700, 1200].forEach((delay) => timers.push(window.setTimeout(restore, delay)));
+      timers.push(
+        window.setTimeout(() => {
+          root.style.scrollBehavior = behaviour;
+        }, 1400)
+      );
     }
 
     /*

@@ -3,7 +3,6 @@ title: "Loadify"
 page_title: "Loadify Sass Mixin"
 page_description: "Fade a page element in as the page loads with the Loadify Sass mixin, which also gives images a smooth loading effect of their own."
 page_keywords: "Smooth Image Loading with Sass, Smooth Page Loading, Medium Image Loading, Bootstrap Lazy Load Images, CSS Image Loading, Sass Image Loading, Lazy Load Content, Smooth Content Loading, CSS Smooth Content Loading, Defer Image Loading"
-css: css/styles.css
 page_image: "gerillass-loadify.jpg"
 ---
 
@@ -123,7 +122,7 @@ Suppose you have a group of items like the ones below, and you want them to appe
 
 <Hint kind="info">
 
-**Important!** When you call the mixin inside a selector without passing any arguments, it works differently, as you can see in the example below. Here, the `item` selector takes the default `animation-delay` and `animation-duration` values.
+**Inside a selector the mixin writes one `animation` shorthand**: the name, the duration, the delay and `backwards`. With no arguments that is `animation: loadify 0.5s 0.2s backwards`, which is what the example above uses. Because it is the shorthand, an `animation` of your own on the same element replaces it rather than adding to it.
 
 </Hint>
 
@@ -257,6 +256,106 @@ The display order will be as follows: &quot;**1**&quot;, &quot;**6**&quot;, &quo
   <div class="item">06</div>
   <div class="item">07</div>
   <div class="item">08</div>
+</div>
+```
+</Example>
+
+<Example caption="A hero that arrives in order: the heading first, then the sentence under it, then the button. Three calls with three delays, and nothing in the markup says which comes first.
+
+**Refresh the page to see it.**" setup="@include loadify(init);">
+```scss
+.hero {
+  h4 {
+    @include loadify(0.1s, 0.5s);
+  }
+
+  p {
+    @include loadify(0.35s, 0.5s);
+  }
+
+  span {
+    @include loadify(0.6s, 0.5s);
+  }
+}
+```
+```html
+<style>
+  .hero { display: grid; place-items: center; gap: 14px; padding: 40px 24px; border-radius: 12px; background: #f8fafc; text-align: center; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .hero h4 { margin: 0; font-size: 26px; font-weight: 700; color: #0f172a; }
+  .hero p { margin: 0; color: #475569; max-width: 34ch; }
+  .hero span { padding: 10px 18px; border-radius: 999px; background: #0f172a; color: #f8fafc; font-weight: 600; }
+</style>
+<div class="hero">
+  <h4>Every account, one place</h4>
+  <p>Bring your team, your data and your tools together in an afternoon.</p>
+  <span>Start for free</span>
+</div>
+```
+</Example>
+
+<Example caption="A dashboard's figures, each one a beat behind the last. The stagger comes from [only](/docs/only), which picks an item by its position, so adding a fifth card needs one more pair of lines rather than a class on every card.
+
+**Refresh the page to see it.**" setup="@include loadify(init);">
+```scss
+.stats .stat {
+  @include only(1) {
+    @include loadify(0.1s, 0.45s);
+  }
+
+  @include only(2) {
+    @include loadify(0.25s, 0.45s);
+  }
+
+  @include only(3) {
+    @include loadify(0.4s, 0.45s);
+  }
+
+  @include only(4) {
+    @include loadify(0.55s, 0.45s);
+  }
+}
+```
+```html
+<style>
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; font: 14px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .stat { padding: 16px; border-radius: 10px; background: #eef2ff; }
+  .stat b { display: block; font-size: 24px; color: #1e1b4b; }
+  .stat small { color: #4338ca; }
+</style>
+<div class="stats">
+  <div class="stat"><b>1,284</b><small>Sessions</small></div>
+  <div class="stat"><b>96%</b><small>Uptime</small></div>
+  <div class="stat"><b>318</b><small>Signups</small></div>
+  <div class="stat"><b>4.8</b><small>Rating</small></div>
+</div>
+```
+</Example>
+
+<Example caption="A list of photographs. One call on the image and one on its caption is enough for the whole gallery, because the delay is the same for every item: they are not staggered, they simply arrive rather than appearing all at once with the layout.
+
+**Refresh the page to see it.**" setup="@include loadify(init);">
+```scss
+.gallery {
+  img {
+    @include loadify(0.15s, 0.6s);
+  }
+
+  figcaption {
+    @include loadify(0.45s, 0.6s);
+  }
+}
+```
+```html
+<style>
+  .gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; font: 13px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .gallery figure { margin: 0; }
+  .gallery img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 8px; }
+  .gallery figcaption { padding-top: 6px; color: #475569; }
+</style>
+<div class="gallery">
+  <figure><img src="/images/backgrounds/01.jpg" alt=""><figcaption>Dune, at first light</figcaption></figure>
+  <figure><img src="/images/backgrounds/02.jpg" alt=""><figcaption>The long room</figcaption></figure>
+  <figure><img src="/images/backgrounds/03.jpg" alt=""><figcaption>Nine to five</figcaption></figure>
 </div>
 ```
 </Example>
