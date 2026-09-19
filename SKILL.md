@@ -191,6 +191,12 @@ a dropped declaration rather than an error.
 - In Safari the number reads 0 when a numbered child is itself a container, since the `::before` inside it cannot see the list's counter. Chrome and Firefox show the right number. Put `container-type` on an element inside the child instead.
 - A child hidden with `content: none` on its `::before` still takes a number. Write `counter-increment: none` on it as well to skip it.
 
+**`escape-to-parent`**
+
+- The selector lands on the **outermost element** of the rule, as one compound: `.a .b` gives `.theme.a .b`, not `.theme .a .b`. For a class on an ancestor of that element, pass the ancestor with it, `"body.theme .inner"`, or nest the rule under it.
+- Two element selectors cannot match the same element, so `ul li` with `"html"` or `"body.theme"` is refused rather than written as the `htmlul li` that matches nothing. Pass a class or an id.
+- Before 4.0.0 the mixin pasted the argument onto the front of the parent as text. That prefixed only the first selector of a list, leaving the rest of the rule applying with no theme at all, glued the class to a leading element as `.themeul li`, and split a list argument so a bare `.theme` painted every element carrying that class. All three are fixed, and the CSS a call writes can change.
+
 **`except`**
 
 - An+B with an offset cannot be passed as a number: Sass does the arithmetic, so `except(2n+1)` becomes `3n` and excludes every third element, not the odd ones. Use `odd` or `even`, or a coefficient alone such as `3n`.
@@ -265,7 +271,7 @@ a dropped declaration rather than an error.
 | `container($name: null, $type: inline-size)` | Marks an element as a query container, so container-query can ask about its width instead of the viewport's. The rule that asks has to sit on a descendant: an element is never matched by a @container rule reading its own container, and nothing warns you when it is not. |
 | `counter($params...)` | Numbers the children of the element it is included in, with optional text before and after each number. No classes in the markup. |
 | `ellipsis($width: 100%, $display: inline-block)` | Truncates a single line of text with an ellipsis. |
-| `escape-to-parent($selector: null)` | Re-roots the current selector under another one using @at-root. |
+| `escape-to-parent($selector: null)` | Writes the rule again with another selector attached to its outermost element, so a theme or state class can switch what a nested rule does. |
 | `except($params...)` | Selects every sibling except the ones named. |
 | `focus-ring($width: 2px, $offset: 2px, $color: currentColor)` | Draws a keyboard focus ring with outline on :focus-visible, which survives forced-colors mode where a box-shadow ring disappears. |
 | `font-face($font-family, $file-path, $font-style: normal, $font-weight: 400, $file-formats: woff2, $font-display: null)` | Emits an @font-face rule for one family across several file formats. Must be called at the root. |

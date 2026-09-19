@@ -1,12 +1,108 @@
 @charset "UTF-8";
 
+@use "sass:list";
 @use "sass:meta";
+@use "sass:selector";
+@use "sass:string";
+@use "../internal/is-css-function" as *;
+
+// Writes the current rule again with another selector attached to the front of
+// its outermost element, so a theme or a state class on an ancestor can switch
+// what a nested rule does.
+//
+// The trap this closes is what interpolation does to a selector. Until 4.0.0
+// the whole mixin was `@at-root #{$selector}#{&}`, which reads the parent as
+// text and pastes the argument onto the front of that text. Three things went
+// wrong with it, all silently, and all compiled here:
+//
+// - `.c, .d { .b { … } }` came out as `.theme.c .b, .d .b`, so the second half
+//   applied with no theme at all;
+// - `ul li` came out as `.themeul li`, an element nothing is called, so the
+//   rule matched nothing;
+// - `escape-to-parent(".theme, .other")` came out as `.theme, .other.card`,
+//   and the bare `.theme` painted every element carrying that class.
+//
+// sass:selector parses both sides instead. Every branch of the parent is
+// joined with every branch of the argument, and `selector.unify` writes an
+// element before a class, which is the order CSS requires.
+// True when the string holds nothing but spaces. `selector.parse("")` raises
+// Sass's own "expected selector", which says nothing about the mixin.
+@function -blank($text) {
+  @for $i from 1 through string.length($text) {
+    @if string.slice($text, $i, $i) != " " {
+      @return false;
+    }
+  }
+  @return true;
+}
+
+@function -write($complex, $from: 1) {
+  $out: "";
+  @for $i from $from through list.length($complex) {
+    $out: $out + if($i == $from, "", " ") + "#{list.nth($complex, $i)}";
+  }
+  @return $out;
+}
 
 @mixin escape-to-parent($selector: null) {
-  @if $selector != null and meta.type-of($selector) != "string" {
-    @error "`#{$selector}` is not a valid $selector for `escape-to-parent`. Pass a selector as a string, such as `\".theme-dark\"`.";
+  @if $selector == null {
+    @error "`escape-to-parent` needs a $selector to escape to, such as `\".theme-dark\"`.";
   }
-  @at-root #{$selector}#{&} {
+  @if meta.type-of($selector) != "string" {
+    @error "`#{meta.inspect($selector)}` is not a valid $selector for `escape-to-parent`. Pass a selector as a string, such as `\".theme-dark\"`.";
+  }
+  @if & == null {
+    @error "`escape-to-parent` has no parent selector to escape to. Call it inside a rule, such as `.card { @include escape-to-parent(\".theme\") { … } }`.";
+  }
+
+  // What a selector cannot hold, checked before `selector.parse`, whose own
+  // message names neither the mixin nor the argument.
+  $text: string.unquote($selector);
+  @if string.length("#{$text}") == 0 or -blank("#{$text}") {
+    @error "`escape-to-parent` was given an empty $selector. Pass a selector such as `\".theme-dark\"`.";
+  }
+  @each $char in "{" "}" ";" "@" "!" {
+    @if string.index("#{$text}", $char) {
+      @error "`#{meta.inspect($selector)}` is not a valid $selector for `escape-to-parent`: a selector cannot hold `#{$char}`. Pass a selector such as `\".theme-dark\"`.";
+    }
+  }
+  @if string.index("#{$text}", "&") {
+    @error "`#{meta.inspect($selector)}` is not a valid $selector for `escape-to-parent`: the parent is attached for you, so an `&` would write it twice. Pass `\".theme-dark\"` rather than `\"&.theme-dark\"`.";
+  }
+  @if isCssFunction($text, "var" "env" "attr" "calc" "clamp" "min" "max" "url" "image-set" "counter") {
+    @error "`#{meta.inspect($selector)}` is not a valid $selector for `escape-to-parent`: a CSS function is a value, not a selector, and a browser drops the rule. Pass a selector such as `\".theme-dark\"`.";
+  }
+
+  $parsed: selector.parse($selector);
+  @each $prefix in $parsed {
+    // A selector ending in a combinator is only valid for nesting: Dart Sass
+    // leaves the rule out of the CSS and warns rather than raising.
+    @if list.index(">" "+" "~", "#{list.nth($prefix, list.length($prefix))}") {
+      @error "`#{meta.inspect($selector)}` is not a valid $selector for `escape-to-parent`: it ends in a combinator, so nothing is written. Pass a selector such as `\".theme-dark\"`.";
+    }
+  }
+
+  $result: ();
+  @each $complex in & {
+    $first: list.nth($complex, 1);
+    $rest: "";
+    @if list.length($complex) > 1 {
+      $rest: " " + -write($complex, 2);
+    }
+    @each $prefix in $parsed {
+      // The argument and the outermost element become one compound, so the
+      // class sits on that element rather than on an ancestor of it.
+      $head: selector.unify($prefix, $first);
+      @if $head == null {
+        @error "`#{meta.inspect($selector)}` cannot be attached to `#{$first}` in `escape-to-parent`: no element can match both. Pass a class or an id, such as `\".theme-dark\"`.";
+      }
+      @each $branch in $head {
+        $result: list.append($result, string.unquote(-write($branch) + $rest), comma);
+      }
+    }
+  }
+
+  @at-root #{$result} {
     @content;
   }
 }

@@ -1,18 +1,37 @@
 {
   "name": "escape-to-parent",
-  "summary": "Re-roots the current selector under another one using @at-root.",
+  "summary": "Writes the rule again with another selector attached to its outermost element, so a theme or state class can switch what a nested rule does.",
   "arguments": [
     {
       "name": "$selector",
       "accepts": [
-        "a selector to prepend"
+        "a selector as a string, such as `\".theme-dark\"` or `\"#app\"`",
+        "several, separated by commas, which are each attached in turn",
+        "a descendant selector such as `\"body.theme .inner\"`, whose ancestors are kept"
       ]
     }
   ],
   "examples": [
-    ".a { @include escape-to-parent(\".theme-dark\") { color: white; } }"
+    ".a { @include escape-to-parent(\".theme-dark\") { color: white; } }",
+    ".a .b { @include escape-to-parent(\".theme-dark\") { color: white; } }",
+    ".a, .b { @include escape-to-parent(\".theme-dark\") { color: white; } }",
+    "ul li { @include escape-to-parent(\".theme-dark\") { color: white; } }",
+    ".a { @include escape-to-parent(\".theme-dark, .theme-dim\") { color: white; } }"
   ],
   "rejects": [
-    ".a { @include escape-to-parent(42) { color: red; } }"
+    ".a { @include escape-to-parent(42) { color: red; } }",
+    ".a { @include escape-to-parent { color: red; } }",
+    "@include escape-to-parent(\".theme\") { color: red; }",
+    ".a { @include escape-to-parent(\"&.theme\") { color: red; } }",
+    ".a { @include escape-to-parent(\"\") { color: red; } }",
+    ".a { @include escape-to-parent(\".theme {\") { color: red; } }",
+    ".a { @include escape-to-parent(\".theme >\") { color: red; } }",
+    ".a { @include escape-to-parent(var(--theme)) { color: red; } }",
+    "ul li { @include escape-to-parent(\"html\") { color: red; } }"
+  ],
+  "caveats": [
+    "The selector lands on the **outermost element** of the rule, as one compound: `.a .b` gives `.theme.a .b`, not `.theme .a .b`. For a class on an ancestor of that element, pass the ancestor with it, `\"body.theme .inner\"`, or nest the rule under it.",
+    "Two element selectors cannot match the same element, so `ul li` with `\"html\"` or `\"body.theme\"` is refused rather than written as the `htmlul li` that matches nothing. Pass a class or an id.",
+    "Before 4.0.0 the mixin pasted the argument onto the front of the parent as text. That prefixed only the first selector of a list, leaving the rest of the rule applying with no theme at all, glued the class to a leading element as `.themeul li`, and split a list argument so a bare `.theme` painted every element carrying that class. All three are fixed, and the CSS a call writes can change."
   ]
 }

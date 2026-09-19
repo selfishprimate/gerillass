@@ -1,0 +1,117 @@
+// Since 4.0.0 the mixin parses both sides with sass:selector rather than
+// pasting the argument onto the front of the parent as text. These are the
+// three shapes the old way got wrong, kept here so a rewrite cannot bring
+// them back, plus the combinators and ancestors it has to carry through.
+//
+// The expectations are written with `@at-root` and name `.test-output`, which
+// is sass-true's own wrapper: the mixin attaches the selector to the outermost
+// element of the rule, and inside a test that element is the wrapper rather
+// than the selector written here.
+@use 'true' as *;
+@use '../../scss/library/escape-to-parent' as *;
+
+@include describe('escape-to-parent()') {
+  @include it('Attaches the selector to the outermost element as one compound.') {
+    @include assert {
+      @include output {
+        .a .b {
+          @include escape-to-parent('.theme') {
+            color: red;
+          }
+        }
+      }
+      @include expect {
+        @at-root .theme.test-output .a .b {
+          color: red;
+        }
+      }
+    }
+  }
+
+  @include it('Attaches it to every selector of a list, not only the first.') {
+    @include assert {
+      @include output {
+        .c, .d {
+          .b {
+            @include escape-to-parent('.theme') {
+              color: red;
+            }
+          }
+        }
+      }
+      @include expect {
+        @at-root .theme.test-output .c .b, .theme.test-output .d .b {
+          color: red;
+        }
+      }
+    }
+  }
+
+  @include it('Writes an element before the class rather than gluing them.') {
+    @include assert {
+      @include output {
+        ul li {
+          @include escape-to-parent('.theme') {
+            color: red;
+          }
+        }
+      }
+      @include expect {
+        @at-root .theme.test-output ul li {
+          color: red;
+        }
+      }
+    }
+  }
+
+  @include it('Attaches each selector of a list argument in turn.') {
+    @include assert {
+      @include output {
+        .card {
+          @include escape-to-parent('.theme, .other') {
+            color: red;
+          }
+        }
+      }
+      @include expect {
+        @at-root .theme.test-output .card, .other.test-output .card {
+          color: red;
+        }
+      }
+    }
+  }
+
+  @include it('Keeps the combinators of the parent.') {
+    @include assert {
+      @include output {
+        .a > .b + .c {
+          @include escape-to-parent('#app') {
+            color: red;
+          }
+        }
+      }
+      @include expect {
+        @at-root #app.test-output .a > .b + .c {
+          color: red;
+        }
+      }
+    }
+  }
+
+  @include it('Keeps the ancestors of the argument.') {
+    @include assert {
+      @include output {
+        .card {
+          @include escape-to-parent('body.theme .inner') {
+            color: red;
+          }
+        }
+      }
+      @include expect {
+        @at-root body.theme .inner.test-output .card {
+          color: red;
+        }
+      }
+    }
+  }
+}

@@ -728,9 +728,10 @@ reason differs:
   which shows nothing until a `@container` rule reads it. `hide` was on this
   list until 4.0.0, when its page gained an icon toolbar, skip links revealed
   with the Tab key, and labels hidden on narrow screens.
-- **It needs something the frame has not got.** `font-face` wants font files,
-  `escape-to-parent` an ancestor from another part of the page, `reset-css` a
-  page to reset.
+- **It needs something the frame has not got.** `font-face` wants font files
+  and `reset-css` a page to reset. `escape-to-parent` was on this list until
+  4.0.0, when its page gained three demos that carry the theme or state class
+  on a wrapper inside the frame itself.
 
 None of these is a defect. They are recorded so nobody spends an afternoon
 rediscovering why.

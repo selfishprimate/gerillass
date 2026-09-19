@@ -1157,8 +1157,32 @@ exports[`Manifest examples ellipsis: .a { @include ellipsis; } 1`] = `
 }"
 `;
 
+exports[`Manifest examples escape-to-parent: .a .b { @include escape-to-parent(".theme-dark") { color: white; } } 1`] = `
+".theme-dark.a .b {
+  color: white;
+}"
+`;
+
 exports[`Manifest examples escape-to-parent: .a { @include escape-to-parent(".theme-dark") { color: white; } } 1`] = `
 ".theme-dark.a {
+  color: white;
+}"
+`;
+
+exports[`Manifest examples escape-to-parent: .a { @include escape-to-parent(".theme-dark, .theme-dim") { color: whi 1`] = `
+".theme-dark.a, .theme-dim.a {
+  color: white;
+}"
+`;
+
+exports[`Manifest examples escape-to-parent: .a, .b { @include escape-to-parent(".theme-dark") { color: white; } } 1`] = `
+".theme-dark.a, .theme-dark.b {
+  color: white;
+}"
+`;
+
+exports[`Manifest examples escape-to-parent: ul li { @include escape-to-parent(".theme-dark") { color: white; } } 1`] = `
+"ul.theme-dark li {
   color: white;
 }"
 `;

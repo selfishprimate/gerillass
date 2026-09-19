@@ -1,8 +1,8 @@
 ---
 title: "Escape to Parent"
 page_title: "Escape to Parent Sass Mixin"
-page_description: "The Escape to Parent Sass mixin allows you to escape to the parent element and use multiple class or id selectors with it."
-page_keywords: "Gerillass escape-to-parent, Escape To Parent Sass mixin, Sass escape-to-parent, SCSS escape-to-parent, CSS nesting selector, CSS nesting"
+page_description: "The Escape to Parent Sass mixin writes a nested rule again with a theme or state class attached to its outermost element, so a class higher up the page can switch what the rule does."
+page_keywords: "Gerillass escape-to-parent, Escape To Parent Sass mixin, Sass escape-to-parent, SCSS escape-to-parent, Sass theme class, Sass at-root, CSS nesting selector, CSS nesting"
 page_image: "gerillass-escape-to-parent.jpg"
 ---
 
@@ -10,35 +10,128 @@ page_image: "gerillass-escape-to-parent.jpg"
 
 <Member name="escape-to-parent">
 
-The **Escape to Parent** Sass mixin allows you to **escape to the parent** element and use multiple class or id selectors with it. This makes it easy to control how the selected child elements respond in different cases.
+The **Escape to Parent** Sass mixin writes the rule again with another selector attached to the **outermost element** it is nested in. A theme or a state class higher up the page can then switch what the rule does, while the rule itself stays in the component it belongs to.
 
 </Member>
 
+<Hint kind="warning">
+
+**Changed in Gerillass 4.0.0.** The mixin used to paste the selector onto the front of the parent as text, which went wrong in three ways: `.c, .d { .b { … } }` came out as `.theme.c .b, .d .b`, so the second half applied with no theme at all; `ul li` came out as `.themeul li`, an element nothing is called; and a list argument split, leaving a bare `.theme` that painted every element carrying that class. All three are fixed, so the CSS a call writes can change. See the migration guide.
+
+</Hint>
+
 ## Arguments
 
-<Arguments of="escape-to-parent" footnote="Note that you have to use a quoted string!">
-  <Argument name="$selector" type="string (quoted)">Accepts a value as a <code>class</code> or <code>id</code> selector.</Argument>
+<Arguments of="escape-to-parent" footnote="The selector is a quoted string. Pass several at once by separating them with commas.">
+  <Argument name="$selector" type="string (quoted)">A selector to attach to the outermost element, usually a <code>class</code> or an <code>id</code>. Several, separated by commas, are each attached in turn, and a descendant selector such as <code>"body.theme .inner"</code> keeps its ancestors.</Argument>
 </Arguments>
 
 ## Examples
 
-<Example caption="Call the mixin once for each case you want the element to respond to, and pass the matching argument each time.">
+<Example caption="A panel that follows a theme class on the element around it. Both rules are inside the component, and neither one is repeated under a theme selector somewhere else in the stylesheet." listing="<div class=&quot;panel&quot;>
+&#32;&#32;<span class=&quot;price&quot;>$29</span>
+</div>
+<div class=&quot;panel theme-dark&quot;>
+&#32;&#32;<span class=&quot;price&quot;>$29</span>
+</div>">
 ```scss
-.parent-element{
-  .element{
-    @include escape-to-parent(".smartphone"){
-      background-color: red;
-    }
-    @include escape-to-parent(".desktop"){
-      background-color: green;
+.panel {
+  @include escape-to-parent(".theme-dark") {
+    background: #0f172a;
+    border-color: #1e293b;
+  }
+
+  .price {
+    color: #0f172a;
+
+    @include escape-to-parent(".theme-dark") {
+      color: #f8fafc;
     }
   }
 }
 ```
+```html
+<style>
+  .demo-row { display: flex; gap: 16px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .panel { flex: 1; padding: 24px; border: 1px solid #e2e8f0; border-radius: 10px; background: #ffffff; text-align: center; }
+  .price { font-size: 24px; font-weight: 700; }
+</style>
+<div class="demo-row">
+  <div class="panel"><span class="price">$29</span></div>
+  <div class="panel theme-dark"><span class="price">$29</span></div>
+</div>
+```
 </Example>
+
+<Example caption="The same thing for a state rather than a theme. The class goes on the menu, and the rule for the item reads it from inside the item's own block." listing="<nav class=&quot;menu&quot;>
+&#32;&#32;<span class=&quot;item&quot;>Settings</span>
+</nav>
+<nav class=&quot;menu is-open&quot;>
+&#32;&#32;<span class=&quot;item&quot;>Settings</span>
+</nav>">
+```scss
+.menu .item {
+  opacity: 0.45;
+
+  @include escape-to-parent(".is-open") {
+    opacity: 1;
+    font-weight: 700;
+  }
+}
+```
+```html
+<style>
+  .demo-row { display: flex; gap: 16px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .menu { flex: 1; padding: 20px; border-radius: 10px; background: #f1f5f9; text-align: center; }
+</style>
+<div class="demo-row">
+  <nav class="menu"><span class="item">Settings</span></nav>
+  <nav class="menu is-open"><span class="item">Settings</span></nav>
+</div>
+```
+</Example>
+
+<Example caption="Several selectors at once. Each one is attached in turn, so two themes that share a rule take one include rather than two." listing="<div class=&quot;card theme-dark&quot;>Dark</div>
+<div class=&quot;card theme-dim&quot;>Dim</div>">
+```scss
+.card {
+  color: #0f172a;
+
+  @include escape-to-parent(".theme-dark, .theme-dim") {
+    color: #f8fafc;
+  }
+}
+```
+```html
+<style>
+  .demo-row { display: flex; gap: 16px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; font-weight: 600; }
+  .card { flex: 1; padding: 24px; border-radius: 10px; text-align: center; background: #e2e8f0; }
+  .theme-dark { background: #0f172a; }
+  .theme-dim { background: #475569; }
+</style>
+<div class="demo-row">
+  <div class="card theme-dark">Dark</div>
+  <div class="card theme-dim">Dim</div>
+</div>
+```
+</Example>
+
+<Hint kind="info">
+
+**Where the selector lands.** On the outermost element of the rule, as one compound: `.a .b` gives `.theme.a .b`, not `.theme .a .b`, and `ul li` gives `ul.theme li`, with the element written first as CSS requires. For a class that sits on an **ancestor** of that element, pass the ancestor with it, such as `"body.theme .inner"`, which keeps its own ancestors and attaches only its last part.
+
+</Hint>
+
+<Hint kind="danger">
+
+**What it refuses.** Two element selectors cannot match the same element, so `ul li` with `"html"` or `"body.theme"` raises rather than writing the `htmlul li` that matches nothing. A call with no `$selector`, a call outside any rule, an `&` in the argument, an empty string and a selector ending in a combinator all raise as well.
+
+</Hint>
 
 ## Related Links
 
 - [Before](/docs/before)
+- [Sass @at-root](https://sass-lang.com/documentation/at-rules/at-root/)
+- [Sass selector.unify()](https://sass-lang.com/documentation/modules/selector/#unify)
 - [CSS Nesting Selector](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/Nesting_selector)
 - [CSS Nesting](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Nesting)

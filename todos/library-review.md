@@ -26,9 +26,19 @@ Each of these was compiled on the `counter` branch.
 | 5 | `sprite("icons.webp")` | the library's error | `.webp`, `.avif`, `.gif`, `a.png?v=2` and `var()` are all refused, though the two-argument form takes any string |
 | 6 | `.c, .d { .b { escape-to-parent(".theme") } }` | `.theme.c .b, .d .b` | only the first selector is prefixed, so `.d .b` gets the styles unconditionally |
 | 7 | `ul li { escape-to-parent(".theme") }` | `.themeul li` | a selector that matches nothing |
+| 7b | `escape-to-parent(".theme, .other")` | `.theme, .other.card` | found while fixing 6 and 7: the bare `.theme` paints every element carrying the class |
 | 8 | `pixelify(2rem)` | `2px` | a silent, wrong conversion |
 | 9 | `isNumber("a")` | `@warn`, then Sass's `Function finished without @return` | the same for `shorthandProperty(())` |
 | 10 | `convertToEm(24px)` | the string `1.5em` | `convertToEm(24px) * 2` fails, while `remify` returns a number |
+
+**Rows 6, 7 and 7b are done for 4.0.0 on the `escape-to-parent` branch.** The
+mixin parses both sides with `sass:selector` instead of pasting the argument
+onto the front of the parent as text, so every branch of the parent takes every
+branch of the argument and `unify` writes an element before a class. A 253 call
+matrix compiled against 3.x and against the branch: 110 calls unchanged, 111
+changed, every one of them from a selector that leaked or matched nothing, and
+32 now raise, all with the library's own message. It also gained a sass-true
+spec and its documentation page's first demos.
 
 `text-shadow` is the worst of these: it is in the SILENT and BROKEN OUTPUT
 buckets that `tools/audit.js` is supposed to keep empty, and

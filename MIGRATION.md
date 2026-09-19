@@ -2,7 +2,8 @@
 
 Written while 4.0.0 is being prepared, and added to as its changes land. So far
 it covers `hide`, where breakpoint ranges end, `columnizer`, `before` and
-`after`, `font-face`, `all-text-inputs`, `aspect-ratio`, `counter`, `text-shadow`, `text-stroke`, and the background patterns. The 3.0.0 and
+`after`, `font-face`, `all-text-inputs`, `aspect-ratio`, `counter`, `text-shadow`, `text-stroke`, the background patterns and
+`escape-to-parent`. The 3.0.0 and
 2.0.0 guides follow below, unchanged.
 
 Every claim here was checked by compiling the old call against 3.0.0's source
@@ -32,6 +33,8 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `text-stroke` takes `$width` first and a `$style` | breaking, loud |
 | `text-stroke` with no arguments outlines in `currentColor`, not black | breaking, silent |
 | `background-dots` and `background-stripes` became `background-pattern` | breaking, loud |
+| `escape-to-parent` attaches its selector to every branch of the parent | breaking, silent |
+| `escape-to-parent` refuses an argument that cannot be attached | breaking, loud |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -745,6 +748,45 @@ and `triangles`.
 In forced colours mode a browser replaces `background-image` with `none` for
 anything that is not a `url()`, so every pattern disappears there. This was true
 of the old two as well, and it is now written down: a pattern is decoration.
+
+---
+
+## Break: `escape-to-parent` writes real selectors
+
+Until 4.0.0 the whole mixin was one line, `@at-root #{$selector}#{&}`, which
+reads the parent as text and pastes the argument onto the front of it. It now
+parses both sides with `sass:selector`, so the argument reaches every branch of
+the parent and lands on the element rather than beside it.
+
+Three shapes change, and none of them raised before:
+
+| The rule | 3.x wrote | 4.0.0 writes |
+|---|---|---|
+| `.c, .d { .b { … } }` with `".theme"` | `.theme.c .b, .d .b` | `.theme.c .b, .theme.d .b` |
+| `ul li` with `".theme"` | `.themeul li` | `ul.theme li` |
+| `.card` with `".theme, .other"` | `.theme, .other.card` | `.theme.card, .other.card` |
+
+The first is the one to look for in a stylesheet: the second half of that list
+applied with no theme at all, so a rule meant for one theme was painting every
+page. The second matched nothing, since no element is called `themeul`. The
+third left a bare `.theme` that painted every element carrying the class.
+
+**A call that cannot be written now raises.** Two element selectors cannot
+match the same element, so `ul li` with `"html"` or `"body.theme"` stops the
+build rather than writing `htmlul li`. Pass a class or an id, or pass the
+ancestor with it: `"body.theme .inner"` keeps its own ancestors and attaches
+only its last part. An `&` in the argument, an empty string, a selector ending
+in a combinator, a call with no argument and a call outside any rule raise as
+well, each with a message naming what to pass.
+
+To find every call:
+
+```bash
+grep -rn "escape-to-parent(" --include=*.scss .
+```
+
+Nothing changes for the ordinary case, a single class on a single parent:
+`.a .b` with `".theme"` is `.theme.a .b` as before.
 
 ---
 
