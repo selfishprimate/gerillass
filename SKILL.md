@@ -238,7 +238,9 @@ a dropped declaration rather than an error.
 
 **`loadify`**
 
-- `init` and every call must be in the same module, or the module with the call must `@use` the one that calls `init`. Otherwise Sass fails with "The target selector was not found".
+- The element is visible by default and the animation only fades it in: the keyframes start at `opacity: 0` and `backwards` applies that during the delay. Until 4.0.0 it was the other way round, `opacity: 0; visibility: hidden` with the animation revealing it, so anything that stopped the animation left the content invisible for good. Measured in Chrome 152, Firefox 156 and Safari 26.6.2 with a later `animation: none`: the element computed to `opacity: 0` and `visibility: hidden` in all three, and now computes to `1` and `visible`.
+- `init` and the calls no longer have to see each other. The mixin used to define a `%loadify` placeholder that every call `@extend`ed, which fails with Sass's "The target selector was not found" whenever the call is in another module, an entry file's `init` being no help to a partial it loads. Each call writes its own declarations now, and a stylesheet that forgets `init` builds with no fade rather than not building.
+- The mixin writes the `animation` shorthand, so an animation of your own on the same element replaces it.
 
 **`motion-safe`**
 
@@ -354,7 +356,7 @@ a dropped declaration rather than an error.
 | `gradient($colors, $type: linear, $direction: null, $shape: null, $position: null, $from: null, $in: null, $repeating: false)` | A linear, radial or conic gradient as background-image, plain or repeating, with an optional colour interpolation space. Replaced linear-gradient and radial-gradient in 3.0.0. |
 | `hide($toggle: "hide")` | Visually hides an element while keeping it available to screen readers, either always or until it or anything inside it has keyboard focus. |
 | `line-clamp($lines: 3)` | Truncates text after a number of lines, where ellipsis truncates one. It emits five declarations rather than one because -webkit-line-clamp does nothing on its own: without display: -webkit-box or without -webkit-box-orient: vertical the text is not clamped at all and nothing warns you, and without overflow: hidden the clamped text spills out below the box. The unprefixed line-clamp is emitted too, for when it becomes Baseline. |
-| `loadify($params...)` | Fades elements in on page load. Call once at the root to set up, then on each element. Under prefers-reduced-motion: reduce the end state is applied directly and no animation runs. Switching the animation off alone would not do, because the element starts invisible and the animation is what reveals it, so the content would stay hidden for good. |
+| `loadify($params...)` | Fades elements in on page load. Call `loadify(init)` once at the root to write the keyframes, then the mixin on each element. |
 | `motion-safe` | Wraps its content in @media (prefers-reduced-motion: no-preference), so motion is opt-in: a user who asked their system for less motion gets none of it. |
 | `only($params...)` | Selects only the siblings named. |
 | `placeholder-shown` | Styles an input while its placeholder is visible. |

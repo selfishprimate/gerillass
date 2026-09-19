@@ -1574,63 +1574,46 @@ exports[`Manifest examples line-clamp: .title { @include line-clamp(2); } 1`] = 
 }"
 `;
 
-exports[`Manifest examples loadify: @include loadify(init); .a { @include loadify; } 1`] = `
-"@keyframes loadify {
-  to {
-    opacity: 1;
-    visibility: visible;
-    backface-visibility: visible;
-  }
-}
-.a {
-  opacity: 0;
-  visibility: hidden;
-  backface-visibility: hidden;
-  animation-name: loadify;
-  animation-fill-mode: forwards;
+exports[`Manifest examples loadify: .a { @include loadify(0.4s); } 1`] = `
+".a {
+  animation: loadify 0.5s 0.4s backwards;
 }
 @media (prefers-reduced-motion: reduce) {
   .a {
-    opacity: 1;
-    visibility: visible;
-    backface-visibility: visible;
     animation: none;
   }
-}
+}"
+`;
 
+exports[`Manifest examples loadify: @include loadify(init); .a { @include loadify; } 1`] = `
+"@keyframes loadify {
+  from {
+    opacity: 0;
+  }
+}
 .a {
-  animation-delay: 0.2s;
-  animation-duration: 0.5s;
+  animation: loadify 0.5s 0.2s backwards;
+}
+@media (prefers-reduced-motion: reduce) {
+  .a {
+    animation: none;
+  }
 }"
 `;
 
 exports[`Manifest examples loadify: @include loadify; .a { @include loadify(0.4s, 1s); } 1`] = `
 "@keyframes loadify {
-  to {
-    opacity: 1;
-    visibility: visible;
-    backface-visibility: visible;
+  from {
+    opacity: 0;
   }
 }
 .a {
-  opacity: 0;
-  visibility: hidden;
-  backface-visibility: hidden;
-  animation-name: loadify;
-  animation-fill-mode: forwards;
+  animation: loadify 1s 0.4s backwards;
 }
 @media (prefers-reduced-motion: reduce) {
   .a {
-    opacity: 1;
-    visibility: visible;
-    backface-visibility: visible;
     animation: none;
   }
-}
-
-.a {
-  animation-delay: 0.4s;
-  animation-duration: 1s;
 }"
 `;
 

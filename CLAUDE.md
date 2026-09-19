@@ -905,7 +905,9 @@ Two pieces of work are open:
   `border-box-specificity`, branched from `responsive-image`; and `center`
   offsetting with `translate` rather than `transform`, on `center-translate`,
   branched from `border-box-specificity`; and `all-buttons` selecting the input
-  types with `input`, on `all-buttons`, branched from `center-translate`.
+  types with `input`, on `all-buttons`, branched from `center-translate`; and
+  `loadify` leaving its elements visible and dropping the `%loadify`
+  placeholder, on `loadify-visible`, branched from `all-buttons`.
   The last three come from `todos/library-review.md`, and the last three
   patterns, `glow`, `vignette` and `mesh`, from the survey in
   `todos/saas-hero-backgrounds.md`. Each has a `MIGRATION.md` section.

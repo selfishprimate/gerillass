@@ -4,8 +4,8 @@ Written while 4.0.0 is being prepared, and added to as its changes land. So far
 it covers `hide`, where breakpoint ranges end, `columnizer`, `before` and
 `after`, `font-face`, `all-text-inputs`, `aspect-ratio`, `counter`, `text-shadow`, `text-stroke`, the background patterns,
 `escape-to-parent`, `sprite`, four of the utility functions, the device maps,
-`responsive-image`, `border-box`, `antialias`, `center` and `all-buttons`.
-The 3.0.0 and
+`responsive-image`, `border-box`, `antialias`, `center`, `all-buttons` and
+`loadify`. The 3.0.0 and
 2.0.0 guides follow below, unchanged.
 
 Every claim here was checked by compiling the old call against 3.0.0's source
@@ -46,6 +46,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `border-box` and `antialias` write their descendants inside `:where()` | fixes a cascade defect; silent |
 | `center` offsets with `translate` rather than `transform` | breaking, silent, and only if you touched its transform |
 | `all-buttons` selects the input types with `input`, and adds the image button | breaking, silent |
+| `loadify` leaves the element visible and only fades it in | fixes a disappearing-content defect; silent |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -1084,6 +1085,79 @@ written for `focus` is shown to everyone who clicks, and
 
 shows it to the people who need it. It could not be measured in Safari, where
 macOS does not focus a button on click unless full keyboard access is on.
+
+---
+
+## Change: `loadify` no longer hides the element first
+
+It wrote the element as invisible and let the animation reveal it:
+
+```css
+.item {
+  opacity: 0;
+  visibility: hidden;
+  backface-visibility: hidden;
+  animation-name: loadify;
+  animation-fill-mode: forwards;
+}
+```
+
+So anything that stopped the animation left the content invisible for good, and
+`visibility: hidden` took it out of the accessibility tree too. One rule is
+enough, and a component or a reset writes rules like it every day:
+
+```css
+.item { animation: none; }
+```
+
+Measured in Chrome 152, Firefox 156 and Safari 26.6.2: the element computed to
+`opacity: 0` and `visibility: hidden` in all three. It now computes to
+`opacity: 1` and `visible`.
+
+4.0.0 turns it round. The keyframes start at `opacity: 0`, the element itself
+carries no hidden state, and `backwards` applies the starting state during the
+delay so the fade looks the same:
+
+```css
+@keyframes loadify { from { opacity: 0; } }
+
+.item { animation: loadify 0.5s 0.2s backwards; }
+@media (prefers-reduced-motion: reduce) {
+  .item { animation: none; }
+}
+```
+
+`visibility` and `backface-visibility` are not written at all any more.
+
+### `init` is no longer load-bearing
+
+The mixin used to define a `%loadify` placeholder and every call `@extend`ed
+it. Under the module system a selector can only extend a placeholder from a
+module it loads, so this perfectly ordinary setup did not build:
+
+```scss
+// entry.scss
+@use "gerillass" as *;
+@use "card";
+@include loadify(init);
+
+// card.scss
+@use "gerillass" as *;
+.card { @include loadify; }
+```
+
+```text
+Error: The target selector was not found.
+```
+
+There is no placeholder now, so the same two files compile. `loadify(init)`
+still writes the keyframes and should still be called once, but a stylesheet
+that leaves it out builds with no fade instead of failing.
+
+**What to check**: a rule of yours that set `visibility: visible` or
+`opacity: 1` to undo the mixin by hand is no longer needed, and an
+`animation-delay` or `animation-duration` written beside the include is now
+overridden by the shorthand, so move those into the mixin's own arguments.
 
 ---
 

@@ -15,9 +15,7 @@ The **Loadify Sass mixin** is a handy tool that helps you make a page element lo
 
 <Hint kind="info">
 
-**Reduced motion is handled for you.** Under `prefers-reduced-motion: reduce` the end state is applied directly and no animation runs, so the content is simply there.
-
-Note that **switching the animation off would not have worked.** The element starts at `opacity: 0` with `visibility: hidden`, and the animation is the thing that reveals it. Turning the animation off and doing nothing else would have left the content invisible for good. That is why the mixin sets the end state instead, and only then sets `animation: none`.
+**The element is visible by default, and the animation only fades it in.** The keyframes start at `opacity: 0` and `animation-fill-mode: backwards` applies that during the delay, so the fade looks the same as before while an animation that never runs leaves the content where it is. Under `prefers-reduced-motion: reduce` the mixin writes `animation: none`, and nothing else is needed.
 
 </Hint>
 
@@ -26,7 +24,7 @@ Note that **switching the animation off would not have worked.** The element sta
 ## Arguments
 
 <Arguments of="loadify" footnote="The time value must be given in either seconds (s) or milliseconds (ms). The value must be zero or positive, and the unit is always required.">
-  <Argument name="$mode" type="string">Accepts <code>init</code> value. This initializes the whole effects for the selected elements. <strong>It must be called once at the root of your stylesheet document.</strong></Argument>
+  <Argument name="$mode" type="string">Accepts <code>init</code> at the root of your stylesheet, which writes the keyframes once. Since 4.0.0 a stylesheet that forgets it still builds: the elements simply do not fade.</Argument>
   <Argument name="$delay" type="time">Specifies the amount of time a design element must wait before it starts appearing on the page. The default value is set to <code>0.2s</code>.</Argument>
   <Argument name="$duration" type="time">Sets the length of time a page element takes to load. <strong>This is the second argument. It must always come last and cannot be used on its own.</strong> The default value is <code>0.5s</code>.</Argument>
 </Arguments>
@@ -39,10 +37,8 @@ Note that **switching the animation off would not have worked.** The element sta
 ```css
 //CSS Output
 @keyframes loadify {
-  to {
-    opacity: 1;
-    visibility: visible;
-    backface-visibility: visible;
+  from {
+    opacity: 0;
   }
 }
 ```
@@ -105,32 +101,13 @@ Suppose you have a group of items like the ones below, and you want them to appe
 
 <Hint kind="info">
 
-**Keep in mind!** You must call the `loadify` mixin once at the root of your stylesheet as an initializer.
+**Call `loadify(init)` once at the root**, to write the keyframes the elements animate to. Since 4.0.0 it can live in any file: the mixin no longer works by `@extend`, so the call and the initializer no longer have to see each other, and a stylesheet that leaves `init` out builds as before with no fade.
 
 </Hint>
 
 <Hint kind="warning">
 
-**With `@use`, the call has to be able to see `init`.** The mixin works by `@extend`, and under the module system a selector can only extend a placeholder from a module it loads. So `init` and every call must be in the same file, or the file with the call must `@use` the file that calls `init`. Otherwise Sass stops with:
-
-```
-Error: The target selector was not found.
-```
-
-Putting `init` in your entry file is not enough when the calls live in partials the entry file loads, because those partials do not load the entry file.
-
-```scss
-// _animations.scss
-@use "gerillass" as gls;
-@include gls.loadify(init);
-
-// _hero.scss
-@use "gerillass" as gls;
-@use "animations"; // required: loads init
-.hero { @include gls.loadify; }
-```
-
-A stylesheet that still loads the library with `@import` shares one global scope and is not affected.
+**Changed in Gerillass 4.0.0.** Until then the element was written as `opacity: 0; visibility: hidden` and the animation was the thing that revealed it, so anything that stopped the animation left the content invisible for good. Measured in Chrome 152, Firefox 156 and Safari 26.6.2 with a later `animation: none`, which a component or a reset can easily write: the element computed to `opacity: 0` and `visibility: hidden` in all three, gone from the page and from the accessibility tree with it. It now computes to `opacity: 1` and `visible` in all three.
 
 </Hint>
 

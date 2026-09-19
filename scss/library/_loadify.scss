@@ -4,59 +4,59 @@
 @use "sass:meta";
 @use "../utilities/is-time" as *;
 
-// `init` defines the %loadify placeholder, and every call extends it. Under the
-// module system a selector can only extend a placeholder from a module it
-// loads, so the file with the call must be the file that calls `init`, or must
-// `@use` it. Anything else fails with "The target selector was not found".
-// An entry file calling `init` does not help a partial it loads, since the
-// partial does not load the entry file. Stylesheets using @import share one
-// scope and are unaffected.
+// Fades elements in when the page loads.
+//
+// Until 4.0.0 the element started at `opacity: 0; visibility: hidden` and the
+// animation was what revealed it, which meant anything that stopped the
+// animation left the content invisible for good. Measured in Chrome 152,
+// Firefox 156 and Safari 26.6.2 with a later `animation: none`, as a component
+// or a reset can write: the element computed to `opacity: 0` and
+// `visibility: hidden` in all three, so it was gone from the page and, being
+// `visibility: hidden`, from the accessibility tree with it.
+//
+// It is the other way round now. The element carries no hidden state of its
+// own; the animation starts from `opacity: 0` and `backwards` applies that
+// during the delay, so the fade looks the same and an animation that never
+// runs leaves the content visible.
+//
+// The placeholder went with it. `init` used to define `%loadify` and every
+// call `@extend`ed it, which fails with Sass's "The target selector was not
+// found" whenever the call is in another module: an entry file calling `init`
+// does not help a partial it loads, since the partial does not load the entry
+// file. Each call now writes its own declarations, so there is nothing to
+// extend and nothing to fail. `init` still writes the keyframes, and a
+// stylesheet that forgets it simply does not animate rather than not building.
 @mixin loadify($params...) {
   @if not & {
     @if list.length($params) == 0 or (list.length($params) == 1 and list.nth($params, 1) == "init") {
       @keyframes loadify {
-        to {
-          opacity: 1;
-          visibility: visible;
-          backface-visibility: visible;
+        from {
+          opacity: 0;
         }
       }
-      %loadify {
-        opacity: 0;
-        visibility: hidden;
-        backface-visibility: hidden;
-        animation-name: loadify;
-        animation-fill-mode: forwards;
-
-        // The element starts invisible and the animation is what reveals it,
-        // so switching the animation off is not enough on its own: it would
-        // leave the content hidden for good. Under reduced motion the end
-        // state is applied directly instead, and nothing moves.
-        @media (prefers-reduced-motion: reduce) {
-          opacity: 1;
-          visibility: visible;
-          backface-visibility: visible;
-          animation: none;
-        }
-      }
-    } @else if (list.length($params) == 1 and list.nth($params, 1) != "init") or (list.length($params) == 1 and meta.type-of(list.nth($params, 1)) != "string") {
+    } @else if list.length($params) == 1 {
       @error "#{list.nth($params, 1)} is not a valid argument. Please pass `init` as an argument to initialize the effect or do not pass any argument at all.";
-    } @else if list.length($params) > 1 {
+    } @else {
       @error "Only one argument is allowed when you call this mixin at the root of your stylesheet! Please pass `init` as an argument to initialize the effect or do not pass any argument at all.";
     }
-  } @else if & {
-    @extend %loadify;
-    @if list.length($params) == 0 {
-      animation-delay: 0.2s;
-      animation-duration: 0.5s;
-    } @else if list.length($params) == 1 {
-      animation-delay: #{isTime(list.nth($params, 1))};
-      animation-duration: 0.5s;
+  } @else {
+    $delay: 0.2s;
+    $duration: 0.5s;
+    @if list.length($params) == 1 {
+      $delay: isTime(list.nth($params, 1));
     } @else if list.length($params) == 2 {
-      animation-delay: #{isTime(list.nth($params, 1))};
-      animation-duration: #{isTime(list.nth($params, 2))};
+      $delay: isTime(list.nth($params, 1));
+      $duration: isTime(list.nth($params, 2));
     } @else if list.length($params) > 2 {
       @error "You cannot pass more than two arguments.";
+    }
+
+    animation: loadify #{$duration} #{$delay} backwards;
+
+    // Nothing has to be put back here: with no animation the element is
+    // already visible, which is the whole point of the change.
+    @media (prefers-reduced-motion: reduce) {
+      animation: none;
     }
   }
 }

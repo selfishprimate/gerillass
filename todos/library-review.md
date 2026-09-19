@@ -103,10 +103,16 @@ refused. `$step` was added for how far apart a filled shadow's layers sit, a
   Deprecating it is still open.
 - **`stretched-link`** carries `background-color: rgba(0, 0, 0, 0)`, an IE
   click-target hack, and physical offsets rather than `inset`. [source]
-- **`loadify`** starts its elements at `visibility: hidden` and needs
-  `loadify(init)` in the same module, or the build fails with "The target
-  selector was not found". [compiled] Proposal: drop `init` and the `@extend`,
-  keep the content visible, and wrap the animation in `motion-safe`.
+- ~~**`loadify`** starts its elements at `visibility: hidden`~~ **done for
+  4.0.0 on the `loadify-visible` branch**: the keyframes start at `opacity: 0`
+  with `backwards`, the element carries no hidden state, and the placeholder is
+  gone, so `init` no longer has to be visible to the call and a stylesheet that
+  forgets it builds with no fade. Measured in Chrome 152, Firefox 156 and
+  Safari 26.6.2 with a later `animation: none`: the element computed to
+  `opacity: 0` and `visibility: hidden` in all three and now computes to `1`
+  and `visible`. The fade itself was timed in Chrome and Firefox; Safari
+  throttles animations in an automation window, so the timing could not be read
+  there.
 - ~~**`responsive-image`**~~ **done for 4.0.0 on the `responsive-image`
   branch**: `max-inline-size: 100%` and `height: auto` inside `:where()`.
   Measured in Chrome 152, Firefox 156 and Safari 26.6.2, all three agreeing: a
