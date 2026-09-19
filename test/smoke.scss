@@ -43,7 +43,6 @@
 .breakpointer { @include breakpointer; }
 .center { @include center; }
 .circle { @include circle(50px); }
-.clearfix { @include clearfix; }
 .columnizer { @include columnizer(3); }
 .container { @include container("card"); }
 .container-query { @include container-query("min", 400px) { color: red; } }

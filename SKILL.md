@@ -5,7 +5,7 @@ description: Use the Gerillass Sass mixin library — loading it, the mixin cata
 
 # Gerillass
 
-A Sass mixin library: 54 mixins and 24 functions that emit CSS from
+A Sass mixin library: 53 mixins and 24 functions that emit CSS from
 semantic declarations. It is Sass source only — there is no runtime and no
 utility classes, so styles live in your stylesheet and your markup stays clean.
 
@@ -368,7 +368,6 @@ a dropped declaration rather than an error.
 | `breakpointer($selector: null)` | Debug helper that prints the active breakpoint name into a pseudo-element. |
 | `center($axis: "both")` | Centres an absolutely positioned element in its positioned parent, leaving transform free. |
 | `circle($size)` | Square element with a fully rounded border, i.e. a circle. |
-| `clearfix` | Clears floated children using an ::after pseudo-element. |
 | `columnizer($params...)` | Flexbox grid of equal columns, with an optional gutter written as gap and an optional fill for the last row. |
 | `container-query($params...)` | A @container rule, taking the same argument shapes as breakpoint so the two read alike. Sizes may be a key from $map-for-breakpoints or a raw length, and a length is the common case because a container is usually narrower than the viewport. Nothing matches at all unless an ancestor was declared with the container mixin. |
 | `container($name: null, $type: inline-size)` | Marks an element as a query container, so container-query can ask about its width instead of the viewport's. The rule that asks has to sit on a descendant: an element is never matched by a @container rule reading its own container, and nothing warns you when it is not. |

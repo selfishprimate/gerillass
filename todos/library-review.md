@@ -96,9 +96,15 @@ refused. `$step` was added for how far apart a filled shadow's layers sit, a
   own engine's alias for the standard rule. `placeholder-shown` stays at the
   maintainer's decision, with the float-label trap, `placeholder=" "`, written
   into its page and its caveats.
-- **`clearfix`** is a float-era technique; `display: flow-root` replaces it in
-  one declaration, though the two differ in margin collapsing. [source]
-  [measure] Proposal: deprecate with a `@warn`.
+- ~~**`clearfix`** is a float-era technique~~ **removed for 4.0.0 on the
+  `remove-clearfix` branch**, at the maintainer's decision, rather than
+  deprecated with a `@warn`. Measured in Chrome 152, Firefox 156 and Safari
+  26.6.2: `display: flow-root` contains the float exactly as the hack does,
+  keeps a child's top margin inside the box where the hack lets it escape, and
+  sits beside an outside float where the hack runs under it. caniuse puts
+  `flow-root` at 96.46% of users, from Chrome 58, Firefox 53, Safari 13 and
+  Edge 79. Bootstrap 5.3 and Bourbon still ship a clearfix helper; the bar here
+  is different, since one declaration with no trap is not a member.
 - **`antialias`** sets two non-standard properties that only ever worked on
   macOS. **The summary is fixed for 4.0.0 on the `border-box-specificity`
   branch**, and the mixin is not dead: in Chrome 152 the same line of text

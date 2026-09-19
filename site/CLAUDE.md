@@ -296,7 +296,7 @@ keeps its own.
 
 ## The documentation
 
-76 pages under `content/docs/`, one `.mdx` file each, ported from the Hugo site
+81 pages under `content/docs/`, one `.mdx` file each, ported from the Hugo site
 in `../../gerillass-docs`. **The filename is the URL and the only registration
 there is**: `src/content/pages.js` globs the sections and `src/routes.jsx` turns
 each file into a lazy route, which the prerender resolves at build time, so a
@@ -542,7 +542,7 @@ section, since the two breaks in that release are what a reader arriving from
 an old tutorial will hit first.
 
 **The list is out of the flow, and that is deliberate.** As a grid column it
-decided how tall the row was, because it is 77 items and most pages are shorter
+decided how tall the row was, because it is the whole catalogue and most pages are shorter
 than that: on a short page the content ended half a screen above a footer that
 had been pushed down to clear a list nobody was looking at. `.docs-layout__aside`
 is now absolutely positioned at `height: 100%`, so it contributes no height, and
@@ -578,7 +578,7 @@ one reported "An internal error occurred" and nothing else:
   member went undocumented. It is the same gap the playground's member menu
   has, three mixins short since 2.1.0 with nothing saying so
 
-It currently holds at 76 pages for 76 members, one to one.
+It currently holds at 77 member pages for 77 members, one to one, with four guides beside them. `clearfix` was removed in 4.0.0 and its page went with it, with `/docs/clearfix` redirected in `public/_redirects`.
 
 ### The head, on a client-side navigation
 
@@ -611,7 +611,7 @@ the domain move is a host swap rather than a path rewrite.
 
 ### Related Links
 
-Every one of the 76 member pages carries the section, and the links are not
+Every one of the member pages carries the section, and the links are not
 guesses. For a mixin that emits properties they point at the properties it
 actually emits, taken from compiling its manifest example; for one that wraps a
 selector or an at-rule they point at that, so `breakpoint` links `@media` and
@@ -759,7 +759,7 @@ An item's search value carries the member's own name as well as its title, so
 `clearUnit` finds the page called Clear Unit, and the summary is matched too,
 so `grad` finds `background-image` for the filter it can lay over one.
 
-It lists mixins first: fifty-three of them against twenty-three functions and
+It lists mixins first: fifty-three of them against twenty-four functions and
 four guides, and a mixin is what somebody opening a search box here is looking
 for. The guides are on every page in the sidebar, so they sit at the bottom.
 

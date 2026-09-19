@@ -644,18 +644,6 @@
       ]
     },
     {
-      "name": "clearfix",
-      "kind": "mixin",
-      "arguments": [],
-      "file": "scss/library/_clearfix.scss",
-      "signature": "clearfix",
-      "summary": "Clears floated children using an ::after pseudo-element.",
-      "examples": [
-        ".row { @include clearfix; }"
-      ],
-      "rejects": []
-    },
-    {
       "name": "columnizer",
       "kind": "mixin",
       "arguments": [

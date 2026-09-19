@@ -1,9 +1,0 @@
-@charset "UTF-8";
-
-@mixin clearfix {
-  &::after {
-    content: "";
-    display: block;
-    clear: both;
-  }
-}

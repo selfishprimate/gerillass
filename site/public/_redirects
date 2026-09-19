@@ -4,6 +4,13 @@
 /about   /   301!
 /about/  /   301!
 
+# `clearfix` was removed in 4.0.0: `display: flow-root` is one declaration and
+# does the same job, plus two things the hack never did. The page is gone, so
+# the old address goes to the section of the migration guide that says what to
+# write instead.
+/docs/clearfix   https://github.com/selfishprimate/gerillass/blob/main/MIGRATION.md#break-clearfix-is-removed   301!
+/docs/clearfix/  https://github.com/selfishprimate/gerillass/blob/main/MIGRATION.md#break-clearfix-is-removed   301!
+
 # Anything with no file behind it gets the not-found page, with a not-found
 # status. Every real route is a file the build wrote, so nothing legitimate
 # reaches this rule.

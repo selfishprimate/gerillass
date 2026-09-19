@@ -5,8 +5,8 @@ it covers `hide`, where breakpoint ranges end, `columnizer`, `before` and
 `after`, `font-face`, `all-text-inputs`, `aspect-ratio`, `counter`, `text-shadow`, `text-stroke`, the background patterns,
 `escape-to-parent`, `sprite`, four of the utility functions, the device maps,
 `responsive-image`, `border-box`, `antialias`, `center`, `all-buttons`,
-`loadify`, `stretched-link`, `text-gradient`, `text-image` and `placeholder`.
-The 3.0.0 and
+`loadify`, `stretched-link`, `text-gradient`, `text-image`, `placeholder` and
+the removal of `clearfix`. The 3.0.0 and
 2.0.0 guides follow below, unchanged.
 
 Every claim here was checked by compiling the old call against 3.0.0's source
@@ -52,6 +52,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `text-gradient` and `text-image` keep their text in forced colours | not breaking |
 | `text-image` takes a `$fallback` colour | not breaking |
 | `placeholder` writes one rule instead of five | breaking only before 2017 |
+| `clearfix` was removed | breaking, loud |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -1259,6 +1260,56 @@ all from 2017.
 Safari does not report pseudo-element styles through `getComputedStyle`, so
 what was checked there is that the selector parses and that the rule changes
 what is painted, which it does.
+
+---
+
+## Break: `clearfix` is removed
+
+A call stops the build with Sass's `Undefined mixin`, as the gradients did in
+3.0.0. What it wrote is one declaration now:
+
+```scss
+// 3.x
+.row {
+  @include clearfix;
+}
+```
+
+```css
+/* 4.0.0: write this */
+.row {
+  display: flow-root;
+}
+```
+
+`display: flow-root` is supported by 96.46% of users on caniuse today, from
+Chrome 58, Firefox 53, Safari 13 and Edge 79. Measured here in Chrome 152,
+Firefox 156 and Safari 26.6.2, with a 60px floated child in a 420px box, all
+three agreeing:
+
+| | `clearfix` | `display: flow-root` |
+|---|---|---|
+| contains the floated child | box is 60px | box is 60px |
+| a child's 40px top margin | box is 20px, the margin escapes | box is 60px, the margin stays in |
+| beside a float outside the box | starts at x=1, 420 wide, runs under the float | starts at x=121, 300 wide, sits next to it |
+
+So the replacement does the same job and fixes two things the hack never did.
+Those two differences are also the reason the mixin was removed rather than
+rewritten to emit `flow-root`: a call that relied on a margin escaping, or on
+the box sliding under a float, would have changed without a word.
+
+**If you support browsers older than 2018**, the hack still works and is two
+lines to keep:
+
+```scss
+.row::after {
+  content: "";
+  display: block;
+  clear: both;
+}
+```
+
+`/docs/clearfix` now redirects to this section.
 
 ---
 
