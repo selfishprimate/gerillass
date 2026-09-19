@@ -127,6 +127,11 @@ a dropped declaration rather than an error.
 
 ## Traps a signature does not show
 
+**`adaptive`**
+
+- The first breakpoint is the width every screen already has, so no query is written for it and the container is full width below the next one. That is the point of the mixin: the side space comes from the step, and it grows as the viewport passes each breakpoint.
+- A breakpoint of zero is skipped by its value since 4.0.0. It used to be dropped by name, `map.remove($map, "xsmall")`, and `$map-for-breakpoints` is `!default`: a project naming its own breakpoints kept the zero entry, and the mixin wrote `@media (min-width: 0)` with `max-width: calc(0 - 30px * 2)` in it. Measured in Chrome 152, Firefox 156 and Safari 26.6.2, that calculation is invalid and the declaration is dropped; written as `0px` it computes to -60px, the browser clamps it to 0, and the container is 0 wide at every size. With the default map the CSS is exactly what it always was.
+
 **`after`**
 
 - With no argument the mixin also writes `content: ""` in a rule of its own, `:where(.a)::after`, so a block of styles alone draws the pseudo-element. A `content` written in the block, or by another rule for the element with a class or an element selector, still wins. Until 4.0.0 nothing was written and the pseudo-element was not drawn.
@@ -352,7 +357,7 @@ a dropped declaration rather than an error.
 
 | Signature | What it does |
 |---|---|
-| `adaptive($gutter: 30px)` | Centred container whose max-width steps up at every breakpoint. |
+| `adaptive($gutter: 30px)` | Centred container whose max-width steps up at every breakpoint, full width below the first. |
 | `after($content: null)` | Styles the ::after pseudo-element. A `data-` argument becomes an attr() content value. |
 | `all-buttons($pseudo: null)` | Targets every button element at once, optionally in one pseudo-class state. |
 | `all-text-inputs($pseudo: null)` | Targets every form control a browser draws as a text field, textarea included, optionally in one pseudo-class state. |

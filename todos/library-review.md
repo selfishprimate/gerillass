@@ -147,10 +147,16 @@ refused. `$step` was added for how far apart a filled shadow's layers sit, a
   `transform: rotate(10deg)` or `scale(1.5)` sat 50px right and 25px below the
   middle in all three, and now stays in the middle; a transform written before
   the include used to be dropped instead. One-axis offsets are unchanged.
-- **`adaptive`** does nothing below 576px and hard-codes the `xsmall` key.
-  [source] `width: min(100% - 2 * gutter, key)` would give a gutter at every
-  width. Two agent trials turned the mixin down; `todos/fix-plan.md` says to
-  find out who uses it before any deprecation.
+- **`adaptive`**: the hard-coded `xsmall` key is **fixed for 4.0.0 on the
+  `adaptive-zero` branch**, where a breakpoint of zero is skipped by its value,
+  with or without a unit. Measured in Chrome 152, Firefox 156 and Safari
+  26.6.2 with a renamed map holding `0px`: the container was 0 wide at every
+  size and is the width of the screen now; with the default map the CSS is
+  unchanged across 130 compiled calls. The other half of this item, "does
+  nothing below 576px", is **not a defect**: the maintainer's design is
+  Bootstrap's container, full width below the first breakpoint, with the side
+  space coming from the step above it. Two agent trials turned the mixin down;
+  `todos/fix-plan.md` says to find out who uses it before any deprecation.
 - **`text-stroke`** is **done for 4.0.0 on the `text-stroke` branch**: the
   arguments are `$width, $color, $style, $fill`, and `$style: outside` writes
   `paint-order: stroke fill` at twice the width, which keeps the letterform. The

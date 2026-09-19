@@ -68,6 +68,12 @@ A gutter the browser drops stops the build. It is subtracted inside `calc()` at 
 Error: `auto` is not a valid $gutter for `adaptive`: it is not a length. A browser drops the max-width at every breakpoint.
 ```
 
+<Hint kind="info">
+
+**Changed in Gerillass 4.0.0.** The mixin skips a breakpoint of zero by its value rather than by the name `xsmall`. `$map-for-breakpoints` is a `!default` variable, so a project can name its own breakpoints, and a renamed zero entry used to stay in the list: the mixin wrote `@media (min-width: 0)` with `max-width: calc(0 - 30px * 2)` inside it. Written as `0px` in the map that calculation is valid, computes to -60px, and the browser clamps it to 0, so the container was 0 wide at every size. Measured in Chrome 152, Firefox 156 and Safari 26.6.2 with such a map: the container was 0 before and is the full width of the screen now. With the default map the CSS is exactly what it always was.
+
+</Hint>
+
 ## Related Links
 
 - [Container](/docs/container)

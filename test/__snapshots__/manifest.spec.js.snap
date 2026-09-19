@@ -834,14 +834,6 @@ exports[`Manifest examples clearWhitespace: .a { content: clearWhitespace("a b c
 }"
 `;
 
-exports[`Manifest examples clearfix: .row { @include clearfix; } 1`] = `
-".row::after {
-  content: "";
-  display: block;
-  clear: both;
-}"
-`;
-
 exports[`Manifest examples columnizer: .grid { @include columnizer(#{3}, 0); } 1`] = `
 ".grid {
   display: flex;

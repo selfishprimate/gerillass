@@ -1,11 +1,11 @@
 @charset "UTF-8";
 
-@use "sass:map";
 @use "sass:math";
 @use "sass:meta";
 @use "sass:string";
 @use "../maps/map-for-breakpoints" as *;
 @use "../internal/length-problem" as *;
+@use "../utilities/clear-unit" as *;
 
 @mixin adaptive($gutter: 30px) {
   // The gutter is subtracted twice inside calc(), which in Chrome 152 kept a
@@ -21,11 +21,25 @@
   @if (meta.type-of($gutter) == "number" and math.is-unitless($gutter)) or (meta.type-of($gutter) == "string" and string.unquote($gutter) == string.unquote("0")) {
     $gutter: 0px;
   }
-  $actual-breakpoints: map.remove($map-for-breakpoints, "xsmall");
   margin: 0 auto;
-  @each $item, $value in $actual-breakpoints {
-    @media (min-width: #{$value}) {
-      max-width: calc(#{$value} - (#{$gutter} * 2));
+  // The first breakpoint is the width every screen already has, so it is not a
+  // query. It used to be dropped by name, `map.remove($map, "xsmall")`, and the
+  // map is `!default`: a project that names its own breakpoints kept the zero
+  // entry, and the mixin wrote `@media (min-width: 0)` with
+  // `max-width: calc(0 - 30px * 2)` in it. Measured in Chrome 152 and Firefox
+  // 156, that calculation is invalid and the declaration is dropped, which is
+  // merely pointless; with `0px` in the map it computes to -60px, the browser
+  // clamps it to 0, and the container disappears. Skipping by value covers
+  // every name, and the default map compiles to the CSS it always did.
+  @each $item, $value in $map-for-breakpoints {
+    // `0` and `0px` are both zero and neither compares equal to the other in
+    // Sass, so the unit is taken off before the comparison. A value that is
+    // not a number, a var() for instance, is left alone and written as it is.
+    $zero: meta.type-of($value) == "number" and clearUnit($value) == 0;
+    @if not $zero {
+      @media (min-width: #{$value}) {
+        max-width: calc(#{$value} - (#{$gutter} * 2));
+      }
     }
   }
 }

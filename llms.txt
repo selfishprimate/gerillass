@@ -14,7 +14,7 @@ Arguments are validated and refused with a message naming what is accepted, so a
 
 ## Mixins
 
-- [adaptive($gutter: 30px)](https://docs.gerillass.com/docs/adaptive/): Centred container whose max-width steps up at every breakpoint.
+- [adaptive($gutter: 30px)](https://docs.gerillass.com/docs/adaptive/): Centred container whose max-width steps up at every breakpoint, full width below the first.
 - [after($content: null)](https://docs.gerillass.com/docs/after/): Styles the ::after pseudo-element.
 - [all-buttons($pseudo: null)](https://docs.gerillass.com/docs/all-buttons/): Targets every button element at once, optionally in one pseudo-class state.
 - [all-text-inputs($pseudo: null)](https://docs.gerillass.com/docs/all-text-inputs/): Targets every form control a browser draws as a text field, textarea included, optionally in one pseudo-class state.

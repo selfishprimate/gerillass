@@ -6,7 +6,7 @@ it covers `hide`, where breakpoint ranges end, `columnizer`, `before` and
 `escape-to-parent`, `sprite`, four of the utility functions, the device maps,
 `responsive-image`, `border-box`, `antialias`, `center`, `all-buttons`,
 `loadify`, `stretched-link`, `text-gradient`, `text-image`, `placeholder` and
-the removal of `clearfix`. The 3.0.0 and
+the removal of `clearfix` and `adaptive`. The 3.0.0 and
 2.0.0 guides follow below, unchanged.
 
 Every claim here was checked by compiling the old call against 3.0.0's source
@@ -53,6 +53,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `text-image` takes a `$fallback` colour | not breaking |
 | `placeholder` writes one rule instead of five | breaking only before 2017 |
 | `clearfix` was removed | breaking, loud |
+| `adaptive` skips a zero breakpoint by value, not by the name `xsmall` | fixes a lost container; no change with the default map |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -1310,6 +1311,47 @@ lines to keep:
 ```
 
 `/docs/clearfix` now redirects to this section.
+
+---
+
+## Change: `adaptive` skips a zero breakpoint by value
+
+The mixin builds one query per breakpoint, and the first entry of the map is
+the width every screen already has, so it is not a query. It used to be dropped
+by name:
+
+```scss
+$actual-breakpoints: map.remove($map-for-breakpoints, "xsmall");
+```
+
+`$map-for-breakpoints` is a `!default` variable, so a project can name its own
+breakpoints. Then the zero entry stayed in the list:
+
+```scss
+$map-for-breakpoints: (
+  "sm": 0px,
+  "md": 700px,
+);
+```
+
+```css
+@media (min-width: 0px) {
+  .wrap {
+    max-width: calc(0px - 30px * 2);
+  }
+}
+```
+
+That computes to -60px, and a browser clamps a negative max-width to 0.
+Measured in Chrome 152, Firefox 156 and Safari 26.6.2 with the map above: the
+container was **0 pixels wide at every size**, and is the width of the screen
+now. Written as an unitless `0` the calculation is invalid instead, and the
+declaration is dropped, which is merely pointless.
+
+The mixin now skips any breakpoint whose value is zero, with or without a unit.
+**With the default map nothing changes**: 130 compiled calls over ten
+breakpoint maps and thirteen gutters, before and after, differ only where a
+zero entry was carrying a name other than `xsmall`.
 
 ---
 
