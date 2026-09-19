@@ -898,7 +898,9 @@ Two pieces of work are open:
   `shorthandProperty` and `convertToEm`, defects 5 and 8 to 10 of the library
   review, on `library-defects`, branched from `escape-to-parent`; and the
   device maps behind `smartphone` and `tablet`, refreshed and flattened, from
-  `todos/device-maps.md`, on `device-maps`, branched from `library-defects`.
+  `todos/device-maps.md`, on `device-maps`, branched from `library-defects`;
+  and `responsive-image` fitting an image without upscaling it, on
+  `responsive-image`, branched from `device-maps`.
   The last three come from `todos/library-review.md`, and the last three
   patterns, `glow`, `vignette` and `mesh`, from the survey in
   `todos/saas-hero-backgrounds.md`. Each has a `MIGRATION.md` section.

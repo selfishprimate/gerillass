@@ -231,6 +231,16 @@ a dropped declaration rather than an error.
 - `max` with a key, and a range ending at a key, end just under the key, as in `breakpoint`: `remove(max, medium)` hides below 768px, `(max-width: 767.98px)`, so it does not overlap `remove(min, medium)`.
 - A `display` written after the include, in the same rule, is emitted after the `@media` block and wins over it. Write it before the include.
 
+**`reset-figure`**
+
+- It includes `responsive-image` for the image, so the image no longer upscales and keeps its proportions against a `height` attribute. See that member for what was measured.
+
+**`responsive-image`**
+
+- Until 4.0.0 this wrote `width: 100%`, which upscales: measured in Chrome 152, Firefox 156 and Safari 26.6.2, a 100x50 image in a 600px container was drawn at 600x300 in all three. `max-inline-size: 100%` leaves it at 100x50 and still fits a larger image to the container.
+- A `height` attribute is a definite height, so `<img width="1200" height="600">` was drawn 600x600 rather than 600x300, out of shape. `height: auto` inside `:where()` overrides the attribute and loses to any `height` a stylesheet sets, which was measured in all three browsers.
+- `max-inline-size` rather than `max-width`, so the image fits the line in a vertical writing mode.
+
 **`smartphone`**
 
 - `device-width` and `device-height` read the **screen**, not the viewport, so a desktop window resized to a phone's width matches nothing. Measured in Chrome 152, Firefox 156 and Safari 26.6.2: a query at the screen's own size matched and the same query one pixel off did not. For a rule that follows the window, use `breakpoint` or `container-query`.
@@ -329,9 +339,9 @@ a dropped declaration rather than an error.
 | `position($position: absolute, $offsets: 0, $logical: false)` | Sets position and offsets in one call, using shorthand order. |
 | `remove($params...)` | Hides an element outright, or within a media query: from a breakpoint up with min, up to it with max, or between two breakpoints. One breakpoint on its own hides the element at exactly that width, a single pixel, and prints a warning: pass only for that. |
 | `reset-css` | Meyer reset. Must be called at the root of the stylesheet. |
-| `reset-figure` | Removes default figure margins and makes the image inside responsive. |
+| `reset-figure` | Drops a figure's default margins and fits the image inside it. |
 | `resizable($direction: both, $overflow: auto)` | Makes an element user-resizable. |
-| `responsive-image` | Makes an image fill its container width. |
+| `responsive-image` | Fits an image to its container without upscaling it or losing its proportions. |
 | `scissors($corners)` | Cuts the corners off an element with clip-path. |
 | `screen-agent($resolution)` | Media query targeting a screen pixel density. |
 | `sizer($width, $height: $width)` | Sets width and height together; one argument makes a square. |

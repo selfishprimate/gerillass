@@ -3,8 +3,8 @@
 Written while 4.0.0 is being prepared, and added to as its changes land. So far
 it covers `hide`, where breakpoint ranges end, `columnizer`, `before` and
 `after`, `font-face`, `all-text-inputs`, `aspect-ratio`, `counter`, `text-shadow`, `text-stroke`, the background patterns,
-`escape-to-parent`, `sprite`, four of the utility functions and the device maps.
-The 3.0.0 and
+`escape-to-parent`, `sprite`, four of the utility functions, the device maps and
+`responsive-image`. The 3.0.0 and
 2.0.0 guides follow below, unchanged.
 
 Every claim here was checked by compiling the old call against 3.0.0's source
@@ -41,6 +41,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `convertToEm` returns a number rather than a string | not breaking in CSS |
 | `isNumber` and `shorthandProperty` raise where they used to crash | breaking, loud |
 | the phone and tablet maps hold two lengths per device, not a nested map | breaking, loud, and only for a map you replaced |
+| `responsive-image` fits an image without upscaling it | breaking, silent |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -918,6 +919,40 @@ matches nothing: in Chrome 152, Firefox 156 and Safari 26.6.2 a query at the
 screen's own size matched and the same query one pixel off did not. And a size
 is not a model: seven phones share 390x844 and four share 393x852, so a rule
 written for one of them applies to all of them.
+
+---
+
+## Break: `responsive-image` stops upscaling
+
+It wrote `display: block; width: 100%`, which draws an image at the container's
+width whatever its own size is. Measured in Chrome 152, Firefox 156 and Safari
+26.6.2, all three agreeing:
+
+| The image | 3.x | 4.0.0 |
+|---|---|---|
+| 100 x 50, in a 600px container | 600 x 300, six times its size | 100 x 50 |
+| 1200 x 600, in a 600px container | 600 x 300 | 600 x 300 |
+| 1200 x 600 with `width` and `height` attributes | 600 x 600, out of shape | 600 x 300 |
+| the same, under `.card img { height: 200px }` | 600 x 200 | 600 x 200 |
+
+Two declarations changed. `width: 100%` became `max-inline-size: 100%`, which
+is what stops the upscaling and also fits the image to the line in a vertical
+writing mode. And `height: auto` is written inside `:where()`, which overrides
+the `height` attribute, since an attribute counts for less than any rule, while
+losing to a `height` your own stylesheet sets.
+
+**If a call was stretching a small image on purpose**, write the width beside
+the include:
+
+```scss
+img {
+  @include responsive-image;
+  width: 100%;
+}
+```
+
+`reset-figure` includes `responsive-image` for the image inside the figure, so
+it follows.
 
 ---
 

@@ -1601,12 +1601,6 @@ exports[`Manifest examples mapDeepGet: $theme: (card: (padding: 16px, radius: 8p
 }"
 `;
 
-exports[`Manifest examples mapDeepGet: .a { height: mapDeepGet($map-for-tablets, "iPadPro", "height"); } 1`] = `
-".a {
-  height: 1366px;
-}"
-`;
-
 exports[`Manifest examples motion-safe: .card { @include motion-safe { transition: transform 0.2s ease; } } 1`] = `
 "@media (prefers-reduced-motion: no-preference) {
   .card {
@@ -1883,7 +1877,10 @@ exports[`Manifest examples reset-figure: figure { @include reset-figure; } 1`] =
 }
 figure img {
   display: block;
-  width: 100%;
+  max-inline-size: 100%;
+}
+:where(figure img) {
+  height: auto;
 }"
 `;
 
@@ -1903,10 +1900,23 @@ exports[`Manifest examples resizable: .a { @include resizable; } 1`] = `
 }"
 `;
 
+exports[`Manifest examples responsive-image: .card img { @include responsive-image; } 1`] = `
+".card img {
+  display: block;
+  max-inline-size: 100%;
+}
+:where(.card img) {
+  height: auto;
+}"
+`;
+
 exports[`Manifest examples responsive-image: img { @include responsive-image; } 1`] = `
 "img {
   display: block;
-  width: 100%;
+  max-inline-size: 100%;
+}
+:where(img) {
+  height: auto;
 }"
 `;
 
@@ -2093,14 +2103,6 @@ exports[`Manifest examples stretched-link: .card a { @include stretched-link; } 
   bottom: 0;
   left: 0;
   z-index: 1;
-}"
-`;
-
-exports[`Manifest examples tablet: .a { @include tablet("iPad", landscape) { display: none; } } 1`] = `
-"@media only screen and (device-width: 1080px) and (device-height: 810px) and (orientation: landscape) {
-  .a {
-    display: none;
-  }
 }"
 `;
 

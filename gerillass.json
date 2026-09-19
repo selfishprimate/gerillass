@@ -1485,7 +1485,10 @@
       "arguments": [],
       "file": "scss/library/_reset-figure.scss",
       "signature": "reset-figure",
-      "summary": "Removes default figure margins and makes the image inside responsive.",
+      "summary": "Drops a figure's default margins and fits the image inside it.",
+      "caveats": [
+        "It includes `responsive-image` for the image, so the image no longer upscales and keeps its proportions against a `height` attribute. See that member for what was measured."
+      ],
       "examples": [
         "figure { @include reset-figure; }"
       ],
@@ -1532,9 +1535,15 @@
       "arguments": [],
       "file": "scss/library/_responsive-image.scss",
       "signature": "responsive-image",
-      "summary": "Makes an image fill its container width.",
+      "summary": "Fits an image to its container without upscaling it or losing its proportions.",
+      "caveats": [
+        "Until 4.0.0 this wrote `width: 100%`, which upscales: measured in Chrome 152, Firefox 156 and Safari 26.6.2, a 100x50 image in a 600px container was drawn at 600x300 in all three. `max-inline-size: 100%` leaves it at 100x50 and still fits a larger image to the container.",
+        "A `height` attribute is a definite height, so `<img width=\"1200\" height=\"600\">` was drawn 600x600 rather than 600x300, out of shape. `height: auto` inside `:where()` overrides the attribute and loses to any `height` a stylesheet sets, which was measured in all three browsers.",
+        "`max-inline-size` rather than `max-width`, so the image fits the line in a vertical writing mode."
+      ],
       "examples": [
-        "img { @include responsive-image; }"
+        "img { @include responsive-image; }",
+        ".card img { @include responsive-image; }"
       ],
       "rejects": []
     },

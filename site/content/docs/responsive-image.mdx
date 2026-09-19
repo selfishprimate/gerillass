@@ -1,7 +1,7 @@
 ---
 title: "Responsive Image"
 page_title: "Responsive Image Sass Mixin"
-page_description: "Make an image responsive with the Responsive Image Sass mixin, which also switches display from inline to block and removes the gap underneath."
+page_description: "The Responsive Image Sass mixin fits an image to its container without upscaling it, and keeps its proportions against a height attribute."
 page_keywords: "CSS Responsive Image, Sass Responsive Image, Responsive Images, Reset CSS Image, CSS Fluid Images, Responsive img tag"
 page_image: "gerillass-responsive-image.jpg"
 ---
@@ -10,7 +10,7 @@ page_image: "gerillass-responsive-image.jpg"
 
 <Member name="responsive-image">
 
-The **Responsive Image Sass mixin** helps you make images responsive and change the default `display` CSS property value from `inline` to `block`, which removes the extra space below them.
+The **Responsive Image Sass mixin** fits an image to its container: it never draws the image larger than its own size, it keeps the image's proportions even when the markup carries a `height` attribute, and it switches `display` from `inline` to `block`, which removes the extra space below it.
 
 </Member>
 
@@ -27,8 +27,20 @@ img {
 ```
 </Example>
 
+<Hint kind="warning">
+
+**Changed in Gerillass 4.0.0.** The mixin used to write `width: 100%`, which **upscales**: measured in Chrome 152, Firefox 156 and Safari 26.6.2, a 100 by 50 image in a 600px container was drawn at 600 by 300 in all three, six times its own size. It is `max-inline-size: 100%` now, so a small image is left at its own size and a large one still fits the container. If a call of yours was stretching a small image on purpose, write `width: 100%` beside the include.
+
+</Hint>
+
+<Hint kind="info">
+
+**The `height` attribute no longer squashes the image.** `<img width="1200" height="600">` carries a definite height, so with the width at 100% the image was drawn 600 by 600 rather than 600 by 300. The mixin writes `height: auto` inside `:where()`, which beats the attribute and loses to any `height` your stylesheet sets: with `.card img { height: 200px }` the image stayed 200px tall in all three browsers.
+
+</Hint>
+
 ## Related Links
 
 - [Aspect Ratio](/docs/aspect-ratio)
-- [CSS max-width](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/max-width)
+- [CSS max-inline-size](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/max-inline-size)
 - [CSS height](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/height)

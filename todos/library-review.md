@@ -107,11 +107,13 @@ refused. `$step` was added for how far apart a filled shadow's layers sit, a
   `loadify(init)` in the same module, or the build fails with "The target
   selector was not found". [compiled] Proposal: drop `init` and the `@extend`,
   keep the content visible, and wrap the animation in `motion-safe`.
-- **`responsive-image`** writes `display: block; width: 100%` [compiled], so it
-  upscales small images and, with a `height` attribute, distorts them, which is
-  the trap `todos/aspect-ratio-height-auto.md` measured for `aspect-ratio`.
-  Proposal: `max-inline-size: 100%` and `height: auto` in `:where()`.
-  `reset-figure` is `margin: 0` plus this, and would follow it.
+- ~~**`responsive-image`**~~ **done for 4.0.0 on the `responsive-image`
+  branch**: `max-inline-size: 100%` and `height: auto` inside `:where()`.
+  Measured in Chrome 152, Firefox 156 and Safari 26.6.2, all three agreeing: a
+  100x50 image in a 600px container was drawn at 600x300 and is now left at
+  100x50, a 1200x600 one still fits at 600x300, an image carrying `width` and
+  `height` attributes was drawn 600x600 and is now 600x300, and a `height` a
+  stylesheet sets still wins. `reset-figure` includes it and follows.
 - **`border-box`** and **`antialias`** write `.a *` at (0,1,0) when nested,
   which overrides a page's own rules. `columnizer` fixed the same trap with
   `:where()` for 4.0.0. [source] [measure]

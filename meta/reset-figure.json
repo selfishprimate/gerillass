@@ -1,9 +1,12 @@
 {
   "name": "reset-figure",
-  "summary": "Removes default figure margins and makes the image inside responsive.",
+  "summary": "Drops a figure's default margins and fits the image inside it.",
   "arguments": [],
   "examples": [
     "figure { @include reset-figure; }"
   ],
-  "rejects": []
+  "rejects": [],
+  "caveats": [
+    "It includes `responsive-image` for the image, so the image no longer upscales and keeps its proportions against a `height` attribute. See that member for what was measured."
+  ]
 }

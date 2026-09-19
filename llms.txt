@@ -51,9 +51,9 @@ Arguments are validated and refused with a message naming what is accepted, so a
 - [position($position: absolute, $offsets: 0, $logical: false)](https://docs.gerillass.com/docs/position/): Sets position and offsets in one call, using shorthand order.
 - [remove($params...)](https://docs.gerillass.com/docs/remove/): Hides an element outright, or within a media query: from a breakpoint up with min, up to it with max, or between two breakpoints.
 - [reset-css](https://docs.gerillass.com/docs/reset-css/): Meyer reset.
-- [reset-figure](https://docs.gerillass.com/docs/reset-figure/): Removes default figure margins and makes the image inside responsive.
+- [reset-figure](https://docs.gerillass.com/docs/reset-figure/): Drops a figure's default margins and fits the image inside it.
 - [resizable($direction: both, $overflow: auto)](https://docs.gerillass.com/docs/resizable/): Makes an element user-resizable.
-- [responsive-image](https://docs.gerillass.com/docs/responsive-image/): Makes an image fill its container width.
+- [responsive-image](https://docs.gerillass.com/docs/responsive-image/): Fits an image to its container without upscaling it or losing its proportions.
 - [scissors($corners)](https://docs.gerillass.com/docs/scissors/): Cuts the corners off an element with clip-path.
 - [screen-agent($resolution)](https://docs.gerillass.com/docs/screen-agent/): Media query targeting a screen pixel density.
 - [sizer($width, $height: $width)](https://docs.gerillass.com/docs/sizer/): Sets width and height together; one argument makes a square.
