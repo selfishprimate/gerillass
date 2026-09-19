@@ -1,0 +1,125 @@
+// The maps are keyed by name and hold the screen as two lengths since 4.0.0.
+// These pin the query the mixins write, and the landscape swap, which
+// `todos/device-maps.md` records as platform dependent.
+@use 'true' as *;
+@use '../../scss/library/smartphone' as *;
+@use '../../scss/library/tablet' as *;
+
+@include describe('smartphone()') {
+  @include it('Writes the screen of the named phone, portrait by default.') {
+    @include assert {
+      @include output {
+        .a {
+          @include smartphone('iPhone17-Pro') {
+            display: none;
+          }
+        }
+      }
+      @include expect {
+        @media only screen and (device-width: 402px) and (device-height: 874px) and (orientation: portrait) {
+          .a {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+
+  @include it('Swaps the two for landscape.') {
+    @include assert {
+      @include output {
+        .a {
+          @include smartphone('iPhone17-Pro', landscape) {
+            display: none;
+          }
+        }
+      }
+      @include expect {
+        @media only screen and (device-width: 874px) and (device-height: 402px) and (orientation: landscape) {
+          .a {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+
+  @include it('Reads the phones that share one screen from the same entry.') {
+    @include assert {
+      @include output {
+        .a {
+          @include smartphone('iPhone16') {
+            display: none;
+          }
+        }
+        .b {
+          @include smartphone('iPhone15-Pro') {
+            display: none;
+          }
+        }
+      }
+      @include expect {
+        @media only screen and (device-width: 393px) and (device-height: 852px) and (orientation: portrait) {
+          .a {
+            display: none;
+          }
+        }
+        @media only screen and (device-width: 393px) and (device-height: 852px) and (orientation: portrait) {
+          .b {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}
+
+@include describe('tablet()') {
+  @include it('Writes the screen of the named tablet.') {
+    @include assert {
+      @include output {
+        .a {
+          @include tablet('iPadPro-13') {
+            display: none;
+          }
+        }
+      }
+      @include expect {
+        @media only screen and (device-width: 1032px) and (device-height: 1376px) and (orientation: portrait) {
+          .a {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+
+  @include it('Keeps iPad and iPadPro at the sizes they always had.') {
+    @include assert {
+      @include output {
+        .a {
+          @include tablet('iPad') {
+            display: none;
+          }
+        }
+        .b {
+          @include tablet('iPadPro') {
+            display: none;
+          }
+        }
+      }
+      @include expect {
+        @media only screen and (device-width: 810px) and (device-height: 1080px) and (orientation: portrait) {
+          .a {
+            display: none;
+          }
+        }
+        @media only screen and (device-width: 1024px) and (device-height: 1366px) and (orientation: portrait) {
+          .b {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}

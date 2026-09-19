@@ -1594,6 +1594,13 @@ exports[`Manifest examples loadify: @include loadify; .a { @include loadify(0.4s
 }"
 `;
 
+exports[`Manifest examples mapDeepGet: $theme: (card: (padding: 16px, radius: 8px)); .a { padding: mapDeepGet 1`] = `
+".a {
+  padding: 16px;
+  border-radius: 8px;
+}"
+`;
+
 exports[`Manifest examples mapDeepGet: .a { height: mapDeepGet($map-for-tablets, "iPadPro", "height"); } 1`] = `
 ".a {
   height: 1366px;
@@ -1967,6 +1974,14 @@ exports[`Manifest examples sizer: .a { @include sizer(120px, 40px); } 1`] = `
 }"
 `;
 
+exports[`Manifest examples smartphone: .a { @include smartphone("iPhone-Air") { display: none; } } 1`] = `
+"@media only screen and (device-width: 420px) and (device-height: 912px) and (orientation: portrait) {
+  .a {
+    display: none;
+  }
+}"
+`;
+
 exports[`Manifest examples smartphone: .a { @include smartphone("iPhone11") { display: none; } } 1`] = `
 "@media only screen and (device-width: 414px) and (device-height: 896px) and (orientation: portrait) {
   .a {
@@ -1977,6 +1992,22 @@ exports[`Manifest examples smartphone: .a { @include smartphone("iPhone11") { di
 
 exports[`Manifest examples smartphone: .a { @include smartphone("iPhone11", landscape) { display: none; } } 1`] = `
 "@media only screen and (device-width: 896px) and (device-height: 414px) and (orientation: landscape) {
+  .a {
+    display: none;
+  }
+}"
+`;
+
+exports[`Manifest examples smartphone: .a { @include smartphone("iPhone16e", landscape) { display: none; } } 1`] = `
+"@media only screen and (device-width: 844px) and (device-height: 390px) and (orientation: landscape) {
+  .a {
+    display: none;
+  }
+}"
+`;
+
+exports[`Manifest examples smartphone: .a { @include smartphone("iPhone17-Pro") { display: none; } } 1`] = `
+"@media only screen and (device-width: 402px) and (device-height: 874px) and (orientation: portrait) {
   .a {
     display: none;
   }
@@ -2073,8 +2104,40 @@ exports[`Manifest examples tablet: .a { @include tablet("iPad", landscape) { dis
 }"
 `;
 
+exports[`Manifest examples tablet: .a { @include tablet("iPad-A16", landscape) { display: none; } } 1`] = `
+"@media only screen and (device-width: 1180px) and (device-height: 820px) and (orientation: landscape) {
+  .a {
+    display: none;
+  }
+}"
+`;
+
+exports[`Manifest examples tablet: .a { @include tablet("iPadMini6") { display: none; } } 1`] = `
+"@media only screen and (device-width: 744px) and (device-height: 1133px) and (orientation: portrait) {
+  .a {
+    display: none;
+  }
+}"
+`;
+
 exports[`Manifest examples tablet: .a { @include tablet("iPadPro") { display: none; } } 1`] = `
 "@media only screen and (device-width: 1024px) and (device-height: 1366px) and (orientation: portrait) {
+  .a {
+    display: none;
+  }
+}"
+`;
+
+exports[`Manifest examples tablet: .a { @include tablet("iPadPro", landscape) { display: none; } } 1`] = `
+"@media only screen and (device-width: 1366px) and (device-height: 1024px) and (orientation: landscape) {
+  .a {
+    display: none;
+  }
+}"
+`;
+
+exports[`Manifest examples tablet: .a { @include tablet("iPadPro-13") { display: none; } } 1`] = `
+"@media only screen and (device-width: 1032px) and (device-height: 1376px) and (orientation: portrait) {
   .a {
     display: none;
   }

@@ -22,9 +22,35 @@ There will be times when you need to style elements for one particular tablet mo
 ## Arguments
 
 <Arguments of="tablet" footnote="String values can be passed with or without quotation marks.">
-  <Argument name="$device" type="string">Accepts the name of a tablet model. Predefined values are <code>iPadMini</code>, <code>iPad</code>, <code>iPadAir</code>, <code>iPadPro</code>, <code>Nexus7</code>, <code>Nexus9</code>, <code>Nexus10</code>.</Argument>
+  <Argument name="$device" type="string">The name of a tablet, from <code>$map-for-tablets</code>: the iPad, iPad Air, iPad Pro and iPad mini lines, plus the Nexus entries the map has always carried. The table below lists them by screen. A screen size is refused: pass a name.</Argument>
   <Argument name="$orientation" type="string">Accepts two values: <code>portrait</code> and <code>landscape</code>. The default value is <code>portrait</code>.</Argument>
 </Arguments>
+
+## The tablets it knows
+
+The map is keyed by name, and several names share a screen. The Apple sizes are
+read from Xcode's own device profiles rather than from a specification page.
+
+| Screen | Names | Models |
+|---|---|---|
+| 744 x 1133 | `iPadMini6`, `iPadMini-A17` | iPad mini 6, iPad mini (A17 Pro) |
+| 768 x 1024 | `iPadMini` | iPad 5 and 6, iPad Air 2, iPad Pro 9.7-inch, iPad mini 4 and 5 |
+| 810 x 1080 | `iPad`, `iPad7`, `iPad8`, `iPad9` | iPad 7, 8 and 9 |
+| 820 x 1180 | `iPad10`, `iPad-A16`, `iPadAir4`, `iPadAir5`, `iPadAir-11` | iPad 10 and the A16 iPad, iPad Air 4, 5 and every 11-inch Air |
+| 834 x 1112 | `iPadAir`, `iPadPro-10` | iPad Air 3, iPad Pro 10.5-inch |
+| 834 x 1194 | `iPadPro-11` | iPad Pro 11-inch, 1st to 4th generation |
+| 834 x 1210 | `iPadPro-11-M4` | iPad Pro 11-inch, M4 and M5 |
+| 1024 x 1366 | `iPadPro`, `iPadPro-12`, `iPadAir-13` | iPad Pro 12.9-inch, every generation, and the 13-inch Air |
+| 1032 x 1376 | `iPadPro-13` | iPad Pro 13-inch, M4 and M5 |
+| 600 x 960 | `Nexus7` | Nexus 7 |
+| 768 x 1024 | `Nexus9` | Nexus 9 |
+| 800 x 1280 | `Nexus10` | Nexus 10 |
+
+<Hint kind="info">
+
+**`iPad` and `iPadPro` mean what they always did**, the 7th to 9th generation iPad and the 12.9-inch Pro, so no call written before 4.0.0 changes. The current iPad is `iPad-A16`, and the 11-inch Pro is `iPadPro-11` or `iPadPro-11-M4`.
+
+</Hint>
 
 ## Examples
 
@@ -47,6 +73,18 @@ There will be times when you need to style elements for one particular tablet mo
 }
 ```
 </Example>
+
+<Hint kind="warning">
+
+**This reads the screen, not the window.** `device-width` and `device-height` answer the size of the device's screen, so a tablet running the page beside another app in a split view still matches: the window is narrower, the screen is not. Measured in Chrome 152, Firefox 156 and Safari 26.6.2: a query at the screen's own size matched, and the same query one pixel off did not. For a rule that follows the window, use [breakpoint](/docs/breakpoint); for one that follows a component's own width, [container query](/docs/container-query).
+
+</Hint>
+
+<Hint kind="danger">
+
+**A size is not a model.** The current iPad, the 11-inch Air and the Air 4 and 5 all measure 820 x 1180, and the 12.9-inch Pro and the 13-inch Air both measure 1024 x 1366, so a rule written for one of a group applies to all of it.
+
+</Hint>
 
 ## Related Links
 

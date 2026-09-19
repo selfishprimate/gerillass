@@ -1,29 +1,35 @@
 @charset "UTF-8";
 
-@use "sass:map";
+@use "sass:list";
+@use "../internal/device-size" as *;
 @use "../maps/map-for-smartphones" as *;
-@use "../utilities/map-deep-get" as *;
 
+// A media query for one phone's screen, by name.
+//
+// `device-width` and `device-height` read the screen rather than the viewport,
+// and both still resolve: measured in Chrome 152, Firefox 156 and Safari
+// 26.6.2, a query at the screen's own size matched and the same query one
+// pixel off did not. That also means a desktop window resized to a phone's
+// width matches nothing here, which is what `breakpoint` is for.
+//
+// The landscape form swaps the two, which is right where the platform swaps
+// the screen with the device. Emulated in Chrome 152: with the screen reported
+// as 874x402 the swapped query matched, and with the screen left at 402x874 it
+// did not. Not measured on iOS; `todos/device-maps.md` has the detail.
 @mixin smartphone($device, $orientation: null) {
-  @if map.has-key($map-for-smartphones, $device) {
-    @if $orientation == portrait or $orientation == null {
-      @media only screen 
-      and (device-width: mapDeepGet($map-for-smartphones, $device, 'width')) 
-      and (device-height: mapDeepGet($map-for-smartphones, $device, 'height'))
-      and (orientation: portrait) {
-        @content;
-      }
-    } @else if $orientation == landscape {
-      @media only screen 
-      and (device-width: mapDeepGet($map-for-smartphones, $device, 'height')) 
-      and (device-height: mapDeepGet($map-for-smartphones, $device, 'width'))
-      and (orientation: landscape) {
-        @content;
-      }
-    } @else {
-      @error "`#{$orientation}` is not a valid $orientation for `smartphone`. Pass `portrait`, `landscape`, or no orientation at all.";
+  $size: deviceSize($map-for-smartphones, $device, "smartphone", "phone");
+  $width: list.nth($size, 1);
+  $height: list.nth($size, 2);
+
+  @if $orientation == portrait or $orientation == null {
+    @media only screen and (device-width: $width) and (device-height: $height) and (orientation: portrait) {
+      @content;
+    }
+  } @else if $orientation == landscape {
+    @media only screen and (device-width: $height) and (device-height: $width) and (orientation: landscape) {
+      @content;
     }
   } @else {
-    @error "`#{$device}` is not a device known to `smartphone`. Pass one of: #{map.keys($map-for-smartphones)}.";
+    @error "`#{$orientation}` is not a valid $orientation for `smartphone`. Pass `portrait`, `landscape`, or no orientation at all.";
   }
 }

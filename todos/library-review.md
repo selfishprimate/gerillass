@@ -75,7 +75,13 @@ refused. `$step` was added for how far apart a filled shadow's layers sit, a
   models, and the landscape branch swaps the two, which on iOS probably never
   matches. [source] [measure] Proposal: deprecate with a `@warn` naming
   `breakpoint`, `container-query`, `(pointer: coarse)` and `(hover: none)`, and
-  remove them with `map-for-smartphones` and `map-for-tablets`.
+  remove them with `map-for-smartphones` and `map-for-tablets`. **Measured and
+  half done for 4.0.0 on the `device-maps` branch**, where the maintainer chose
+  to keep the two and refresh them: `device-width` still resolves in all three
+  engines, the maps are current again and flat, and both pages say that a size
+  is not a model and that the query reads the screen rather than the window.
+  Deprecating them is still open, and so is Android; `todos/device-maps.md`
+  has the measurements.
 - **`reset-css`** is Meyer's 2011 reset, unchanged: obsolete elements
   (`applet`, `acronym`, `center`), single-colon `:before`, no `box-sizing`, no
   font inheritance on form controls, `line-height: 1` on `body`, and no

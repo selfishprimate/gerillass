@@ -16,7 +16,10 @@
     }
   ],
   "examples": [
-    ".a { height: mapDeepGet($map-for-tablets, \"iPadPro\", \"height\"); }"
+    "$theme: (card: (padding: 16px, radius: 8px)); .a { padding: mapDeepGet($theme, card, padding); border-radius: mapDeepGet($theme, card, radius); }"
   ],
-  "rejects": []
+  "rejects": [],
+  "caveats": [
+    "No map the library ships is nested any more: the phone and tablet maps held one entry per device until 4.0.0 and now hold the screen as two lengths. The function is for a map of your own."
+  ]
 }

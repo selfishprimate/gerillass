@@ -1,0 +1,31 @@
+@charset "UTF-8";
+
+@use "sass:list";
+@use "sass:map";
+@use "sass:meta";
+
+// Shared by `smartphone` and `tablet`; see _is-css-function.scss for why this
+// folder is not public API.
+
+// The screen of one device as `width height`, or the library's own error.
+//
+// The maps are keyed by name on purpose, and a size is refused rather than
+// written into the query: a name can be looked up, and the documentation can
+// say which models share a size, while a pair of numbers in a stylesheet says
+// nothing about what it is for.
+@function deviceSize($devices, $device, $mixin, $kind) {
+  @if meta.type-of($device) == "number" or meta.type-of($device) == "list" {
+    @error "`#{meta.inspect($device)}` is not a #{$kind} name for `#{$mixin}`. Pass a name, such as `#{list.nth(map.keys($devices), 1)}`, rather than a screen size.";
+  }
+  @if not map.has-key($devices, $device) {
+    @error "`#{meta.inspect($device)}` is not a device known to `#{$mixin}`. Pass one of: #{map.keys($devices)}.";
+  }
+  $size: map.get($devices, $device);
+  @if meta.type-of($size) == "map" {
+    @error "`#{$device}` in the #{$kind} map holds a map of `width` and `height`, which is the shape Gerillass used before 4.0.0. An entry is now the screen as two lengths, `#{$device}: 390px 844px`.";
+  }
+  @if meta.type-of($size) != "list" or list.length($size) != 2 {
+    @error "`#{$device}` in the #{$kind} map is `#{meta.inspect($size)}`, which is not a screen size. An entry is two lengths, `#{$device}: 390px 844px`.";
+  }
+  @return $size;
+}

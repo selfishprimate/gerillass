@@ -1,32 +1,35 @@
 @charset "UTF-8";
 
+// The screen of each tablet in CSS pixels, as `width height`. See
+// _map-for-smartphones.scss for where the Apple numbers come from and why a
+// size is not a model.
+//
+// Two of the old entries are kept at the size they always had, since changing
+// what a key means would change a stylesheet without saying so: `iPad` is the
+// 7th to 9th generation, 810x1080, and `iPadPro` is the 12.9-inch. The current
+// iPad and the 11-inch Pro have keys of their own.
 $map-for-tablets: (
-  "iPadMini": (
-    width: 768px,
-    height: 1024px,
-  ),
-  "iPad": (
-    width: 810px,
-    height: 1080px,
-  ),
-  "iPadAir": (
-    width: 834px,
-    height: 1112px,
-  ),
-  "iPadPro": (
-    width: 1024px,
-    height: 1366px,
-  ),
-  "Nexus7": (
-    width: 600px,
-    height: 960px,
-  ),
-  "Nexus9": (
-    width: 768px,
-    height: 1024px,
-  ),
-  "Nexus10": (
-    width: 800px,
-    height: 1280px,
-  ),
+  "iPadMini": 768px 1024px,
+  "iPadMini6": 744px 1133px,
+  "iPadMini-A17": 744px 1133px,
+  "iPad": 810px 1080px,
+  "iPad7": 810px 1080px,
+  "iPad8": 810px 1080px,
+  "iPad9": 810px 1080px,
+  "iPad10": 820px 1180px,
+  "iPad-A16": 820px 1180px,
+  "iPadAir": 834px 1112px,
+  "iPadAir4": 820px 1180px,
+  "iPadAir5": 820px 1180px,
+  "iPadAir-11": 820px 1180px,
+  "iPadAir-13": 1024px 1366px,
+  "iPadPro": 1024px 1366px,
+  "iPadPro-10": 834px 1112px,
+  "iPadPro-11": 834px 1194px,
+  "iPadPro-11-M4": 834px 1210px,
+  "iPadPro-12": 1024px 1366px,
+  "iPadPro-13": 1032px 1376px,
+  "Nexus7": 600px 960px,
+  "Nexus9": 768px 1024px,
+  "Nexus10": 800px 1280px,
 ) !default;

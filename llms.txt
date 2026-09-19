@@ -57,10 +57,10 @@ Arguments are validated and refused with a message naming what is accepted, so a
 - [scissors($corners)](https://docs.gerillass.com/docs/scissors/): Cuts the corners off an element with clip-path.
 - [screen-agent($resolution)](https://docs.gerillass.com/docs/screen-agent/): Media query targeting a screen pixel density.
 - [sizer($width, $height: $width)](https://docs.gerillass.com/docs/sizer/): Sets width and height together; one argument makes a square.
-- [smartphone($device, $orientation: null)](https://docs.gerillass.com/docs/smartphone/): Media query targeting a known smartphone by device dimensions.
+- [smartphone($device, $orientation: null)](https://docs.gerillass.com/docs/smartphone/): Media query for one phone's screen, by name, from $map-for-smartphones.
 - [sprite($params...)](https://docs.gerillass.com/docs/sprite/): Sets up an element as a sprite tile: an image, a background position, or both.
 - [stretched-link($value: "before")](https://docs.gerillass.com/docs/stretched-link/): Expands a link to cover its positioned parent, so the whole card is clickable.
-- [tablet($device, $orientation: null)](https://docs.gerillass.com/docs/tablet/): Media query targeting a known tablet by device dimensions.
+- [tablet($device, $orientation: null)](https://docs.gerillass.com/docs/tablet/): Media query for one tablet's screen, by name, from $map-for-tablets.
 - [text-gradient($colors, $type: linear, $direction: null, $shape: null, $position: null, $from: null, $in: null, $repeating: false)](https://docs.gerillass.com/docs/text-gradient/): Fills the text with a gradient through background-clip: text.
 - [text-image($image: null)](https://docs.gerillass.com/docs/text-image/): Fills the text with an image via background-clip.
 - [text-selection($value: null)](https://docs.gerillass.com/docs/text-selection/): Styles the ::selection pseudo-element.

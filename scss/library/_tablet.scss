@@ -1,29 +1,30 @@
 @charset "UTF-8";
 
-@use "sass:map";
+@use "sass:list";
+@use "../internal/device-size" as *;
 @use "../maps/map-for-tablets" as *;
-@use "../utilities/map-deep-get" as *;
 
+// A media query for one tablet's screen, by name. See _smartphone.scss for
+// what `device-width` was measured to do, and for the landscape caveat.
+//
+// A tablet has a second trap a phone does not: on iPadOS a split view app is
+// narrower than the screen, and this query still matches, since the screen has
+// not changed. A rule that has to follow the window belongs in `breakpoint` or
+// `container-query`.
 @mixin tablet($device, $orientation: null) {
-  @if map.has-key($map-for-tablets, $device) {
-    @if $orientation == portrait or $orientation == null {
-      @media only screen 
-      and (device-width: mapDeepGet($map-for-tablets, $device, 'width')) 
-      and (device-height: mapDeepGet($map-for-tablets, $device, 'height'))
-      and (orientation: portrait) {
-        @content;
-      }
-    } @else if $orientation == landscape {
-      @media only screen 
-      and (device-width: mapDeepGet($map-for-tablets, $device, 'height')) 
-      and (device-height: mapDeepGet($map-for-tablets, $device, 'width'))
-      and (orientation: landscape) {
-        @content;
-      }
-    } @else {
-      @error "`#{$orientation}` is not a valid $orientation for `tablet`. Pass `portrait`, `landscape`, or no orientation at all.";
+  $size: deviceSize($map-for-tablets, $device, "tablet", "tablet");
+  $width: list.nth($size, 1);
+  $height: list.nth($size, 2);
+
+  @if $orientation == portrait or $orientation == null {
+    @media only screen and (device-width: $width) and (device-height: $height) and (orientation: portrait) {
+      @content;
+    }
+  } @else if $orientation == landscape {
+    @media only screen and (device-width: $height) and (device-height: $width) and (orientation: landscape) {
+      @content;
     }
   } @else {
-    @error "`#{$device}` is not a device known to `tablet`. Pass one of: #{map.keys($map-for-tablets)}.";
+    @error "`#{$orientation}` is not a valid $orientation for `tablet`. Pass `portrait`, `landscape`, or no orientation at all.";
   }
 }

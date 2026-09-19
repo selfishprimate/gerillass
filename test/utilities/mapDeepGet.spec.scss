@@ -1,9 +1,25 @@
+// The library's own maps are flat since 4.0.0, so the example is a map of the
+// kind a user writes: a theme keyed by component.
 @use 'true' as *;
 @use '../../scss/utilities/map-deep-get' as *;
-@use '../../scss/maps/map-for-tablets' as *;
+
+$theme: (
+  card: (
+    padding: 16px,
+    radius: 8px,
+  ),
+  button: (
+    padding: 8px 12px,
+  ),
+);
 
 @include describe('mapDeepGet()') {
   @include it('Return the value from a deep-map request.') {
-    @include assert-equal(mapDeepGet($map-for-tablets, 'iPadPro', 'height'), 1366px);
+    @include assert-equal(mapDeepGet($theme, card, radius), 8px);
+    @include assert-equal(mapDeepGet($theme, button, padding), 8px 12px);
+  }
+
+  @include it('Returns the inner map when the chain stops short.') {
+    @include assert-equal(mapDeepGet($theme, card), (padding: 16px, radius: 8px));
   }
 }

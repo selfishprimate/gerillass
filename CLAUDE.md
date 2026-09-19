@@ -9,7 +9,7 @@ Gerillass is a **pure Sass library** — a toolkit of mixins and functions, in t
 Two consequences follow from this and drive most decisions in the repo:
 
 1. **`package.json` must have no `dependencies`.** Everything (`jest`, `sass`, `sass-true`, `glob`) belongs in `devDependencies`. Consumers get only `.scss` files, so a runtime dependency here forces the entire test toolchain onto every downstream project. This was the cause of 24 Dependabot alerts fixed in v1.3.3 — do not reintroduce it.
-2. **Only `scss/` ships.** `.npmignore` excludes `test`, `assets`, `meta`, `tools`, dotfiles and `*.md`; npm always adds `README.md`, `LICENSE.md` and `package.json` back. Verify with `npm pack --dry-run` before any release (114 files, an 86 kB tarball, since `background-dots` and `background-stripes` became one `background-pattern` in 4.0.0).
+2. **Only `scss/` ships.** `.npmignore` excludes `test`, `assets`, `meta`, `tools`, dotfiles and `*.md`; npm always adds `README.md`, `LICENSE.md` and `package.json` back. Verify with `npm pack --dry-run` before any release (115 files, a 113 kB tarball for 4.0.0, which merged `background-dots` and `background-stripes` into one `background-pattern` and added `scss/internal/_key-end.scss` and `_device-size.scss`).
 3. **The gem is the same library, not a port.** `gerillass.gemspec` ships `scss/`, `gerillass.json` and `SKILL.md`, plus `lib/`, `LICENSE.md` and `README.md`, reads its version from `package.json`, and has no runtime dependencies. `lib/` only tells Rails, Jekyll or a plain `sass-embedded` compile where `scss/` is. `.npmignore` keeps `lib`, the gemspec and `*.gem` out of the npm package. Keep the gemspec ASCII: RubyGems reads it in the locale's encoding, and a literal non-ASCII character fails to load.
 
 Dart Sass only. LibSass/node-sass has been unsupported since v1.3.0.
@@ -403,7 +403,7 @@ Four levels, and knowing which one covers a member tells you what you can trust:
 | `test/smoke.scss` | the mixin evaluates at all | 54/54 mixins |
 | snapshot of `meta/` examples | the output cannot change unnoticed | 78/78 members |
 | `meta/` rejects | bad input is refused with a real message | 57/78 |
-| sass-true spec in `test/` | the CSS is **correct** | 37/78 |
+| sass-true spec in `test/` | the CSS is **correct** | 40/78 |
 
 Only the last one catches an output that was wrong from the start; a snapshot
 records a wrong value as correct. Hand-written specs are therefore reserved for
@@ -896,7 +896,9 @@ Two pieces of work are open:
   than pasting it on as text, on `escape-to-parent`, branched from
   `background-pattern`; and `sprite`, `pixelify`, `isNumber`,
   `shorthandProperty` and `convertToEm`, defects 5 and 8 to 10 of the library
-  review, on `library-defects`, branched from `escape-to-parent`.
+  review, on `library-defects`, branched from `escape-to-parent`; and the
+  device maps behind `smartphone` and `tablet`, refreshed and flattened, from
+  `todos/device-maps.md`, on `device-maps`, branched from `library-defects`.
   The last three come from `todos/library-review.md`, and the last three
   patterns, `glow`, `vignette` and `mesh`, from the survey in
   `todos/saas-hero-backgrounds.md`. Each has a `MIGRATION.md` section.

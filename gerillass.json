@@ -1634,7 +1634,9 @@
           "name": "$device",
           "required": true,
           "accepts": [
-            "a key from $map-for-smartphones, such as iPhone11"
+            "a key from $map-for-smartphones, such as iPhone17-Pro",
+            "every iPhone from the 4 to the 17 and the Air, plus the Galaxy entries the map has always carried",
+            "a name, never a screen size: several phones share one size"
           ]
         },
         {
@@ -1649,14 +1651,24 @@
       ],
       "file": "scss/library/_smartphone.scss",
       "signature": "smartphone($device, $orientation: null)",
-      "summary": "Media query targeting a known smartphone by device dimensions.",
+      "summary": "Media query for one phone's screen, by name, from $map-for-smartphones.",
+      "caveats": [
+        "`device-width` and `device-height` read the **screen**, not the viewport, so a desktop window resized to a phone's width matches nothing. Measured in Chrome 152, Firefox 156 and Safari 26.6.2: a query at the screen's own size matched and the same query one pixel off did not. For a rule that follows the window, use `breakpoint` or `container-query`.",
+        "A size is not a model. Seven phones share 390x844 and four share 393x852, so `smartphone(\"iPhone15\")` applies to the 15 Pro and the 16 as well. The names are for looking a size up, not for telling two devices apart.",
+        "The landscape form swaps the width and the height, which is right where the platform swaps the screen with the device. Emulated in Chrome 152, the swapped query matched when the screen was reported as 874x402 and did not when it stayed 402x874. It is not measured on iOS; `todos/device-maps.md` records what is open.",
+        "Since 4.0.0 an entry in the map is the screen as two lengths, `iPhone17: 402px 874px`, rather than a map of `width` and `height`. A map that still holds the old shape raises with a message saying so."
+      ],
       "examples": [
+        ".a { @include smartphone(\"iPhone17-Pro\") { display: none; } }",
+        ".a { @include smartphone(\"iPhone16e\", landscape) { display: none; } }",
+        ".a { @include smartphone(\"iPhone-Air\") { display: none; } }",
         ".a { @include smartphone(\"iPhone11\") { display: none; } }",
         ".a { @include smartphone(\"iPhone11\", landscape) { display: none; } }"
       ],
       "rejects": [
         ".a { @include smartphone(Nokia3310) { display: none; } }",
-        ".a { @include smartphone(\"iPhone11\", sideways) { display: none; } }"
+        ".a { @include smartphone(\"iPhone11\", sideways) { display: none; } }",
+        ".a { @include smartphone(402 874) { display: none; } }"
       ]
     },
     {
@@ -1733,7 +1745,9 @@
           "name": "$device",
           "required": true,
           "accepts": [
-            "a key from $map-for-tablets, such as iPadPro"
+            "a key from $map-for-tablets, such as iPadPro-13",
+            "the iPad, iPad Air, iPad Pro and iPad mini lines, plus the Nexus entries the map has always carried",
+            "a name, never a screen size: several tablets share one size"
           ]
         },
         {
@@ -1748,13 +1762,24 @@
       ],
       "file": "scss/library/_tablet.scss",
       "signature": "tablet($device, $orientation: null)",
-      "summary": "Media query targeting a known tablet by device dimensions.",
+      "summary": "Media query for one tablet's screen, by name, from $map-for-tablets.",
+      "caveats": [
+        "`device-width` and `device-height` read the screen, not the viewport, so a tablet running the page in a split view still matches: the window is narrower, the screen is not. A rule that has to follow the window belongs in `breakpoint` or `container-query`.",
+        "A size is not a model: the current iPad, the iPad Air 11-inch and the iPad Air 4 and 5 all measure 820x1180, and the 12.9-inch Pro and the 13-inch Air both measure 1024x1366.",
+        "`iPad` and `iPadPro` keep the sizes they have always had, the 7th to 9th generation iPad at 810x1080 and the 12.9-inch Pro, so no existing call changes. The current iPad is `iPad-A16` or `iPad10`, and the 11-inch Pro is `iPadPro-11` or `iPadPro-11-M4`.",
+        "Since 4.0.0 an entry in the map is the screen as two lengths, `iPad10: 820px 1180px`, rather than a map of `width` and `height`. A map that still holds the old shape raises with a message saying so."
+      ],
       "examples": [
+        ".a { @include tablet(\"iPadPro-13\") { display: none; } }",
+        ".a { @include tablet(\"iPad-A16\", landscape) { display: none; } }",
+        ".a { @include tablet(\"iPadMini6\") { display: none; } }",
         ".a { @include tablet(\"iPadPro\") { display: none; } }",
-        ".a { @include tablet(\"iPad\", landscape) { display: none; } }"
+        ".a { @include tablet(\"iPadPro\", landscape) { display: none; } }"
       ],
       "rejects": [
-        ".a { @include tablet(Surface) { display: none; } }"
+        ".a { @include tablet(Surface) { display: none; } }",
+        ".a { @include tablet(\"iPadPro\", sideways) { display: none; } }",
+        ".a { @include tablet(820 1180) { display: none; } }"
       ]
     },
     {
@@ -2570,8 +2595,11 @@
       "file": "scss/utilities/_map-deep-get.scss",
       "signature": "mapDeepGet($map, $keys...)",
       "summary": "Reads a value out of a nested map by following a chain of keys.",
+      "caveats": [
+        "No map the library ships is nested any more: the phone and tablet maps held one entry per device until 4.0.0 and now hold the screen as two lengths. The function is for a map of your own."
+      ],
       "examples": [
-        ".a { height: mapDeepGet($map-for-tablets, \"iPadPro\", \"height\"); }"
+        "$theme: (card: (padding: 16px, radius: 8px)); .a { padding: mapDeepGet($theme, card, padding); border-radius: mapDeepGet($theme, card, radius); }"
       ],
       "rejects": []
     },

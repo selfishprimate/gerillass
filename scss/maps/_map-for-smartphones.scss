@@ -1,72 +1,68 @@
 @charset "UTF-8";
 
+// The screen of each phone in CSS pixels, which is what `device-width` and
+// `device-height` answer: one entry is `width height`.
+//
+// Until 4.0.0 each entry was a map of `width` and `height`, which took four
+// lines per phone and let the two numbers drift apart; `smartphone` says so if
+// it is given the old shape.
+//
+// The Apple sizes are read from `mainScreenWidth`, `mainScreenHeight` and
+// `mainScreenScale` in Xcode's own device profiles, under
+// /Library/Developer/CoreSimulator/Profiles/DeviceTypes, so they are points
+// rather than figures from a specification page. The Galaxy entries are the
+// ones this map has always carried and were not measured.
+//
+// **A size is not a model.** Seven phones share 390x844 and four share
+// 393x852, so a query written for one of them applies to every phone of that
+// size. The names are here to be looked up, not to tell two devices apart.
 $map-for-smartphones: (
-  "iPhone4": (
-    width: 320px,
-    height: 480px,
-  ),
-  "iPhone-SE": (
-    width: 320px,
-    height: 568px,
-  ),
-  "iPhone5-SE": (
-    width: 320px,
-    height: 568px,
-  ),
-  "iPhone6": (
-    width: 375px,
-    height: 667px,
-  ),
-  "iPhone6-Plus": (
-    width: 414px,
-    height: 736px,
-  ),
-  "iPhone7": (
-    width: 375px,
-    height: 667px,
-  ),
-  "iPhone7-Plus": (
-    width: 414px,
-    height: 736px,
-  ),
-  "iPhone8": (
-    width: 375px,
-    height: 667px,
-  ),
-  "iPhone8-Plus": (
-    width: 414px,
-    height: 736px,
-  ),
-  "iPhone11": (
-    width: 414px,
-    height: 896px,
-  ),
-  "iPhone11-Pro": (
-    width: 375px,
-    height: 812px,
-  ),
-  "iPhone11-Pro-Max": (
-    width: 414px,
-    height: 896px,
-  ),
-  "iPhoneX": (
-    width: 375px,
-    height: 812px,
-  ),
-  "Galaxy-S7": (
-    width: 360px,
-    height: 640px,
-  ),
-  "Galaxy-S8": (
-    width: 360px,
-    height: 740px,
-  ),
-  "Galaxy-S8-Plus": (
-    width: 360px,
-    height: 740px,
-  ),
-  "Galaxy-S10": (
-    width: 360px,
-    height: 760px,
-  ),
+  "iPhone4": 320px 480px,
+  "iPhone-SE": 320px 568px,
+  "iPhone5-SE": 320px 568px,
+  "iPhone-SE2": 375px 667px,
+  "iPhone-SE3": 375px 667px,
+  "iPhone6": 375px 667px,
+  "iPhone6-Plus": 414px 736px,
+  "iPhone7": 375px 667px,
+  "iPhone7-Plus": 414px 736px,
+  "iPhone8": 375px 667px,
+  "iPhone8-Plus": 414px 736px,
+  "iPhoneX": 375px 812px,
+  "iPhoneXR": 414px 896px,
+  "iPhoneXS": 375px 812px,
+  "iPhoneXS-Max": 414px 896px,
+  "iPhone11": 414px 896px,
+  "iPhone11-Pro": 375px 812px,
+  "iPhone11-Pro-Max": 414px 896px,
+  "iPhone12-mini": 360px 780px,
+  "iPhone12": 390px 844px,
+  "iPhone12-Pro": 390px 844px,
+  "iPhone12-Pro-Max": 428px 926px,
+  "iPhone13-mini": 360px 780px,
+  "iPhone13": 390px 844px,
+  "iPhone13-Pro": 390px 844px,
+  "iPhone13-Pro-Max": 428px 926px,
+  "iPhone14": 390px 844px,
+  "iPhone14-Plus": 428px 926px,
+  "iPhone14-Pro": 393px 852px,
+  "iPhone14-Pro-Max": 430px 932px,
+  "iPhone15": 393px 852px,
+  "iPhone15-Plus": 430px 932px,
+  "iPhone15-Pro": 393px 852px,
+  "iPhone15-Pro-Max": 430px 932px,
+  "iPhone16": 393px 852px,
+  "iPhone16-Plus": 430px 932px,
+  "iPhone16-Pro": 402px 874px,
+  "iPhone16-Pro-Max": 440px 956px,
+  "iPhone16e": 390px 844px,
+  "iPhone17": 402px 874px,
+  "iPhone17-Pro": 402px 874px,
+  "iPhone17-Pro-Max": 440px 956px,
+  "iPhone17e": 390px 844px,
+  "iPhone-Air": 420px 912px,
+  "Galaxy-S7": 360px 640px,
+  "Galaxy-S8": 360px 740px,
+  "Galaxy-S8-Plus": 360px 740px,
+  "Galaxy-S10": 360px 760px,
 ) !default;

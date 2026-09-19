@@ -231,11 +231,25 @@ a dropped declaration rather than an error.
 - `max` with a key, and a range ending at a key, end just under the key, as in `breakpoint`: `remove(max, medium)` hides below 768px, `(max-width: 767.98px)`, so it does not overlap `remove(min, medium)`.
 - A `display` written after the include, in the same rule, is emitted after the `@media` block and wins over it. Write it before the include.
 
+**`smartphone`**
+
+- `device-width` and `device-height` read the **screen**, not the viewport, so a desktop window resized to a phone's width matches nothing. Measured in Chrome 152, Firefox 156 and Safari 26.6.2: a query at the screen's own size matched and the same query one pixel off did not. For a rule that follows the window, use `breakpoint` or `container-query`.
+- A size is not a model. Seven phones share 390x844 and four share 393x852, so `smartphone("iPhone15")` applies to the 15 Pro and the 16 as well. The names are for looking a size up, not for telling two devices apart.
+- The landscape form swaps the width and the height, which is right where the platform swaps the screen with the device. Emulated in Chrome 152, the swapped query matched when the screen was reported as 874x402 and did not when it stayed 402x874. It is not measured on iOS; `todos/device-maps.md` records what is open.
+- Since 4.0.0 an entry in the map is the screen as two lengths, `iPhone17: 402px 874px`, rather than a map of `width` and `height`. A map that still holds the old shape raises with a message saying so.
+
 **`sprite`**
 
 - With one argument the mixin has to tell an image from a position, and both can be strings. Until 4.0.0 it read the last four characters and took only `.png`, `.jpg` and `.svg`, so `.webp`, `.avif`, `.gif`, `.jpeg`, an upper case `.PNG`, a path with a query such as `a.png?v=2` and a data URI were all refused. It now asks whether the value is a position, and a string that is not one is the path.
 - A `var()` with one argument is read as the position, since that is what a single `var()` usually is. For an image in a custom property, pass it with a position: `sprite(var(--sprite), 0 0)`.
 - A quoted position is unquoted rather than refused: `background-position: "center"` is dropped in Chrome 152, Firefox 156 and Safari 26.6.2, all three falling back to `0% 0%`.
+
+**`tablet`**
+
+- `device-width` and `device-height` read the screen, not the viewport, so a tablet running the page in a split view still matches: the window is narrower, the screen is not. A rule that has to follow the window belongs in `breakpoint` or `container-query`.
+- A size is not a model: the current iPad, the iPad Air 11-inch and the iPad Air 4 and 5 all measure 820x1180, and the 12.9-inch Pro and the 13-inch Air both measure 1024x1366.
+- `iPad` and `iPadPro` keep the sizes they have always had, the 7th to 9th generation iPad at 810x1080 and the 12.9-inch Pro, so no existing call changes. The current iPad is `iPad-A16` or `iPad10`, and the 11-inch Pro is `iPadPro-11` or `iPadPro-11-M4`.
+- Since 4.0.0 an entry in the map is the screen as two lengths, `iPad10: 820px 1180px`, rather than a map of `width` and `height`. A map that still holds the old shape raises with a message saying so.
 
 **`text-shadow`**
 
@@ -259,6 +273,10 @@ a dropped declaration rather than an error.
 
 - Until 4.0.0 a value that was not a number only warned, and the function then ended with nothing to return, so the build stopped with Sass's own "Function finished without @return" instead of a message naming the argument. It now raises, which is what `isColor` and `isTime` do.
 - A `var()` or a `calc()` is not a Sass number and is refused. Pass those straight to the property rather than through a type guard.
+
+**`mapDeepGet`**
+
+- No map the library ships is nested any more: the phone and tablet maps held one entry per device until 4.0.0 and now hold the screen as two lengths. The function is for a map of your own.
 
 **`pixelify`**
 
@@ -317,10 +335,10 @@ a dropped declaration rather than an error.
 | `scissors($corners)` | Cuts the corners off an element with clip-path. |
 | `screen-agent($resolution)` | Media query targeting a screen pixel density. |
 | `sizer($width, $height: $width)` | Sets width and height together; one argument makes a square. |
-| `smartphone($device, $orientation: null)` | Media query targeting a known smartphone by device dimensions. |
+| `smartphone($device, $orientation: null)` | Media query for one phone's screen, by name, from $map-for-smartphones. |
 | `sprite($params...)` | Sets up an element as a sprite tile: an image, a background position, or both. |
 | `stretched-link($value: "before")` | Expands a link to cover its positioned parent, so the whole card is clickable. |
-| `tablet($device, $orientation: null)` | Media query targeting a known tablet by device dimensions. |
+| `tablet($device, $orientation: null)` | Media query for one tablet's screen, by name, from $map-for-tablets. |
 | `text-gradient($colors, $type: linear, $direction: null, $shape: null, $position: null, $from: null, $in: null, $repeating: false)` | Fills the text with a gradient through background-clip: text. It takes the gradient mixin's arguments, colours first: a linear, radial or conic gradient, plain or repeating, with an optional colour space. |
 | `text-image($image: null)` | Fills the text with an image via background-clip. |
 | `text-selection($value: null)` | Styles the ::selection pseudo-element. |

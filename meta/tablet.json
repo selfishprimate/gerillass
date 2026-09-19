@@ -1,11 +1,13 @@
 {
   "name": "tablet",
-  "summary": "Media query targeting a known tablet by device dimensions.",
+  "summary": "Media query for one tablet's screen, by name, from $map-for-tablets.",
   "arguments": [
     {
       "name": "$device",
       "accepts": [
-        "a key from $map-for-tablets, such as iPadPro"
+        "a key from $map-for-tablets, such as iPadPro-13",
+        "the iPad, iPad Air, iPad Pro and iPad mini lines, plus the Nexus entries the map has always carried",
+        "a name, never a screen size: several tablets share one size"
       ]
     },
     {
@@ -18,10 +20,21 @@
     }
   ],
   "examples": [
+    ".a { @include tablet(\"iPadPro-13\") { display: none; } }",
+    ".a { @include tablet(\"iPad-A16\", landscape) { display: none; } }",
+    ".a { @include tablet(\"iPadMini6\") { display: none; } }",
     ".a { @include tablet(\"iPadPro\") { display: none; } }",
-    ".a { @include tablet(\"iPad\", landscape) { display: none; } }"
+    ".a { @include tablet(\"iPadPro\", landscape) { display: none; } }"
   ],
   "rejects": [
-    ".a { @include tablet(Surface) { display: none; } }"
+    ".a { @include tablet(Surface) { display: none; } }",
+    ".a { @include tablet(\"iPadPro\", sideways) { display: none; } }",
+    ".a { @include tablet(820 1180) { display: none; } }"
+  ],
+  "caveats": [
+    "`device-width` and `device-height` read the screen, not the viewport, so a tablet running the page in a split view still matches: the window is narrower, the screen is not. A rule that has to follow the window belongs in `breakpoint` or `container-query`.",
+    "A size is not a model: the current iPad, the iPad Air 11-inch and the iPad Air 4 and 5 all measure 820x1180, and the 12.9-inch Pro and the 13-inch Air both measure 1024x1366.",
+    "`iPad` and `iPadPro` keep the sizes they have always had, the 7th to 9th generation iPad at 810x1080 and the 12.9-inch Pro, so no existing call changes. The current iPad is `iPad-A16` or `iPad10`, and the 11-inch Pro is `iPadPro-11` or `iPadPro-11-M4`.",
+    "Since 4.0.0 an entry in the map is the screen as two lengths, `iPad10: 820px 1180px`, rather than a map of `width` and `height`. A map that still holds the old shape raises with a message saying so."
   ]
 }

@@ -22,14 +22,27 @@ Reads a value out of a nested map by following a chain of keys.
 
 ## Examples
 
-<Example caption="Reading two values out of one of the library's own maps.">
+<Example caption="Reading two values out of a theme map, without nesting `map.get` calls by hand.">
 ```scss
-.tablet-frame {
-  width: mapDeepGet($map-for-tablets, "iPadPro", "width");
-  height: mapDeepGet($map-for-tablets, "iPadPro", "height");
+$theme: (
+  card: (
+    padding: 16px,
+    radius: 8px,
+  ),
+);
+
+.card {
+  padding: mapDeepGet($theme, card, padding);
+  border-radius: mapDeepGet($theme, card, radius);
 }
 ```
 </Example>
+
+<Hint kind="info">
+
+**No map the library ships is nested any more.** `$map-for-smartphones` and `$map-for-tablets` held a `width` and a `height` per device until 4.0.0 and now hold the screen as two lengths. This function is for a map of your own.
+
+</Hint>
 
 ## Related Links
 

@@ -3,7 +3,8 @@
 Written while 4.0.0 is being prepared, and added to as its changes land. So far
 it covers `hide`, where breakpoint ranges end, `columnizer`, `before` and
 `after`, `font-face`, `all-text-inputs`, `aspect-ratio`, `counter`, `text-shadow`, `text-stroke`, the background patterns,
-`escape-to-parent`, `sprite` and four of the utility functions. The 3.0.0 and
+`escape-to-parent`, `sprite`, four of the utility functions and the device maps.
+The 3.0.0 and
 2.0.0 guides follow below, unchanged.
 
 Every claim here was checked by compiling the old call against 3.0.0's source
@@ -39,6 +40,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `pixelify` converts the unit instead of replacing it | breaking, silent |
 | `convertToEm` returns a number rather than a string | not breaking in CSS |
 | `isNumber` and `shorthandProperty` raise where they used to crash | breaking, loud |
+| the phone and tablet maps hold two lengths per device, not a nested map | breaking, loud, and only for a map you replaced |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -871,6 +873,51 @@ with a message naming the argument:
 can be used in arithmetic, as `remify`'s always could. A `null` passed to
 `shorthandProperty` is still carried through, because `position` depends on it:
 `position(absolute, null)` writes the position and no offsets.
+
+---
+
+## Break: the device maps hold the screen as two lengths
+
+`$map-for-smartphones` and `$map-for-tablets` held a map per device:
+
+```scss
+"iPhone11": (
+  width: 414px,
+  height: 896px,
+),
+```
+
+An entry is now the screen itself, which is one line per device and cannot
+drift apart:
+
+```scss
+"iPhone11": 414px 896px,
+```
+
+**Every call is unchanged**, and so is the CSS: all 72 calls the old maps could
+answer, both orientations, compile byte for byte as they did. This only reaches
+you if you replaced or extended a map, in which case `smartphone` and `tablet`
+stop the build naming the entry and the new shape.
+
+`mapDeepGet`'s documented example used to read `$map-for-tablets`, since it was
+the library's only nested map. Nothing the library ships is nested now, and the
+example is a theme map of the kind a user writes.
+
+### The lists are current again
+
+Every iPhone from the 12 to the 17, the iPhone Air, and the current iPad, iPad
+Air, iPad Pro and iPad mini are in, with sizes read from Xcode's own device
+profiles. `iPad` and `iPadPro` keep the sizes they always had, the 7th to 9th
+generation iPad and the 12.9-inch Pro, so a call written before 4.0.0 means
+what it did; the current iPad is `iPad-A16` and the 11-inch Pro is
+`iPadPro-11`.
+
+Two things the documentation now says out loud, both measured. The query reads
+the **screen**, not the window, so a desktop window resized to a phone's width
+matches nothing: in Chrome 152, Firefox 156 and Safari 26.6.2 a query at the
+screen's own size matched and the same query one pixel off did not. And a size
+is not a model: seven phones share 390x844 and four share 393x852, so a rule
+written for one of them applies to all of them.
 
 ---
 

@@ -22,9 +22,41 @@ There will be times when you need to style elements for one particular smartphon
 ## Arguments
 
 <Arguments of="smartphone" footnote="String values can be passed with or without quotation marks.">
-  <Argument name="$device" type="string">Accepts the name of a smartphone model. Predefined values are <code>iPhone4</code>, <code>iPhone-SE</code>, <code>iPhone5-SE</code>, <code>iPhone6</code>, <code>iPhone6-Plus</code>, <code>iPhone7</code>, <code>iPhone7-Plus</code>, <code>iPhone8</code>, <code>iPhone8-Plus</code>, <code>iPhone11</code>, <code>iPhone11-Pro</code>, <code>iPhone11-Pro-Max</code>, <code>iPhoneX</code>, <code>Galaxy-S7</code>, <code>Galaxy-S8</code>, <code>Galaxy-S8-Plus</code>, <code>Galaxy-S10</code>.</Argument>
+  <Argument name="$device" type="string">The name of a phone, from <code>$map-for-smartphones</code>. Every iPhone from the 4 to the 17 and the Air is in it, along with the Galaxy entries the map has always carried; the table below lists them by screen. A screen size is refused: pass a name.</Argument>
   <Argument name="$orientation" type="string">Accepts two values: <code>portrait</code> and <code>landscape</code>. The default value is <code>portrait</code>.</Argument>
 </Arguments>
+
+## The phones it knows
+
+The map is keyed by name and the names are a way of looking a screen up, so
+several of them share one entry. The Apple sizes are read from Xcode's own
+device profiles rather than from a specification page.
+
+| Screen | Names | Models |
+|---|---|---|
+| 320 x 480 | `iPhone4` | iPhone 4, 4s |
+| 320 x 568 | `iPhone-SE`, `iPhone5-SE` | iPhone 5, 5s, 5c, SE 1 |
+| 375 x 667 | `iPhone6`, `iPhone7`, `iPhone8`, `iPhone-SE2`, `iPhone-SE3` | iPhone 6, 6s, 7, 8, SE 2, SE 3 |
+| 414 x 736 | `iPhone6-Plus`, `iPhone7-Plus`, `iPhone8-Plus` | the Plus models of the 6, 6s, 7 and 8 |
+| 375 x 812 | `iPhoneX`, `iPhoneXS`, `iPhone11-Pro` | iPhone X, Xs, 11 Pro |
+| 414 x 896 | `iPhoneXR`, `iPhoneXS-Max`, `iPhone11`, `iPhone11-Pro-Max` | iPhone Xʀ, Xs Max, 11, 11 Pro Max |
+| 360 x 780 | `iPhone12-mini`, `iPhone13-mini` | iPhone 12 mini, 13 mini |
+| 390 x 844 | `iPhone12`, `iPhone12-Pro`, `iPhone13`, `iPhone13-Pro`, `iPhone14`, `iPhone16e`, `iPhone17e` | seven phones, from the 12 to the 17e |
+| 428 x 926 | `iPhone12-Pro-Max`, `iPhone13-Pro-Max`, `iPhone14-Plus` | iPhone 12 Pro Max, 13 Pro Max, 14 Plus |
+| 393 x 852 | `iPhone14-Pro`, `iPhone15`, `iPhone15-Pro`, `iPhone16` | iPhone 14 Pro, 15, 15 Pro, 16 |
+| 430 x 932 | `iPhone14-Pro-Max`, `iPhone15-Plus`, `iPhone15-Pro-Max`, `iPhone16-Plus` | the large phones of the 14, 15 and 16 |
+| 402 x 874 | `iPhone16-Pro`, `iPhone17`, `iPhone17-Pro` | iPhone 16 Pro, 17, 17 Pro |
+| 440 x 956 | `iPhone16-Pro-Max`, `iPhone17-Pro-Max` | iPhone 16 Pro Max, 17 Pro Max |
+| 420 x 912 | `iPhone-Air` | iPhone Air |
+| 360 x 640 | `Galaxy-S7` | Galaxy S7 |
+| 360 x 740 | `Galaxy-S8`, `Galaxy-S8-Plus` | Galaxy S8, S8+ |
+| 360 x 760 | `Galaxy-S10` | Galaxy S10 |
+
+<Hint kind="danger">
+
+**A size is not a model.** The query is the screen, so `smartphone("iPhone15")` applies to the 15 Pro and the 16 as well: the four share 393 x 852. There is no media feature that tells one model from another, so a rule written for one of a group applies to all of it.
+
+</Hint>
 
 ## Examples
 
@@ -47,6 +79,18 @@ There will be times when you need to style elements for one particular smartphon
 }
 ```
 </Example>
+
+<Hint kind="warning">
+
+**This reads the screen, not the window.** `device-width` and `device-height` answer the size of the device's screen, so resizing a desktop window to 393px matches nothing here, and neither does a phone with display zoom switched on, which reports a different screen. Measured in Chrome 152, Firefox 156 and Safari 26.6.2: a query at the screen's own size matched, and the same query one pixel off did not. For a rule that follows the window, use [breakpoint](/docs/breakpoint); for one that follows a component's own width, [container query](/docs/container-query).
+
+</Hint>
+
+<Hint kind="info">
+
+**Landscape swaps the two values.** That is right on a platform that swaps the screen with the device, which is what Android reports: emulated in Chrome 152, the swapped query matched when the screen read 874 x 402 and did not when it stayed 402 x 874. It is not verified on iOS.
+
+</Hint>
 
 ## Related Links
 
