@@ -29,7 +29,7 @@ class Header extends Component {
         <div className="navbar">
           <nav className="navbar__nav">
             <h2 className="navbar__title">Site Navigation</h2>
-            <ul className="navbar__nav__menu">
+            <ul className="navbar__nav__menu" role="list">
               <li>
                 <SearchCommand />
               </li>
@@ -60,7 +60,7 @@ class Header extends Component {
               {/* <li><Link to="/contact">CONTACT</Link></li> */}
             </ul>
 
-            <ul className="navbar__nav__channels">
+            <ul className="navbar__nav__channels" role="list">
               <li data-tooltip="Twitter">
                 <a
                   href="https://twitter.com/gerillass"

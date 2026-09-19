@@ -45,22 +45,19 @@
   */
 
   /*
-    Markers back. The site applies the library's own `reset-css` globally,
-    which sets `list-style: none` on every list, so a list in prose here had
-    none: the Related Links on sixteen pages were a stack of bare links.
-  */
-  /*
     Prose lists only, the same exclusion the links use. A list that carries a
     class belongs to a component and brings its own layout: without it this
     indented the breadcrumb trail past the title it sits above.
+
+    The markers themselves used to be put back here, because the library's
+    `reset-css` took them off every list. Since 4.0.0 it only does that for a
+    list that asks with `role="list"`, so a prose list keeps its markers and
+    its semantics, and only the indent is set here.
   */
   ul:not([class]),
   ol:not([class]) {
     padding-left: 1.25rem;
   }
-
-  ul:not([class]) { list-style: disc; }
-  ol:not([class]) { list-style: decimal; }
 
   li::marker { color: inherit; opacity: 0.45; }
 

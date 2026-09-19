@@ -23,7 +23,7 @@ class Footer extends Component {
               >
                 <h3>Home</h3>
               </label>
-              <ul className="footer__menu__list">
+              <ul className="footer__menu__list" role="list">
                 <li className="footer__menu__list__item">How to use?</li>
                 <li className="footer__menu__list__item">
                   <Link to="/docs/introduction">
@@ -61,7 +61,7 @@ class Footer extends Component {
               >
                 <h3>Team</h3>
               </label>
-              <ul className="footer__menu__list">
+              <ul className="footer__menu__list" role="list">
                 <li className="footer__menu__list__item">Who we are?</li>
                 <li className="footer__menu__list__item">
                   <a
@@ -91,7 +91,7 @@ class Footer extends Component {
               >
                 <h3>Channels</h3>
               </label>
-              <ul className="footer__menu__list">
+              <ul className="footer__menu__list" role="list">
                 <li className="footer__menu__list__item">Join us!</li>
                 <li className="footer__menu__list__item">
                   <a
@@ -130,7 +130,7 @@ class Footer extends Component {
               >
                 <h3>Contribution</h3>
               </label>
-              <ul className="footer__menu__list">
+              <ul className="footer__menu__list" role="list">
                 <li className="footer__menu__list__item">Help it grow!</li>
                 <li className="footer__menu__list__item">
                   <a

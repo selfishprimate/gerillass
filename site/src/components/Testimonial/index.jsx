@@ -14,7 +14,7 @@ class Testimonial extends Component {
             </p>
           </div>
 
-          <ul className="testimonial__list">
+          <ul className="testimonial__list" role="list">
             <li className="testimonial__list__item">
               <div className="testimonial__list__item__content">
                 <div className="testimonial__list__item__role">

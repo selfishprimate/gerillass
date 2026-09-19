@@ -916,7 +916,8 @@ Two pieces of work are open:
   `text-fill-guard`; and `clearfix` removed in favour of `display: flow-root`,
   on `remove-clearfix`, branched from `placeholder-standard`; and `adaptive`
   skipping a zero breakpoint by value rather than by name, on `adaptive-zero`,
-  branched from `remove-clearfix`.
+  branched from `remove-clearfix`; and `reset-css` rewritten as a modern reset
+  inside `:where()`, on `reset-modern`, branched from `adaptive-zero`.
   The last three come from `todos/library-review.md`, and the last three
   patterns, `glow`, `vignette` and `mesh`, from the survey in
   `todos/saas-hero-backgrounds.md`. Each has a `MIGRATION.md` section.

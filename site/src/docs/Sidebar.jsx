@@ -37,7 +37,7 @@ function Sidebar({ onNavigate }) {
                 <span className="docs-sidebar__count"> ({group.length})</span>
               )}
             </h2>
-            <ul className="docs-sidebar__list">
+            <ul className="docs-sidebar__list" role="list">
               {group.map((page) => {
                 const isCurrent =
                   pathname === page.href || pathname === `${page.href}/`;

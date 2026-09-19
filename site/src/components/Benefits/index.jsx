@@ -58,7 +58,7 @@ class Benefits extends Component {
           </p>
         </div>
 
-        <ul className="benefits__list">
+        <ul className="benefits__list" role="list">
           {BENEFITS.map((benefit) => (
             <li className="benefits__list__item" key={benefit.label}>
               <figure className="benefits__figure">

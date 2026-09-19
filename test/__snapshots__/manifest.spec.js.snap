@@ -1829,51 +1829,56 @@ exports[`Manifest examples remove: .a { @include remove; } 1`] = `
 `;
 
 exports[`Manifest examples reset-css: @include reset-css; 1`] = `
-"html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed,
-figure, figcaption, footer, header, hgroup,
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  font-size: 100%;
-  font: inherit;
-  vertical-align: baseline;
+"*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
-article, aside, details, figcaption, figure,
-footer, header, hgroup, menu, main, nav, section {
+:where(body, h1, h2, h3, h4, h5, h6, p, figure, blockquote, dl, dd, pre) {
+  margin: 0;
+}
+
+:where(body) {
+  line-height: 1.5;
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
+}
+
+:where(h1, h2, h3, h4, h5, h6, button, input, label) {
+  line-height: 1.1;
+}
+
+:where(ul, ol)[role=list] {
+  list-style: none;
+  padding: 0;
+}
+
+:where(img, picture, video, canvas) {
   display: block;
 }
 
-body {
-  line-height: 1;
+:where(img, picture, video, canvas, svg) {
+  max-width: 100%;
 }
 
-ol, ul {
-  list-style: none;
+:where(input, button, textarea, select) {
+  font: inherit;
 }
 
-blockquote, q {
-  quotes: none;
+:where(p, h1, h2, h3, h4, h5, h6) {
+  overflow-wrap: break-word;
 }
 
-blockquote:before, blockquote:after,
-q:before, q:after {
-  content: "";
-  content: none;
+:where(textarea):not([rows]) {
+  min-height: 10em;
 }
 
-table {
+:where(:target) {
+  scroll-margin-block: 5ex;
+}
+
+:where(table) {
   border-collapse: collapse;
   border-spacing: 0;
 }"

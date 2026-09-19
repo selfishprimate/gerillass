@@ -1,11 +1,17 @@
 {
   "name": "reset-css",
-  "summary": "Meyer reset. Must be called at the root of the stylesheet.",
+  "summary": "Writes a modern baseline for the document: border-box, readable line heights, media that stays in its container, form controls that inherit the page's font.",
   "arguments": [],
   "examples": [
     "@include reset-css;"
   ],
   "rejects": [
     ".a { @include reset-css; }"
+  ],
+  "caveats": [
+    "Every rule is inside `:where()`, so the reset has no specificity of its own and any rule you write beats it whatever the order. The `box-sizing` rule is a `*` selector, which already has none.",
+    "A list keeps its markers, and loses them with `role=\"list\"`. The 2011 reset this replaces wrote `list-style: none` on every list, which is what makes VoiceOver stop announcing a list as a list.",
+    "`svg` is not made a block, though the resets this one is modelled on do that. An inline SVG is usually an icon inside a line of text: measured on this project's own site, `display: block` on the header's search icon dropped its label onto a second line. `img`, `picture`, `video` and `canvas` are blocks.",
+    "Rewritten in 4.0.0, so a page that includes it looks different: `box-sizing` is `border-box`, the body's line height is 1.5 rather than 1, lists keep their markers, images are blocks that never overflow, form controls inherit the page's font, and the obsolete elements in the old selector list are gone. Measured in Chrome 152, Firefox 156 and Safari 26.6.2 with both resets on the same page, all three agreeing."
   ]
 }

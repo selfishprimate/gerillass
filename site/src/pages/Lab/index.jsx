@@ -681,7 +681,7 @@ function Lab() {
               </p>
             </header>
             <h2 className="lab__cases__title">Cases</h2>
-            <ul>
+            <ul role="list">
               {names.map((caseName) => (
                 <li key={caseName}>
                   <button

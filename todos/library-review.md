@@ -82,13 +82,16 @@ refused. `$step` was added for how far apart a filled shadow's layers sit, a
   is not a model and that the query reads the screen rather than the window.
   Deprecating them is still open, and so is Android; `todos/device-maps.md`
   has the measurements.
-- **`reset-css`** is Meyer's 2011 reset, unchanged: obsolete elements
-  (`applet`, `acronym`, `center`), single-colon `:before`, no `box-sizing`, no
-  font inheritance on form controls, `line-height: 1` on `body`, and no
-  `:where()`, so it beats a component's own rules. [source] Proposal: a second
-  member, `reset-modern`, everything inside `:where()`, which keeps list
-  semantics for `[role=list]`, makes controls inherit the font and sets the
-  media defaults. Leave `reset-css` alone for the people who call it.
+- ~~**`reset-css`** is Meyer's 2011 reset~~ **rewritten for 4.0.0 on the
+  `reset-modern` branch**. The maintainer chose one member rather than two:
+  two baselines is one too many, so `reset-css` carries the modern rules and
+  the 2011 block is gone. Everything is inside `:where()`, lists keep their
+  markers and lose them with `role="list"`, form controls inherit the font,
+  media is block and never overflows, and `svg` is deliberately left inline,
+  since `display: block` on the site's own search icon dropped its label onto
+  a second line. Measured in Chrome 152, Firefox 156 and Safari 26.6.2 with
+  both resets on the same page. The site went with it: `role="list"` on its
+  twelve layout lists, and the rule that put markers back in prose deleted.
 - ~~**`placeholder`** writes four rules for browsers before 2017~~ **done for
   4.0.0 on the `placeholder-standard` branch**: only `&::placeholder` is
   written. Measured in Chrome 152, Firefox 156 and Safari 26.6.2, the two

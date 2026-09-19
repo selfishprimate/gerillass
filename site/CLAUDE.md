@@ -628,10 +628,12 @@ redirects into `/Web/CSS/Reference/Properties/`, `/Reference/Selectors/`,
 `/Reference/At-rules/`, `/Reference/Values/` or `/Guides/`. The old form still
 works, but the links here are written to where the pages actually live.
 
-Markers on those lists need saying out loud: the site applies the library's own
-`reset-css` globally, which sets `list-style: none`, so `content.scss` puts
-`disc` and `decimal` back for prose. Without it a list of links renders as a
-stack of bare links.
+Markers on those lists used to need saying out loud, and no longer do: the
+site applies the library's own `reset-css` globally, and since 4.0.0 that only
+takes the markers off a list carrying `role="list"`. `content.scss` sets the
+indent for prose lists and nothing else. The twelve lists the site uses as
+layout, the header's two, the footer's four, the sidebar, the supporters' two,
+the testimonial, the benefits and the Featured buttons, carry `role="list"`.
 
 ### Editorial consistency
 

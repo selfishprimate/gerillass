@@ -1,57 +1,98 @@
 @charset "UTF-8";
 
+// The baseline the rest of a stylesheet is written against.
+//
+// Until 4.0.0 this was Eric Meyer's 2011 reset, unchanged: a selector list
+// carrying `applet`, `acronym`, `center` and other elements HTML has dropped,
+// `line-height: 1` on the body, `list-style: none` on every list, no
+// `box-sizing`, nothing for form controls and nothing for media. What is here
+// now is the shape modern resets settled on, with every rule inside `:where()`
+// so the reset has no specificity of its own and any rule a component writes
+// wins, whatever its order.
+//
+// Comments in this file are `//`: a /* */ comment inside a mixin is emitted
+// into the stylesheet of everyone who includes it.
 @mixin reset-css {
-    @if & {
-        @error "Please call the mixin at the root of your style sheet.";
-    } @else {
-    // http://meyerweb.com/eric/tools/css/reset/
-    // v2.0 | 20110126
-    // License: none (public domain)
-    //
-    // Comments in this file are `//`: a /* */ comment inside a mixin is emitted
-    // into the stylesheet of everyone who includes it.
-    html, body, div, span, applet, object, iframe,
-    h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-    a, abbr, acronym, address, big, cite, code,
-    del, dfn, em, img, ins, kbd, q, s, samp,
-    small, strike, strong, sub, sup, tt, var,
-    b, u, i, center,
-    dl, dt, dd, ol, ul, li,
-    fieldset, form, label, legend,
-    table, caption, tbody, tfoot, thead, tr, th, td,
-    article, aside, canvas, details, embed, 
-    figure, figcaption, footer, header, hgroup, 
-    menu, nav, output, ruby, section, summary,
-    time, mark, audio, video {
-      margin: 0;
-      padding: 0;
-      border: 0;
-      font-size: 100%;
-      font: inherit;
-      vertical-align: baseline;
-    }
-    // HTML5 display-role reset for older browsers
-    article, aside, details, figcaption, figure, 
-    footer, header, hgroup, menu, main, nav, section {
-      display: block;
-    }
-    body {
-      line-height: 1;
-    }
-    ol, ul {
-      list-style: none;
-    }
-    blockquote, q {
-      quotes: none;
-    }
-    blockquote:before, blockquote:after,
-    q:before, q:after {
-      content: '';
-      content: none;
-    }
-    table {
-      border-collapse: collapse;
-      border-spacing: 0;
-    }
+  @if & {
+    @error "Please call the mixin at the root of your style sheet.";
+  }
+
+  // The box model people expect, and the one every layout mixin here assumes.
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  // Margins are a design decision, so the reset takes them off the elements
+  // that carry one by default rather than off everything: `dialog` keeps its
+  // centring margin, and a `*` rule would have taken that too.
+  :where(body, h1, h2, h3, h4, h5, h6, p, figure, blockquote, dl, dd, pre) {
+    margin: 0;
+  }
+
+  :where(body) {
+    // 1 is the old reset's value and it is unreadable for anything but a
+    // heading; 1.5 is what the readable-line-length guidance assumes.
+    line-height: 1.5;
+    // Safari on iOS inflates text in landscape without this, which changes a
+    // layout nobody asked it to change.
+    -webkit-text-size-adjust: none;
+    text-size-adjust: none;
+  }
+
+  // Headings and controls read better tighter than body text.
+  :where(h1, h2, h3, h4, h5, h6, button, input, label) {
+    line-height: 1.1;
+  }
+
+  // A list keeps its markers, and with them the semantics a screen reader
+  // announces. The old reset took the markers off every list, which is what
+  // made VoiceOver stop calling them lists. Ask for it with `role="list"`
+  // where the list is a layout rather than prose.
+  :where(ul, ol)[role="list"] {
+    list-style: none;
+    padding: 0;
+  }
+
+  // Media sits on its own line, which takes away the descender gap an inline
+  // image leaves under it, and never overflows its container.
+  //
+  // `svg` is deliberately not in that list, though the resets this is modelled
+  // on include it. An inline SVG is usually an icon inside a line of text, and
+  // `display: block` breaks the line: measured on this project's own site,
+  // the search icon in the header dropped its label onto a second line.
+  :where(img, picture, video, canvas) {
+    display: block;
+  }
+
+  :where(img, picture, video, canvas, svg) {
+    max-width: 100%;
+  }
+
+  // A form control does not inherit the page's font unless it is told to.
+  :where(input, button, textarea, select) {
+    font: inherit;
+  }
+
+  // A long word, a URL or a token should not push a layout sideways.
+  :where(p, h1, h2, h3, h4, h5, h6) {
+    overflow-wrap: break-word;
+  }
+
+  // A textarea with no rows is two lines tall, which is never what the design
+  // wanted.
+  :where(textarea):not([rows]) {
+    min-height: 10em;
+  }
+
+  // An in-page link lands with the heading against the top edge otherwise.
+  :where(:target) {
+    scroll-margin-block: 5ex;
+  }
+
+  :where(table) {
+    border-collapse: collapse;
+    border-spacing: 0;
   }
 }

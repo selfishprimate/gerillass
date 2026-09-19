@@ -6,7 +6,7 @@ it covers `hide`, where breakpoint ranges end, `columnizer`, `before` and
 `escape-to-parent`, `sprite`, four of the utility functions, the device maps,
 `responsive-image`, `border-box`, `antialias`, `center`, `all-buttons`,
 `loadify`, `stretched-link`, `text-gradient`, `text-image`, `placeholder` and
-the removal of `clearfix` and `adaptive`. The 3.0.0 and
+the removal of `clearfix`, `adaptive` and `reset-css`. The 3.0.0 and
 2.0.0 guides follow below, unchanged.
 
 Every claim here was checked by compiling the old call against 3.0.0's source
@@ -54,6 +54,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `placeholder` writes one rule instead of five | breaking only before 2017 |
 | `clearfix` was removed | breaking, loud |
 | `adaptive` skips a zero breakpoint by value, not by the name `xsmall` | fixes a lost container; no change with the default map |
+| `reset-css` is a modern reset rather than Meyer's 2011 one | breaking, silent, and visible |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -1352,6 +1353,54 @@ The mixin now skips any breakpoint whose value is zero, with or without a unit.
 **With the default map nothing changes**: 130 compiled calls over ten
 breakpoint maps and thirteen gutters, before and after, differ only where a
 zero entry was carrying a name other than `xsmall`.
+
+---
+
+## Break: `reset-css` is a modern reset
+
+It was Eric Meyer's 2011 reset, unchanged, and it is now the shape modern
+resets have settled on. A page that includes the mixin looks different, so this
+is the section to read before upgrading.
+
+What changed, measured in Chrome 152, Firefox 156 and Safari 26.6.2 with the
+old reset and the new one on the same page, all three agreeing:
+
+| | 3.x | 4.0.0 |
+|---|---|---|
+| `box-sizing` | not set, so `content-box`: a 100px box with 10px padding and a 5px border measured 130px | `border-box`, and the same box measures 100px |
+| `body` line height | `1` | `1.5` |
+| lists | `list-style: none` on every list, padding zeroed | markers kept; `role="list"` takes them off |
+| images | `inline`, with a few pixels of descender space under them | `block`, and never wider than their container |
+| form controls | the browser's own font, `Arial` in Chrome | the page's font, through `font: inherit` |
+| long words in prose | `overflow-wrap: normal` | `break-word` |
+| an empty `<textarea>` | two lines tall | at least ten |
+| specificity | element selectors, beaten only by source order | every rule inside `:where()`, so your own rules always win |
+
+The obsolete elements the old selector list carried, `applet`, `acronym`,
+`center`, `big`, `strike` and `tt`, are gone with it.
+
+### What to do
+
+**A navigation or a card grid built from a `<ul>` needs `role="list"`** if it
+is not to show markers:
+
+```html
+<ul role="list" class="card-grid">
+  <li>…</li>
+</ul>
+```
+
+That is not busywork: the old reset took the markers off every list, and a list
+without markers is announced as a plain group of items by VoiceOver rather than
+as a list. Asking for it per list keeps the semantics where the list is prose.
+
+**Check anything that relied on `content-box`.** The reset now sets
+`border-box` on everything, which is what the layout mixins here assume.
+
+**To keep the old baseline**, the 2011 reset is public domain: copy it into
+your own stylesheet. This project's own site took the other route, adding
+`role="list"` to its twelve layout lists and deleting the rule it had for
+putting markers back in prose.
 
 ---
 

@@ -1,8 +1,8 @@
 ---
 title: "Reset CSS"
 page_title: "Reset CSS Sass Mixin"
-page_description: "The Reset CSS Sass mixin (also known as CSS Reset) helps you reset the browser default styles of all HTML elements to a consistent baseline."
-page_keywords: "Sass CSS Reset, Reset CSS in Sass, SCSS Reset CSS, SCSS to CSS, Eric Meyer's CSS Reset, Modern CSS Reset, What is CSS Reset, CSS Reset Code, CSS Reset 2020, CSS Reset 2021, CSS Reset 2022, Normalize CSS, Bootstrap CSS Reset, Universal CSS Reset, CSS Reset to Default"
+page_description: "The Reset CSS Sass mixin writes a modern baseline: border-box, sane line heights, media that does not overflow, form controls that inherit the page's font, and no specificity of its own."
+page_keywords: "Sass CSS Reset, Reset CSS in Sass, SCSS Reset CSS, Modern CSS Reset, CSS Reset 2026, Normalize CSS, box-sizing border-box, CSS Reset where, Accessible CSS Reset"
 page_image: "gerillass-reset-css.jpg"
 ---
 
@@ -10,25 +10,124 @@ page_image: "gerillass-reset-css.jpg"
 
 <Member name="reset-css">
 
-The **Reset CSS** Sass mixin (also known as **CSS Reset**) helps you reset the browser default styles of all HTML elements to a consistent baseline.
-<Hint kind="info">
-
-Endless thanks to [**Eric Meyer**](https://meyerweb.com/) for his legendary [**Reset CSS**](https://meyerweb.com/eric/tools/css/reset/) code, which has been used for years, and for letting us include it in this library.
-
-</Hint>
+The **Reset CSS** Sass mixin writes the baseline the rest of your stylesheet is written against: the box model people expect, line heights that read, media that stays inside its container, form controls that inherit the page's font, and nothing with any specificity of its own.
 
 </Member>
 
+<Hint kind="warning">
+
+**Rewritten in Gerillass 4.0.0.** Until then this was Eric Meyer's 2011 reset, unchanged, and a page that includes the mixin looks different now. The section below says exactly what changed, and the migration guide has the same list with the measurements.
+
+</Hint>
+
 ## Examples
 
-<Example caption="Simply call the mixin at the root of your stylesheet to override the browser default styles.">
+<Example caption="Call the mixin once, at the root of your stylesheet. Calling it inside a selector raises, because a baseline belongs to the document rather than to one component.">
 ```scss
 @include reset-css;
 ```
 </Example>
 
-## Related Links
-* [CSS Tools: Reset CSS](https://meyerweb.com/eric/tools/css/reset/)
-* [What is a CSS Reset?](https://cssreset.com/what-is-a-css-reset/)
-* [Browsers' default CSS for HTML elements](https://stackoverflow.com/questions/6867254/browsers-default-css-for-html-elements)
+## What it writes
 
+```css
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+:where(body, h1, h2, h3, h4, h5, h6, p, figure, blockquote, dl, dd, pre) {
+  margin: 0;
+}
+
+:where(body) {
+  line-height: 1.5;
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
+}
+
+:where(h1, h2, h3, h4, h5, h6, button, input, label) {
+  line-height: 1.1;
+}
+
+:where(ul, ol)[role="list"] {
+  list-style: none;
+  padding: 0;
+}
+
+:where(img, picture, video, canvas) {
+  display: block;
+}
+
+:where(img, picture, video, canvas, svg) {
+  max-width: 100%;
+}
+
+:where(input, button, textarea, select) {
+  font: inherit;
+}
+
+:where(p, h1, h2, h3, h4, h5, h6) {
+  overflow-wrap: break-word;
+}
+
+:where(textarea):not([rows]) {
+  min-height: 10em;
+}
+
+:where(:target) {
+  scroll-margin-block: 5ex;
+}
+
+:where(table) {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+```
+
+<Hint kind="info">
+
+**Everything is inside `:where()`, so the reset has no specificity.** Any rule you write wins, whatever order it lands in. The one exception is `box-sizing`, which is a `*` rule and already has none.
+
+</Hint>
+
+<Hint kind="danger">
+
+**A list keeps its markers now, and asks for `role="list"` to lose them.** The old reset wrote `list-style: none` on every list, which is what makes VoiceOver stop announcing a list as a list. A navigation or a card grid built from a `<ul>` should say so:
+
+```html
+<ul role="list" class="card-grid">
+  <li>…</li>
+</ul>
+```
+
+</Hint>
+
+<Hint kind="info">
+
+**`svg` is not made a block.** The resets this one is modelled on put `svg` in the same rule as `img`, and an inline SVG is usually an icon inside a line of text: measured on this site, `display: block` on the search icon dropped its label onto a second line. Images, video and canvas are blocks, which is what takes away the few pixels of descender space an inline image leaves under itself.
+
+</Hint>
+
+## What changed from the 2011 reset
+
+| | Before | Now |
+|---|---|---|
+| `box-sizing` | not set, so `content-box` | `border-box`, measured: a 100px box with padding and a border is 130px wide before and 100px now |
+| `body` line height | `1` | `1.5` |
+| lists | markers off everywhere | markers kept, off with `role="list"` |
+| images | `inline` | `block`, and never wider than the container |
+| form controls | the browser's own font | the page's font, through `font: inherit` |
+| long words | `overflow-wrap: normal` | `break-word` on prose |
+| empty `<textarea>` | two lines tall | at least ten lines |
+| obsolete elements | `applet`, `acronym`, `center`, `big`, `strike`, `tt` in the selector list | gone |
+| specificity | element selectors, beaten only by order | `:where()`, so your rules always win |
+
+Each row was measured in Chrome 152, Firefox 156 and Safari 26.6.2, with the old reset and the new one on the same page, and all three agree.
+
+## Related Links
+
+- [Border Box](/docs/border-box)
+- [Josh W. Comeau: A Modern CSS Reset](https://www.joshwcomeau.com/css/custom-css-reset/)
+- [Andy Bell: A more modern CSS reset](https://piccalil.li/blog/a-more-modern-css-reset/)
+- [CSS Tools: Reset CSS](https://meyerweb.com/eric/tools/css/reset/)
+- [CSS :where()](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:where)

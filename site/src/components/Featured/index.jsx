@@ -24,7 +24,7 @@ class Featured extends Component {
           </div>
         </div>
         <div className="featured__right">
-          <ul className="github-buttons">
+          <ul className="github-buttons" role="list">
             <li className="github-buttons__item star">
               <a
                 href="https://github.com/selfishprimate/gerillass"

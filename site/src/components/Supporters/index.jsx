@@ -243,7 +243,7 @@ class Supporters extends Component {
             These wonderful people starred Gerillass on Github and keep the
             project going. Thank you!
           </p>
-          <ul className="supporters__dialog__list">
+          <ul className="supporters__dialog__list" role="list">
             {PEOPLE.map((person) => (
               <li key={person.login}>
                 {this.renderAvatar(
@@ -272,7 +272,7 @@ class Supporters extends Component {
     return (
       <div className="supporters">
         <div className="supporters__people">
-          <ul className="supporters__avatars">
+          <ul className="supporters__avatars" role="list">
             {rowPeople.map((person) => (
               <li key={person.login}>
                 {this.renderAvatar(
