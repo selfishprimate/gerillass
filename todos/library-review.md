@@ -89,10 +89,13 @@ refused. `$step` was added for how far apart a filled shadow's layers sit, a
   member, `reset-modern`, everything inside `:where()`, which keeps list
   semantics for `[role=list]`, makes controls inherit the font and sets the
   media defaults. Leave `reset-css` alone for the people who call it.
-- **`placeholder`** writes four rules for browsers before 2017 plus
-  `::placeholder`. [source] Proposal: deprecate, or keep only `::placeholder`.
-  `placeholder-shown` is a single pseudo-class and fails the bar; the trap
-  worth encoding is the float-label pattern, which needs `placeholder=" "`.
+- ~~**`placeholder`** writes four rules for browsers before 2017~~ **done for
+  4.0.0 on the `placeholder-standard` branch**: only `&::placeholder` is
+  written. Measured in Chrome 152, Firefox 156 and Safari 26.6.2, the two
+  single-colon selectors parse nowhere and the two double-colon ones are their
+  own engine's alias for the standard rule. `placeholder-shown` stays at the
+  maintainer's decision, with the float-label trap, `placeholder=" "`, written
+  into its page and its caveats.
 - **`clearfix`** is a float-era technique; `display: flow-root` replaces it in
   one declaration, though the two differ in margin collapsing. [source]
   [measure] Proposal: deprecate with a `@warn`.

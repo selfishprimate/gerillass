@@ -1,18 +1,20 @@
 @charset "UTF-8";
 
+// Styles the placeholder text of an input.
+//
+// Until 4.0.0 this wrote five rules: the standard one and four prefixed
+// ancestors. Measured in Chrome 152, Firefox 156 and Safari 26.6.2, by giving
+// each selector its own colour and asking what actually painted:
+//
+// - `:-ms-input-placeholder` and the single-colon `:-moz-placeholder` do not
+//   parse in any of the three, so those two rules were dead everywhere;
+// - `::-webkit-input-placeholder` paints in Chrome and Safari and
+//   `::-moz-placeholder` in Firefox, but each is that engine's alias for
+//   `::placeholder`, which is written anyway, so neither adds anything.
+//
+// What is left is the one rule that works, which every browser since Chrome
+// 57, Firefox 51 and Safari 10.1, all from 2017, understands.
 @mixin placeholder {
-  &::-webkit-input-placeholder {
-    @content;
-  }
-  &::-moz-placeholder {
-    @content;
-  }
-  &:-ms-input-placeholder {
-    @content;
-  }
-  &:-moz-placeholder {
-    @content;
-  }
   &::placeholder {
     @content;
   }

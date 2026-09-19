@@ -10,7 +10,7 @@ page_image: "gerillass-placeholder.jpg"
 
 <Member name="placeholder">
 
-The **Placeholder Sass mixin** helps you style the **placeholder text** in an `<input>` or `<textarea>` element and generate cross-browser compatible CSS code.
+The **Placeholder Sass mixin** helps you style the **placeholder text** in an `<input>` or `<textarea>` element.
 
 </Member>
 
@@ -40,6 +40,18 @@ The **Placeholder Sass mixin** helps you style the **placeholder text** in an `<
 <textarea placeholder="Including this one" rows="2"></textarea>
 ```
 </Example>
+
+<Hint kind="info">
+
+**Changed in Gerillass 4.0.0.** The mixin used to write five rules, the standard one and four prefixed ancestors. Measured in Chrome 152, Firefox 156 and Safari 26.6.2, by giving each selector a colour of its own and asking what actually painted: `:-ms-input-placeholder` and the single-colon `:-moz-placeholder` parse in none of the three, and `::-webkit-input-placeholder` and `::-moz-placeholder` are each their own engine's alias for `::placeholder`, which was written anyway. So one rule is left, and every browser since Chrome 57, Firefox 51 and Safari 10.1, all from 2017, understands it.
+
+</Hint>
+
+<Hint kind="warning">
+
+**A placeholder can come out paler than the colour you set.** Firefox gives it an opacity of its own, so `opacity: 1` beside the colour is the usual answer.
+
+</Hint>
 
 ## Related Links
 

@@ -42,6 +42,16 @@ input{
 ```
 </Example>
 
+<Hint kind="warning">
+
+**A floating label needs `placeholder=" "`.** `:placeholder-shown` only matches a field that has a placeholder, and in that pattern the field usually shows no placeholder text of its own. A single space keeps the pseudo-class working while showing nothing, which is what makes the label know the field is empty.
+
+```html
+<input type="text" placeholder=" " />
+```
+
+</Hint>
+
 ## Related Links
 
 - [Placeholder](/docs/placeholder)

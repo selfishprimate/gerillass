@@ -250,6 +250,15 @@ a dropped declaration rather than an error.
 
 - An+B with an offset cannot be passed as a number: Sass does the arithmetic, so `only(2n+1)` becomes `3n` and selects every third element, not the odd ones. Use `odd` or `even`, or a coefficient alone such as `3n`.
 
+**`placeholder-shown`**
+
+- `:placeholder-shown` only matches a field that **has** a placeholder. For the floating label pattern the field usually shows no placeholder text of its own, and the way round that is `placeholder=" "`, a single space, which keeps the pseudo-class working while showing nothing.
+
+**`placeholder`**
+
+- Until 4.0.0 this wrote five rules, the standard one and four prefixed ancestors. Measured in Chrome 152, Firefox 156 and Safari 26.6.2 by giving each selector its own colour and asking what painted: `:-ms-input-placeholder` and the single-colon `:-moz-placeholder` parse in none of the three, and `::-webkit-input-placeholder` and `::-moz-placeholder` are their own engine's alias for `::placeholder`, which was written anyway. One rule is left, and it is understood by everything since Chrome 57, Firefox 51 and Safari 10.1, all 2017.
+- Firefox used to give the placeholder its own opacity, so a colour can come out paler than you set it. `opacity: 1` beside the colour is the usual answer.
+
 **`remove`**
 
 - With one argument the element is hidden at exactly that width, `(width: 768px)`, which is a single pixel, and the mixin prints a warning. Write `only` for that width, or `min`, `max` or a range for anything wider.
@@ -375,8 +384,8 @@ a dropped declaration rather than an error.
 | `loadify($params...)` | Fades elements in on page load. Call `loadify(init)` once at the root to write the keyframes, then the mixin on each element. |
 | `motion-safe` | Wraps its content in @media (prefers-reduced-motion: no-preference), so motion is opt-in: a user who asked their system for less motion gets none of it. |
 | `only($params...)` | Selects only the siblings named. |
-| `placeholder-shown` | Styles an input while its placeholder is visible. |
-| `placeholder` | Styles the placeholder text of an input across vendor prefixes. |
+| `placeholder-shown` | Styles an input while its placeholder is visible, which is how a floating label knows the field is empty. |
+| `placeholder` | Styles the placeholder text of an input or a textarea. |
 | `position($position: absolute, $offsets: 0, $logical: false)` | Sets position and offsets in one call, using shorthand order. |
 | `remove($params...)` | Hides an element outright, or within a media query: from a breakpoint up with min, up to it with max, or between two breakpoints. One breakpoint on its own hides the element at exactly that width, a single pixel, and prints a warning: pass only for that. |
 | `reset-css` | Meyer reset. Must be called at the root of the stylesheet. |

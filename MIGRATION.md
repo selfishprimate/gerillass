@@ -5,7 +5,8 @@ it covers `hide`, where breakpoint ranges end, `columnizer`, `before` and
 `after`, `font-face`, `all-text-inputs`, `aspect-ratio`, `counter`, `text-shadow`, `text-stroke`, the background patterns,
 `escape-to-parent`, `sprite`, four of the utility functions, the device maps,
 `responsive-image`, `border-box`, `antialias`, `center`, `all-buttons`,
-`loadify`, `stretched-link`, `text-gradient` and `text-image`. The 3.0.0 and
+`loadify`, `stretched-link`, `text-gradient`, `text-image` and `placeholder`.
+The 3.0.0 and
 2.0.0 guides follow below, unchanged.
 
 Every claim here was checked by compiling the old call against 3.0.0's source
@@ -50,6 +51,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `stretched-link` drops an IE10 line and writes `inset: 0` | not breaking |
 | `text-gradient` and `text-image` keep their text in forced colours | not breaking |
 | `text-image` takes a `$fallback` colour | not breaking |
+| `placeholder` writes one rule instead of five | breaking only before 2017 |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -1222,6 +1224,41 @@ Measured in Chrome 152 with a path that 404s: without the fallback the box was
 pixel for pixel one whose text is transparent and which has no background at
 all, and with it the letters rendered in that colour. Nothing changes for a
 call that passes no fallback, beyond the forced-colours block.
+
+---
+
+## Change: `placeholder` writes one rule
+
+It wrote five: the standard rule and four prefixed ancestors.
+
+```css
+.field::-webkit-input-placeholder { color: gray; }
+.field::-moz-placeholder { color: gray; }
+.field:-ms-input-placeholder { color: gray; }
+.field:-moz-placeholder { color: gray; }
+.field::placeholder { color: gray; }
+```
+
+Measured in Chrome 152, Firefox 156 and Safari 26.6.2, by giving each selector
+a colour of its own and asking what painted the placeholder:
+
+| Selector | Chrome | Firefox | Safari |
+|---|---|---|---|
+| `::placeholder` | paints | paints | parses |
+| `::-webkit-input-placeholder` | paints, as an alias | not parsed | parses |
+| `::-moz-placeholder` | not parsed | paints, as an alias | not parsed |
+| `:-ms-input-placeholder` | not parsed | not parsed | not parsed |
+| `:-moz-placeholder` | not parsed | not parsed | not parsed |
+
+Two of the four are dead everywhere, and the other two are their own engine's
+alias for the rule that is written anyway. So the mixin writes
+`&::placeholder` and nothing else. A browser that understands a prefixed alias
+but not `::placeholder` is older than Chrome 57, Firefox 51 and Safari 10.1,
+all from 2017.
+
+Safari does not report pseudo-element styles through `getComputedStyle`, so
+what was checked there is that the selector parses and that the rule changes
+what is painted, which it does.
 
 ---
 

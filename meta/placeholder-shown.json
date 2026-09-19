@@ -1,9 +1,13 @@
 {
   "name": "placeholder-shown",
-  "summary": "Styles an input while its placeholder is visible.",
+  "summary": "Styles an input while its placeholder is visible, which is how a floating label knows the field is empty.",
   "arguments": [],
   "examples": [
-    ".field { @include placeholder-shown { border-color: gray; } }"
+    ".field { @include placeholder-shown { border-color: gray; } }",
+    ".field { @include placeholder-shown { & + label { transform: none; } } }"
   ],
-  "rejects": []
+  "rejects": [],
+  "caveats": [
+    "`:placeholder-shown` only matches a field that **has** a placeholder. For the floating label pattern the field usually shows no placeholder text of its own, and the way round that is `placeholder=\" \"`, a single space, which keeps the pseudo-class working while showing nothing."
+  ]
 }

@@ -1687,20 +1687,21 @@ exports[`Manifest examples pixelify: .a { width: pixelify(pixelify(1in)); } 1`] 
 `;
 
 exports[`Manifest examples placeholder: .field { @include placeholder { color: gray; } } 1`] = `
-".field::-webkit-input-placeholder {
+".field::placeholder {
   color: gray;
-}
-.field::-moz-placeholder {
+}"
+`;
+
+exports[`Manifest examples placeholder: @include placeholder { color: gray; opacity: 1; } 1`] = `
+"&::placeholder {
   color: gray;
-}
-.field:-ms-input-placeholder {
-  color: gray;
-}
-.field:-moz-placeholder {
-  color: gray;
-}
-.field::placeholder {
-  color: gray;
+  opacity: 1;
+}"
+`;
+
+exports[`Manifest examples placeholder-shown: .field { @include placeholder-shown { & + label { transform: none; } } 1`] = `
+".field:placeholder-shown + label {
+  transform: none;
 }"
 `;
 
