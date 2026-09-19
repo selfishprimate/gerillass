@@ -4,8 +4,8 @@ Written while 4.0.0 is being prepared, and added to as its changes land. So far
 it covers `hide`, where breakpoint ranges end, `columnizer`, `before` and
 `after`, `font-face`, `all-text-inputs`, `aspect-ratio`, `counter`, `text-shadow`, `text-stroke`, the background patterns,
 `escape-to-parent`, `sprite`, four of the utility functions, the device maps,
-`responsive-image`, `border-box`, `antialias`, `center`, `all-buttons` and
-`loadify`. The 3.0.0 and
+`responsive-image`, `border-box`, `antialias`, `center`, `all-buttons`,
+`loadify` and `stretched-link`. The 3.0.0 and
 2.0.0 guides follow below, unchanged.
 
 Every claim here was checked by compiling the old call against 3.0.0's source
@@ -47,6 +47,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `center` offsets with `translate` rather than `transform` | breaking, silent, and only if you touched its transform |
 | `all-buttons` selects the input types with `input`, and adds the image button | breaking, silent |
 | `loadify` leaves the element visible and only fades it in | fixes a disappearing-content defect; silent |
+| `stretched-link` drops an IE10 line and writes `inset: 0` | not breaking |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -1158,6 +1159,30 @@ that leaves it out builds with no fade instead of failing.
 `opacity: 1` to undo the mixin by hand is no longer needed, and an
 `animation-delay` or `animation-duration` written beside the include is now
 overridden by the shorthand, so move those into the mixin's own arguments.
+
+---
+
+## Change: `stretched-link` loses an IE10 line
+
+The overlay carried `background-color: rgba(0, 0, 0, 0)`, which is IE10's: a
+pseudo-element with no background did not take the click there. It also wrote
+the four offsets separately. Neither is needed:
+
+```css
+/* 3.x */
+.card a::before { content: ""; position: absolute; pointer-events: auto; background-color: rgba(0, 0, 0, 0); top: 0; right: 0; bottom: 0; left: 0; z-index: 1; }
+
+/* 4.0.0 */
+.card a::before { content: ""; position: absolute; pointer-events: auto; inset: 0; z-index: 1; }
+```
+
+Measured in Chrome 152, Firefox 156 and Safari 26.6.2 by asking what a click in
+the far corner of the card would hit: the link, with the old CSS and with the
+new, in all three, and the computed offsets are the same four zeros.
+
+`pointer-events: auto` stays, because it is the line that does something: with
+an ancestor at `pointer-events: none`, the corner answers the link with it and
+the body without it.
 
 ---
 

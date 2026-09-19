@@ -1766,10 +1766,17 @@
       ],
       "file": "scss/library/_stretched-link.scss",
       "signature": "stretched-link($value: \"before\")",
-      "summary": "Expands a link to cover its positioned parent, so the whole card is clickable.",
+      "summary": "Spreads a link over its positioned parent, so the whole card is clickable.",
+      "caveats": [
+        "The parent has to be positioned, and the mixin goes on one child of it. A second stretched link in the same parent covers the first.",
+        "Until 4.0.0 the overlay also carried `background-color: rgba(0, 0, 0, 0)`, which is IE10's, where a transparent pseudo-element did not take the click. Measured in Chrome 152, Firefox 156 and Safari 26.6.2 by asking what a click in the far corner of the card would hit: the answer was the link with the line and without it, in all three.",
+        "`pointer-events: auto` stays and is not decoration: with an ancestor at `pointer-events: none`, the corner answered the link with it and the body without it, in all three browsers.",
+        "The overlay sits above the card's text, so the text inside the card cannot be selected with the mouse. That is the trade every version of this technique makes."
+      ],
       "examples": [
         ".card a { @include stretched-link; }",
-        ".card a { @include stretched-link(\"after\"); }"
+        ".card a { @include stretched-link(\"after\"); }",
+        ".card label { @include stretched-link; }"
       ],
       "rejects": [
         ".card a { @include stretched-link(middle); }"

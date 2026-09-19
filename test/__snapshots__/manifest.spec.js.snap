@@ -671,11 +671,7 @@ exports[`Manifest examples brand-logo: .logo { @include brand-logo(120px, 40px, 
   content: "";
   position: absolute;
   pointer-events: auto;
-  background-color: rgba(0, 0, 0, 0);
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  inset: 0;
   z-index: 1;
 }"
 `;
@@ -702,11 +698,7 @@ exports[`Manifest examples brand-logo: .logo { @include brand-logo(120px, 40px, 
   content: "";
   position: absolute;
   pointer-events: auto;
-  background-color: rgba(0, 0, 0, 0);
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  inset: 0;
   z-index: 1;
 }"
 `;
@@ -2106,11 +2098,7 @@ exports[`Manifest examples stretched-link: .card a { @include stretched-link("af
   content: "";
   position: absolute;
   pointer-events: auto;
-  background-color: rgba(0, 0, 0, 0);
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  inset: 0;
   z-index: 1;
 }"
 `;
@@ -2120,11 +2108,17 @@ exports[`Manifest examples stretched-link: .card a { @include stretched-link; } 
   content: "";
   position: absolute;
   pointer-events: auto;
-  background-color: rgba(0, 0, 0, 0);
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  inset: 0;
+  z-index: 1;
+}"
+`;
+
+exports[`Manifest examples stretched-link: .card label { @include stretched-link; } 1`] = `
+".card label::before {
+  content: "";
+  position: absolute;
+  pointer-events: auto;
+  inset: 0;
   z-index: 1;
 }"
 `;

@@ -101,8 +101,13 @@ refused. `$step` was added for how far apart a filled shadow's layers sit, a
   branch**, and the mixin is not dead: in Chrome 152 the same line of text
   rendered to different pixels with and without it, compared as clipped PNGs.
   Deprecating it is still open.
-- **`stretched-link`** carries `background-color: rgba(0, 0, 0, 0)`, an IE
-  click-target hack, and physical offsets rather than `inset`. [source]
+- ~~**`stretched-link`** carries `background-color: rgba(0, 0, 0, 0)`~~ **done
+  for 4.0.0 on the `stretched-link` branch**: the colour is gone and the four
+  offsets are `inset: 0`. Measured in Chrome 152, Firefox 156 and Safari
+  26.6.2, a click in the far corner of the card hits the link with the old CSS
+  and with the new. `pointer-events: auto` stays: with an ancestor at
+  `pointer-events: none` the corner answers the link with it and the body
+  without it.
 - ~~**`loadify`** starts its elements at `visibility: hidden`~~ **done for
   4.0.0 on the `loadify-visible` branch**: the keyframes start at `opacity: 0`
   with `backwards`, the element carries no hidden state, and the placeholder is

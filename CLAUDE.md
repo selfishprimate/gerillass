@@ -907,7 +907,9 @@ Two pieces of work are open:
   branched from `border-box-specificity`; and `all-buttons` selecting the input
   types with `input`, on `all-buttons`, branched from `center-translate`; and
   `loadify` leaving its elements visible and dropping the `%loadify`
-  placeholder, on `loadify-visible`, branched from `all-buttons`.
+  placeholder, on `loadify-visible`, branched from `all-buttons`; and
+  `stretched-link` losing its IE10 line, on `stretched-link`, branched from
+  `loadify-visible`.
   The last three come from `todos/library-review.md`, and the last three
   patterns, `glow`, `vignette` and `mesh`, from the survey in
   `todos/saas-hero-backgrounds.md`. Each has a `MIGRATION.md` section.

@@ -2,17 +2,29 @@
 
 @use "sass:list";
 
+// Spreads a link over its positioned parent, so the whole card is clickable
+// while the markup keeps one link with its own text.
+//
+// Two things changed in 4.0.0, both measured in Chrome 152, Firefox 156 and
+// Safari 26.6.2 by asking `elementFromPoint` what a click in the far corner
+// of the card would hit:
+//
+// - `background-color: rgba(0, 0, 0, 0)` is gone. It is IE10's, where a
+//   pseudo-element with no background did not take the click. Without it the
+//   corner still answered "the link" in all three;
+// - the four offsets are one `inset: 0`, which computes to the same four
+//   values.
+//
+// `pointer-events: auto` stays, and it is not decoration: with an ancestor at
+// `pointer-events: none` the corner answered "the link" with it and "the body"
+// without it, again in all three.
 @mixin stretched-link($value: "before") {
   @if list.index("before" "after", $value) {
     &#{"::" + $value} {
       content: "";
       position: absolute;
       pointer-events: auto;
-      background-color: rgba(0, 0, 0, 0);
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
+      inset: 0;
       z-index: 1;
     }
   } @else {

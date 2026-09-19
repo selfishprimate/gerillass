@@ -279,6 +279,13 @@ a dropped declaration rather than an error.
 - A `var()` with one argument is read as the position, since that is what a single `var()` usually is. For an image in a custom property, pass it with a position: `sprite(var(--sprite), 0 0)`.
 - A quoted position is unquoted rather than refused: `background-position: "center"` is dropped in Chrome 152, Firefox 156 and Safari 26.6.2, all three falling back to `0% 0%`.
 
+**`stretched-link`**
+
+- The parent has to be positioned, and the mixin goes on one child of it. A second stretched link in the same parent covers the first.
+- Until 4.0.0 the overlay also carried `background-color: rgba(0, 0, 0, 0)`, which is IE10's, where a transparent pseudo-element did not take the click. Measured in Chrome 152, Firefox 156 and Safari 26.6.2 by asking what a click in the far corner of the card would hit: the answer was the link with the line and without it, in all three.
+- `pointer-events: auto` stays and is not decoration: with an ancestor at `pointer-events: none`, the corner answered the link with it and the body without it, in all three browsers.
+- The overlay sits above the card's text, so the text inside the card cannot be selected with the mouse. That is the trade every version of this technique makes.
+
 **`tablet`**
 
 - `device-width` and `device-height` read the screen, not the viewport, so a tablet running the page in a split view still matches: the window is narrower, the screen is not. A rule that has to follow the window belongs in `breakpoint` or `container-query`.
@@ -372,7 +379,7 @@ a dropped declaration rather than an error.
 | `sizer($width, $height: $width)` | Sets width and height together; one argument makes a square. |
 | `smartphone($device, $orientation: null)` | Media query for one phone's screen, by name, from $map-for-smartphones. |
 | `sprite($params...)` | Sets up an element as a sprite tile: an image, a background position, or both. |
-| `stretched-link($value: "before")` | Expands a link to cover its positioned parent, so the whole card is clickable. |
+| `stretched-link($value: "before")` | Spreads a link over its positioned parent, so the whole card is clickable. |
 | `tablet($device, $orientation: null)` | Media query for one tablet's screen, by name, from $map-for-tablets. |
 | `text-gradient($colors, $type: linear, $direction: null, $shape: null, $position: null, $from: null, $in: null, $repeating: false)` | Fills the text with a gradient through background-clip: text. It takes the gradient mixin's arguments, colours first: a linear, radial or conic gradient, plain or repeating, with an optional colour space. |
 | `text-image($image: null)` | Fills the text with an image via background-clip. |
