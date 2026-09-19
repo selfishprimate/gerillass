@@ -12,10 +12,15 @@
   ],
   "examples": [
     "@include border-box;",
-    ".a { @include border-box(\"only\"); }"
+    ".a { @include border-box(\"only\"); }",
+    ".a { @include border-box; }"
   ],
   "rejects": [
     "@include border-box(only);",
     ".a { @include border-box(bogus); }"
+  ],
+  "caveats": [
+    "Called inside a selector with no argument, the descendants are written inside `:where()` since 4.0.0, so a rule the page has for one of them wins. Until then the rule was `.a *`, which is (0,1,0) and overrode a component's own `input` or `.inner` rule: measured in Chrome 152, Firefox 156 and Safari 26.6.2, a `.page-rule { box-sizing: content-box }` written before the include lost in all three and now wins in all three.",
+    "At the root of a stylesheet the rule is `*, *::before, *::after`, which has no specificity of its own and is unchanged."
   ]
 }

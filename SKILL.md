@@ -138,6 +138,12 @@ a dropped declaration rather than an error.
 - Matches `:where(input):not([type=button], [type=checkbox], [type=color], [type=file], [type=hidden], [type=image], [type=radio], [type=range], [type=reset], [type=submit])` and `textarea`, so an input with no type or a type the browser does not know, which it draws as a text field, is included. Until 4.0.0 it listed text types instead, which styled `[type=color]` and stretched its swatch, and missed unknown types.
 - `select` is not matched. Style it in a rule of its own beside the mixin.
 
+**`antialias`**
+
+- The summary said this turned subpixel antialiasing **on** until 4.0.0, which is backwards: `-webkit-font-smoothing: antialiased` turns it off and draws greyscale, and `-moz-osx-font-smoothing: grayscale` is the same thing for Firefox.
+- Both properties are non-standard and macOS only, and neither does anything on Windows or Linux. They still change what is drawn: in Chrome 152 the same line of text rendered to different pixels with and without the mixin, measured by clipping the two to PNGs and comparing them.
+- Called inside a selector with no argument, the descendants are written inside `:where()` since 4.0.0, so a rule the page has for one of them wins. The old `.a *` was (0,1,0) and overrode it.
+
 **`aspect-ratio`**
 
 - An element with a `height` attribute, such as `<img width="1600" height="900">` or an embed code's `<iframe width="560" height="315">`, keeps the ratio: the mixin writes `height: auto` inside `:where()`, which overrides the attribute but loses to any `height` a stylesheet sets, before or after the include. Until 4.0.0 the attribute height won and the ratio was ignored.
@@ -160,6 +166,11 @@ a dropped declaration rather than an error.
 - With no argument the mixin also writes `content: ""` in a rule of its own, `:where(.a)::before`, so a block of styles alone draws the pseudo-element. A `content` written in the block, or by another rule for the element with a class or an element selector, still wins. Until 4.0.0 nothing was written and the pseudo-element was not drawn.
 - If `content` comes only from another state, such as `.a:hover::before` or a media query, the pseudo-element is now drawn empty the rest of the time. Write `content: none` in the block.
 - On a `q` element the default replaces the browser's quotation marks; pass `open-quote` or `close-quote` in the block to keep them. A bare `::before { content: ... }` rule written before the include loses to the default, since both have the same specificity.
+
+**`border-box`**
+
+- Called inside a selector with no argument, the descendants are written inside `:where()` since 4.0.0, so a rule the page has for one of them wins. Until then the rule was `.a *`, which is (0,1,0) and overrode a component's own `input` or `.inner` rule: measured in Chrome 152, Firefox 156 and Safari 26.6.2, a `.page-rule { box-sizing: content-box }` written before the include lost in all three and now wins in all three.
+- At the root of a stylesheet the rule is `*, *::before, *::after`, which has no specificity of its own and is unchanged.
 
 **`breakpoint`**
 
@@ -306,7 +317,7 @@ a dropped declaration rather than an error.
 | `after($content: null)` | Styles the ::after pseudo-element. A `data-` argument becomes an attr() content value. |
 | `all-buttons($pseudo: null)` | Targets every button-like element at once, optionally in one pseudo-class state. |
 | `all-text-inputs($pseudo: null)` | Targets every form control a browser draws as a text field, textarea included, optionally in one pseudo-class state. |
-| `antialias($value: null)` | Turns on subpixel-antialiased text smoothing. |
+| `antialias($value: null)` | Draws text with greyscale antialiasing instead of subpixel, which makes it look thinner. |
 | `aspect-ratio($ratio: null, $fit: cover)` | Holds an element to a ratio and adds what CSS aspect-ratio alone leaves out: object-fit so an image is cropped rather than stretched, and border: 0 so an iframe does not overflow its container by 4px. Apply it to the element itself, not to a wrapper. |
 | `background-image($image-url: null, $filter-color: null, $filter-direction: null)` | Background image with an optional colour or gradient filter laid over it. |
 | `background-pattern($kind: dots, $params...)` | Twenty background patterns drawn with gradients alone: seventeen that tile, from dots and stripes to houndstooth and harlequin, and glow, vignette and mesh, which light the whole box. |

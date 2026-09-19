@@ -1,6 +1,6 @@
 {
   "name": "antialias",
-  "summary": "Turns on subpixel-antialiased text smoothing.",
+  "summary": "Draws text with greyscale antialiasing instead of subpixel, which makes it look thinner.",
   "arguments": [
     {
       "name": "$value",
@@ -12,10 +12,16 @@
   ],
   "examples": [
     "@include antialias;",
-    ".a { @include antialias(\"only\"); }"
+    ".a { @include antialias(\"only\"); }",
+    ".a { @include antialias; }"
   ],
   "rejects": [
     "@include antialias(only);",
     ".a { @include antialias(bogus); }"
+  ],
+  "caveats": [
+    "The summary said this turned subpixel antialiasing **on** until 4.0.0, which is backwards: `-webkit-font-smoothing: antialiased` turns it off and draws greyscale, and `-moz-osx-font-smoothing: grayscale` is the same thing for Firefox.",
+    "Both properties are non-standard and macOS only, and neither does anything on Windows or Linux. They still change what is drawn: in Chrome 152 the same line of text rendered to different pixels with and without the mixin, measured by clipping the two to PNGs and comparing them.",
+    "Called inside a selector with no argument, the descendants are written inside `:where()` since 4.0.0, so a rule the page has for one of them wins. The old `.a *` was (0,1,0) and overrode it."
   ]
 }

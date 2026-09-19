@@ -16,12 +16,21 @@
       -moz-osx-font-smoothing: grayscale;
     }
   } @else if & and $value == null {
-    &,
-    &::before,
-    &::after,
-    *,
-    *::before,
-    *::after {
+    // The element itself keeps the specificity of the selector it was called
+    // in, since that is what the call asked for. Its descendants go through
+    // :where(), so a rule the page writes for one of them wins: `.card *` is
+    // (0,1,0) and beat a component's own `input` or `.inner` rule, which is
+    // the trap `columnizer` closed the same way for 4.0.0. Measured in Chrome
+    // 152, Firefox 156 and Safari 26.6.2.
+    & {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+    }
+    :where(&)::before,
+    :where(&)::after,
+    :where(&) *,
+    :where(&) *::before,
+    :where(&) *::after {
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }

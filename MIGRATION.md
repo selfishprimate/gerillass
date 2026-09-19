@@ -3,8 +3,8 @@
 Written while 4.0.0 is being prepared, and added to as its changes land. So far
 it covers `hide`, where breakpoint ranges end, `columnizer`, `before` and
 `after`, `font-face`, `all-text-inputs`, `aspect-ratio`, `counter`, `text-shadow`, `text-stroke`, the background patterns,
-`escape-to-parent`, `sprite`, four of the utility functions, the device maps and
-`responsive-image`. The 3.0.0 and
+`escape-to-parent`, `sprite`, four of the utility functions, the device maps,
+`responsive-image`, `border-box` and `antialias`. The 3.0.0 and
 2.0.0 guides follow below, unchanged.
 
 Every claim here was checked by compiling the old call against 3.0.0's source
@@ -42,6 +42,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `isNumber` and `shorthandProperty` raise where they used to crash | breaking, loud |
 | the phone and tablet maps hold two lengths per device, not a nested map | breaking, loud, and only for a map you replaced |
 | `responsive-image` fits an image without upscaling it | breaking, silent |
+| `border-box` and `antialias` write their descendants inside `:where()` | fixes a cascade defect; silent |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -953,6 +954,40 @@ img {
 
 `reset-figure` includes `responsive-image` for the image inside the figure, so
 it follows.
+
+---
+
+## Change: `border-box` and `antialias` stop overriding your own rules
+
+Called inside a selector with no argument, both wrote the element, its
+pseudo-elements and `*` under it:
+
+```css
+.card, .card::before, .card::after,
+.card *, .card *::before, .card *::after { box-sizing: border-box; }
+```
+
+`.card *` is (0,1,0), so it beat a component's own rule for something inside
+it. Measured in Chrome 152, Firefox 156 and Safari 26.6.2, with
+`.page-rule { box-sizing: content-box }` written before the include: the
+element kept `border-box` in all three. The descendants now go through
+`:where()`, which has no specificity, so the same page rule wins in all three
+and an element with no rule of its own still gets `border-box`.
+
+```css
+.card { box-sizing: border-box; }
+:where(.card)::before, :where(.card)::after,
+:where(.card) *, :where(.card) *::before, :where(.card) *::after { box-sizing: border-box; }
+```
+
+This is the shape `columnizer` took for the same reason. At the root of a
+stylesheet, `@include border-box;` still writes `*, *::before, *::after`,
+which has no specificity of its own, and `border-box("only")` is unchanged.
+
+**`antialias`'s description was backwards.** It said the mixin turned subpixel
+antialiasing on; `-webkit-font-smoothing: antialiased` turns it off and draws
+greyscale instead, which is what makes text look thinner. The CSS is the same
+as before, and the manifest and the page now say what it does.
 
 ---
 

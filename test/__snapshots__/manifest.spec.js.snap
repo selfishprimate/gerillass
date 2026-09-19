@@ -152,6 +152,17 @@ exports[`Manifest examples antialias: .a { @include antialias("only"); } 1`] = `
 }"
 `;
 
+exports[`Manifest examples antialias: .a { @include antialias; } 1`] = `
+".a {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+:where(.a)::before, :where(.a)::after, :where(.a) *, :where(.a) *::before, :where(.a) *::after {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}"
+`;
+
 exports[`Manifest examples antialias: @include antialias; 1`] = `
 "*,
 *::before,
@@ -569,6 +580,15 @@ exports[`Manifest examples before: .badge { @include before { display: block; wi
 
 exports[`Manifest examples border-box: .a { @include border-box("only"); } 1`] = `
 ".a, .a::before, .a::after {
+  box-sizing: border-box;
+}"
+`;
+
+exports[`Manifest examples border-box: .a { @include border-box; } 1`] = `
+".a {
+  box-sizing: border-box;
+}
+:where(.a)::before, :where(.a)::after, :where(.a) *, :where(.a) *::before, :where(.a) *::after {
   box-sizing: border-box;
 }"
 `;

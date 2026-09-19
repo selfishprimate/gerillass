@@ -18,7 +18,7 @@ Arguments are validated and refused with a message naming what is accepted, so a
 - [after($content: null)](https://docs.gerillass.com/docs/after/): Styles the ::after pseudo-element.
 - [all-buttons($pseudo: null)](https://docs.gerillass.com/docs/all-buttons/): Targets every button-like element at once, optionally in one pseudo-class state.
 - [all-text-inputs($pseudo: null)](https://docs.gerillass.com/docs/all-text-inputs/): Targets every form control a browser draws as a text field, textarea included, optionally in one pseudo-class state.
-- [antialias($value: null)](https://docs.gerillass.com/docs/antialias/): Turns on subpixel-antialiased text smoothing.
+- [antialias($value: null)](https://docs.gerillass.com/docs/antialias/): Draws text with greyscale antialiasing instead of subpixel, which makes it look thinner.
 - [aspect-ratio($ratio: null, $fit: cover)](https://docs.gerillass.com/docs/aspect-ratio/): Holds an element to a ratio and adds what CSS aspect-ratio alone leaves out: object-fit so an image is cropped rather than stretched, and border: 0 so an iframe does not overflow its container by 4px.
 - [background-image($image-url: null, $filter-color: null, $filter-direction: null)](https://docs.gerillass.com/docs/background-image/): Background image with an optional colour or gradient filter laid over it.
 - [background-pattern($kind: dots, $params...)](https://docs.gerillass.com/docs/background-pattern/): Twenty background patterns drawn with gradients alone: seventeen that tile, from dots and stripes to houndstooth and harlequin, and glow, vignette and mesh, which light the whole box.

@@ -44,6 +44,12 @@ The **Border Box** Sass mixin sets the [box-sizing CSS property](https://develop
 ```
 </Example>
 
+<Hint kind="info">
+
+**Changed in Gerillass 4.0.0.** Called inside a selector with no argument, the descendants are now written inside `:where()`, so a `box-sizing` your own stylesheet sets for one of them wins. Until then the rule was `.a *`, which is (0,1,0) and overrode a component's own `input` or `.inner` rule: measured in Chrome 152, Firefox 156 and Safari 26.6.2, a rule written before the include lost in all three and now wins in all three. At the root of a stylesheet nothing changes: `*, *::before, *::after` has no specificity of its own.
+
+</Hint>
+
 ## Related Links
 * [CSS Box Sizing](https://www.w3schools.com/css/css3_box-sizing.asp)
 * [Box Sizing](https://css-tricks.com/box-sizing/)

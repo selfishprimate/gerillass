@@ -1,7 +1,7 @@
 ---
 title: "Antialias"
 page_title: "Antialias Sass Mixin"
-page_description: "The Antialias Sass mixin provides smooth font rendering. It smooths fonts at the pixel level and prevents subpixel rendering."
+page_description: "The Antialias Sass mixin draws text with greyscale antialiasing instead of subpixel antialiasing on macOS, which makes it look thinner."
 page_keywords: "Gerillass antialias, Antialias Sass mixin, Sass antialias, SCSS antialias, CSS -webkit-font-smoothing, CSS font smoothing"
 page_image: "gerillass-antialias.jpg"
 ---
@@ -10,7 +10,7 @@ page_image: "gerillass-antialias.jpg"
 
 <Member name="antialias">
 
-The **Antialias** Sass mixin provides smooth font rendering. It smooths fonts at the pixel level and prevents subpixel rendering.
+The **Antialias** Sass mixin draws text with greyscale antialiasing instead of subpixel antialiasing, which makes it look thinner. It writes `-webkit-font-smoothing: antialiased` for Chrome and Safari and `-moz-osx-font-smoothing: grayscale` for Firefox.
 
 </Member>
 
@@ -43,6 +43,18 @@ The **Antialias** Sass mixin provides smooth font rendering. It smooths fonts at
 @include antialias;
 ```
 </Example>
+
+<Hint kind="warning">
+
+**macOS only, and non-standard.** Neither property does anything on Windows or Linux. They do still change what is drawn: in Chrome 152 the same line of text rendered to different pixels with and without the mixin, measured by clipping both to PNGs and comparing them.
+
+</Hint>
+
+<Hint kind="info">
+
+**Changed in Gerillass 4.0.0.** Called inside a selector with no argument, the descendants are now written inside `:where()`, so a rule your own stylesheet has for one of them wins. Until then the rule was `.a *`, which is (0,1,0) and overrode it: measured in Chrome 152, Firefox 156 and Safari 26.6.2, a `.page-rule` written before the include lost in all three and now wins in all three. Also, this page used to say the mixin turned subpixel rendering on. It turns it off.
+
+</Hint>
 
 ## Related Links
 * [Stop Fixing Font Smoothing](https://usabilitypost.com/2012/11/05/stop-fixing-font-smoothing/)  

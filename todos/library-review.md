@@ -97,10 +97,10 @@ refused. `$step` was added for how far apart a filled shadow's layers sit, a
   one declaration, though the two differ in margin collapsing. [source]
   [measure] Proposal: deprecate with a `@warn`.
 - **`antialias`** sets two non-standard properties that only ever worked on
-  macOS, and macOS stopped subpixel-smoothing in 10.14. Its `meta` summary is
-  also wrong: it says the mixin turns subpixel antialiasing on, and
-  `antialiased` turns it off. [source] [measure] Proposal: fix the summary now,
-  then deprecate.
+  macOS. **The summary is fixed for 4.0.0 on the `border-box-specificity`
+  branch**, and the mixin is not dead: in Chrome 152 the same line of text
+  rendered to different pixels with and without it, compared as clipped PNGs.
+  Deprecating it is still open.
 - **`stretched-link`** carries `background-color: rgba(0, 0, 0, 0)`, an IE
   click-target hack, and physical offsets rather than `inset`. [source]
 - **`loadify`** starts its elements at `visibility: hidden` and needs
@@ -114,9 +114,12 @@ refused. `$step` was added for how far apart a filled shadow's layers sit, a
   100x50, a 1200x600 one still fits at 600x300, an image carrying `width` and
   `height` attributes was drawn 600x600 and is now 600x300, and a `height` a
   stylesheet sets still wins. `reset-figure` includes it and follows.
-- **`border-box`** and **`antialias`** write `.a *` at (0,1,0) when nested,
-  which overrides a page's own rules. `columnizer` fixed the same trap with
-  `:where()` for 4.0.0. [source] [measure]
+- ~~**`border-box`** and **`antialias`** write `.a *` at (0,1,0)~~ **done for
+  4.0.0 on the `border-box-specificity` branch**: the descendants go through
+  `:where()`, as `columnizer` does. Measured in Chrome 152, Firefox 156 and
+  Safari 26.6.2 with a page rule written before the include: it lost in all
+  three before and wins in all three now, while an element with no rule of its
+  own still gets the reset.
 - **`center`** writes `transform: translateX(-50%) translateY(-50%)`, wiping out
   any transform the user sets. The individual `translate` property composes
   instead. [source] [measure]

@@ -154,10 +154,16 @@
       ],
       "file": "scss/library/_antialias.scss",
       "signature": "antialias($value: null)",
-      "summary": "Turns on subpixel-antialiased text smoothing.",
+      "summary": "Draws text with greyscale antialiasing instead of subpixel, which makes it look thinner.",
+      "caveats": [
+        "The summary said this turned subpixel antialiasing **on** until 4.0.0, which is backwards: `-webkit-font-smoothing: antialiased` turns it off and draws greyscale, and `-moz-osx-font-smoothing: grayscale` is the same thing for Firefox.",
+        "Both properties are non-standard and macOS only, and neither does anything on Windows or Linux. They still change what is drawn: in Chrome 152 the same line of text rendered to different pixels with and without the mixin, measured by clipping the two to PNGs and comparing them.",
+        "Called inside a selector with no argument, the descendants are written inside `:where()` since 4.0.0, so a rule the page has for one of them wins. The old `.a *` was (0,1,0) and overrode it."
+      ],
       "examples": [
         "@include antialias;",
-        ".a { @include antialias(\"only\"); }"
+        ".a { @include antialias(\"only\"); }",
+        ".a { @include antialias; }"
       ],
       "rejects": [
         "@include antialias(only);",
@@ -407,9 +413,14 @@
       "file": "scss/library/_border-box.scss",
       "signature": "border-box($value: null)",
       "summary": "Applies box-sizing: border-box.",
+      "caveats": [
+        "Called inside a selector with no argument, the descendants are written inside `:where()` since 4.0.0, so a rule the page has for one of them wins. Until then the rule was `.a *`, which is (0,1,0) and overrode a component's own `input` or `.inner` rule: measured in Chrome 152, Firefox 156 and Safari 26.6.2, a `.page-rule { box-sizing: content-box }` written before the include lost in all three and now wins in all three.",
+        "At the root of a stylesheet the rule is `*, *::before, *::after`, which has no specificity of its own and is unchanged."
+      ],
       "examples": [
         "@include border-box;",
-        ".a { @include border-box(\"only\"); }"
+        ".a { @include border-box(\"only\"); }",
+        ".a { @include border-box; }"
       ],
       "rejects": [
         "@include border-box(only);",
