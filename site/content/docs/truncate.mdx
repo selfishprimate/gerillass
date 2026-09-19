@@ -59,7 +59,7 @@ So at one line the two look the same and differ in what the element becomes, whi
 ```
 </Example>
 
-<Example caption="Three lines, for a summary under a card's title. The ellipsis lands at the end of the third line." listing="<p class=&quot;summary&quot;>…</p>">
+<Example caption="Three lines, for a summary under a card's title. The ellipsis lands at the end of the third line." listing="<p class=&quot;summary&quot;>Gerillass is a set of Sass mixins and functions for modern web design, with a manifest the test suite verifies, so a coding agent cannot work from stale docs and every call it writes compiles the first time.</p>">
 ```scss
 .summary {
   @include truncate(3);
@@ -73,7 +73,7 @@ So at one line the two look the same and differ in what the element becomes, whi
 ```
 </Example>
 
-<Example caption="A width with either technique. Here the text is held to forty characters and two lines, which is the shape a table cell or a compact card wants." listing="<p class=&quot;cell&quot;>…</p>">
+<Example caption="A width with either technique. Here the text is held to forty characters and two lines, which is the shape a table cell or a compact card wants." listing="<p class=&quot;cell&quot;>scss/library/_background-pattern.scss draws twenty patterns with CSS gradients alone, no image file and nothing to download.</p>">
 ```scss
 .cell {
   @include truncate(2, 40ch);
@@ -88,8 +88,8 @@ So at one line the two look the same and differ in what the element becomes, whi
 </Example>
 
 <Example caption="A card: the title on one line, the summary on three. This pair is what the mixin is for, and the two calls write different CSS from the same name." listing="<article class=&quot;card&quot;>
-&#32;&#32;<h4 class=&quot;card__title&quot;>…</h4>
-&#32;&#32;<p class=&quot;card__text&quot;>…</p>
+&#32;&#32;<h4 class=&quot;card__title&quot;>Twenty background patterns, drawn with gradients alone</h4>
+&#32;&#32;<p class=&quot;card__text&quot;>Dots, stripes, houndstooth, harlequin, sunburst and glow, all of them pure CSS, all of them one line of Sass. The image an older version needed is gone, and so is the request for it.</p>
 </article>">
 ```scss
 .card__title {
@@ -113,7 +113,7 @@ So at one line the two look the same and differ in what the element becomes, whi
 ```
 </Example>
 
-<Example caption="`none` undoes a clamp, which is how a summary opens up on a wider screen." listing="<p class=&quot;teaser&quot;>…</p>">
+<Example caption="`none` undoes a clamp, which is how a summary opens up on a wider screen." listing="<p class=&quot;teaser&quot;>On a narrow screen this is two lines and then an ellipsis. From the large breakpoint up, the clamp is lifted and the whole paragraph is shown.</p>">
 ```scss
 .teaser {
   @include truncate(2);
@@ -127,7 +127,7 @@ So at one line the two look the same and differ in what the element becomes, whi
 <style>
   .teaser { margin: 0; font: 15px/1.6 Inter, ui-sans-serif, system-ui, sans-serif; color: #334155; }
 </style>
-<p class="teaser">On a narrow screen this is two lines and then an ellipsis. From the large breakpoint up, the clamp is lifted and the whole paragraph is shown, which is what `none` is for.</p>
+<p class="teaser">On a narrow screen this is two lines and then an ellipsis. From the large breakpoint up, the clamp is lifted and the whole paragraph is shown.</p>
 ```
 </Example>
 

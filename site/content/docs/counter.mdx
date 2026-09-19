@@ -131,13 +131,23 @@ The **Counter** Sass mixin numbers the children of the element you include it in
 ```
 </Example>
 
-<Example caption="A listicle broken up three times, by a pull quote, a photo and a newsletter box. The first part names its counter, and every later part carries on from it with `$continue`, however many times the list is interrupted. One class serves all the later parts." listing="<ol class=&quot;habits&quot;>…</ol>
-<blockquote>…</blockquote>
-<ol class=&quot;habits-more&quot;>…</ol>
+<Example caption="A listicle broken up three times, by a pull quote, a photo and a newsletter box. The first part names its counter, and every later part carries on from it with `$continue`, however many times the list is interrupted. One class serves all the later parts." listing="<ol class=&quot;habits&quot;>
+&#32;&#32;<li>Write the markup first</li>
+&#32;&#32;<li>Name things by what they are</li>
+</ol>
+<blockquote>Good CSS is mostly deleted CSS.</blockquote>
+<ol class=&quot;habits-more&quot;>
+&#32;&#32;<li>Prefer gap to margins</li>
+</ol>
 <div class=&quot;photo&quot;></div>
-<ol class=&quot;habits-more&quot;>…</ol>
-<div class=&quot;newsletter&quot;>…</div>
-<ol class=&quot;habits-more&quot;>…</ol>">
+<ol class=&quot;habits-more&quot;>
+&#32;&#32;<li>Use logical properties</li>
+&#32;&#32;<li>Keep specificity flat</li>
+</ol>
+<div class=&quot;newsletter&quot;>Get one habit a week by email.</div>
+<ol class=&quot;habits-more&quot;>
+&#32;&#32;<li>Test in three browsers</li>
+</ol>">
 ```scss
 .habits {
   @include counter(decimal, ".", $name: habits) {
@@ -187,14 +197,14 @@ The **Counter** Sass mixin numbers the children of the element you include it in
 
 <Example caption="A recipe in three stages, where the ingredients and the method take turns. Two lists split into three parts each, and each keeps its own count because each has its own name: ingredients run a to g, steps 1 to 5. Lists without names share one counter, so the steps of the filling would carry on from the ingredients." listing="<div class=&quot;recipe&quot;>
 &#32;&#32;<h4>Dough</h4>
-&#32;&#32;<ol class=&quot;ingredients&quot;>…</ol>
-&#32;&#32;<ol class=&quot;method&quot;>…</ol>
+&#32;&#32;<ol class=&quot;ingredients&quot;><li>Flour</li><li>Butter</li><li>Water</li></ol>
+&#32;&#32;<ol class=&quot;method&quot;><li>Rub the butter into the flour</li><li>Add water and chill</li></ol>
 &#32;&#32;<h4>Filling</h4>
-&#32;&#32;<ol class=&quot;ingredients-more&quot;>…</ol>
-&#32;&#32;<ol class=&quot;method-more&quot;>…</ol>
+&#32;&#32;<ol class=&quot;ingredients-more&quot;><li>Apples</li><li>Sugar</li></ol>
+&#32;&#32;<ol class=&quot;method-more&quot;><li>Slice and toss the apples</li><li>Fill the lined tin</li></ol>
 &#32;&#32;<h4>Glaze</h4>
-&#32;&#32;<ol class=&quot;ingredients-more&quot;>…</ol>
-&#32;&#32;<ol class=&quot;method-more&quot;>…</ol>
+&#32;&#32;<ol class=&quot;ingredients-more&quot;><li>Egg</li><li>Milk</li></ol>
+&#32;&#32;<ol class=&quot;method-more&quot;><li>Brush and bake for 40 minutes</li></ol>
 </div>">
 ```scss
 .ingredients {
@@ -250,11 +260,11 @@ The **Counter** Sass mixin numbers the children of the element you include it in
 <Example caption="Figures numbered through every chapter of a book. A count only carries on to later siblings of a list, so a gallery in the next `section` would start at 1 again. Create the counter on the element around every chapter with `counter-reset`, and give every gallery `$continue` with that name." listing="<article class=&quot;book&quot;>
 &#32;&#32;<section>
 &#32;&#32;&#32;&#32;<h4>1. The first frost</h4>
-&#32;&#32;&#32;&#32;<div class=&quot;gallery&quot;><figure>…</figure><figure>…</figure></div>
+&#32;&#32;&#32;&#32;<div class=&quot;gallery&quot;><figure><img src=&quot;/frost-1.jpg&quot; alt=&quot;&quot;></figure><figure><img src=&quot;/frost-2.jpg&quot; alt=&quot;&quot;></figure></div>
 &#32;&#32;</section>
 &#32;&#32;<section>
 &#32;&#32;&#32;&#32;<h4>2. The long winter</h4>
-&#32;&#32;&#32;&#32;<div class=&quot;gallery&quot;><figure>…</figure><figure>…</figure><figure>…</figure></div>
+&#32;&#32;&#32;&#32;<div class=&quot;gallery&quot;><figure><img src=&quot;/winter-1.jpg&quot; alt=&quot;&quot;></figure><figure><img src=&quot;/winter-2.jpg&quot; alt=&quot;&quot;></figure><figure><img src=&quot;/winter-3.jpg&quot; alt=&quot;&quot;></figure></div>
 &#32;&#32;</section>
 </article>">
 ```scss
@@ -370,7 +380,10 @@ The **Counter** Sass mixin numbers the children of the element you include it in
 &#32;&#32;&#32;&#32;</ol>
 &#32;&#32;</li>
 &#32;&#32;<li>Layout
-&#32;&#32;&#32;&#32;<ol class=&quot;toc-sections&quot;>…</ol>
+&#32;&#32;&#32;&#32;<ol class=&quot;toc-sections&quot;>
+&#32;&#32;&#32;&#32;&#32;&#32;<li>The grid</li>
+&#32;&#32;&#32;&#32;&#32;&#32;<li>Spacing</li>
+&#32;&#32;&#32;&#32;</ol>
 &#32;&#32;</li>
 &#32;&#32;<li>Reference</li>
 </ol>">
