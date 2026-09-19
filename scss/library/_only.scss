@@ -1,11 +1,36 @@
 @charset "UTF-8";
 
 @use "sass:list";
+@use "sass:map";
 @use "sass:meta";
 @use "sass:string";
+@use "../internal/nth-of" as *;
 @use "../internal/sibling-index" as *;
 
+// Styles one sibling, or several, by position.
+//
+// `$of` says what to count. Without it the selector is `:nth-of-type`, which
+// counts siblings of the same tag: on a grid holding a `<div class="note">`
+// and two `<div class="card">`, `.card:nth-of-type(1)` matches nothing and
+// `:nth-of-type(2)` matches the first card, so every number is one out.
+// `only(1, $of: ".card")` writes `:nth-child(1 of .card)`, which counts the
+// cards and nothing else. Measured in Chrome 152, Firefox 156 and Safari
+// 26.6.2, where all three agree and all three support the `of` form.
 @mixin only($params...) {
+  $keywords: meta.keywords($params);
+  @each $key, $value in $keywords {
+    @if $key != "of" {
+      @error "`$#{$key}` is not an argument of `only`. It takes the positions, then `$of`, the selector to count by.";
+    }
+  }
+  $of: map.get($keywords, "of");
+  @if $of != null {
+    $problem: nthOfProblem($of, "only");
+    @if $problem {
+      @error "`#{meta.inspect($of)}` is not a valid $of for `only`: #{$problem}.";
+    }
+  }
+
   @if list.length($params) == 0 {
     @error "Please pass an argument. The argument must be either a negative or positive number or list of numbers. Or pass one of the following predefined string values: 'first', 'last', 'odd', 'even'.";
   } @else if list.length($params) == 1 {
@@ -18,33 +43,33 @@
         @error "`#{meta.inspect($value)}` is not a valid position for `only`: #{$problem}.";
       }
       @if $value < 0 {
-        &:nth-last-of-type(#{$value * -1}) {
+        &#{nthPseudo($value * -1, $of, true)} {
           @content;
         }
       } @else {
-        &:nth-of-type(#{$value}) {
+        &#{nthPseudo($value, $of)} {
           @content;
         }
       }
     } @else if meta.type-of($value) == "string" {
-      @if $value == "odd" {
-        &:nth-of-type(odd) {
-          @content;
-        }
-      } @else if $value == "even" {
-        &:nth-of-type(even) {
+      @if $value == "odd" or $value == "even" {
+        &#{nthPseudo($value, $of)} {
           @content;
         }
       } @else if $value == "first" {
-        &:first-of-type {
+        &#{if($of == null, ":first-of-type", nthPseudo(1, $of))} {
           @content;
         }
       } @else if $value == "last" {
-        &:last-of-type {
+        &#{if($of == null, ":last-of-type", nthPseudo(1, $of, true))} {
           @content;
         }
       } @else {
-        // For class, id or attribute selectors.
+        // For class, id or attribute selectors. Counting by another selector
+        // has no meaning here: this form does not count at all.
+        @if $of != null {
+          @error "`only(#{meta.inspect($value)}, $of: #{meta.inspect($of)})` asks for two different things: `#{$value}` narrows the element itself, while `$of` says what to count. Pass a position, such as `only(2, $of: #{meta.inspect($of)})`.";
+        }
         &#{$value} {
           @content;
         }
@@ -52,7 +77,7 @@
     } @else {
       @error "`#{$value}` is not a valid argument for `only`. Pass a positive or negative number, one of `first`, `last`, `odd`, `even`, or a selector such as `.foo`.";
     }
-  } @else if list.length($params) > 1 {
+  } @else {
     // Every item is checked first. A word used to fail with Sass's own
     // `Undefined operation`, and one bad position emptied the whole selector
     // list, taking the good positions with it.
@@ -63,8 +88,9 @@
       }
     }
     $list: ();
-    @for $i from 1 through list.length($params) {
-      $list: list.append($list, if(list.nth($params, $i) < 0, string.unquote("&:nth-last-of-type(#{list.nth($params, $i) * -1})"), string.unquote("&:nth-of-type(#{list.nth($params, $i)})")), comma);
+    @each $item in $params {
+      $pseudo: if($item < 0, nthPseudo($item * -1, $of, true), nthPseudo($item, $of));
+      $list: list.append($list, string.unquote("&#{$pseudo}"), comma);
     }
     #{$list} {
       @content;

@@ -1,11 +1,33 @@
 @charset "UTF-8";
 
 @use "sass:list";
+@use "sass:map";
 @use "sass:meta";
 @use "sass:string";
+@use "../internal/nth-of" as *;
 @use "../internal/sibling-index" as *;
 
+// Styles every sibling but the ones named, by position.
+//
+// `$of` says what to count, and is the same argument `only` takes: without it
+// the selector is `:nth-of-type`, which counts siblings of the same tag rather
+// than the things being counted. See scss/internal/_nth-of.scss for what was
+// measured.
 @mixin except($params...) {
+  $keywords: meta.keywords($params);
+  @each $key, $value in $keywords {
+    @if $key != "of" {
+      @error "`$#{$key}` is not an argument of `except`. It takes the positions, then `$of`, the selector to count by.";
+    }
+  }
+  $of: map.get($keywords, "of");
+  @if $of != null {
+    $problem: nthOfProblem($of, "except");
+    @if $problem {
+      @error "`#{meta.inspect($of)}` is not a valid $of for `except`: #{$problem}.";
+    }
+  }
+
   @if list.length($params) == 0 {
     @error "Please pass an argument. The argument must be either a negative or positive number or list of numbers. Or pass one of the following predefined string values: 'first', 'last', 'odd', 'even'.";
   } @else if list.length($params) == 1 {
@@ -18,32 +40,33 @@
         @error "`#{meta.inspect($value)}` is not a valid position for `except`: #{$problem}.";
       }
       @if $value < 0 {
-        &:not(:nth-last-of-type(#{$value * -1})) {
+        &:not(#{nthPseudo($value * -1, $of, true)}) {
           @content;
         }
       } @else {
-        &:not(:nth-of-type(#{$value})) {
+        &:not(#{nthPseudo($value, $of)}) {
           @content;
         }
       }
     } @else if meta.type-of($value) == "string" {
-      @if $value == "odd" {
-        &:not(:nth-of-type(odd)) {
-          @content;
-        }
-      } @else if $value == "even" {
-        &:not(:nth-of-type(even)) {
+      @if $value == "odd" or $value == "even" {
+        &:not(#{nthPseudo($value, $of)}) {
           @content;
         }
       } @else if $value == "first" {
-        &:not(:first-of-type) {
+        &:not(#{if($of == null, ":first-of-type", nthPseudo(1, $of))}) {
           @content;
         }
       } @else if $value == "last" {
-        &:not(:last-of-type) {
+        &:not(#{if($of == null, ":last-of-type", nthPseudo(1, $of, true))}) {
           @content;
         }
       } @else {
+        // For class, id or attribute selectors. Counting by another selector
+        // has no meaning here: this form does not count at all.
+        @if $of != null {
+          @error "`except(#{meta.inspect($value)}, $of: #{meta.inspect($of)})` asks for two different things: `#{$value}` narrows the element itself, while `$of` says what to count. Pass a position, such as `except(2, $of: #{meta.inspect($of)})`.";
+        }
         &:not(#{$value}) {
           @content;
         }
@@ -51,7 +74,7 @@
     } @else {
       @error "`#{$value}` is not a valid argument for `except`. Pass a positive or negative number, one of `first`, `last`, `odd`, `even`, or a selector such as `.foo`.";
     }
-  } @else if list.length($params) > 1 {
+  } @else {
     // Every item is checked first. A word used to fail with Sass's own
     // `Undefined operation`, and one bad position dropped the whole rule.
     @each $item in $params {
@@ -61,10 +84,11 @@
       }
     }
     $items: "";
-    @for $i from 1 through list.length($params) {
-      $items: $items + if(list.nth($params, $i) < 0, string.unquote(":not(:nth-last-of-type(#{list.nth($params, $i) * -1}))"), string.unquote(":not(:nth-of-type(#{list.nth($params, $i)}))"));
+    @each $item in $params {
+      $pseudo: if($item < 0, nthPseudo($item * -1, $of, true), nthPseudo($item, $of));
+      $items: $items + ":not(#{$pseudo})";
     }
-    &#{$items} {
+    &#{string.unquote($items)} {
       @content;
     }
   }

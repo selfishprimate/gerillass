@@ -36,7 +36,7 @@ Arguments are validated and refused with a message naming what is accepted, so a
 - [counter($params...)](https://docs.gerillass.com/docs/counter/): Numbers the children of the element it is included in, with optional text before and after each number.
 - [ellipsis($width: 100%, $display: inline-block)](https://docs.gerillass.com/docs/ellipsis/): Truncates a single line of text with an ellipsis.
 - [escape-to-parent($selector: null)](https://docs.gerillass.com/docs/escape-to-parent/): Writes the rule again with another selector attached to its outermost element, so a theme or state class can switch what a nested rule does.
-- [except($params...)](https://docs.gerillass.com/docs/except/): Selects every sibling except the ones named.
+- [except($params...)](https://docs.gerillass.com/docs/except/): Selects every sibling but the ones named, counted by tag or by a selector you name.
 - [focus-ring($width: 2px, $offset: 2px, $color: currentColor)](https://docs.gerillass.com/docs/focus-ring/): Draws a keyboard focus ring with outline on :focus-visible, which survives forced-colors mode where a box-shadow ring disappears.
 - [font-face($font-family, $file-path, $font-style: normal, $font-weight: 400, $file-formats: woff2, $font-display: null)](https://docs.gerillass.com/docs/font-face/): Emits an @font-face rule for one family across several file formats.
 - [gradient($colors, $type: linear, $direction: null, $shape: null, $position: null, $from: null, $in: null, $repeating: false)](https://docs.gerillass.com/docs/gradient/): A linear, radial or conic gradient as background-image, plain or repeating, with an optional colour interpolation space.
@@ -44,7 +44,7 @@ Arguments are validated and refused with a message naming what is accepted, so a
 - [line-clamp($lines: 3)](https://docs.gerillass.com/docs/line-clamp/): Truncates text after a number of lines, where ellipsis truncates one.
 - [loadify($params...)](https://docs.gerillass.com/docs/loadify/): Fades elements in on page load.
 - [motion-safe](https://docs.gerillass.com/docs/motion-safe/): Wraps its content in @media (prefers-reduced-motion: no-preference), so motion is opt-in: a user who asked their system for less motion gets none of it.
-- [only($params...)](https://docs.gerillass.com/docs/only/): Selects only the siblings named.
+- [only($params...)](https://docs.gerillass.com/docs/only/): Selects only the siblings named, counted by tag or by a selector you name.
 - [placeholder-shown](https://docs.gerillass.com/docs/placeholder-shown/): Styles an input while its placeholder is visible, which is how a floating label knows the field is empty.
 - [placeholder](https://docs.gerillass.com/docs/placeholder/): Styles the placeholder text of an input or a textarea.
 - [position($position: absolute, $offsets: 0, $logical: false)](https://docs.gerillass.com/docs/position/): Sets position and offsets in one call, using shorthand order.

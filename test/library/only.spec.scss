@@ -57,4 +57,27 @@
       }
     }
   }
+
+  @include it('Counts by the selector $of names, rather than by tag.') {
+    @include assert {
+      @include output { .a { @include only(2, $of: ".card") { color: red; } } }
+      @include expect { .a:nth-child(2 of .card) { color: red; } }
+    }
+  }
+
+  @include it('Counts from the end, and by keyword, with $of.') {
+    @include assert {
+      @include output {
+        .a { @include only(-1, $of: ".card") { color: red; } }
+        .b { @include only(first, $of: "li.done") { color: red; } }
+        .c { @include only(odd, $of: "[data-done]") { color: red; } }
+      }
+      @include expect {
+        .a:nth-last-child(1 of .card) { color: red; }
+        .b:nth-child(1 of li.done) { color: red; }
+        .c:nth-child(odd of [data-done]) { color: red; }
+      }
+    }
+  }
+
 }

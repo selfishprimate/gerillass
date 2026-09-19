@@ -191,7 +191,7 @@ refused. `$step` was added for how far apart a filled shadow's layers sit, a
 |---|---|---|
 | `text-gradient` + `text-image` | `text-fill($source, $size, $position, $fallback: currentColor)` | one member for gradients, images and `image-set()`, writing `background-image` rather than the shorthand, with the forced-colours fallback |
 | ~~`background-dots` + `background-stripes`~~ | **done for 4.0.0 on the `background-pattern` branch**: one mixin, twenty patterns, an image as a background layer rather than a `::before`, longhands only, and colours that follow `currentColor` | |
-| `only` + `except` | `nth($positions..., $not: false, $of: null)` | `$of` writes `:nth-child(n of .item)`, which counts by class rather than by tag, the thing `-of-type` gets wrong |
+| ~~`only` + `except`~~ | **not merged, at the maintainer's decision**: `only` and `except` read as English where `nth(2, $not: true)` does not. **`$of` is done for 4.0.0 on the `nth-of` branch** and added to both, which was the real gain: `:nth-child(n of .card)` counts by the selector rather than by tag | |
 | `ellipsis` + `line-clamp` | `truncate($lines: 1, $width: 100%)` | one line is the nowrap method, more lines the clamp method |
 | `placeholder` + `placeholder-shown` | `placeholder($state: text \| shown)` | or deprecate both |
 | `smartphone` + `tablet` | remove, do not merge | merging keeps a broken technique alive |

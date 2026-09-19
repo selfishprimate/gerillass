@@ -936,15 +936,21 @@
       ],
       "file": "scss/library/_except.scss",
       "signature": "except($params...)",
-      "summary": "Selects every sibling except the ones named.",
+      "summary": "Selects every sibling but the ones named, counted by tag or by a selector you name.",
       "caveats": [
-        "An+B with an offset cannot be passed as a number: Sass does the arithmetic, so `except(2n+1)` becomes `3n` and excludes every third element, not the odd ones. Use `odd` or `even`, or a coefficient alone such as `3n`."
+        "An+B with an offset cannot be passed as a number: Sass does the arithmetic, so `except(2n+1)` becomes `3n` and excludes every third element, not the odd ones. Use `odd` or `even`, or a coefficient alone such as `3n`.",
+        "Without `$of` the selector is `:nth-of-type`, which counts siblings **of the same tag** rather than the things being picked. Measured in Chrome 152, Firefox 156 and Safari 26.6.2 on a grid holding a `<div class=\"note\">` and three `<div class=\"card\">`: `.card:nth-of-type(1)` matched nothing, because the first div is the note, and every other number was one out. With `$of: \".card\"` the same call matched the first card in all three.",
+        "`:nth-child(… of S)` is in Chrome 111, Firefox 113 and Safari 9, and `CSS.supports(\"selector(:nth-child(2 of .card))\")` answers true in all three.",
+        "`$of` counts, it does not narrow: a call that passes a selector as the position, such as `only(\".featured\")`, is not counting anything, so passing both raises."
       ],
       "examples": [
         ".a { @include except(\"first\") { margin: 0; } }",
         ".a { @include except(2) { margin: 0; } }",
         ".a { @include except(1, 3) { margin: 0; } }",
-        ".a { @include except(3n) { margin: 0; } }"
+        ".a { @include except(3n) { margin: 0; } }",
+        ".a { @include except(2, $of: \".card\") { margin: 0; } }",
+        ".a { @include except(-1, $of: \".card\") { margin: 0; } }",
+        ".a { @include except(odd, $of: \"li.done\") { margin: 0; } }"
       ],
       "rejects": [
         ".a { @include except(#ff0000) { margin: 0; } }",
@@ -954,7 +960,12 @@
         ".a { @include except(0) { margin: 0; } }",
         ".a { @include except(0n) { margin: 0; } }",
         ".a { @include except(1, 10deg) { margin: 0; } }",
-        ".a { @include except(2, \"first\") { margin: 0; } }"
+        ".a { @include except(2, \"first\") { margin: 0; } }",
+        ".a { @include except(2, $of: 42) { margin: 0; } }",
+        ".a { @include except(2, $of: \"\") { margin: 0; } }",
+        ".a { @include except(2, $of: \"&.card\") { margin: 0; } }",
+        ".a { @include except(\".featured\", $of: \".card\") { margin: 0; } }",
+        ".a { @include except(2, $count: \".card\") { margin: 0; } }"
       ]
     },
     {
@@ -1341,15 +1352,21 @@
       ],
       "file": "scss/library/_only.scss",
       "signature": "only($params...)",
-      "summary": "Selects only the siblings named.",
+      "summary": "Selects only the siblings named, counted by tag or by a selector you name.",
       "caveats": [
-        "An+B with an offset cannot be passed as a number: Sass does the arithmetic, so `only(2n+1)` becomes `3n` and selects every third element, not the odd ones. Use `odd` or `even`, or a coefficient alone such as `3n`."
+        "An+B with an offset cannot be passed as a number: Sass does the arithmetic, so `only(2n+1)` becomes `3n` and selects every third element, not the odd ones. Use `odd` or `even`, or a coefficient alone such as `3n`.",
+        "Without `$of` the selector is `:nth-of-type`, which counts siblings **of the same tag** rather than the things being picked. Measured in Chrome 152, Firefox 156 and Safari 26.6.2 on a grid holding a `<div class=\"note\">` and three `<div class=\"card\">`: `.card:nth-of-type(1)` matched nothing, because the first div is the note, and every other number was one out. With `$of: \".card\"` the same call matched the first card in all three.",
+        "`:nth-child(… of S)` is in Chrome 111, Firefox 113 and Safari 9, and `CSS.supports(\"selector(:nth-child(2 of .card))\")` answers true in all three.",
+        "`$of` counts, it does not narrow: a call that passes a selector as the position, such as `only(\".featured\")`, is not counting anything, so passing both raises."
       ],
       "examples": [
         ".a { @include only(\"first\") { margin: 0; } }",
         ".a { @include only(-1) { margin: 0; } }",
         ".a { @include only(1, 3) { margin: 0; } }",
-        ".a { @include only(3n) { margin: 0; } }"
+        ".a { @include only(3n) { margin: 0; } }",
+        ".a { @include only(2, $of: \".card\") { margin: 0; } }",
+        ".a { @include only(-1, $of: \".card\") { margin: 0; } }",
+        ".a { @include only(odd, $of: \"li.done\") { margin: 0; } }"
       ],
       "rejects": [
         ".a { @include only(#ff0000) { margin: 0; } }",
@@ -1359,7 +1376,12 @@
         ".a { @include only(0) { margin: 0; } }",
         ".a { @include only(0n) { margin: 0; } }",
         ".a { @include only(1, 10deg) { margin: 0; } }",
-        ".a { @include only(2, \"first\") { margin: 0; } }"
+        ".a { @include only(2, \"first\") { margin: 0; } }",
+        ".a { @include only(2, $of: 42) { margin: 0; } }",
+        ".a { @include only(2, $of: \"\") { margin: 0; } }",
+        ".a { @include only(2, $of: \"&.card\") { margin: 0; } }",
+        ".a { @include only(\".featured\", $of: \".card\") { margin: 0; } }",
+        ".a { @include only(2, $count: \".card\") { margin: 0; } }"
       ]
     },
     {

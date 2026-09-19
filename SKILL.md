@@ -228,6 +228,9 @@ a dropped declaration rather than an error.
 **`except`**
 
 - An+B with an offset cannot be passed as a number: Sass does the arithmetic, so `except(2n+1)` becomes `3n` and excludes every third element, not the odd ones. Use `odd` or `even`, or a coefficient alone such as `3n`.
+- Without `$of` the selector is `:nth-of-type`, which counts siblings **of the same tag** rather than the things being picked. Measured in Chrome 152, Firefox 156 and Safari 26.6.2 on a grid holding a `<div class="note">` and three `<div class="card">`: `.card:nth-of-type(1)` matched nothing, because the first div is the note, and every other number was one out. With `$of: ".card"` the same call matched the first card in all three.
+- `:nth-child(… of S)` is in Chrome 111, Firefox 113 and Safari 9, and `CSS.supports("selector(:nth-child(2 of .card))")` answers true in all three.
+- `$of` counts, it does not narrow: a call that passes a selector as the position, such as `only(".featured")`, is not counting anything, so passing both raises.
 
 **`font-face`**
 
@@ -254,6 +257,9 @@ a dropped declaration rather than an error.
 **`only`**
 
 - An+B with an offset cannot be passed as a number: Sass does the arithmetic, so `only(2n+1)` becomes `3n` and selects every third element, not the odd ones. Use `odd` or `even`, or a coefficient alone such as `3n`.
+- Without `$of` the selector is `:nth-of-type`, which counts siblings **of the same tag** rather than the things being picked. Measured in Chrome 152, Firefox 156 and Safari 26.6.2 on a grid holding a `<div class="note">` and three `<div class="card">`: `.card:nth-of-type(1)` matched nothing, because the first div is the note, and every other number was one out. With `$of: ".card"` the same call matched the first card in all three.
+- `:nth-child(… of S)` is in Chrome 111, Firefox 113 and Safari 9, and `CSS.supports("selector(:nth-child(2 of .card))")` answers true in all three.
+- `$of` counts, it does not narrow: a call that passes a selector as the position, such as `only(".featured")`, is not counting anything, so passing both raises.
 
 **`placeholder-shown`**
 
@@ -386,7 +392,7 @@ a dropped declaration rather than an error.
 | `counter($params...)` | Numbers the children of the element it is included in, with optional text before and after each number. No classes in the markup. |
 | `ellipsis($width: 100%, $display: inline-block)` | Truncates a single line of text with an ellipsis. |
 | `escape-to-parent($selector: null)` | Writes the rule again with another selector attached to its outermost element, so a theme or state class can switch what a nested rule does. |
-| `except($params...)` | Selects every sibling except the ones named. |
+| `except($params...)` | Selects every sibling but the ones named, counted by tag or by a selector you name. |
 | `focus-ring($width: 2px, $offset: 2px, $color: currentColor)` | Draws a keyboard focus ring with outline on :focus-visible, which survives forced-colors mode where a box-shadow ring disappears. |
 | `font-face($font-family, $file-path, $font-style: normal, $font-weight: 400, $file-formats: woff2, $font-display: null)` | Emits an @font-face rule for one family across several file formats. Must be called at the root. |
 | `gradient($colors, $type: linear, $direction: null, $shape: null, $position: null, $from: null, $in: null, $repeating: false)` | A linear, radial or conic gradient as background-image, plain or repeating, with an optional colour interpolation space. Replaced linear-gradient and radial-gradient in 3.0.0. |
@@ -394,7 +400,7 @@ a dropped declaration rather than an error.
 | `line-clamp($lines: 3)` | Truncates text after a number of lines, where ellipsis truncates one. It emits five declarations rather than one because -webkit-line-clamp does nothing on its own: without display: -webkit-box or without -webkit-box-orient: vertical the text is not clamped at all and nothing warns you, and without overflow: hidden the clamped text spills out below the box. The unprefixed line-clamp is emitted too, for when it becomes Baseline. |
 | `loadify($params...)` | Fades elements in on page load. Call `loadify(init)` once at the root to write the keyframes, then the mixin on each element. |
 | `motion-safe` | Wraps its content in @media (prefers-reduced-motion: no-preference), so motion is opt-in: a user who asked their system for less motion gets none of it. |
-| `only($params...)` | Selects only the siblings named. |
+| `only($params...)` | Selects only the siblings named, counted by tag or by a selector you name. |
 | `placeholder-shown` | Styles an input while its placeholder is visible, which is how a floating label knows the field is empty. |
 | `placeholder` | Styles the placeholder text of an input or a textarea. |
 | `position($position: absolute, $offsets: 0, $logical: false)` | Sets position and offsets in one call, using shorthand order. |

@@ -6,7 +6,8 @@ it covers `hide`, where breakpoint ranges end, `columnizer`, `before` and
 `escape-to-parent`, `sprite`, four of the utility functions, the device maps,
 `responsive-image`, `border-box`, `antialias`, `center`, `all-buttons`,
 `loadify`, `stretched-link`, `text-gradient`, `text-image`, `placeholder` and
-the removal of `clearfix`, `adaptive` and `reset-css`. The 3.0.0 and
+the removal of `clearfix`, `adaptive`, `reset-css` and the `$of` argument on
+`only` and `except`. The 3.0.0 and
 2.0.0 guides follow below, unchanged.
 
 Every claim here was checked by compiling the old call against 3.0.0's source
@@ -55,6 +56,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `clearfix` was removed | breaking, loud |
 | `adaptive` skips a zero breakpoint by value, not by the name `xsmall` | fixes a lost container; no change with the default map |
 | `reset-css` is a modern reset rather than Meyer's 2011 one | breaking, silent, and visible |
+| `only` and `except` take `$of`, the selector to count by | not breaking |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -1401,6 +1403,65 @@ as a list. Asking for it per list keeps the semantics where the list is prose.
 your own stylesheet. This project's own site took the other route, adding
 `role="list"` to its twelve layout lists and deleting the rule it had for
 putting markers back in prose.
+
+---
+
+## Added: `$of` on `only` and `except`
+
+Both mixins counted with `:nth-of-type`, which counts an element's siblings
+**of the same tag** rather than the things being picked. One stray element
+moves every number:
+
+```html
+<div class="grid">
+  <div class="note">On sale this week</div>
+  <div class="card">A</div>
+  <div class="card">B</div>
+  <div class="card">C</div>
+</div>
+```
+
+```scss
+.card {
+  @include only(1) {
+    outline: 2px solid;
+  }
+}
+```
+
+That selects nothing, since the first `div` is the note, and `only(2)` selects
+card A. Measured in Chrome 152, Firefox 156 and Safari 26.6.2, all three the
+same.
+
+`$of` names what to count, and the mixin writes `:nth-child(… of S)`:
+
+```scss
+.card {
+  @include only(1, $of: ".card") {
+    outline: 2px solid;
+  }
+}
+```
+
+```css
+.card:nth-child(1 of .card) {
+  outline: 2px solid;
+}
+```
+
+It works with every form both mixins take: a position, a negative position
+counted from the end, `first`, `last`, `odd`, `even`, and several positions at
+once. `except` wraps the same selector in `:not()`.
+
+**Nothing changes without it.** All 44 call shapes the two mixins accept were
+compiled before and after, and every one is byte for byte what it was.
+
+`:nth-child(… of S)` is in Chrome 111, Firefox 113 and Safari 9, and
+`CSS.supports("selector(:nth-child(2 of .card))")` answers true in all three.
+
+The two mixins stay separate. Merging them into one `nth($positions..., $not:
+…)` was the proposal in `todos/library-review.md`, and the maintainer turned it
+down: `only` and `except` read as English where a boolean flag does not.
 
 ---
 

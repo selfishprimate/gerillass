@@ -9,7 +9,7 @@ Gerillass is a **pure Sass library** — a toolkit of mixins and functions, in t
 Two consequences follow from this and drive most decisions in the repo:
 
 1. **`package.json` must have no `dependencies`.** Everything (`jest`, `sass`, `sass-true`, `glob`) belongs in `devDependencies`. Consumers get only `.scss` files, so a runtime dependency here forces the entire test toolchain onto every downstream project. This was the cause of 24 Dependabot alerts fixed in v1.3.3 — do not reintroduce it.
-2. **Only `scss/` ships.** `.npmignore` excludes `test`, `assets`, `meta`, `tools`, dotfiles and `*.md`; npm always adds `README.md`, `LICENSE.md` and `package.json` back. Verify with `npm pack --dry-run` before any release (114 files, a 120 kB tarball for 4.0.0, which merged `background-dots` and `background-stripes` into one `background-pattern` and added `scss/internal/_key-end.scss` and `_device-size.scss`).
+2. **Only `scss/` ships.** `.npmignore` excludes `test`, `assets`, `meta`, `tools`, dotfiles and `*.md`; npm always adds `README.md`, `LICENSE.md` and `package.json` back. Verify with `npm pack --dry-run` before any release (115 files, a 125 kB tarball for 4.0.0, which merged `background-dots` and `background-stripes` into one `background-pattern` and added `scss/internal/_key-end.scss` and `_device-size.scss`).
 3. **The gem is the same library, not a port.** `gerillass.gemspec` ships `scss/`, `gerillass.json` and `SKILL.md`, plus `lib/`, `LICENSE.md` and `README.md`, reads its version from `package.json`, and has no runtime dependencies. `lib/` only tells Rails, Jekyll or a plain `sass-embedded` compile where `scss/` is. `.npmignore` keeps `lib`, the gemspec and `*.gem` out of the npm package. Keep the gemspec ASCII: RubyGems reads it in the locale's encoding, and a literal non-ASCII character fails to load.
 
 Dart Sass only. LibSass/node-sass has been unsupported since v1.3.0.
@@ -917,7 +917,9 @@ Two pieces of work are open:
   on `remove-clearfix`, branched from `placeholder-standard`; and `adaptive`
   skipping a zero breakpoint by value rather than by name, on `adaptive-zero`,
   branched from `remove-clearfix`; and `reset-css` rewritten as a modern reset
-  inside `:where()`, on `reset-modern`, branched from `adaptive-zero`.
+  inside `:where()`, on `reset-modern`, branched from `adaptive-zero`; and `$of`
+  on `only` and `except`, counting by a selector rather than by tag, on
+  `nth-of`, branched from `reset-modern`.
   The last three come from `todos/library-review.md`, and the last three
   patterns, `glow`, `vignette` and `mesh`, from the survey in
   `todos/saas-hero-backgrounds.md`. Each has a `MIGRATION.md` section.

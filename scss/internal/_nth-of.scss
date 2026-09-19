@@ -1,0 +1,48 @@
+@charset "UTF-8";
+
+@use "sass:list";
+@use "sass:meta";
+@use "sass:string";
+
+// Shared by `only` and `except`; see _is-css-function.scss for why this folder
+// is not public API.
+//
+// `:nth-of-type` counts an element's siblings **of the same tag**, which is
+// rarely the thing being counted. Measured in Chrome 152, Firefox 156 and
+// Safari 26.6.2 on a grid holding a `<div class="note">` and two
+// `<div class="card">`: `.card:nth-of-type(1)` matched nothing, because the
+// first div is the note, and `.card:nth-of-type(2)` matched the first card, so
+// every number was one out. `:nth-child(1 of .card)` matched the first card
+// whatever else was in the grid.
+//
+// `of` has been in Safari since 9 and in Chrome 111 and Firefox 113, and
+// `CSS.supports("selector(:nth-child(2 of .card))")` answers true in all three.
+
+// What is wrong with $of as a selector to count by, or null.
+@function nthOfProblem($of, $mixin) {
+  @if meta.type-of($of) != "string" {
+    @return "`$of` is the selector to count by, written as a string, such as `\".card\"`";
+  }
+  $text: string.unquote($of);
+  @if string.length("#{$text}") == 0 {
+    @return "`$of` is empty. Pass the selector to count by, such as `\".card\"`";
+  }
+  @each $character in "{" "}" ";" "@" "&" {
+    @if string.index("#{$text}", $character) {
+      @return "a selector to count by cannot hold `#{$character}`. Pass something like `\".card\"` or `\"li.done\"`";
+    }
+  }
+  @return null;
+}
+
+// The pseudo-class for one position: `:nth-of-type(2)` on its own, or
+// `:nth-child(2 of .card)` when a selector to count by is given. $last swaps
+// both for the form that counts from the end.
+@function nthPseudo($position, $of, $last: false) {
+  $name: if($last, "nth-last-of-type", "nth-of-type");
+  @if $of != null {
+    $name: if($last, "nth-last-child", "nth-child");
+    @return ":#{$name}(#{$position} of #{string.unquote($of)})";
+  }
+  @return ":#{$name}(#{$position})";
+}
