@@ -178,6 +178,11 @@ a dropped declaration rather than an error.
 - A range that ends at a key from $map-for-breakpoints, and `max` with a key, end just under the key: `breakpoint(max, medium)` is `(max-width: 767.98px)` and `breakpoint(small, medium)` ends at `767.98px`, or `47.99rem` with a rem map. So `max` and `min` at the same key, and neighbouring ranges, neither overlap nor leave a gap, including at fractional viewport widths. A length written by hand is used as written, and a zero key is left alone. Until 4.0.0 `max` included the key and a range ended 1 below it, which overlapped at the key and left gaps.
 - Declarations written after the include, in the same rule, are emitted after the `@media` block and win over it. Write them before the include.
 
+**`center`**
+
+- The element has to be positioned, and its parent too: the mixin writes the offsets and the translation, not `position`.
+- Until 4.0.0 the offset was `transform: translateX(-50%) translateY(-50%)`, and `transform` is one property, so a transform the element set for itself replaced the centring. Measured in Chrome 152, Firefox 156 and Safari 26.6.2: a 100x50 element centred in a 400x200 box and then given `transform: rotate(10deg)` or `transform: scale(1.5)` sat 50px right and 25px below the middle in all three. It is the `translate` property now, which composes with `transform`, so a hover that scales no longer moves the element off centre.
+
 **`columnizer`**
 
 - The gutter is the container's `gap`. Since 4.0.0 a margin on the columns adds to it instead of being overridden by the mixin's own margins, so remove a column margin that was only there for spacing.
@@ -327,7 +332,7 @@ a dropped declaration rather than an error.
 | `brand-logo($width, $height, $image-url: null)` | Logo box with an image and an accessible stretched link over it. |
 | `breakpoint($params...)` | Media query built from the breakpoint map, or from raw lengths. |
 | `breakpointer($selector: null)` | Debug helper that prints the active breakpoint name into a pseudo-element. |
-| `center($axis: "both")` | Absolutely centres an element inside its positioned parent. |
+| `center($axis: "both")` | Centres an absolutely positioned element in its positioned parent, leaving transform free. |
 | `circle($size)` | Square element with a fully rounded border, i.e. a circle. |
 | `clearfix` | Clears floated children using an ::after pseudo-element. |
 | `columnizer($params...)` | Flexbox grid of equal columns, with an optional gutter written as gap and an optional fill for the last row. |

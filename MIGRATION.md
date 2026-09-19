@@ -4,7 +4,7 @@ Written while 4.0.0 is being prepared, and added to as its changes land. So far
 it covers `hide`, where breakpoint ranges end, `columnizer`, `before` and
 `after`, `font-face`, `all-text-inputs`, `aspect-ratio`, `counter`, `text-shadow`, `text-stroke`, the background patterns,
 `escape-to-parent`, `sprite`, four of the utility functions, the device maps,
-`responsive-image`, `border-box` and `antialias`. The 3.0.0 and
+`responsive-image`, `border-box`, `antialias` and `center`. The 3.0.0 and
 2.0.0 guides follow below, unchanged.
 
 Every claim here was checked by compiling the old call against 3.0.0's source
@@ -43,6 +43,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | the phone and tablet maps hold two lengths per device, not a nested map | breaking, loud, and only for a map you replaced |
 | `responsive-image` fits an image without upscaling it | breaking, silent |
 | `border-box` and `antialias` write their descendants inside `:where()` | fixes a cascade defect; silent |
+| `center` offsets with `translate` rather than `transform` | breaking, silent, and only if you touched its transform |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -988,6 +989,53 @@ which has no specificity of its own, and `border-box("only")` is unchanged.
 antialiasing on; `-webkit-font-smoothing: antialiased` turns it off and draws
 greyscale instead, which is what makes text look thinner. The CSS is the same
 as before, and the manifest and the page now say what it does.
+
+---
+
+## Change: `center` offsets with `translate`
+
+It wrote the offset into `transform`:
+
+```css
+.modal { top: 50%; left: 50%; transform: translateX(-50%) translateY(-50%); }
+```
+
+`transform` is one property, so the moment the element had a transform of its
+own the centring was gone. This is the common case, and it is what a hover
+does:
+
+```scss
+.modal {
+  position: absolute;
+  @include center;
+}
+
+.modal:hover {
+  transform: scale(1.05);
+}
+```
+
+Measured in Chrome 152, Firefox 156 and Safari 26.6.2, with a 100 by 50 element
+centred in a 400 by 200 box: with `transform: rotate(10deg)` or
+`transform: scale(1.5)` written after the include, the element sat 50px right
+and 25px below the middle in all three. Written before the include, the
+rotation was the thing dropped instead.
+
+4.0.0 writes the individual property, which composes with `transform` rather
+than replacing it, and the same measurement puts the element exactly in the
+middle in all three browsers:
+
+```css
+.modal { top: 50%; left: 50%; translate: -50% -50%; }
+```
+
+One axis follows: `center("horizontal")` is `translate: -50% 0` and
+`center("vertical")` is `translate: 0 -50%`, both at the same offsets as
+before.
+
+**What to check in a stylesheet**: a rule that overrode the mixin's
+`transform` on purpose, and a `transition: transform` that was animating the
+centring itself. Transitioning the centring now means `transition: translate`.
 
 ---
 

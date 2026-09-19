@@ -2,6 +2,17 @@
 
 @use "sass:list";
 
+// Centres an absolutely positioned element in its positioned parent.
+//
+// The offset is written with the individual `translate` property rather than
+// with `transform`, and that is the whole point of the change in 4.0.0.
+// `transform` is one property, so a transform the element sets for itself
+// replaced the centring: measured in Chrome 152, Firefox 156 and Safari
+// 26.6.2, a 100x50 element centred in a 400x200 box and then given
+// `transform: rotate(10deg)` or `transform: scale(1.5)` sat 50px right and
+// 25px below the middle in all three. With `translate` the same element stays
+// in the middle, since `translate`, `rotate`, `scale` and `transform` are
+// separate properties that compose.
 @mixin center($axis: "both") {
   @if not list.index("both" "horizontal" "vertical", $axis) {
     @error "`#{$axis}` is not a valid $axis for `center`. Pass one of: both, horizontal, vertical.";
@@ -12,8 +23,11 @@
   @if $axis == "both" or $axis == "horizontal" {
     left: 50%;
   }
-  transform: 
-    if($axis == "horizontal", translateX(-50%), if($axis == "both", translateX(-50%), null))
-    if($axis == "vertical", translateY(-50%), if($axis == "both", translateY(-50%), null))
-  ;
+  @if $axis == "both" {
+    translate: -50% -50%;
+  } @else if $axis == "horizontal" {
+    translate: -50% 0;
+  } @else {
+    translate: 0 -50%;
+  }
 }

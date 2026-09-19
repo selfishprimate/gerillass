@@ -28,7 +28,7 @@ Arguments are validated and refused with a message naming what is accepted, so a
 - [brand-logo($width, $height, $image-url: null)](https://docs.gerillass.com/docs/brand-logo/): Logo box with an image and an accessible stretched link over it.
 - [breakpoint($params...)](https://docs.gerillass.com/docs/breakpoint/): Media query built from the breakpoint map, or from raw lengths.
 - [breakpointer($selector: null)](https://docs.gerillass.com/docs/breakpointer/): Debug helper that prints the active breakpoint name into a pseudo-element.
-- [center($axis: "both")](https://docs.gerillass.com/docs/center/): Absolutely centres an element inside its positioned parent.
+- [center($axis: "both")](https://docs.gerillass.com/docs/center/): Centres an absolutely positioned element in its positioned parent, leaving transform free.
 - [circle($size)](https://docs.gerillass.com/docs/circle/): Square element with a fully rounded border, i.e.
 - [clearfix](https://docs.gerillass.com/docs/clearfix/): Clears floated children using an ::after pseudo-element.
 - [columnizer($params...)](https://docs.gerillass.com/docs/columnizer/): Flexbox grid of equal columns, with an optional gutter written as gap and an optional fill for the last row.

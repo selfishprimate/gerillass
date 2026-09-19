@@ -902,7 +902,9 @@ Two pieces of work are open:
   and `responsive-image` fitting an image without upscaling it, on
   `responsive-image`, branched from `device-maps`; and `border-box` and
   `antialias` writing their descendants inside `:where()`, on
-  `border-box-specificity`, branched from `responsive-image`.
+  `border-box-specificity`, branched from `responsive-image`; and `center`
+  offsetting with `translate` rather than `transform`, on `center-translate`,
+  branched from `border-box-specificity`.
   The last three come from `todos/library-review.md`, and the last three
   patterns, `glow`, `vignette` and `mesh`, from the survey in
   `todos/saas-hero-backgrounds.md`. Each has a `MIGRATION.md` section.

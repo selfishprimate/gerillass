@@ -1,6 +1,6 @@
 {
   "name": "center",
-  "summary": "Absolutely centres an element inside its positioned parent.",
+  "summary": "Centres an absolutely positioned element in its positioned parent, leaving transform free.",
   "arguments": [
     {
       "name": "$axis",
@@ -13,9 +13,14 @@
   ],
   "examples": [
     ".modal { @include center; }",
-    ".bar { @include center(\"horizontal\"); }"
+    ".bar { @include center(\"horizontal\"); }",
+    ".stripe { @include center(\"vertical\"); }"
   ],
   "rejects": [
     ".modal { @include center(diagonal); }"
+  ],
+  "caveats": [
+    "The element has to be positioned, and its parent too: the mixin writes the offsets and the translation, not `position`.",
+    "Until 4.0.0 the offset was `transform: translateX(-50%) translateY(-50%)`, and `transform` is one property, so a transform the element set for itself replaced the centring. Measured in Chrome 152, Firefox 156 and Safari 26.6.2: a 100x50 element centred in a 400x200 box and then given `transform: rotate(10deg)` or `transform: scale(1.5)` sat 50px right and 25px below the middle in all three. It is the `translate` property now, which composes with `transform`, so a hover that scales no longer moves the element off centre."
   ]
 }

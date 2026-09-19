@@ -789,7 +789,7 @@ exports[`Manifest examples breakpointer: @include breakpointer; 1`] = `
 exports[`Manifest examples center: .bar { @include center("horizontal"); } 1`] = `
 ".bar {
   left: 50%;
-  transform: translateX(-50%);
+  translate: -50% 0;
 }"
 `;
 
@@ -797,7 +797,14 @@ exports[`Manifest examples center: .modal { @include center; } 1`] = `
 ".modal {
   top: 50%;
   left: 50%;
-  transform: translateX(-50%) translateY(-50%);
+  translate: -50% -50%;
+}"
+`;
+
+exports[`Manifest examples center: .stripe { @include center("vertical"); } 1`] = `
+".stripe {
+  top: 50%;
+  translate: 0 -50%;
 }"
 `;
 

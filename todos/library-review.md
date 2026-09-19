@@ -120,9 +120,13 @@ refused. `$step` was added for how far apart a filled shadow's layers sit, a
   Safari 26.6.2 with a page rule written before the include: it lost in all
   three before and wins in all three now, while an element with no rule of its
   own still gets the reset.
-- **`center`** writes `transform: translateX(-50%) translateY(-50%)`, wiping out
-  any transform the user sets. The individual `translate` property composes
-  instead. [source] [measure]
+- ~~**`center`** writes `transform: translateX(-50%) translateY(-50%)`~~ **done
+  for 4.0.0 on the `center-translate` branch**: the offset is the individual
+  `translate` property. Measured in Chrome 152, Firefox 156 and Safari 26.6.2,
+  a 100x50 element centred in a 400x200 box and then given
+  `transform: rotate(10deg)` or `scale(1.5)` sat 50px right and 25px below the
+  middle in all three, and now stays in the middle; a transform written before
+  the include used to be dropped instead. One-axis offsets are unchanged.
 - **`adaptive`** does nothing below 576px and hard-codes the `xsmall` key.
   [source] `width: min(100% - 2 * gutter, key)` would give a gutter at every
   width. Two agent trials turned the mixin down; `todos/fix-plan.md` says to
