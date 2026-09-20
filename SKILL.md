@@ -106,10 +106,10 @@ a dropped declaration rather than an error.
 | `motion-safe` | `.card { @include motion-safe; }` |
 | `only` | `.a { @include only(#ff0000) { margin: 0; } }` |
 | `position` | `.badge { @include position(absolute, 0, $logical: yes); }` |
-| `presence` | `.a { @include presence(nonsense); }` |
 | `remove` | `.a { @include remove(a, b, c); }` |
 | `reset-css` | `.a { @include reset-css; }` |
 | `resizable` | `.a { @include resizable(huge); }` |
+| `reveal` | `.a { @include reveal(nonsense); }` |
 | `scissors` | `.a { @include scissors(5px 10px); }` |
 | `screen-agent` | `.a { @include screen-agent(var(--density)) { color: red; } }` |
 | `sizer` | `.a { @include sizer(huge); }` |
@@ -279,13 +279,6 @@ a dropped declaration rather than an error.
 - Until 4.0.0 this wrote five rules, the standard one and four prefixed ancestors. Measured in Chrome 152, Firefox 156 and Safari 26.6.2 by giving each selector its own colour and asking what painted: `:-ms-input-placeholder` and the single-colon `:-moz-placeholder` parse in none of the three, and `::-webkit-input-placeholder` and `::-moz-placeholder` are their own engine's alias for `::placeholder`, which was written anyway. One rule is left, and it is understood by everything since Chrome 57, Firefox 51 and Safari 10.1, all 2017.
 - Firefox used to give the placeholder its own opacity, so a colour can come out paler than you set it. `opacity: 1` beside the colour is the usual answer.
 
-**`presence`**
-
-- Two of the three pieces fail silently on their own. Measured in Chrome 152, Firefox 156 and Safari 26.6.2 on a popover, a modal dialog and a class-toggled element, sampling the computed opacity 80ms into each direction: without `@starting-style` nothing animates on the way in, in any browser, and without `transition-behavior: allow-discrete` on `display` nothing animates on the way out, in any browser. `@starting-style` also has to be written after the rule it starts from.
-- Firefox 156 does not run the exit at all, for any of the three shapes, although it answers true for `CSS.supports("transition-behavior", "allow-discrete")`. There the element animates in and disappears at once. Chrome 152 and Safari 26.6.2 animate both ways.
-- The `overlay` line is Chrome's alone, since Firefox and Safari do not support the property, and it is what keeps a top-layer element above the page while it leaves. Measured in Chrome 152, 100ms into the close: with the line the popover computes `overlay: auto`, without it `overlay: none`, so it has already left the top layer while it is still fading and is painted among the page's own content.
-- Under `prefers-reduced-motion: reduce` the transition is shortened to 0.01ms rather than removed, because the discrete part still has to run or the element never leaves the page. Measured in Chrome and Firefox with the preference set: the element appears and disappears at once, with no motion and nothing stuck. Safari cannot be put into reduced motion from automation.
-
 **`remove`**
 
 - With one argument the element is hidden at exactly that width, `(width: 768px)`, which is a single pixel, and the mixin prints a warning. Write `only` for that width, or `min`, `max` or a range for anything wider.
@@ -308,6 +301,14 @@ a dropped declaration rather than an error.
 - Until 4.0.0 this wrote `width: 100%`, which upscales: measured in Chrome 152, Firefox 156 and Safari 26.6.2, a 100x50 image in a 600px container was drawn at 600x300 in all three. `max-inline-size: 100%` leaves it at 100x50 and still fits a larger image to the container.
 - A `height` attribute is a definite height, so `<img width="1200" height="600">` was drawn 600x600 rather than 600x300, out of shape. `height: auto` inside `:where()` overrides the attribute and loses to any `height` a stylesheet sets, which was measured in all three browsers.
 - `max-inline-size` rather than `max-width`, so the image fits the line in a vertical writing mode.
+
+**`reveal`**
+
+- Two of the three pieces fail silently on their own. Measured in Chrome 152, Firefox 156 and Safari 26.6.2 on a popover, a modal dialog and a class-toggled element, sampling the computed opacity 80ms into each direction: without `@starting-style` nothing animates on the way in, in any browser, and without `transition-behavior: allow-discrete` on `display` nothing animates on the way out, in any browser. `@starting-style` also has to be written after the rule it starts from.
+- Firefox 156 does not run the exit at all, for any of the three shapes, although it answers true for `CSS.supports("transition-behavior", "allow-discrete")`. There the element animates in and disappears at once. Chrome 152 and Safari 26.6.2 animate both ways.
+- The `overlay` line is Chrome's alone, since Firefox and Safari do not support the property, and it is what keeps a top-layer element above the page while it leaves. Measured in Chrome 152, 100ms into the close: with the line the popover computes `overlay: auto`, without it `overlay: none`, so it has already left the top layer while it is still fading and is painted among the page's own content.
+- Under `prefers-reduced-motion: reduce` the transition is shortened to 0.01ms rather than removed, because the discrete part still has to run or the element never leaves the page. Measured in Chrome and Firefox with the preference set: the element appears and disappears at once, with no motion and nothing stuck. Safari cannot be put into reduced motion from automation.
+- Several of them on one page do not touch each other: the mixin writes no shared keyframes and needs no call at the root, unlike `loadify`, so every include is its own scoped rule. Measured in Chrome 152, Firefox 156 and Safari 26.6.2 with five on a page at durations from 0.2s to 0.6s: two opened together were each at their own point of their own animation 100ms in, and opening or closing one left the others' computed styles untouched. What does close another is HTML's own rule, not this: a second `popover` closes the first, and `showModal()` closes any open ones. `popover="manual"` is the way to have two open at once, and it stayed open through all of it.
 
 **`smartphone`**
 
@@ -433,12 +434,12 @@ a dropped declaration rather than an error.
 | `placeholder-shown` | Styles an input while its placeholder is visible, which is how a floating label knows the field is empty. |
 | `placeholder` | Styles the placeholder text of an input or a textarea. |
 | `position($position: absolute, $offsets: 0, $logical: false)` | Sets position and offsets in one call, using shorthand order. |
-| `presence($open: popover, $duration: 0.3s, $move: top 0.75rem, $scale: null, $backdrop: true, $easing: ease)` | Entry and exit animation for something that is shown and hidden: a popover, a dialog, or an element a class toggles. |
 | `remove($params...)` | Hides an element outright, or within a media query: from a breakpoint up with min, up to it with max, or between two breakpoints. One breakpoint on its own hides the element at exactly that width, a single pixel, and prints a warning: pass only for that. |
 | `reset-css` | Writes a modern baseline for the document: border-box, readable line heights, media that stays in its container, form controls that inherit the page's font. |
 | `reset-figure` | Drops a figure's default margins and fits the image inside it. |
 | `resizable($direction: both, $overflow: auto)` | Makes an element user-resizable. |
 | `responsive-image` | Fits an image to its container without upscaling it or losing its proportions. |
+| `reveal($open: popover, $duration: 0.3s, $move: top 0.75rem, $scale: null, $backdrop: true, $easing: ease)` | Entry and exit animation for something that is shown and hidden: a popover, a dialog, or an element a class toggles. |
 | `scissors($corners)` | Cuts the corners off an element with clip-path. |
 | `screen-agent($resolution)` | Media query targeting a screen pixel density. |
 | `sizer($width, $height: $width)` | Sets width and height together; one argument makes a square. |

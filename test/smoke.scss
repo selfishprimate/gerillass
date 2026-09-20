@@ -61,7 +61,7 @@
 .placeholder { @include placeholder { color: gray; } }
 .placeholder-shown { @include placeholder-shown { color: gray; } }
 .position { @include position(absolute, 0 10px); }
-.presence { @include presence(popover, 0.3s, top 0.75rem); }
+.reveal { @include reveal(popover, 0.3s, top 0.75rem); }
 .remove { @include remove("only", "medium"); }
 .reset-figure { @include reset-figure; }
 .resizable { @include resizable; }

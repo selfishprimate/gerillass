@@ -6,11 +6,11 @@
 @use 'true' as *;
 @use '../../scss/gerillass' as *;
 
-@include describe('presence()') {
+@include describe('reveal()') {
   @include it('Writes the closed state, the open state and the starting state, in that order.') {
     @include assert {
       @include output {
-        .panel { @include presence(popover, 0.3s, none, null, false); }
+        .panel { @include reveal(popover, 0.3s, none, null, false); }
       }
       @include expect {
         .panel {
@@ -31,7 +31,7 @@
   @include it('Turns a direction and a distance into a translate.') {
     @include assert {
       @include output {
-        .panel { @include presence(dialog, 200ms, right 1rem, null, false); }
+        .panel { @include reveal(dialog, 200ms, right 1rem, null, false); }
       }
       @include expect {
         .panel {
@@ -53,7 +53,7 @@
   @include it('Writes the backdrop pair when it is asked for.') {
     @include assert {
       @include output {
-        .panel { @include presence(dialog, 0.3s, none, 0.9); }
+        .panel { @include reveal(dialog, 0.3s, none, 0.9); }
       }
       @include expect {
         .panel {

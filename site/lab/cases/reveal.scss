@@ -2,15 +2,15 @@
 
 // The mixin, on the three shapes it is for.
 .tooltip {
-  @include presence(popover, 0.35s, top 0.75rem, null, false);
+  @include reveal(popover, 0.35s, top 0.75rem, null, false);
 }
 
 .modal {
-  @include presence(dialog, 0.35s, none, 0.9);
+  @include reveal(dialog, 0.35s, none, 0.9);
 }
 
 .menu {
-  @include presence(".is-open", 0.35s, right 1.5rem, null, false);
+  @include reveal(".is-open", 0.35s, right 1.5rem, null, false);
 }
 
 // The same popover with one piece left out at a time, to see what each one is

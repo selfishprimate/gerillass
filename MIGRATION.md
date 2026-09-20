@@ -66,7 +66,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | the length-unit and anchor pseudo-class lists gained entries | not breaking |
 | a range that runs backwards or is empty stops the build | breaking, loud |
 | `auto-grid` is new | not breaking |
-| `presence` is new | not breaking |
+| `reveal` is new | not breaking |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -1714,7 +1714,7 @@ same call in a 250px container gives one.
 
 ---
 
-## Added: `presence`
+## Added: `reveal`
 
 Entry and exit animation for something that is shown and hidden: a popover, a
 `<dialog>`, or an element a class toggles. Nothing else changed, so it breaks
@@ -1722,11 +1722,11 @@ no call.
 
 ```scss
 .tooltip {
-  @include presence;
+  @include reveal;
 }
 
 .modal {
-  @include presence(dialog, 0.25s, none, 0.95);
+  @include reveal(dialog, 0.25s, none, 0.95);
 }
 ```
 

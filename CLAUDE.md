@@ -929,7 +929,7 @@ Two pieces of work are open:
   `$map-for-breakpoints`; and, found while discussing that key, `breakpoint`
   and `container-query` refusing a range that runs backwards or is empty
   through `scss/internal/_range-problem.scss`, which both used to write into a
-  query no width can satisfy; and `auto-grid` and `presence`, the
+  query no width can satisfy; and `auto-grid` and `reveal`, the
   first two of the review's new members that survived, on `auto-grid`,
   branched from `utilities-lists-maps`.
   The last three come from `todos/library-review.md`, and the last three

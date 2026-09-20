@@ -41,7 +41,7 @@
 // line.
 $-directions: ("top": (0, -1), "bottom": (0, 1), "left": (-1, 0), "right": (1, 0));
 
-@mixin presence($open: popover, $duration: 0.3s, $move: top 0.75rem, $scale: null, $backdrop: true, $easing: ease) {
+@mixin reveal($open: popover, $duration: 0.3s, $move: top 0.75rem, $scale: null, $backdrop: true, $easing: ease) {
   // The selector the open state is written with. Two shapes have one of their
   // own; anything else is the caller's, such as ".is-open".
   $state: null;
@@ -56,16 +56,16 @@ $-directions: ("top": (0, -1), "bottom": (0, 1), "left": (-1, 0), "right": (1, 0
     // selector that matches nothing and says nothing.
     $state: string.unquote($open);
   } @else {
-    @error "`#{meta.inspect($open)}` is not a valid $open for `presence`. Pass `popover`, `dialog`, or the selector your own code adds to the element, starting with `.`, `#`, `[` or `:`, such as `\".is-open\"`.";
+    @error "`#{meta.inspect($open)}` is not a valid $open for `reveal`. Pass `popover`, `dialog`, or the selector your own code adds to the element, starting with `.`, `#`, `[` or `:`, such as `\".is-open\"`.";
   }
 
   $time: isTime($duration);
   @if list.length($duration) > 1 {
-    @error "`#{meta.inspect($duration)}` is not a valid $duration for `presence`, which takes one time. A second one in a `transition` would be read as another property's duration.";
+    @error "`#{meta.inspect($duration)}` is not a valid $duration for `reveal`, which takes one time. A second one in a `transition` would be read as another property's duration.";
   }
 
   @if $backdrop != true and $backdrop != false {
-    @error "`#{meta.inspect($backdrop)}` is not a valid $backdrop for `presence`. Pass `true` to animate `::backdrop` with the element, or `false` to leave it alone.";
+    @error "`#{meta.inspect($backdrop)}` is not a valid $backdrop for `reveal`. Pass `true` to animate `::backdrop` with the element, or `false` to leave it alone.";
   }
 
   // What the element moves from. `none` fades without moving.
@@ -75,11 +75,11 @@ $-directions: ("top": (0, -1), "bottom": (0, 1), "left": (-1, 0), "right": (1, 0
     $direction: list.nth($move, 1);
     $distance: if(list.length($move) > 1, list.nth($move, 2), 0.75rem);
     @if not map.has-key($-directions, $direction) {
-      @error "`#{meta.inspect($direction)}` is not a valid direction for `presence`. Pass `none`, or one of: top, bottom, left, right, with an optional distance such as `top 1rem`.";
+      @error "`#{meta.inspect($direction)}` is not a valid direction for `reveal`. Pass `none`, or one of: top, bottom, left, right, with an optional distance such as `top 1rem`.";
     }
     $problem: lengthProblem($distance, $negative: false, $quoted: true);
     @if $problem {
-      @error "`#{meta.inspect($distance)}` is not a valid distance for `presence`: #{$problem}. It is written into `translate`, and a browser drops the declaration.";
+      @error "`#{meta.inspect($distance)}` is not a valid distance for `reveal`: #{$problem}. It is written into `translate`, and a browser drops the declaration.";
     }
     $signs: map.get($-directions, $direction);
     $x: if(list.nth($signs, 1) == 0, 0, $distance * list.nth($signs, 1));
@@ -88,7 +88,7 @@ $-directions: ("top": (0, -1), "bottom": (0, 1), "left": (-1, 0), "right": (1, 0
 
   @if $scale != null {
     @if meta.type-of($scale) != "number" or not math.is-unitless($scale) or $scale <= 0 {
-      @error "`#{meta.inspect($scale)}` is not a valid $scale for `presence`. Pass a unitless number above zero, such as `0.95`, or nothing to leave the size alone.";
+      @error "`#{meta.inspect($scale)}` is not a valid $scale for `reveal`. Pass a unitless number above zero, such as `0.95`, or nothing to leave the size alone.";
     }
   }
 

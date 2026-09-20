@@ -47,12 +47,12 @@ Arguments are validated and refused with a message naming what is accepted, so a
 - [placeholder-shown](https://docs.gerillass.com/docs/placeholder-shown/): Styles an input while its placeholder is visible, which is how a floating label knows the field is empty.
 - [placeholder](https://docs.gerillass.com/docs/placeholder/): Styles the placeholder text of an input or a textarea.
 - [position($position: absolute, $offsets: 0, $logical: false)](https://docs.gerillass.com/docs/position/): Sets position and offsets in one call, using shorthand order.
-- [presence($open: popover, $duration: 0.3s, $move: top 0.75rem, $scale: null, $backdrop: true, $easing: ease)](https://docs.gerillass.com/docs/presence/): Entry and exit animation for something that is shown and hidden: a popover, a dialog, or an element a class toggles.
 - [remove($params...)](https://docs.gerillass.com/docs/remove/): Hides an element outright, or within a media query: from a breakpoint up with min, up to it with max, or between two breakpoints.
 - [reset-css](https://docs.gerillass.com/docs/reset-css/): Writes a modern baseline for the document: border-box, readable line heights, media that stays in its container, form controls that inherit the page's font.
 - [reset-figure](https://docs.gerillass.com/docs/reset-figure/): Drops a figure's default margins and fits the image inside it.
 - [resizable($direction: both, $overflow: auto)](https://docs.gerillass.com/docs/resizable/): Makes an element user-resizable.
 - [responsive-image](https://docs.gerillass.com/docs/responsive-image/): Fits an image to its container without upscaling it or losing its proportions.
+- [reveal($open: popover, $duration: 0.3s, $move: top 0.75rem, $scale: null, $backdrop: true, $easing: ease)](https://docs.gerillass.com/docs/reveal/): Entry and exit animation for something that is shown and hidden: a popover, a dialog, or an element a class toggles.
 - [scissors($corners)](https://docs.gerillass.com/docs/scissors/): Cuts the corners off an element with clip-path.
 - [screen-agent($resolution)](https://docs.gerillass.com/docs/screen-agent/): Media query targeting a screen pixel density.
 - [sizer($width, $height: $width)](https://docs.gerillass.com/docs/sizer/): Sets width and height together; one argument makes a square.

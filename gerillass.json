@@ -1476,83 +1476,6 @@
       ]
     },
     {
-      "name": "presence",
-      "kind": "mixin",
-      "arguments": [
-        {
-          "name": "$open",
-          "default": "popover",
-          "accepts": [
-            "popover, the default",
-            "dialog",
-            "a selector your own code adds, such as \".is-open\""
-          ]
-        },
-        {
-          "name": "$duration",
-          "default": "0.3s",
-          "accepts": [
-            "one time, such as 0.3s or 200ms",
-            "a var() or calc()"
-          ]
-        },
-        {
-          "name": "$move",
-          "default": "top 0.75rem",
-          "accepts": [
-            "a direction with an optional distance, such as top 0.75rem",
-            "none, to fade without moving"
-          ]
-        },
-        {
-          "name": "$scale",
-          "default": "null",
-          "accepts": [
-            "a unitless number above zero, such as 0.95",
-            "nothing, to leave the size alone"
-          ]
-        },
-        {
-          "name": "$backdrop",
-          "default": "true",
-          "accepts": [
-            "true, the default, to animate ::backdrop with the element",
-            "false"
-          ]
-        },
-        {
-          "name": "$easing",
-          "default": "ease",
-          "accepts": [
-            "any easing a transition takes, such as ease or cubic-bezier(...)"
-          ]
-        }
-      ],
-      "file": "scss/library/_presence.scss",
-      "signature": "presence($open: popover, $duration: 0.3s, $move: top 0.75rem, $scale: null, $backdrop: true, $easing: ease)",
-      "summary": "Entry and exit animation for something that is shown and hidden: a popover, a dialog, or an element a class toggles.",
-      "caveats": [
-        "Two of the three pieces fail silently on their own. Measured in Chrome 152, Firefox 156 and Safari 26.6.2 on a popover, a modal dialog and a class-toggled element, sampling the computed opacity 80ms into each direction: without `@starting-style` nothing animates on the way in, in any browser, and without `transition-behavior: allow-discrete` on `display` nothing animates on the way out, in any browser. `@starting-style` also has to be written after the rule it starts from.",
-        "Firefox 156 does not run the exit at all, for any of the three shapes, although it answers true for `CSS.supports(\"transition-behavior\", \"allow-discrete\")`. There the element animates in and disappears at once. Chrome 152 and Safari 26.6.2 animate both ways.",
-        "The `overlay` line is Chrome's alone, since Firefox and Safari do not support the property, and it is what keeps a top-layer element above the page while it leaves. Measured in Chrome 152, 100ms into the close: with the line the popover computes `overlay: auto`, without it `overlay: none`, so it has already left the top layer while it is still fading and is painted among the page's own content.",
-        "Under `prefers-reduced-motion: reduce` the transition is shortened to 0.01ms rather than removed, because the discrete part still has to run or the element never leaves the page. Measured in Chrome and Firefox with the preference set: the element appears and disappears at once, with no motion and nothing stuck. Safari cannot be put into reduced motion from automation."
-      ],
-      "examples": [
-        ".tooltip { @include presence; }",
-        ".modal { @include presence(dialog, 0.25s, none, 0.95); }",
-        ".menu { @include presence(\".is-open\", 200ms, right 1rem, null, false); }",
-        ".sheet { @include presence(dialog, 0.3s, bottom 2rem); }"
-      ],
-      "rejects": [
-        ".a { @include presence(nonsense); }",
-        ".a { @include presence(popover, 0); }",
-        ".a { @include presence(popover, 0.3s, sideways); }",
-        ".a { @include presence(popover, 0.3s, top -1rem); }",
-        ".a { @include presence(popover, 0.3s, top, 0); }",
-        ".a { @include presence(popover, 0.3s, top 1rem, null, yes); }"
-      ]
-    },
-    {
       "name": "remove",
       "kind": "mixin",
       "arguments": [
@@ -1681,6 +1604,84 @@
         ".card img { @include responsive-image; }"
       ],
       "rejects": []
+    },
+    {
+      "name": "reveal",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$open",
+          "default": "popover",
+          "accepts": [
+            "popover, the default",
+            "dialog",
+            "a selector your own code adds, such as \".is-open\""
+          ]
+        },
+        {
+          "name": "$duration",
+          "default": "0.3s",
+          "accepts": [
+            "one time, such as 0.3s or 200ms",
+            "a var() or calc()"
+          ]
+        },
+        {
+          "name": "$move",
+          "default": "top 0.75rem",
+          "accepts": [
+            "a direction with an optional distance, such as top 0.75rem",
+            "none, to fade without moving"
+          ]
+        },
+        {
+          "name": "$scale",
+          "default": "null",
+          "accepts": [
+            "a unitless number above zero, such as 0.95",
+            "nothing, to leave the size alone"
+          ]
+        },
+        {
+          "name": "$backdrop",
+          "default": "true",
+          "accepts": [
+            "true, the default, to animate ::backdrop with the element",
+            "false"
+          ]
+        },
+        {
+          "name": "$easing",
+          "default": "ease",
+          "accepts": [
+            "any easing a transition takes, such as ease or cubic-bezier(...)"
+          ]
+        }
+      ],
+      "file": "scss/library/_reveal.scss",
+      "signature": "reveal($open: popover, $duration: 0.3s, $move: top 0.75rem, $scale: null, $backdrop: true, $easing: ease)",
+      "summary": "Entry and exit animation for something that is shown and hidden: a popover, a dialog, or an element a class toggles.",
+      "caveats": [
+        "Two of the three pieces fail silently on their own. Measured in Chrome 152, Firefox 156 and Safari 26.6.2 on a popover, a modal dialog and a class-toggled element, sampling the computed opacity 80ms into each direction: without `@starting-style` nothing animates on the way in, in any browser, and without `transition-behavior: allow-discrete` on `display` nothing animates on the way out, in any browser. `@starting-style` also has to be written after the rule it starts from.",
+        "Firefox 156 does not run the exit at all, for any of the three shapes, although it answers true for `CSS.supports(\"transition-behavior\", \"allow-discrete\")`. There the element animates in and disappears at once. Chrome 152 and Safari 26.6.2 animate both ways.",
+        "The `overlay` line is Chrome's alone, since Firefox and Safari do not support the property, and it is what keeps a top-layer element above the page while it leaves. Measured in Chrome 152, 100ms into the close: with the line the popover computes `overlay: auto`, without it `overlay: none`, so it has already left the top layer while it is still fading and is painted among the page's own content.",
+        "Under `prefers-reduced-motion: reduce` the transition is shortened to 0.01ms rather than removed, because the discrete part still has to run or the element never leaves the page. Measured in Chrome and Firefox with the preference set: the element appears and disappears at once, with no motion and nothing stuck. Safari cannot be put into reduced motion from automation.",
+        "Several of them on one page do not touch each other: the mixin writes no shared keyframes and needs no call at the root, unlike `loadify`, so every include is its own scoped rule. Measured in Chrome 152, Firefox 156 and Safari 26.6.2 with five on a page at durations from 0.2s to 0.6s: two opened together were each at their own point of their own animation 100ms in, and opening or closing one left the others' computed styles untouched. What does close another is HTML's own rule, not this: a second `popover` closes the first, and `showModal()` closes any open ones. `popover=\"manual\"` is the way to have two open at once, and it stayed open through all of it."
+      ],
+      "examples": [
+        ".tooltip { @include reveal; }",
+        ".modal { @include reveal(dialog, 0.25s, none, 0.95); }",
+        ".menu { @include reveal(\".is-open\", 200ms, right 1rem, null, false); }",
+        ".sheet { @include reveal(dialog, 0.3s, bottom 2rem); }"
+      ],
+      "rejects": [
+        ".a { @include reveal(nonsense); }",
+        ".a { @include reveal(popover, 0); }",
+        ".a { @include reveal(popover, 0.3s, sideways); }",
+        ".a { @include reveal(popover, 0.3s, top -1rem); }",
+        ".a { @include reveal(popover, 0.3s, top, 0); }",
+        ".a { @include reveal(popover, 0.3s, top 1rem, null, yes); }"
+      ]
     },
     {
       "name": "scissors",
