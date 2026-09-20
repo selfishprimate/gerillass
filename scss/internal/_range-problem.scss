@@ -1,0 +1,45 @@
+@charset "UTF-8";
+
+@use "sass:map";
+@use "sass:math";
+@use "sass:meta";
+@use "../maps/map-for-breakpoints" as *;
+
+// Shared by the mixins and not public API; see _is-css-function.scss.
+
+// Why a range can never match, or null when it can.
+//
+// `breakpoint(large, small)` compiled to
+// `@media (min-width: 992px) and (max-width: 575.98px)` until 4.0.0, and
+// `breakpoint(medium, medium)` to `(min-width: 768px) and (max-width:
+// 767.98px)`. Both are valid CSS a browser keeps and neither matches any
+// width, so the styles inside never applied and nothing said so.
+// `container-query` had the same two.
+//
+// A range that ends at a key stops just before it, which is what keeps
+// neighbouring ranges from overlapping, so naming the same key at both ends is
+// empty. A length written by hand ends at itself, and there a range of one
+// width is `only` written another way, which does match: that one is left
+// alone.
+//
+// Only two numbers in comparable units can be compared. A quoted length, a
+// calc() or a var() is left to the condition checks.
+@function rangeProblem($start, $end) {
+  $from: if(map.has-key($map-for-breakpoints, $start), map.get($map-for-breakpoints, $start), $start);
+  $to: if(map.has-key($map-for-breakpoints, $end), map.get($map-for-breakpoints, $end), $end);
+
+  @if meta.type-of($from) != "number" or meta.type-of($to) != "number" or not math.compatible($from, $to) {
+    @return null;
+  }
+
+  @if $from > $to {
+    @return "it runs backwards, since #{$from} is wider than #{$to}. Pass the smaller size first";
+  }
+
+  $exclusive: map.has-key($map-for-breakpoints, $end) and $to != $to * 0;
+  @if $exclusive and $from == $to {
+    @return "both ends are the same width, and a range ends just before the key it names, so the query asks for at least #{$to} and under #{$to} at once";
+  }
+
+  @return null;
+}

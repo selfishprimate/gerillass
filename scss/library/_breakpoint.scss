@@ -2,11 +2,13 @@
 
 @use "sass:list";
 @use "sass:map";
+@use "sass:meta";
 @use "../maps/map-for-breakpoints" as *;
 @use "../utilities/validate-breakpoint" as *;
 @use "../internal/custom-property-in" as *;
 @use "../internal/condition-width" as *;
 @use "../internal/key-end" as *;
+@use "../internal/range-problem" as *;
 
 // Every size goes through conditionWidth before a query is written, so a size no
 // width condition can match raises instead of compiling into one. The checks in
@@ -44,6 +46,10 @@
       $start: list.nth($params, 1);
       $end: list.nth($params, 2);
       $checked: conditionWidth($start, "breakpoint") conditionWidth($end, "breakpoint");
+      $problem: rangeProblem($start, $end);
+      @if $problem {
+        @error "`#{meta.inspect($start)}, #{meta.inspect($end)}` is not a range `breakpoint` can match: #{$problem}.";
+      }
       @media (min-width: #{validateBreakpoint($start)}) and (max-width: #{if(map.has-key($map-for-breakpoints, $end), keyEnd(validateBreakpoint($end)), $end)}) {
         @content;
       }
@@ -89,6 +95,10 @@
         $start: list.nth($value, 1);
         $end: list.nth($value, 2);
         $checked: conditionWidth($start, "breakpoint") conditionWidth($end, "breakpoint");
+        $problem: rangeProblem($start, $end);
+        @if $problem {
+          @error "`#{meta.inspect($start)} #{meta.inspect($end)}` is not a range `breakpoint` can match: #{$problem}.";
+        }
         @media (min-width: #{validateBreakpoint($start)}) and (max-width: #{if(map.has-key($map-for-breakpoints, $end), keyEnd(validateBreakpoint($end)), $end)}) {
           @content;
         }

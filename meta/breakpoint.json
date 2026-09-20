@@ -38,7 +38,9 @@
     ".a { @include breakpoint(\"small\", \"huge\") { color: red; } }",
     ".a { @include breakpoint(\"min\", 10deg) { color: red; } }",
     ".a { @include breakpoint(\"max\", 50%) { color: red; } }",
-    ".a { @include breakpoint(\"only\", 768) { color: red; } }"
+    ".a { @include breakpoint(\"only\", 768) { color: red; } }",
+    "@include breakpoint(large, small) { color: red; }",
+    "@include breakpoint(medium, medium) { color: red; }"
   ],
   "warns": [
     ".a { @include breakpoint(\"medium\") { color: red; } }"

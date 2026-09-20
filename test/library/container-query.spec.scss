@@ -55,6 +55,20 @@
 
   // A size that can never match is refused; these were measured in Chrome 152
   // as conditions an @container rule keeps, and must not be.
+  // The same as in `breakpoint`: a range of one hand-written width matches that
+  // width and is kept, while a range whose ends are the same key is empty and
+  // raises.
+  @include it('Keeps a range of one hand-written width.') {
+    @include assert {
+      @include output {
+        .a { @include container-query(500px, 500px) { color: red; } }
+      }
+      @include expect {
+        @container (min-width: 500px) and (max-width: 500px) { .a { color: red; } }
+      }
+    }
+  }
+
   @include it('Accepts a quoted length, container units and a calculation.') {
     @include assert {
       @include output {

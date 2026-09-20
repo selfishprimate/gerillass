@@ -191,6 +191,26 @@ Error: `50%` cannot be used as a size in `breakpoint`: a width condition takes a
 
 A length written as a string, `breakpoint(min, "600px")`, still works, as it always has.
 
+A range has to be able to match, and two shapes cannot. Both compiled until
+4.0.0, into valid CSS a browser keeps and no width ever satisfies, so the
+styles inside simply never applied.
+
+```scss
+.element {
+  @include breakpoint(large, small) { color: red; }
+  @include breakpoint(medium, medium) { color: red; }
+}
+```
+```text
+Error: `large, small` is not a range `breakpoint` can match: it runs backwards, since 992px is wider than 576px. Pass the smaller size first.
+Error: `medium, medium` is not a range `breakpoint` can match: both ends are the same width, and a range ends just before the key it names, so the query asks for at least 768px and under 768px at once.
+```
+
+A range of one width written by hand is a different thing and still works,
+since a length ends at itself: `breakpoint(768px, 768px)` applies at exactly
+768px, which is `only` written another way.
+
+
 ## Related Links
 
 - [CSS @media](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@media)

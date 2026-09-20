@@ -64,6 +64,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `fillNulls`'s second argument is `$separation` | not breaking; the old spelling warns |
 | `tint` and `shade` refuse a list with their own message | breaking, loud, where Sass raised before |
 | the length-unit and anchor pseudo-class lists gained entries | not breaking |
+| a range that runs backwards or is empty stops the build | breaking, loud |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -1612,6 +1613,45 @@ and the font-relative ones such as `cap`, `ic` and `rlh`. It is the set
 `$list-of-counter-styles` lost a `lower-alpha` it held twice. Nothing in the
 library branches on the first two, so this only matters to a stylesheet reading
 them.
+
+---
+
+## Break: a range that cannot match stops the build
+
+`breakpoint` and `container-query` used to write any pair of sizes into a
+query, whichever way round they were. Two shapes can never match, and both
+compiled into valid CSS a browser keeps, so the styles inside never applied and
+nothing said so:
+
+```scss
+// 3.x
+.a { @include breakpoint(large, small) { color: red; } }
+.b { @include breakpoint(medium, medium) { color: red; } }
+```
+
+```css
+@media (min-width: 992px) and (max-width: 575.98px) { .a { color: red; } }
+@media (min-width: 768px) and (max-width: 767.98px) { .b { color: red; } }
+```
+
+Measured in Chrome 152, Firefox 156 and Safari 26.6.2 at 320, 575, 576, 577,
+768, 992, 1200 and 1400px: neither query matched at any width, in any browser,
+while a real range, `(min-width: 576px) and (max-width: 991.98px)`, matched at
+576, 577 and 768. Both raise now.
+
+The second one is easy to write by accident, because a range ends just before
+the key it names: naming the same key at both ends asks for at least 768px and
+under 768px at once. A range of one width written **by hand** is a different
+thing and still compiles, since a length ends at itself:
+
+```scss
+.a { @include breakpoint(768px, 768px) { color: red; } }   // applies at 768px
+```
+
+An 880 call matrix over every pair of keys and lengths compiled against 3.x and
+against the branch: 655 calls unchanged, 225 refused, none newly accepted and
+no CSS changed. Every one of the 225 was checked arithmetically as well: in all
+of them the minimum sits above the maximum.
 
 ---
 

@@ -9,7 +9,7 @@ Gerillass is a **pure Sass library** — a toolkit of mixins and functions, in t
 Two consequences follow from this and drive most decisions in the repo:
 
 1. **`package.json` must have no `dependencies`.** Everything (`jest`, `sass`, `sass-true`, `glob`) belongs in `devDependencies`. Consumers get only `.scss` files, so a runtime dependency here forces the entire test toolchain onto every downstream project. This was the cause of 24 Dependabot alerts fixed in v1.3.3 — do not reintroduce it.
-2. **Only `scss/` ships.** `.npmignore` excludes `test`, `assets`, `meta`, `tools`, dotfiles and `*.md`; npm always adds `README.md`, `LICENSE.md` and `package.json` back. Verify with `npm pack --dry-run` before any release (115 files, a 128 kB tarball for 4.0.0, which merged `background-dots` and `background-stripes` into one `background-pattern` and added `scss/internal/_key-end.scss`, `_device-size.scss`, `_nth-of.scss` and `_time-problem.scss`).
+2. **Only `scss/` ships.** `.npmignore` excludes `test`, `assets`, `meta`, `tools`, dotfiles and `*.md`; npm always adds `README.md`, `LICENSE.md` and `package.json` back. Verify with `npm pack --dry-run` before any release (116 files, a 129 kB tarball for 4.0.0, which merged `background-dots` and `background-stripes` into one `background-pattern` and added `scss/internal/_key-end.scss`, `_device-size.scss`, `_nth-of.scss`, `_time-problem.scss` and `_range-problem.scss`).
 3. **The gem is the same library, not a port.** `gerillass.gemspec` ships `scss/`, `gerillass.json` and `SKILL.md`, plus `lib/`, `LICENSE.md` and `README.md`, reads its version from `package.json`, and has no runtime dependencies. `lib/` only tells Rails, Jekyll or a plain `sass-embedded` compile where `scss/` is. `.npmignore` keeps `lib`, the gemspec and `*.gem` out of the npm package. Keep the gemspec ASCII: RubyGems reads it in the locale's encoding, and a literal non-ASCII character fails to load.
 
 Dart Sass only. LibSass/node-sass has been unsupported since v1.3.0.
@@ -926,7 +926,10 @@ Two pieces of work are open:
   `utilities-lists-maps`, branched from `truncate`, which fixes `isTime`,
   `fillNulls`, `tint` and `shade`, refreshes the length-unit and anchor
   pseudo-class lists, and adds an `xxl` key at 1400px to
-  `$map-for-breakpoints`.
+  `$map-for-breakpoints`; and, found while discussing that key, `breakpoint`
+  and `container-query` refusing a range that runs backwards or is empty
+  through `scss/internal/_range-problem.scss`, which both used to write into a
+  query no width can satisfy.
   The last three come from `todos/library-review.md`, and the last three
   patterns, `glow`, `vignette` and `mesh`, from the survey in
   `todos/saas-hero-backgrounds.md`. Each has a `MIGRATION.md` section.

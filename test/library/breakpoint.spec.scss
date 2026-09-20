@@ -60,6 +60,24 @@
     }
   }
 
+  // A range of one width is `only` written another way, and it does match, so
+  // the check for an empty range must not take it: measured in Chrome 152,
+  // Firefox 156 and Safari 26.6.2, `(min-width: 768px) and (max-width: 768px)`
+  // applies at exactly 768px. A range ending at a key is the other case, since
+  // the key ends just before itself.
+  @include it('Keeps a range of one hand-written width.') {
+    @include assert {
+      @include output {
+        .a { @include breakpoint(768px, 768px) { color: red; } }
+        .b { @include breakpoint(between, 900px 900px) { color: red; } }
+      }
+      @include expect {
+        @media (min-width: 768px) and (max-width: 768px) { .a { color: red; } }
+        @media (min-width: 900px) and (max-width: 900px) { .b { color: red; } }
+      }
+    }
+  }
+
   // Since 4.0.0 a range or a max that ends at a key stops 0.02px under it, so
   // `max` and `min` at the same key, and neighbouring ranges, neither overlap
   // nor leave a gap. Measured in Chrome 152, Firefox 156 and Safari 26.6.2; see

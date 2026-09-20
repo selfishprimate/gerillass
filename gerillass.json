@@ -563,7 +563,9 @@
         ".a { @include breakpoint(\"small\", \"huge\") { color: red; } }",
         ".a { @include breakpoint(\"min\", 10deg) { color: red; } }",
         ".a { @include breakpoint(\"max\", 50%) { color: red; } }",
-        ".a { @include breakpoint(\"only\", 768) { color: red; } }"
+        ".a { @include breakpoint(\"only\", 768) { color: red; } }",
+        "@include breakpoint(large, small) { color: red; }",
+        "@include breakpoint(medium, medium) { color: red; }"
       ],
       "warns": [
         ".a { @include breakpoint(\"medium\") { color: red; } }"
@@ -739,7 +741,9 @@
         ".title { @include container-query(\"min\", \"huge\") { color: red; } }",
         ".title { @include container-query(\"max\", 400) { color: red; } }",
         ".title { @include container-query(\"between\", 300px 10deg) { color: red; } }",
-        ".title { @include container-query(300px, 50%) { color: red; } }"
+        ".title { @include container-query(300px, 50%) { color: red; } }",
+        "@include container-query(large, small) { color: red; }",
+        "@include container-query(between, medium medium) { color: red; }"
       ],
       "warns": [
         ".title { @include container-query(400px) { color: red; } }"

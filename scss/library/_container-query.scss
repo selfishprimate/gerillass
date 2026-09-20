@@ -7,6 +7,7 @@
 @use "../maps/map-for-breakpoints" as *;
 @use "../internal/custom-property-in" as *;
 @use "../internal/condition-width" as *;
+@use "../internal/range-problem" as *;
 
 // Characters and names a browser will not keep as the name in an @container
 // rule. Measured in Chrome 152, the rule was dropped for `var(--n)`, `none`,
@@ -109,6 +110,10 @@ $-forbidden-in-name: "." "," "/" "#" ":" ";" "(" ")" "[" "]" "{" "}" "!" "@" "$"
     $mode: list.nth($params, 1);
     @if not list.index("only" "min" "max" "between", $mode) {
       // Two bare sizes mean a range, as they do in `breakpoint`.
+      $problem: rangeProblem($mode, list.nth($params, 2));
+      @if $problem {
+        @error "`#{meta.inspect($mode)}, #{meta.inspect(list.nth($params, 2))}` is not a range `container-query` can match: #{$problem}.";
+      }
       $condition: "(min-width: #{conditionWidth($mode, "container-query", "@container")}) and (#{-range-end(list.nth($params, 2))})";
     } @else {
       $value: list.nth($params, 2);
@@ -121,6 +126,10 @@ $-forbidden-in-name: "." "," "/" "#" ":" ";" "(" ")" "[" "]" "{" "}" "!" "@" "$"
       } @else {
         $start: list.nth($value, 1);
         $end: list.nth($value, 2);
+        $problem: rangeProblem($start, $end);
+        @if $problem {
+          @error "`#{meta.inspect($start)} #{meta.inspect($end)}` is not a range `container-query` can match: #{$problem}.";
+        }
         $condition: "(min-width: #{conditionWidth($start, "container-query", "@container")}) and (#{-range-end($end)})";
       }
     }

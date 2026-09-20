@@ -171,6 +171,25 @@ A name from a custom property is refused too. The query needs the name itself, e
 Error: `var(--container)` is not a valid $name for `container-query`: a custom property is not evaluated in a @container condition, so the rule would never apply. Pass the name itself, such as `"card"`; the `container` mixin can still take its name from a custom property.
 ```
 
+A range has to be able to match, and two shapes cannot. Both compiled until
+4.0.0, into valid CSS a browser keeps and no width ever satisfies, so the
+styles inside simply never applied.
+
+```scss
+.element {
+  @include container-query(large, small) { color: red; }
+  @include container-query(medium, medium) { color: red; }
+}
+```
+```text
+Error: `large, small` is not a range `container-query` can match: it runs backwards, since 992px is wider than 576px. Pass the smaller size first.
+Error: `medium, medium` is not a range `container-query` can match: both ends are the same width, and a range ends just before the key it names, so the query asks for at least 768px and under 768px at once.
+```
+
+A range of one width written by hand is a different thing and still works,
+since a length ends at itself: `container-query(768px, 768px)` applies at exactly
+768px, which is `only` written another way.
+
 ## Related Links
 * [Container](/docs/container)
 * [Breakpoint](/docs/breakpoint)
