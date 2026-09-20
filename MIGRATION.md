@@ -66,6 +66,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | the length-unit and anchor pseudo-class lists gained entries | not breaking |
 | a range that runs backwards or is empty stops the build | breaking, loud |
 | `auto-grid` is new | not breaking |
+| `presence` is new | not breaking |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -1710,6 +1711,39 @@ minimum as `max($min, (100% - ($limit - 1) * $gap) / $limit)`, where the limit
 appears twice and the gap once. Measured in a 1000px container with six items,
 `$limit: 4` gives exactly four 238px columns in all three browsers, and the
 same call in a 250px container gives one.
+
+---
+
+## Added: `presence`
+
+Entry and exit animation for something that is shown and hidden: a popover, a
+`<dialog>`, or an element a class toggles. Nothing else changed, so it breaks
+no call.
+
+```scss
+.tooltip {
+  @include presence;
+}
+
+.modal {
+  @include presence(dialog, 0.25s, none, 0.95);
+}
+```
+
+`display: none` could not be transitioned, and the CSS that changes that has
+two pieces which each do nothing on their own. Measured in Chrome 152, Firefox
+156 and Safari 26.6.2 on all three shapes, reading the computed opacity 80ms
+into each direction: without `@starting-style` nothing animates on the way in,
+in any browser, and without `transition-behavior: allow-discrete` on `display`
+nothing animates on the way out, in any browser. Neither says a word.
+`@starting-style` also has to be written after the rule it starts from.
+
+Firefox 156 does not run the exit at all, on any of the three shapes, although
+it answers true for `CSS.supports("transition-behavior", "allow-discrete")`:
+there the element animates in and closes at once. Under
+`prefers-reduced-motion: reduce` the transition is shortened to 0.01ms rather
+than removed, since `transition: none` would take the discrete part with it and
+the element would never leave the page.
 
 ---
 

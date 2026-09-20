@@ -1,0 +1,210 @@
+---
+title: "Presence"
+page_title: "Presence Sass Mixin"
+page_description: "The Presence Sass mixin animates something in and out of the page: a popover, a dialog, or an element a class toggles, with the starting-style and allow-discrete pieces that each fail silently on their own."
+page_keywords: "CSS starting-style, transition-behavior allow-discrete, animate display none, popover animation CSS, dialog animation CSS, CSS exit animation, Gerillass presence"
+page_image: "gerillass-loadify.jpg"
+---
+
+# Presence
+
+<Member name="presence">
+
+The **Presence** Sass mixin animates something in and out of the page: a popover, a `<dialog>`, or a plain element a class shows and hides. It writes the pieces that make a `display: none` transition work, and each of those pieces does nothing on its own.
+
+</Member>
+
+<Hint kind="warning">
+
+**New in Gerillass 4.0.0.**
+
+</Hint>
+
+## Why this needs a mixin
+
+`display: none` could not be transitioned, which is why fading a menu in was a JavaScript job for years. CSS can do it now, and it takes three things that have to agree. Measured in Chrome 152, Firefox 156 and Safari 26.6.2, on a popover, a modal dialog and a class-toggled element, reading the computed opacity 80ms into each direction:
+
+| What is written | On the way in | On the way out |
+|---|---|---|
+| all of it | animates in all three | Chrome and Safari |
+| without `@starting-style` | **nothing, in any browser** | animates |
+| without `allow-discrete` on `display` | animates | **nothing, in any browser** |
+
+Neither failure says anything. The CSS is valid, the transition is there, and half the effect is missing.
+
+`@starting-style` also has to come **after** the rule it starts from. Written before it, it does nothing, and again without a word.
+
+<Hint kind="danger">
+
+**Firefox does not run the exit.** Measured in Firefox 156 on all three shapes: the element animates in and then disappears at once, although the browser answers `true` for `CSS.supports("transition-behavior", "allow-discrete")`. Chrome 152 and Safari 26.6.2 animate both ways. What a Firefox user gets is the entry animation and an instant close, which is a smaller effect rather than a broken one.
+
+</Hint>
+
+## Arguments
+
+<Arguments of="presence" footnote="The mixin goes on the element that is shown and hidden, not on the button that toggles it.">
+  <Argument name="$open" type="string"><code>popover</code>, the default, writes the open state as <code>:popover-open</code>; <code>dialog</code> writes <code>[open]</code>; a string such as <code>".is-open"</code> is the selector your own code adds. It is attached to the element with no combinator, so it has to start with <code>.</code>, <code>#</code>, <code>[</code> or <code>:</code>.</Argument>
+  <Argument name="$duration" type="number">One time, <code>0.3s</code> by default. It is written into every part of the transition, the discrete ones included.</Argument>
+  <Argument name="$move" type="list">Where it comes from: a direction, <code>top</code>, <code>bottom</code>, <code>left</code> or <code>right</code>, with an optional distance, as in <code>top 0.75rem</code>. <code>none</code> fades without moving.</Argument>
+  <Argument name="$scale" type="number">A unitless number above zero, such as <code>0.95</code>, to grow into place. Left out, the size is not touched.</Argument>
+  <Argument name="$backdrop" type="boolean"><code>true</code> by default, which writes the same three pieces again for <code>::backdrop</code>, since a dialog's backdrop is a second element with its own transition. <code>false</code> leaves it alone.</Argument>
+  <Argument name="$easing" type="string">Any easing a transition takes, <code>ease</code> by default.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="A popover that fades and slides down. The button needs no JavaScript: `popovertarget` is HTML's own." listing="<button popovertarget=&quot;tip&quot;>Toggle the popover</button>
+<div popover id=&quot;tip&quot; class=&quot;tooltip&quot;>Fades and slides, both ways.</div>">
+```scss
+.tooltip {
+  @include presence(popover, 0.35s, top 0.75rem, null, false);
+}
+```
+```html
+<style>
+  button { padding: 8px 14px; border: 0; border-radius: 8px; background: #0f172a; color: #fff; font: 600 13px Inter, ui-sans-serif, system-ui, sans-serif; }
+  .tooltip { position: absolute; inset: auto; margin: 6px 0 0; border: 0; border-radius: 10px; padding: 12px 14px; background: #0f172a; color: #f8fafc; font: 13px Inter, ui-sans-serif, system-ui, sans-serif; }
+</style>
+<button popovertarget="tip">Toggle the popover</button>
+<div popover id="tip" class="tooltip">Fades and slides, both ways.</div>
+```
+</Example>
+
+<Example caption="The same popover with `@starting-style` left out, so you can see what it carries: this one appears at once and only fades on the way out." listing="<button popovertarget=&quot;plain&quot;>Toggle</button>
+<div popover id=&quot;plain&quot; class=&quot;plain&quot;>No way in.</div>">
+```scss
+// Not what the mixin writes: this is the same CSS with the starting state
+// removed, for the comparison.
+.plain {
+  opacity: 0;
+  transition: opacity 0.35s ease, display 0.35s allow-discrete;
+}
+
+.plain:popover-open {
+  opacity: 1;
+}
+```
+```html
+<style>
+  button { padding: 8px 14px; border: 0; border-radius: 8px; background: #0f172a; color: #fff; font: 600 13px Inter, ui-sans-serif, system-ui, sans-serif; }
+  .plain { position: absolute; inset: auto; margin: 6px 0 0; border: 0; border-radius: 10px; padding: 12px 14px; background: #7c2d12; color: #ffedd5; font: 13px Inter, ui-sans-serif, system-ui, sans-serif; }
+</style>
+<button popovertarget="plain">Toggle</button>
+<div popover id="plain" class="plain">No way in.</div>
+```
+</Example>
+
+<Example caption="A modal dialog growing into place, with its backdrop fading behind it. Opening a dialog takes a line of script, which the frames on this page do not run, so this one is code rather than a demo.">
+```scss
+.modal {
+  @include presence(dialog, 0.25s, none, 0.95);
+}
+```
+```html
+<dialog class="modal">
+  <p>Delete this project?</p>
+  <form method="dialog">
+    <button value="cancel">Cancel</button>
+    <button value="delete">Delete</button>
+  </form>
+</dialog>
+```
+</Example>
+
+<Example caption="An element your own code shows with a class. The selector is yours, so the mixin writes the same three pieces against it.">
+```scss
+.menu {
+  display: none;
+
+  @include presence(".is-open", 200ms, right 1rem, null, false);
+}
+
+.menu.is-open {
+  display: block;
+}
+```
+```html
+<nav class="menu">
+  <a href="/docs">Docs</a>
+  <a href="/playground">Playground</a>
+</nav>
+```
+</Example>
+
+## What it writes
+
+```scss
+.tooltip {
+  @include presence;
+}
+```
+
+```css
+.tooltip {
+  opacity: 0;
+  translate: 0 -0.75rem;
+  transition: opacity 0.3s ease, translate 0.3s ease, display 0.3s allow-discrete, overlay 0.3s allow-discrete;
+}
+.tooltip:popover-open {
+  opacity: 1;
+  translate: 0 0;
+}
+@starting-style {
+  .tooltip:popover-open {
+    opacity: 0;
+    translate: 0 -0.75rem;
+  }
+}
+.tooltip::backdrop {
+  opacity: 0;
+  transition: opacity 0.3s ease, display 0.3s allow-discrete, overlay 0.3s allow-discrete;
+}
+.tooltip:popover-open::backdrop {
+  opacity: 1;
+}
+@starting-style {
+  .tooltip:popover-open::backdrop {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tooltip, .tooltip::backdrop {
+    transition-duration: 0.01ms;
+  }
+}
+```
+
+The closed state is the base rule, so an element that is never opened is already in it. `overlay` is in the transition for the top layer: it is Chrome's property alone, since Firefox and Safari do not support it, and it is what keeps a popover or a dialog painted while it leaves.
+
+<Hint kind="info">
+
+**Reduced motion shortens the transition rather than removing it.** `transition: none` would take the discrete part with it, and then the element never leaves the page. `0.01ms` is a cut: measured in Chrome 152 and Firefox 156 with the preference set, the element appears and disappears at once, with no motion and nothing left behind. Safari cannot be put into reduced motion from automation, so it was not measured there.
+
+</Hint>
+
+## What it refuses
+
+```scss
+.a {
+  @include presence(nonsense);
+  @include presence(popover, 0.3s, sideways);
+  @include presence(popover, 0.3s, top -1rem);
+  @include presence(popover, 0.3s, top, 0);
+}
+```
+```text
+Error: `nonsense` is not a valid $open for `presence`. Pass `popover`, `dialog`, or the selector your own code adds to the element, starting with `.`, `#`, `[` or `:`, such as `".is-open"`.
+Error: `sideways` is not a valid direction for `presence`. Pass `none`, or one of: top, bottom, left, right, with an optional distance such as `top 1rem`.
+Error: `-1rem` is not a valid distance for `presence`: a length below zero does not work here. It is written into `translate`, and a browser drops the declaration.
+Error: `0` is not a valid $scale for `presence`. Pass a unitless number above zero, such as `0.95`, or nothing to leave the size alone.
+```
+
+A bare word for `$open` is the one worth explaining: the state is attached to the element with no combinator, so `presence(nonsense)` would have compiled into `.aNonsense`, a selector that matches nothing and says nothing.
+
+## Related Links
+
+- [Loadify](/docs/loadify)
+- [Motion Safe](/docs/motion-safe)
+- [CSS @starting-style](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@starting-style)
+- [CSS transition-behavior](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/transition-behavior)
+- [CSS overlay](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/overlay)

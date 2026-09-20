@@ -1,0 +1,171 @@
+@charset "UTF-8";
+
+@use "sass:list";
+@use "sass:map";
+@use "sass:math";
+@use "sass:meta";
+@use "sass:string";
+@use "../utilities/is-time" as *;
+@use "../internal/length-problem" as *;
+
+// Entry and exit animation for something that is shown and hidden: a popover,
+// a <dialog>, or a plain element a class toggles.
+//
+// `display: none` cannot be transitioned, which is why this was a JavaScript
+// job for years. CSS can do it now, and it takes three pieces that each fail
+// silently when they are missing. Measured in Chrome 152, Firefox 156 and
+// Safari 26.6.2, on a popover, a modal dialog and a class-toggled div, sampling
+// the computed opacity 80ms into each direction:
+//
+//   what is written                   opening              closing
+//   all three pieces                  animates everywhere  Chrome, Safari
+//   no @starting-style                nothing, anywhere    animates
+//   no allow-discrete on display      animates             nothing, anywhere
+//
+// So `@starting-style` is the entry and `allow-discrete` is the exit, and
+// leaving either out gives CSS that runs without doing half of what it says.
+// `@starting-style` also has to come after the rule it starts from, which is
+// the order the mixin writes them in.
+//
+// Two things the measurements say plainly. Firefox 156 does not run the exit
+// at all, for any of the three shapes, although it answers true for
+// `CSS.supports("transition-behavior", "allow-discrete")`: there the element
+// fades in and disappears at once. And the `overlay` line is Chrome's alone,
+// since Firefox and Safari do not support the property; it is written because
+// it costs nothing and is what keeps a top-layer element painted while it
+// leaves.
+$-directions: ("top": (0, -1), "bottom": (0, 1), "left": (-1, 0), "right": (1, 0));
+
+@mixin presence($open: popover, $duration: 0.3s, $move: top 0.75rem, $scale: null, $backdrop: true, $easing: ease) {
+  // The selector the open state is written with. Two shapes have one of their
+  // own; anything else is the caller's, such as ".is-open".
+  $state: null;
+  @if $open == popover {
+    $state: ":popover-open";
+  } @else if $open == dialog {
+    $state: "[open]";
+  } @else if meta.type-of($open) == "string" and list.index("." "#" "[" ":", string.slice(string.unquote($open), 1, 1)) {
+    // It is attached to the element with no combinator, so it has to be
+    // something that can attach: a class, an id, an attribute or a
+    // pseudo-class. A bare word would compile into `.panelnonsense`, a
+    // selector that matches nothing and says nothing.
+    $state: string.unquote($open);
+  } @else {
+    @error "`#{meta.inspect($open)}` is not a valid $open for `presence`. Pass `popover`, `dialog`, or the selector your own code adds to the element, starting with `.`, `#`, `[` or `:`, such as `\".is-open\"`.";
+  }
+
+  $time: isTime($duration);
+  @if list.length($duration) > 1 {
+    @error "`#{meta.inspect($duration)}` is not a valid $duration for `presence`, which takes one time. A second one in a `transition` would be read as another property's duration.";
+  }
+
+  @if $backdrop != true and $backdrop != false {
+    @error "`#{meta.inspect($backdrop)}` is not a valid $backdrop for `presence`. Pass `true` to animate `::backdrop` with the element, or `false` to leave it alone.";
+  }
+
+  // What the element moves from. `none` fades without moving.
+  $x: 0;
+  $y: 0;
+  @if $move != none and $move != null {
+    $direction: list.nth($move, 1);
+    $distance: if(list.length($move) > 1, list.nth($move, 2), 0.75rem);
+    @if not map.has-key($-directions, $direction) {
+      @error "`#{meta.inspect($direction)}` is not a valid direction for `presence`. Pass `none`, or one of: top, bottom, left, right, with an optional distance such as `top 1rem`.";
+    }
+    $problem: lengthProblem($distance, $negative: false, $quoted: true);
+    @if $problem {
+      @error "`#{meta.inspect($distance)}` is not a valid distance for `presence`: #{$problem}. It is written into `translate`, and a browser drops the declaration.";
+    }
+    $signs: map.get($-directions, $direction);
+    $x: if(list.nth($signs, 1) == 0, 0, $distance * list.nth($signs, 1));
+    $y: if(list.nth($signs, 2) == 0, 0, $distance * list.nth($signs, 2));
+  }
+
+  @if $scale != null {
+    @if meta.type-of($scale) != "number" or not math.is-unitless($scale) or $scale <= 0 {
+      @error "`#{meta.inspect($scale)}` is not a valid $scale for `presence`. Pass a unitless number above zero, such as `0.95`, or nothing to leave the size alone.";
+    }
+  }
+
+  // The closed state is the base rule, so an element that is never opened is
+  // already in it. `overlay` is in the list for the top layer; a class-toggled
+  // element ignores it.
+  $properties: "opacity #{$time} #{$easing}";
+  @if $x != 0 or $y != 0 {
+    $properties: "#{$properties}, translate #{$time} #{$easing}";
+  }
+  @if $scale != null {
+    $properties: "#{$properties}, scale #{$time} #{$easing}";
+  }
+  $properties: "#{$properties}, display #{$time} allow-discrete, overlay #{$time} allow-discrete";
+
+  opacity: 0;
+  @if $x != 0 or $y != 0 {
+    translate: $x $y;
+  }
+  @if $scale != null {
+    scale: $scale;
+  }
+  transition: string.unquote($properties);
+
+  &#{$state} {
+    opacity: 1;
+    @if $x != 0 or $y != 0 {
+      translate: 0 0;
+    }
+    @if $scale != null {
+      scale: 1;
+    }
+  }
+
+  // The starting state, and it has to be written after the rule above: a
+  // browser reads @starting-style in source order and an earlier one does
+  // nothing at all.
+  @at-root {
+    @starting-style {
+      &#{$state} {
+        opacity: 0;
+        @if $x != 0 or $y != 0 {
+          translate: $x $y;
+        }
+        @if $scale != null {
+          scale: $scale;
+        }
+      }
+    }
+  }
+
+  @if $backdrop {
+    &::backdrop {
+      opacity: 0;
+      transition: string.unquote("opacity #{$time} #{$easing}, display #{$time} allow-discrete, overlay #{$time} allow-discrete");
+    }
+
+    &#{$state}::backdrop {
+      opacity: 1;
+    }
+
+    @at-root {
+      @starting-style {
+        &#{$state}::backdrop {
+          opacity: 0;
+        }
+      }
+    }
+  }
+
+  // Not `transition: none`: the discrete part still has to run, or the element
+  // stays on the page. A duration this short is a cut rather than a motion.
+  @media (prefers-reduced-motion: reduce) {
+    @if $backdrop {
+      &,
+      &::backdrop {
+        transition-duration: 0.01ms;
+      }
+    } @else {
+      & {
+        transition-duration: 0.01ms;
+      }
+    }
+  }
+}

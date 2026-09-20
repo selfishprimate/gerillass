@@ -1,0 +1,40 @@
+@use "gerillass" as *;
+
+// The mixin, on the three shapes it is for.
+.tooltip {
+  @include presence(popover, 0.35s, top 0.75rem, null, false);
+}
+
+.modal {
+  @include presence(dialog, 0.35s, none, 0.9);
+}
+
+.menu {
+  @include presence(".is-open", 0.35s, right 1.5rem, null, false);
+}
+
+// The same popover with the two pieces left out, one at a time, to see what
+// each one is carrying. Written by hand, since the mixin does not write these.
+.no-starting-style {
+  opacity: 0;
+  transition: opacity 0.35s ease, display 0.35s allow-discrete;
+}
+
+.no-starting-style:popover-open {
+  opacity: 1;
+}
+
+.no-allow-discrete {
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.no-allow-discrete:popover-open {
+  opacity: 1;
+}
+
+@starting-style {
+  .no-allow-discrete:popover-open {
+    opacity: 0;
+  }
+}

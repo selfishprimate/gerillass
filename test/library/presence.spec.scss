@@ -1,0 +1,82 @@
+// The order is the thing a snapshot cannot explain: `@starting-style` has to
+// come after the rule it starts from, or the entry animation does nothing.
+// Measured in Chrome 152, Firefox 156 and Safari 26.6.2 on a popover, a modal
+// dialog and a class-toggled element: without `@starting-style` nothing
+// animates in, and without `allow-discrete` on `display` nothing animates out.
+@use 'true' as *;
+@use '../../scss/gerillass' as *;
+
+@include describe('presence()') {
+  @include it('Writes the closed state, the open state and the starting state, in that order.') {
+    @include assert {
+      @include output {
+        .panel { @include presence(popover, 0.3s, none, null, false); }
+      }
+      @include expect {
+        .panel {
+          opacity: 0;
+          transition: opacity 0.3s ease, display 0.3s allow-discrete, overlay 0.3s allow-discrete;
+        }
+        .panel:popover-open { opacity: 1; }
+        @starting-style {
+          .panel:popover-open { opacity: 0; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .panel { transition-duration: 0.01ms; }
+        }
+      }
+    }
+  }
+
+  @include it('Turns a direction and a distance into a translate.') {
+    @include assert {
+      @include output {
+        .panel { @include presence(dialog, 200ms, right 1rem, null, false); }
+      }
+      @include expect {
+        .panel {
+          opacity: 0;
+          translate: 1rem 0;
+          transition: opacity 200ms ease, translate 200ms ease, display 200ms allow-discrete, overlay 200ms allow-discrete;
+        }
+        .panel[open] { opacity: 1; translate: 0 0; }
+        @starting-style {
+          .panel[open] { opacity: 0; translate: 1rem 0; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .panel { transition-duration: 0.01ms; }
+        }
+      }
+    }
+  }
+
+  @include it('Writes the backdrop pair when it is asked for.') {
+    @include assert {
+      @include output {
+        .panel { @include presence(dialog, 0.3s, none, 0.9); }
+      }
+      @include expect {
+        .panel {
+          opacity: 0;
+          scale: 0.9;
+          transition: opacity 0.3s ease, scale 0.3s ease, display 0.3s allow-discrete, overlay 0.3s allow-discrete;
+        }
+        .panel[open] { opacity: 1; scale: 1; }
+        @starting-style {
+          .panel[open] { opacity: 0; scale: 0.9; }
+        }
+        .panel::backdrop {
+          opacity: 0;
+          transition: opacity 0.3s ease, display 0.3s allow-discrete, overlay 0.3s allow-discrete;
+        }
+        .panel[open]::backdrop { opacity: 1; }
+        @starting-style {
+          .panel[open]::backdrop { opacity: 0; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .panel, .panel::backdrop { transition-duration: 0.01ms; }
+        }
+      }
+    }
+  }
+}

@@ -5,7 +5,7 @@ description: Use the Gerillass Sass mixin library — loading it, the mixin cata
 
 # Gerillass
 
-A Sass mixin library: 53 mixins and 24 functions that emit CSS from
+A Sass mixin library: 54 mixins and 24 functions that emit CSS from
 semantic declarations. It is Sass source only — there is no runtime and no
 utility classes, so styles live in your stylesheet and your markup stays clean.
 
@@ -106,6 +106,7 @@ a dropped declaration rather than an error.
 | `motion-safe` | `.card { @include motion-safe; }` |
 | `only` | `.a { @include only(#ff0000) { margin: 0; } }` |
 | `position` | `.badge { @include position(absolute, 0, $logical: yes); }` |
+| `presence` | `.a { @include presence(nonsense); }` |
 | `remove` | `.a { @include remove(a, b, c); }` |
 | `reset-css` | `.a { @include reset-css; }` |
 | `resizable` | `.a { @include resizable(huge); }` |
@@ -278,6 +279,13 @@ a dropped declaration rather than an error.
 - Until 4.0.0 this wrote five rules, the standard one and four prefixed ancestors. Measured in Chrome 152, Firefox 156 and Safari 26.6.2 by giving each selector its own colour and asking what painted: `:-ms-input-placeholder` and the single-colon `:-moz-placeholder` parse in none of the three, and `::-webkit-input-placeholder` and `::-moz-placeholder` are their own engine's alias for `::placeholder`, which was written anyway. One rule is left, and it is understood by everything since Chrome 57, Firefox 51 and Safari 10.1, all 2017.
 - Firefox used to give the placeholder its own opacity, so a colour can come out paler than you set it. `opacity: 1` beside the colour is the usual answer.
 
+**`presence`**
+
+- Two of the three pieces fail silently on their own. Measured in Chrome 152, Firefox 156 and Safari 26.6.2 on a popover, a modal dialog and a class-toggled element, sampling the computed opacity 80ms into each direction: without `@starting-style` nothing animates on the way in, in any browser, and without `transition-behavior: allow-discrete` on `display` nothing animates on the way out, in any browser. `@starting-style` also has to be written after the rule it starts from.
+- Firefox 156 does not run the exit at all, for any of the three shapes, although it answers true for `CSS.supports("transition-behavior", "allow-discrete")`. There the element animates in and disappears at once. Chrome 152 and Safari 26.6.2 animate both ways.
+- The `overlay` line is Chrome's alone: Firefox and Safari do not support the property. It is written because it costs nothing and is what keeps a top-layer element painted while it leaves.
+- Under `prefers-reduced-motion: reduce` the transition is shortened to 0.01ms rather than removed, because the discrete part still has to run or the element never leaves the page. Measured in Chrome and Firefox with the preference set: the element appears and disappears at once, with no motion and nothing stuck. Safari cannot be put into reduced motion from automation.
+
 **`remove`**
 
 - With one argument the element is hidden at exactly that width, `(width: 768px)`, which is a single pixel, and the mixin prints a warning. Write `only` for that width, or `min`, `max` or a range for anything wider.
@@ -425,6 +433,7 @@ a dropped declaration rather than an error.
 | `placeholder-shown` | Styles an input while its placeholder is visible, which is how a floating label knows the field is empty. |
 | `placeholder` | Styles the placeholder text of an input or a textarea. |
 | `position($position: absolute, $offsets: 0, $logical: false)` | Sets position and offsets in one call, using shorthand order. |
+| `presence($open: popover, $duration: 0.3s, $move: top 0.75rem, $scale: null, $backdrop: true, $easing: ease)` | Entry and exit animation for something that is shown and hidden: a popover, a dialog, or an element a class toggles. |
 | `remove($params...)` | Hides an element outright, or within a media query: from a breakpoint up with min, up to it with max, or between two breakpoints. One breakpoint on its own hides the element at exactly that width, a single pixel, and prints a warning: pass only for that. |
 | `reset-css` | Writes a modern baseline for the document: border-box, readable line heights, media that stays in its container, form controls that inherit the page's font. |
 | `reset-figure` | Drops a figure's default margins and fits the image inside it. |
