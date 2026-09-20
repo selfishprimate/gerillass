@@ -1,0 +1,55 @@
+<style>
+  body { font: 14px/1.5 system-ui, sans-serif; color: #0f172a; }
+  h3 { font-size: 14px; margin: 0 0 6px; color: #334155; }
+  p.note { margin: 0 0 18px; padding: 10px 12px; border-radius: 8px; background: #e0f2fe; color: #075985; font-weight: 600; }
+
+  /* Every demo can be dragged by the handle in its bottom right corner, which
+     is the point: the layouts answer the width of this box, not the window. */
+  .demo {
+    resize: horizontal;
+    overflow: auto;
+    width: 100%;
+    max-width: 100%;
+    padding: 10px;
+    margin: 0 0 22px;
+    border: 2px dashed #94a3b8;
+    border-radius: 10px;
+  }
+
+  .card {
+    padding: 12px;
+    border-radius: 8px;
+    background: #5bc0bb;
+    color: #fff;
+    font-weight: 600;
+  }
+</style>
+
+<p class="note">Drag the handle in the bottom right corner of each dashed box and watch where the three cards go.</p>
+
+<h3>1. flex-wrap, the line people write: at some widths the third card drops to a line of its own</h3>
+<div class="demo">
+  <div class="wrapper">
+    <div class="card">One</div>
+    <div class="card">Two</div>
+    <div class="card">Three</div>
+  </div>
+</div>
+
+<h3>2. auto-grid: the same one-at-a-time wrap, with the orphan at a column's width</h3>
+<div class="demo">
+  <div class="grid">
+    <div class="card">One</div>
+    <div class="card">Two</div>
+    <div class="card">Three</div>
+  </div>
+</div>
+
+<h3>3. switcher: three in a row until 30rem, then all three stacked, never two and one</h3>
+<div class="demo">
+  <div class="switcher">
+    <div class="card">One</div>
+    <div class="card">Two</div>
+    <div class="card">Three</div>
+  </div>
+</div>
