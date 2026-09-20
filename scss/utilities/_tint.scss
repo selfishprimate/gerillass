@@ -1,10 +1,25 @@
 @charset "UTF-8";
 
 @use "sass:color";
+@use "sass:list";
+@use "sass:meta";
 @use "../utilities/is-color" as *;
 
+// Mixes a colour towards white.
+//
+// `isColor` takes a list and answers one, which is its documented shape:
+// `isColor(red blue)` returns both colours. `color.mix` takes a single colour,
+// so until 4.0.0 a list walked past the guard and ended the build with Sass's
+// own message, `$color2: (red blue) is not a color`, which names neither this
+// function nor the argument.
 @function tint($color, $percentage) {
-  @if isColor($color) {
-    @return color.mix(white, $color, $percentage);
+  @if list.length($color) > 1 {
+    @error "`#{meta.inspect($color)}` is not a single colour for `tint`. Pass one colour, such as `red` or `#bada55`.";
   }
+  // `isColor` raises this library's message for anything that is not a colour.
+  // The mix takes the value itself, since `isColor` answers a list.
+  @if not isColor($color) {
+    @error "`#{meta.inspect($color)}` is not a valid $color for `tint`. Pass a colour, such as `red` or `#bada55`.";
+  }
+  @return color.mix(white, $color, $percentage);
 }

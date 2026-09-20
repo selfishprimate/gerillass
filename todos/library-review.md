@@ -226,24 +226,48 @@ mixins, `subgrid`, `:has()`, `@layer`, `@scope`.
 
 ## 5. Utilities, lists and maps
 
-- **Defects:** `isNumber` and `shorthandProperty` can end without a return,
-  `pixelify(2rem)` returns `2px`, `convertToEm` returns a string where `remify`
-  returns a number, `isTime("1s 2s")` errors instead of answering, `isColor`
-  accepts a list and lets Sass raise. `fillNulls` spells its argument
-  `$seperation`; an alias would fix that without a break.
+**Done for 4.0.0 on the `utilities-lists-maps` branch**, 20 September 2026,
+apart from the two items marked open below. A 207 call matrix compiled against
+the branch point and the branch: 146 unchanged, 44 changed, 15 calls that used
+to raise now compile and 2 that compiled now raise. The measurements are under
+each item.
+
+- ~~**Defects:** `isNumber` and `shorthandProperty` can end without a return,
+  `pixelify(2rem)` returns `2px`, `convertToEm` returns a string~~ done earlier
+  on `library-defects`. The rest is done here. `isTime` read the whole value
+  rather than each item, so `isTime(0.2s 0.4s)` raised on two good times; it
+  answers a list now, and a `var()`, `env()` or `calc()` with it. It also
+  accepted a unitless `0`, which no browser takes: measured in Chrome 152,
+  Firefox 156 and Safari 26.6.2 against a declaration written after a working
+  `5s`, `transition-duration: 0`, `animation-duration: 0` and
+  `animation-delay: 0` are all dropped, and in the `animation` shorthand
+  `loadify 0.5s 0 backwards`, which `loadify(0)` wrote, computes to an
+  iteration count of 0, so the fade never ran and nothing said so. `loadify`
+  takes one time per argument now for the same reason: two of them made all
+  three browsers drop the declaration. `isColor` still answers a list, which is
+  its documented shape; `tint` and `shade` are the ones that refuse it, with
+  their own message rather than Sass's `$color2: (red blue) is not a color`.
+  `fillNulls` spells its second argument `$separation`, with `$seperation`
+  still accepted as a fourth argument and warning.
 - **`tint` and `shade`** mix in sRGB. An optional `$method: oklch`, and a
   `color-mix()` form for `var()` values, would modernise them without changing
-  today's output.
+  today's output. **Still open**: the list fix above did not touch the mixing.
 - **`mapDeepGet`** duplicates `map.get($map, $keys...)`, built in since Dart
   Sass 1.27. Keep it, it is public API, but it could become a wrapper.
-- **`list-of-length-units`** misses `dvh`, `svh`, `lvh`, `cqi`, `rlh`, `cap`,
-  `vi` and `vb`, which `scss/internal/_is-condition-value.scss` already knows.
-  **`list-of-counter-styles`** has `lower-alpha` twice.
-  **`list-of-anchor-pseudo-classes`** has no `focus-visible` or `focus-within`.
-- **`map-for-breakpoints`** has no `xxl` key, where Bootstrap 5 has 1400px.
-  Adding one is not breaking.
+  **Still open.**
+- ~~**`list-of-length-units`** misses `dvh`, `svh`, `lvh`, `cqi`, `rlh`, `cap`,
+  `vi` and `vb`~~ it now holds the 33 relative units
+  `scss/internal/_is-condition-value.scss` accepts, nine before.
+  **`list-of-counter-styles`** has one `lower-alpha`, not two.
+  **`list-of-anchor-pseudo-classes`** has `focus-visible` and `focus-within`.
+  Nothing in the library branches on the first or the last, so a stylesheet
+  reading them is the only thing that sees the difference.
+- ~~**`map-for-breakpoints`** has no `xxl` key~~ it has one, at 1400px.
+  `adaptive` walks the map, so it writes a fifth `@media` block: measured in a
+  1400px frame in all three browsers, the container was 1140px and is 1340px,
+  and the range below it still ends at 1399.98px.
 - **`map-for-smartphones` and `map-for-tablets`** go with `smartphone` and
-  `tablet`.
+  `tablet`, which the maintainer decided on 20 September 2026 both stay.
 
 ## 6. What the survey of other projects says
 

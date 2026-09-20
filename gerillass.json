@@ -1233,15 +1233,19 @@
       "caveats": [
         "The element is visible by default and the animation only fades it in: the keyframes start at `opacity: 0` and `backwards` applies that during the delay. Until 4.0.0 it was the other way round, `opacity: 0; visibility: hidden` with the animation revealing it, so anything that stopped the animation left the content invisible for good. Measured in Chrome 152, Firefox 156 and Safari 26.6.2 with a later `animation: none`: the element computed to `opacity: 0` and `visibility: hidden` in all three, and now computes to `1` and `visible`.",
         "`init` and the calls no longer have to see each other. The mixin used to define a `%loadify` placeholder that every call `@extend`ed, which fails with Sass's \"The target selector was not found\" whenever the call is in another module, an entry file's `init` being no help to a partial it loads. Each call writes its own declarations now, and a stylesheet that forgets `init` builds with no fade rather than not building.",
-        "The mixin writes the `animation` shorthand, so an animation of your own on the same element replaces it."
+        "The mixin writes the `animation` shorthand, so an animation of your own on the same element replaces it.",
+        "A time needs its unit and there is one per argument. `loadify(0)` wrote `animation: loadify 0.5s 0 backwards`, which Chrome 152, Firefox 156 and Safari 26.6.2 read as an iteration count of 0, so the fade never ran; `loadify(0.2s 0.4s)` wrote two delays, and all three dropped the declaration. Both are refused since 4.0.0."
       ],
       "examples": [
         "@include loadify(init);\n.a { @include loadify; }",
         "@include loadify;\n.a { @include loadify(0.4s, 1s); }",
-        ".a { @include loadify(0.4s); }"
+        ".a { @include loadify(0.4s); }",
+        ".a { @include loadify(var(--delay)); }"
       ],
       "rejects": [
-        "@include loadify(nonsense);"
+        "@include loadify(nonsense);",
+        ".a { @include loadify(0); }",
+        ".a { @include loadify(0.2s 0.4s); }"
       ]
     },
     {
@@ -2329,11 +2333,12 @@
           ]
         },
         {
-          "name": "$seperation",
+          "name": "$separation",
           "default": "comma",
           "accepts": [
             "comma",
-            "space"
+            "space",
+            "slash"
           ]
         },
         {
@@ -2342,16 +2347,26 @@
           "accepts": [
             "true to leave nulls in place instead of using 0"
           ]
+        },
+        {
+          "name": "$seperation",
+          "default": "null"
         }
       ],
       "file": "scss/utilities/_fill-nulls.scss",
-      "signature": "fillNulls($value, $seperation: comma, $skip: false)",
+      "signature": "fillNulls($value, $separation: comma, $skip: false, $seperation: null)",
       "summary": "Replaces null entries in a list with 0, or drops them.",
+      "caveats": [
+        "The second argument was spelt `$seperation` until 4.0.0. The old spelling still works as a keyword argument and warns; `$separation` is the one to pass."
+      ],
       "examples": [
         ".a { margin: fillNulls(1px null 3px null, space); }"
       ],
       "rejects": [
         ".a { --x: #{fillNulls(1px null, nonsense)}; }"
+      ],
+      "warns": [
+        ".a { margin: fillNulls(1px null 3px null, $seperation: space); }"
       ]
     },
     {
@@ -2632,18 +2647,26 @@
           "name": "$value",
           "required": true,
           "accepts": [
-            "a duration such as 0.2s or 300ms, or 0"
+            "a duration such as 0.2s or 300ms",
+            "a list of them, as transition-duration takes",
+            "a var(), env() or calc()"
           ]
         }
       ],
       "file": "scss/utilities/_is-time.scss",
       "signature": "isTime($value)",
-      "summary": "Returns the value if it is a time in s or ms, and errors otherwise.",
+      "summary": "Returns the value if every part of it is a time in s or ms, and errors otherwise.",
+      "caveats": [
+        "A unitless `0` is not a time and is refused since 4.0.0. Measured in Chrome 152, Firefox 156 and Safari 26.6.2: `animation-delay: 0` and `transition-duration: 0` are dropped, and in the `animation` shorthand a bare `0` is read as the iteration count, so `loadify 0.5s 0 backwards` never runs. Write `0s`."
+      ],
       "examples": [
-        ".a { animation-duration: isTime(0.4s); }"
+        ".a { animation-duration: isTime(0.4s); }",
+        ".a { transition-duration: isTime((0.2s, 0.4s)); }",
+        ".a { animation-duration: isTime(var(--duration)); }"
       ],
       "rejects": [
-        ".a { animation-duration: isTime(400px); }"
+        ".a { animation-duration: isTime(400px); }",
+        ".a { animation-duration: isTime(0); }"
       ]
     },
     {
@@ -2790,7 +2813,8 @@
       ],
       "rejects": [
         ".a { color: shade(notacolor, 20%); }",
-        ".a { color: shade(var(--x), 20%); }"
+        ".a { color: shade(var(--x), 20%); }",
+        ".a { color: shade(red blue, 20%); }"
       ]
     },
     {
@@ -2851,7 +2875,8 @@
       ],
       "rejects": [
         ".a { color: tint(notacolor, 20%); }",
-        ".a { color: tint(var(--x), 20%); }"
+        ".a { color: tint(var(--x), 20%); }",
+        ".a { color: tint(red blue, 20%); }"
       ]
     },
     {

@@ -32,7 +32,7 @@ The **Loadify Sass mixin** is a handy tool that helps you make a page element lo
 
 <Arguments of="loadify" footnote="The time value must be given in either seconds (s) or milliseconds (ms). The value must be zero or positive, and the unit is always required.">
   <Argument name="$mode" type="string">Accepts <code>init</code> at the root of your stylesheet, which writes the keyframes once. Since 4.0.0 a stylesheet that forgets it still builds: the elements simply do not fade.</Argument>
-  <Argument name="$delay" type="time">Specifies the amount of time a design element must wait before it starts appearing on the page. The default value is set to <code>0.2s</code>.</Argument>
+  <Argument name="$delay" type="time">Specifies the amount of time a design element must wait before it starts appearing on the page. The default value is set to <code>0.2s</code>. One time, with its unit, or a <code>var()</code>.</Argument>
   <Argument name="$duration" type="time">Sets the length of time a page element takes to load. <strong>This is the second argument. It must always come last and cannot be used on its own.</strong> The default value is <code>0.5s</code>.</Argument>
 </Arguments>
 
@@ -117,6 +117,28 @@ Suppose you have a group of items like the ones below, and you want them to appe
 <Hint kind="warning">
 
 **Changed in Gerillass 4.0.0.** Until then the element was written as `opacity: 0; visibility: hidden` and the animation was the thing that revealed it, so anything that stopped the animation left the content invisible for good. Measured in Chrome 152, Firefox 156 and Safari 26.6.2 with a later `animation: none`, which a component or a reset can easily write: the element computed to `opacity: 0` and `visibility: hidden` in all three, gone from the page and from the accessibility tree with it. It now computes to `opacity: 1` and `visible` in all three.
+
+</Hint>
+
+<Hint kind="danger">
+
+**A time needs its unit, and there is one time per argument.** Both were accepted until 4.0.0 and both produced CSS that does nothing, which is why they stop the build now.
+
+```scss
+.a {
+  @include loadify(0);
+}
+
+.b {
+  @include loadify(0.2s 0.4s);
+}
+```
+```text
+Error: `0` is not a valid time: a time needs its unit, and a bare `0` is read as the iteration count in the `animation` shorthand, where it stops the animation from running at all. Write `0s`.
+Error: `0.2s 0.4s` is not a valid delay for `loadify`, which takes one time. A second one in the `animation` shorthand makes a browser drop the declaration, so nothing fades.
+```
+
+Measured in Chrome 152, Firefox 156 and Safari 26.6.2, on the CSS each call used to write: `animation: loadify 0.5s 0 backwards` computed to an `animation-iteration-count` of **0**, so the fade never ran, and `animation: loadify 0.5s 0.2s 0.4s backwards` computed to `animation-name: none`, the whole declaration dropped. Neither browser said anything. Write `loadify(0s)` and `loadify(0.2s, 0.4s)`.
 
 </Hint>
 

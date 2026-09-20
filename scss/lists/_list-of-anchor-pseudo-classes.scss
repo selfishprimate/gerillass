@@ -1,9 +1,18 @@
 @charset "UTF-8";
 
+// The states a link is styled in, in the order a stylesheet writes them, which
+// is what makes `:hover` beat `:visited` at the same specificity.
+//
+// `focus-visible` and `focus-within` were added in 4.0.0, for the same reason
+// they joined `all-buttons`: measured in Chrome 152, Firefox 156 and Safari
+// 26.6.2, a mouse click matches `:focus` but not `:focus-visible`, so a ring
+// written for `focus` alone is shown to everyone who clicks.
 $list-of-anchor-pseudo-classes: (
   "link",
   "visited",
   "hover",
   "active",
-  "focus"
+  "focus",
+  "focus-visible",
+  "focus-within"
 ) !default;

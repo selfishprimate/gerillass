@@ -1,9 +1,18 @@
 @charset "UTF-8";
 
+// The keys every condition mixin reads. `xxl` was added in 4.0.0, where
+// Bootstrap 5 has had 1400px since 2021: a stylesheet had no name for the
+// widths today's laptops open at, and `adaptive` left its container at 1140px
+// on a screen twice that wide.
+//
+// A project that sets its own map is not affected, since the map is `!default`
+// and a map passed with `@use ... with` replaces this one rather than merging
+// into it.
 $map-for-breakpoints: (
   "xsmall": 0,
   "small": 576px,
   "medium": 768px,
   "large": 992px,
   "xlarge": 1200px,
+  "xxl": 1400px,
 ) !default;

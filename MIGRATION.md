@@ -58,6 +58,12 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `reset-css` is a modern reset rather than Meyer's 2011 one | breaking, silent, and visible |
 | `only` and `except` take `$of`, the selector to count by | not breaking |
 | `ellipsis` and `line-clamp` became `truncate` | breaking, loud |
+| `isTime` refuses a unitless `0` and answers a list | breaking, loud |
+| `loadify` refuses `0` and a second time in one argument | breaking, loud |
+| `$map-for-breakpoints` has an `xxl` key at 1400px | not breaking; `adaptive` writes one more step |
+| `fillNulls`'s second argument is `$separation` | not breaking; the old spelling warns |
+| `tint` and `shade` refuse a list with their own message | breaking, loud, where Sass raised before |
+| the length-unit and anchor pseudo-class lists gained entries | not breaking |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -1500,6 +1506,112 @@ that does it.
 `$display` belongs to the one-line form and raises with a clamp, which takes
 the display over. `/docs/ellipsis` and `/docs/line-clamp` redirect to
 `/docs/truncate`.
+
+---
+
+## Break: `isTime` refuses a unitless `0`, and answers a list
+
+`0` is not a time, and no browser reads it as one. Measured in Chrome 152,
+Firefox 156 and Safari 26.6.2, each declaration written after a working `5s`,
+so a dropped one leaves the `5s` standing:
+
+| Written | What the browser does |
+|---|---|
+| `transition-duration: 0` | drops it |
+| `animation-duration: 0` | drops it |
+| `animation-delay: 0` | drops it |
+| `animation: fade 0.5s 0 backwards` | keeps it, and reads the `0` as `animation-iteration-count`, so nothing runs |
+
+The last row is what `loadify(0)` wrote. The fade never happened and nothing
+said so.
+
+```scss
+// 3.x, compiled and did nothing
+.panel { @include loadify(0); }
+
+// 4.0.0
+.panel { @include loadify(0s); }
+```
+
+Two things went the other way and are accepted now: a list of times, which
+`transition-duration: 0.2s, 0.4s` really does take and which the old check
+refused because it read the whole list rather than each time in it, and a
+`var()`, `env()` or `calc()`, which the browser resolves.
+
+```scss
+.panel {
+  transition-duration: isTime((0.2s, 0.4s));   // raised in 3.x
+  animation-duration: isTime(var(--duration)); // raised in 3.x
+}
+```
+
+`loadify` still takes one time per argument, and says so: a second one in the
+`animation` shorthand made all three browsers drop the declaration.
+
+```scss
+.panel { @include loadify(0.2s 0.4s); }  // now raises
+.panel { @include loadify(0.2s, 0.4s); } // a delay and a duration
+```
+
+To find the calls:
+
+```bash
+grep -rn "loadify(0)\|isTime(0)" --include=*.scss .
+```
+
+---
+
+## Not breaking: `$map-for-breakpoints` has an `xxl` key
+
+1400px, which is where Bootstrap has had its own since 2021. Every condition
+mixin takes the name, `breakpoint(min, xxl)` included, and a range ending at it
+ends at 1399.98px like the others.
+
+One thing does change without being asked: `adaptive` walks the map, so it
+writes a fifth `@media` block and a container goes on growing past 1200px
+instead of stopping at 1140px. Measured in Chrome 152, Firefox 156 and Safari
+26.6.2 in a 1400px frame: 1140px before, 1340px after. `breakpointer` gains a
+step for the same reason.
+
+The map is `!default`, so a project that sets its own is unaffected, and a
+project that wants the old ceiling leaves `xxl` out of its map.
+
+---
+
+## Not breaking: `fillNulls` spells its second argument `$separation`
+
+It was `$seperation`. The old spelling still works as a keyword argument and
+prints a warning naming the new one; it is a fourth argument now, so nothing
+passed by position moves.
+
+```scss
+margin: fillNulls(24px null, $seperation: space); // warns
+margin: fillNulls(24px null, $separation: space); // the same result, no warning
+margin: fillNulls(24px null, space);              // unchanged
+```
+
+---
+
+## Change: `tint` and `shade` refuse a list with their own message
+
+`isColor` answers a list, because `isColor(red blue)` is a fair question.
+`color.mix` takes one colour, so `tint(red blue, 20%)` used to end the build
+with Sass's `$color2: (red blue) is not a color`, which names neither the
+function nor the argument. It now names both. Nothing that compiled before
+stops compiling.
+
+---
+
+## Not breaking: the lists know more units and states
+
+`$list-of-relative-length-units` went from nine entries to thirty-three: the
+viewport units in their small, large and dynamic forms, the container units,
+and the font-relative ones such as `cap`, `ic` and `rlh`. It is the set
+`scss/internal/_is-condition-value.scss` already accepted.
+`$list-of-anchor-pseudo-classes` gained `focus-visible` and `focus-within`, and
+`$list-of-counter-styles` lost a `lower-alpha` it held twice. Nothing in the
+library branches on the first two, so this only matters to a stylesheet reading
+them.
 
 ---
 

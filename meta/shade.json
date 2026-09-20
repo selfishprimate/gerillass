@@ -20,6 +20,7 @@
   ],
   "rejects": [
     ".a { color: shade(notacolor, 20%); }",
-    ".a { color: shade(var(--x), 20%); }"
+    ".a { color: shade(var(--x), 20%); }",
+    ".a { color: shade(red blue, 20%); }"
   ]
 }

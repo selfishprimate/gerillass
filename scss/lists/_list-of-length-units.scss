@@ -1,5 +1,11 @@
 @charset "UTF-8";
 
+// The two lists are data for stylesheets to read; nothing in the library
+// branches on them. The relative list stopped at the 2018 set until 4.0.0, so
+// it knew `vh` but not `dvh`, `svh` or `lvh`, none of the container units, and
+// none of the font-relative units a modern stylesheet uses. The set here is
+// the one `scss/internal/_is-condition-value.scss` already accepts, which was
+// measured against the three browsers when the condition checks were written.
 $list-of-absolute-length-units: (
   "cm",
   "mm",
@@ -12,12 +18,45 @@ $list-of-absolute-length-units: (
 
 $list-of-relative-length-units: (
   "em",
-  "ex",
-  "ch",
   "rem",
+  "ex",
+  "rex",
+  "ch",
+  "rch",
+  "cap",
+  "rcap",
+  "ic",
+  "ric",
   "lh",
+  "rlh",
   "vw",
   "vh",
+  "vi",
+  "vb",
   "vmin",
-  "vmax"
+  "vmax",
+  "svw",
+  "svh",
+  "svi",
+  "svb",
+  "svmin",
+  "svmax",
+  "lvw",
+  "lvh",
+  "lvi",
+  "lvb",
+  "lvmin",
+  "lvmax",
+  "dvw",
+  "dvh",
+  "dvi",
+  "dvb",
+  "dvmin",
+  "dvmax",
+  "cqw",
+  "cqh",
+  "cqi",
+  "cqb",
+  "cqmin",
+  "cqmax"
 ) !default;

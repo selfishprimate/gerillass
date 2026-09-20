@@ -1,18 +1,26 @@
 {
   "name": "isTime",
-  "summary": "Returns the value if it is a time in s or ms, and errors otherwise.",
+  "summary": "Returns the value if every part of it is a time in s or ms, and errors otherwise.",
   "arguments": [
     {
       "name": "$value",
       "accepts": [
-        "a duration such as 0.2s or 300ms, or 0"
+        "a duration such as 0.2s or 300ms",
+        "a list of them, as transition-duration takes",
+        "a var(), env() or calc()"
       ]
     }
   ],
   "examples": [
-    ".a { animation-duration: isTime(0.4s); }"
+    ".a { animation-duration: isTime(0.4s); }",
+    ".a { transition-duration: isTime((0.2s, 0.4s)); }",
+    ".a { animation-duration: isTime(var(--duration)); }"
   ],
   "rejects": [
-    ".a { animation-duration: isTime(400px); }"
+    ".a { animation-duration: isTime(400px); }",
+    ".a { animation-duration: isTime(0); }"
+  ],
+  "caveats": [
+    "A unitless `0` is not a time and is refused since 4.0.0. Measured in Chrome 152, Firefox 156 and Safari 26.6.2: `animation-delay: 0` and `transition-duration: 0` are dropped, and in the `animation` shorthand a bare `0` is read as the iteration count, so `loadify 0.5s 0 backwards` never runs. Write `0s`."
   ]
 }

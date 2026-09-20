@@ -1,0 +1,29 @@
+// What must stay accepted. Until 4.0.0 the loop read the whole value rather
+// than the item it was looking at, so every list raised, and a `var()` raised
+// too. A unitless `0` went the other way and was accepted, although no browser
+// takes one: the refusals it now writes are covered by the `rejects` entries in
+// `meta/isTime.json`, and these are the forms that must keep compiling.
+@use 'true' as *;
+@use '../../scss/utilities/is-time' as *;
+
+@include describe('isTime()') {
+  @include it('Answers a single time with itself.') {
+    @include assert-equal(isTime(0.4s), 0.4s);
+    @include assert-equal(isTime(300ms), 300ms);
+    @include assert-equal(isTime(0s), 0s);
+  }
+
+  @include it('Answers a list of times, which transition-duration takes.') {
+    @include assert-equal(isTime(0.2s 0.4s), 0.2s 0.4s);
+    @include assert-equal(isTime((0.2s, 0.4s)), (0.2s, 0.4s));
+  }
+
+  @include it('Answers a CSS function, since the browser resolves it.') {
+    @include assert-equal(isTime(var(--duration)), var(--duration));
+    @include assert-equal(isTime(env(--x, 1s)), env(--x, 1s));
+  }
+
+  @include it('Answers a calculation, which Sass has already reduced.') {
+    @include assert-equal(isTime(calc(0.2s + 0.3s)), 0.5s);
+  }
+}

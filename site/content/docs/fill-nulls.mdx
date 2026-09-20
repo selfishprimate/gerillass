@@ -13,12 +13,19 @@ Replaces null entries in a list with 0, or drops them.
 
 </Member>
 
+<Hint kind="warning">
+
+**The second argument is `$separation` since Gerillass 4.0.0.** It was spelt `$seperation`, and that spelling still works as a keyword argument, with a warning naming the new one.
+
+</Hint>
+
 ## Arguments
 
 <Arguments of="fillNulls">
   <Argument name="$value" type="list">Accepts a list that may contain nulls.</Argument>
-  <Argument name="$seperation (comma)" type="string">Accepts comma, or space.</Argument>
-  <Argument name="$skip (false)" type="boolean">Accepts true to leave nulls in place instead of using 0.</Argument>
+  <Argument name="$separation (comma)" type="string">Accepts <code>comma</code>, <code>space</code> or <code>slash</code>, which is the separator the returned list is built with.</Argument>
+  <Argument name="$skip (false)" type="boolean">Accepts true to leave nulls in place instead of using 0. A null is left out of the CSS the list writes.</Argument>
+  <Argument name="$seperation (null)" type="string">The old, misspelt name of <code>$separation</code>. Passing it still works and warns; it is a fourth argument so that nobody passes it by position.</Argument>
 </Arguments>
 
 ## Examples
@@ -41,7 +48,7 @@ Arguments are checked, so a wrong value stops the build with a message instead o
 }
 ```
 ```text
-Error: `spaces` is not a valid $seperation for `fillNulls`. Pass `comma`, `space` or `slash`.
+Error: `spaces` is not a valid $separation for `fillNulls`. Pass `comma`, `space` or `slash`.
 ```
 
 ## Related Links

@@ -74,6 +74,12 @@ Error: `auto` is not a valid $gutter for `adaptive`: it is not a length. A brows
 
 </Hint>
 
+<Hint kind="info">
+
+**There is one more step since Gerillass 4.0.0.** `$map-for-breakpoints` gained an `xxl` key at 1400px, so the mixin writes a fifth `@media` block and a container goes on growing past 1200px instead of stopping at 1140px. A project that sets its own map is unaffected, and one that wants the old ceiling can leave `xxl` out of it.
+
+</Hint>
+
 ## Related Links
 
 - [Container](/docs/container)

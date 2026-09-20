@@ -73,7 +73,7 @@ Arguments are validated and refused with a message naming what is accepted, so a
 - [clearWhitespace($string)](https://docs.gerillass.com/docs/clear-whitespace/): Removes every space from a string.
 - [convertToEm($value)](https://docs.gerillass.com/docs/convert-to-em/): Converts a pixel length to em, against a 16px base.
 - [convertToNumber($value)](https://docs.gerillass.com/docs/convert-to-number/): Parses a string of digits into a number.
-- [fillNulls($value, $seperation: comma, $skip: false)](https://docs.gerillass.com/docs/fill-nulls/): Replaces null entries in a list with 0, or drops them.
+- [fillNulls($value, $separation: comma, $skip: false, $seperation: null)](https://docs.gerillass.com/docs/fill-nulls/): Replaces null entries in a list with 0, or drops them.
 - [fluid($min, $max, $min-viewport: 320px, $max-viewport: 1280px)](https://docs.gerillass.com/docs/fluid/): A clamp() value that grows with the viewport between two widths, then stops.
 - [fontSizer($size, $time)](https://docs.gerillass.com/docs/font-sizer/): Multiplies a size by a factor.
 - [fontSource($font-family, $file-path, $file-formats)](https://docs.gerillass.com/docs/font-source/): Builds one src entry for an @font-face rule.
@@ -81,7 +81,7 @@ Arguments are validated and refused with a message naming what is accepted, so a
 - [isColor($value)](https://docs.gerillass.com/docs/is-color/): Returns the value if every item in it is a colour, and errors otherwise.
 - [isGutter($value)](https://docs.gerillass.com/docs/is-gutter/): True for anything that can sit where a CSS length is expected: a number, a calculation, or a CSS function such as var().
 - [isNumber($value)](https://docs.gerillass.com/docs/is-number/): Returns the value when it is a number, and raises when it is not.
-- [isTime($value)](https://docs.gerillass.com/docs/is-time/): Returns the value if it is a time in s or ms, and errors otherwise.
+- [isTime($value)](https://docs.gerillass.com/docs/is-time/): Returns the value if every part of it is a time in s or ms, and errors otherwise.
 - [mapDeepGet($map, $keys...)](https://docs.gerillass.com/docs/map-deep-get/): Reads a value out of a nested map by following a chain of keys.
 - [pixelify($value)](https://docs.gerillass.com/docs/pixelify/): Returns the value in pixels: a unitless number takes a px, and a length in another unit is converted.
 - [pseudoSelector($elements, $pseudo: null)](https://docs.gerillass.com/docs/pseudo-selector/): Appends a pseudo-class to every selector in a list.

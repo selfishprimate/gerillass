@@ -9,10 +9,11 @@
       ]
     },
     {
-      "name": "$seperation",
+      "name": "$separation",
       "accepts": [
         "comma",
-        "space"
+        "space",
+        "slash"
       ]
     },
     {
@@ -27,5 +28,11 @@
   ],
   "rejects": [
     ".a { --x: #{fillNulls(1px null, nonsense)}; }"
+  ],
+  "warns": [
+    ".a { margin: fillNulls(1px null 3px null, $seperation: space); }"
+  ],
+  "caveats": [
+    "The second argument was spelt `$seperation` until 4.0.0. The old spelling still works as a keyword argument and warns; `$separation` is the one to pass."
   ]
 }

@@ -1,7 +1,7 @@
 ---
 title: "Is Time"
 page_title: "Is Time Sass Function"
-page_description: "The isTime Sass function returns the value when it is a time in s or ms, and errors otherwise, so an animation argument is checked before it is used."
+page_description: "The isTime Sass function returns the value when every part of it is a time in s or ms, and errors otherwise, so an animation argument is checked before it is used."
 page_keywords: "Gerillass isTime, Sass isTime, Sass Functions, SCSS Functions, Sass Utility Functions, Gerillass Utilities"
 ---
 
@@ -9,14 +9,20 @@ page_keywords: "Gerillass isTime, Sass isTime, Sass Functions, SCSS Functions, S
 
 <Member name="isTime">
 
-Returns the value if it is a time in s or ms, and errors otherwise.
+Returns the value if every part of it is a time in s or ms, and errors otherwise.
 
 </Member>
+
+<Hint kind="warning">
+
+**Changed in Gerillass 4.0.0.** A list of times is answered rather than refused, a `var()` or a `calc()` passes through, and a unitless `0` is refused. The section below has the measurements.
+
+</Hint>
 
 ## Arguments
 
 <Arguments of="isTime">
-  <Argument name="$value" type="time">Accepts a duration such as 0.2s or 300ms, or 0.</Argument>
+  <Argument name="$value" type="time | list">Accepts a duration such as <code>0.2s</code> or <code>300ms</code>, a list of them, as <code>transition-duration</code> takes, or a <code>var()</code>, <code>env()</code> or <code>calc()</code>, which the browser resolves.</Argument>
 </Arguments>
 
 ## Examples
@@ -32,6 +38,23 @@ Returns the value if it is a time in s or ms, and errors otherwise.
 ```
 </Example>
 
+<Example caption="A list, which is what a property taking more than one duration wants. Until 4.0.0 this raised, because the check read the whole list rather than each time in it.">
+```scss
+.panel {
+  transition-property: opacity, transform;
+  transition-duration: isTime((0.2s, 0.4s));
+}
+```
+</Example>
+
+<Example caption="A custom property passes through, since the browser is the one that resolves it.">
+```scss
+.panel {
+  animation-duration: isTime(var(--duration));
+}
+```
+</Example>
+
 ## What it refuses
 
 Arguments are checked, so a wrong value stops the build with a message instead of quietly producing the wrong CSS.
@@ -42,8 +65,34 @@ Arguments are checked, so a wrong value stops the build with a message instead o
 }
 ```
 ```text
-Error: '400px' is not a valid time value. Time values must be specified in either seconds (s) or milliseconds (ms). Please try one of the following forms: '1s', '0.2s', or '3ms'
+Error: `400px` is not a valid time: `px` is not a time unit. Pass a duration in seconds or milliseconds, such as `0.2s`, `300ms` or `0s`, or a CSS function such as `var(--duration)`.
 ```
+
+A unitless `0` is refused too, and that one is worth a word, because it looks like a perfectly good "no delay".
+
+```scss
+.panel {
+  animation-delay: isTime(0);
+}
+```
+```text
+Error: `0` is not a valid time: a time needs its unit, and a bare `0` is read as the iteration count in the `animation` shorthand, where it stops the animation from running at all. Write `0s`.
+```
+
+<Hint kind="danger">
+
+**A bare `0` is not a time in any browser.** Measured in Chrome 152, Firefox 156 and Safari 26.6.2, each declaration written after a working `5s`, so a dropped one leaves the `5s` standing:
+
+| Written | Computed |
+|---|---|
+| `transition-duration: 0` | `5s`, the declaration is dropped |
+| `animation-duration: 0` | `5s`, dropped |
+| `animation-delay: 0` | `5s`, dropped |
+| `animation: fade 0.5s 0 backwards` | kept, and `animation-iteration-count` is **0**, so the animation never runs |
+
+The last row is the one that costs an afternoon: nothing is dropped and nothing warns, the browser simply reads the bare number as an iteration count. `0s` does what was meant.
+
+</Hint>
 
 ## Related Links
 

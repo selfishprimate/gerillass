@@ -19,6 +19,7 @@
         @media (min-width: 768px) { .wrap { max-width: string.unquote("calc(768px - 0px * 2)"); } }
         @media (min-width: 992px) { .wrap { max-width: string.unquote("calc(992px - 0px * 2)"); } }
         @media (min-width: 1200px) { .wrap { max-width: string.unquote("calc(1200px - 0px * 2)"); } }
+        @media (min-width: 1400px) { .wrap { max-width: string.unquote("calc(1400px - 0px * 2)"); } }
       }
     }
   }
@@ -34,6 +35,7 @@
         @media (min-width: 768px) { .wrap { max-width: string.unquote("calc(768px - 30px * 2)"); } }
         @media (min-width: 992px) { .wrap { max-width: string.unquote("calc(992px - 30px * 2)"); } }
         @media (min-width: 1200px) { .wrap { max-width: string.unquote("calc(1200px - 30px * 2)"); } }
+        @media (min-width: 1400px) { .wrap { max-width: string.unquote("calc(1400px - 30px * 2)"); } }
       }
     }
   }
@@ -49,6 +51,7 @@
         @media (min-width: 768px) { .wrap { max-width: string.unquote("calc(768px - var(--gutter) * 2)"); } }
         @media (min-width: 992px) { .wrap { max-width: string.unquote("calc(992px - var(--gutter) * 2)"); } }
         @media (min-width: 1200px) { .wrap { max-width: string.unquote("calc(1200px - var(--gutter) * 2)"); } }
+        @media (min-width: 1400px) { .wrap { max-width: string.unquote("calc(1400px - var(--gutter) * 2)"); } }
       }
     }
   }

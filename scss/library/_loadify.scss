@@ -26,6 +26,18 @@
 // file. Each call now writes its own declarations, so there is nothing to
 // extend and nothing to fail. `init` still writes the keyframes, and a
 // stylesheet that forgets it simply does not animate rather than not building.
+// One time, not a list of them. `isTime` answers a list, because
+// `transition-duration: 0.2s, 0.4s` is a real declaration, and this is not
+// that place: a second time here writes `animation: loadify 0.5s 0.2s 0.4s
+// backwards`, which Chrome 152, Firefox 156 and Safari 26.6.2 all drop, the
+// computed `animation-name` coming back as `none` with no fade at all.
+@function -one-time($value, $what) {
+  @if list.length($value) > 1 {
+    @error "`#{meta.inspect($value)}` is not a valid #{$what} for `loadify`, which takes one time. A second one in the `animation` shorthand makes a browser drop the declaration, so nothing fades.";
+  }
+  @return isTime($value);
+}
+
 @mixin loadify($params...) {
   @if not & {
     @if list.length($params) == 0 or (list.length($params) == 1 and list.nth($params, 1) == "init") {
@@ -43,10 +55,10 @@
     $delay: 0.2s;
     $duration: 0.5s;
     @if list.length($params) == 1 {
-      $delay: isTime(list.nth($params, 1));
+      $delay: -one-time(list.nth($params, 1), "delay");
     } @else if list.length($params) == 2 {
-      $delay: isTime(list.nth($params, 1));
-      $duration: isTime(list.nth($params, 2));
+      $delay: -one-time(list.nth($params, 1), "delay");
+      $duration: -one-time(list.nth($params, 2), "duration");
     } @else if list.length($params) > 2 {
       @error "You cannot pass more than two arguments.";
     }

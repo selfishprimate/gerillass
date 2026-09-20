@@ -248,6 +248,7 @@ a dropped declaration rather than an error.
 - The element is visible by default and the animation only fades it in: the keyframes start at `opacity: 0` and `backwards` applies that during the delay. Until 4.0.0 it was the other way round, `opacity: 0; visibility: hidden` with the animation revealing it, so anything that stopped the animation left the content invisible for good. Measured in Chrome 152, Firefox 156 and Safari 26.6.2 with a later `animation: none`: the element computed to `opacity: 0` and `visibility: hidden` in all three, and now computes to `1` and `visible`.
 - `init` and the calls no longer have to see each other. The mixin used to define a `%loadify` placeholder that every call `@extend`ed, which fails with Sass's "The target selector was not found" whenever the call is in another module, an entry file's `init` being no help to a partial it loads. Each call writes its own declarations now, and a stylesheet that forgets `init` builds with no fade rather than not building.
 - The mixin writes the `animation` shorthand, so an animation of your own on the same element replaces it.
+- A time needs its unit and there is one per argument. `loadify(0)` wrote `animation: loadify 0.5s 0 backwards`, which Chrome 152, Firefox 156 and Safari 26.6.2 read as an iteration count of 0, so the fade never ran; `loadify(0.2s 0.4s)` wrote two delays, and all three dropped the declaration. Both are refused since 4.0.0.
 
 **`motion-safe`**
 
@@ -352,10 +353,18 @@ a dropped declaration rather than an error.
 
 - Until 4.0.0 the unit was added as text, so the function returned the string `1.5em` rather than a number: it printed the same, and `convertToEm(24px) * 2` stopped the build with Sass's "Undefined operation". It now returns a number, as `remify` always has.
 
+**`fillNulls`**
+
+- The second argument was spelt `$seperation` until 4.0.0. The old spelling still works as a keyword argument and warns; `$separation` is the one to pass.
+
 **`isNumber`**
 
 - Until 4.0.0 a value that was not a number only warned, and the function then ended with nothing to return, so the build stopped with Sass's own "Function finished without @return" instead of a message naming the argument. It now raises, which is what `isColor` and `isTime` do.
 - A `var()` or a `calc()` is not a Sass number and is refused. Pass those straight to the property rather than through a type guard.
+
+**`isTime`**
+
+- A unitless `0` is not a time and is refused since 4.0.0. Measured in Chrome 152, Firefox 156 and Safari 26.6.2: `animation-delay: 0` and `transition-duration: 0` are dropped, and in the `animation` shorthand a bare `0` is read as the iteration count, so `loadify 0.5s 0 backwards` never runs. Write `0s`.
 
 **`mapDeepGet`**
 
@@ -439,7 +448,7 @@ and camelCase is what tells them apart from the kebab-case mixins above.
 | `clearWhitespace($string)` | Removes every space from a string. |
 | `convertToEm($value)` | Converts a pixel length to em, against a 16px base. |
 | `convertToNumber($value)` | Parses a string of digits into a number. |
-| `fillNulls($value, $seperation: comma, $skip: false)` | Replaces null entries in a list with 0, or drops them. |
+| `fillNulls($value, $separation: comma, $skip: false, $seperation: null)` | Replaces null entries in a list with 0, or drops them. |
 | `fluid($min, $max, $min-viewport: 320px, $max-viewport: 1280px)` | A clamp() value that grows with the viewport between two widths, then stops. The preferred value keeps a rem term rather than being pure vw, because a vw-only value ignores browser text zoom and fails WCAG 1.4.4. It is a function rather than a mixin because the value is the hard part and belongs to any property, not only font-size. |
 | `fontSizer($size, $time)` | Multiplies a size by a factor. Handy for a modular scale. |
 | `fontSource($font-family, $file-path, $file-formats)` | Builds one src entry for an @font-face rule. |
@@ -447,7 +456,7 @@ and camelCase is what tells them apart from the kebab-case mixins above.
 | `isColor($value)` | Returns the value if every item in it is a colour, and errors otherwise. |
 | `isGutter($value)` | True for anything that can sit where a CSS length is expected: a number, a calculation, or a CSS function such as var(). |
 | `isNumber($value)` | Returns the value when it is a number, and raises when it is not. |
-| `isTime($value)` | Returns the value if it is a time in s or ms, and errors otherwise. |
+| `isTime($value)` | Returns the value if every part of it is a time in s or ms, and errors otherwise. |
 | `mapDeepGet($map, $keys...)` | Reads a value out of a nested map by following a chain of keys. |
 | `pixelify($value)` | Returns the value in pixels: a unitless number takes a px, and a length in another unit is converted. |
 | `pseudoSelector($elements, $pseudo: null)` | Appends a pseudo-class to every selector in a list. |

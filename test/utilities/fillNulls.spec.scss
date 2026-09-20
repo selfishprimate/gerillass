@@ -1,0 +1,20 @@
+// The second argument was spelt `$seperation` until 4.0.0. Both spellings have
+// to keep working, the old one with a warning, which `meta/fillNulls.json`
+// covers with a `warns` entry.
+@use 'true' as *;
+@use '../../scss/utilities/fill-nulls' as *;
+
+@include describe('fillNulls()') {
+  @include it('Replaces a null with 0.') {
+    @include assert-equal(fillNulls(1px null 3px, space), 1px 0 3px);
+  }
+
+  @include it('Leaves the null in place when $skip is true, and CSS drops it.') {
+    @include assert-equal(fillNulls(1px null 3px, space, true), 1px null 3px);
+  }
+
+  @include it('Takes the separator under either spelling.') {
+    @include assert-equal(fillNulls(1px null, $separation: space), 1px 0);
+    @include assert-equal(fillNulls(1px null, $seperation: space), 1px 0);
+  }
+}

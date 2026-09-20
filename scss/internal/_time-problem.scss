@@ -1,0 +1,38 @@
+@charset "UTF-8";
+
+@use "sass:list";
+@use "sass:math";
+@use "sass:meta";
+@use "is-css-function" as *;
+
+// Why a value is not a time, or null when it is one. `isTime` reads it for its
+// message, and it lives here rather than in that file because the manifest
+// counts every function under `utilities/` as public API, a private `-` name
+// included.
+//
+// A unitless number is not a time, and `0` is the one worth explaining.
+// Measured in Chrome 152, Firefox 156 and Safari 26.6.2, each declaration
+// written after a working `5s`: `transition-duration: 0`,
+// `animation-duration: 0` and `animation-delay: 0` are all dropped, so the
+// `5s` stands. In the `animation` shorthand the value is not dropped but read
+// as something else, since an iteration count is a plain number:
+// `loadify 0.5s 0 backwards` computes to `animation-iteration-count: 0` in all
+// three, so the animation never runs and nothing says so.
+@function timeProblem($item) {
+  @if meta.type-of($item) == "calculation" or isCssFunction($item, "var" "env") {
+    @return null;
+  }
+  @if meta.type-of($item) != "number" {
+    @return "it is not a number";
+  }
+  @if list.index("s" "ms", math.unit($item)) == null {
+    @if math.is-unitless($item) {
+      @if $item == 0 {
+        @return "a time needs its unit, and a bare `0` is read as the iteration count in the `animation` shorthand, where it stops the animation from running at all. Write `0s`";
+      }
+      @return "a time needs its unit. Write `#{$item}s` or `#{$item}ms`";
+    }
+    @return "`#{math.unit($item)}` is not a time unit";
+  }
+  @return null;
+}

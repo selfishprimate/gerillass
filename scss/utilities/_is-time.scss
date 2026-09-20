@@ -1,14 +1,37 @@
+@charset "UTF-8";
 
 @use "sass:list";
-@use "sass:math";
 @use "sass:meta";
+@use "../internal/time-problem" as *;
 
+// Returns the value when every part of it is a time, and raises when one is
+// not, which is what `isColor` and `isNumber` do with their own types.
+//
+// Three things were wrong until 4.0.0, and the file did not even open with
+// `@charset`, alone in the library.
+//
+// The loop read `$value` itself rather than the item it was looking at, so a
+// list of perfectly good times raised:
+//
+//   isTime(0.2s 0.4s)   ->  "'0.2s 0.4s' is not a valid time value"
+//
+// A `var()` was refused, although `loadify(var(--delay))` writes CSS all three
+// browsers run: measured in Chrome 152, Firefox 156 and Safari 26.6.2,
+// `animation-duration: var(--d)` with `--d: 0.5s` computes to 0.5s, and so
+// does a `calc(0.2s + 0.3s)`.
+//
+// And a unitless `0` was accepted, which is not a time in any of the three
+// browsers; `scss/internal/_time-problem.scss` carries that measurement, since
+// it is the file that writes the message.
 @function isTime($value) {
-  @for $i from 1 through list.length($value) {
-    @if (meta.type-of($value) == "number" and list.index("ms" "s", math.unit($value)) != null) or $value == 0 {
-      @return $value;
-    } @else {
-      @error "'#{$value}' is not a valid time value. Time values must be specified in either seconds (s) or milliseconds (ms). Please try one of the following forms: '1s', '0.2s', or '3ms'";
+  @if list.length($value) == 0 {
+    @error "`()` is not a valid time. Pass a duration in seconds or milliseconds, such as `0.2s`, `300ms` or `0s`.";
+  }
+  @each $item in $value {
+    $problem: timeProblem($item);
+    @if $problem {
+      @error "`#{meta.inspect($item)}` is not a valid time: #{$problem}. Pass a duration in seconds or milliseconds, such as `0.2s`, `300ms` or `0s`, or a CSS function such as `var(--duration)`.";
     }
   }
+  @return $value;
 }

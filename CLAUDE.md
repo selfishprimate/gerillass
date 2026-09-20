@@ -9,7 +9,7 @@ Gerillass is a **pure Sass library** — a toolkit of mixins and functions, in t
 Two consequences follow from this and drive most decisions in the repo:
 
 1. **`package.json` must have no `dependencies`.** Everything (`jest`, `sass`, `sass-true`, `glob`) belongs in `devDependencies`. Consumers get only `.scss` files, so a runtime dependency here forces the entire test toolchain onto every downstream project. This was the cause of 24 Dependabot alerts fixed in v1.3.3 — do not reintroduce it.
-2. **Only `scss/` ships.** `.npmignore` excludes `test`, `assets`, `meta`, `tools`, dotfiles and `*.md`; npm always adds `README.md`, `LICENSE.md` and `package.json` back. Verify with `npm pack --dry-run` before any release (114 files, a 124 kB tarball for 4.0.0, which merged `background-dots` and `background-stripes` into one `background-pattern` and added `scss/internal/_key-end.scss` and `_device-size.scss`).
+2. **Only `scss/` ships.** `.npmignore` excludes `test`, `assets`, `meta`, `tools`, dotfiles and `*.md`; npm always adds `README.md`, `LICENSE.md` and `package.json` back. Verify with `npm pack --dry-run` before any release (115 files, a 128 kB tarball for 4.0.0, which merged `background-dots` and `background-stripes` into one `background-pattern` and added `scss/internal/_key-end.scss`, `_device-size.scss`, `_nth-of.scss` and `_time-problem.scss`).
 3. **The gem is the same library, not a port.** `gerillass.gemspec` ships `scss/`, `gerillass.json` and `SKILL.md`, plus `lib/`, `LICENSE.md` and `README.md`, reads its version from `package.json`, and has no runtime dependencies. `lib/` only tells Rails, Jekyll or a plain `sass-embedded` compile where `scss/` is. `.npmignore` keeps `lib`, the gemspec and `*.gem` out of the npm package. Keep the gemspec ASCII: RubyGems reads it in the locale's encoding, and a literal non-ASCII character fails to load.
 
 Dart Sass only. LibSass/node-sass has been unsupported since v1.3.0.
@@ -402,8 +402,8 @@ Four levels, and knowing which one covers a member tells you what you can trust:
 |---|---|---|
 | `test/smoke.scss` | the mixin evaluates at all | 52/52 mixins |
 | snapshot of `meta/` examples | the output cannot change unnoticed | 76/76 members |
-| `meta/` rejects | bad input is refused with a real message | 55/76 |
-| sass-true spec in `test/` | the CSS is **correct** | 41/76 |
+| `meta/` rejects | bad input is refused with a real message | 66/76 |
+| sass-true spec in `test/` | the CSS is **correct** | 40/76 |
 
 Only the last one catches an output that was wrong from the start; a snapshot
 records a wrong value as correct. Hand-written specs are therefore reserved for
@@ -708,7 +708,8 @@ today and the ones still too new, and the leverage ranking the maintainer's
 north star produced. `text-shadow`, `text-stroke`, the
 `background-pattern` merge, `escape-to-parent` and the five members of defects
 5 and 8 to 10 are done from it and marked there, which is every defect in its
-first section; the rest is the list the next items come from.
+first section, and so is the fifth section, the utilities, lists and maps. What
+is left is three merges the maintainer has not ruled on and the new members.
 
 ### What `breakpoint-boundaries.md` records
 
@@ -920,7 +921,12 @@ Two pieces of work are open:
   inside `:where()`, on `reset-modern`, branched from `adaptive-zero`; and `$of`
   on `only` and `except`, counting by a selector rather than by tag, on
   `nth-of`, branched from `reset-modern`; and `ellipsis` and `line-clamp`
-  merged into `truncate`, on `truncate`, branched from `nth-of`.
+  merged into `truncate`, on `truncate`, branched from `nth-of`; and the
+  utilities, lists and maps of the review's fifth section, on
+  `utilities-lists-maps`, branched from `truncate`, which fixes `isTime`,
+  `fillNulls`, `tint` and `shade`, refreshes the length-unit and anchor
+  pseudo-class lists, and adds an `xxl` key at 1400px to
+  `$map-for-breakpoints`.
   The last three come from `todos/library-review.md`, and the last three
   patterns, `glow`, `vignette` and `mesh`, from the survey in
   `todos/saas-hero-backgrounds.md`. Each has a `MIGRATION.md` section.
