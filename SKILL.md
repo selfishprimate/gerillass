@@ -5,7 +5,7 @@ description: Use the Gerillass Sass mixin library — loading it, the mixin cata
 
 # Gerillass
 
-A Sass mixin library: 54 mixins and 24 functions that emit CSS from
+A Sass mixin library: 53 mixins and 24 functions that emit CSS from
 semantic declarations. It is Sass source only — there is no runtime and no
 utility classes, so styles live in your stylesheet and your markup stays clean.
 
@@ -111,7 +111,6 @@ a dropped declaration rather than an error.
 | `resizable` | `.a { @include resizable(huge); }` |
 | `scissors` | `.a { @include scissors(5px 10px); }` |
 | `screen-agent` | `.a { @include screen-agent(var(--density)) { color: red; } }` |
-| `sidebar` | `.layout { @include sidebar(20); }` |
 | `sizer` | `.a { @include sizer(huge); }` |
 | `smartphone` | `.a { @include smartphone(Nokia3310) { display: none; } }` |
 | `sprite` | `.icon { @include sprite("/img/a.png" "/img/b.png", 0 -40px); }` |
@@ -302,12 +301,6 @@ a dropped declaration rather than an error.
 - A `height` attribute is a definite height, so `<img width="1200" height="600">` was drawn 600x600 rather than 600x300, out of shape. `height: auto` inside `:where()` overrides the attribute and loses to any `height` a stylesheet sets, which was measured in all three browsers.
 - `max-inline-size` rather than `max-width`, so the image fits the line in a vertical writing mode.
 
-**`sidebar`**
-
-- The threshold is a share of the row, not a width, which is why it follows the box rather than the window. Measured in Chrome 152, Firefox 156 and Safari 26.6.2 with the window at 1024px, so a 768px media query never fires: a grid with that query left the content at 356px in a 700px box, 216px in a 560px one and 60px in a 400px one, overflowing by 4px, while this mixin stacked in all three boxes. All three browsers agreed on every row.
-- `flex-grow: 999` on the content is what keeps the sidebar at its `flex-basis`. With a plain `flex: 1` on both, the two share the spare space and the sidebar grows with the window.
-- It styles the first and the last child. A third element between them is laid out by flexbox's own defaults, which is rarely what a sidebar layout wants.
-
 **`smartphone`**
 
 - `device-width` and `device-height` read the **screen**, not the viewport, so a desktop window resized to a phone's width matches nothing. Measured in Chrome 152, Firefox 156 and Safari 26.6.2: a query at the screen's own size matched and the same query one pixel off did not. For a rule that follows the window, use `breakpoint` or `container-query`.
@@ -439,7 +432,6 @@ a dropped declaration rather than an error.
 | `responsive-image` | Fits an image to its container without upscaling it or losing its proportions. |
 | `scissors($corners)` | Cuts the corners off an element with clip-path. |
 | `screen-agent($resolution)` | Media query targeting a screen pixel density. |
-| `sidebar($side: 20rem, $gap: 1.5rem, $threshold: 50%, $side-on: left)` | A sidebar and a content column that stack when the space runs out, with no media query. |
 | `sizer($width, $height: $width)` | Sets width and height together; one argument makes a square. |
 | `smartphone($device, $orientation: null)` | Media query for one phone's screen, by name, from $map-for-smartphones. |
 | `sprite($params...)` | Sets up an element as a sprite tile: an image, a background position, or both. |

@@ -66,7 +66,6 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | the length-unit and anchor pseudo-class lists gained entries | not breaking |
 | a range that runs backwards or is empty stops the build | breaking, loud |
 | `auto-grid` is new | not breaking |
-| `sidebar` is new | not breaking |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -1711,35 +1710,6 @@ minimum as `max($min, (100% - ($limit - 1) * $gap) / $limit)`, where the limit
 appears twice and the gap once. Measured in a 1000px container with six items,
 `$limit: 4` gives exactly four 238px columns in all three browsers, and the
 same call in a 250px container gives one.
-
----
-
-## Added: `sidebar`
-
-A sidebar beside a content column, the two stacking when the space runs out,
-with no media query. Nothing else changed, so it breaks no call.
-
-```scss
-.layout {
-  @include sidebar(20rem, 1.5rem);
-}
-```
-
-A media query reads the window, and a sidebar layout usually sits in something
-narrower: a card, one pane of a split view, an embedded widget. Measured in
-Chrome 152, Firefox 156 and Safari 26.6.2 with the window at 1024px, so that
-`@media (max-width: 768px)` never fires:
-
-| The box | a 20rem grid with that query | `sidebar` |
-|---|---|---|
-| 1000px | 320 + 656 | 337 + 639 |
-| 700px | 320 + 356 | stacked |
-| 560px | 320 + 216 | stacked |
-| 400px | 320 + 60, overflowing 4px | stacked |
-
-The threshold is a share of the row, `50%` by default, rather than a width,
-which is what makes the layout follow its box. `$side-on: right` swaps which
-child is the sidebar and leaves the markup order alone.
 
 ---
 
