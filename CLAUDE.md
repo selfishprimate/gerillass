@@ -9,7 +9,7 @@ Gerillass is a **pure Sass library** — a toolkit of mixins and functions, in t
 Two consequences follow from this and drive most decisions in the repo:
 
 1. **`package.json` must have no `dependencies`.** Everything (`jest`, `sass`, `sass-true`, `glob`) belongs in `devDependencies`. Consumers get only `.scss` files, so a runtime dependency here forces the entire test toolchain onto every downstream project. This was the cause of 24 Dependabot alerts fixed in v1.3.3 — do not reintroduce it.
-2. **Only `scss/` ships.** `.npmignore` excludes `test`, `assets`, `meta`, `tools`, dotfiles and `*.md`; npm always adds `README.md`, `LICENSE.md` and `package.json` back. Verify with `npm pack --dry-run` before any release (116 files, a 129 kB tarball for 4.0.0, which merged `background-dots` and `background-stripes` into one `background-pattern` and added `scss/internal/_key-end.scss`, `_device-size.scss`, `_nth-of.scss`, `_time-problem.scss` and `_range-problem.scss`).
+2. **Only `scss/` ships.** `.npmignore` excludes `test`, `assets`, `meta`, `tools`, dotfiles and `*.md`; npm always adds `README.md`, `LICENSE.md` and `package.json` back. Verify with `npm pack --dry-run` before any release (117 files, a 130 kB tarball for 4.0.0, which merged `background-dots` and `background-stripes` into one `background-pattern` and added `scss/internal/_key-end.scss`, `_device-size.scss`, `_nth-of.scss`, `_time-problem.scss` and `_range-problem.scss`).
 3. **The gem is the same library, not a port.** `gerillass.gemspec` ships `scss/`, `gerillass.json` and `SKILL.md`, plus `lib/`, `LICENSE.md` and `README.md`, reads its version from `package.json`, and has no runtime dependencies. `lib/` only tells Rails, Jekyll or a plain `sass-embedded` compile where `scss/` is. `.npmignore` keeps `lib`, the gemspec and `*.gem` out of the npm package. Keep the gemspec ASCII: RubyGems reads it in the locale's encoding, and a literal non-ASCII character fails to load.
 
 Dart Sass only. LibSass/node-sass has been unsupported since v1.3.0.
@@ -299,7 +299,7 @@ Four layers, loaded in dependency order by `scss/_gerillass.scss`. The order is 
 | 1 | `scss/lists/` | flat value lists (`$list-of-buttons`) | `list-of-` prefix, `!default` |
 | 2 | `scss/maps/` | keyed config (`$map-for-breakpoints`) | `map-for-` prefix, `!default` |
 | 3 | `scss/utilities/` | 24 helper **functions** | `camelCase` |
-| 4 | `scss/library/` | 52 **mixins** — the bulk of the API | `kebab-case` |
+| 4 | `scss/library/` | 53 **mixins** — the bulk of the API | `kebab-case` |
 
 `_gerillass.scss` lists every partial explicitly. **A new file is invisible until you add its `@import` line there**, in the correct layer block.
 
@@ -400,10 +400,10 @@ Four levels, and knowing which one covers a member tells you what you can trust:
 
 | Level | Proves | Coverage |
 |---|---|---|
-| `test/smoke.scss` | the mixin evaluates at all | 52/52 mixins |
-| snapshot of `meta/` examples | the output cannot change unnoticed | 76/76 members |
-| `meta/` rejects | bad input is refused with a real message | 66/76 |
-| sass-true spec in `test/` | the CSS is **correct** | 40/76 |
+| `test/smoke.scss` | the mixin evaluates at all | 53/53 mixins |
+| snapshot of `meta/` examples | the output cannot change unnoticed | 77/77 members |
+| `meta/` rejects | bad input is refused with a real message | 67/77 |
+| sass-true spec in `test/` | the CSS is **correct** | 41/77 |
 
 Only the last one catches an output that was wrong from the start; a snapshot
 records a wrong value as correct. Hand-written specs are therefore reserved for
@@ -929,7 +929,8 @@ Two pieces of work are open:
   `$map-for-breakpoints`; and, found while discussing that key, `breakpoint`
   and `container-query` refusing a range that runs backwards or is empty
   through `scss/internal/_range-problem.scss`, which both used to write into a
-  query no width can satisfy.
+  query no width can satisfy; and `auto-grid`, the first of the review's new
+  members, on `auto-grid`, branched from `utilities-lists-maps`.
   The last three come from `todos/library-review.md`, and the last three
   patterns, `glow`, `vignette` and `mesh`, from the survey in
   `todos/saas-hero-backgrounds.md`. Each has a `MIGRATION.md` section.
@@ -980,18 +981,23 @@ insets, `auto-fit` grids, anchor positioning, `@scope`, view transitions and
 scrollbar styling. The `clamp(` and `anchor` matches in `scss/` are a comment
 and the `<a>` pseudo-class list, not the features.
 
-**Six of the seven have shipped.** `container-query`, `fluid` and
+**Seven of the eight have shipped.** `container-query`, `fluid` and
 `line-clamp` are in, `loadify` respects `prefers-reduced-motion`, which was the
 accessibility defect the fourth entry existed for, and 2.2.0 added `focus-ring`
 (an outline on `:focus-visible`, measured in its source comment) and
 `motion-safe`, the standalone reduced-motion guard. What is left, with the trap
 each one closes:
 
-1. **`auto-grid`.** Verified in a browser: in a 250px container,
-   `repeat(auto-fit, minmax(20rem, 1fr))` lays out a 320px column and overflows
-   by 70px, while `minmax(min(100%, 20rem), 1fr)` fits at 250px. Forgetting the
-   `min()` is what produces horizontal scrolling on phones. Different enough
-   from `columnizer`, which is flexbox and wants a column count.
+1. ~~**`auto-grid`.**~~ **Done for 4.0.0 on the `auto-grid` branch.** The
+   overflow was measured again in all three browsers before it was written: in
+   a 250px container `repeat(auto-fit, minmax(20rem, 1fr))` lays out a 320px
+   column and runs 70px past the container, and `min(100%, 20rem)` fits at
+   250px. It takes `$min`, `$gap`, `$limit` and `$fill`. `$limit` is the part
+   that earns the member rather than the `min()`: a ceiling on the column count
+   is not a property, it comes out of
+   `max($min, (100% - ($limit - 1) * $gap) / $limit)`, which has to be edited in
+   three places by hand every time the limit or the gap changes. `columnizer`
+   stays as it is: it is flexbox and wants a column count.
 2. **Decorative, in the spirit of `background-pattern` and `scissors`:** `glass`
    (`backdrop-filter` with a `@supports` fallback, which is unreadable without
    it), `edge-fade` (`mask-image` on a scroll container), `theme`
@@ -999,8 +1005,8 @@ each one closes:
    second silently pick light). `theme` is now part of the token layer in
    `todos/design-tokens.md`.
 
-`auto-grid` is the one that closes a real defect. The rest are decorative and
-can wait for a release that wants them.
+`auto-grid` was the one that closed a real defect and it is in. The rest are
+decorative and can wait for a release that wants them.
 
 **What one costs.** A member is seven places, not one: the partial in
 `scss/library/`, its line in that folder's `_index.scss`, a `meta/` entry

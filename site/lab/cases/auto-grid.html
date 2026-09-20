@@ -1,0 +1,25 @@
+<p>Without the mixin, in a 250px box: the column stays 320px and runs outside.</p>
+<div style="width: 250px; outline: 1px solid #c33">
+  <div class="without">
+    <div style="background:#cde;padding:8px">One</div>
+    <div style="background:#cde;padding:8px">Two</div>
+  </div>
+</div>
+
+<p>With the mixin, the same box: one column, nothing outside.</p>
+<div style="width: 250px; outline: 1px solid #3c3">
+  <div class="with">
+    <div style="background:#cde;padding:8px">One</div>
+    <div style="background:#cde;padding:8px">Two</div>
+  </div>
+</div>
+
+<p>A ceiling of three columns, however wide the page gets.</p>
+<div class="limited">
+  <div style="background:#cde;padding:8px">1</div>
+  <div style="background:#cde;padding:8px">2</div>
+  <div style="background:#cde;padding:8px">3</div>
+  <div style="background:#cde;padding:8px">4</div>
+  <div style="background:#cde;padding:8px">5</div>
+  <div style="background:#cde;padding:8px">6</div>
+</div>

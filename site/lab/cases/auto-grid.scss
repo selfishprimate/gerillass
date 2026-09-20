@@ -1,0 +1,15 @@
+@use "gerillass" as *;
+
+.without {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+}
+
+.with {
+  @include auto-grid(20rem, 1rem);
+}
+
+.limited {
+  @include auto-grid(8rem, 1rem, 3);
+}

@@ -1,0 +1,57 @@
+{
+  "name": "auto-grid",
+  "summary": "A grid that fits as many columns of $min as the container holds, without overflowing a narrow one.",
+  "caveats": [
+    "The line this replaces, `repeat(auto-fit, minmax(20rem, 1fr))`, overflows a container narrower than the minimum. Measured in Chrome 152, Firefox 156 and Safari 26.6.2 in a 250px container: the column is laid out at 320px and the grid runs 70px past the container in all three, which is a horizontal scrollbar on a phone. `min(100%, 20rem)` caps the minimum at the container and the same case lays out one 250px column.",
+    "`$limit` is a ceiling, not a target: with `auto-grid(10rem, 1rem, 4)` in a 1000px container all three browsers lay out exactly four 238px columns, and in a 250px one a single 250px column.",
+    "`$fill: true` writes `auto-fill`, which keeps an empty column, and the default `auto-fit` collapses it. Measured with two items in a 1000px container: `auto-fill` gave three 323px columns and `auto-fit` two 492px ones.",
+    "It writes nothing on the children. `min-inline-size: 0`, which `columnizer` needs, was measured as unnecessary here: with a long unbroken token in a 250px container the track stayed 250px with and without it, since the track's minimum is given rather than left at `auto`."
+  ],
+  "arguments": [
+    {
+      "name": "$min",
+      "accepts": [
+        "a length, such as 16rem",
+        "a percentage",
+        "a var() or calc()"
+      ]
+    },
+    {
+      "name": "$gap",
+      "accepts": [
+        "a length or a percentage",
+        "normal",
+        "a var() or calc()"
+      ]
+    },
+    {
+      "name": "$limit",
+      "accepts": [
+        "a whole number of columns, as a ceiling",
+        "nothing for as many as fit"
+      ]
+    },
+    {
+      "name": "$fill",
+      "accepts": [
+        "true for auto-fill, which keeps an empty column",
+        "false for auto-fit, the default"
+      ]
+    }
+  ],
+  "examples": [
+    ".cards { @include auto-grid; }",
+    ".cards { @include auto-grid(20rem, 1.5rem); }",
+    ".cards { @include auto-grid(10rem, 1rem, 4); }",
+    ".cards { @include auto-grid(15rem, 1rem, $fill: true); }",
+    ".cards { @include auto-grid(var(--card-min), var(--grid-gap)); }"
+  ],
+  "rejects": [
+    ".cards { @include auto-grid(auto); }",
+    ".cards { @include auto-grid(20); }",
+    ".cards { @include auto-grid(20rem, -1rem); }",
+    ".cards { @include auto-grid(20rem, 1rem, 0); }",
+    ".cards { @include auto-grid(20rem, 1rem, var(--n)); }",
+    ".cards { @include auto-grid(20rem, 1rem, 4, yes); }"
+  ]
+}

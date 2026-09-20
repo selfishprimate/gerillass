@@ -5,7 +5,7 @@ description: Use the Gerillass Sass mixin library — loading it, the mixin cata
 
 # Gerillass
 
-A Sass mixin library: 52 mixins and 24 functions that emit CSS from
+A Sass mixin library: 53 mixins and 24 functions that emit CSS from
 semantic declarations. It is Sass source only — there is no runtime and no
 utility classes, so styles live in your stylesheet and your markup stays clean.
 
@@ -81,6 +81,7 @@ a dropped declaration rather than an error.
 | `all-text-inputs` | `@include all-text-inputs(nonsense) { color: red; }` |
 | `antialias` | `@include antialias(only);` |
 | `aspect-ratio` | `.thumb { @include aspect-ratio("16:9", nonsense); }` |
+| `auto-grid` | `.cards { @include auto-grid(auto); }` |
 | `background-image` | `.a { @include background-image("/img/a.png", (red, blue), sideways); }` |
 | `background-pattern` | `.a { @include background-pattern(spiral); }` |
 | `before` | `.a { @include before(42) { color: red; } }` |
@@ -158,6 +159,13 @@ a dropped declaration rather than an error.
 **`aspect-ratio`**
 
 - An element with a `height` attribute, such as `<img width="1600" height="900">` or an embed code's `<iframe width="560" height="315">`, keeps the ratio: the mixin writes `height: auto` inside `:where()`, which overrides the attribute but loses to any `height` a stylesheet sets, before or after the include. Until 4.0.0 the attribute height won and the ratio was ignored.
+
+**`auto-grid`**
+
+- The line this replaces, `repeat(auto-fit, minmax(20rem, 1fr))`, overflows a container narrower than the minimum. Measured in Chrome 152, Firefox 156 and Safari 26.6.2 in a 250px container: the column is laid out at 320px and the grid runs 70px past the container in all three, which is a horizontal scrollbar on a phone. `min(100%, 20rem)` caps the minimum at the container and the same case lays out one 250px column.
+- `$limit` is a ceiling, not a target: with `auto-grid(10rem, 1rem, 4)` in a 1000px container all three browsers lay out exactly four 238px columns, and in a 250px one a single 250px column.
+- `$fill: true` writes `auto-fill`, which keeps an empty column, and the default `auto-fit` collapses it. Measured with two items in a 1000px container: `auto-fill` gave three 323px columns and `auto-fit` two 492px ones.
+- It writes nothing on the children. `min-inline-size: 0`, which `columnizer` needs, was measured as unnecessary here: with a long unbroken token in a 250px container the track stayed 250px with and without it, since the track's minimum is given rather than left at `auto`.
 
 **`background-pattern`**
 
@@ -390,6 +398,7 @@ a dropped declaration rather than an error.
 | `all-text-inputs($pseudo: null)` | Targets every form control a browser draws as a text field, textarea included, optionally in one pseudo-class state. |
 | `antialias($value: null)` | Draws text with greyscale antialiasing instead of subpixel, which makes it look thinner. |
 | `aspect-ratio($ratio: null, $fit: cover)` | Holds an element to a ratio and adds what CSS aspect-ratio alone leaves out: object-fit so an image is cropped rather than stretched, and border: 0 so an iframe does not overflow its container by 4px. Apply it to the element itself, not to a wrapper. |
+| `auto-grid($min: 16rem, $gap: 1rem, $limit: null, $fill: false)` | A grid that fits as many columns of $min as the container holds, without overflowing a narrow one. |
 | `background-image($image-url: null, $filter-color: null, $filter-direction: null)` | Background image with an optional colour or gradient filter laid over it. |
 | `background-pattern($kind: dots, $params...)` | Twenty background patterns drawn with gradients alone: seventeen that tile, from dots and stripes to houndstooth and harlequin, and glow, vignette and mesh, which light the whole box. |
 | `before($content: null)` | Styles the ::before pseudo-element. A `data-` argument becomes an attr() content value. |

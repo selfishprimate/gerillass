@@ -65,6 +65,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `tint` and `shade` refuse a list with their own message | breaking, loud, where Sass raised before |
 | the length-unit and anchor pseudo-class lists gained entries | not breaking |
 | a range that runs backwards or is empty stops the build | breaking, loud |
+| `auto-grid` is new | not breaking |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -1678,6 +1679,37 @@ An 880 call matrix over every pair of keys and lengths compiled against 3.x and
 against the branch: 655 calls unchanged, 225 refused, none newly accepted and
 no CSS changed. Every one of the 225 was checked arithmetically as well: in all
 of them the minimum sits above the maximum.
+
+---
+
+## Added: `auto-grid`
+
+A grid that fits as many columns of `$min` as the container holds, with a
+ceiling on the column count. Nothing else changed, so it breaks no call.
+
+```scss
+.cards {
+  @include auto-grid(20rem, 1rem);
+}
+
+.team {
+  @include auto-grid(10rem, 1rem, 4);
+}
+```
+
+It exists because the line everyone writes overflows. Measured in Chrome 152,
+Firefox 156 and Safari 26.6.2, in a 250px container:
+`repeat(auto-fit, minmax(20rem, 1fr))` lays out a 320px column and runs 70px
+past the container in all three, which on a phone is a horizontal scrollbar.
+The mixin writes `minmax(min(100%, 20rem), 1fr)`, which lays out one 250px
+column instead.
+
+`$limit` is the other half, and the part a person does not write from memory: a
+ceiling on the column count is not a property, it comes out of the track
+minimum as `max($min, (100% - ($limit - 1) * $gap) / $limit)`, where the limit
+appears twice and the gap once. Measured in a 1000px container with six items,
+`$limit: 4` gives exactly four 238px columns in all three browsers, and the
+same call in a 250px container gives one.
 
 ---
 

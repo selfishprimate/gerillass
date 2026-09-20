@@ -1,0 +1,89 @@
+// The track formula is the part worth pinning. Measured in Chrome 152, Firefox
+// 156 and Safari 26.6.2: `minmax(20rem, 1fr)` in a 250px container lays out a
+// 320px column and overflows by 70px, while the wrapped form lays out one 250px
+// column; with `$limit: 4` a 1000px container gets exactly four 238px columns
+// and a 250px one a single column. The track is written by interpolation, so
+// the expectations are unquoted strings, as in the `adaptive` spec.
+@use 'sass:string';
+@use 'true' as *;
+@use '../../scss/gerillass' as *;
+
+@include describe('auto-grid()') {
+  @include it('Caps the track minimum at the container width.') {
+    @include assert {
+      @include output {
+        .cards { @include auto-grid(20rem, 1rem); }
+      }
+      @include expect {
+        .cards {
+          display: grid;
+          gap: 1rem;
+          grid-template-columns: string.unquote("repeat(auto-fit, minmax(min(100%, 20rem), 1fr))");
+        }
+      }
+    }
+  }
+
+  @include it('Writes the ceiling formula for $limit.') {
+    @include assert {
+      @include output {
+        .cards { @include auto-grid(10rem, 1rem, 4); }
+      }
+      @include expect {
+        .cards {
+          display: grid;
+          gap: 1rem;
+          grid-template-columns: string.unquote("repeat(auto-fit, minmax(min(100%, max(10rem, (100% - 3 * 1rem) / 4)), 1fr))");
+        }
+      }
+    }
+  }
+
+  @include it('Reduces a limit of one to the whole row.') {
+    @include assert {
+      @include output {
+        .cards { @include auto-grid(10rem, 1rem, 1); }
+      }
+      @include expect {
+        .cards {
+          display: grid;
+          gap: 1rem;
+          grid-template-columns: string.unquote("repeat(auto-fit, minmax(100%, 1fr))");
+        }
+      }
+    }
+  }
+
+  @include it('Takes auto-fill when asked, and keeps a var() unevaluated.') {
+    @include assert {
+      @include output {
+        .cards { @include auto-grid(var(--min), var(--gap), $fill: true); }
+      }
+      @include expect {
+        .cards {
+          display: grid;
+          gap: var(--gap);
+          grid-template-columns: string.unquote("repeat(auto-fill, minmax(min(100%, var(--min)), 1fr))");
+        }
+      }
+    }
+  }
+
+  // A unitless 0 is a number rather than a length: `min(100%, 0)` drops the
+  // track list in all three browsers, and `100% - 3 * 0` inside the ceiling
+  // formula is a percentage minus a number. Both are written as 0px.
+  @include it('Writes a unitless zero as 0px.') {
+    @include assert {
+      @include output {
+        .cards { @include auto-grid(0, 0); }
+      }
+      @include expect {
+        .cards {
+          display: grid;
+          gap: 0px;
+          grid-template-columns: string.unquote("repeat(auto-fit, minmax(min(100%, 0px), 1fr))");
+        }
+      }
+    }
+  }
+}

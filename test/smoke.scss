@@ -29,6 +29,7 @@
 .all-text-inputs { @include all-text-inputs { color: red; } }
 .antialias { @include antialias; }
 .aspect-ratio { @include aspect-ratio("16:9"); }
+.auto-grid { @include auto-grid(16rem, 1rem, 4); }
 .background-pattern { @include background-pattern(dots); }
 .background-image { @include background-image("/img/a.png"); }
 .background-image-filtered { @include background-image("/img/a.png", rgba(0, 0, 0, 0.5)); }

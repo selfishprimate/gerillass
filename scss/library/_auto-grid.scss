@@ -1,0 +1,90 @@
+@charset "UTF-8";
+
+@use "sass:math";
+@use "sass:meta";
+@use "sass:string";
+@use "../internal/length-problem" as *;
+
+// A grid that fits as many columns of $min as the container holds.
+//
+// The line everyone writes is `repeat(auto-fit, minmax(20rem, 1fr))`, and it
+// overflows. Measured in Chrome 152, Firefox 156 and Safari 26.6.2, in a 250px
+// container: the column is laid out at 320px and the grid runs 70px past its
+// container, in all three. `minmax()` takes the first value as a hard minimum,
+// so a track never shrinks below it and the container is the thing that gives.
+// Wrapping it in `min(100%, 20rem)` caps the minimum at the container's own
+// width: the same case lays out one 250px column, with nothing overflowing.
+//
+// $limit is the other half. Keeping a grid to at most four columns by hand
+// means writing `max($min, (100% - ($limit - 1) * $gap) / $limit)`, which has
+// to be edited in three places every time the limit or the gap changes.
+// Measured in a 1000px container with six items, `$limit: 4` lays out exactly
+// four 238px columns in all three browsers.
+//
+// What it does not write: `min-inline-size: 0` on the children, which
+// `columnizer` needs. Measured with a long unbroken token in a 250px
+// container, with and without it: the track stayed 250px either way, because
+// the track's minimum is given here rather than left at `auto`.
+@mixin auto-grid($min: 16rem, $gap: 1rem, $limit: null, $fill: false) {
+  @if $fill != true and $fill != false {
+    @error "`#{meta.inspect($fill)}` is not a valid $fill for `auto-grid`. Pass `true` for `auto-fill`, which keeps an empty column, or `false` for `auto-fit`, which collapses it.";
+  }
+
+  // The track minimum goes inside `min()`, which takes no keyword: measured in
+  // all three browsers, `min-content`, `max-content`, `auto`, `fit-content()`
+  // and a CSS-wide keyword each drop the whole declaration, while a length, a
+  // percentage, a `var()` and a `calc()` are kept.
+  $problem: lengthProblem($min, $negative: false, $quoted: true);
+  @if $problem {
+    @error "`#{meta.inspect($min)}` is not a valid $min for `auto-grid`: #{$problem}. It is the smallest a column may be, and a browser drops the whole track list.";
+  }
+
+  // `gap` keeps a length, a percentage, `normal`, a `var()` and a `calc()`, and
+  // drops a negative length, `auto` and a word.
+  $problem: lengthProblem($gap, $negative: false, $keywords: ("normal",), $quoted: true);
+  @if $problem {
+    @error "`#{meta.inspect($gap)}` is not a valid $gap for `auto-grid`: #{$problem}. A browser drops the declaration and the columns touch.";
+  }
+
+  @if $limit != null {
+    @if meta.type-of($limit) != "number" or not math.is-unitless($limit) {
+      @error "`#{meta.inspect($limit)}` is not a valid $limit for `auto-grid`. Pass a whole number of columns, such as `4`, or nothing for as many as fit. It is arithmetic in the track formula, so a `var()` cannot be used.";
+    }
+    @if $limit < 1 or $limit != math.round($limit) {
+      @error "`#{meta.inspect($limit)}` is not a valid $limit for `auto-grid`. Pass a whole number of columns that is at least 1.";
+    }
+  }
+
+  // A unitless 0 is a number rather than a length. Measured in all three
+  // browsers: `min(100%, 0)` drops the track list, and inside the $limit
+  // formula `100% - 3 * 0` is a percentage minus a number, which is invalid
+  // arithmetic. `0px` works in both places, which is what `adaptive` does with
+  // its gutter for the same reason.
+  $min: -zero-to-px($min);
+  $gap: -zero-to-px($gap);
+
+  $track: "min(100%, #{$min})";
+  @if $limit == 1 {
+    // The formula reduces to this, and `100% - 0 * $gap` is noise in the
+    // output. One column is the whole row.
+    $track: "100%";
+  } @else if $limit != null {
+    $track: "min(100%, max(#{$min}, (100% - #{$limit - 1} * #{$gap}) / #{$limit}))";
+  }
+
+  display: grid;
+  gap: $gap;
+  // Interpolated rather than computed, as in `columnizer`: it is what lets a
+  // `var()` minimum or gap reach the browser unevaluated.
+  grid-template-columns: repeat(#{if($fill, auto-fill, auto-fit)}, minmax(#{string.unquote($track)}, 1fr));
+}
+
+@function -zero-to-px($value) {
+  @if meta.type-of($value) == "number" and math.is-unitless($value) and $value == 0 {
+    @return 0px;
+  }
+  @if meta.type-of($value) == "string" and string.unquote($value) == string.unquote("0") {
+    @return 0px;
+  }
+  @return $value;
+}

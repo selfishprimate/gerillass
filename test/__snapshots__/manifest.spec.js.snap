@@ -272,6 +272,46 @@ exports[`Manifest examples aspect-ratio: .video { @include aspect-ratio("16/9");
 }"
 `;
 
+exports[`Manifest examples auto-grid: .cards { @include auto-grid(10rem, 1rem, 4); } 1`] = `
+".cards {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, max(10rem, (100% - 3 * 1rem) / 4)), 1fr));
+}"
+`;
+
+exports[`Manifest examples auto-grid: .cards { @include auto-grid(15rem, 1rem, $fill: true); } 1`] = `
+".cards {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+}"
+`;
+
+exports[`Manifest examples auto-grid: .cards { @include auto-grid(20rem, 1.5rem); } 1`] = `
+".cards {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+}"
+`;
+
+exports[`Manifest examples auto-grid: .cards { @include auto-grid(var(--card-min), var(--grid-gap)); } 1`] = `
+".cards {
+  display: grid;
+  gap: var(--grid-gap);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--card-min)), 1fr));
+}"
+`;
+
+exports[`Manifest examples auto-grid: .cards { @include auto-grid; } 1`] = `
+".cards {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+}"
+`;
+
 exports[`Manifest examples background-image: .a { @include background-image("/img/a.png"); } 1`] = `
 ".a {
   background-image: url("/img/a.png");
