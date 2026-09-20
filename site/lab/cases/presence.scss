@@ -13,11 +13,16 @@
   @include presence(".is-open", 0.35s, right 1.5rem, null, false);
 }
 
-// The same popover with the two pieces left out, one at a time, to see what
-// each one is carrying. Written by hand, since the mixin does not write these.
+// The same popover with one piece left out at a time, to see what each one is
+// carrying. Written by hand, since the mixin does not write these.
+//
+// Both carry `overlay ... allow-discrete` even though the piece under test is
+// something else: without it a popover leaves the top layer the moment it is
+// closed, so it is painted in the wrong place while it fades and the demo
+// shows two faults at once instead of the one it is about.
 .no-starting-style {
   opacity: 0;
-  transition: opacity 0.35s ease, display 0.35s allow-discrete;
+  transition: opacity 0.35s ease, display 0.35s allow-discrete, overlay 0.35s allow-discrete;
 }
 
 .no-starting-style:popover-open {
@@ -26,7 +31,7 @@
 
 .no-allow-discrete {
   opacity: 0;
-  transition: opacity 0.35s ease;
+  transition: opacity 0.35s ease, overlay 0.35s allow-discrete;
 }
 
 .no-allow-discrete:popover-open {

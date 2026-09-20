@@ -30,10 +30,15 @@
 // Two things the measurements say plainly. Firefox 156 does not run the exit
 // at all, for any of the three shapes, although it answers true for
 // `CSS.supports("transition-behavior", "allow-discrete")`: there the element
-// fades in and disappears at once. And the `overlay` line is Chrome's alone,
-// since Firefox and Safari do not support the property; it is written because
-// it costs nothing and is what keeps a top-layer element painted while it
-// leaves.
+// fades in and disappears at once.
+//
+// And the `overlay` line earns its place, which was measured after a lab demo
+// written without it closed wrongly. In Chrome 152, sampled 100ms into the
+// close, a popover with the line computes `overlay: auto` and one without it
+// computes `overlay: none`: the second has already left the top layer while it
+// is still fading, so it is painted among the page's own content rather than
+// above it. Firefox and Safari do not support the property and ignore the
+// line.
 $-directions: ("top": (0, -1), "bottom": (0, 1), "left": (-1, 0), "right": (1, 0));
 
 @mixin presence($open: popover, $duration: 0.3s, $move: top 0.75rem, $scale: null, $backdrop: true, $easing: ease) {

@@ -174,7 +174,7 @@ Neither failure says anything. The CSS is valid, the transition is there, and ha
 }
 ```
 
-The closed state is the base rule, so an element that is never opened is already in it. `overlay` is in the transition for the top layer: it is Chrome's property alone, since Firefox and Safari do not support it, and it is what keeps a popover or a dialog painted while it leaves.
+The closed state is the base rule, so an element that is never opened is already in it. `overlay` is in the transition for the top layer, and it is Chrome's property alone: Firefox and Safari do not support it and ignore the line. What it buys was measured in Chrome 152, 100ms into a close: with the line the popover computes `overlay: auto` and without it `overlay: none`, so the one without has already left the top layer while it is still fading, and is painted among the page's own content instead of above it.
 
 <Hint kind="info">
 
