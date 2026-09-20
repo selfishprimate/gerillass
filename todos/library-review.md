@@ -82,7 +82,9 @@ refused. `$step` was added for how far apart a filled shadow's layers sit, a
   is not a model and that the query reads the screen rather than the window.
   **The maintainer decided on 20 September 2026 that both stay**, with no
   deprecation and no warning; only the Android side of the maps is still open.
-  `todos/device-maps.md` has the measurements.
+  `todos/device-maps.md` has the measurements. **The Android side was answered
+  on 20 September 2026**: twenty entries from Chrome's own device list, the
+  Pixel line from the 6 to the 10 among them.
 - ~~**`reset-css`** is Meyer's 2011 reset~~ **rewritten for 4.0.0 on the
   `reset-modern` branch**. The maintainer chose one member rather than two:
   two baselines is one too many, so `reset-css` carries the modern rules and

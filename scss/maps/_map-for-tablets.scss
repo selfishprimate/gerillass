@@ -1,8 +1,10 @@
 @charset "UTF-8";
 
 // The screen of each tablet in CSS pixels, as `width height`. See
-// _map-for-smartphones.scss for where the Apple numbers come from and why a
-// size is not a model.
+// _map-for-smartphones.scss for where the Apple and the Android numbers come
+// from, why a size is not a model, and why an Android size is only the default
+// display setting. `Galaxy-Tab-S4` is Chrome's own figure; the Nexus entries
+// are the ones this map has always carried and were not measured.
 //
 // Two of the old entries are kept at the size they always had, since changing
 // what a key means would change a stylesheet without saying so: `iPad` is the
@@ -32,4 +34,5 @@ $map-for-tablets: (
   "Nexus7": 600px 960px,
   "Nexus9": 768px 1024px,
   "Nexus10": 800px 1280px,
+  "Galaxy-Tab-S4": 712px 1138px,
 ) !default;

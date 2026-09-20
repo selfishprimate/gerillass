@@ -10,8 +10,31 @@
 // The Apple sizes are read from `mainScreenWidth`, `mainScreenHeight` and
 // `mainScreenScale` in Xcode's own device profiles, under
 // /Library/Developer/CoreSimulator/Profiles/DeviceTypes, so they are points
-// rather than figures from a specification page. The Galaxy entries are the
-// ones this map has always carried and were not measured.
+// rather than figures from a specification page.
+//
+// The Android sizes are Chrome's own, from the device list DevTools emulates,
+// `front_end/models/emulation/EmulatedDevices.ts` in devtools-frontend, read on
+// 20 September 2026. Where a model is not on that list but Android Studio's
+// device profile, `com/android/sdklib/devices/nexus.xml` in `sdklib.jar`,
+// gives it the same panel and the same density as one that is, it takes that
+// model's size: that is Pixel 6, 6a, 7a, 9a, 10 Pro and 10 Pro XL, each sharing
+// a profile with a Pixel Chrome lists. Nothing here is computed from a
+// specification page, because the arithmetic does not decide the rounding: a
+// Pixel 7 is 1080px at a scale of 2.625, which is 411.43, and the device
+// answers 412.
+//
+// Two kinds of Android phone are deliberately absent. A folding phone has two
+// screens and an entry holds one size. And the models with the largest share
+// are the budget A series, whose sizes no source to hand gives, so they are not
+// here rather than here and wrong.
+//
+// **An Android size is the default display setting.** Android's Display size
+// control changes the density, and with it the CSS pixel the screen is
+// measured in, so a phone whose owner has moved that slider answers something
+// else and matches no entry here. The Apple entries have no such setting.
+//
+// The four Galaxy entries below `Galaxy-S7` are the ones this map has always
+// carried and were not measured.
 //
 // **A size is not a model.** Seven phones share 390x844 and four share
 // 393x852, so a query written for one of them applies to every phone of that
@@ -65,4 +88,23 @@ $map-for-smartphones: (
   "Galaxy-S8": 360px 740px,
   "Galaxy-S8-Plus": 360px 740px,
   "Galaxy-S10": 360px 760px,
+  "Galaxy-S20-Ultra": 412px 915px,
+  "Galaxy-A51": 412px 914px,
+  "Galaxy-A71": 412px 914px,
+  "Galaxy-A55": 360px 800px,
+  "Pixel6": 412px 915px,
+  "Pixel6a": 412px 915px,
+  "Pixel7": 412px 915px,
+  "Pixel7a": 412px 915px,
+  "Pixel8": 412px 915px,
+  "Pixel8a": 412px 915px,
+  "Pixel8-Pro": 448px 997px,
+  "Pixel9": 412px 924px,
+  "Pixel9a": 412px 924px,
+  "Pixel9-Pro": 427px 952px,
+  "Pixel9-Pro-XL": 448px 997px,
+  "Pixel10": 412px 924px,
+  "Pixel10-Pro": 427px 952px,
+  "Pixel10-Pro-XL": 448px 997px,
+  "Moto-G-Power": 412px 823px,
 ) !default;

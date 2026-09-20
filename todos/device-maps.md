@@ -133,6 +133,25 @@ and a screen size passed instead of a name is refused. Done for 4.0.0 on the
    a default. Either the maps carry Apple only, or the Android entries are
    marked as approximate.
 
+   **Answered on 20 September 2026: the maps carry Android models, from
+   Chrome's own list.** Not from spec sheets, and not computed: the sizes are
+   the ones Chrome DevTools emulates, in
+   `front_end/models/emulation/EmulatedDevices.ts`, which Google keeps per
+   device. A model Chrome does not list is added only when Android Studio's
+   device profile, `com/android/sdklib/devices/nexus.xml` inside `sdklib.jar`,
+   gives it the same panel and density as one Chrome does; that covers the
+   Pixel 6, 6a, 7a, 9a, 10 Pro and 10 Pro XL. The arithmetic alone cannot
+   decide the number, which is why it is not used: a Pixel 7 is 1080px at a
+   scale of 2.625, and 411.43 rounds to 411 while the device answers 412.
+
+   Twenty entries went in: the Pixel line from the 6 to the 10, the Galaxy
+   S20 Ultra, A51, A71 and A55, the Moto G Power, and the Galaxy Tab S4 among
+   the tablets. Left out on purpose: folding phones, since one entry holds one
+   size and a fold has two screens, and the budget A series models that lead
+   the usage charts, since no source to hand gives their CSS size. The display
+   size caveat stands and is written into the map, the two documentation pages
+   and the caveats.
+
 ## What `todos/library-review.md` proposed instead, and the answer
 
 Deprecating both mixins with a `@warn` naming `breakpoint`,
@@ -142,9 +161,9 @@ with the two maps.
 **The maintainer decided on 20 September 2026 that they stay**, with no
 deprecation and no warning. The measurements support that as far as they go:
 `device-width` resolves in all three engines, the maps are current again, and
-both pages say what the query does and does not do. What is still open is only
-decision 3 below, whether the maps carry Android models beyond the Galaxy
-entries they have always had.
+both pages say what the query does and does not do. Decision 3 below, whether the maps carry
+Android models beyond the Galaxy entries they have always had, was answered on
+20 September 2026: they do, from Chrome's own device list.
 
 The case for deprecating is on the record here rather than acted on: the list
 ages every September, and a name cannot be told from another of the same size.
