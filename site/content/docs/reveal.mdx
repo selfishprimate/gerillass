@@ -62,8 +62,11 @@ Neither failure says anything. The CSS is valid, the transition is there, and ha
 ```
 ```html
 <style>
+  /* The popover is in the top layer and adds nothing to the page's height, so the frame is given room for it to open into. */
+  body { min-height: 150px; }
   button { padding: 8px 14px; border: 0; border-radius: 8px; background: #0f172a; color: #fff; font: 600 13px Inter, ui-sans-serif, system-ui, sans-serif; }
-  .tooltip { position: absolute; inset: auto; margin: 6px 0 0; border: 0; border-radius: 10px; padding: 12px 14px; background: #0f172a; color: #f8fafc; font: 13px Inter, ui-sans-serif, system-ui, sans-serif; }
+  /* A popover is in the top layer, where its containing block is the viewport: `inset: auto` does not keep it under the button, so the place is given. */
+  .tooltip { position: absolute; inset: auto; top: 60px; left: 16px; border: 0; border-radius: 10px; padding: 12px 14px; background: #0f172a; color: #f8fafc; font: 13px Inter, ui-sans-serif, system-ui, sans-serif; }
 </style>
 <button popovertarget="tip">Toggle the popover</button>
 <div popover id="tip" class="tooltip">Fades and slides, both ways.</div>
@@ -86,22 +89,35 @@ Neither failure says anything. The CSS is valid, the transition is there, and ha
 ```
 ```html
 <style>
+  body { min-height: 150px; }
   button { padding: 8px 14px; border: 0; border-radius: 8px; background: #0f172a; color: #fff; font: 600 13px Inter, ui-sans-serif, system-ui, sans-serif; }
-  .plain { position: absolute; inset: auto; margin: 6px 0 0; border: 0; border-radius: 10px; padding: 12px 14px; background: #7c2d12; color: #ffedd5; font: 13px Inter, ui-sans-serif, system-ui, sans-serif; }
+  .plain { position: absolute; inset: auto; top: 60px; left: 16px; border: 0; border-radius: 10px; padding: 12px 14px; background: #7c2d12; color: #ffedd5; font: 13px Inter, ui-sans-serif, system-ui, sans-serif; }
 </style>
 <button popovertarget="plain">Toggle</button>
 <div popover id="plain" class="plain">No way in.</div>
 ```
 </Example>
 
-<Example caption="A modal dialog growing into place, with its backdrop fading behind it. Opening a dialog takes a line of script, which the frames on this page do not run, so this one is code rather than a demo.">
+<Example caption="A modal dialog growing into place, with its backdrop fading behind it. The frames on this page run no script, so this one is drawn with the `open` attribute already on it: what you see is the end of the animation, the state `[open]` carries." listing="<dialog class=&quot;modal&quot;>
+&#32;&#32;<p>Delete this project?</p>
+&#32;&#32;<form method=&quot;dialog&quot;>
+&#32;&#32;&#32;&#32;<button value=&quot;cancel&quot;>Cancel</button>
+&#32;&#32;&#32;&#32;<button value=&quot;delete&quot;>Delete</button>
+&#32;&#32;</form>
+</dialog>">
 ```scss
 .modal {
   @include reveal(dialog, 0.25s, none, 0.95);
 }
 ```
 ```html
-<dialog class="modal">
+<style>
+  .modal { position: static; border: 0; border-radius: 12px; padding: 16px 18px; background: #0f172a; color: #f8fafc; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; box-shadow: 0 18px 40px rgb(15 23 42 / 0.35); }
+  .modal p { margin: 0 0 12px; }
+  .modal button { padding: 8px 14px; margin-right: 6px; border: 0; border-radius: 8px; background: #334155; color: #fff; font: 600 13px Inter, ui-sans-serif, system-ui, sans-serif; }
+  .modal button[value="delete"] { background: #b91c1c; }
+</style>
+<dialog class="modal" open>
   <p>Delete this project?</p>
   <form method="dialog">
     <button value="cancel">Cancel</button>
@@ -111,7 +127,10 @@ Neither failure says anything. The CSS is valid, the transition is there, and ha
 ```
 </Example>
 
-<Example caption="An element your own code shows with a class. The selector is yours, so the mixin writes the same three pieces against it.">
+<Example caption="An element your own code shows with a class. The selector is yours, so the mixin writes the same three pieces against it. The demo carries the class already, since the frame runs no script to add it." listing="<nav class=&quot;menu is-open&quot;>
+&#32;&#32;<a href=&quot;/docs&quot;>Docs</a>
+&#32;&#32;<a href=&quot;/playground&quot;>Playground</a>
+</nav>">
 ```scss
 .menu {
   display: none;
@@ -124,7 +143,11 @@ Neither failure says anything. The CSS is valid, the transition is there, and ha
 }
 ```
 ```html
-<nav class="menu">
+<style>
+  .menu { width: 180px; padding: 12px 14px; border-radius: 10px; background: #5bc0bb; font: 14px/1.8 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .menu a { display: block; color: #04312f; font-weight: 600; text-decoration: none; }
+</style>
+<nav class="menu is-open">
   <a href="/docs">Docs</a>
   <a href="/playground">Playground</a>
 </nav>
