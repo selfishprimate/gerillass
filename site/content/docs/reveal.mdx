@@ -30,7 +30,7 @@ The **Reveal** Sass mixin animates something in and out of the page: a popover, 
 | without `@starting-style` | **nothing, in any browser** | animates |
 | without `allow-discrete` on `display` | animates | **nothing, in any browser** |
 
-Neither failure says anything. The CSS is valid, the transition is there, and half the effect is missing.
+Neither failure says anything. The CSS is valid, the transition is there, and half the effect is missing. Both are in the repository's lab as demos you can click, beside the mixin on the same three shapes.
 
 `@starting-style` also has to come **after** the rule it starts from. Written before it, it does nothing, and again without a word.
 
@@ -70,31 +70,6 @@ Neither failure says anything. The CSS is valid, the transition is there, and ha
 </style>
 <button popovertarget="tip">Toggle the popover</button>
 <div popover id="tip" class="tooltip">Fades and slides, both ways.</div>
-```
-</Example>
-
-<Example caption="The same popover with `@starting-style` left out, so you can see what it carries: this one appears at once and only fades on the way out." listing="<button popovertarget=&quot;plain&quot;>Toggle</button>
-<div popover id=&quot;plain&quot; class=&quot;plain&quot;>No way in.</div>">
-```scss
-// Not what the mixin writes: this is the same CSS with the starting state
-// removed, for the comparison.
-.plain {
-  opacity: 0;
-  transition: opacity 0.35s ease, display 0.35s allow-discrete;
-}
-
-.plain:popover-open {
-  opacity: 1;
-}
-```
-```html
-<style>
-  body { min-height: 150px; }
-  button { padding: 8px 14px; border: 0; border-radius: 8px; background: #0f172a; color: #fff; font: 600 13px Inter, ui-sans-serif, system-ui, sans-serif; }
-  .plain { position: absolute; inset: auto; top: 60px; left: 16px; border: 0; border-radius: 10px; padding: 12px 14px; background: #7c2d12; color: #ffedd5; font: 13px Inter, ui-sans-serif, system-ui, sans-serif; }
-</style>
-<button popovertarget="plain">Toggle</button>
-<div popover id="plain" class="plain">No way in.</div>
 ```
 </Example>
 
