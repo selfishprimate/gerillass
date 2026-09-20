@@ -111,9 +111,17 @@ refused. `$step` was added for how far apart a filled shadow's layers sit, a
   is different, since one declaration with no trap is not a member.
 - **`antialias`** sets two non-standard properties that only ever worked on
   macOS. **The summary is fixed for 4.0.0 on the `border-box-specificity`
-  branch**, and the mixin is not dead: in Chrome 152 the same line of text
-  rendered to different pixels with and without it, compared as clipped PNGs.
-  Deprecating it is still open.
+  branch**, and **the maintainer decided on 20 September 2026 that the mixin
+  stays**, with no deprecation: it still changes what is drawn, and unlike
+  `clearfix` it has no single modern declaration to point at, so removing it
+  would only make the user write the same two lines by hand. Measured that day
+  by screenshotting the same page with and without the mixin, headless and in
+  a real window: Chrome 152 and Safari 26.6.2 draw differently, Firefox 156 is
+  identical to the byte, since it draws greyscale on macOS already and
+  `-moz-osx-font-smoothing: grayscale` asks for what it does. Windows and Linux
+  were not tested. Bootstrap's reboot sets neither property; Tailwind still
+  ships both as `antialiased` and `subpixel-antialiased`. The finding is in the
+  source, the caveats and the documentation page.
 - ~~**`stretched-link`** carries `background-color: rgba(0, 0, 0, 0)`~~ **done
   for 4.0.0 on the `stretched-link` branch**: the colour is gone and the four
   offsets are `inset: 0`. Measured in Chrome 152, Firefox 156 and Safari
@@ -276,7 +284,9 @@ each item.
   `golden-ratio`, `box-sizing`, `inline-block` and `retina-image`, with one
   minor version of warnings first. The members closest to that line here are
   `border-box`, `antialias`, `responsive-image`, `clearfix`, `sizer`, `circle`,
-  `placeholder`, `smartphone` and `tablet`.
+  `placeholder`, `smartphone` and `tablet`. Of those, only `clearfix` was
+  removed; `smartphone`, `tablet` and `antialias` were each looked at and kept,
+  on 20 September 2026.
 - **What nobody ships** is the thing this library could: a compile-time
   contrast check on a colour pair, and `gerillass_compile` for agents. Both are
   already recorded, in `todos/design-tokens.md` and

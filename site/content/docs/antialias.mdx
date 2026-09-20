@@ -1,7 +1,7 @@
 ---
 title: "Antialias"
 page_title: "Antialias Sass Mixin"
-page_description: "The Antialias Sass mixin draws text with greyscale antialiasing instead of subpixel antialiasing on macOS, which makes it look thinner."
+page_description: "The Antialias Sass mixin draws text with greyscale antialiasing instead of subpixel antialiasing on macOS, which makes it look thinner. Measured in all three browsers."
 page_keywords: "Gerillass antialias, Antialias Sass mixin, Sass antialias, SCSS antialias, CSS -webkit-font-smoothing, CSS font smoothing"
 page_image: "gerillass-antialias.jpg"
 ---
@@ -46,7 +46,15 @@ The **Antialias** Sass mixin draws text with greyscale antialiasing instead of s
 
 <Hint kind="warning">
 
-**macOS only, and non-standard.** Neither property does anything on Windows or Linux. They do still change what is drawn: in Chrome 152 the same line of text rendered to different pixels with and without the mixin, measured by clipping both to PNGs and comparing them.
+**macOS only, and non-standard.** Neither property does anything on Windows or Linux, and on macOS only two of the three engines respond. Measured by screenshotting the same page with and without the mixin and comparing the images, headless and in a real window:
+
+| | Does the text render differently |
+|---|---|
+| Chrome 152 | yes |
+| Safari 26.6.2 | yes |
+| Firefox 156 | no, the image is identical to the byte |
+
+`-moz-osx-font-smoothing: grayscale` is Firefox's own property, and it has nothing left to do: Firefox on macOS draws greyscale already, so asking for greyscale asks for what it does. The mixin still writes it, since a future engine may need it and it costs one declaration.
 
 </Hint>
 

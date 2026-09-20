@@ -1,5 +1,23 @@
 @charset "UTF-8";
 
+// Draws text with greyscale antialiasing instead of subpixel antialiasing.
+//
+// Both properties are non-standard and macOS only. The maintainer decided on
+// 20 September 2026 that the mixin stays, since it does still change what is
+// drawn, but half of what it writes is dead and that is worth knowing.
+//
+// Measured on 20 September 2026 by screenshotting the same page with and
+// without the two declarations and comparing the images, headless and in a
+// real window, on macOS 26.6.2:
+//
+//   Chrome 152    the image changes
+//   Safari 26.6.2 the image changes
+//   Firefox 156   the image is identical, to the byte
+//
+// `-moz-osx-font-smoothing: grayscale` is Firefox's own property and does
+// nothing there any more: Firefox on macOS draws greyscale already, so asking
+// for greyscale asks for what it does. Windows and Linux were not tested; no
+// machine was to hand, and neither property is implemented outside macOS.
 @mixin antialias($value: null) {
   @if not & and $value == null {
     *,
@@ -23,8 +41,8 @@
     // the trap `columnizer` closed the same way for 4.0.0. Measured in Chrome
     // 152, Firefox 156 and Safari 26.6.2.
     & {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
     :where(&)::before,
     :where(&)::after,

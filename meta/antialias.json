@@ -21,7 +21,7 @@
   ],
   "caveats": [
     "The summary said this turned subpixel antialiasing **on** until 4.0.0, which is backwards: `-webkit-font-smoothing: antialiased` turns it off and draws greyscale, and `-moz-osx-font-smoothing: grayscale` is the same thing for Firefox.",
-    "Both properties are non-standard and macOS only, and neither does anything on Windows or Linux. They still change what is drawn: in Chrome 152 the same line of text rendered to different pixels with and without the mixin, measured by clipping the two to PNGs and comparing them.",
+    "Both properties are non-standard and macOS only, and neither does anything on Windows or Linux. On macOS only two of the three engines respond: measured on 20 September 2026 by screenshotting the same page with and without the mixin and comparing the images, headless and in a real window, Chrome 152 and Safari 26.6.2 both draw differently, while Firefox 156 is identical to the byte, since it draws greyscale on macOS already and `-moz-osx-font-smoothing: grayscale` asks for what it does.",
     "Called inside a selector with no argument, the descendants are written inside `:where()` since 4.0.0, so a rule the page has for one of them wins. The old `.a *` was (0,1,0) and overrode it."
   ]
 }
