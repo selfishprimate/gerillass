@@ -3,7 +3,20 @@
   .side { padding: 12px; border-radius: 8px; background: #5bc0bb; color: #fff; font-weight: 600; }
   .main { padding: 12px; border-radius: 8px; background: #f1f5f9; }
   h3 { font: 600 14px/1.4 system-ui, sans-serif; margin: 0 0 6px; color: #334155; }
+
+  /* The comparison below needs a preview wider than the media query's 768px,
+     since that query reads this frame's own width. The note says which side of
+     it you are on, and it is written with a media query on purpose. */
+  .hint { font: 600 13px/1.5 system-ui, sans-serif; margin: 0 0 18px; padding: 10px 12px; border-radius: 8px; }
+  .hint::after { content: "Drag the divider to make this preview wider than 768px. Right now the media query below is firing, so both versions stack and there is nothing to compare."; }
+  .hint { background: #fef3c7; color: #92400e; }
+  @media (min-width: 769px) {
+    .hint { background: #dcfce7; color: #166534; }
+    .hint::after { content: "This preview is wider than 768px, so the media query below is not firing: the 400px box shows the article squeezed, and the mixin's box does not."; }
+  }
 </style>
+
+<p class="hint"></p>
 
 <h3>Full width: both are fine</h3>
 <div class="box">
