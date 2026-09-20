@@ -67,6 +67,7 @@
 .responsive-image { @include responsive-image; }
 .scissors { @include scissors(10px); }
 .screen-agent { @include screen-agent("2x") { color: red; } }
+.sidebar { @include sidebar(20rem, 1.5rem); }
 .sizer { @include sizer(100px); }
 .smartphone { @include smartphone("iPhone11") { color: red; } }
 .sprite { @include sprite("/img/sprite.png"); }

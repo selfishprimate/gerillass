@@ -1,0 +1,48 @@
+// The three declarations that carry the layout, pinned. Measured in Chrome 152,
+// Firefox 156 and Safari 26.6.2 with the window at 1024px: in a 1000px box the
+// sidebar is 337px and the content 639px, and in a 700px, 560px or 400px box
+// the two stack, while the same layout written with a 768px media query keeps
+// two columns and squeezes the content to 356px, 216px and 60px.
+@use 'true' as *;
+@use '../../scss/gerillass' as *;
+
+@include describe('sidebar()') {
+  @include it('Writes the row, the sidebar basis and the content threshold.') {
+    @include assert {
+      @include output {
+        .layout { @include sidebar; }
+      }
+      @include expect {
+        .layout { display: flex; flex-wrap: wrap; gap: 1.5rem; }
+        .layout > :first-child { flex-basis: 20rem; flex-grow: 1; }
+        .layout > :last-child { flex-basis: 0; flex-grow: 999; min-inline-size: 50%; }
+      }
+    }
+  }
+
+  @include it('Swaps the two children when the sidebar is on the right.') {
+    @include assert {
+      @include output {
+        .layout { @include sidebar(16rem, 1rem, 60%, right); }
+      }
+      @include expect {
+        .layout { display: flex; flex-wrap: wrap; gap: 1rem; }
+        .layout > :last-child { flex-basis: 16rem; flex-grow: 1; }
+        .layout > :first-child { flex-basis: 0; flex-grow: 999; min-inline-size: 60%; }
+      }
+    }
+  }
+
+  @include it('Keeps a custom property unevaluated.') {
+    @include assert {
+      @include output {
+        .layout { @include sidebar(var(--side), var(--gap), var(--threshold)); }
+      }
+      @include expect {
+        .layout { display: flex; flex-wrap: wrap; gap: var(--gap); }
+        .layout > :first-child { flex-basis: var(--side); flex-grow: 1; }
+        .layout > :last-child { flex-basis: 0; flex-grow: 999; min-inline-size: var(--threshold); }
+      }
+    }
+  }
+}

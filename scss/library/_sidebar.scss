@@ -1,0 +1,94 @@
+@charset "UTF-8";
+
+@use "sass:list";
+@use "sass:meta";
+@use "sass:string";
+@use "../internal/length-problem" as *;
+
+// A sidebar and a content column that stack when the space runs out, with no
+// media query and no breakpoint to pick.
+//
+// A media query reads the window, not the box the layout sits in, which is the
+// whole reason this exists. Measured in Chrome 152, Firefox 156 and Safari
+// 26.6.2 with the window at 1024px, so `@media (max-width: 768px)` never fires,
+// the same two column layout in boxes of different widths:
+//
+//   box     grid with a 768px query      this mixin
+//   1000px  320 + 656                    337 + 639
+//   700px   320 + 356                    stacked, 700 + 700
+//   560px   320 + 216                    stacked, 560 + 560
+//   400px   320 + 60, overflowing 4px    stacked, 400 + 400
+//
+// All three browsers agreed on every row. The layout lives inside a box more
+// often than people expect: a card, one pane of a split view, an embedded
+// widget, or a documentation page whose content column is narrower than the
+// window.
+//
+// Three declarations carry it, and none of them is guessable:
+//
+// - `flex-grow: 999` on the content, so the content takes every spare pixel
+//   and the sidebar stays at its `flex-basis`. With a plain `flex: 1` the two
+//   share the space and the sidebar grows with the window.
+// - `flex-basis: 0` on the content, so its own width is not part of the sum.
+// - `min-inline-size` on the content, which is the threshold: the row wraps
+//   when the content would be narrower than this share of it. A proportion
+//   rather than a pixel width, which is what makes it follow the box.
+@mixin sidebar($side: 20rem, $gap: 1.5rem, $threshold: 50%, $side-on: left) {
+  $where: if(meta.type-of($side-on) == "string", string.to-lower-case(string.unquote($side-on)), $side-on);
+  @if not list.index("left" "right", $where) {
+    @error "`#{meta.inspect($side-on)}` is not a valid $side-on for `sidebar`. Pass `left` or `right`, which is the side the sidebar is on while the two sit in a row.";
+  }
+
+  // The keyword lists are the ones each property keeps, measured in all three
+  // browsers with a working `7px` written before the value under test.
+  // flex-basis keeps auto, content and the intrinsic keywords; min-inline-size
+  // keeps auto and the intrinsic ones but drops `fit-content()`, and keeps
+  // `stretch` in Chrome only, so that one is not on the list. Both drop a
+  // unitless number, a negative length and a word.
+  $problem: lengthProblem(
+    $side,
+    $negative: false,
+    $keywords: ("auto", "content", "min-content", "max-content", "fit-content"),
+    $css-wide: true,
+    $quoted: true
+  );
+  @if $problem {
+    @error "`#{meta.inspect($side)}` is not a valid $side for `sidebar`: #{$problem}. It is the sidebar's `flex-basis`, and a browser drops the declaration.";
+  }
+
+  $problem: lengthProblem($gap, $negative: false, $keywords: ("normal",), $quoted: true);
+  @if $problem {
+    @error "`#{meta.inspect($gap)}` is not a valid $gap for `sidebar`: #{$problem}. A browser drops the declaration and the two columns touch.";
+  }
+
+  $problem: lengthProblem(
+    $threshold,
+    $negative: false,
+    $keywords: ("auto", "min-content", "max-content"),
+    $css-wide: true,
+    $quoted: true
+  );
+  @if $problem {
+    @error "`#{meta.inspect($threshold)}` is not a valid $threshold for `sidebar`: #{$problem}. It is the content's `min-inline-size`, the share of the row below which the two stack, and a browser drops the declaration.";
+  }
+
+  $sidebar-is: if($where == "left", ":first-child", ":last-child");
+  $content-is: if($where == "left", ":last-child", ":first-child");
+
+  display: flex;
+  flex-wrap: wrap;
+  gap: $gap;
+
+  & > #{$sidebar-is} {
+    flex-basis: $side;
+    // The sidebar fills the row once the two have stacked, rather than sitting
+    // at its own width with the rest of the line empty.
+    flex-grow: 1;
+  }
+
+  & > #{$content-is} {
+    flex-basis: 0;
+    flex-grow: 999;
+    min-inline-size: $threshold;
+  }
+}

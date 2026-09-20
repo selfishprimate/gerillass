@@ -1,0 +1,24 @@
+@use "gerillass" as *;
+
+// What people write by hand: a media query, which reads the window.
+.with-query {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: 20rem 1fr;
+}
+
+@media (max-width: 768px) {
+  .with-query {
+    grid-template-columns: 1fr;
+  }
+}
+
+// The mixin, which reacts to the box it is in.
+.with-mixin {
+  @include sidebar(20rem, 1.5rem);
+}
+
+// The sidebar on the right, with the content first in the markup.
+.on-the-right {
+  @include sidebar(14rem, 1rem, 50%, right);
+}

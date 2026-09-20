@@ -1660,6 +1660,70 @@
       ]
     },
     {
+      "name": "sidebar",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$side",
+          "default": "20rem",
+          "accepts": [
+            "a length, such as 20rem",
+            "a percentage",
+            "auto, content, min-content, max-content or fit-content",
+            "a var() or calc()"
+          ]
+        },
+        {
+          "name": "$gap",
+          "default": "1.5rem",
+          "accepts": [
+            "a length or a percentage",
+            "normal",
+            "a var() or calc()"
+          ]
+        },
+        {
+          "name": "$threshold",
+          "default": "50%",
+          "accepts": [
+            "a percentage of the row, 50% by default",
+            "a length",
+            "auto, min-content or max-content",
+            "a var() or calc()"
+          ]
+        },
+        {
+          "name": "$side-on",
+          "default": "left",
+          "accepts": [
+            "left, the default",
+            "right"
+          ]
+        }
+      ],
+      "file": "scss/library/_sidebar.scss",
+      "signature": "sidebar($side: 20rem, $gap: 1.5rem, $threshold: 50%, $side-on: left)",
+      "summary": "A sidebar and a content column that stack when the space runs out, with no media query.",
+      "caveats": [
+        "The threshold is a share of the row, not a width, which is why it follows the box rather than the window. Measured in Chrome 152, Firefox 156 and Safari 26.6.2 with the window at 1024px, so a 768px media query never fires: a grid with that query left the content at 356px in a 700px box, 216px in a 560px one and 60px in a 400px one, overflowing by 4px, while this mixin stacked in all three boxes. All three browsers agreed on every row.",
+        "`flex-grow: 999` on the content is what keeps the sidebar at its `flex-basis`. With a plain `flex: 1` on both, the two share the spare space and the sidebar grows with the window.",
+        "It styles the first and the last child. A third element between them is laid out by flexbox's own defaults, which is rarely what a sidebar layout wants."
+      ],
+      "examples": [
+        ".layout { @include sidebar; }",
+        ".layout { @include sidebar(16rem, 1rem); }",
+        ".layout { @include sidebar(20rem, 1.5rem, 60%, right); }",
+        ".layout { @include sidebar(var(--side-width), var(--gap)); }"
+      ],
+      "rejects": [
+        ".layout { @include sidebar(20); }",
+        ".layout { @include sidebar(-5rem); }",
+        ".layout { @include sidebar(20rem, -1rem); }",
+        ".layout { @include sidebar(20rem, 1.5rem, fit-content(20rem)); }",
+        ".layout { @include sidebar(20rem, 1.5rem, 50%, middle); }"
+      ]
+    },
+    {
       "name": "sizer",
       "kind": "mixin",
       "arguments": [

@@ -1,0 +1,38 @@
+<style>
+  .box { outline: 2px dashed #94a3b8; padding: 8px; margin: 0 0 20px; }
+  .side { padding: 12px; border-radius: 8px; background: #5bc0bb; color: #fff; font-weight: 600; }
+  .main { padding: 12px; border-radius: 8px; background: #f1f5f9; }
+  h3 { font: 600 14px/1.4 system-ui, sans-serif; margin: 0 0 6px; color: #334155; }
+</style>
+
+<h3>Full width: both are fine</h3>
+<div class="box">
+  <div class="with-mixin">
+    <nav class="side">Sidebar</nav>
+    <article class="main">The article people came to read.</article>
+  </div>
+</div>
+
+<h3>In a 400px box, written with a media query: the article is squeezed to 60px, because the window is still wide</h3>
+<div class="box" style="width: 400px">
+  <div class="with-query">
+    <nav class="side">Sidebar</nav>
+    <article class="main">The article people came to read.</article>
+  </div>
+</div>
+
+<h3>The same 400px box with the mixin: the two stack</h3>
+<div class="box" style="width: 400px">
+  <div class="with-mixin">
+    <nav class="side">Sidebar</nav>
+    <article class="main">The article people came to read.</article>
+  </div>
+</div>
+
+<h3>Sidebar on the right, content first in the markup</h3>
+<div class="box">
+  <div class="on-the-right">
+    <article class="main">The article comes first for a screen reader.</article>
+    <aside class="side">On the right</aside>
+  </div>
+</div>

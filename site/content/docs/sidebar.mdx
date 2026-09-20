@@ -1,0 +1,181 @@
+---
+title: "Sidebar"
+page_title: "Sidebar Sass Mixin"
+page_description: "The Sidebar Sass mixin lays out a sidebar beside a content column and lets the two stack when the space runs out, with no media query and no breakpoint to pick."
+page_keywords: "Sass sidebar layout, CSS sidebar flexbox, responsive sidebar without media query, flex-grow 999, Every Layout sidebar, CSS intrinsic layout, Gerillass sidebar"
+page_image: "gerillass-columnizer.jpg"
+---
+
+# Sidebar
+
+<Member name="sidebar">
+
+The **Sidebar** Sass mixin lays out a sidebar beside a content column and lets the two stack when the space runs out. There is no media query in it and no breakpoint to choose: the layout reacts to the box it is in.
+
+</Member>
+
+<Hint kind="warning">
+
+**New in Gerillass 4.0.0.**
+
+</Hint>
+
+## What it is for
+
+A media query reads the window, and a sidebar layout usually lives inside something narrower than the window: a card, one pane of a split view, an embedded widget, or a documentation page whose content column has a menu beside it.
+
+Measured in Chrome 152, Firefox 156 and Safari 26.6.2, with the window at 1024px so that `@media (max-width: 768px)` never fires, and the same two column layout put into boxes of different widths:
+
+| The box | `grid-template-columns: 20rem 1fr` with a 768px query | `sidebar` |
+|---|---|---|
+| 1000px | 320 + 656 | 337 + 639 |
+| 700px | 320 + **356** | stacked, 700 + 700 |
+| 560px | 320 + **216** | stacked, 560 + 560 |
+| 400px | 320 + **60**, and 4px of overflow | stacked, 400 + 400 |
+
+All three browsers agreed on every row. The query is looking at the window, which is wide, while the box is not.
+
+## Arguments
+
+<Arguments of="sidebar" footnote="The mixin goes on the parent, and it styles that element's first and last child.">
+  <Argument name="$side" type="number">How wide the sidebar is while the two sit in a row, <code>20rem</code> by default. It is the sidebar's <code>flex-basis</code>, so it also takes <code>auto</code>, <code>content</code>, the intrinsic keywords, a <code>var()</code> or a <code>calc()</code>.</Argument>
+  <Argument name="$gap" type="number">The gap between the two, and between the rows once they stack. <code>1.5rem</code> by default.</Argument>
+  <Argument name="$threshold" type="number">The share of the row the content may not go under before the two stack, <code>50%</code> by default. A proportion rather than a width, which is what makes the layout follow its box. A larger value stacks sooner.</Argument>
+  <Argument name="$side-on" type="string"><code>left</code>, the default, or <code>right</code>. It names the side the sidebar sits on, and the mixin swaps which child is which.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="The default. The first child is the sidebar, the second is the content, and nothing else is needed." listing="<div class=&quot;layout&quot;>
+&#32;&#32;<nav class=&quot;side&quot;>Sidebar</nav>
+&#32;&#32;<article class=&quot;main&quot;>The article people came to read.</article>
+</div>">
+```scss
+.layout {
+  @include sidebar;
+}
+```
+```html
+<style>
+  .side { padding: 14px; border-radius: 8px; background: #5bc0bb; color: #fff; font: 600 14px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .main { padding: 14px; border-radius: 8px; background: #f1f5f9; color: #0f172a; font: 14px/1.6 Inter, ui-sans-serif, system-ui, sans-serif; }
+</style>
+<div class="layout">
+  <nav class="side">Sidebar</nav>
+  <article class="main">The article people came to read. Drag the frame narrower and the two will stack on their own, with no breakpoint anywhere in the CSS.</article>
+</div>
+```
+</Example>
+
+<Example caption="A narrower sidebar, a tighter gap, and the sidebar on the right. The markup keeps the content first, which is the order a screen reader follows.">
+```scss
+.layout {
+  @include sidebar(14rem, 1rem, 50%, right);
+}
+```
+```html
+<style>
+  .side { padding: 14px; border-radius: 8px; background: #fde68a; color: #78350f; font: 600 14px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .main { padding: 14px; border-radius: 8px; background: #f1f5f9; color: #0f172a; font: 14px/1.6 Inter, ui-sans-serif, system-ui, sans-serif; }
+</style>
+<div class="layout">
+  <article class="main">The article comes first in the markup, and the sidebar is drawn to its right.</article>
+  <aside class="side">On the right</aside>
+</div>
+```
+</Example>
+
+<Example caption="A higher threshold stacks the two sooner: the content may not go under two thirds of the row.">
+```scss
+.layout {
+  @include sidebar(20rem, 1.5rem, 66%);
+}
+```
+```html
+<style>
+  .side { padding: 14px; border-radius: 8px; background: #ede9fe; color: #4c1d95; font: 600 14px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .main { padding: 14px; border-radius: 8px; background: #f1f5f9; color: #0f172a; font: 14px/1.6 Inter, ui-sans-serif, system-ui, sans-serif; }
+</style>
+<div class="layout">
+  <aside class="side">Stacks sooner</aside>
+  <article class="main">At 66% this pair stacks in a 1000px box, where the default 50% keeps them side by side.</article>
+</div>
+```
+</Example>
+
+<Example caption="The sizes can come from custom properties, so a theme or a container query can move them.">
+```scss
+.layout {
+  --side-width: 18rem;
+  --gap: 1rem;
+
+  @include sidebar(var(--side-width), var(--gap));
+}
+```
+```html
+<style>
+  .side { padding: 14px; border-radius: 8px; background: #dbeafe; color: #1e3a8a; font: 600 14px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .main { padding: 14px; border-radius: 8px; background: #f1f5f9; color: #0f172a; font: 14px/1.6 Inter, ui-sans-serif, system-ui, sans-serif; }
+</style>
+<div class="layout">
+  <aside class="side">From a variable</aside>
+  <article class="main">Both the width and the gap are custom properties, written into the CSS as they are.</article>
+</div>
+```
+</Example>
+
+## The three declarations that carry it
+
+```css
+.layout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+.layout > :first-child {
+  flex-basis: 20rem;
+  flex-grow: 1;
+}
+.layout > :last-child {
+  flex-basis: 0;
+  flex-grow: 999;
+  min-inline-size: 50%;
+}
+```
+
+- **`flex-grow: 999`** on the content is why the sidebar stays at its width. The content takes every spare pixel, so there is none left to widen the sidebar with. Written as `flex: 1` on both, the two share the spare space and the sidebar grows with the window.
+- **`flex-basis: 0`** on the content keeps its own width out of the sum, so the row is the sidebar plus whatever is left.
+- **`min-inline-size`** is the threshold. A flex item may not go under it, so when the content would, the row wraps and the two stack. It is a share of the row rather than a pixel width, which is what makes the layout follow its box instead of the window.
+
+<Hint kind="info">
+
+**It styles the first and the last child.** A third element between them is laid out by flexbox's own defaults, which is rarely what a sidebar layout wants. `$side-on` swaps which of the two is the sidebar, and leaves the markup order alone, so the content can come first for a screen reader while being drawn second.
+
+</Hint>
+
+## What it refuses
+
+```scss
+.layout {
+  @include sidebar(20);
+  @include sidebar(20rem, -1rem);
+  @include sidebar(20rem, 1.5rem, fit-content(20rem));
+  @include sidebar(20rem, 1.5rem, 50%, middle);
+}
+```
+```text
+Error: `20` is not a valid $side for `sidebar`: a unitless number is not a length; add a unit, such as `20px`. It is the sidebar's `flex-basis`, and a browser drops the declaration.
+Error: `-1rem` is not a valid $gap for `sidebar`: a length below zero does not work here. A browser drops the declaration and the two columns touch.
+Error: `fit-content(20rem)` is not a valid $threshold for `sidebar`: `fit-content()` does not give a length here. It is the content's `min-inline-size`, the share of the row below which the two stack, and a browser drops the declaration.
+Error: `middle` is not a valid $side-on for `sidebar`. Pass `left` or `right`, which is the side the sidebar is on while the two sit in a row.
+```
+
+The keyword lists behind those checks were measured rather than assumed, in all three browsers, with a working value written before the one under test: `flex-basis` keeps `auto`, `content` and the intrinsic keywords, `min-inline-size` keeps `auto`, `min-content` and `max-content` but drops `fit-content()`, and both drop a unitless number, a negative length and a word. `min-inline-size: stretch` is kept by Chrome alone, so it is not on the list.
+
+## Related Links
+
+- [Auto Grid](/docs/auto-grid)
+- [Columnizer](/docs/columnizer)
+- [CSS flex-basis](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/flex-basis)
+- [CSS flex-grow](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/flex-grow)
+- [Every Layout: The Sidebar](https://every-layout.dev/layouts/sidebar/)

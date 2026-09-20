@@ -2030,6 +2030,74 @@ exports[`Manifest examples shorthandProperty: .a { padding: shorthandProperty(16
 }"
 `;
 
+exports[`Manifest examples sidebar: .layout { @include sidebar(16rem, 1rem); } 1`] = `
+".layout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.layout > :first-child {
+  flex-basis: 16rem;
+  flex-grow: 1;
+}
+.layout > :last-child {
+  flex-basis: 0;
+  flex-grow: 999;
+  min-inline-size: 50%;
+}"
+`;
+
+exports[`Manifest examples sidebar: .layout { @include sidebar(20rem, 1.5rem, 60%, right); } 1`] = `
+".layout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+.layout > :last-child {
+  flex-basis: 20rem;
+  flex-grow: 1;
+}
+.layout > :first-child {
+  flex-basis: 0;
+  flex-grow: 999;
+  min-inline-size: 60%;
+}"
+`;
+
+exports[`Manifest examples sidebar: .layout { @include sidebar(var(--side-width), var(--gap)); } 1`] = `
+".layout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap);
+}
+.layout > :first-child {
+  flex-basis: var(--side-width);
+  flex-grow: 1;
+}
+.layout > :last-child {
+  flex-basis: 0;
+  flex-grow: 999;
+  min-inline-size: 50%;
+}"
+`;
+
+exports[`Manifest examples sidebar: .layout { @include sidebar; } 1`] = `
+".layout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+.layout > :first-child {
+  flex-basis: 20rem;
+  flex-grow: 1;
+}
+.layout > :last-child {
+  flex-basis: 0;
+  flex-grow: 999;
+  min-inline-size: 50%;
+}"
+`;
+
 exports[`Manifest examples sizer: .a { @include sizer(40px); } 1`] = `
 ".a {
   width: 40px;

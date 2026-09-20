@@ -1,6 +1,6 @@
 # Gerillass
 
-> A Sass toolkit of 53 mixins and 24 functions, built to be read by coding agents as well as by people. Every member is described in a machine-readable manifest whose examples and refusals are executed by the test suite, so the documentation cannot drift away from the code.
+> A Sass toolkit of 54 mixins and 24 functions, built to be read by coding agents as well as by people. Every member is described in a machine-readable manifest whose examples and refusals are executed by the test suite, so the documentation cannot drift away from the code.
 
 Gerillass is a pure Sass library. There is no build step and no runtime dependency: the `.scss` sources are the deliverable, and the package installs nothing else. It needs Dart Sass; LibSass and node-sass are not supported. This file describes Gerillass 3.0.0.
 
@@ -54,6 +54,7 @@ Arguments are validated and refused with a message naming what is accepted, so a
 - [responsive-image](https://docs.gerillass.com/docs/responsive-image/): Fits an image to its container without upscaling it or losing its proportions.
 - [scissors($corners)](https://docs.gerillass.com/docs/scissors/): Cuts the corners off an element with clip-path.
 - [screen-agent($resolution)](https://docs.gerillass.com/docs/screen-agent/): Media query targeting a screen pixel density.
+- [sidebar($side: 20rem, $gap: 1.5rem, $threshold: 50%, $side-on: left)](https://docs.gerillass.com/docs/sidebar/): A sidebar and a content column that stack when the space runs out, with no media query.
 - [sizer($width, $height: $width)](https://docs.gerillass.com/docs/sizer/): Sets width and height together; one argument makes a square.
 - [smartphone($device, $orientation: null)](https://docs.gerillass.com/docs/smartphone/): Media query for one phone's screen, by name, from $map-for-smartphones.
 - [sprite($params...)](https://docs.gerillass.com/docs/sprite/): Sets up an element as a sprite tile: an image, a background position, or both.
