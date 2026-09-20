@@ -948,9 +948,9 @@ written for one of them applies to all of them.
 ### Android, since 20 September 2026
 
 The maps carry twenty Android entries beside the Galaxy and Nexus ones they
-always had: the Pixel line from the 6 to the 10, the Galaxy S20 Ultra, A51,
-A71 and A55, the Moto G Power, and the Galaxy Tab S4. Nothing existing changed,
-so this breaks no call.
+always had: the Pixel line from the 6 to the 10, the Galaxy S20 Ultra, S24,
+S25, A51 and A71, and the Galaxy Tab S4. Nothing existing changed, so this
+breaks no call.
 
 The sizes are Chrome's own, from the device list DevTools emulates, and a model
 Chrome does not list is here only when Android Studio's device profile gives it
@@ -961,9 +961,15 @@ to 411 while the device answers 412.
 **An Android size is the default display setting.** Android's Display size
 control changes the density the screen is measured in, so a phone whose owner
 has moved that slider answers a different `device-width` and matches no entry.
-Folding phones are left out, since an entry holds one size and a fold has two
-screens, and so are the budget A series models that lead the usage charts,
-whose CSS sizes no source to hand gives.
+
+Where sources disagree, nothing is written, and the test is to take a size back
+to the panel it implies: Chrome's Galaxy A55, 360x800 at a scale of 2.25,
+implies an 810x1800 screen and the phone is 1080x2340, so it is not here. The
+same check left out the Moto G Power, and the Galaxy S24 Ultra went out because
+one database says 384x832 and another 412x891. The budget A series, which leads
+the usage charts, is absent for that reason: the query matches a screen exactly,
+so a size one pixel out matches nothing at all. Folding phones are absent
+because an entry holds one size and a fold has two screens.
 
 ## Break: `responsive-image` stops upscaling
 

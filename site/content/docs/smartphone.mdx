@@ -22,7 +22,7 @@ There will be times when you need to style elements for one particular smartphon
 ## Arguments
 
 <Arguments of="smartphone" footnote="String values can be passed with or without quotation marks.">
-  <Argument name="$device" type="string">The name of a phone, from <code>$map-for-smartphones</code>. Every iPhone from the 4 to the 17 and the Air is in it, and on the Android side the Pixel line from the 6 to the 10, four Galaxy models and the Moto G Power; the table below lists them by screen. A screen size is refused: pass a name.</Argument>
+  <Argument name="$device" type="string">The name of a phone, from <code>$map-for-smartphones</code>. Every iPhone from the 4 to the 17 and the Air is in it, and on the Android side the Pixel line from the 6 to the 10 and seven Galaxy models; the table below lists them by screen. A screen size is refused: pass a name.</Argument>
   <Argument name="$orientation" type="string">Accepts two values: <code>portrait</code> and <code>landscape</code>. The default value is <code>portrait</code>.</Argument>
 </Arguments>
 
@@ -34,7 +34,8 @@ device profiles rather than from a specification page, and the Android sizes
 from the device list Chrome DevTools emulates, read on 20 September 2026. A
 model Chrome does not list is here only when Android Studio's own device
 profile gives it the same panel and density as one Chrome does, which is how
-the Pixel 6, 6a, 7a, 9a, 10 Pro and 10 Pro XL got their sizes.
+the Pixel 6, 6a, 7a, 9a, 10 Pro and 10 Pro XL got their sizes; the Galaxy S24
+and S25 are the one size two other sources state alike.
 
 | Screen | Names | Models |
 |---|---|---|
@@ -44,7 +45,7 @@ the Pixel 6, 6a, 7a, 9a, 10 Pro and 10 Pro XL got their sizes.
 | 414 x 736 | `iPhone6-Plus`, `iPhone7-Plus`, `iPhone8-Plus` | the Plus models of the 6, 6s, 7 and 8 |
 | 375 x 812 | `iPhoneX`, `iPhoneXS`, `iPhone11-Pro` | iPhone X, Xs, 11 Pro |
 | 414 x 896 | `iPhoneXR`, `iPhoneXS-Max`, `iPhone11`, `iPhone11-Pro-Max` | iPhone Xʀ, Xs Max, 11, 11 Pro Max |
-| 360 x 780 | `iPhone12-mini`, `iPhone13-mini` | iPhone 12 mini, 13 mini |
+| 360 x 780 | `iPhone12-mini`, `iPhone13-mini`, `Galaxy-S24`, `Galaxy-S25` | iPhone 12 mini, 13 mini, Galaxy S24, S25 |
 | 390 x 844 | `iPhone12`, `iPhone12-Pro`, `iPhone13`, `iPhone13-Pro`, `iPhone14`, `iPhone16e`, `iPhone17e` | seven phones, from the 12 to the 17e |
 | 428 x 926 | `iPhone12-Pro-Max`, `iPhone13-Pro-Max`, `iPhone14-Plus` | iPhone 12 Pro Max, 13 Pro Max, 14 Plus |
 | 393 x 852 | `iPhone14-Pro`, `iPhone15`, `iPhone15-Pro`, `iPhone16` | iPhone 14 Pro, 15, 15 Pro, 16 |
@@ -55,8 +56,6 @@ the Pixel 6, 6a, 7a, 9a, 10 Pro and 10 Pro XL got their sizes.
 | 360 x 640 | `Galaxy-S7` | Galaxy S7 |
 | 360 x 740 | `Galaxy-S8`, `Galaxy-S8-Plus` | Galaxy S8, S8+ |
 | 360 x 760 | `Galaxy-S10` | Galaxy S10 |
-| 360 x 800 | `Galaxy-A55` | Galaxy A55 |
-| 412 x 823 | `Moto-G-Power` | Moto G Power |
 | 412 x 914 | `Galaxy-A51`, `Galaxy-A71` | Galaxy A51, A71 |
 | 412 x 915 | `Pixel6`, `Pixel6a`, `Pixel7`, `Pixel7a`, `Pixel8`, `Pixel8a`, `Galaxy-S20-Ultra` | the 1080 x 2400 Pixels and the Galaxy S20 Ultra |
 | 412 x 924 | `Pixel9`, `Pixel9a`, `Pixel10` | Pixel 9, 9a, 10 |
@@ -65,7 +64,7 @@ the Pixel 6, 6a, 7a, 9a, 10 Pro and 10 Pro XL got their sizes.
 
 <Hint kind="warning">
 
-**An Android size is the default display setting.** Android's Display size control changes the density the screen is measured in, so a phone whose owner has moved that slider answers a different `device-width` and matches no entry here. The Apple entries have no such setting. Two kinds of phone are deliberately missing as well: a folding phone, which has two screens where an entry holds one size, and the budget A series models that lead the usage charts, whose sizes no source to hand gives. Better absent than here and wrong.
+**An Android size is the default display setting.** Android's Display size control changes the density the screen is measured in, so a phone whose owner has moved that slider answers a different `device-width` and matches no entry here. The Apple entries have no such setting. Some phones are deliberately missing, and the reason is worth saying out loud, because the query is an exact match and a size one pixel out matches nothing at all. A folding phone has two screens where an entry holds one size. And where sources disagree, nothing is written: the Galaxy A55 is 360 x 800 in Chrome's list, which implies an 810 x 1800 panel the phone does not have, the Moto G Power implies a 720 x 1440 one no model has, and the Galaxy S24 Ultra is 384 x 832 in one database and 412 x 891 in another. The budget A series, the models that lead the usage charts, are absent for that reason rather than from neglect.
 
 </Hint>
 

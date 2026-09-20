@@ -145,12 +145,24 @@ and a screen size passed instead of a name is refused. Done for 4.0.0 on the
    scale of 2.625, and 411.43 rounds to 411 while the device answers 412.
 
    Twenty entries went in: the Pixel line from the 6 to the 10, the Galaxy
-   S20 Ultra, A51, A71 and A55, the Moto G Power, and the Galaxy Tab S4 among
-   the tablets. Left out on purpose: folding phones, since one entry holds one
-   size and a fold has two screens, and the budget A series models that lead
-   the usage charts, since no source to hand gives their CSS size. The display
-   size caveat stands and is written into the map, the two documentation pages
-   and the caveats.
+   S20 Ultra, S24, S25, A51 and A71, and the Galaxy Tab S4 among the tablets.
+
+   **Two candidates were dropped after a check, and that check is the rule to
+   reuse.** Take the size back to the panel it implies, since width times scale
+   has to land on a screen the phone really has. Chrome has the Galaxy A55 at
+   360x800 with a scale of 2.25, which is an 810x1800 panel, and the A55 is
+   1080x2340; the Moto G Power at 412x823 and 1.75 implies 720x1440, which no
+   G Power has. Neither is written. The Galaxy S24 Ultra was left out for the
+   same reason from the other end: DeviceAtlas says 384x832 and
+   screensizechecker 412x891, so there is no one answer to write.
+
+   The budget A series, which leads the usage charts, is still absent.
+   DeviceAtlas has the A12 at 385x854 and the A54 at 384x832 and Chrome has
+   neither, and one pixel out is a query that matches nothing, so a second
+   source has to agree before an entry goes in. Folding phones are absent for a
+   different reason: one entry holds one size and a fold has two screens. The
+   display size caveat stands and is written into the map, the two
+   documentation pages and the caveats.
 
 ## What `todos/library-review.md` proposed instead, and the answer
 
