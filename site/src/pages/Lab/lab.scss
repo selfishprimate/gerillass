@@ -69,7 +69,12 @@
     flex: 1 1 auto;
     min-height: 0;
     display: grid;
-    grid-template-columns: remify(204px) minmax(0, 1fr);
+    /*
+      The case list is 204px wherever there is room for it, and gives way when
+      there is not: the divider may be dragged until this half is 200px, and a
+      fixed track would have pushed the source column off the edge instead.
+    */
+    grid-template-columns: minmax(0, remify(204px)) minmax(0, 1fr);
   }
 
   /*

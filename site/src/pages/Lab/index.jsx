@@ -45,8 +45,13 @@ const PANELS = ["source", "scss", "css", "html"];
 
 const ALL_OPEN = { html: true, scss: true, source: true, css: true };
 
-/* The left half's share of the window, in percent, and how far it can go. */
-const SPLIT = { initial: 50, min: 25, max: 75, step: 2 };
+/*
+  The left half's share of the window, in percent. How far it can go is a
+  width, not a share: either half may be dragged down to 200px, whatever the
+  window is. A percentage floor was what stopped the preview from going narrow
+  enough to watch a layout collapse, which is half of what the preview is for.
+*/
+const SPLIT = { initial: 50, minPx: 200, step: 2 };
 
 const LOADS_LIBRARY = /@(use|forward|import)\s+["'](pkg:)?gerillass/;
 
@@ -161,7 +166,23 @@ function readOrder() {
   return valid ? stored : PANELS;
 }
 
-const clampSplit = (value) => Math.min(SPLIT.max, Math.max(SPLIT.min, value));
+/*
+  The bounds in percent, from the width the lab actually has. `window.innerWidth`
+  stands in before the element is measured, since the lab spans the window.
+*/
+function splitBounds(width) {
+  const box = width || (typeof window === "undefined" ? 1200 : window.innerWidth) || 1200;
+  const edge = (SPLIT.minPx / box) * 100;
+  // A window too narrow for two 200px halves keeps the middle rather than
+  // inverting the bounds.
+  if (edge >= 50) return { min: 50, max: 50 };
+  return { min: edge, max: 100 - edge };
+}
+
+function clampSplit(value, width) {
+  const { min, max } = splitBounds(width);
+  return Math.min(max, Math.max(min, value));
+}
 
 function move(list, id, to) {
   const rest = list.filter((item) => item !== id);
@@ -472,7 +493,7 @@ function Lab() {
     setDragging(true);
     const follow = (moveEvent) => {
       const box = labRef.current.getBoundingClientRect();
-      setSplit(clampSplit(((moveEvent.clientX - box.left) / box.width) * 100));
+      setSplit(clampSplit(((moveEvent.clientX - box.left) / box.width) * 100, box.width));
     };
     const stop = () => {
       setDragging(false);
@@ -484,8 +505,9 @@ function Lab() {
   };
 
   const nudge = (event) => {
-    if (event.key === "ArrowLeft") setSplit((value) => clampSplit(value - SPLIT.step));
-    else if (event.key === "ArrowRight") setSplit((value) => clampSplit(value + SPLIT.step));
+    const width = labRef.current ? labRef.current.getBoundingClientRect().width : null;
+    if (event.key === "ArrowLeft") setSplit((value) => clampSplit(value - SPLIT.step, width));
+    else if (event.key === "ArrowRight") setSplit((value) => clampSplit(value + SPLIT.step, width));
     else return;
     event.preventDefault();
   };
@@ -745,8 +767,8 @@ function Lab() {
           role="separator"
           aria-orientation="vertical"
           aria-label="Resize the lab and the preview"
-          aria-valuemin={SPLIT.min}
-          aria-valuemax={SPLIT.max}
+          aria-valuemin={Math.round(splitBounds(null).min)}
+          aria-valuemax={Math.round(splitBounds(null).max)}
           aria-valuenow={Math.round(split)}
           tabIndex={0}
           onPointerDown={startDrag}
