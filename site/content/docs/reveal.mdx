@@ -53,7 +53,7 @@ Neither failure says anything. The CSS is valid, the transition is there, and ha
 
 ## Examples
 
-The two demos here are popovers, because `popovertarget` is HTML's own button and needs no script: the frames on this page run none. A dialog and a class both need a line of script to open, so those two are calls rather than demos, and the repository's lab has all three as things you can click.
+The frames on this page run no script, so a demo here is driven by HTML alone: `popovertarget` for a popover, and `<form method="dialog">` for a dialog. Opening a dialog is `showModal()`, a line of script, so that one starts open and you press Close to watch it leave. A class is the one shape that cannot be demonstrated here at all, and it is written out under the examples.
 
 <Example caption="A popover that fades and slides down. Press the button twice, once to show and once to hide." listing="<button popovertarget=&quot;tip&quot;>Toggle the popover</button>
 <div popover id=&quot;tip&quot; class=&quot;tooltip&quot;>Fades and slides, both ways.</div>">
@@ -101,15 +101,40 @@ The two demos here are popovers, because `popovertarget` is HTML's own button an
 ```
 </Example>
 
-<Example caption="A modal dialog growing into place, with its backdrop fading behind it. Opening one is `showModal()`, a line of script, so this is the call rather than a demo.">
+<Example caption="A dialog, shrinking away as it closes. It starts open here because opening one is `showModal()`, which these frames cannot run; press Close and watch it leave, which is the half of the animation this demo can show." listing="<dialog class=&quot;modal&quot; open>
+&#32;&#32;<p>Delete this project?</p>
+&#32;&#32;<form method=&quot;dialog&quot;>
+&#32;&#32;&#32;&#32;<button value=&quot;cancel&quot;>Cancel</button>
+&#32;&#32;&#32;&#32;<button value=&quot;delete&quot;>Delete</button>
+&#32;&#32;</form>
+</dialog>">
 ```scss
 .modal {
-  @include reveal(dialog, 0.25s, none, 0.95);
+  @include reveal(dialog, 0.45s, none, 0.9);
 }
+```
+```html
+<style>
+  body { min-height: 150px; }
+  .modal { position: static; border: 0; border-radius: 12px; padding: 16px 18px; background: #0f172a; color: #f8fafc; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; box-shadow: 0 18px 40px rgb(15 23 42 / 0.35); }
+  .modal p { margin: 0 0 12px; }
+  .modal button { padding: 8px 14px; margin-right: 6px; border: 0; border-radius: 8px; background: #334155; color: #fff; font: 600 13px Inter, ui-sans-serif, system-ui, sans-serif; }
+  .modal button[value="delete"] { background: #b91c1c; }
+</style>
+<dialog class="modal" open>
+  <p>Delete this project?</p>
+  <form method="dialog">
+    <button value="cancel">Cancel</button>
+    <button value="delete">Delete</button>
+  </form>
+</dialog>
 ```
 </Example>
 
-<Example caption="An element your own code shows with a class. The selector is yours, so the mixin writes the same three pieces against it, and the `display` pair is yours to write as well.">
+## Your own selector
+
+The third shape is an element your own code shows and hides with a class. The mixin writes the same three pieces against whatever selector you name, and the `display` pair is yours:
+
 ```scss
 .menu {
   display: none;
@@ -121,7 +146,8 @@ The two demos here are popovers, because `popovertarget` is HTML's own button an
   display: block;
 }
 ```
-</Example>
+
+It is here rather than among the examples because a frame on this page cannot show it. Adding a class takes script, and these frames run none: measured on 21 September 2026, a demo's own script is blocked both by the frame's sandbox and by the site's `script-src`, and a `:target` link, the one other way to change state without script, navigates the srcdoc document and replaces it. The repository's own lab runs scripts, and the case there has this shape beside the other two.
 
 ## Several on one page
 

@@ -473,6 +473,24 @@ hundred and one carry markup purely so the demo has something to style, an
 empty div with a sizing class, and printing that would offer scaffolding as
 though it were the answer.
 
+**A frame is sandboxed with `allow-same-origin`, and with `allow-forms` only
+where a demo needs it.** Measured on 21 September 2026 while the `reveal` page's
+demos were being made to work: a `<dialog>` closes through
+`<form method="dialog">`, which is HTML rather than script, and the sandbox was
+blocking that in Chrome 152 and Firefox 156 while Safari 26.6.2 allowed it. The
+flag cannot go on every frame, because six pages carry a demo form written
+`onsubmit="return false"` and that handler never runs, an inline handler being
+blocked by the policy's `script-src`; with forms allowed those would submit on
+Enter and navigate the frame, which empties the demo. So `Example` looks at the
+markup and adds the flag only when a form says `method="dialog"`.
+
+The other two ways to drive a demo were measured and neither works: a script of
+its own is blocked by the sandbox and by `script-src`, and a `:target` link
+navigates the srcdoc document, which replaces it. What is left is
+`popovertarget`, which is HTML's own button and works in all three browsers
+inside such a frame. A demo that needs anything more belongs in the lab, which
+runs scripts.
+
 The `sandbox` shortcode itself rendered an empty div carrying the compiled CSS
 again as a hand-written inline style. Here the div takes the class the
 example's Sass targets instead, so the demo is painted by the CSS this

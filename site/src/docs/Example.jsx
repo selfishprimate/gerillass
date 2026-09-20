@@ -86,14 +86,40 @@ function Example({ source, css, html, listing, title, caption, height, interacti
 
   // Re-attach the observer when the demo itself changes, not on every render.
   const rendered = html;
+  /* See the note above: forms only where a dialog's own close button needs them. */
+  const needsForms = /<form[^>]*method\s*=\s*["']?dialog/i.test(String(rendered || ""));
+  const frameSandbox = interactive
+    ? "allow-same-origin allow-scripts allow-presentation"
+    : needsForms
+      ? "allow-same-origin allow-forms"
+      : "allow-same-origin";
   const srcDocKey = css + String(rendered);
 
   /*
     The frame is left same-origin so its height can be read back and the box
     sized to what it actually holds; a fixed height either crops a demo or
-    leaves a gap under it. `allow-same-origin` alone is the whole sandbox:
-    scripts, forms and navigation stay blocked, and the only thing inside is
-    CSS this repository compiled.
+    leaves a gap under it. `allow-same-origin` and `allow-forms` are the whole
+    sandbox: scripts and navigation stay blocked, and the only thing inside is
+    markup and CSS this repository compiled.
+
+    `allow-forms` is added for one demo shape and only where that shape is
+    present. A `<dialog>` closes through `<form method="dialog">`, which is
+    HTML rather than script, and the sandbox was blocking it: measured on
+    21 September 2026, the button did nothing in Chrome 152 and Firefox 156
+    and worked in Safari 26.6.2, and with `allow-forms` the dialog closes in
+    all three.
+
+    It is not given to every frame, because six pages carry a demo form that
+    says `onsubmit="return false"`, and that handler does not run: an inline
+    handler is blocked by the policy's `script-src`. With forms allowed those
+    would submit on Enter and navigate the frame, which empties the demo. So
+    the flag follows the markup, and only a demo whose form says
+    `method="dialog"` gets it.
+
+    The other two ways a demo could be driven stay unavailable and were
+    measured too: a script of its own is blocked by the sandbox and by
+    `script-src`, and a `:target` link navigates the srcdoc document, which
+    replaces it.
   */
   /*
     Watched rather than measured once. A frame grows after it is first laid
@@ -241,7 +267,7 @@ function Example({ source, css, html, listing, title, caption, height, interacti
             under a closed sandbox -- and a page opting in says so at the call
             site rather than the whole set being loosened for one case.
           */
-          sandbox={interactive ? "allow-same-origin allow-scripts allow-presentation" : "allow-same-origin"}
+          sandbox={frameSandbox}
           srcDoc={srcDoc}
         />
       </div>
