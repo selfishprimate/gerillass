@@ -53,7 +53,9 @@ Neither failure says anything. The CSS is valid, the transition is there, and ha
 
 ## Examples
 
-<Example caption="A popover that fades and slides down. The button needs no JavaScript: `popovertarget` is HTML's own." listing="<button popovertarget=&quot;tip&quot;>Toggle the popover</button>
+The two demos here are popovers, because `popovertarget` is HTML's own button and needs no script: the frames on this page run none. A dialog and a class both need a line of script to open, so those two are calls rather than demos, and the repository's lab has all three as things you can click.
+
+<Example caption="A popover that fades and slides down. Press the button twice, once to show and once to hide." listing="<button popovertarget=&quot;tip&quot;>Toggle the popover</button>
 <div popover id=&quot;tip&quot; class=&quot;tooltip&quot;>Fades and slides, both ways.</div>">
 ```scss
 .tooltip {
@@ -73,39 +75,41 @@ Neither failure says anything. The CSS is valid, the transition is there, and ha
 ```
 </Example>
 
-<Example caption="A modal dialog growing into place, with its backdrop fading behind it. The frames on this page run no script, so this one is drawn with the `open` attribute already on it: what you see is the end of the animation, the state `[open]` carries." listing="<dialog class=&quot;modal&quot;>
-&#32;&#32;<p>Delete this project?</p>
-&#32;&#32;<form method=&quot;dialog&quot;>
-&#32;&#32;&#32;&#32;<button value=&quot;cancel&quot;>Cancel</button>
-&#32;&#32;&#32;&#32;<button value=&quot;delete&quot;>Delete</button>
-&#32;&#32;</form>
-</dialog>">
+<Example caption="The same thing with a longer duration, coming up from below and growing into place. `$move` and `$scale` are what change, and the two run together." listing="<button popovertarget=&quot;card&quot;>Toggle the card</button>
+<div popover id=&quot;card&quot; class=&quot;card&quot;>
+&#32;&#32;<b>Rises and grows</b>
+&#32;&#32;<p>0.45s, up from a centimetre below, from 92% of its size.</p>
+</div>">
+```scss
+.card {
+  @include reveal(popover, 0.45s, bottom 1rem, 0.92, false);
+}
+```
+```html
+<style>
+  body { min-height: 190px; }
+  button { padding: 8px 14px; border: 0; border-radius: 8px; background: #0f172a; color: #fff; font: 600 13px Inter, ui-sans-serif, system-ui, sans-serif; }
+  .card { position: absolute; inset: auto; top: 60px; left: 16px; width: 260px; border: 0; border-radius: 12px; padding: 14px 16px; background: #5bc0bb; color: #04312f; font: 13px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .card b { display: block; margin-bottom: 4px; font-size: 15px; }
+  .card p { margin: 0; }
+</style>
+<button popovertarget="card">Toggle the card</button>
+<div popover id="card" class="card">
+  <b>Rises and grows</b>
+  <p>0.45s, up from a centimetre below, from 92% of its size.</p>
+</div>
+```
+</Example>
+
+<Example caption="A modal dialog growing into place, with its backdrop fading behind it. Opening one is `showModal()`, a line of script, so this is the call rather than a demo.">
 ```scss
 .modal {
   @include reveal(dialog, 0.25s, none, 0.95);
 }
 ```
-```html
-<style>
-  .modal { position: static; border: 0; border-radius: 12px; padding: 16px 18px; background: #0f172a; color: #f8fafc; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; box-shadow: 0 18px 40px rgb(15 23 42 / 0.35); }
-  .modal p { margin: 0 0 12px; }
-  .modal button { padding: 8px 14px; margin-right: 6px; border: 0; border-radius: 8px; background: #334155; color: #fff; font: 600 13px Inter, ui-sans-serif, system-ui, sans-serif; }
-  .modal button[value="delete"] { background: #b91c1c; }
-</style>
-<dialog class="modal" open>
-  <p>Delete this project?</p>
-  <form method="dialog">
-    <button value="cancel">Cancel</button>
-    <button value="delete">Delete</button>
-  </form>
-</dialog>
-```
 </Example>
 
-<Example caption="An element your own code shows with a class. The selector is yours, so the mixin writes the same three pieces against it. The demo carries the class already, since the frame runs no script to add it." listing="<nav class=&quot;menu is-open&quot;>
-&#32;&#32;<a href=&quot;/docs&quot;>Docs</a>
-&#32;&#32;<a href=&quot;/playground&quot;>Playground</a>
-</nav>">
+<Example caption="An element your own code shows with a class. The selector is yours, so the mixin writes the same three pieces against it, and the `display` pair is yours to write as well.">
 ```scss
 .menu {
   display: none;
@@ -117,68 +121,7 @@ Neither failure says anything. The CSS is valid, the transition is there, and ha
   display: block;
 }
 ```
-```html
-<style>
-  .menu { width: 180px; padding: 12px 14px; border-radius: 10px; background: #5bc0bb; font: 14px/1.8 Inter, ui-sans-serif, system-ui, sans-serif; }
-  .menu a { display: block; color: #04312f; font-weight: 600; text-decoration: none; }
-</style>
-<nav class="menu is-open">
-  <a href="/docs">Docs</a>
-  <a href="/playground">Playground</a>
-</nav>
-```
 </Example>
-
-## What it writes
-
-```scss
-.tooltip {
-  @include reveal;
-}
-```
-
-```css
-.tooltip {
-  opacity: 0;
-  translate: 0 -0.75rem;
-  transition: opacity 0.3s ease, translate 0.3s ease, display 0.3s allow-discrete, overlay 0.3s allow-discrete;
-}
-.tooltip:popover-open {
-  opacity: 1;
-  translate: 0 0;
-}
-@starting-style {
-  .tooltip:popover-open {
-    opacity: 0;
-    translate: 0 -0.75rem;
-  }
-}
-.tooltip::backdrop {
-  opacity: 0;
-  transition: opacity 0.3s ease, display 0.3s allow-discrete, overlay 0.3s allow-discrete;
-}
-.tooltip:popover-open::backdrop {
-  opacity: 1;
-}
-@starting-style {
-  .tooltip:popover-open::backdrop {
-    opacity: 0;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .tooltip, .tooltip::backdrop {
-    transition-duration: 0.01ms;
-  }
-}
-```
-
-The closed state is the base rule, so an element that is never opened is already in it. `overlay` is in the transition for the top layer, and it is Chrome's property alone: Firefox and Safari do not support it and ignore the line. What it buys was measured in Chrome 152, 100ms into a close: with the line the popover computes `overlay: auto` and without it `overlay: none`, so the one without has already left the top layer while it is still fading, and is painted among the page's own content instead of above it.
-
-<Hint kind="info">
-
-**Reduced motion shortens the transition rather than removing it.** `transition: none` would take the discrete part with it, and then the element never leaves the page. `0.01ms` is a cut: measured in Chrome 152 and Firefox 156 with the preference set, the element appears and disappears at once, with no motion and nothing left behind. Safari cannot be put into reduced motion from automation, so it was not measured there.
-
-</Hint>
 
 ## Several on one page
 
