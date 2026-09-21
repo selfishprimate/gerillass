@@ -204,7 +204,7 @@ refused. `$step` was added for how far apart a filled shadow's layers sit, a
 | ~~`only` + `except`~~ | **not merged, at the maintainer's decision**: `only` and `except` read as English where `nth(2, $not: true)` does not. **`$of` is done for 4.0.0 on the `nth-of` branch** and added to both, which was the real gain: `:nth-child(n of .card)` counts by the selector rather than by tag | |
 | ~~`ellipsis` + `line-clamp`~~ | **done for 4.0.0 on the `truncate` branch**: `truncate($lines: 1, $width: null, $display: inline-block)`, where one line is the nowrap method and more lines the clamp method, both compiling to exactly what the two mixins compiled to. A `$fade` argument was considered and dropped at the maintainer's decision; a custom ellipsis string was measured and refused, since `text-overflow: "→"` works in Firefox 156 only and computes to `clip` in Chrome 152 and Safari 26.6.2, which removes the marker entirely | |
 | `placeholder` + `placeholder-shown` | `placeholder($state: text \| shown)` | or deprecate both |
-| `smartphone` + `tablet` | remove, do not merge | merging keeps a broken technique alive |
+| ~~`smartphone` + `tablet`~~ | **settled on 20 September 2026: both stay, neither merged nor deprecated.** The maps were refreshed and flattened on the `device-maps` branch and the Android entries added, and section 2 has the measurements | |
 | `circle` into `sizer` | `sizer($w, $h: $w, $round: false)` | low value, only if something else breaks these |
 | `reset-figure` into `responsive-image` | drop `reset-figure` | it is `margin: 0` plus one include |
 
@@ -222,7 +222,7 @@ refused. `$step` was added for how far apart a filled shadow's layers sit, a
 8. **`long-shadow($color, $length, $direction, $step)`**: what `text-shadow`'s fill mode tries to be, with the count computed from the length.
 9. **`hit-area($min: 44px)`**: a pointer target of at least 24px for WCAG 2.5.8 without changing the visual size. [measure] against clipped parents.
 10. **`lazy-render($size)`**: `content-visibility: auto` with `contain-intrinsic-size: auto $size`, without which the scrollbar jumps and anchors land wrong. Baseline September 2025.
-11. **`when($feature)`**: one query mixin for `pointer: coarse`, `hover: none`, `forced-colors`, `prefers-contrast` and `scripting: none`, with `motion-safe` kept as an alias. It is also the replacement to point `smartphone` and `tablet` at.
+11. **`when($feature)`**: one query mixin for `pointer: coarse`, `hover: none`, `forced-colors`, `prefers-contrast` and `scripting: none`, with `motion-safe` kept as an alias. It is not a replacement for `smartphone` or `tablet`, which stay as they are; it is the member a page reaches for when it wants to ask about the pointer rather than about the screen.
 
 **Parked until they age.** `text-trim` (Baseline August 2026), `field-sizing`
 (June 2026), anchor positioning (January 2026, and partial before Safari 26),
@@ -319,10 +319,11 @@ fixing, but it is not worth a redesign.
 
 1. **The defects in section 1**, which are bugs, not design questions.
    `text-shadow` and `escape-to-parent` first.
-2. **4.0.0 candidates, since the major is open**: `smartphone` and `tablet`
-   deprecated, `responsive-image`, `text-gradient` and `text-image` (or the
-   `text-fill` merge), `loadify`, `border-box` and `antialias` scoping,
-   `center` on `translate`, `all-buttons`.
+2. **4.0.0 candidates, since the major is open**: `responsive-image`,
+   `text-gradient` and `text-image` (or the `text-fill` merge), `loadify`,
+   `border-box` and `antialias` scoping, `center` on `translate`,
+   `all-buttons`. `smartphone` and `tablet` were on this list as deprecations
+   and came off it: the maintainer kept both.
 3. **The merges**, one at a time, each with a `MIGRATION.md` section.
 4. **New members**, in the order above, each through `/new-mixin`.
 5. **`reset-modern`**, which also absorbs several one-declaration ideas.

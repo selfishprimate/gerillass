@@ -709,7 +709,10 @@ north star produced. `text-shadow`, `text-stroke`, the
 `background-pattern` merge, `escape-to-parent` and the five members of defects
 5 and 8 to 10 are done from it and marked there, which is every defect in its
 first section, and so is the fifth section, the utilities, lists and maps. What
-is left is three merges the maintainer has not ruled on and the new members.
+is left is four merges the maintainer has not ruled on and the new members.
+`smartphone` and `tablet` are not among them: the review proposed deprecating
+both, and on 20 September 2026 the maintainer kept them, with the maps
+refreshed on the `device-maps` branch.
 
 ### What `breakpoint-boundaries.md` records
 
