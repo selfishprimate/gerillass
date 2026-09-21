@@ -53,13 +53,13 @@ Neither failure says anything. The CSS is valid, the transition is there, and ha
 
 ## Examples
 
-The frames on this page run no script, so a demo here is driven by HTML alone: `popovertarget` for a popover, and `<form method="dialog">` for a dialog. Opening a dialog is `showModal()`, a line of script, so that one starts open and you press Close to watch it leave. A class is the one shape that cannot be demonstrated here at all, and it is written out under the examples.
+The frames on this page run no script, so a demo here is driven by HTML alone, and for this mixin that leaves one shape: `popovertarget`, a button the browser wires to a popover by itself. Every one below is a real popover, so press each button twice, once to show and once to hide, and watch both directions. The other two shapes, a `<dialog>` and a class, open with a line of script and are written out under the examples instead.
 
-<Example caption="A popover that fades and slides down. Press the button twice, once to show and once to hide." listing="<button popovertarget=&quot;tip&quot;>Toggle the popover</button>
+<Example caption="The default, and the shortest call there is: 0.3s, fading and sliding down from three quarters of a rem above." listing="<button popovertarget=&quot;tip&quot;>Toggle the popover</button>
 <div popover id=&quot;tip&quot; class=&quot;tooltip&quot;>Fades and slides, both ways.</div>">
 ```scss
 .tooltip {
-  @include reveal(popover, 0.35s, top 0.75rem, null, false);
+  @include reveal;
 }
 ```
 ```html
@@ -75,10 +75,10 @@ The frames on this page run no script, so a demo here is driven by HTML alone: `
 ```
 </Example>
 
-<Example caption="The same thing with a longer duration, coming up from below and growing into place. `$move` and `$scale` are what change, and the two run together." listing="<button popovertarget=&quot;card&quot;>Toggle the card</button>
+<Example caption="A longer duration, coming up from below and growing into place. `$move` and `$scale` are what change, and the two run together." listing="<button popovertarget=&quot;card&quot;>Toggle the card</button>
 <div popover id=&quot;card&quot; class=&quot;card&quot;>
 &#32;&#32;<b>Rises and grows</b>
-&#32;&#32;<p>0.45s, up from a centimetre below, from 92% of its size.</p>
+&#32;&#32;<p>0.45s, up from 1rem below, from 92% of its size.</p>
 </div>">
 ```scss
 .card {
@@ -96,44 +96,105 @@ The frames on this page run no script, so a demo here is driven by HTML alone: `
 <button popovertarget="card">Toggle the card</button>
 <div popover id="card" class="card">
   <b>Rises and grows</b>
-  <p>0.45s, up from a centimetre below, from 92% of its size.</p>
+  <p>0.45s, up from 1rem below, from 92% of its size.</p>
 </div>
 ```
 </Example>
 
-<Example caption="A dialog, shrinking away as it closes. It starts open here because opening one is `showModal()`, which these frames cannot run; press Close and watch it leave, which is the half of the animation this demo can show." listing="<dialog class=&quot;modal&quot; open>
-&#32;&#32;<p>Delete this project?</p>
-&#32;&#32;<form method=&quot;dialog&quot;>
-&#32;&#32;&#32;&#32;<button value=&quot;cancel&quot;>Cancel</button>
-&#32;&#32;&#32;&#32;<button value=&quot;delete&quot;>Delete</button>
-&#32;&#32;</form>
-</dialog>">
+<Example caption="`$easing` is the last argument and takes anything a transition does. This one overshoots, so the menu comes in from the right, goes a little past its place and settles back." listing="<button popovertarget=&quot;links&quot;>Toggle the menu</button>
+<nav popover id=&quot;links&quot; class=&quot;dropdown&quot;>
+&#32;&#32;<a href=&quot;#&quot;>Documentation</a>
+&#32;&#32;<a href=&quot;#&quot;>Playground</a>
+&#32;&#32;<a href=&quot;#&quot;>Releases</a>
+</nav>">
+```scss
+.dropdown {
+  @include reveal(popover, 0.5s, right 1.5rem, null, false, cubic-bezier(0.34, 1.56, 0.64, 1));
+}
+```
+```html
+<style>
+  body { min-height: 200px; }
+  button { padding: 8px 14px; border: 0; border-radius: 8px; background: #0f172a; color: #fff; font: 600 13px Inter, ui-sans-serif, system-ui, sans-serif; }
+  /* No `display` on a popover: an author's `display` beats the rule a browser hides a closed one with. Written `display: grid` here, as the first draft of this demo was, the menu never left in any of the three browsers. */
+  .dropdown { position: absolute; inset: auto; top: 60px; left: 16px; width: 190px; border: 0; border-radius: 12px; padding: 8px; background: #0f172a; font: 600 13px Inter, ui-sans-serif, system-ui, sans-serif; }
+  .dropdown a { display: block; padding: 8px 10px; border-radius: 8px; color: #e2e8f0; text-decoration: none; }
+  .dropdown a:hover { background: #1e293b; }
+</style>
+<button popovertarget="links">Toggle the menu</button>
+<nav popover id="links" class="dropdown">
+  <a href="#">Documentation</a>
+  <a href="#">Playground</a>
+  <a href="#">Releases</a>
+</nav>
+```
+</Example>
+
+<Example caption="`$backdrop` is left at its default here, so the layer behind the sheet fades in with it and out with it. The mixin animates that layer; what colour it is stays the demo's own line. Pressing the backdrop closes the sheet, which is the popover's own behaviour." listing="<button popovertarget=&quot;sheet&quot;>Open the sheet</button>
+<div popover id=&quot;sheet&quot; class=&quot;sheet&quot;>
+&#32;&#32;<b>A sheet from the bottom</b>
+&#32;&#32;<p>The dark layer behind it is the backdrop, fading on the same clock.</p>
+</div>">
+```scss
+.sheet {
+  @include reveal(popover, 0.4s, bottom 2rem);
+}
+```
+```html
+<style>
+  body { min-height: 230px; }
+  button { padding: 8px 14px; border: 0; border-radius: 8px; background: #0f172a; color: #fff; font: 600 13px Inter, ui-sans-serif, system-ui, sans-serif; }
+  .sheet { position: fixed; inset: auto 0 0 0; border: 0; border-radius: 14px 14px 0 0; padding: 16px 18px; background: #f8fafc; color: #0f172a; font: 13px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .sheet b { display: block; margin-bottom: 4px; font-size: 15px; }
+  .sheet p { margin: 0; }
+  /* The mixin fades the backdrop in and out; this is what it is made of. */
+  .sheet::backdrop { background: rgb(15 23 42 / 0.55); }
+</style>
+<button popovertarget="sheet">Open the sheet</button>
+<div popover id="sheet" class="sheet">
+  <b>A sheet from the bottom</b>
+  <p>The dark layer behind it is the backdrop, fading on the same clock.</p>
+</div>
+```
+</Example>
+
+<Example caption="`none` for `$move` fades without moving, and at 0.15s that reads as a switch rather than a motion. It is the call to reach for when the thing being shown is small and should simply be there." listing="<button popovertarget=&quot;note&quot;>Toggle the note</button>
+<div popover id=&quot;note&quot; class=&quot;note&quot;>Copied to the clipboard</div>">
+```scss
+.note {
+  @include reveal(popover, 0.15s, none, null, false);
+}
+```
+```html
+<style>
+  body { min-height: 140px; }
+  button { padding: 8px 14px; border: 0; border-radius: 8px; background: #0f172a; color: #fff; font: 600 13px Inter, ui-sans-serif, system-ui, sans-serif; }
+  .note { position: absolute; inset: auto; top: 60px; left: 16px; border: 0; border-radius: 999px; padding: 8px 14px; background: #1d4ed8; color: #eff6ff; font: 600 13px Inter, ui-sans-serif, system-ui, sans-serif; }
+</style>
+<button popovertarget="note">Toggle the note</button>
+<div popover id="note" class="note">Copied to the clipboard</div>
+```
+</Example>
+
+<Hint kind="danger">
+
+**Do not set `display` on a popover this is on.** An author's `display` beats the rule a browser hides a closed popover with, so the element never leaves. Measured in Chrome 152, Firefox 156 and Safari 26.6.2: a popover carrying `display: grid`, which is how the menu above was first written, reported `display: grid` and `opacity: 0` after it was closed, invisible but still on the page and still taking clicks. Lay its contents out on a child instead, as that demo does now.
+
+</Hint>
+
+## A dialog, and your own selector
+
+Only the popover is on this page. The other two shapes open with a line of script and these frames run none, measured on 21 September 2026: a demo's own script is blocked both by the frame's sandbox and by the site's `script-src`, and a `:target` link, the one other way to change state without script, navigates the srcdoc document and replaces it. So both are written out here, and the repository's own lab, which does run scripts, has all three side by side.
+
+A `<dialog>` opened with `showModal()`. `dialog` writes the open state as `[open]`, which the browser adds and removes itself, and `$backdrop` is left at its default, so the layer behind the dialog fades with it rather than appearing and vanishing on its own:
+
 ```scss
 .modal {
   @include reveal(dialog, 0.45s, none, 0.9);
 }
 ```
-```html
-<style>
-  body { min-height: 150px; }
-  .modal { position: static; border: 0; border-radius: 12px; padding: 16px 18px; background: #0f172a; color: #f8fafc; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; box-shadow: 0 18px 40px rgb(15 23 42 / 0.35); }
-  .modal p { margin: 0 0 12px; }
-  .modal button { padding: 8px 14px; margin-right: 6px; border: 0; border-radius: 8px; background: #334155; color: #fff; font: 600 13px Inter, ui-sans-serif, system-ui, sans-serif; }
-  .modal button[value="delete"] { background: #b91c1c; }
-</style>
-<dialog class="modal" open>
-  <p>Delete this project?</p>
-  <form method="dialog">
-    <button value="cancel">Cancel</button>
-    <button value="delete">Delete</button>
-  </form>
-</dialog>
-```
-</Example>
 
-## Your own selector
-
-The third shape is an element your own code shows and hides with a class. The mixin writes the same three pieces against whatever selector you name, and the `display` pair is yours:
+An element your own code shows and hides with a class. The mixin writes the same three pieces against whatever selector you name, and the `display` pair is yours:
 
 ```scss
 .menu {
@@ -146,8 +207,6 @@ The third shape is an element your own code shows and hides with a class. The mi
   display: block;
 }
 ```
-
-It is here rather than among the examples because a frame on this page cannot show it. Adding a class takes script, and these frames run none: measured on 21 September 2026, a demo's own script is blocked both by the frame's sandbox and by the site's `script-src`, and a `:target` link, the one other way to change state without script, navigates the srcdoc document and replaces it. The repository's own lab runs scripts, and the case there has this shape beside the other two.
 
 ## Several on one page
 

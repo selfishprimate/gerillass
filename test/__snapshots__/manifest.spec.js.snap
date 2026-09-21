@@ -1980,6 +1980,29 @@ exports[`Manifest examples responsive-image: img { @include responsive-image; } 
 }"
 `;
 
+exports[`Manifest examples reveal: .dropdown { @include reveal(popover, 0.5s, right 1.5rem, null, false,  1`] = `
+".dropdown {
+  opacity: 0;
+  translate: 1.5rem 0;
+  transition: opacity 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), translate 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), display 0.5s allow-discrete, overlay 0.5s allow-discrete;
+}
+.dropdown:popover-open {
+  opacity: 1;
+  translate: 0 0;
+}
+@starting-style {
+  .dropdown:popover-open {
+    opacity: 0;
+    translate: 1.5rem 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dropdown {
+    transition-duration: 0.01ms;
+  }
+}"
+`;
+
 exports[`Manifest examples reveal: .menu { @include reveal(".is-open", 200ms, right 1rem, null, false); } 1`] = `
 ".menu {
   opacity: 0;

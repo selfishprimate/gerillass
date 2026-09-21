@@ -931,7 +931,8 @@ Two pieces of work are open:
   through `scss/internal/_range-problem.scss`, which both used to write into a
   query no width can satisfy; and `auto-grid` and `reveal`, the
   first two of the review's new members that survived, on `auto-grid`,
-  branched from `utilities-lists-maps`.
+  branched from `utilities-lists-maps`, with `reveal`'s documentation page
+  rewritten on `reveal`, branched from `auto-grid`.
   The last three come from `todos/library-review.md`, and the last three
   patterns, `glow`, `vignette` and `mesh`, from the survey in
   `todos/saas-hero-backgrounds.md`. Each has a `MIGRATION.md` section.
