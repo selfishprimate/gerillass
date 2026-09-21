@@ -1,0 +1,84 @@
+@charset "UTF-8";
+
+@use "sass:list";
+@use "sass:map";
+@use "sass:math";
+@use "sass:meta";
+@use "sass:string";
+
+// Shared by the mixins and not public API; see _is-css-function.scss.
+//
+// The direction a shadow points, and the offset it lands at. `text-shadow` and
+// `long-shadow` both take the eight keywords and any angle, and both measure an
+// angle the way `gradient` does, 0deg up and clockwise, so a direction means
+// the same thing wherever it is written. The offsets are the sine and cosine of
+// that angle, which puts a diagonal shadow the same distance from the element
+// as a straight one; until 4.0.0 `text-shadow` wrote the distance on both axes,
+// which was 1.414 times further out.
+$-directions: (
+  "top": 0deg,
+  "top-right": 45deg,
+  "right": 90deg,
+  "bottom-right": 135deg,
+  "bottom": 180deg,
+  "bottom-left": 225deg,
+  "left": 270deg,
+  "top-left": 315deg
+);
+$-angle-units: "deg" "grad" "rad" "turn";
+
+// The keyword directions, for an error message.
+@function shadowDirectionNames() {
+  $out: "";
+  @each $name, $angle in $-directions {
+    @if $out != "" {
+      $out: $out + ", ";
+    }
+    $out: $out + "`" + $name + "`";
+  }
+  @return $out;
+}
+
+// The angle a direction stands for, or null when it is neither a keyword nor an
+// angle. A keyword is matched in any case, as CSS matches its own.
+@function shadowAngle($value) {
+  @if meta.type-of($value) == "number" {
+    @if list.index($-angle-units, math.unit($value)) {
+      @return $value;
+    }
+    @return null;
+  }
+  @if meta.type-of($value) != "string" {
+    @return null;
+  }
+  @return map.get($-directions, string.to-lower-case("#{$value}"));
+}
+
+// Sass keeps ten digits, which writes 3.5355339059px into the stylesheet. Four
+// is under a thousandth of a pixel at any distance a shadow is written at.
+@function shadowRound($value) {
+  @return math.div(math.round($value * 10000), 10000);
+}
+
+// One axis of the offset. $ratio is sine for x and minus cosine for y, since
+// the y axis points down. A distance only the browser knows keeps the ratio in
+// a calc(), where 0, 1 and -1 are written without one.
+@function shadowOffset($ratio, $distance) {
+  $ratio: shadowRound($ratio);
+  @if meta.type-of($distance) == "number" {
+    $offset: shadowRound($ratio * $distance);
+    // 0px and 0 are not equal in Sass, and a bare 0 is what the mixin has
+    // always written for an axis the shadow does not move on.
+    @if $offset == $offset * 0 {
+      @return 0;
+    }
+    @return $offset;
+  }
+  @if $ratio == 0 {
+    @return 0;
+  }
+  @if $ratio == 1 {
+    @return $distance;
+  }
+  @return string.unquote("calc(#{$ratio} * #{$distance})");
+}

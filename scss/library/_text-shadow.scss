@@ -4,92 +4,21 @@
 @use "sass:map";
 @use "sass:math";
 @use "sass:meta";
-@use "sass:string";
 @use "../utilities/clear-unit" as *;
 @use "../internal/color-problem" as *;
+@use "../internal/shadow-direction" as *;
 @use "../internal/length-problem" as *;
 
 // One or more shadows, each written as `<direction> <colour> <distance>`, with
 // an optional blur and an optional `true` that fills the gap between the text
 // and the shadow's end.
 //
-// Since 4.0.0 the direction may also be an angle, and every direction is one:
-// the keywords are the eight 45 degree steps, measured as `gradient` measures
-// them, 0deg up and clockwise. The offsets are then the sine and cosine of that
-// angle, so a shadow is the same distance from the text whichever way it
-// points. Until 4.0.0 a diagonal keyword wrote the distance on both axes, which
-// put it 1.414 times further out than a straight one.
+// Since 4.0.0 the direction may also be an angle, and every direction is one.
+// `scss/internal/_shadow-direction.scss` holds that vocabulary and the offsets,
+// which `long-shadow` shares.
 //
 // A distance a browser resolves, `var()` or `calc()`, is written as a `calc()`
 // with CSS's own `sin()` and `cos()` rather than computed here.
-$-directions: (
-  "top": 0deg,
-  "top-right": 45deg,
-  "right": 90deg,
-  "bottom-right": 135deg,
-  "bottom": 180deg,
-  "bottom-left": 225deg,
-  "left": 270deg,
-  "top-left": 315deg
-);
-$-angle-units: "deg" "grad" "rad" "turn";
-
-// The keyword directions, for an error message.
-@function -names() {
-  $out: "";
-  @each $name, $angle in $-directions {
-    @if $out != "" {
-      $out: $out + ", ";
-    }
-    $out: $out + "`" + $name + "`";
-  }
-  @return $out;
-}
-
-// The angle a direction stands for, or null when it is neither a keyword nor an
-// angle. A keyword is matched in any case, as CSS matches its own.
-@function -angle($value) {
-  @if meta.type-of($value) == "number" {
-    @if list.index($-angle-units, math.unit($value)) {
-      @return $value;
-    }
-    @return null;
-  }
-  @if meta.type-of($value) != "string" {
-    @return null;
-  }
-  @return map.get($-directions, string.to-lower-case("#{$value}"));
-}
-
-// Sass keeps ten digits, which writes 3.5355339059px into the stylesheet. Four
-// is under a thousandth of a pixel at any distance a shadow is written at.
-@function -round($value) {
-  @return math.div(math.round($value * 10000), 10000);
-}
-
-// One axis of the offset. $ratio is sine for x and minus cosine for y, since
-// the y axis points down. A distance only the browser knows keeps the ratio in
-// a calc(), where 0, 1 and -1 are written without one.
-@function -offset($ratio, $distance) {
-  $ratio: -round($ratio);
-  @if meta.type-of($distance) == "number" {
-    $offset: -round($ratio * $distance);
-    // 0px and 0 are not equal in Sass, and a bare 0 is what the mixin has
-    // always written for an axis the shadow does not move on.
-    @if $offset == $offset * 0 {
-      @return 0;
-    }
-    @return $offset;
-  }
-  @if $ratio == 0 {
-    @return 0;
-  }
-  @if $ratio == 1 {
-    @return $distance;
-  }
-  @return string.unquote("calc(#{$ratio} * #{$distance})");
-}
-
 @mixin text-shadow($params...) {
   $keywords: meta.keywords($params);
   @each $key, $value in $keywords {
@@ -136,9 +65,9 @@ $-angle-units: "deg" "grad" "rad" "turn";
       }
     }
 
-    $angle: -angle($direction);
+    $angle: shadowAngle($direction);
     @if $angle == null {
-      @error "`#{$direction}` is not a valid direction for `text-shadow`, in `#{$item}`. Pass one of #{-names()}, or an angle such as `45deg`, measured from the top and clockwise.";
+      @error "`#{$direction}` is not a valid direction for `text-shadow`, in `#{$item}`. Pass one of #{shadowDirectionNames()}, or an angle such as `45deg`, measured from the top and clockwise.";
     }
 
     $problem: colorProblem($color, $css-wide: false);
@@ -190,11 +119,11 @@ $-angle-units: "deg" "grad" "rad" "turn";
         @if $this-step != null {
           $distance: math.min($i * $this-step, $size);
         }
-        $shadow: -offset($sin, $distance) -offset($cos, $distance) $blur $color;
+        $shadow: shadowOffset($sin, $distance) shadowOffset($cos, $distance) $blur $color;
         $value: list.append($value, $shadow, comma);
       }
     } @else {
-      $shadow: -offset($sin, $size) -offset($cos, $size) $blur $color;
+      $shadow: shadowOffset($sin, $size) shadowOffset($cos, $size) $blur $color;
       $value: list.append($value, $shadow, comma);
     }
   }
