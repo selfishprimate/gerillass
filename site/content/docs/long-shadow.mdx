@@ -25,7 +25,7 @@ The **Long Shadow** Sass mixin draws the long shadow of flat design: a solid blo
 `box-shadow` draws one copy of the element. A long shadow is the copies themselves, each a step further along, so the effect is not a value you write but a list you generate. Its length is the number of layers:
 
 ```css
-.badge {
+.button {
   box-shadow: 0.7071px 0.7071px #0f172a, 1.4142px 1.4142px #0f172a, 2.1213px 2.1213px #0f172a,
               /* thirty six more */
               28.284px 28.284px #0f172a;
@@ -72,48 +72,72 @@ Chrome 152 and Firefox 156 stayed at the frame budget even at 2000 layers, measu
 
 ## Examples
 
-<Example caption="The default: 40px to the bottom right, solid, in 40 layers of one pixel.">
+<Example caption="A brutalist button. The look is a hard shadow with no blur, and the long form is the extruded one: ten pixels of it in steps of two, which is five layers.">
 ```scss
-.badge {
-  @include long-shadow(#0f172a, 40px);
+.button {
+  @include long-shadow(#0f172a, 10px, bottom-right, $step: 2px);
 }
 ```
 ```html
 <style>
-  body { min-height: 150px; }
-  .badge { width: 84px; height: 84px; border-radius: 16px; background: #38bdf8; display: grid; place-items: center; font: 800 30px Inter, ui-sans-serif, system-ui, sans-serif; color: #fff; }
+  body { min-height: 120px; }
+  .button { display: inline-block; margin: 6px 0 0; padding: 14px 24px; border: 3px solid #0f172a; border-radius: 4px; background: #fde047; color: #0f172a; font: 800 15px Inter, ui-sans-serif, system-ui, sans-serif; letter-spacing: 0.04em; text-transform: uppercase; }
 </style>
-<div class="badge">A</div>
+<button class="button">Get started</button>
 ```
 </Example>
 
-<Example caption="Straight down, in steps of 4px. Ten layers rather than forty, and the edge is straight, so nothing shows: a step this size is worth it where the shadow does not run diagonally.">
+<Example caption="`currentColor` is what makes one rule cover every variant: the button below sets a colour and the border, the text and the shadow all follow it. Nothing here is computed by Sass.">
 ```scss
-.tile {
+.button {
+  @include long-shadow(currentColor, 8px, bottom-right, $step: 2px);
+}
+```
+```html
+<style>
+  body { min-height: 190px; display: grid; gap: 18px; justify-items: start; }
+  .button { padding: 12px 20px; border: 3px solid currentColor; border-radius: 4px; background: #fff; font: 800 14px Inter, ui-sans-serif, system-ui, sans-serif; letter-spacing: 0.03em; text-transform: uppercase; }
+  .pink { color: #be185d; }
+  .blue { color: #1d4ed8; }
+  .green { color: #15803d; }
+</style>
+<button class="button pink">Read the docs</button>
+<button class="button blue">Pricing</button>
+<button class="button green">Download</button>
+```
+</Example>
+
+<Example caption="Straight down, in steps of 4px. The edge is straight, so a coarse step costs nothing to look at and saves thirty layers, which is worth knowing for a shadow on a card that scrolls.">
+```scss
+.stat {
   @include long-shadow(#0f766e, 24px, bottom, $step: 4px);
 }
 ```
 ```html
 <style>
-  body { min-height: 150px; }
-  .tile { width: 84px; height: 84px; border-radius: 20px; background: #5eead4; display: grid; place-items: center; font: 800 30px Inter, ui-sans-serif, system-ui, sans-serif; color: #0f766e; }
+  body { min-height: 190px; }
+  .stat { width: 140px; padding: 16px 18px; border-radius: 14px; background: #5eead4; color: #042f2e; font: 13px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .stat b { display: block; font-size: 34px; letter-spacing: -0.02em; }
 </style>
-<div class="tile">★</div>
+<div class="stat">
+  <b>12,480</b>
+  Active users
+</div>
 ```
 </Example>
 
-<Example caption="`$fade` is the colour the shadow ends in. The first layer is the colour itself and every one after it is mixed a step further, in `oklab`, which is what keeps a fade to `transparent` from going grey.">
+<Example caption="`$fade` is the colour the shadow ends in. The first layer is the colour itself and every one after it is mixed a step further, in `oklab`, which is what keeps a fade to `transparent` from going grey on the way out.">
 ```scss
-.card {
-  @include long-shadow(#5bc0bb, 40px, bottom-right, transparent);
+.tag {
+  @include long-shadow(#be123c, 28px, bottom-right, transparent);
 }
 ```
 ```html
 <style>
-  body { min-height: 170px; }
-  .card { width: 96px; height: 96px; border-radius: 18px; background: #0f766e; display: grid; place-items: center; font: 800 30px Inter, ui-sans-serif, system-ui, sans-serif; color: #ccfbf1; }
+  body { min-height: 150px; }
+  .tag { display: inline-block; margin: 6px 0 0; padding: 12px 22px; border-radius: 999px; background: #fb7185; color: #4c0519; font: 800 14px Inter, ui-sans-serif, system-ui, sans-serif; letter-spacing: 0.06em; text-transform: uppercase; }
 </style>
-<div class="card">B</div>
+<span class="tag">New release</span>
 ```
 </Example>
 
@@ -126,27 +150,9 @@ Chrome 152 and Firefox 156 stayed at the frame budget even at 2000 layers, measu
 ```html
 <style>
   body { min-height: 190px; }
-  .coin { width: 92px; height: 92px; border-radius: 999px; background: #fde68a; display: grid; place-items: center; font: 800 30px Inter, ui-sans-serif, system-ui, sans-serif; color: #7c2d12; }
+  .coin { width: 92px; height: 92px; border-radius: 999px; background: #fde68a; display: grid; place-items: center; font: 800 26px Inter, ui-sans-serif, system-ui, sans-serif; color: #7c2d12; }
 </style>
-<div class="coin">C</div>
-```
-</Example>
-
-<Example caption="`currentColor` takes the shadow from the text, so one rule covers every colour a component comes in. Nothing here is computed by Sass: the colour is whatever the element inherits.">
-```scss
-.pill {
-  @include long-shadow(currentColor, 20px, right, $step: 2px);
-}
-```
-```html
-<style>
-  body { min-height: 150px; display: grid; gap: 14px; }
-  .pill { justify-self: start; padding: 10px 18px; border-radius: 999px; border: 2px solid currentColor; font: 800 14px Inter, ui-sans-serif, system-ui, sans-serif; background: #fff; }
-  .one { color: #b91c1c; }
-  .two { color: #1d4ed8; }
-</style>
-<div class="pill one">Kırmızı</div>
-<div class="pill two">Mavi</div>
+<div class="coin">4.0</div>
 ```
 </Example>
 
