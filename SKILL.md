@@ -5,7 +5,7 @@ description: Use the Gerillass Sass mixin library — loading it, the mixin cata
 
 # Gerillass
 
-A Sass mixin library: 54 mixins and 24 functions that emit CSS from
+A Sass mixin library: 55 mixins and 24 functions that emit CSS from
 semantic declarations. It is Sass source only — there is no runtime and no
 utility classes, so styles live in your stylesheet and your markup stays clean.
 
@@ -103,6 +103,7 @@ a dropped declaration rather than an error.
 | `gradient` | `.a { @include gradient((red, blue), sideways); }` |
 | `hide` | `.a { @include hide(nonsense); }` |
 | `loadify` | `@include loadify(nonsense);` |
+| `long-shadow` | `.a { @include long-shadow(nonsense, 40px); }` |
 | `motion-safe` | `.card { @include motion-safe; }` |
 | `only` | `.a { @include only(#ff0000) { margin: 0; } }` |
 | `position` | `.badge { @include position(absolute, 0, $logical: yes); }` |
@@ -258,6 +259,15 @@ a dropped declaration rather than an error.
 - `init` and the calls no longer have to see each other. The mixin used to define a `%loadify` placeholder that every call `@extend`ed, which fails with Sass's "The target selector was not found" whenever the call is in another module, an entry file's `init` being no help to a partial it loads. Each call writes its own declarations now, and a stylesheet that forgets `init` builds with no fade rather than not building.
 - The mixin writes the `animation` shorthand, so an animation of your own on the same element replaces it.
 - A time needs its unit and there is one per argument. `loadify(0)` wrote `animation: loadify 0.5s 0 backwards`, which Chrome 152, Firefox 156 and Safari 26.6.2 read as an iteration count of 0, so the fade never ran; `loadify(0.2s 0.4s)` wrote two delays, and all three dropped the declaration. Both are refused since 4.0.0.
+
+**`long-shadow`**
+
+- The number of layers is the length divided by the step, not anything a caller types, and `$step` defaults to a fortieth of the length so a call is 40 layers whatever unit the length is in. Measured at three times zoom in Chrome 152: a step of 1px or 2px leaves a clean diagonal edge, 4px shows a stair only when magnified, and 8px is visibly notched, since between two copies the sweep leaves a tooth the size of the step.
+- Cost is Safari's problem alone. Measured in a real window in Safari 26.6.2, repainting a box: 17ms a frame at 40 and 120 layers, 38ms at 400 and 62ms at 1000. Chrome 152 and Firefox 156 stayed at the frame budget even at 2000 layers, both measured headless, where painting may be cheaper than on screen. The mixin stops at 500 layers and names `$step` in the message.
+- The length has to be one Sass can count, so `var()` and `calc()` are refused although `box-shadow` itself takes both: the mixin divides the length to know how many copies to write. `text-shadow` accepts them because it writes one offset per shadow and hands the expression to the browser.
+- `box-shadow` draws behind the element, so an element with a transparent or translucent background shows every layer through itself, and the effect reads as a stack rather than a shadow. Give it a solid background.
+- A shadow is clipped by an ancestor that clips, which is what `overflow: hidden` on a card does. Measured in Chrome 152: the layers stop at the container's padding box rather than running off it.
+- Measured in Chrome 152, Firefox 156 and Safari 26.6.2, `box-shadow` keeps every colour kind this takes, a keyword, a hex, `rgb()`, `hsl()`, `currentColor`, `var()`, `color-mix()`, `oklch()`, `light-dark()` and a system colour, and drops only a percentage and a unitless number among lengths. Those two are what `$length` and `$step` refuse.
 
 **`motion-safe`**
 
@@ -430,6 +440,7 @@ a dropped declaration rather than an error.
 | `gradient($colors, $type: linear, $direction: null, $shape: null, $position: null, $from: null, $in: null, $repeating: false)` | A linear, radial or conic gradient as background-image, plain or repeating, with an optional colour interpolation space. Replaced linear-gradient and radial-gradient in 3.0.0. |
 | `hide($toggle: "hide")` | Visually hides an element while keeping it available to screen readers, either always or until it or anything inside it has keyboard focus. |
 | `loadify($params...)` | Fades elements in on page load. Call `loadify(init)` once at the root to write the keyframes, then the mixin on each element. |
+| `long-shadow($color, $length, $direction: bottom-right, $fade: null, $step: null)` | The long shadow of flat design: a solid block running off the element, drawn as a stack of copies of it. |
 | `motion-safe` | Wraps its content in @media (prefers-reduced-motion: no-preference), so motion is opt-in: a user who asked their system for less motion gets none of it. |
 | `only($params...)` | Selects only the siblings named, counted by tag or by a selector you name. |
 | `placeholder-shown` | Styles an input while its placeholder is visible, which is how a floating label knows the field is empty. |

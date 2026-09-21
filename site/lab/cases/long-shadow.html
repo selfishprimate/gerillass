@@ -1,0 +1,22 @@
+<p>Without the mixin: one copy, which is all <code>box-shadow</code> draws.</p>
+<div class="box" style="box-shadow: 28.284px 28.284px #0f172a"></div>
+
+<p style="margin-top: 60px">With the mixin: forty copies, one per pixel of the length.</p>
+<div class="box with"></div>
+
+<p style="margin-top: 60px">Fading into nothing along its length.</p>
+<div class="box faded"></div>
+
+<p style="margin-top: 60px">Any angle, fading into another colour.</p>
+<div class="box angled" style="border-radius: 999px; background: #fde68a"></div>
+
+<p style="margin-top: 60px">A step of 8px: five layers, and a tooth on each diagonal edge.</p>
+<div class="box notched"></div>
+
+<p style="margin-top: 60px">A see-through box shows every layer through itself.</p>
+<div class="box translucent"></div>
+
+<p style="margin-top: 60px">Inside a container that clips, the shadow stops at its edge.</p>
+<div style="width: 180px; height: 140px; overflow: hidden; border-radius: 14px; background: #fff; display: grid; place-items: center">
+  <div class="box with"></div>
+</div>

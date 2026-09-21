@@ -1317,6 +1317,79 @@
       ]
     },
     {
+      "name": "long-shadow",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$color",
+          "required": true,
+          "accepts": [
+            "any colour, including currentColor, var() and color-mix()"
+          ]
+        },
+        {
+          "name": "$length",
+          "required": true,
+          "accepts": [
+            "a length Sass can count, such as 40px or 2.5rem",
+            "not a percentage, a var() or a calc()"
+          ]
+        },
+        {
+          "name": "$direction",
+          "default": "bottom-right",
+          "accepts": [
+            "top, top-right, right, bottom-right, bottom, bottom-left, left, top-left",
+            "any angle, such as 160deg or 0.5turn, measured from the top and clockwise"
+          ]
+        },
+        {
+          "name": "$fade",
+          "default": "null",
+          "accepts": [
+            "the colour the shadow fades into, such as transparent",
+            "nothing, to leave it solid"
+          ]
+        },
+        {
+          "name": "$step",
+          "default": "null",
+          "accepts": [
+            "a length greater than zero, in the same unit as $length",
+            "nothing, for a fortieth of the length"
+          ]
+        }
+      ],
+      "file": "scss/library/_long-shadow.scss",
+      "signature": "long-shadow($color, $length, $direction: bottom-right, $fade: null, $step: null)",
+      "summary": "The long shadow of flat design: a solid block running off the element, drawn as a stack of copies of it.",
+      "caveats": [
+        "The number of layers is the length divided by the step, not anything a caller types, and `$step` defaults to a fortieth of the length so a call is 40 layers whatever unit the length is in. Measured at three times zoom in Chrome 152: a step of 1px or 2px leaves a clean diagonal edge, 4px shows a stair only when magnified, and 8px is visibly notched, since between two copies the sweep leaves a tooth the size of the step.",
+        "Cost is Safari's problem alone. Measured in a real window in Safari 26.6.2, repainting a box: 17ms a frame at 40 and 120 layers, 38ms at 400 and 62ms at 1000. Chrome 152 and Firefox 156 stayed at the frame budget even at 2000 layers, both measured headless, where painting may be cheaper than on screen. The mixin stops at 500 layers and names `$step` in the message.",
+        "The length has to be one Sass can count, so `var()` and `calc()` are refused although `box-shadow` itself takes both: the mixin divides the length to know how many copies to write. `text-shadow` accepts them because it writes one offset per shadow and hands the expression to the browser.",
+        "`box-shadow` draws behind the element, so an element with a transparent or translucent background shows every layer through itself, and the effect reads as a stack rather than a shadow. Give it a solid background.",
+        "A shadow is clipped by an ancestor that clips, which is what `overflow: hidden` on a card does. Measured in Chrome 152: the layers stop at the container's padding box rather than running off it.",
+        "Measured in Chrome 152, Firefox 156 and Safari 26.6.2, `box-shadow` keeps every colour kind this takes, a keyword, a hex, `rgb()`, `hsl()`, `currentColor`, `var()`, `color-mix()`, `oklch()`, `light-dark()` and a system colour, and drops only a percentage and a unitless number among lengths. Those two are what `$length` and `$step` refuse."
+      ],
+      "examples": [
+        ".badge { @include long-shadow(#0f172a, 40px); }",
+        ".tile { @include long-shadow(#0f766e, 24px, bottom, $step: 4px); }",
+        ".card { @include long-shadow(#5bc0bb, 20px, bottom-right, transparent, 5px); }",
+        ".pill { @include long-shadow(currentColor, 16px, 160deg, $step: 4px); }"
+      ],
+      "rejects": [
+        ".a { @include long-shadow(nonsense, 40px); }",
+        ".a { @include long-shadow(red, 40px, bottom, nonsense); }",
+        ".a { @include long-shadow(red, 40px, sideways); }",
+        ".a { @include long-shadow(red, 10%); }",
+        ".a { @include long-shadow(red, -40px); }",
+        ".a { @include long-shadow(red, var(--length)); }",
+        ".a { @include long-shadow(red, 40px, bottom, null, 0); }",
+        ".a { @include long-shadow(red, 40px, bottom, null, 1rem); }",
+        ".a { @include long-shadow(red, 40px, bottom, null, 0.01px); }"
+      ]
+    },
+    {
       "name": "motion-safe",
       "kind": "mixin",
       "arguments": [],

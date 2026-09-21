@@ -1,6 +1,6 @@
 # Gerillass
 
-> A Sass toolkit of 54 mixins and 24 functions, built to be read by coding agents as well as by people. Every member is described in a machine-readable manifest whose examples and refusals are executed by the test suite, so the documentation cannot drift away from the code.
+> A Sass toolkit of 55 mixins and 24 functions, built to be read by coding agents as well as by people. Every member is described in a machine-readable manifest whose examples and refusals are executed by the test suite, so the documentation cannot drift away from the code.
 
 Gerillass is a pure Sass library. There is no build step and no runtime dependency: the `.scss` sources are the deliverable, and the package installs nothing else. It needs Dart Sass; LibSass and node-sass are not supported. This file describes Gerillass 3.0.0.
 
@@ -42,6 +42,7 @@ Arguments are validated and refused with a message naming what is accepted, so a
 - [gradient($colors, $type: linear, $direction: null, $shape: null, $position: null, $from: null, $in: null, $repeating: false)](https://docs.gerillass.com/docs/gradient/): A linear, radial or conic gradient as background-image, plain or repeating, with an optional colour interpolation space.
 - [hide($toggle: "hide")](https://docs.gerillass.com/docs/hide/): Visually hides an element while keeping it available to screen readers, either always or until it or anything inside it has keyboard focus.
 - [loadify($params...)](https://docs.gerillass.com/docs/loadify/): Fades elements in on page load.
+- [long-shadow($color, $length, $direction: bottom-right, $fade: null, $step: null)](https://docs.gerillass.com/docs/long-shadow/): The long shadow of flat design: a solid block running off the element, drawn as a stack of copies of it.
 - [motion-safe](https://docs.gerillass.com/docs/motion-safe/): Wraps its content in @media (prefers-reduced-motion: no-preference), so motion is opt-in: a user who asked their system for less motion gets none of it.
 - [only($params...)](https://docs.gerillass.com/docs/only/): Selects only the siblings named, counted by tag or by a selector you name.
 - [placeholder-shown](https://docs.gerillass.com/docs/placeholder-shown/): Styles an input while its placeholder is visible, which is how a floating label knows the field is empty.

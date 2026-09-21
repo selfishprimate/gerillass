@@ -1,0 +1,32 @@
+@use "gerillass" as *;
+
+// The core effect, and the one thing that goes wrong: the step.
+.box {
+  width: 84px;
+  height: 84px;
+  border-radius: 16px;
+  background: #38bdf8;
+}
+
+.with {
+  @include long-shadow(#0f172a, 40px);
+}
+
+.faded {
+  @include long-shadow(#5bc0bb, 40px, bottom-right, transparent);
+}
+
+.angled {
+  @include long-shadow(#f59e0b, 48px, 160deg, #7c2d12);
+}
+
+// A step this coarse leaves a tooth its own size on each diagonal edge.
+.notched {
+  @include long-shadow(#0f172a, 40px, bottom-right, $step: 8px);
+}
+
+// box-shadow draws behind the element, so a see-through box shows the stack.
+.translucent {
+  background: rgb(56 189 248 / 0.35);
+  @include long-shadow(#0f172a, 40px);
+}

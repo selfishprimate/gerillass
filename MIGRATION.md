@@ -1747,6 +1747,52 @@ the element would never leave the page.
 
 ---
 
+## Added: `long-shadow`
+
+The long shadow of flat design, drawn as `box-shadow`: a solid block running
+off the element, at any angle, optionally fading as it goes. Nothing else
+changed, so it breaks no call.
+
+```scss
+.badge {
+  @include long-shadow(#0f172a, 40px);
+}
+
+.card {
+  @include long-shadow(#5bc0bb, 40px, bottom-right, transparent);
+}
+```
+
+`box-shadow` draws one copy of the element, so the effect is the copies
+themselves and their number is the length divided by the step, which is not a
+number anyone types: the first call above writes forty layers. Shortening the
+shadow by hand means rewriting every one of them.
+
+`$step` is what decides whether the diagonal edge is clean, and it defaults to
+a fortieth of the length. Measured in Chrome 152 at three times zoom, on a 70px
+box with a 40px shadow: a step of 1px or 2px leaves a clean edge, 4px shows a
+stair only when magnified, and 8px is visibly notched, since between two copies
+the sweep leaves a tooth the size of the step. A step of one unit, which is
+what `text-shadow`'s fill uses, would have been 16px in `rem`.
+
+The cost is Safari's alone. Measured in a real window in Safari 26.6.2,
+repainting the box each frame: 17ms at 40 and 120 layers, 38ms at 400 and 62ms
+at 1000. Chrome 152 and Firefox 156 held the frame budget even at 2000, both
+measured headless. The mixin stops at 500 layers and names `$step` in the
+message.
+
+Two things it cannot do anything about, both `box-shadow`'s own behaviour:
+the shadow is drawn behind the element, so a translucent background shows every
+layer through itself, and an ancestor that clips, such as a card with
+`overflow: hidden`, cuts the shadow at its edge.
+
+It shares its directions with `text-shadow`, through
+`scss/internal/_shadow-direction.scss`, so `bottom-right` and `160deg` mean the
+same thing in both. That move was checked by compiling eight `text-shadow`
+calls before and after it, with identical output.
+
+---
+
 # Migrating to Gerillass 3.0.0
 
 Written while 3.0.0 is being prepared, and added to as its changes land. So far

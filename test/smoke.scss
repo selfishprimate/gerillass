@@ -56,6 +56,7 @@
 .hide { @include hide; }
 .hide-focusable { @include hide(focusable); }
 .truncate-many { @include truncate(3); }
+.long-shadow { @include long-shadow(#0f172a, 20px, bottom-right, transparent, 5px); }
 .motion-safe { @include motion-safe { transition: opacity 0.2s; } }
 .only { @include only("first") { color: red; } }
 .placeholder { @include placeholder { color: gray; } }

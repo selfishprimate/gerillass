@@ -1630,6 +1630,30 @@ exports[`Manifest examples loadify: @include loadify; .a { @include loadify(0.4s
 }"
 `;
 
+exports[`Manifest examples long-shadow: .badge { @include long-shadow(#0f172a, 40px); } 1`] = `
+".badge {
+  box-shadow: 0.7071px 0.7071px #0f172a, 1.4142px 1.4142px #0f172a, 2.1213px 2.1213px #0f172a, 2.8284px 2.8284px #0f172a, 3.5355px 3.5355px #0f172a, 4.2426px 4.2426px #0f172a, 4.9497px 4.9497px #0f172a, 5.6568px 5.6568px #0f172a, 6.3639px 6.3639px #0f172a, 7.071px 7.071px #0f172a, 7.7781px 7.7781px #0f172a, 8.4852px 8.4852px #0f172a, 9.1923px 9.1923px #0f172a, 9.8994px 9.8994px #0f172a, 10.6065px 10.6065px #0f172a, 11.3136px 11.3136px #0f172a, 12.0207px 12.0207px #0f172a, 12.7278px 12.7278px #0f172a, 13.4349px 13.4349px #0f172a, 14.142px 14.142px #0f172a, 14.8491px 14.8491px #0f172a, 15.5562px 15.5562px #0f172a, 16.2633px 16.2633px #0f172a, 16.9704px 16.9704px #0f172a, 17.6775px 17.6775px #0f172a, 18.3846px 18.3846px #0f172a, 19.0917px 19.0917px #0f172a, 19.7988px 19.7988px #0f172a, 20.5059px 20.5059px #0f172a, 21.213px 21.213px #0f172a, 21.9201px 21.9201px #0f172a, 22.6272px 22.6272px #0f172a, 23.3343px 23.3343px #0f172a, 24.0414px 24.0414px #0f172a, 24.7485px 24.7485px #0f172a, 25.4556px 25.4556px #0f172a, 26.1627px 26.1627px #0f172a, 26.8698px 26.8698px #0f172a, 27.5769px 27.5769px #0f172a, 28.284px 28.284px #0f172a;
+}"
+`;
+
+exports[`Manifest examples long-shadow: .card { @include long-shadow(#5bc0bb, 20px, bottom-right, transparent, 1`] = `
+".card {
+  box-shadow: 3.5355px 3.5355px #5bc0bb, 7.071px 7.071px color-mix(in oklab, #5bc0bb 75%, transparent), 10.6065px 10.6065px color-mix(in oklab, #5bc0bb 50%, transparent), 14.142px 14.142px color-mix(in oklab, #5bc0bb 25%, transparent);
+}"
+`;
+
+exports[`Manifest examples long-shadow: .pill { @include long-shadow(currentColor, 16px, 160deg, $step: 4px);  1`] = `
+".pill {
+  box-shadow: 1.368px 3.7588px currentColor, 2.736px 7.5176px currentColor, 4.104px 11.2764px currentColor, 5.472px 15.0352px currentColor;
+}"
+`;
+
+exports[`Manifest examples long-shadow: .tile { @include long-shadow(#0f766e, 24px, bottom, $step: 4px); } 1`] = `
+".tile {
+  box-shadow: 0 4px #0f766e, 0 8px #0f766e, 0 12px #0f766e, 0 16px #0f766e, 0 20px #0f766e, 0 24px #0f766e;
+}"
+`;
+
 exports[`Manifest examples mapDeepGet: $theme: (card: (padding: 16px, radius: 8px)); .a { padding: mapDeepGet 1`] = `
 ".a {
   padding: 16px;

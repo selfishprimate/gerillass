@@ -1,0 +1,120 @@
+// A long shadow is a stack of copies, so what a spec has to pin is arithmetic:
+// how many layers a call writes, where each one lands, and what the fade puts
+// in them. The counts and the steps below are the ones measured in Chrome 152,
+// Firefox 156 and Safari 26.6.2 while the mixin was written, where a step of
+// 1px or 2px leaves a clean edge and 8px is visibly notched.
+@use 'true' as *;
+@use '../../scss/library/long-shadow' as *;
+
+@include describe('long-shadow()') {
+  @include it('Steps a fortieth of the length by default, so a call is 40 layers.') {
+    @include assert {
+      @include output {
+        .a {
+          @include long-shadow(red, 8px, bottom, $step: 2px);
+        }
+      }
+      @include expect {
+        .a {
+          box-shadow: 0 2px red, 0 4px red, 0 6px red, 0 8px red;
+        }
+      }
+    }
+  }
+
+  @include it('Puts a diagonal shadow the same distance away as a straight one.') {
+    @include assert {
+      @include output {
+        .a {
+          @include long-shadow(red, 10px, bottom-right, $step: 5px);
+        }
+      }
+      @include expect {
+        .a {
+          box-shadow: 3.5355px 3.5355px red, 7.071px 7.071px red;
+        }
+      }
+    }
+  }
+
+  @include it('Takes an angle in any of CSS angle units, measured from the top.') {
+    @include assert {
+      @include output {
+        .a {
+          @include long-shadow(red, 10px, 0.5turn, $step: 5px);
+        }
+      }
+      @include expect {
+        .a {
+          box-shadow: 0 5px red, 0 10px red;
+        }
+      }
+    }
+  }
+
+  @include it('Lands the last layer on the length rather than past it.') {
+    @include assert {
+      @include output {
+        .a {
+          @include long-shadow(red, 10px, bottom, $step: 4px);
+        }
+      }
+      @include expect {
+        .a {
+          box-shadow: 0 4px red, 0 8px red, 0 10px red;
+        }
+      }
+    }
+  }
+
+  @include it('Fades from the colour itself to one step of it, with color-mix.') {
+    @include assert {
+      @include output {
+        .a {
+          @include long-shadow(#5bc0bb, 20px, bottom, transparent, 5px);
+        }
+      }
+      @include expect {
+        .a {
+          box-shadow: 0 5px #5bc0bb, 0 10px color-mix(in oklab, #5bc0bb 75%, transparent), 0 15px color-mix(in oklab, #5bc0bb 50%, transparent), 0 20px color-mix(in oklab, #5bc0bb 25%, transparent);
+        }
+      }
+    }
+  }
+
+  @include it('Keeps a colour the browser resolves, such as currentColor or a var().') {
+    @include assert {
+      @include output {
+        .a {
+          @include long-shadow(currentColor, 4px, right, $step: 2px);
+        }
+        .b {
+          @include long-shadow(var(--shadow), 4px, left, $step: 2px);
+        }
+      }
+      @include expect {
+        .a {
+          box-shadow: 2px 0 currentColor, 4px 0 currentColor;
+        }
+        .b {
+          box-shadow: -2px 0 var(--shadow), -4px 0 var(--shadow);
+        }
+      }
+    }
+  }
+
+  @include it('Counts in the length\'s own unit, so rem works as px does.') {
+    @include assert {
+      @include output {
+        .a {
+          @include long-shadow(red, 1rem, bottom, $step: 0.5rem);
+        }
+      }
+      @include expect {
+        .a {
+          box-shadow: 0 0.5rem red, 0 1rem red;
+        }
+      }
+    }
+  }
+}

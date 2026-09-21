@@ -1,0 +1,125 @@
+@charset "UTF-8";
+
+@use "sass:list";
+@use "sass:math";
+@use "sass:meta";
+@use "sass:string";
+@use "../internal/color-problem" as *;
+@use "../internal/shadow-direction" as *;
+@use "../internal/length-problem" as *;
+
+// The long shadow of flat design: a solid block running off the element, drawn
+// as a stack of copies of it, each one step further along.
+//
+// `box-shadow` draws one copy, so the effect is the copies themselves, and
+// their number is `$length / $step` rather than anything a person types. That
+// is the whole reason this is a mixin: change the length by hand and every
+// layer has to be rewritten. `text-shadow` does the same for the glyphs of a
+// line of text, and the two share their directions through
+// `scss/internal/_shadow-direction.scss`.
+//
+// Three things were measured before this was written, in Chrome 152,
+// Firefox 156 and Safari 26.6.2:
+//
+// - **what the property keeps.** Every colour kind was kept: a keyword, a hex,
+//   `rgb()`, `hsl()`, `currentColor`, `var()`, `color-mix()`, `oklch()`,
+//   `light-dark()` and a system colour. Of the lengths, only a percentage and a
+//   unitless number were dropped, so those two are what the checks refuse;
+//   `em`, `ch`, `vw`, `Q`, `cm`, `calc()` and `var()` all work.
+// - **what a step looks like.** At three times zoom a step of 1px or 2px leaves
+//   a clean diagonal edge, 4px shows a stair only when magnified, and 8px is
+//   visibly notched, because between two copies the sweep leaves a tooth the
+//   size of the step. `$step` therefore defaults to a fortieth of the length,
+//   which is 1px for the 40px shadow this effect is usually written at and
+//   stays under 2px up to 80px, whatever unit the length is in. A fixed step of
+//   one unit would have been 16px in `rem`.
+// - **what it costs.** Safari is the one that feels it: on a real window a
+//   repainting box took 17ms a frame at 40 and 120 layers, 38ms at 400 and 62ms
+//   at 1000. Chrome and Firefox stayed at the frame budget even at 2000, both
+//   measured headless. Hence the ceiling below, and the default that keeps a
+//   call at 40 layers.
+//
+// A length only the browser can resolve cannot be counted here, so `var()` and
+// `calc()` are refused with a message that says why: unlike `text-shadow`'s
+// single offset, there is no one declaration to hand the expression to.
+
+// Past this the stylesheet grows by about 30 bytes a layer and Safari drops
+// frames, and a step is what the caller wanted instead.
+$-max-layers: 500;
+
+@mixin long-shadow($color, $length, $direction: bottom-right, $fade: null, $step: null) {
+  $problem: colorProblem($color, $css-wide: false);
+  @if $problem {
+    @error "`#{meta.inspect($color)}` is not a valid $color for `long-shadow`: #{$problem}.";
+  }
+
+  @if $fade != null {
+    $problem: colorProblem($fade, $css-wide: false);
+    @if $problem {
+      @error "`#{meta.inspect($fade)}` is not a valid $fade for `long-shadow`: #{$problem}. Pass the colour the shadow fades into, such as `transparent`, or nothing to leave it solid.";
+    }
+  }
+
+  $angle: shadowAngle($direction);
+  @if $angle == null {
+    @error "`#{meta.inspect($direction)}` is not a valid $direction for `long-shadow`. Pass one of #{shadowDirectionNames()}, or an angle such as `45deg`, measured from the top and clockwise.";
+  }
+
+  $problem: lengthProblem($length, $percent: false, $negative: false);
+  @if $problem {
+    $hint: "";
+    @if meta.type-of($length) == "number" and $length < 0 {
+      $hint: " Point the shadow the other way rather than passing a negative length.";
+    }
+    @error "`#{meta.inspect($length)}` is not a valid $length for `long-shadow`: #{$problem}.#{$hint}";
+  }
+  // The count comes out of the length, so a length only the browser resolves
+  // cannot be used: there is nothing here to divide.
+  @if meta.type-of($length) != "number" or $length == 0 {
+    @error "`#{meta.inspect($length)}` cannot be drawn by `long-shadow`. A long shadow is a stack of copies, so the length has to be one this stylesheet can count, such as `40px` or `2.5rem`.";
+  }
+
+  // One fortieth of the length, in the length's own unit. See the note above.
+  $this-step: $step;
+  @if $this-step == null {
+    $this-step: math.div($length, 40);
+  } @else {
+    $problem: lengthProblem($step, $percent: false, $negative: false);
+    @if $problem or meta.type-of($step) != "number" or $step == 0 {
+      @error "`#{meta.inspect($step)}` is not a valid $step for `long-shadow`. Pass a length greater than zero, such as `1px`, in the same unit as the length it steps through.";
+    }
+    @if not math.compatible($step, $length) {
+      @error "`$step: #{$step}` cannot step through `#{$length}` in `long-shadow`. Pass the step in the same unit as the length.";
+    }
+  }
+
+  $count: math.ceil(math.div($length, $this-step));
+  @if $count > $-max-layers {
+    @error "`long-shadow` would draw #{$count} layers for `#{$length}` in steps of `#{$this-step}`, and stops at #{$-max-layers}. Pass a larger `$step`: measured in Safari 26.6.2, a shadow of 400 layers takes 38ms a frame to repaint and one of 1000 takes 62ms, and the stylesheet grows by about 30 bytes a layer.";
+  }
+
+  $sin: math.sin($angle);
+  $cos: -1 * math.cos($angle);
+  $value: ();
+
+  @for $i from 1 through $count {
+    // The last step lands exactly on the length rather than past it.
+    $distance: math.min($i * $this-step, $length);
+    $layer-color: $color;
+    @if $fade != null {
+      // From the full colour at the element to one step of it at the end.
+      // `color-mix` rather than Sass's own: mixing with `transparent` in Sass
+      // darkens on the way out, since it is a transparent black, while
+      // `in oklab` interpolates premultiplied and keeps the hue.
+      $weight: math.div(math.round(math.div(($count - $i + 1) * 10000, $count)), 100);
+      // The first layer is the colour itself; a 100% mix is the same colour
+      // written the long way.
+      @if $weight < 100 {
+        $layer-color: string.unquote("color-mix(in oklab, #{$color} #{$weight}%, #{$fade})");
+      }
+    }
+    $value: list.append($value, shadowOffset($sin, $distance) shadowOffset($cos, $distance) $layer-color, comma);
+  }
+
+  box-shadow: $value;
+}
