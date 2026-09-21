@@ -1636,9 +1636,15 @@ exports[`Manifest examples long-shadow: .button { @include long-shadow(#0f172a, 
 }"
 `;
 
-exports[`Manifest examples long-shadow: .button { @include long-shadow(currentColor, 8px, bottom-right, $step: 1`] = `
+exports[`Manifest examples long-shadow: .button { @include long-shadow(currentColor, 10px, bottom-right, $step 1`] = `
 ".button {
-  box-shadow: 1.4142px 1.4142px currentColor, 2.8284px 2.8284px currentColor, 4.2426px 4.2426px currentColor, 5.6568px 5.6568px currentColor;
+  box-shadow: 1.4142px 1.4142px currentColor, 2.8284px 2.8284px currentColor, 4.2426px 4.2426px currentColor, 5.6568px 5.6568px currentColor, 7.071px 7.071px currentColor;
+}
+.button:hover {
+  box-shadow: 1.4142px 1.4142px currentColor, 2.8284px 2.8284px currentColor, 4.2426px 4.2426px currentColor, 5.6568px 5.6568px currentColor, 7.071px 7.071px currentColor, 8.4852px 8.4852px currentColor, 9.8994px 9.8994px currentColor, 11.3136px 11.3136px currentColor;
+}
+.button:active {
+  box-shadow: 1.4142px 1.4142px currentColor, 2.8284px 2.8284px currentColor;
 }"
 `;
 

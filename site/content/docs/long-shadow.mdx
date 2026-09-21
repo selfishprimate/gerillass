@@ -72,38 +72,30 @@ Chrome 152 and Firefox 156 stayed at the frame budget even at 2000 layers, measu
 
 ## Examples
 
-<Example caption="A brutalist button. The look is a hard shadow with no blur, and the long form is the extruded one: ten pixels of it in steps of two, which is five layers.">
+<Example caption="A brutalist button, and the whole of its behaviour is three calls. The shadow is `currentColor`, so it follows the text and a second variant is one colour; it grows on hover and collapses under the press, and the `translate` is what keeps the far end of it in the same place while the button moves. Nothing here animates, because the mixin writes no transition: press it in the frame and see.">
 ```scss
 .button {
-  @include long-shadow(#0f172a, 10px, bottom-right, $step: 2px);
+  @include long-shadow(currentColor, 10px, bottom-right, $step: 2px);
+
+  &:hover {
+    @include long-shadow(currentColor, 16px, bottom-right, $step: 2px);
+    translate: -4px -4px;
+  }
+
+  &:active {
+    @include long-shadow(currentColor, 4px, bottom-right, $step: 2px);
+    translate: 4px 4px;
+  }
 }
 ```
 ```html
 <style>
-  body { min-height: 120px; }
-  .button { display: inline-block; margin: 6px 0 0; padding: 14px 24px; border: 3px solid #0f172a; border-radius: 4px; background: #fde047; color: #0f172a; font: 800 15px Inter, ui-sans-serif, system-ui, sans-serif; letter-spacing: 0.04em; text-transform: uppercase; }
+  body { min-height: 150px; display: grid; gap: 20px; justify-items: start; }
+  .button { margin: 10px 0 0 4px; padding: 14px 24px; border: 3px solid currentColor; border-radius: 4px; background: #fde047; color: #0f172a; font: 800 15px Inter, ui-sans-serif, system-ui, sans-serif; letter-spacing: 0.04em; text-transform: uppercase; }
+  .plum { background: #f5d0fe; color: #86198f; }
 </style>
 <button class="button">Get started</button>
-```
-</Example>
-
-<Example caption="`currentColor` is what makes one rule cover every variant: the button below sets a colour and the border, the text and the shadow all follow it. Nothing here is computed by Sass.">
-```scss
-.button {
-  @include long-shadow(currentColor, 8px, bottom-right, $step: 2px);
-}
-```
-```html
-<style>
-  body { min-height: 190px; display: grid; gap: 18px; justify-items: start; }
-  .button { padding: 12px 20px; border: 3px solid currentColor; border-radius: 4px; background: #fff; font: 800 14px Inter, ui-sans-serif, system-ui, sans-serif; letter-spacing: 0.03em; text-transform: uppercase; }
-  .pink { color: #be185d; }
-  .blue { color: #1d4ed8; }
-  .green { color: #15803d; }
-</style>
-<button class="button pink">Read the docs</button>
-<button class="button blue">Pricing</button>
-<button class="button green">Download</button>
+<button class="button plum">Read the docs</button>
 ```
 </Example>
 
