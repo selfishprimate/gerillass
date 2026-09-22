@@ -45,7 +45,7 @@ The **Breakpoint** Sass mixin helps you create scalable media queries and breakp
 ```
 </Example>
 
-<Example caption="Now let's set the `$mode` option to `min` and pass a predefined breakpoint value. If you are a **mobile-first** person, you are going to use this one a lot!">
+<Example caption="`min` applies the styles from a width upwards, which is the mobile-first direction, and a predefined name can stand in for the length.">
 ```scss
 .element{
   @include breakpoint(min, medium) {
@@ -55,7 +55,7 @@ The **Breakpoint** Sass mixin helps you create scalable media queries and breakp
 ```
 </Example>
 
-<Example caption="For **desktop-first** arrangements, set the `$mode` option to `max`. This time, let's pass a custom value for the second argument, which is used exactly as written.">
+<Example caption="`max` applies them up to a width, for a desktop-first stylesheet. A custom length is used exactly as it is written.">
 ```scss
 .element{
   @include breakpoint(max, 1024px) {
@@ -84,7 +84,7 @@ The **Breakpoint** Sass mixin helps you create scalable media queries and breakp
 
 </Hint>
 
-<Example caption="We can set a range between two values to apply our styles.">
+<Example caption="Two values with `between` make a range, so the styles apply inside it and nowhere else.">
 ```scss
 .element{
   @include breakpoint(between, small 1200px) {
@@ -141,7 +141,7 @@ The values can be either custom numbers (with a unit) or predefined values.
 
 </Hint>
 
-<Example caption="**Now let's define a range without passing the `between` option.** Simply pass two values and **separate them with a comma**.">
+<Example caption="Two values with no mode are the same range, since a pair can only mean one thing.">
 ```scss
 .element{
   @include breakpoint(320px, 768px) {
@@ -151,7 +151,7 @@ The values can be either custom numbers (with a unit) or predefined values.
 ```
 </Example>
 
-<Example caption="Now let's try it with the predefined values just to see that it works.">
+<Example caption="The same pair as predefined names.">
 ```scss
 .element{
   @include breakpoint(small, large) {

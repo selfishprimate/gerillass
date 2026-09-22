@@ -29,7 +29,7 @@ The **Triangle** Sass mixin helps you generate triangles using the `::before` or
 
 ## Examples
 
-<Example caption="Suppose you have an expandable box and you want users to click a label to expand it. **Let's apply the mixin to the `::after` pseudo-element of the selected element.**" listing="<div class=&quot;element&quot;>Click here to expand it!</div>">
+<Example caption="With no arguments the mixin draws a small dark triangle pointing down, on a pseudo-element, which is the caret every expandable row has." listing="<div class=&quot;element&quot;>Click here to expand it!</div>">
 ```scss
 .element {
   &::after {
@@ -42,7 +42,7 @@ The **Triangle** Sass mixin helps you generate triangles using the `::before` or
 ```
 </Example>
 
-<Example caption="Now let's **change the `$color` and the `$size`** of the triangle, and separate it from the text by **passing a declaration block into the mixin**.">
+<Example caption="`$color` and `$size` change it, and a declaration block holds whatever else the caret needs, such as the space between it and the text.">
 ```scss
 .element {
   &::after {
@@ -60,7 +60,7 @@ The **Triangle** Sass mixin helps you generate triangles using the `::before` or
 ```
 </Example>
 
-<Example caption="When you pass one of the `top`, `right`, `bottom`, or `left` values for the `$direction` argument, you can pass a second value to resize the triangle. The first value controls the width of the triangle and the second controls the height.">
+<Example caption="A pair of values for `$size` is the width and the height, so a caret can be wider than it is tall.">
 ```scss
 .element{
   &::after {
@@ -81,7 +81,7 @@ The **Triangle** Sass mixin helps you generate triangles using the `::before` or
 ```
 </Example>
 
-<Example caption="You can apply the mixin not only to the pseudo-elements, but to the selected element itself.">
+<Example caption="It works on the element itself as well as on a pseudo-element, which is how a tooltip gets its arrow.">
 ```scss
 .element{
   @include triangle(

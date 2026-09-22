@@ -23,7 +23,7 @@ The **Border Radius** Sass mixin helps you round the corners of a selected eleme
 
 ## Examples
 
-<Example caption="Simply pass a value to target all the corners of an element and style them equally.">
+<Example caption="One value rounds all four corners, which is the card every layout starts with.">
 ```scss
 .element{
   @include border-radius(20px);
@@ -43,7 +43,7 @@ The **Border Radius** Sass mixin helps you round the corners of a selected eleme
 ```
 </Example>
 
-<Example caption="Now let's pass two values. The first one is `top`, to target only the top corners of the selected element, and the second one is `40px`, for the size of the radius.">
+<Example caption="Two values: an edge and a radius. `top` rounds the two corners along the top, which is the shape a sheet arrives in.">
 ```scss
 .element{
   @include border-radius(top, 40px);
@@ -74,7 +74,7 @@ Just to remind you once more, these are the predefined values you can use to tar
 
 </Hint>
 
-<Example caption="Now, let's try to target right corners.">
+<Example caption="The same form on the right edge, so the notice keeps its square side against the edge of the page.">
 ```scss
 .element{
   @include border-radius(right, 40px);
@@ -90,7 +90,7 @@ Just to remind you once more, these are the predefined values you can use to tar
 ```
 </Example>
 
-<Example caption="Now let's try the `cross-left` and `cross-right` values, which let you target the corners diagonally.">
+<Example caption="`cross-left` and `cross-right` take the corners diagonally, which is how an avatar tile gets its leaf shape.">
 ```scss
 .element{
   @include border-radius(cross-left, 40px);
@@ -105,7 +105,7 @@ Just to remind you once more, these are the predefined values you can use to tar
 ```
 </Example>
 
-<Example caption="You can use the CSS shorthand method to pass different radius size values for different corners.">
+<Example caption="Four values in CSS's own shorthand order, one radius per corner.">
 ```scss
 .element{
   @include border-radius(25px 50px 100px 150px);
@@ -125,7 +125,7 @@ Just to remind you once more, these are the predefined values you can use to tar
 ```
 </Example>
 
-<Example caption="Now let's **pass four values** again, but this time we are going to **separate them with commas** to try something different.">
+<Example caption="The same four values separated by commas, which reads better once the values get long.">
 ```scss
 .element{
   @include border-radius(25px, 50px, 100px, 150px);
@@ -145,7 +145,7 @@ Just to remind you once more, these are the predefined values you can use to tar
 ```
 </Example>
 
-<Example caption="For each corner you can pass a second value next to the first one to bend the curve.">
+<Example caption="A second value after each radius bends the curve into an ellipse, and a photograph is where that shows.">
 ```scss
 .element{
   @include border-radius(100px 40px, 50px 20%, 100px 30%, 150px 2rem);
@@ -161,7 +161,7 @@ Just to remind you once more, these are the predefined values you can use to tar
 ```
 </Example>
 
-<Example caption="Use `null` to skip a corner!">
+<Example caption="`null` skips a corner, so a dropdown can keep the two corners that meet the button square.">
 ```scss
 .element{
   @include border-radius(null, null, 100px 30%, 150px 2rem);
@@ -182,7 +182,7 @@ Just to remind you once more, these are the predefined values you can use to tar
 ```
 </Example>
 
-<Example caption="**Logical corners and edges** follow the writing direction. `inline-start` rounds the side where lines begin: the left in a left-to-right layout, the right in a right-to-left one, from the same rule. Measured in Chrome 152, every logical name renders the same radii as its physical twin in both directions.">
+<Example caption="**Logical corners and edges** follow the writing direction. `inline-start` rounds the corners a line begins at: the left in a left-to-right tab and the right in a right-to-left one, from the same rule.">
 ```scss
 .tab {
   @include border-radius("inline-start", 16px);

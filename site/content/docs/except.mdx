@@ -42,7 +42,7 @@ Let's say you have a list of items wrapped in a container, just like the example
 </div>
 ```
 
-<Example caption="Let's exclude the **first** one!">
+<Example caption="`first` leaves the first item alone and takes the rest.">
 ```scss
 .list-wrapper{
   .list-item{
@@ -65,7 +65,7 @@ Let's say you have a list of items wrapped in a container, just like the example
 ```
 </Example>
 
-<Example caption="Now, let's try to exclude the **last item** in the list.">
+<Example caption="`last` leaves the last one out, which is how a separator stops before the end of a trail.">
 ```scss
 .list-wrapper{
   .list-item{
@@ -88,7 +88,7 @@ Let's say you have a list of items wrapped in a container, just like the example
 ```
 </Example>
 
-<Example caption="Now, let's exclude the **third** item in the list.">
+<Example caption="A number leaves that position out.">
 ```scss
 .list-wrapper{
   .list-item{
@@ -111,7 +111,7 @@ Let's say you have a list of items wrapped in a container, just like the example
 ```
 </Example>
 
-<Example caption="Let's exclude the elements whose position is even (e.g. 2, 4, 6, and so on).">
+<Example caption="`even` and `odd` leave every other one out.">
 ```scss
 .list-wrapper{
   .list-item{
@@ -140,7 +140,7 @@ Remember that when you target multiple items in the list, the arguments you pass
 
 </Hint>
 
-<Example caption="Now, let's try something really fancy and exclude multiple items!">
+<Example caption="Several positions in one call, separated by commas.">
 ```scss
 .list-wrapper{
   .list-item{
@@ -169,7 +169,7 @@ When you pass arguments for the `id` or `class` attributes of the items, don't f
 
 </Hint>
 
-<Example caption="Let's exclude the items with class `exclude` on them." listing="<div class=&quot;list-wrapper&quot;>
+<Example caption="A selector rather than a position: everything except the items carrying that class." listing="<div class=&quot;list-wrapper&quot;>
 &#32;&#32;<div class=&quot;list-item exclude&quot;>01</div>
 &#32;&#32;<div class=&quot;list-item&quot;>02</div>
 &#32;&#32;<div class=&quot;list-item&quot;>03</div>
@@ -205,7 +205,7 @@ When you pass arguments for the `id` or `class` attributes of the items, don't f
 
 </Hint>
 
-<Example caption="Now suppose you don't know how many items will appear in the list, and **you want to exclude the second item from the end**. How can you do that? It's easy!">
+<Example caption="A negative position counts from the end, so `-2` is the second from the last.">
 ```scss
 .list-wrapper{
   .list-item{
@@ -228,7 +228,7 @@ When you pass arguments for the `id` or `class` attributes of the items, don't f
 ```
 </Example>
 
-<Example caption="Now let's pass multiple negative values.">
+<Example caption="Several negative positions in one call.">
 ```scss
 .list-wrapper {
   .list-item {
@@ -251,7 +251,7 @@ When you pass arguments for the `id` or `class` attributes of the items, don't f
 ```
 </Example>
 
-<Example caption="Now let's pass **positive and negative values together**.">
+<Example caption="The two kinds mixed: the first item and the last two left out.">
 ```scss
 .list-wrapper {
   .list-item {

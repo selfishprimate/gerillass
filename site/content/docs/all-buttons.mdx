@@ -22,7 +22,7 @@ The **All Buttons** Sass mixin helps you target all the HTML button elements in 
 
 ## Examples
 
-<Example caption="Simply call the mixin at the root level of your stylesheet **to target all the HTML button elements**.">
+<Example caption="Called at the root of the stylesheet, it reaches every kind of button: a `<button>`, a submit input and a reset input.">
 ```scss
 @include all-buttons {
   padding: 11px 20px;
@@ -43,7 +43,7 @@ The **All Buttons** Sass mixin helps you target all the HTML button elements in 
 ```
 </Example>
 
-<Example caption="Now pass the `hover` value as an argument to style all the button elements when they are in the **:hover** state.">
+<Example caption="A pseudo-class as the argument styles the same set in that state.">
 ```scss
 @include all-buttons(hover) {
   background-color: #312e81;
@@ -60,7 +60,7 @@ The **All Buttons** Sass mixin helps you target all the HTML button elements in 
 ```
 </Example>
 
-<Example caption="Now, let's try it again with all the possible pseudo-class selectors.">
+<Example caption="The states a button needs, one call each, on top of the base rule.">
 ```scss
 @include all-buttons {
   padding: 11px 20px;

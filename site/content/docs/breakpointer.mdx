@@ -34,7 +34,7 @@ This mixin has been applied to this page only, to show you how the **Breakpointe
 
 ## Examples
 
-<Example caption="Call the mixin at the root level of your stylesheet without passing any arguments.">
+<Example caption="Called at the root with no arguments, it writes the current breakpoint's name into the corner of the page.">
 ```scss
 @include breakpointer;
 ```
@@ -47,7 +47,7 @@ This mixin has been applied to this page only, to show you how the **Breakpointe
 ```
 </Example>
 
-<Example caption="You can pass a CSS declaration block to customize how it looks (as I did when I was developing the Gerillass site itself).">
+<Example caption="A declaration block dresses the label: the corner it sits in, its colours, its type.">
 ```scss
 @include breakpointer {
   position: fixed;
@@ -67,7 +67,7 @@ This mixin has been applied to this page only, to show you how the **Breakpointe
 ```
 </Example>
 
-<Example caption="Well, good news! You can call the Breakpointer Sass mixin in a selector if you wish.">
+<Example caption="Called inside a selector, the label lands on that element instead of the page.">
 ```scss
 .element {
   @include breakpointer();

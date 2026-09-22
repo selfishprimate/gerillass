@@ -24,7 +24,7 @@ The **Position Sass mixin** provides a one-line method to quickly set both the p
 
 ## Examples
 
-<Example caption="Call the mixin without passing any arguments to see the default values that it generates.">
+<Example caption="With no arguments it writes `absolute` with every inset at zero, so the element covers its parent. That is the scrim over a photograph.">
 ```scss
 .element{
   @include position;
@@ -42,7 +42,7 @@ The **Position Sass mixin** provides a one-line method to quickly set both the p
 ```
 </Example>
 
-<Example caption="Now let's set the position value to `fixed` and leave the offset values as they are." height={180}>
+<Example caption="`fixed` with the same insets covers the viewport, which is what a modal's backdrop is." height={180}>
 ```scss
 .element{
   @include position(fixed);
@@ -65,7 +65,7 @@ The **Position Sass mixin** provides a one-line method to quickly set both the p
 ```
 </Example>
 
-<Example caption="Changing the offset values is easy. Note that multiple offset values must be separated by a space." height={180}>
+<Example caption="Offsets in the shorthand order, separated by spaces. Fifty on the left leaves room for a rail." height={180}>
 ```scss
 .element{
   @include position(fixed, 10px 10px 10px 50px);
@@ -88,7 +88,7 @@ The **Position Sass mixin** provides a one-line method to quickly set both the p
 ```
 </Example>
 
-<Example caption="You can use the `null` value to skip positioning particular edges of an element.">
+<Example caption="`null` skips an edge, so a bar can sit against three of them and let its own height decide the fourth.">
 ```scss
 .element{
   @include position(absolute, null 16px 16px 16px);

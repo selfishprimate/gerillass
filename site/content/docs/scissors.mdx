@@ -28,7 +28,7 @@ The **first** value selects the `top-left` corner, the **second** the `top-right
 
 ## Examples
 
-<Example caption="Simply call the mixin and pass just one value to affect all the corners evenly.">
+<Example caption="One value cuts all four corners by the same amount, which is what a coupon looks like.">
 ```scss
 .element{
   @include scissors(30px);
@@ -48,7 +48,7 @@ The **first** value selects the `top-left` corner, the **second** the `top-right
 ```
 </Example>
 
-<Example caption="Do the following to target only the top corners.">
+<Example caption="Four values, one per corner, in the shorthand order. Zero leaves a corner square.">
 ```scss
 .element{
   @include scissors(30px 30px 0 0);
@@ -68,7 +68,7 @@ The **first** value selects the `top-left` corner, the **second** the `top-right
 ```
 </Example>
 
-<Example caption="You can use `null` to skip a corner as well! The following arrangement will target only the bottom corners.">
+<Example caption="`null` skips a corner, which is the same as zero written as an intention rather than a number.">
 ```scss
 .element{
   @include scissors(null null 50px 50px);
@@ -94,7 +94,7 @@ For some reason, your design component might look different, but I'm sure you ge
 
 </Hint>
 
-<Example caption="Now, let's try something really fancy!" listing="<div class=&quot;element&quot;>
+<Example caption="A shape with a cut on one side only, over a background that shows the cut." listing="<div class=&quot;element&quot;>
 &#32;&#32;<h2>It's a fancy looking title text!</h2>
 </div>">
 ```scss

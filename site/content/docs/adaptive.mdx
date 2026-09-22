@@ -33,7 +33,7 @@ The **Adaptive Sass mixin** gives you the fastest and most consistent way to app
 
 ## Examples
 
-<Example caption="Simply call the mixin without passing any arguments. The default `$gutter` value is `30px`.">
+<Example caption="The default: a centred container with a maximum width that steps up at every breakpoint, and a `30px` gutter on either side.">
 ```scss
 .main-container{
   @include adaptive;
@@ -53,7 +53,7 @@ The **Adaptive Sass mixin** gives you the fastest and most consistent way to app
 ```
 </Example>
 
-<Example caption="Try passing a value with an `em` unit. You can use any length unit here, so `px`, `em`, `rem`, and percentages all work.">
+<Example caption="A gutter in any length unit. `px`, `em`, `rem` and percentages all work, and the gutter is what keeps the text off the edge of a phone.">
 ```scss
 .main-container{
   @include adaptive(2em);

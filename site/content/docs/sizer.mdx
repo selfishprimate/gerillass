@@ -23,7 +23,7 @@ The **Sizer Sass mixin** helps you size elements with one statement (or two). Si
 
 ## Examples
 
-<Example caption="Call the mixin to adjust the `$width` and the `$height` of an element.">
+<Example caption="One value is the width and the height together, which is the square a logo tile wants.">
 ```scss
 .element{
   @include sizer(200px);
@@ -38,7 +38,7 @@ The **Sizer Sass mixin** helps you size elements with one statement (or two). Si
 ```
 </Example>
 
-<Example caption="To assign different values to the width and height properties of an element, do the following:">
+<Example caption="Two values are the width and the height, in that order.">
 ```scss
 .element{
   @include sizer(500px, 100px);
@@ -57,7 +57,7 @@ The **Sizer Sass mixin** helps you size elements with one statement (or two). Si
 ```
 </Example>
 
-<Example caption="You can pass string values as well!">
+<Example caption="A keyword works where a length does, so `auto` leaves the height to the content.">
 ```scss
 .element{
   @include sizer(400px, auto);

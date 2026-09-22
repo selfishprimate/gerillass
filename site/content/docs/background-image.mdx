@@ -24,7 +24,7 @@ The **Background Image** Sass mixin allows you to apply background images to the
 
 ## Examples
 
-<Example caption="Simply call the mixin in a selector and pass the URL of the background image.">
+<Example caption="The image alone, as a `background` that covers the element.">
 ```scss
 .element{
   @include background-image("/images/backgrounds/07.jpg");
@@ -35,7 +35,7 @@ The **Background Image** Sass mixin allows you to apply background images to the
 ```
 </Example>
 
-<Example caption="Now let's apply a color filter to it by passing a color value for the `$filter-color` argument.">
+<Example caption="A colour over the image. One colour is a flat wash, and the alpha decides how much of the photograph is left.">
 ```scss
 .element{
   @include background-image("/images/backgrounds/07.jpg", rgba(255, 204, 153, 0.5));
@@ -52,7 +52,7 @@ The **Background Image** Sass mixin allows you to apply background images to the
 
 </Hint>
 
-<Example caption="Now let's pass multiple color values for `$filter-color` to make the background image look even more interesting.">
+<Example caption="Several colours become a gradient over the image, which is what makes a photograph safe to put text on.">
 ```scss
 .element{
   @include background-image("/images/backgrounds/07.jpg", rgba(0, 0, 0, 0.5) rgba(40, 102, 100, 0.8));
@@ -69,7 +69,7 @@ The **Background Image** Sass mixin allows you to apply background images to the
 
 </Hint>
 
-<Example caption="Now let's try the `$filter-direction` option. While we do, let's use sharper color transitions to see the effect clearly.">
+<Example caption="`$filter-direction` turns that gradient. The stops here are sharp on purpose, so the angle is easy to read.">
 ```scss
 .element{
   @include background-image("/images/backgrounds/07.jpg", rgba(0, 128, 128, 0.7) rgba(255, 192, 203, 0.8), right);
@@ -97,9 +97,7 @@ The **Background Image** Sass mixin allows you to apply background images to the
 ```
 </Example>
 
-<Example caption="You are probably wondering why those `position: relative` and `z-index: 1` style rules are applied to the direct children of the selected element. **These rules exist to prevent the color filter from covering the direct children when you add the background image to an element using the style attribute.**
-
-Let's try it with a title placed inside the selected element to see it in action." listing="<div class=&quot;element&quot; style=&quot;background-image: url(/images/backgrounds/07.jpg)&quot;>
+<Example caption="The rule that catches people out: the filter is an `::after` layer over the element, so the element's own children need `position: relative` and a `z-index` to sit above it." listing="<div class=&quot;element&quot; style=&quot;background-image: url(/images/backgrounds/07.jpg)&quot;>
 &#32;&#32;<h2>A beautiful title text standing over the color filter.</h2>
 </div>">
 ```scss

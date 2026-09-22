@@ -22,7 +22,7 @@ The **After** Sass mixin helps you generate content or a style element after the
 
 ## Examples
 
-<Example caption="Simply pass a value as a string.">
+<Example caption="A string argument is written straight into `content`, which is the shortest form there is.">
 ```scss
 .price {
   @include after(" / month");
@@ -40,7 +40,7 @@ The **After** Sass mixin helps you generate content or a style element after the
 ```
 </Example>
 
-<Example caption="You can target the `::after` pseudo-element on its own and pass a declaration block.">
+<Example caption="A declaration block styles the pseudo-element, so the tag beside the heading is one rule rather than a second element in the markup.">
 ```scss
 .feature {
   @include after {
@@ -64,7 +64,7 @@ The **After** Sass mixin helps you generate content or a style element after the
 ```
 </Example>
 
-<Example caption="You can render the value of a data attribute. One important thing to remember is that the name of the attribute must start with the 'data-' prefix." listing="<div class=&quot;element&quot; data-currency=&quot; TL&quot;>200</div>">
+<Example caption="A `data-` attribute name is read from the markup instead of a string, so each element carries its own text." listing="<div class=&quot;element&quot; data-currency=&quot; TL&quot;>200</div>">
 ```scss
 .element{
   @include after("data-currency");
@@ -78,7 +78,7 @@ The **After** Sass mixin helps you generate content or a style element after the
 ```
 </Example>
 
-<Example caption="You can pass a value for the CSS content property as a string, and a declaration block between the opening and closing curly braces." listing="<div class=&quot;element&quot; data-currency=&quot;TL&quot;>200</div>">
+<Example caption="The two forms together: the attribute for the text, and a block for how it looks." listing="<div class=&quot;element&quot; data-currency=&quot;TL&quot;>200</div>">
 ```scss
 .element{
   @include after("data-currency"){

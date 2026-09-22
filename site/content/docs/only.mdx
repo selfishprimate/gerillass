@@ -42,7 +42,7 @@ Suppose you have a group of items like the ones below, and you want to apply sty
 </div>
 ```
 
-<Example caption="Let's start with the **first** one!">
+<Example caption="`first` takes the first item, whatever the list turns out to hold.">
 ```scss
 .list-wrapper{
   .list-item{
@@ -65,7 +65,7 @@ Suppose you have a group of items like the ones below, and you want to apply sty
 ```
 </Example>
 
-<Example caption="Now, let's try to get the **last item** in the list.">
+<Example caption="`last` takes the last one, counted at render time rather than written into the stylesheet.">
 ```scss
 .list-wrapper{
   .list-item{
@@ -88,7 +88,7 @@ Suppose you have a group of items like the ones below, and you want to apply sty
 ```
 </Example>
 
-<Example caption="Now, let's target the **second** item in the list.">
+<Example caption="A number takes that position.">
 ```scss
 .list-wrapper{
   .list-item{
@@ -111,7 +111,7 @@ Suppose you have a group of items like the ones below, and you want to apply sty
 ```
 </Example>
 
-<Example caption="Let's get the elements whose position is odd (e.g. 1, 3, 5, and so on).">
+<Example caption="`odd` and `even` take every other one, which is where striping comes from.">
 ```scss
 .list-wrapper{
   .list-item{
@@ -140,7 +140,7 @@ Remember that when you make a multiple selection, the arguments you pass must be
 
 </Hint>
 
-<Example caption="Now, let's try something really fancy!">
+<Example caption="Several positions in one call, separated by commas.">
 ```scss
 .list-wrapper{
   .list-item{
@@ -169,7 +169,7 @@ Remember that when you make a multiple selection, the arguments you pass must be
 
 </Hint>
 
-<Example caption="Now suppose you don't know how many items will appear in the list, and **you want to target only the third item from the end**. How can you do that? It's surprisingly easy!">
+<Example caption="A negative position counts from the end, so `-3` is the third from the last however many there are.">
 ```scss
 .list-wrapper {
   .list-item {
@@ -192,7 +192,7 @@ Remember that when you make a multiple selection, the arguments you pass must be
 ```
 </Example>
 
-<Example caption="Now let's pass multiple negative values.">
+<Example caption="Several negative positions in one call.">
 ```scss
 .list-wrapper {
   .list-item {
@@ -215,7 +215,7 @@ Remember that when you make a multiple selection, the arguments you pass must be
 ```
 </Example>
 
-<Example caption="Now let's pass **positive and negative values together**.">
+<Example caption="The two kinds mixed: the first item and the second from the end.">
 ```scss
 .list-wrapper {
   .list-item {

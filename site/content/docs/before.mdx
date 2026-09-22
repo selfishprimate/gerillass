@@ -22,7 +22,7 @@ The **Before** Sass mixin helps you generate content or a style element before t
 
 ## Examples
 
-<Example caption="Simply pass a value as a string.">
+<Example caption="A string argument is written straight into `content`, in front of the element's own text.">
 ```scss
 .total {
   @include before("Total: ");
@@ -38,7 +38,7 @@ The **Before** Sass mixin helps you generate content or a style element before t
 ```
 </Example>
 
-<Example caption="You can target the `::before` pseudo-element on its own and pass a declaration block.">
+<Example caption="A declaration block styles the pseudo-element, so the label in front of the note is one rule rather than a second element.">
 ```scss
 .note {
   @include before {
@@ -58,7 +58,7 @@ The **Before** Sass mixin helps you generate content or a style element before t
 ```
 </Example>
 
-<Example caption="You can render the value of a data attribute. One important thing to remember is that the name of the attribute must start with the 'data-' prefix." listing="<div class=&quot;element&quot; data-currency=&quot;&#36;&quot;>200</div>">
+<Example caption="A `data-` attribute name is read from the markup instead of a string, so each element carries its own text." listing="<div class=&quot;element&quot; data-currency=&quot;&#36;&quot;>200</div>">
 ```scss
 .element{
   @include before("data-currency");
@@ -72,7 +72,7 @@ The **Before** Sass mixin helps you generate content or a style element before t
 ```
 </Example>
 
-<Example caption="You can pass a value for the CSS content property as a string, and a declaration block between the opening and closing curly braces." listing="<div class=&quot;element&quot; data-currency=&quot;&#36;&quot;>200</div>">
+<Example caption="The two forms together: the attribute for the text, and a block for how it looks." listing="<div class=&quot;element&quot; data-currency=&quot;&#36;&quot;>200</div>">
 ```scss
 .element{
   @include before("data-currency"){

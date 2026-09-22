@@ -56,9 +56,7 @@ The **Loadify Sass mixin** is a handy tool that helps you make a page element lo
 
 </Hint>
 
-<Example caption="Let's see the animation on an image element. Call the Loadify mixin inside the element's selector and **do not pass any arguments** yet, just to see the loading effect with the default timing values. 
-
-**Refresh the page to see it, and the page will keep your place.**" setup="@include loadify(init);">
+<Example caption="One call on an image. With no arguments the element fades in as soon as the page paints." setup="@include loadify(init);">
 ```scss
 .loadify-img {
   @include loadify();
@@ -71,9 +69,7 @@ The **Loadify Sass mixin** is a handy tool that helps you make a page element lo
 ```
 </Example>
 
-<Example caption="Let's dive a bit deeper to understand exactly what this handy tool can do.
-
-Suppose you have a group of items like the ones below, and you want them to appear smoothly as the page loads." setup="@include loadify(init);" listing="<div class=&quot;parent-element&quot;>
+<Example caption="The same call on the items of a list, which is where the effect is usually wanted." setup="@include loadify(init);" listing="<div class=&quot;parent-element&quot;>
 &#32;&#32;<div class=&quot;item&quot;>01</div>
 &#32;&#32;<div class=&quot;item&quot;>02</div>
 &#32;&#32;<div class=&quot;item&quot;>03</div>
@@ -148,9 +144,7 @@ Measured in Chrome 152, Firefox 156 and Safari 26.6.2, on the CSS each call used
 
 </Hint>
 
-<Example caption="Now let's pass `1s` as a custom value for the `animation-delay` CSS property, to set how long the selected element waits before it starts to appear.
-
-**Refresh the page to see the effect.**" setup="@include loadify(init);">
+<Example caption="An argument is the delay, so the whole group waits a second before it arrives." setup="@include loadify(init);">
 ```scss
 .parent-element {
   .item {
@@ -176,11 +170,7 @@ Measured in Chrome 152, Firefox 156 and Safari 26.6.2, on the CSS each call used
 ```
 </Example>
 
-<Example caption="Now we are going to try a fantastic example to see how the Gerillass Sass library can ease your frontend development, and how well it works when you combine two or more mixins.
-
-We will use the `only` mixin to select items in the list based on their index positions, and then call the `loadify` mixin inside each of those selectors to make the elements appear at different times (with different delay and duration values).
-
-**Refresh the page to see the effect.**" setup="@include loadify(init);">
+<Example caption="A delay per item, through [Only](/docs/only), which is what turns a fade into a stagger." setup="@include loadify(init);">
 ```scss
 .parent-element {
   .item {
@@ -229,11 +219,7 @@ We will use the `only` mixin to select items in the list based on their index po
 ```
 </Example>
 
-<Example caption="Now let's try another sexy example. This time we are going to **change the display order of the boxes (we will be using a diagonal pattern)** and **pass a value for the second argument to control the value of the `animation-duration` CSS property**.
-
-The display order will be as follows: &quot;**1**&quot;, &quot;**6**&quot;, &quot;**3**&quot;, &quot;**8**&quot;, &quot;**5**&quot;, &quot;**2**&quot;, &quot;**7**&quot;, &quot;**4**&quot; 
-
-**Refresh the page to see the effect.**" setup="@include loadify(init);">
+<Example caption="The same stagger with an order of its own, so the boxes arrive in a sequence the markup does not have." setup="@include loadify(init);">
 ```scss
 .parent-element {
   .item {
