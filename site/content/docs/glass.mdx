@@ -83,6 +83,85 @@ The **Glass** Sass mixin writes a frosted glass panel: a tint, a blur of whateve
 ```
 </Example>
 
+<Example caption="A floating tab bar, the shape a phone app puts over a scrolling page. Light glass this time: the tint is white at 55%, the saturation is up so the colour underneath still reads through it, and the edge is white too.">
+```scss
+.tabs {
+  @include glass(14px, rgb(255 255 255 / 0.55), 1.8, rgb(255 255 255 / 0.65));
+}
+```
+```html
+<style>
+  body { min-height: 280px; margin: 0; padding: 18px 18px 0; background: #eef2ff; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #1e1b4b; }
+  .feed { display: grid; gap: 10px; }
+  .feed div { height: 54px; border-radius: 12px; background: linear-gradient(120deg, #a5b4fc, #f0abfc); }
+  .feed div:nth-child(2) { background: linear-gradient(120deg, #fca5a5, #fdba74); }
+  .feed div:nth-child(3) { background: linear-gradient(120deg, #6ee7b7, #93c5fd); }
+  .feed div:nth-child(4) { background: linear-gradient(120deg, #fcd34d, #fca5a5); }
+  .tabs { position: fixed; inset: auto 24px 18px; display: flex; justify-content: space-around; padding: 10px; border-radius: 999px; }
+  .tabs a { display: grid; justify-items: center; gap: 3px; padding: 6px 14px; border-radius: 999px; color: #312e81; font-size: 11px; font-weight: 700; text-decoration: none; }
+  .tabs a[aria-current] { background: rgb(49 46 129 / 0.12); }
+  .tabs svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+</style>
+<div class="feed"><div></div><div></div><div></div><div></div></div>
+<nav class="tabs">
+  <a href="#" aria-current="page"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>Home</a>
+  <a href="#"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Search</a>
+  <a href="#"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg>Browse</a>
+  <a href="#"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"/></svg>You</a>
+</nav>
+```
+</Example>
+
+<Example caption="A menu over a feed, which is where dark glass belongs: the list has to stay readable while the page keeps showing through it. `$saturate` is nearly off, because lifting the colour of a photograph behind small text is what makes it hard to read.">
+```scss
+.menu {
+  @include glass(22px, rgb(15 23 42 / 0.62), 1.1, rgb(148 163 184 / 0.32));
+}
+```
+```html
+<style>
+  body { min-height: 300px; margin: 0; padding: 16px; background: #f1f5f9; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; }
+  .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .cards div { height: 132px; border-radius: 14px; background: linear-gradient(150deg, #fb7185, #f59e0b); }
+  .cards div:nth-child(2) { background: linear-gradient(150deg, #34d399, #06b6d4); }
+  .cards div:nth-child(3) { background: linear-gradient(150deg, #818cf8, #c084fc); }
+  .cards div:nth-child(4) { background: linear-gradient(150deg, #facc15, #fb923c); }
+  .menu { position: absolute; top: 44px; right: 30px; width: 210px; padding: 8px; border-radius: 16px; color: #e2e8f0; }
+  .menu a { display: flex; justify-content: space-between; padding: 9px 12px; border-radius: 10px; color: inherit; font-size: 13px; font-weight: 600; text-decoration: none; }
+  .menu a[aria-current] { background: rgb(226 232 240 / 0.14); }
+</style>
+<div class="cards"><div></div><div></div><div></div><div></div></div>
+<nav class="menu">
+  <a href="#" aria-current="true">Top stories<span>✓</span></a>
+  <a href="#">Design</a>
+  <a href="#">Engineering</a>
+  <a href="#">Culture</a>
+</nav>
+```
+</Example>
+
+<Example caption="A widget on a wallpaper, the smallest useful piece of glass and the one most likely to be over a photograph. The blur is heavier than the panel is tall, which is what keeps a wallpaper from showing its edges through the tile.">
+```scss
+.widget {
+  @include glass(28px, rgb(255 255 255 / 0.16), 150%, rgb(255 255 255 / 0.28), rgb(51 65 85 / 0.92));
+}
+```
+```html
+<style>
+  body { min-height: 260px; display: grid; place-items: center; background: linear-gradient(200deg, #f97316, #db2777 40%, #4c1d95 75%, #0f172a); }
+  .widget { width: 200px; padding: 18px 20px; border-radius: 22px; color: #f8fafc; font: 14px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; display: grid; gap: 10px; }
+  .widget__top { display: flex; justify-content: space-between; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.75; }
+  .widget__temp { font-size: 44px; font-weight: 300; letter-spacing: -0.03em; }
+  .widget__row { display: flex; justify-content: space-between; font-size: 12px; opacity: 0.85; }
+</style>
+<div class="widget">
+  <div class="widget__top"><span>Istanbul</span><span>Now</span></div>
+  <div class="widget__temp">21°</div>
+  <div class="widget__row"><span>Clear</span><span>H 24° L 16°</span></div>
+</div>
+```
+</Example>
+
 ## Before you use it
 
 <Hint kind="danger">
