@@ -45,30 +45,30 @@ Shortening the shadow by hand means rewriting every layer, and turning it means 
 
 ## Examples
 
-<Example caption="A brutalist button, and the whole of its behaviour is three calls. The shadow is `currentColor`, so it follows the text and a second variant is one colour; it grows on hover and collapses under the press, and the `translate` is what keeps the far end of it in the same place while the button moves. Nothing here animates, because the mixin writes no transition: press it in the frame and see.">
+<Example caption="A brutalist button, and the whole of its behaviour is three calls: the shadow grows on hover and collapses under the press, and the `translate` is what keeps its far end in the same place while the button moves. Nothing animates, because the mixin writes no transition. Press it in the frame and see.">
 ```scss
+$ink: oklch(0.21 0.04 265);
+
 .button {
-  @include long-shadow(currentColor, 10px, bottom-right, $step: 2px);
+  @include long-shadow($ink, 10px, bottom-right, $step: 2px);
 
   &:hover {
-    @include long-shadow(currentColor, 16px, bottom-right, $step: 2px);
+    @include long-shadow($ink, 16px, bottom-right, $step: 2px);
     translate: -4px -4px;
   }
 
   &:active {
-    @include long-shadow(currentColor, 4px, bottom-right, $step: 2px);
+    @include long-shadow($ink, 4px, bottom-right, $step: 2px);
     translate: 4px 4px;
   }
 }
 ```
 ```html
 <style>
-  body { min-height: 150px; display: grid; gap: 20px; justify-items: start; }
-  .button { margin: 10px 0 0 4px; padding: 14px 24px; border: 3px solid currentColor; border-radius: 4px; background: #fde047; color: #0f172a; font: 800 15px Inter, ui-sans-serif, system-ui, sans-serif; letter-spacing: 0.04em; text-transform: uppercase; }
-  .plum { background: #f5d0fe; color: #86198f; }
+  body { min-height: 130px; display: grid; place-items: center; }
+  .button { padding: 14px 24px; border: 3px solid oklch(0.21 0.04 265); border-radius: 4px; background: #fde047; color: oklch(0.21 0.04 265); font: 800 15px Inter, ui-sans-serif, system-ui, sans-serif; letter-spacing: 0.04em; text-transform: uppercase; }
 </style>
 <button class="button">Get started</button>
-<button class="button plum">Read the docs</button>
 ```
 </Example>
 

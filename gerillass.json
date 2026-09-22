@@ -1372,10 +1372,10 @@
         "Measured in Chrome 152, Firefox 156 and Safari 26.6.2, `box-shadow` keeps every colour kind this takes, a keyword, a hex, `rgb()`, `hsl()`, `currentColor`, `var()`, `color-mix()`, `oklch()`, `light-dark()` and a system colour, and drops only a percentage and a unitless number among lengths. Those two are what `$length` and `$step` refuse."
       ],
       "examples": [
-        ".button { @include long-shadow(currentColor, 10px, bottom-right, $step: 2px); }",
-        ".button {\n  @include long-shadow(currentColor, 10px, bottom-right, $step: 2px);\n\n  &:hover { @include long-shadow(currentColor, 16px, bottom-right, $step: 2px); }\n  &:active { @include long-shadow(currentColor, 4px, bottom-right, $step: 2px); }\n}",
-        ".badge { @include long-shadow(#701a75, 26px, bottom-right, transparent, 2px); }",
-        ".tile { @include long-shadow(#f59e0b, 52px, 160deg, #7c2d12); }"
+        ".button { @include long-shadow(rgb(15 23 42), 10px, bottom-right, $step: 2px); }",
+        ".button {\n  @include long-shadow(oklch(0.21 0.04 265), 10px, bottom-right, $step: 2px);\n\n  &:hover { @include long-shadow(oklch(0.21 0.04 265), 16px, bottom-right, $step: 2px); }\n  &:active { @include long-shadow(oklch(0.21 0.04 265), 4px, bottom-right, $step: 2px); }\n}",
+        ".badge { @include long-shadow(#701a75, 1.6rem, bottom-right, transparent, 0.125rem); }",
+        ".tile { @include long-shadow(hsl(38 92% 50%), 52px, 160deg, #7c2d12); }"
       ],
       "rejects": [
         ".a { @include long-shadow(nonsense, 40px); }",
