@@ -24,33 +24,37 @@ The **Before** Sass mixin helps you generate content or a style element before t
 
 <Example caption="Simply pass a value as a string.">
 ```scss
-.element{
-  @include before("Text to use! – ");
+.total {
+  @include before("Total: ");
 }
 ```
 ```html
 <style>
-  .element { font: 16px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+  body { background: #f8fafc; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; }
+  .row { display: flex; justify-content: space-between; width: 260px; padding: 16px 18px; border-radius: 14px; background: #fff; box-shadow: 0 6px 20px rgb(15 23 42 / 0.08); font-weight: 700; }
+  .total::before { color: #64748b; font-weight: 600; }
 </style>
-<p class="element">Some text</p>
+<div class="row"><span class="total"></span><span>$228.00</span></div>
 ```
 </Example>
 
 <Example caption="You can target the `::before` pseudo-element on its own and pass a declaration block.">
 ```scss
-.element{
-  @include before{
-    content: "Easy to use! ";
-    font-style: italic;
-    color: red;
-  };
+.note {
+  @include before {
+    content: "Note ";
+    font-weight: 700;
+    font-style: normal;
+    color: #b45309;
+  }
 }
 ```
 ```html
 <style>
-  .element { font: 16px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+  body { background: #f8fafc; font: 15px/1.6 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; }
+  .note { display: block; max-width: 420px; padding: 14px 16px; border-radius: 12px; background: #fffbeb; color: #78350f; font-style: italic; }
 </style>
-<p class="element">Some text</p>
+<em class="note">the trial ends on the first of the month, and nothing is charged before then.</em>
 ```
 </Example>
 

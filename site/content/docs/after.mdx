@@ -24,33 +24,43 @@ The **After** Sass mixin helps you generate content or a style element after the
 
 <Example caption="Simply pass a value as a string.">
 ```scss
-.element{
-  @include after(" – Text to use!");
+.price {
+  @include after(" / month");
 }
 ```
 ```html
 <style>
-  .element { font: 16px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+  body { background: #f8fafc; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; }
+  .card { width: 230px; padding: 20px; border-radius: 16px; background: #fff; box-shadow: 0 6px 20px rgb(15 23 42 / 0.08); }
+  .card b { display: block; margin-bottom: 6px; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: #64748b; }
+  .price { font: 800 30px Inter, ui-sans-serif, system-ui, sans-serif; letter-spacing: -0.02em; }
+  .price::after { font: 600 14px Inter, ui-sans-serif, system-ui, sans-serif; color: #64748b; }
 </style>
-<p class="element">Some text</p>
+<div class="card"><b>Team</b><span class="price">$19</span></div>
 ```
 </Example>
 
 <Example caption="You can target the `::after` pseudo-element on its own and pass a declaration block.">
 ```scss
-.element{
-  @include after{
-    content: " Easy to use!";
-    font-style: italic;
-    color: red;
-  };
+.feature {
+  @include after {
+    content: " Beta";
+    padding: 2px 8px;
+    margin-left: 8px;
+    border-radius: 999px;
+    background: #fef08a;
+    color: #854d0e;
+    font-size: 11px;
+    font-weight: 700;
+  }
 }
 ```
 ```html
 <style>
-  .element { font: 16px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+  body { background: #f8fafc; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; }
+  .feature { display: inline-flex; align-items: center; font-weight: 700; font-size: 17px; }
 </style>
-<p class="element">Some text</p>
+<span class="feature">Container queries</span>
 ```
 </Example>
 

@@ -25,55 +25,73 @@ The **All Buttons** Sass mixin helps you target all the HTML button elements in 
 <Example caption="Simply call the mixin at the root level of your stylesheet **to target all the HTML button elements**.">
 ```scss
 @include all-buttons {
-  background-color: teal;
-  color: white;
+  padding: 11px 20px;
+  border: 0;
+  border-radius: 10px;
+  background-color: #4f46e5;
+  color: #fff;
+  font: 600 14px Inter, ui-sans-serif, system-ui, sans-serif;
 }
 ```
 ```html
-<button type="button">A button element</button>
-<input type="submit" value="A submit input" />
-<input type="reset" value="A reset input" />
+<style>
+  body { background: #f8fafc; display: flex; gap: 10px; flex-wrap: wrap; }
+</style>
+<button type="button">Save changes</button>
+<input type="submit" value="Submit" />
+<input type="reset" value="Reset" />
 ```
 </Example>
 
 <Example caption="Now pass the `hover` value as an argument to style all the button elements when they are in the **:hover** state.">
 ```scss
 @include all-buttons(hover) {
-  background-color: crimson;
-  color: white;
+  background-color: #312e81;
 }
 ```
 ```html
-<button type="button">A button element</button>
-<input type="submit" value="A submit input" />
-<input type="reset" value="A reset input" />
+<style>
+  body { background: #f8fafc; display: flex; gap: 10px; flex-wrap: wrap; }
+  button, input { padding: 11px 20px; border: 0; border-radius: 10px; background: #4f46e5; color: #fff; font: 600 14px Inter, ui-sans-serif, system-ui, sans-serif; }
+</style>
+<button type="button">Hover me</button>
+<input type="submit" value="Or me" />
+<input type="reset" value="Or me" />
 ```
 </Example>
 
 <Example caption="Now, let's try it again with all the possible pseudo-class selectors.">
 ```scss
 @include all-buttons {
-  background-color: teal;
-  color: white;
+  padding: 11px 20px;
+  border: 0;
+  border-radius: 10px;
+  background-color: #4f46e5;
+  color: #fff;
+  font: 600 14px Inter, ui-sans-serif, system-ui, sans-serif;
 }
+
 @include all-buttons(hover) {
-  background-color: teal;
-  color: white;
+  background-color: #312e81;
 }
+
 @include all-buttons(focus) {
-  background-color: purple;
-  color: white;
+  background-color: #312e81;
 }
+
 @include all-buttons(active) {
-  background-color: blue;
-  color: white;
+  background-color: #1e1b4b;
 }
+
 @include all-buttons(disabled) {
-  background-color: gray;
-  color: black;
+  background-color: #e2e8f0;
+  color: #94a3b8;
 }
 ```
 ```html
+<style>
+  body { background: #f8fafc; display: flex; gap: 10px; flex-wrap: wrap; }
+</style>
 <button type="button">Hover, focus and hold me</button>
 <button type="button" disabled>Disabled</button>
 ```
@@ -83,16 +101,23 @@ The **All Buttons** Sass mixin helps you target all the HTML button elements in 
 ```scss
 .containing-element {
   @include all-buttons {
-    background-color: teal;
-    color: white;
+    padding: 11px 20px;
+    border: 0;
+    border-radius: 10px;
+    background-color: #0f766e;
+    color: #fff;
+    font: 600 14px Inter, ui-sans-serif, system-ui, sans-serif;
   }
 }
 ```
 ```html
+<style>
+  body { background: #f8fafc; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #64748b; }
+  .containing-element { display: flex; gap: 10px; flex-wrap: wrap; padding: 16px; margin-bottom: 12px; border-radius: 14px; background: #fff; box-shadow: 0 4px 14px rgb(15 23 42 / 0.08); }
+</style>
 <div class="containing-element">
-<button type="button">A button element</button>
-<input type="submit" value="A submit input" />
-<input type="reset" value="A reset input" />
+  <button type="button">Inside the card</button>
+  <input type="submit" value="Also inside" />
 </div>
 <button type="button">Outside it, so untouched</button>
 ```
@@ -101,11 +126,15 @@ The **All Buttons** Sass mixin helps you target all the HTML button elements in 
 <Example caption="For a focus ring, reach for `focus-visible` rather than `focus`. Measured in Chrome 152 and Firefox 156: a mouse click matches `:focus` but not `:focus-visible`, while arriving with the Tab key matches both, so a ring written for `focus` is shown to everyone who clicks.">
 ```scss
 @include all-buttons("focus-visible") {
-  outline: 2px solid currentColor;
-  outline-offset: 2px;
+  outline: 2px solid #4f46e5;
+  outline-offset: 3px;
 }
 ```
 ```html
+<style>
+  body { background: #f8fafc; display: flex; gap: 10px; }
+  button { padding: 11px 20px; border: 0; border-radius: 10px; background: #e2e8f0; color: #0f172a; font: 600 14px Inter, ui-sans-serif, system-ui, sans-serif; }
+</style>
 <button type="button">Tab to me</button>
 <button type="button">Then to me</button>
 ```
