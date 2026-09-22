@@ -10,7 +10,7 @@ page_image: "gerillass-background-image.jpg"
 
 <Member name="edge-fade">
 
-The **Edge Fade** Sass mixin fades the edge of a scrolling area instead of cutting it off: a row of chips that runs past the screen, a list that scrolls inside a panel, a board that scrolls both ways. It is written as a `mask-image`, and one call covers the gradient, the prefixed twin and the writing direction.
+The **Edge Fade** Sass mixin fades the edge of a scrolling area instead of cutting it off: a carousel of cards that runs past the screen, a feed that scrolls inside a panel, a board that scrolls both ways. It is written as a `mask-image`, and one call covers the gradient, the prefixed twin and the writing direction.
 
 </Member>
 
@@ -30,20 +30,37 @@ The **Edge Fade** Sass mixin fades the edge of a scrolling area instead of cutti
 
 ## Examples
 
-<Example caption="A row of filters that runs past the screen. Faded at both ends, so the row reads as continuing rather than as ending at the edge of the card.">
+<Example caption="A carousel of cards, which is wider than any column it sits in. Faded at both ends, so the row reads as continuing rather than as ending where the box does.">
 ```scss
-.filters {
+.carousel {
   @include edge-fade(3rem);
 }
 ```
 ```html
 <style>
   body { background: #f8fafc; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; }
-  .filters { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 6px; }
-  .filters span { flex: none; padding: 10px 16px; border-radius: 999px; background: #e0e7ff; color: #3730a3; font-weight: 700; white-space: nowrap; }
+  .carousel { display: flex; gap: 14px; overflow-x: auto; padding-bottom: 8px; }
+  .card { flex: none; width: 210px; }
+  .card__art { height: 118px; margin-bottom: 10px; border-radius: 14px; background: linear-gradient(140deg, #60a5fa, #a78bfa); }
+  .card .a2 { background: linear-gradient(140deg, #fb923c, #f472b6); }
+  .card .a3 { background: linear-gradient(140deg, #34d399, #22d3ee); }
+  .card .a4 { background: linear-gradient(140deg, #f59e0b, #ef4444); }
+  .card .a5 { background: linear-gradient(140deg, #818cf8, #38bdf8); }
+  .card .a6 { background: linear-gradient(140deg, #14b8a6, #84cc16); }
+  .card .a7 { background: linear-gradient(140deg, #c084fc, #f472b6); }
+  .card .a8 { background: linear-gradient(140deg, #0ea5e9, #6366f1); }
+  .card b { display: block; font-size: 15px; }
+  .card span { color: #64748b; font-size: 13px; }
 </style>
-<div class="filters">
-  <span>All</span><span>Design</span><span>Engineering</span><span>Culture</span><span>Careers</span><span>Press</span><span>Research</span><span>Events</span>
+<div class="carousel">
+  <article class="card"><div class="card__art a1"></div><b>Lysefjord</b><span>Norway · 3 nights</span></article>
+  <article class="card"><div class="card__art a2"></div><b>Sossusvlei</b><span>Namibia · 5 nights</span></article>
+  <article class="card"><div class="card__art a3"></div><b>Hallstatt</b><span>Austria · 2 nights</span></article>
+  <article class="card"><div class="card__art a4"></div><b>Cappadocia</b><span>Türkiye · 4 nights</span></article>
+  <article class="card"><div class="card__art a5"></div><b>Lofoten</b><span>Norway · 6 nights</span></article>
+  <article class="card"><div class="card__art a6"></div><b>Torres del Paine</b><span>Chile · 7 nights</span></article>
+  <article class="card"><div class="card__art a7"></div><b>Hokkaido</b><span>Japan · 5 nights</span></article>
+  <article class="card"><div class="card__art a8"></div><b>Faroe Islands</b><span>Denmark · 4 nights</span></article>
 </div>
 ```
 </Example>
@@ -58,39 +75,49 @@ The **Edge Fade** Sass mixin fades the edge of a scrolling area instead of cutti
 <style>
   body { background: #f8fafc; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; }
   .scroller { overflow-x: auto; }
-  table { border-collapse: collapse; width: 740px; }
-  th, td { padding: 10px 14px; text-align: left; white-space: nowrap; border-bottom: 1px solid #e2e8f0; }
+  table { border-collapse: collapse; width: 1180px; }
+  th, td { padding: 10px 16px; text-align: left; white-space: nowrap; border-bottom: 1px solid #e2e8f0; }
   th { font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: #64748b; }
+  td:first-child { font-weight: 700; }
 </style>
 <div class="scroller">
   <table>
-    <tr><th>Release</th><th>Date</th><th>Mixins</th><th>Functions</th><th>Tarball</th><th>Downloads</th></tr>
-    <tr><td>4.0.0</td><td>September 2026</td><td>57</td><td>24</td><td>149 kB</td><td>—</td></tr>
-    <tr><td>3.0.0</td><td>September 2026</td><td>54</td><td>24</td><td>136 kB</td><td>1,204</td></tr>
+    <tr><th>Release</th><th>Date</th><th>Mixins</th><th>Functions</th><th>Tarball</th><th>Files</th><th>Node</th><th>Registries</th></tr>
+    <tr><td>4.0.0</td><td>September 2026</td><td>57</td><td>24</td><td>149 kB</td><td>122</td><td>none required</td><td>npm, RubyGems</td></tr>
+    <tr><td>3.0.0</td><td>September 2026</td><td>54</td><td>24</td><td>136 kB</td><td>118</td><td>none required</td><td>npm, RubyGems</td></tr>
+    <tr><td>2.3.1</td><td>September 2026</td><td>53</td><td>24</td><td>131 kB</td><td>114</td><td>none required</td><td>npm, RubyGems</td></tr>
   </table>
 </div>
 ```
 </Example>
 
-<Example caption="A panel that scrolls down, faded top and bottom. On the block axis the mixin writes one rule, because a fade at the top stays at the top whichever way the language runs.">
+<Example caption="An activity feed in a fixed panel, faded top and bottom. On the block axis the mixin writes one rule, because a fade at the top stays at the top whichever way the language runs.">
 ```scss
-.people {
+.feed {
   @include edge-fade(2.5rem, both, block);
 }
 ```
 ```html
 <style>
   body { background: #f8fafc; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; }
-  .people { height: 190px; overflow-y: auto; display: grid; gap: 8px; }
-  .people div { padding: 12px 14px; border-radius: 12px; background: #fff; box-shadow: 0 2px 8px rgb(15 23 42 / 0.06); font-weight: 600; }
+  .feed { height: 210px; overflow-y: auto; display: grid; gap: 10px; }
+  .item { display: flex; gap: 12px; align-items: center; padding: 12px 14px; border-radius: 14px; background: #fff; box-shadow: 0 2px 8px rgb(15 23 42 / 0.06); }
+  .item i { flex: none; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 999px; background: #e0e7ff; color: #3730a3; font: 700 13px Inter, ui-sans-serif, system-ui, sans-serif; font-style: normal; }
+  .item b { display: block; font-size: 14px; }
+  .item span { color: #64748b; font-size: 13px; }
 </style>
-<div class="people">
-  <div>Ada Lovelace</div><div>Grace Hopper</div><div>Alan Turing</div><div>Katherine Johnson</div><div>Edsger Dijkstra</div><div>Barbara Liskov</div>
+<div class="feed">
+  <div class="item"><i>AL</i><div><b>Ada Lovelace</b><span>Opened a pull request</span></div></div>
+  <div class="item"><i>GH</i><div><b>Grace Hopper</b><span>Approved the release</span></div></div>
+  <div class="item"><i>AT</i><div><b>Alan Turing</b><span>Left three comments</span></div></div>
+  <div class="item"><i>KJ</i><div><b>Katherine Johnson</b><span>Fixed the range check</span></div></div>
+  <div class="item"><i>ED</i><div><b>Edsger Dijkstra</b><span>Renamed a mixin</span></div></div>
+  <div class="item"><i>BL</i><div><b>Barbara Liskov</b><span>Shipped 4.0.0</span></div></div>
 </div>
 ```
 </Example>
 
-<Example caption="A board that scrolls both ways. Two gradients, intersected, so a corner is faded by both of them: that is the call nobody writes from memory, and `mask-composite` is the reason.">
+<Example caption="A board of notes that scrolls both ways, nine cards in three rows. Two gradients, intersected, so a corner is faded by both of them: that is the call nobody writes from memory, and `mask-composite` is the reason.">
 ```scss
 .board {
   @include edge-fade(2rem, both, both);
@@ -99,12 +126,22 @@ The **Edge Fade** Sass mixin fades the edge of a scrolling area instead of cutti
 ```html
 <style>
   body { background: #f8fafc; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; }
-  .board { height: 190px; overflow: auto; display: grid; grid-template-columns: repeat(6, 130px); gap: 10px; }
-  .board div { height: 74px; border-radius: 14px; background: linear-gradient(140deg, #a5b4fc, #f0abfc); }
+  .board { height: 230px; overflow: auto; display: grid; grid-auto-flow: column; grid-auto-columns: 190px; grid-template-rows: repeat(3, auto); gap: 12px; }
+  .note { padding: 14px; border-radius: 14px; background: #fff; box-shadow: 0 2px 8px rgb(15 23 42 / 0.06); }
+  .note b { display: block; margin-bottom: 4px; font-size: 14px; }
+  .note span { color: #64748b; font-size: 13px; }
+  .note.done { background: #ecfdf5; }
 </style>
 <div class="board">
-  <div></div><div></div><div></div><div></div><div></div><div></div>
-  <div></div><div></div><div></div><div></div><div></div><div></div>
+  <div class="note"><b>Measure the mask</b><span>Three browsers</span></div>
+  <div class="note done"><b>Write the mixin</b><span>Done</span></div>
+  <div class="note"><b>Lab case</b><span>Row and panel</span></div>
+  <div class="note"><b>Render the demos</b><span>Chrome, Firefox</span></div>
+  <div class="note done"><b>Spec</b><span>Five assertions</span></div>
+  <div class="note"><b>Migration note</b><span>Draft</span></div>
+  <div class="note"><b>Release</b><span>Blocked on 4.0.0</span></div>
+  <div class="note done"><b>Manifest</b><span>Rebuilt</span></div>
+  <div class="note"><b>Playground demo</b><span>At release</span></div>
 </div>
 ```
 </Example>

@@ -1,14 +1,66 @@
-<p>Without the mixin: the row is cut off.</p>
-<div class="row without"><span>All</span><span>Design</span><span>Engineering</span><span>Culture</span><span>Careers</span><span>Press</span><span>Research</span><span>Events</span></div>
+<style>
+  .carousel .card { flex: none; width: 190px; }
+  .carousel .art { height: 104px; margin-bottom: 8px; border-radius: 12px; background: linear-gradient(140deg, #60a5fa, #a78bfa); }
+  .carousel .card:nth-child(2n) .art { background: linear-gradient(140deg, #fb923c, #f472b6); }
+  .carousel .card:nth-child(3n) .art { background: linear-gradient(140deg, #34d399, #22d3ee); }
+  .carousel b { display: block; font-size: 14px; }
+  .carousel span { color: #64748b; font-size: 13px; }
+</style>
+
+<p>Without the mixin: the carousel is cut off at the edge of the box.</p>
+<div class="row carousel without">
+  <div class="card"><div class="art"></div><b>Lysefjord</b><span>Norway</span></div>
+  <div class="card"><div class="art"></div><b>Sossusvlei</b><span>Namibia</span></div>
+  <div class="card"><div class="art"></div><b>Hallstatt</b><span>Austria</span></div>
+  <div class="card"><div class="art"></div><b>Cappadocia</b><span>Türkiye</span></div>
+  <div class="card"><div class="art"></div><b>Lofoten</b><span>Norway</span></div>
+  <div class="card"><div class="art"></div><b>Hokkaido</b><span>Japan</span></div>
+  <div class="card"><div class="art"></div><b>Faroe Islands</b><span>Denmark</span></div>
+  <div class="card"><div class="art"></div><b>Torres del Paine</b><span>Chile</span></div>
+</div>
 
 <p>With the mixin: faded at both ends.</p>
-<div class="row with"><span>All</span><span>Design</span><span>Engineering</span><span>Culture</span><span>Careers</span><span>Press</span><span>Research</span><span>Events</span></div>
+<div class="row carousel with">
+  <div class="card"><div class="art"></div><b>Lysefjord</b><span>Norway</span></div>
+  <div class="card"><div class="art"></div><b>Sossusvlei</b><span>Namibia</span></div>
+  <div class="card"><div class="art"></div><b>Hallstatt</b><span>Austria</span></div>
+  <div class="card"><div class="art"></div><b>Cappadocia</b><span>Türkiye</span></div>
+  <div class="card"><div class="art"></div><b>Lofoten</b><span>Norway</span></div>
+  <div class="card"><div class="art"></div><b>Hokkaido</b><span>Japan</span></div>
+  <div class="card"><div class="art"></div><b>Faroe Islands</b><span>Denmark</span></div>
+  <div class="card"><div class="art"></div><b>Torres del Paine</b><span>Chile</span></div>
+</div>
 
-<p>Faded at the end alone, so the first chip stays sharp.</p>
-<div class="row end-only"><span>All</span><span>Design</span><span>Engineering</span><span>Culture</span><span>Careers</span><span>Press</span><span>Research</span><span>Events</span></div>
+<p>Faded at the end alone, so the first card stays sharp.</p>
+<div class="row carousel end-only">
+  <div class="card"><div class="art"></div><b>Lysefjord</b><span>Norway</span></div>
+  <div class="card"><div class="art"></div><b>Sossusvlei</b><span>Namibia</span></div>
+  <div class="card"><div class="art"></div><b>Hallstatt</b><span>Austria</span></div>
+  <div class="card"><div class="art"></div><b>Cappadocia</b><span>Türkiye</span></div>
+  <div class="card"><div class="art"></div><b>Lofoten</b><span>Norway</span></div>
+  <div class="card"><div class="art"></div><b>Hokkaido</b><span>Japan</span></div>
+  <div class="card"><div class="art"></div><b>Faroe Islands</b><span>Denmark</span></div>
+  <div class="card"><div class="art"></div><b>Torres del Paine</b><span>Chile</span></div>
+</div>
 
 <p>The same call in a right-to-left row: the fade moves to the left.</p>
-<div class="row end-only" dir="rtl" lang="ar"><span>الكل</span><span>تصميم</span><span>هندسة</span><span>ثقافة</span><span>وظائف</span><span>صحافة</span><span>بحث</span><span>فعاليات</span></div>
+<div class="row carousel end-only" dir="rtl" lang="ar">
+  <div class="card"><div class="art"></div><b>النرويج</b><span>ثلاث ليال</span></div>
+  <div class="card"><div class="art"></div><b>ناميبيا</b><span>خمس ليال</span></div>
+  <div class="card"><div class="art"></div><b>النمسا</b><span>ليلتان</span></div>
+  <div class="card"><div class="art"></div><b>تركيا</b><span>أربع ليال</span></div>
+  <div class="card"><div class="art"></div><b>اليابان</b><span>خمس ليال</span></div>
+  <div class="card"><div class="art"></div><b>الدنمارك</b><span>أربع ليال</span></div>
+  <div class="card"><div class="art"></div><b>تشيلي</b><span>سبع ليال</span></div>
+  <div class="card"><div class="art"></div><b>إيسلندا</b><span>ست ليال</span></div>
+</div>
 
-<p>A panel that scrolls down, faded top and bottom.</p>
-<div class="panel"><div>Ada Lovelace</div><div>Grace Hopper</div><div>Alan Turing</div><div>Katherine Johnson</div><div>Edsger Dijkstra</div><div>Barbara Liskov</div></div>
+<p>A feed that scrolls down, faded top and bottom.</p>
+<div class="panel">
+  <div>Ada Lovelace opened a pull request</div>
+  <div>Grace Hopper approved the release</div>
+  <div>Alan Turing left three comments</div>
+  <div>Katherine Johnson fixed the range check</div>
+  <div>Edsger Dijkstra renamed a mixin</div>
+  <div>Barbara Liskov shipped 4.0.0</div>
+</div>
