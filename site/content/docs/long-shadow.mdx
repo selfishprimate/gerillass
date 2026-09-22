@@ -99,52 +99,61 @@ Chrome 152 and Firefox 156 stayed at the frame budget even at 2000 layers, measu
 ```
 </Example>
 
-<Example caption="Straight down, in steps of 4px. The edge is straight, so a coarse step costs nothing to look at and saves thirty layers, which is worth knowing for a shadow on a card that scrolls.">
+<Example caption="A sticker. `$fade` is the colour the shadow ends in, and the mix runs in `oklab`, which is what keeps a fade to `transparent` from going grey halfway. The sticker is turned six degrees and the shadow turns with it: a transform takes the whole painted element, shadow included, so the direction is measured before the rotation rather than after it.">
 ```scss
-.stat {
-  @include long-shadow(#0f766e, 24px, bottom, $step: 4px);
+.sticker {
+  @include long-shadow(#701a75, 26px, bottom-right, transparent, 2px);
 }
 ```
 ```html
 <style>
-  body { min-height: 190px; }
-  .stat { width: 140px; padding: 16px 18px; border-radius: 14px; background: #5eead4; color: #042f2e; font: 13px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; }
-  .stat b { display: block; font-size: 34px; letter-spacing: -0.02em; }
+  body { min-height: 160px; display: grid; place-items: center; }
+  .sticker { rotate: -6deg; padding: 14px 26px; border: 4px solid #fff; border-radius: 999px; background: #e879f9; color: #4a044e; font: 900 18px Inter, ui-sans-serif, system-ui, sans-serif; letter-spacing: 0.08em; text-transform: uppercase; }
 </style>
-<div class="stat">
-  <b>12,480</b>
-  Active users
-</div>
+<span class="sticker">Ship it</span>
 ```
 </Example>
 
-<Example caption="`$fade` is the colour the shadow ends in. The first layer is the colour itself and every one after it is mixed a step further, in `oklab`, which is what keeps a fade to `transparent` from going grey on the way out.">
+<Example caption="A switch, where the shadow is the trail the knob left behind: it runs back the way the knob came, so it fills the side of the track the knob has crossed, and the track clips it. The direction is the state rather than a decoration. Two calls one selector apart, and the frame below is a real checkbox with no script in it, so press it.">
 ```scss
-.tag {
-  @include long-shadow(#be123c, 28px, bottom-right, transparent);
+.switch__knob {
+  @include long-shadow(#fb7185, 46px, right, $step: 2px);
+}
+
+.switch__input:checked + .switch__track .switch__knob {
+  @include long-shadow(#22c55e, 46px, left, $step: 2px);
+  translate: 44px 0;
 }
 ```
 ```html
 <style>
-  body { min-height: 150px; }
-  .tag { display: inline-block; margin: 6px 0 0; padding: 12px 22px; border-radius: 999px; background: #fb7185; color: #4c0519; font: 800 14px Inter, ui-sans-serif, system-ui, sans-serif; letter-spacing: 0.06em; text-transform: uppercase; }
+  body { min-height: 160px; display: grid; place-items: center; }
+  .switch { display: inline-block; cursor: pointer; }
+  .switch__input { position: absolute; opacity: 0; }
+  /* The track clips the trail, which is what turns a long shadow into one. */
+  .switch__track { display: block; width: 100px; height: 52px; padding: 5px; border: 3px solid #0f172a; border-radius: 999px; background: #fecdd3; overflow: hidden; }
+  .switch__input:checked + .switch__track { background: #bbf7d0; }
+  .switch__knob { display: block; width: 36px; height: 36px; border: 3px solid #0f172a; border-radius: 999px; background: #fff; }
 </style>
-<span class="tag">New release</span>
+<label class="switch">
+  <input class="switch__input" type="checkbox">
+  <span class="switch__track"><span class="switch__knob"></span></span>
+</label>
 ```
 </Example>
 
-<Example caption="Any angle, and a fade into another colour rather than into nothing. 160 degrees is down and slightly to the right, which on a circle reads as a solid thing standing on a surface.">
+<Example caption="Any angle, and a fade into another colour rather than into nothing. 160 degrees is down and a little to the right, which on a tile this size reads as a solid thing standing on a surface rather than as a shadow cast on one.">
 ```scss
-.coin {
-  @include long-shadow(#f59e0b, 56px, 160deg, #7c2d12);
+.tile {
+  @include long-shadow(#f59e0b, 52px, 160deg, #7c2d12);
 }
 ```
 ```html
 <style>
-  body { min-height: 190px; }
-  .coin { width: 92px; height: 92px; border-radius: 999px; background: #fde68a; display: grid; place-items: center; font: 800 26px Inter, ui-sans-serif, system-ui, sans-serif; color: #7c2d12; }
+  body { min-height: 210px; display: grid; place-items: center; }
+  .tile { width: 96px; height: 96px; border-radius: 28px; background: #fde68a; display: grid; place-items: center; font: 900 30px Inter, ui-sans-serif, system-ui, sans-serif; color: #7c2d12; letter-spacing: -0.03em; }
 </style>
-<div class="coin">4.0</div>
+<div class="tile">4.0</div>
 ```
 </Example>
 

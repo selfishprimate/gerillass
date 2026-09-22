@@ -46,11 +46,11 @@
     }
   ],
   "examples": [
-    ".button { @include long-shadow(#0f172a, 10px, bottom-right, $step: 2px); }",
+    ".button { @include long-shadow(currentColor, 10px, bottom-right, $step: 2px); }",
     ".button {\n  @include long-shadow(currentColor, 10px, bottom-right, $step: 2px);\n\n  &:hover { @include long-shadow(currentColor, 16px, bottom-right, $step: 2px); }\n  &:active { @include long-shadow(currentColor, 4px, bottom-right, $step: 2px); }\n}",
-    ".stat { @include long-shadow(#0f766e, 24px, bottom, $step: 4px); }",
-    ".tag { @include long-shadow(#be123c, 28px, bottom-right, transparent); }",
-    ".coin { @include long-shadow(#f59e0b, 56px, 160deg, #7c2d12); }"
+    ".sticker { @include long-shadow(#701a75, 26px, bottom-right, transparent, 2px); }",
+    ".switch__knob { @include long-shadow(#fb7185, 46px, right, $step: 2px); }",
+    ".tile { @include long-shadow(#f59e0b, 52px, 160deg, #7c2d12); }"
   ],
   "rejects": [
     ".a { @include long-shadow(nonsense, 40px); }",
