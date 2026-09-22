@@ -22,19 +22,16 @@ The **Long Shadow** Sass mixin draws the long shadow of flat design: a solid blo
 
 ## Why this needs a mixin
 
-`box-shadow` draws one copy of the element. A long shadow is the copies themselves, each a step further along, so the effect is not a value you write but a list you generate. Its length is the number of layers:
+`box-shadow` draws one copy of the element, so a long shadow is the copies themselves, each a step further along. What you write is a list rather than a value, and its length is the length of the shadow divided by the step:
 
 ```css
 .button {
-  box-shadow: 0.7071px 0.7071px #0f172a, 1.4142px 1.4142px #0f172a, 2.1213px 2.1213px #0f172a,
-              /* thirty six more */
-              28.284px 28.284px #0f172a;
+  /* what one line of Sass writes: forty of these */
+  box-shadow: 0.7071px 0.7071px #0f172a, 1.4142px 1.4142px #0f172a, /* … */ 28.284px 28.284px #0f172a;
 }
 ```
 
-That is the output of one line of Sass, and the number 40 in it is not a number anyone types: it is the length divided by the step. Shortening the shadow from 40px to 30px by hand means rewriting every layer, and pointing it somewhere else means recomputing both offsets of all of them.
-
-`text-shadow` already does this for the glyphs of a line of text. This is the same effect for a box, and the two share their directions, so `bottom-right` means the same thing in both.
+Shortening the shadow by hand means rewriting every layer, and turning it means recomputing both offsets of all of them.
 
 ## Arguments
 
@@ -43,32 +40,8 @@ That is the output of one line of Sass, and the number 40 in it is not a number 
   <Argument name="$length" type="number">How far the shadow runs. It has to be a length this stylesheet can count, such as <code>40px</code> or <code>2.5rem</code>, since it is divided to know how many copies to write. A percentage and a unitless number are refused because a browser drops them, and <code>var()</code> and <code>calc()</code> because nothing here can count them.</Argument>
   <Argument name="$direction" type="string">One of <code>top</code>, <code>top-right</code>, <code>right</code>, <code>bottom-right</code>, <code>bottom</code>, <code>bottom-left</code>, <code>left</code>, <code>top-left</code>, or any angle, such as <code>160deg</code> or <code>0.5turn</code>. <code>bottom-right</code> by default.</Argument>
   <Argument name="$fade" type="color">The colour the shadow fades into along its length, usually <code>transparent</code>. Left out, the shadow is solid.</Argument>
-  <Argument name="$step" type="number">How far apart the copies sit, in the same unit as <code>$length</code>. A fortieth of the length by default, which is what the next section is about.</Argument>
+  <Argument name="$step" type="number">How far apart the copies sit, in the same unit as <code>$length</code>. A fortieth of the length by default, which is 1px for a 40px shadow. Between two copies the sweep leaves a tooth the size of the step, so a step over about 4px shows on a diagonal edge, and a call stops at 500 layers.</Argument>
 </Arguments>
-
-## The step, and why it defaults to a fortieth
-
-Between two copies the sweep leaves a tooth the size of the step, so the step is what decides whether the diagonal edge is clean. Measured in Chrome 152 at three times zoom, on a 70px box with a 40px shadow:
-
-| Step | Layers | The edge |
-|---|---|---|
-| 1px | 40 | clean |
-| 2px | 20 | clean |
-| 4px | 10 | a stair, visible only when magnified |
-| 8px | 5 | **visibly notched** |
-
-A step of one unit would have been the obvious default, and it is wrong for every unit but the pixel: `1rem` is 16px, which is the bottom row of that table. A fortieth of the length is 1px for the 40px shadow this effect is usually written at, stays under 2px up to 80px, and means the same thing in `rem`, `em` or `ch`.
-
-It also fixes the cost. Measured in a real window in Safari 26.6.2, repainting the box each frame:
-
-| Layers | Safari, a frame |
-|---|---|
-| 40 | 17ms |
-| 120 | 17ms |
-| 400 | **38ms** |
-| 1000 | **62ms** |
-
-Chrome 152 and Firefox 156 stayed at the frame budget even at 2000 layers, measured headless, where painting may be cheaper than it is on screen. The default keeps a call at 40 layers whatever the length, and the mixin stops at 500 with a message naming `$step`.
 
 ## Examples
 
@@ -103,19 +76,11 @@ Chrome 152 and Firefox 156 stayed at the frame budget even at 2000 layers, measu
 
 <Hint kind="warning">
 
-**`box-shadow` draws behind the element**, so a transparent or translucent background shows every layer through itself and the effect reads as a stack of copies rather than as a shadow. Give the element a solid background, as every example above does.
+Three things are `box-shadow`'s own behaviour rather than anything a mixin decides:
 
-</Hint>
-
-<Hint kind="info">
-
-**A transform turns the shadow with the element.** Rendered in Chrome 152 and Firefox 156 on a badge with `rotate: -6deg`: the shadow is painted with the element and the whole of it is then turned, so `bottom-right` means down and right of the element before the rotation, not after it. Point it where you want it to land once the element is turned.
-
-</Hint>
-
-<Hint kind="info">
-
-**A shadow is clipped by an ancestor that clips.** Measured in Chrome 152: inside a card with `overflow: hidden` the layers stop at the container's padding box rather than running off it. That is `box-shadow`'s own behaviour and not something a mixin can change; if the shadow should leave the card, the clipping has to go.
+- it draws **behind** the element, so a translucent background shows every layer through itself;
+- an ancestor that clips, such as a card with `overflow: hidden`, cuts the shadow at its edge;
+- a transform turns the shadow with the element, so a direction is measured before the rotation, not after it.
 
 </Hint>
 
@@ -138,7 +103,7 @@ Error: `sideways` is not a valid $direction for `long-shadow`. Pass one of `top`
 Error: `long-shadow` would draw 4000 layers for `40px` in steps of `0.01px`, and stops at 500. Pass a larger `$step`: measured in Safari 26.6.2, a shadow of 400 layers takes 38ms a frame to repaint and one of 1000 takes 62ms, and the stylesheet grows by about 30 bytes a layer.
 ```
 
-A percentage and a unitless number are refused because all three browsers drop them in `box-shadow`. A `var()` is different: the property takes one happily, and it is this mixin that cannot, because it divides the length to know how many copies to write. `text-shadow` accepts a `var()` distance for exactly that reason, since it writes one offset and hands the expression to the browser.
+A percentage and a unitless number are refused because browsers drop them. A `var()` length is different: `box-shadow` takes one, and it is this mixin that cannot, since it divides the length to know how many copies to write.
 
 ## Related Links
 
