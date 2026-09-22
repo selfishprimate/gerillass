@@ -92,7 +92,16 @@ The **Triangle** Sass mixin helps you generate triangles using the `::before` or
 }
 ```
 ```html
-<div class="element example04"></div>
+<style>
+  body { background: #f8fafc; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; }
+  .wrap { position: relative; width: 300px; }
+  .element { position: absolute; top: -50px; left: 40px; }
+  .tip { padding: 14px 16px; border-radius: 12px; background: crimson; color: #fff; font-weight: 600; }
+</style>
+<div class="wrap">
+  <div class="element"></div>
+  <div class="tip">A hundred wide and fifty tall, which is the arrow on this tooltip.</div>
+</div>
 ```
 </Example>
 
