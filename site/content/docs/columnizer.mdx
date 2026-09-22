@@ -10,7 +10,7 @@ page_image: "gerillass-columnizer.jpg"
 
 <Member name="columnizer">
 
-The **Columnizer** Sass mixin helps you **create evenly divided hypothetical columns** inside a container element, as many as the value you pass for the `$columns` argument. This lets you show all the children of the parent element as if they were lined up in columns. 
+The **Columnizer** Sass mixin lays the children of an element out in **equal columns**, as many as `$columns` says, with an optional gutter written as the container's `gap`. There are no column elements: the children are the columns, and the last row can be told to fill the width it has left. 
 
 **Important:** The Columnizer mixin **must be applied to the parent** element to **align the children** inside it!
 <Hint kind="info">
@@ -24,7 +24,7 @@ The **Columnizer** Sass mixin helps you **create evenly divided hypothetical col
 ## Arguments
 
 <Arguments of="columnizer">
-  <Argument name="$columns" type="number">Sets the number of the hypothetical columns. A number without a unit, or <code>var()</code>, <code>env()</code> or <code>attr()</code>.</Argument>
+  <Argument name="$columns" type="number">How many columns the children are laid out in. A number without a unit, or <code>var()</code>, <code>env()</code> or <code>attr()</code>.</Argument>
   <Argument name="$gutter" type="number (with unit)">Sets the space between the columns and between the rows, written as the container's <code>gap</code>. A length, <code>var()</code> or a maths function. Not a percentage and not below zero; see below. <code>0</code> is written as <code>0px</code>, because the gutter is multiplied inside <code>calc()</code>.</Argument>
   <Argument name="$fill" type="boolean">Lets the orphans fill the remaining gap at the end of the list. This argument is optional and <strong>should always come last</strong>. The default value is <code>false</code>.</Argument>
 </Arguments>
