@@ -9,7 +9,7 @@ Gerillass is a **pure Sass library** — a toolkit of mixins and functions, in t
 Two consequences follow from this and drive most decisions in the repo:
 
 1. **`package.json` must have no `dependencies`.** Everything (`jest`, `sass`, `sass-true`, `glob`) belongs in `devDependencies`. Consumers get only `.scss` files, so a runtime dependency here forces the entire test toolchain onto every downstream project. This was the cause of 24 Dependabot alerts fixed in v1.3.3 — do not reintroduce it.
-2. **Only `scss/` ships.** `.npmignore` excludes `test`, `assets`, `meta`, `tools`, dotfiles and `*.md`; npm always adds `README.md`, `LICENSE.md` and `package.json` back. Verify with `npm pack --dry-run` before any release (121 files, a 145 kB tarball for 4.0.0, which merged `background-dots` and `background-stripes` into one `background-pattern` and added `scss/internal/_key-end.scss`, `_device-size.scss`, `_nth-of.scss`, `_time-problem.scss`, `_range-problem.scss` and `_shadow-direction.scss`).
+2. **Only `scss/` ships.** `.npmignore` excludes `test`, `assets`, `meta`, `tools`, dotfiles and `*.md`; npm always adds `README.md`, `LICENSE.md` and `package.json` back. Verify with `npm pack --dry-run` before any release (122 files, a 149 kB tarball for 4.0.0, which merged `background-dots` and `background-stripes` into one `background-pattern` and added `scss/internal/_key-end.scss`, `_device-size.scss`, `_nth-of.scss`, `_time-problem.scss`, `_range-problem.scss` and `_shadow-direction.scss`).
 3. **The gem is the same library, not a port.** `gerillass.gemspec` ships `scss/`, `gerillass.json` and `SKILL.md`, plus `lib/`, `LICENSE.md` and `README.md`, reads its version from `package.json`, and has no runtime dependencies. `lib/` only tells Rails, Jekyll or a plain `sass-embedded` compile where `scss/` is. `.npmignore` keeps `lib`, the gemspec and `*.gem` out of the npm package. Keep the gemspec ASCII: RubyGems reads it in the locale's encoding, and a literal non-ASCII character fails to load.
 
 Dart Sass only. LibSass/node-sass has been unsupported since v1.3.0.
@@ -299,7 +299,7 @@ Four layers, loaded in dependency order by `scss/_gerillass.scss`. The order is 
 | 1 | `scss/lists/` | flat value lists (`$list-of-buttons`) | `list-of-` prefix, `!default` |
 | 2 | `scss/maps/` | keyed config (`$map-for-breakpoints`) | `map-for-` prefix, `!default` |
 | 3 | `scss/utilities/` | 24 helper **functions** | `camelCase` |
-| 4 | `scss/library/` | 56 **mixins** — the bulk of the API | `kebab-case` |
+| 4 | `scss/library/` | 57 **mixins** — the bulk of the API | `kebab-case` |
 
 `_gerillass.scss` lists every partial explicitly. **A new file is invisible until you add its `@import` line there**, in the correct layer block.
 
@@ -402,10 +402,10 @@ Four levels, and knowing which one covers a member tells you what you can trust:
 
 | Level | Proves | Coverage |
 |---|---|---|
-| `test/smoke.scss` | the mixin evaluates at all | 56/56 mixins |
-| snapshot of `meta/` examples | the output cannot change unnoticed | 80/80 members |
-| `meta/` rejects | bad input is refused with a real message | 70/80 |
-| sass-true spec in `test/` | the CSS is **correct** | 44/80 |
+| `test/smoke.scss` | the mixin evaluates at all | 57/57 mixins |
+| snapshot of `meta/` examples | the output cannot change unnoticed | 81/81 members |
+| `meta/` rejects | bad input is refused with a real message | 71/81 |
+| sass-true spec in `test/` | the CSS is **correct** | 45/81 |
 
 Only the last one catches an output that was wrong from the start; a snapshot
 records a wrong value as correct. Hand-written specs are therefore reserved for
@@ -942,7 +942,9 @@ Two pieces of work are open:
   `long-shadow`, branched from `reveal`, which also moved the shadow directions
   `text-shadow` had to itself into `scss/internal/_shadow-direction.scss`; and
   `glass`, a `backdrop-filter` panel with the fallback and the prefix around it,
-  on `glass`, branched from `long-shadow`; and the demos and prose of every
+  on `glass`, branched from `long-shadow`; and `edge-fade`, a scrolling area's
+  edge faded with a mask, on `edge-fade`, branched from `text-shadow-step`; and
+  the demos and prose of every
   documentation page, swept and rewritten on `examples-polish`, branched from
   `glass`; and a filled `text-shadow` stepping in pixels rather than in one of
   the distance's own unit, on `text-shadow-step`, branched from
@@ -1018,10 +1020,13 @@ each one closes:
    and the prefix that earn it, not the blur: with no support the panel is the
    tint alone, which is unreadable over a photograph, so the tint sits inside
    `@supports` and the mixin writes it again outside with its alpha raised to
-   0.88. What is left is `edge-fade` (`mask-image` on a scroll container) and
-   `theme` (`color-scheme` plus `light-dark()`, where forgetting the first makes
-   the second silently pick light). `theme` is now part of the token layer in
-   `todos/design-tokens.md`.
+   0.88. `edge-fade` followed it on the `edge-fade` branch, and is the same
+   shape of member: the gradient has four stops, both axes need
+   `mask-composite`, and `start` and `end` have to be written twice to follow
+   the writing direction, since a gradient has no logical direction. What is
+   left is `theme` (`color-scheme` plus `light-dark()`, where forgetting the
+   first makes the second silently pick light), which is part of the token
+   layer in `todos/design-tokens.md`.
 
 `long-shadow` is in too, on its own branch for 4.0.0: the count of layers is
 the length over the step, so one line of Sass writes forty of them, which is the

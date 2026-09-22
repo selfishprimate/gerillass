@@ -1,0 +1,117 @@
+@charset "UTF-8";
+
+@use "sass:list";
+@use "sass:math";
+@use "sass:meta";
+@use "sass:string";
+@use "../internal/length-problem" as *;
+
+// The edge of a scrolling area, faded out instead of cut off: a row of chips
+// that runs past the screen, a list that scrolls inside a panel, a table wider
+// than its column.
+//
+// It is one `mask-image` and a gradient with four stops, which is the part
+// nobody writes from memory, and two gradients with `mask-composite` when both
+// axes scroll. Measured in Chrome 152, Firefox 156 and Safari 26.6.2:
+//
+// - all three keep the unprefixed `mask-image`, `mask-size`, `mask-repeat`,
+//   `mask-mode` and `mask-composite: intersect`, and a percentage stop;
+// - `-webkit-mask-composite` is Chrome's and Safari's only, and takes
+//   `source-in` where the standard takes `intersect`, so both are written and
+//   Firefox drops the one it does not know;
+// - all three answer for `selector(:dir(rtl))` and apply a rule written with
+//   it, which is what lets `start` and `end` mean the edge a line begins and
+//   ends at rather than the left and the right.
+//
+// What it cannot do, and the reason the documentation says so twice: the mask
+// is static, so an edge is faded whether or not there is anything past it. A
+// fade that appears only once the content has scrolled needs a scroll-driven
+// timeline, and Firefox 156 has neither `animation-timeline: scroll()` nor
+// `scroll-timeline`, measured with `CSS.supports`.
+
+$-edges: "start" "end" "both";
+$-axes: "inline" "block" "both";
+
+// The stops of one gradient, as text, for the direction given. A percentage
+// takes the far stop off 100% here rather than leaving a calc() in the
+// stylesheet; anything else has to stay a calc(), since a length and a
+// percentage cannot be subtracted until the box has a size.
+@function -far($size) {
+  @if meta.type-of($size) == "number" and math.unit($size) == "%" {
+    @return 100% - $size;
+  }
+  @return string.unquote("calc(100% - #{$size})");
+}
+
+@function -stops($edges, $size) {
+  @if $edges == "both" {
+    @return "transparent, black #{$size}, black #{-far($size)}, transparent";
+  }
+  @if $edges == "start" {
+    @return "transparent, black #{$size}";
+  }
+  @return "black #{-far($size)}, transparent";
+}
+
+@function -gradient($to, $edges, $size) {
+  @return "linear-gradient(to #{$to}, #{-stops($edges, $size)})";
+}
+
+@mixin edge-fade($size: 2rem, $edges: both, $axis: inline) {
+  $problem: lengthProblem($size, $negative: false);
+  @if $problem or meta.type-of($size) == "list" {
+    @error "`#{meta.inspect($size)}` is not a valid $size for `edge-fade`: #{if($problem, $problem, 'it is several values where one length is meant')}. It is how far the fade reaches from the edge, such as `2rem` or `12%`.";
+  }
+
+  $edge: string.to-lower-case("#{$edges}");
+  @if not list.index($-edges, $edge) {
+    @error "`#{meta.inspect($edges)}` is not a valid $edges for `edge-fade`. Pass `both`, `start` for the edge a line begins at, or `end` for the one it ends at.";
+  }
+
+  $which: string.to-lower-case("#{$axis}");
+  @if not list.index($-axes, $which) {
+    @error "`#{meta.inspect($axis)}` is not a valid $axis for `edge-fade`. Pass `inline` for a row that scrolls sideways, `block` for a column that scrolls down, or `both`.";
+  }
+
+  $inline: $which == "inline" or $which == "both";
+  $block: $which == "block" or $which == "both";
+
+  // The writing direction decides which side `start` and `end` are on, and a
+  // gradient has no logical direction of its own, so the inline axis is
+  // written twice: once for a line that runs to the right and once, under
+  // `:dir(rtl)`, for one that runs to the left. A fade on both edges is the
+  // same gradient either way, so it is written once.
+  $flips: $inline and $edge != "both";
+
+  $ltr: ();
+  @if $inline {
+    $ltr: list.append($ltr, -gradient("right", $edge, $size), comma);
+  }
+  @if $block {
+    $ltr: list.append($ltr, -gradient("bottom", $edge, $size), comma);
+  }
+
+  mask-image: string.unquote("#{$ltr}");
+  -webkit-mask-image: string.unquote("#{$ltr}");
+
+  @if $inline and $block {
+    // Both gradients have to agree for a pixel to be painted, which is what
+    // `intersect` means. `-webkit-mask-composite` is the same thing under its
+    // own name and its own value.
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
+  }
+
+  @if $flips {
+    $rtl: ();
+    $rtl: list.append($rtl, -gradient("left", $edge, $size), comma);
+    @if $block {
+      $rtl: list.append($rtl, -gradient("bottom", $edge, $size), comma);
+    }
+
+    &:dir(rtl) {
+      mask-image: string.unquote("#{$rtl}");
+      -webkit-mask-image: string.unquote("#{$rtl}");
+    }
+  }
+}

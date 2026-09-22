@@ -1225,6 +1225,51 @@ exports[`Manifest examples counter: .steps { @include counter(decimal, $name: st
 }"
 `;
 
+exports[`Manifest examples edge-fade: .board { @include edge-fade(2rem, both, both); } 1`] = `
+".board {
+  mask-image: linear-gradient(to right, transparent, black 2rem, black calc(100% - 2rem), transparent), linear-gradient(to bottom, transparent, black 2rem, black calc(100% - 2rem), transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 2rem, black calc(100% - 2rem), transparent), linear-gradient(to bottom, transparent, black 2rem, black calc(100% - 2rem), transparent);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}"
+`;
+
+exports[`Manifest examples edge-fade: .chips { @include edge-fade; } 1`] = `
+".chips {
+  mask-image: linear-gradient(to right, transparent, black 2rem, black calc(100% - 2rem), transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 2rem, black calc(100% - 2rem), transparent);
+}"
+`;
+
+exports[`Manifest examples edge-fade: .hint { @include edge-fade(12%, start); } 1`] = `
+".hint {
+  mask-image: linear-gradient(to right, transparent, black 12%);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 12%);
+}
+.hint:dir(rtl) {
+  mask-image: linear-gradient(to left, transparent, black 12%);
+  -webkit-mask-image: linear-gradient(to left, transparent, black 12%);
+}"
+`;
+
+exports[`Manifest examples edge-fade: .panel { @include edge-fade(2.5rem, both, block); } 1`] = `
+".panel {
+  mask-image: linear-gradient(to bottom, transparent, black 2.5rem, black calc(100% - 2.5rem), transparent);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 2.5rem, black calc(100% - 2.5rem), transparent);
+}"
+`;
+
+exports[`Manifest examples edge-fade: .table-scroller { @include edge-fade(3rem, end); } 1`] = `
+".table-scroller {
+  mask-image: linear-gradient(to right, black calc(100% - 3rem), transparent);
+  -webkit-mask-image: linear-gradient(to right, black calc(100% - 3rem), transparent);
+}
+.table-scroller:dir(rtl) {
+  mask-image: linear-gradient(to left, black calc(100% - 3rem), transparent);
+  -webkit-mask-image: linear-gradient(to left, black calc(100% - 3rem), transparent);
+}"
+`;
+
 exports[`Manifest examples escape-to-parent: .a .b { @include escape-to-parent(".theme-dark") { color: white; } } 1`] = `
 ".theme-dark.a .b {
   color: white;

@@ -1,0 +1,150 @@
+---
+title: "Edge Fade"
+page_title: "Edge Fade Sass Mixin"
+page_description: "The Edge Fade Sass mixin fades the edge of a scrolling area with a mask instead of cutting it off, on the inline axis, the block axis or both, and follows the writing direction."
+page_keywords: "CSS mask-image fade, scroll edge fade, fade out overflow CSS, mask-composite intersect, horizontal scroll fade, Gerillass edge-fade"
+page_image: "gerillass-background-image.jpg"
+---
+
+# Edge Fade
+
+<Member name="edge-fade">
+
+The **Edge Fade** Sass mixin fades the edge of a scrolling area instead of cutting it off: a row of chips that runs past the screen, a list that scrolls inside a panel, a board that scrolls both ways. It is written as a `mask-image`, and one call covers the gradient, the prefixed twin and the writing direction.
+
+</Member>
+
+<Hint kind="warning">
+
+**New in Gerillass 4.0.0.**
+
+</Hint>
+
+## Arguments
+
+<Arguments of="edge-fade" footnote="A fade on both edges is one gradient; a fade on one edge is two rules, since the second is what makes `start` and `end` follow a right-to-left line.">
+  <Argument name="$size" type="number">How far the fade reaches in from the edge, <code>2rem</code> by default. A length, a percentage, a <code>var()</code> or a <code>calc()</code>. A percentage is taken off <code>100%</code> here, so the stop lands in the stylesheet rather than in a <code>calc()</code>.</Argument>
+  <Argument name="$edges" type="string"><code>both</code> by default. <code>start</code> fades the edge a line begins at and <code>end</code> the one it ends at, which is the left and the right in a left-to-right language and the other way round in Arabic or Hebrew.</Argument>
+  <Argument name="$axis" type="string"><code>inline</code> by default, for a row that scrolls sideways; <code>block</code> for a column that scrolls down; <code>both</code> for an area that does both, which is written as two gradients intersected.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="A row of filters that runs past the screen. Faded at both ends, so the row reads as continuing rather than as ending at the edge of the card.">
+```scss
+.filters {
+  @include edge-fade(3rem);
+}
+```
+```html
+<style>
+  body { background: #f8fafc; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; }
+  .filters { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 6px; }
+  .filters span { flex: none; padding: 10px 16px; border-radius: 999px; background: #e0e7ff; color: #3730a3; font-weight: 700; white-space: nowrap; }
+</style>
+<div class="filters">
+  <span>All</span><span>Design</span><span>Engineering</span><span>Culture</span><span>Careers</span><span>Press</span><span>Research</span><span>Events</span>
+</div>
+```
+</Example>
+
+<Example caption="A table that is wider than its column, faded at the end alone: the first column stays sharp, because that is the one being read. The second rule the mixin writes is what puts that fade on the left in a right-to-left language.">
+```scss
+.scroller {
+  @include edge-fade(4rem, end);
+}
+```
+```html
+<style>
+  body { background: #f8fafc; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; }
+  .scroller { overflow-x: auto; }
+  table { border-collapse: collapse; width: 740px; }
+  th, td { padding: 10px 14px; text-align: left; white-space: nowrap; border-bottom: 1px solid #e2e8f0; }
+  th { font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: #64748b; }
+</style>
+<div class="scroller">
+  <table>
+    <tr><th>Release</th><th>Date</th><th>Mixins</th><th>Functions</th><th>Tarball</th><th>Downloads</th></tr>
+    <tr><td>4.0.0</td><td>September 2026</td><td>57</td><td>24</td><td>149 kB</td><td>—</td></tr>
+    <tr><td>3.0.0</td><td>September 2026</td><td>54</td><td>24</td><td>136 kB</td><td>1,204</td></tr>
+  </table>
+</div>
+```
+</Example>
+
+<Example caption="A panel that scrolls down, faded top and bottom. On the block axis the mixin writes one rule, because a fade at the top stays at the top whichever way the language runs.">
+```scss
+.people {
+  @include edge-fade(2.5rem, both, block);
+}
+```
+```html
+<style>
+  body { background: #f8fafc; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; }
+  .people { height: 190px; overflow-y: auto; display: grid; gap: 8px; }
+  .people div { padding: 12px 14px; border-radius: 12px; background: #fff; box-shadow: 0 2px 8px rgb(15 23 42 / 0.06); font-weight: 600; }
+</style>
+<div class="people">
+  <div>Ada Lovelace</div><div>Grace Hopper</div><div>Alan Turing</div><div>Katherine Johnson</div><div>Edsger Dijkstra</div><div>Barbara Liskov</div>
+</div>
+```
+</Example>
+
+<Example caption="A board that scrolls both ways. Two gradients, intersected, so a corner is faded by both of them: that is the call nobody writes from memory, and `mask-composite` is the reason.">
+```scss
+.board {
+  @include edge-fade(2rem, both, both);
+}
+```
+```html
+<style>
+  body { background: #f8fafc; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; }
+  .board { height: 190px; overflow: auto; display: grid; grid-template-columns: repeat(6, 130px); gap: 10px; }
+  .board div { height: 74px; border-radius: 14px; background: linear-gradient(140deg, #a5b4fc, #f0abfc); }
+</style>
+<div class="board">
+  <div></div><div></div><div></div><div></div><div></div><div></div>
+  <div></div><div></div><div></div><div></div><div></div><div></div>
+</div>
+```
+</Example>
+
+## Before you use it
+
+<Hint kind="danger">
+
+**The fade does not know whether there is anything past it.** A mask is static, so a list that has not been scrolled is still soft at the top, and a row that fits is still soft at both ends. A fade that appears only once the content has moved needs a scroll-driven timeline: measured with `CSS.supports`, Chrome 152 and Safari 26.6.2 have `animation-timeline: scroll()` and Firefox 156 has neither that nor `scroll-timeline`, so that version would be missing in one of the three.
+
+</Hint>
+
+<Hint kind="info">
+
+**A mask fades everything the element paints**, its scrollbar included where the browser draws one inside the box, and it cuts anything painted outside the box, such as a focus ring on a child at the very edge. Both are answered the same way: put the scroller in a wrapper and fade the wrapper.
+
+</Hint>
+
+## What it refuses
+
+```scss
+.a {
+  @include edge-fade(nonsense);
+  @include edge-fade(-2rem);
+  @include edge-fade(2rem 3rem);
+  @include edge-fade(2rem, sideways);
+  @include edge-fade(2rem, both, diagonal);
+}
+```
+```text
+Error: `nonsense` is not a valid $size for `edge-fade`: it is not a length. It is how far the fade reaches from the edge, such as `2rem` or `12%`.
+Error: `-2rem` is not a valid $size for `edge-fade`: a length below zero does not work here. It is how far the fade reaches from the edge, such as `2rem` or `12%`.
+Error: `2rem 3rem` is not a valid $size for `edge-fade`: it is several values where one length is meant. It is how far the fade reaches from the edge, such as `2rem` or `12%`.
+Error: `sideways` is not a valid $edges for `edge-fade`. Pass `both`, `start` for the edge a line begins at, or `end` for the one it ends at.
+Error: `diagonal` is not a valid $axis for `edge-fade`. Pass `inline` for a row that scrolls sideways, `block` for a column that scrolls down, or `both`.
+```
+
+## Related Links
+
+- [Glass](/docs/glass)
+- [Truncate](/docs/truncate)
+- [CSS mask-image](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/mask-image)
+- [CSS mask-composite](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/mask-composite)

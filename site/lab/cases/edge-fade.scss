@@ -1,0 +1,45 @@
+@use "gerillass" as *;
+
+.row {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  margin-bottom: 20px;
+  padding-bottom: 6px;
+}
+
+.row span {
+  flex: none;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: #e0e7ff;
+  color: #3730a3;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+// Without the mixin the row is cut off at the edge of the box.
+.without { }
+
+.with {
+  @include edge-fade(3rem);
+}
+
+.end-only {
+  @include edge-fade(3rem, end);
+}
+
+.panel {
+  height: 150px;
+  overflow-y: auto;
+  display: grid;
+  gap: 8px;
+  @include edge-fade(2.5rem, both, block);
+}
+
+.panel div {
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #f1f5f9;
+  font-weight: 600;
+}

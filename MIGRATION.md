@@ -1871,6 +1871,41 @@ It writes no `box-shadow`, so a drop shadow is still yours to add.
 
 ---
 
+## Added: `edge-fade`
+
+The edge of a scrolling area faded out with a mask rather than cut off, on the
+inline axis, the block axis or both. Nothing else changed, so it breaks no
+call.
+
+```scss
+.filters {
+  @include edge-fade(3rem);
+}
+
+.board {
+  @include edge-fade(2rem, both, both);
+}
+```
+
+One call writes the four stop gradient, the prefixed twin for an older Safari,
+and, when only one edge fades, the second rule that puts that edge on the left
+in a right-to-left language. Both axes together are two gradients and
+`mask-composite: intersect`, which is the part nobody writes from memory.
+
+Measured in Chrome 152, Firefox 156 and Safari 26.6.2: all three keep the
+unprefixed `mask-image` and `mask-composite: intersect`, and a percentage stop,
+and all three answer for `selector(:dir(rtl))` and apply a rule written with
+it. `-webkit-mask-composite` is Chrome's and Safari's alone and takes
+`source-in` rather than `intersect`, so both are written and Firefox drops the
+one it does not know.
+
+What it cannot do is know whether there is anything past the edge: the mask is
+static, so a list that has not been scrolled is still soft at the top. That
+version needs a scroll-driven timeline, and Firefox 156 has neither
+`animation-timeline: scroll()` nor `scroll-timeline`.
+
+---
+
 # Migrating to Gerillass 3.0.0
 
 Written while 3.0.0 is being prepared, and added to as its changes land. So far

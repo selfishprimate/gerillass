@@ -5,7 +5,7 @@ description: Use the Gerillass Sass mixin library — loading it, the mixin cata
 
 # Gerillass
 
-A Sass mixin library: 56 mixins and 24 functions that emit CSS from
+A Sass mixin library: 57 mixins and 24 functions that emit CSS from
 semantic declarations. It is Sass source only — there is no runtime and no
 utility classes, so styles live in your stylesheet and your markup stays clean.
 
@@ -96,6 +96,7 @@ a dropped declaration rather than an error.
 | `container-query` | `.title { @include container-query("min", 400px, 800px) { color: red; } }` |
 | `container` | `.card { @include container("card", sideways); }` |
 | `counter` | `.list { @include counter(decimal, $start: 1.5); }` |
+| `edge-fade` | `.a { @include edge-fade(nonsense); }` |
 | `escape-to-parent` | `.a { @include escape-to-parent(42) { color: red; } }` |
 | `except` | `.a { @include except(#ff0000) { margin: 0; } }` |
 | `focus-ring` | `@include focus-ring;` |
@@ -228,6 +229,14 @@ a dropped declaration rather than an error.
 - A continued list must come after the named list, as a later sibling of it or of an element around it. Parts in separate `section`s restart at 1; reset the counter on an element around all of them, such as `.article { counter-reset: tips; }`, and pass `$continue: tips` to every part. Nothing carries a count into or out of a list that is a container (`container-type`); pass `$start` with the first number instead.
 - In Safari the number reads 0 when a numbered child is itself a container, since the `::before` inside it cannot see the list's counter. Chrome and Firefox show the right number. Put `container-type` on an element inside the child instead.
 - A child hidden with `content: none` on its `::before` still takes a number. Write `counter-increment: none` on it as well to skip it.
+
+**`edge-fade`**
+
+- The mask is static, so an edge is faded whether or not there is anything past it: a list that has not been scrolled is still soft at the top. A fade that appears only once the content has moved needs a scroll-driven timeline, and Firefox 156 has neither `animation-timeline: scroll()` nor `scroll-timeline`, measured with `CSS.supports` in all three browsers.
+- A mask is applied to the element's own painting, so it fades everything the element draws, the scrollbar included where the browser draws one inside the box. Put the scroller inside a wrapper and mask the wrapper when the bar has to stay solid.
+- Measured in Chrome 152, Firefox 156 and Safari 26.6.2: all three keep the unprefixed `mask-image` and `mask-composite: intersect`, and a percentage stop. `-webkit-mask-composite` is Chrome's and Safari's alone and takes `source-in` rather than `intersect`, so both are written and Firefox drops the one it does not know.
+- `start` and `end` follow the writing direction. A gradient has no logical direction, so the inline axis is written twice, the second time under `:dir(rtl)`, which all three browsers answer for and apply. The block axis is written once: a fade at the top stays at the top.
+- A masked element is its own stacking context, and anything painted outside its box, such as a focus ring on a child at the very edge, is cut by the mask. Leave the fade wider than the ring, or fade the wrapper instead.
 
 **`escape-to-parent`**
 
@@ -443,6 +452,7 @@ a dropped declaration rather than an error.
 | `container-query($params...)` | A @container rule, taking the same argument shapes as breakpoint so the two read alike. Sizes may be a key from $map-for-breakpoints or a raw length, and a length is the common case because a container is usually narrower than the viewport. Nothing matches at all unless an ancestor was declared with the container mixin. |
 | `container($name: null, $type: inline-size)` | Marks an element as a query container, so container-query can ask about its width instead of the viewport's. The rule that asks has to sit on a descendant: an element is never matched by a @container rule reading its own container, and nothing warns you when it is not. |
 | `counter($params...)` | Numbers the children of the element it is included in, with optional text before and after each number. No classes in the markup. |
+| `edge-fade($size: 2rem, $edges: both, $axis: inline)` | The edge of a scrolling area faded out with a mask instead of cut off, on either axis or both. |
 | `escape-to-parent($selector: null)` | Writes the rule again with another selector attached to its outermost element, so a theme or state class can switch what a nested rule does. |
 | `except($params...)` | Selects every sibling but the ones named, counted by tag or by a selector you name. |
 | `focus-ring($width: 2px, $offset: 2px, $color: currentColor)` | Draws a keyboard focus ring with outline on :focus-visible, which survives forced-colors mode where a box-shadow ring disappears. |

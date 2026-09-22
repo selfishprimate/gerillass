@@ -49,6 +49,7 @@
 .container-query { @include container-query("min", 400px) { color: red; } }
 .counter { @include counter("decimal"); }
 .truncate-one { @include truncate; }
+.edge-fade { @include edge-fade(2rem, both, both); }
 .escape-to-parent { @include escape-to-parent(".parent") { color: red; } }
 .except { @include except("first") { color: red; } }
 .focus-ring { @include focus-ring; }

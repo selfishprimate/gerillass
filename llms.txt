@@ -1,6 +1,6 @@
 # Gerillass
 
-> A Sass toolkit of 56 mixins and 24 functions, built to be read by coding agents as well as by people. Every member is described in a machine-readable manifest whose examples and refusals are executed by the test suite, so the documentation cannot drift away from the code.
+> A Sass toolkit of 57 mixins and 24 functions, built to be read by coding agents as well as by people. Every member is described in a machine-readable manifest whose examples and refusals are executed by the test suite, so the documentation cannot drift away from the code.
 
 Gerillass is a pure Sass library. There is no build step and no runtime dependency: the `.scss` sources are the deliverable, and the package installs nothing else. It needs Dart Sass; LibSass and node-sass are not supported. This file describes Gerillass 3.0.0.
 
@@ -35,6 +35,7 @@ Arguments are validated and refused with a message naming what is accepted, so a
 - [container-query($params...)](https://docs.gerillass.com/docs/container-query/): A @container rule, taking the same argument shapes as breakpoint so the two read alike.
 - [container($name: null, $type: inline-size)](https://docs.gerillass.com/docs/container/): Marks an element as a query container, so container-query can ask about its width instead of the viewport's.
 - [counter($params...)](https://docs.gerillass.com/docs/counter/): Numbers the children of the element it is included in, with optional text before and after each number.
+- [edge-fade($size: 2rem, $edges: both, $axis: inline)](https://docs.gerillass.com/docs/edge-fade/): The edge of a scrolling area faded out with a mask instead of cut off, on either axis or both.
 - [escape-to-parent($selector: null)](https://docs.gerillass.com/docs/escape-to-parent/): Writes the rule again with another selector attached to its outermost element, so a theme or state class can switch what a nested rule does.
 - [except($params...)](https://docs.gerillass.com/docs/except/): Selects every sibling but the ones named, counted by tag or by a selector you name.
 - [focus-ring($width: 2px, $offset: 2px, $color: currentColor)](https://docs.gerillass.com/docs/focus-ring/): Draws a keyboard focus ring with outline on :focus-visible, which survives forced-colors mode where a box-shadow ring disappears.

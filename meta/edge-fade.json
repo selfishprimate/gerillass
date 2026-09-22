@@ -1,0 +1,51 @@
+{
+  "name": "edge-fade",
+  "summary": "The edge of a scrolling area faded out with a mask instead of cut off, on either axis or both.",
+  "caveats": [
+    "The mask is static, so an edge is faded whether or not there is anything past it: a list that has not been scrolled is still soft at the top. A fade that appears only once the content has moved needs a scroll-driven timeline, and Firefox 156 has neither `animation-timeline: scroll()` nor `scroll-timeline`, measured with `CSS.supports` in all three browsers.",
+    "A mask is applied to the element's own painting, so it fades everything the element draws, the scrollbar included where the browser draws one inside the box. Put the scroller inside a wrapper and mask the wrapper when the bar has to stay solid.",
+    "Measured in Chrome 152, Firefox 156 and Safari 26.6.2: all three keep the unprefixed `mask-image` and `mask-composite: intersect`, and a percentage stop. `-webkit-mask-composite` is Chrome's and Safari's alone and takes `source-in` rather than `intersect`, so both are written and Firefox drops the one it does not know.",
+    "`start` and `end` follow the writing direction. A gradient has no logical direction, so the inline axis is written twice, the second time under `:dir(rtl)`, which all three browsers answer for and apply. The block axis is written once: a fade at the top stays at the top.",
+    "A masked element is its own stacking context, and anything painted outside its box, such as a focus ring on a child at the very edge, is cut by the mask. Leave the fade wider than the ring, or fade the wrapper instead."
+  ],
+  "arguments": [
+    {
+      "name": "$size",
+      "accepts": [
+        "a length, such as 2rem",
+        "a percentage of the element",
+        "a var() or calc()"
+      ]
+    },
+    {
+      "name": "$edges",
+      "accepts": [
+        "both, the default",
+        "start, the edge a line begins at",
+        "end, the edge it ends at"
+      ]
+    },
+    {
+      "name": "$axis",
+      "accepts": [
+        "inline, the default, for a row that scrolls sideways",
+        "block, for a column that scrolls down",
+        "both"
+      ]
+    }
+  ],
+  "examples": [
+    ".chips { @include edge-fade; }",
+    ".table-scroller { @include edge-fade(3rem, end); }",
+    ".panel { @include edge-fade(2.5rem, both, block); }",
+    ".board { @include edge-fade(2rem, both, both); }",
+    ".hint { @include edge-fade(12%, start); }"
+  ],
+  "rejects": [
+    ".a { @include edge-fade(nonsense); }",
+    ".a { @include edge-fade(-2rem); }",
+    ".a { @include edge-fade(2rem 3rem); }",
+    ".a { @include edge-fade(2rem, sideways); }",
+    ".a { @include edge-fade(2rem, both, diagonal); }"
+  ]
+}

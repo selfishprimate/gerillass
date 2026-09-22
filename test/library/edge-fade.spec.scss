@@ -1,0 +1,101 @@
+// What a spec has to pin here is the gradient the mixin builds: which stops it
+// writes for each `$edges`, which direction each axis takes, the second rule
+// that flips the inline axis under `:dir(rtl)`, and the composite that only a
+// two axis call needs.
+@use 'true' as *;
+@use '../../scss/library/edge-fade' as *;
+
+@include describe('edge-fade()') {
+  @include it('Fades both ends of the inline axis, in one rule.') {
+    @include assert {
+      @include output {
+        .a {
+          @include edge-fade(2rem);
+        }
+      }
+      @include expect {
+        .a {
+          mask-image: linear-gradient(to right, transparent, black 2rem, black calc(100% - 2rem), transparent);
+          -webkit-mask-image: linear-gradient(to right, transparent, black 2rem, black calc(100% - 2rem), transparent);
+        }
+      }
+    }
+  }
+
+  @include it('Writes the inline axis twice when only one edge fades, so start and end follow the writing direction.') {
+    @include assert {
+      @include output {
+        .a {
+          @include edge-fade(3rem, end);
+        }
+      }
+      @include expect {
+        .a {
+          mask-image: linear-gradient(to right, black calc(100% - 3rem), transparent);
+          -webkit-mask-image: linear-gradient(to right, black calc(100% - 3rem), transparent);
+        }
+        .a:dir(rtl) {
+          mask-image: linear-gradient(to left, black calc(100% - 3rem), transparent);
+          -webkit-mask-image: linear-gradient(to left, black calc(100% - 3rem), transparent);
+        }
+      }
+    }
+  }
+
+  @include it('Takes the block axis downwards, and writes it once.') {
+    @include assert {
+      @include output {
+        .a {
+          @include edge-fade(2.5rem, start, block);
+        }
+      }
+      @include expect {
+        .a {
+          mask-image: linear-gradient(to bottom, transparent, black 2.5rem);
+          -webkit-mask-image: linear-gradient(to bottom, transparent, black 2.5rem);
+        }
+      }
+    }
+  }
+
+  @include it('Puts both axes in one mask and intersects them.') {
+    @include assert {
+      @include output {
+        .a {
+          @include edge-fade(2rem, both, both);
+        }
+      }
+      @include expect {
+        .a {
+          mask-image: linear-gradient(to right, transparent, black 2rem, black calc(100% - 2rem), transparent), linear-gradient(to bottom, transparent, black 2rem, black calc(100% - 2rem), transparent);
+          -webkit-mask-image: linear-gradient(to right, transparent, black 2rem, black calc(100% - 2rem), transparent), linear-gradient(to bottom, transparent, black 2rem, black calc(100% - 2rem), transparent);
+          -webkit-mask-composite: source-in;
+          mask-composite: intersect;
+        }
+      }
+    }
+  }
+
+  @include it('Takes a percentage, and a length the browser resolves.') {
+    @include assert {
+      @include output {
+        .a {
+          @include edge-fade(12%);
+        }
+        .b {
+          @include edge-fade(var(--fade));
+        }
+      }
+      @include expect {
+        .a {
+          mask-image: linear-gradient(to right, transparent, black 12%, black calc(100% - 12%), transparent);
+          -webkit-mask-image: linear-gradient(to right, transparent, black 12%, black calc(100% - 12%), transparent);
+        }
+        .b {
+          mask-image: linear-gradient(to right, transparent, black var(--fade), black calc(100% - var(--fade)), transparent);
+          -webkit-mask-image: linear-gradient(to right, transparent, black var(--fade), black calc(100% - var(--fade)), transparent);
+        }
+      }
+    }
+  }
+}
