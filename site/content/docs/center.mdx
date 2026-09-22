@@ -44,8 +44,13 @@ The **Center** Sass mixin allows you to center elements (**those with a `positio
 }
 ```
 ```html
+<style>
+  body { background: #f1f5f9; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; }
+  .parent-element { overflow: hidden; border-radius: 18px; background: url("/images/landscape.webp") center/cover; }
+  .element { display: grid; place-items: center; width: 74px; height: 74px; margin: 0; border-radius: 999px; background: rgb(255 255 255 / 0.92); color: #0f172a; font: 26px Inter, ui-sans-serif, system-ui, sans-serif; box-shadow: 0 10px 30px rgb(15 23 42 / 0.35); }
+</style>
 <div class="parent-element sandbox large example01">
-  <h2 class="element">Gerillass</h2>
+  <h2 class="element">▶</h2>
 </div>
 ```
 </Example>
@@ -61,8 +66,13 @@ The **Center** Sass mixin allows you to center elements (**those with a `positio
 }
 ```
 ```html
+<style>
+  body { background: #f1f5f9; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; }
+  .parent-element { overflow: hidden; border-radius: 18px; background: linear-gradient(140deg, #312e81, #7c3aed); }
+  .element { margin: 0; top: 22px; padding: 9px 18px; border-radius: 999px; background: rgb(255 255 255 / 0.16); color: #ede9fe; font: 600 13px Inter, ui-sans-serif, system-ui, sans-serif; letter-spacing: 0.08em; text-transform: uppercase; }
+</style>
 <div class="parent-element sandbox large example02">
-  <h2 class="element">Gerillass</h2>
+  <h2 class="element">Now playing</h2>
 </div>
 ```
 </Example>
@@ -78,8 +88,13 @@ The **Center** Sass mixin allows you to center elements (**those with a `positio
 }
 ```
 ```html
+<style>
+  body { background: #f1f5f9; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; }
+  .parent-element { overflow: hidden; border-radius: 18px; background: #0f172a; }
+  .element { margin: 0; left: 24px; padding: 14px 18px; border-radius: 14px; background: #f8fafc; color: #0f172a; font: 700 15px Inter, ui-sans-serif, system-ui, sans-serif; }
+</style>
 <div class="parent-element sandbox large example03">
-    <h2 class="element">Gerillass</h2>
+  <h2 class="element">Pinned to the middle of the left edge</h2>
 </div>
 ```
 </Example>
@@ -95,8 +110,14 @@ The **Center** Sass mixin allows you to center elements (**those with a `positio
 }
 ```
 ```html
+<style>
+  body { background: #f1f5f9; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; }
+  .parent-element { overflow: hidden; border-radius: 18px; background: linear-gradient(135deg, #f97316, #db2777); }
+  .element { display: grid; gap: 4px; justify-items: center; margin: 0; padding: 18px 26px; border-radius: 16px; background: rgb(255 255 255 / 0.92); color: #0f172a; font: 700 22px Inter, ui-sans-serif, system-ui, sans-serif; }
+  .element small { font: 600 12px Inter, ui-sans-serif, system-ui, sans-serif; color: #64748b; letter-spacing: 0.08em; text-transform: uppercase; }
+</style>
 <div class="parent-element sandbox large example04">
-  <h2 class="element">Gerillass</h2>
+  <h2 class="element">86%<small>Battery</small></h2>
 </div>
 ```
 </Example>

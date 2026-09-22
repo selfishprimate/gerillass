@@ -30,7 +30,16 @@ The **Border Radius** Sass mixin helps you round the corners of a selected eleme
 }
 ```
 ```html
-<div class="element sandbox medium" style="background-color: #5bc0bb"></div>
+<style>
+  body { background: #f1f5f9; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; }
+  .element { overflow: hidden; background: #fff; box-shadow: 0 6px 20px rgb(15 23 42 / 0.08); }
+  .element img { display: block; width: 100%; height: 150px; object-fit: cover; }
+  .element p { margin: 0; padding: 14px 16px; font-weight: 600; }
+</style>
+<figure class="element">
+  <img src="/images/landscape.webp" alt="A fjord seen from a clifftop">
+  <p>Lysefjord, Norway</p>
+</figure>
 ```
 </Example>
 
@@ -41,7 +50,21 @@ The **Border Radius** Sass mixin helps you round the corners of a selected eleme
 }
 ```
 ```html
-<div class="element sandbox medium" style="background-color:#5bc0bb"></div>
+<style>
+  body { background: #0f172a; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; padding: 0; }
+  .sheet-stage { height: 220px; display: grid; align-items: end; }
+  .element { background: #fff; padding: 18px 20px 26px; }
+  .element i { display: block; width: 40px; height: 4px; margin: 0 auto 16px; border-radius: 999px; background: #cbd5e1; }
+  .element b { display: block; font-size: 16px; }
+  .element p { margin: 4px 0 0; color: #64748b; }
+</style>
+<div class="sheet-stage">
+  <div class="element">
+    <i></i>
+    <b>Choose a plan</b>
+    <p>Rounded at the top, because that is the edge a sheet arrives from.</p>
+  </div>
+</div>
 ```
 </Example>
 
@@ -58,7 +81,12 @@ Just to remind you once more, these are the predefined values you can use to tar
 }
 ```
 ```html
-<div class="element sandbox medium" style="background-color:#5bc0bb"></div>
+<style>
+  body { background: #f1f5f9; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; padding: 26px 0; }
+  .element { display: flex; align-items: center; gap: 12px; width: 82%; padding: 16px 26px 16px 20px; background: #ecfeff; color: #155e75; font-weight: 600; }
+  .element span { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 999px; background: #06b6d4; color: #fff; }
+</style>
+<div class="element"><span>i</span>Your export is ready to download.</div>
 ```
 </Example>
 
@@ -69,7 +97,11 @@ Just to remind you once more, these are the predefined values you can use to tar
 }
 ```
 ```html
-<div class="element sandbox medium" style="background-color:#5bc0bb"></div>
+<style>
+  body { background: #f1f5f9; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; }
+  .element { display: grid; place-items: center; width: 150px; height: 150px; background: linear-gradient(140deg, #34d399, #0ea5e9); color: #fff; font: 700 42px Inter, ui-sans-serif, system-ui, sans-serif; }
+</style>
+<div class="element">AM</div>
 ```
 </Example>
 
@@ -80,7 +112,16 @@ Just to remind you once more, these are the predefined values you can use to tar
 }
 ```
 ```html
-<div class="element sandbox large" style="background-color:#5bc0bb"></div>
+<style>
+  body { background: #f1f5f9; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; }
+  .element { display: grid; align-content: center; gap: 6px; height: 200px; padding: 0 34px; background: linear-gradient(135deg, #6366f1, #a855f7 55%, #ec4899); color: #fff; }
+  .element b { font: 700 24px Inter, ui-sans-serif, system-ui, sans-serif; }
+  .element span { opacity: 0.85; }
+</style>
+<div class="element">
+  <b>Four corners, four radii</b>
+  <span>The shorthand order is the one CSS uses.</span>
+</div>
 ```
 </Example>
 
@@ -91,7 +132,16 @@ Just to remind you once more, these are the predefined values you can use to tar
 }
 ```
 ```html
-<div class="element sandbox large" style="background-color:#5bc0bb"></div>
+<style>
+  body { background: #f1f5f9; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; }
+  .element { display: grid; align-content: center; gap: 6px; height: 200px; padding: 0 34px; background: linear-gradient(135deg, #0f766e, #22d3ee 60%, #a7f3d0); color: #042f2e; }
+  .element b { font: 700 24px Inter, ui-sans-serif, system-ui, sans-serif; }
+  .element span { opacity: 0.8; }
+</style>
+<div class="element">
+  <b>The same shape, one comma apart</b>
+  <span>Commas read better when the values get long.</span>
+</div>
 ```
 </Example>
 
@@ -102,7 +152,12 @@ Just to remind you once more, these are the predefined values you can use to tar
 }
 ```
 ```html
-<div class="element sandbox large" style="background-color:#5bc0bb"></div>
+<style>
+  body { background: #f1f5f9; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; }
+  .element { overflow: hidden; height: 200px; background: #fff; }
+  .element img { display: block; width: 100%; height: 100%; object-fit: cover; }
+</style>
+<figure class="element"><img src="/images/landscape.webp" alt="A fjord, cut to an elliptical frame"></figure>
 ```
 </Example>
 
@@ -113,7 +168,17 @@ Just to remind you once more, these are the predefined values you can use to tar
 }
 ```
 ```html
-<div class="element sandbox large" style="background-color:#5bc0bb"></div>
+<style>
+  body { background: #f1f5f9; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; }
+  .element { width: 280px; padding: 16px 18px; background: #fff; box-shadow: 0 10px 30px rgb(15 23 42 / 0.12); }
+  .element a { display: block; padding: 9px 10px; border-radius: 8px; color: #0f172a; text-decoration: none; font-weight: 600; }
+  .element a:hover { background: #f1f5f9; }
+</style>
+<div class="element">
+  <a href="#">Duplicate</a>
+  <a href="#">Move to folder</a>
+  <a href="#">Archive</a>
+</div>
 ```
 </Example>
 
@@ -124,8 +189,14 @@ Just to remind you once more, these are the predefined values you can use to tar
 }
 ```
 ```html
-<div class="tab" dir="ltr" style="height: 48px; margin-bottom: 12px; background: #5bc0bb;"></div>
-<div class="tab" dir="rtl" style="height: 48px; background: #5bc0bb;"></div>
+<style>
+  body { background: #f1f5f9; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; }
+  .row { display: flex; gap: 4px; margin-bottom: 14px; }
+  .tab { padding: 12px 22px; background: #e2e8f0; color: #475569; font-weight: 600; }
+  .tab[aria-current] { background: #0f172a; color: #fff; }
+</style>
+<div class="row" dir="ltr"><span class="tab" aria-current="page">Overview</span><span class="tab">Activity</span></div>
+<div class="row" dir="rtl" lang="ar"><span class="tab" aria-current="page">نظرة عامة</span><span class="tab">النشاط</span></div>
 ```
 </Example>
 

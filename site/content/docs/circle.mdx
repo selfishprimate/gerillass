@@ -29,7 +29,21 @@ The **Circle** Sass mixin helps you easily create perfect circle shapes.
 }
 ```
 ```html
-<div class="element" style="background: #5bc0bb"></div>
+<style>
+  body { background: #f1f5f9; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; }
+  .card { display: flex; align-items: center; gap: 18px; padding: 18px; background: #fff; border-radius: 16px; box-shadow: 0 6px 20px rgb(15 23 42 / 0.08); }
+  .element { overflow: hidden; flex: none; }
+  .element img { width: 100%; height: 100%; object-fit: cover; }
+  .card b { display: block; font-size: 17px; }
+  .card span { color: #64748b; }
+</style>
+<div class="card">
+  <div class="element"><img src="/images/landscape.webp" alt="A fjord"></div>
+  <div>
+    <b>Lysefjord</b>
+    <span>A circle is a square with the corners spent.</span>
+  </div>
+</div>
 ```
 </Example>
 
