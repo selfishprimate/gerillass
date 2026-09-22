@@ -98,14 +98,24 @@
       @if meta.type-of($size) != "number" {
         @error "`#{$size}` cannot be filled in `text-shadow`, in `#{$item}`. A filled shadow is drawn in steps, which needs a distance this stylesheet can count, such as `5px`.";
       }
-      // One step of the distance's own unit by default, which is what the
-      // mixin has always drawn for a whole number of pixels. A zero distance
-      // has nothing to fill, and dividing by it would give NaN.
+      // The default step is one pixel, and for a unit only the browser
+      // resolves it is a fortieth of the distance.
+      //
+      // Until 4.0.0 it was one of the distance's own unit, which is 1px in
+      // `px` and nothing like it anywhere else: `2rem` drew two copies 11px
+      // apart, `1cm` drew one, and a filled shadow in any unit but the pixel
+      // was a row of ghosts rather than a block. Sass converts between the
+      // absolute units, so `pt`, `cm`, `in` and the rest take the pixel too;
+      // `rem`, `em`, `ch` and the viewport units cannot be converted here, and
+      // a fortieth is what `long-shadow` settled on for the same reason.
+      //
+      // A zero distance has nothing to fill, and dividing by it would give
+      // NaN.
       $this-step: $step;
       @if $size == $size * 0 {
         $this-step: null;
       } @else if $this-step == null {
-        $this-step: math.div($size, clearUnit($size));
+        $this-step: if(math.compatible($size, 1px), 1px, math.div($size, 40));
       }
       @if $step != null and not math.compatible($step, $size) {
         @error "`$step: #{$step}` cannot fill `#{$size}` in `text-shadow`. Pass the step in the same unit as the distance.";

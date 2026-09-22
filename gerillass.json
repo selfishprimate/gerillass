@@ -2264,7 +2264,7 @@
       "summary": "Layered text shadows, each written as a direction or an angle, a colour and a distance.",
       "caveats": [
         "Since 4.0.0 every direction is an angle: the eight keywords are the 45 degree steps, measured as `gradient` measures them, 0deg up and clockwise, and the offsets are the sine and cosine of that angle. A diagonal keyword used to write the distance on both axes, which placed it 1.414 times further out than a straight one; multiply an old diagonal distance by 0.7071 to keep the same look.",
-        "`true` fills the gap between the text and the shadow with one layer per step, one unit of the distance's own unit by default. Pass `$step` for anything else, in the same unit as the distance. A distance of 40px therefore writes 40 layers unless `$step` says otherwise.",
+        "`true` fills the gap between the text and the shadow with one layer per step. Since 4.0.0 the default step is one pixel, and a fortieth of the distance for a unit only the browser resolves. Until then it was one of the distance's own unit, which is a pixel in `px` and nothing like it anywhere else: `2rem` drew two copies eleven pixels apart and `1cm` drew one, so a filled shadow in any unit but the pixel was a row of ghosts. Sass converts the absolute units, so `pt`, `cm` and `in` take the pixel too; `rem`, `em`, `ch` and the viewport units cannot be converted, and a fortieth is the rule `long-shadow` settled on. Pass `$step` for anything else, in the same unit as the distance.",
         "A distance a browser resolves, such as `var()` or `calc()`, is written as a `calc()` holding the sine or cosine, which every engine resolves. It cannot be filled, since the number of layers has to be counted while the stylesheet compiles.",
         "A `text-shadow` transition, such as one between a resting state and `:hover`, only animates when both states hold the same number of layers. A filled shadow's layer count comes from the distance and `$step`, so change both together, or the shadow switches rather than moves."
       ],
@@ -2273,7 +2273,7 @@
         ".a { @include text-shadow(bottom rgb(0 0 0 / 0.3) 6px 4px); }",
         ".a { @include text-shadow(30deg #5bc0bb 12px); }",
         ".a { @include text-shadow(bottom-right #5bc0bb 24px true); }",
-        ".a { @include text-shadow(bottom-right #5bc0bb 2rem true, $step: 0.125rem); }",
+        ".a { @include text-shadow(bottom-right #5bc0bb 2rem true); }",
         ".a { @include text-shadow(top crimson 4px, bottom gold 4px); }",
         ".a { @include text-shadow(top var(--shadow-color) var(--shadow-size)); }"
       ],

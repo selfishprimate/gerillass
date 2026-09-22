@@ -606,6 +606,44 @@ write the diagonal as the angle it is and the distance you want.
 Filled shadows, `true`, follow the same line, so a long shadow drawn with a
 diagonal is now shorter by the same factor.
 
+## Change: a filled `text-shadow` steps in pixels
+
+`true` fills the gap between the text and its shadow with one layer per step,
+and the default step used to be one of the distance's own unit. In `px` that is
+one pixel, which is what the mixin was written for. In anything else it is
+nonsense: `2rem` drew two copies eleven pixels apart, `3ch` drew three, and
+`1cm` drew a single layer, so a filled shadow in any unit but the pixel was a
+row of ghosts rather than a block.
+
+```scss
+.title {
+  @include text-shadow(bottom-right #f43f5e 2rem true);
+}
+```
+
+That call wrote two layers and now writes forty. The default step is one pixel,
+and a fortieth of the distance where the unit cannot be converted here, which
+is the rule `long-shadow` uses. Sass converts between the absolute units, so
+`pt`, `cm`, `in`, `mm`, `pc` and `Q` take the pixel as well; `rem`, `em`, `ch`,
+`ex` and the viewport units take the fortieth.
+
+**Nothing changes for a shadow measured in pixels.** Seventeen calls were
+compiled before and after: the ten in `px`, the two that pass `$step`, the one
+with a zero distance, the unfilled ones and the `gls-` twin came out byte for
+byte identical, and the seven in another unit are the ones this fixes. All
+seventeen were then read back in Chrome 152, Firefox 156 and Safari 26.6.2:
+every declaration is kept and the three browsers agree on the layer count.
+
+A call that wants the old, sparse look passes the step it wants:
+
+```scss
+.title {
+  @include text-shadow(bottom-right #f43f5e 2rem true, $step: 1rem);
+}
+```
+
+---
+
 ## Break: `text-shadow` refuses what a browser drops
 
 One broken layer drops the whole `text-shadow` declaration, so these were

@@ -2579,9 +2579,9 @@ exports[`Manifest examples text-shadow: .a { @include text-shadow(bottom rgb(0 0
 }"
 `;
 
-exports[`Manifest examples text-shadow: .a { @include text-shadow(bottom-right #5bc0bb 2rem true, $step: 0.125 1`] = `
+exports[`Manifest examples text-shadow: .a { @include text-shadow(bottom-right #5bc0bb 2rem true); } 1`] = `
 ".a {
-  text-shadow: 0.0884rem 0.0884rem #5bc0bb, 0.1768rem 0.1768rem #5bc0bb, 0.2652rem 0.2652rem #5bc0bb, 0.3535rem 0.3535rem #5bc0bb, 0.4419rem 0.4419rem #5bc0bb, 0.5303rem 0.5303rem #5bc0bb, 0.6187rem 0.6187rem #5bc0bb, 0.7071rem 0.7071rem #5bc0bb, 0.7955rem 0.7955rem #5bc0bb, 0.8839rem 0.8839rem #5bc0bb, 0.9723rem 0.9723rem #5bc0bb, 1.0606rem 1.0606rem #5bc0bb, 1.149rem 1.149rem #5bc0bb, 1.2374rem 1.2374rem #5bc0bb, 1.3258rem 1.3258rem #5bc0bb, 1.4142rem 1.4142rem #5bc0bb;
+  text-shadow: 0.0354rem 0.0354rem #5bc0bb, 0.0707rem 0.0707rem #5bc0bb, 0.1061rem 0.1061rem #5bc0bb, 0.1414rem 0.1414rem #5bc0bb, 0.1768rem 0.1768rem #5bc0bb, 0.2121rem 0.2121rem #5bc0bb, 0.2475rem 0.2475rem #5bc0bb, 0.2828rem 0.2828rem #5bc0bb, 0.3182rem 0.3182rem #5bc0bb, 0.3535rem 0.3535rem #5bc0bb, 0.3889rem 0.3889rem #5bc0bb, 0.4243rem 0.4243rem #5bc0bb, 0.4596rem 0.4596rem #5bc0bb, 0.495rem 0.495rem #5bc0bb, 0.5303rem 0.5303rem #5bc0bb, 0.5657rem 0.5657rem #5bc0bb, 0.601rem 0.601rem #5bc0bb, 0.6364rem 0.6364rem #5bc0bb, 0.6717rem 0.6717rem #5bc0bb, 0.7071rem 0.7071rem #5bc0bb, 0.7425rem 0.7425rem #5bc0bb, 0.7778rem 0.7778rem #5bc0bb, 0.8132rem 0.8132rem #5bc0bb, 0.8485rem 0.8485rem #5bc0bb, 0.8839rem 0.8839rem #5bc0bb, 0.9192rem 0.9192rem #5bc0bb, 0.9546rem 0.9546rem #5bc0bb, 0.9899rem 0.9899rem #5bc0bb, 1.0253rem 1.0253rem #5bc0bb, 1.0606rem 1.0606rem #5bc0bb, 1.096rem 1.096rem #5bc0bb, 1.1314rem 1.1314rem #5bc0bb, 1.1667rem 1.1667rem #5bc0bb, 1.2021rem 1.2021rem #5bc0bb, 1.2374rem 1.2374rem #5bc0bb, 1.2728rem 1.2728rem #5bc0bb, 1.3081rem 1.3081rem #5bc0bb, 1.3435rem 1.3435rem #5bc0bb, 1.3788rem 1.3788rem #5bc0bb, 1.4142rem 1.4142rem #5bc0bb;
 }"
 `;
 

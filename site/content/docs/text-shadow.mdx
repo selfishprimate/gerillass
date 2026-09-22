@@ -28,7 +28,7 @@ The **Text Shadow Sass mixin** writes one or more text shadows. Each one is a di
   <Argument name="$size" type="number, function">How far the shadow sits from the text, such as <code>6px</code>. A <code>var()</code> or <code>calc()</code> is written into a <code>calc()</code> the browser resolves.</Argument>
   <Argument name="$blur" type="number">Optional, after the distance. The default is no blur.</Argument>
   <Argument name="$fill" type="boolean">Optional, last in the group. <code>true</code> fills the gap between the text and the shadow, which is how a long shadow is drawn.</Argument>
-  <Argument name="$step" type="number">Named argument for the whole call: how far apart a filled shadow's layers sit, in the same unit as the distance. The default is one unit of that unit.</Argument>
+  <Argument name="$step" type="number">Named argument for the whole call: how far apart a filled shadow's layers sit, in the same unit as the distance. The default is one pixel, and a fortieth of the distance in a unit this stylesheet cannot convert to pixels, such as <code>rem</code> or <code>ch</code>.</Argument>
 </Arguments>
 
 ## Examples
