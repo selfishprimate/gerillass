@@ -1018,10 +1018,14 @@ each one closes:
    and the prefix that earn it, not the blur: with no support the panel is the
    tint alone, which is unreadable over a photograph, so the tint sits inside
    `@supports` and the mixin writes it again outside with its alpha raised to
-   0.88. What is left is `edge-fade` (`mask-image` on a scroll container) and
-   `theme` (`color-scheme` plus `light-dark()`, where forgetting the first makes
-   the second silently pick light). `theme` is now part of the token layer in
-   `todos/design-tokens.md`.
+   0.88. `edge-fade` was built after it, on the `edge-fade` branch, and
+   **dropped on 22 September 2026 as forced**: the mask is static, so an edge is
+   soft whether or not anything is past it, and the version that knows needs a
+   scroll-driven timeline Firefox 156 does not have. The branch is kept rather
+   than rebuilt, and `todos/library-review.md` item 7 has the measurements. What
+   is left is `theme` (`color-scheme` plus `light-dark()`, where forgetting the
+   first makes the second silently pick light), which is part of the token layer
+   in `todos/design-tokens.md`.
 
 `long-shadow` is in too, on its own branch for 4.0.0: the count of layers is
 the length over the step, so one line of Sass writes forty of them, which is the
