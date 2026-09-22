@@ -75,6 +75,11 @@ const DOCS = [
   ".claude/skills/sass-test/SKILL.md",
   ".claude/skills/release/SKILL.md",
   ".claude/skills/audit-library/SKILL.md",
+  // The site makes the same claims to a reader, and drifts the same way: on
+  // 22 September 2026 its introduction still said 53 mixins and 23 functions,
+  // three releases after that stopped being true, and nothing failed.
+  "site/content/docs/introduction.mdx",
+  "site/src/components/Benefits/index.jsx",
 ];
 
 // A sentence about the past is not a claim about the present. Without this the
@@ -86,6 +91,9 @@ const CLAIMS = [
   { re: /(\d+)\s*\/\s*(\d+) members/g, key: "members", what: "member total", group: 2 },
   { re: /all (\d+) mixins/gi, key: "mixins", what: "mixin total" },
   { re: /(\d+) mixins and (\d+) functions/g, key: "mixins", what: "mixin total" },
+  // The second half of that sentence was unchecked, which is how "56 mixins
+  // and 23 functions" survived a release that added one.
+  { re: /(\d+) mixins and (\d+) functions/g, key: "functions", what: "function total", group: 2 },
   { re: /(\d+) of the (\d+) mixins that take arguments/g, key: "validating", what: "validating mixins" },
   { re: /Expect (\d+) files/g, key: "packFiles", what: "published file count" },
   { re: /\((\d+) files \//g, key: "packFiles", what: "published file count" },

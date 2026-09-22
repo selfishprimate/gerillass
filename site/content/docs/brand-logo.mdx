@@ -29,14 +29,8 @@ This is a **Gerillass** technique for **image replacement**. There are other met
 
 ## Examples
 
-<Hint kind="info">
-
-In this example, I create a logo for **Coolors**. You can use your own brand's logo file and change the logo text if you like.
-
-</Hint>
-
 <Example caption="The markup matters more than the call: a heading that holds a link, with the logo as the element's background and the text hidden behind it, so a screen reader still reads the name." listing="<h1 class=&quot;brand-logo&quot;>
-&#32;&#32;<a href=&quot;#&quot;>Coolors</a>
+&#32;&#32;<a href=&quot;#&quot;>Gerillass</a>
 </h1>">
 ```scss
 .brand-logo {
@@ -61,8 +55,8 @@ Note that the `background-image` declaration has disappeared from the generated 
 
 </Hint>
 
-<Example caption="`$image-url` is optional, and the image can come from the markup instead, which is what a template does when the logo is a variable." listing="<h1 class=&quot;brand-logo&quot; style=&quot;background-image: url(https://coolors.co/assets/img/logo.svg);&quot;>
-&#32;&#32;<a href=&quot;#&quot;>Coolors</a>
+<Example caption="`$image-url` is optional, and the image can come from the markup instead, which is what a template does when the logo is a variable." listing="<h1 class=&quot;brand-logo&quot; style=&quot;background-image: url(/images/logo/logo.svg);&quot;>
+&#32;&#32;<a href=&quot;#&quot;>Gerillass</a>
 </h1>">
 ```scss
 .brand-logo {

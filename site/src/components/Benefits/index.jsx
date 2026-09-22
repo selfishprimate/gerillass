@@ -42,7 +42,7 @@ const BENEFITS = [
     label: "Install Anywhere",
     title: "Install from npm or RubyGems",
     description:
-      "56 mixins and 23 functions for Dart Sass, with no runtime dependencies. Works with Vite, webpack, Parcel, Rails, Jekyll and plain Ruby.",
+      "56 mixins and 24 functions for Dart Sass, with no runtime dependencies. Works with Vite, webpack, Parcel, Rails, Jekyll and plain Ruby.",
   },
 ];
 

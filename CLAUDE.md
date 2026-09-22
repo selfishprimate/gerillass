@@ -191,7 +191,10 @@ made, plus the workflows that are easy to half-finish:
   any edit under `scss/library/`, `scss/utilities/` or `meta/`.
 - **`hooks/check-docs.sh`** — runs `tools/check-docs.js`, which compares the
   counts the documentation claims against the counts the repository has, and
-  blocks on a mismatch. It also prints a reminder naming the prose that usually
+  blocks on a mismatch. It reads the site's introduction page and its Benefits
+  copy as well as the repository's own files, and checks both halves of
+  "N mixins and M functions": the site said 53 and 23 three releases after that
+  stopped being true, and the function count had never been checked at all. It also prints a reminder naming the prose that usually
   needs updating when `tools/`, `test/` or `.claude/` changes, because that part
   is a judgement no script can make.
 - **`hooks/check-wiki.sh`** — runs `tools/check-wiki.js`, which refuses a
