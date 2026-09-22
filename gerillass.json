@@ -1374,8 +1374,7 @@
       "examples": [
         ".button { @include long-shadow(currentColor, 10px, bottom-right, $step: 2px); }",
         ".button {\n  @include long-shadow(currentColor, 10px, bottom-right, $step: 2px);\n\n  &:hover { @include long-shadow(currentColor, 16px, bottom-right, $step: 2px); }\n  &:active { @include long-shadow(currentColor, 4px, bottom-right, $step: 2px); }\n}",
-        ".sticker { @include long-shadow(#701a75, 26px, bottom-right, transparent, 2px); }",
-        ".switch__knob { @include long-shadow(#fb7185, 46px, right, $step: 2px); }",
+        ".badge { @include long-shadow(#701a75, 26px, bottom-right, transparent, 2px); }",
         ".tile { @include long-shadow(#f59e0b, 52px, 160deg, #7c2d12); }"
       ],
       "rejects": [

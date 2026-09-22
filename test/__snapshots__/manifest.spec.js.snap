@@ -1630,6 +1630,12 @@ exports[`Manifest examples loadify: @include loadify; .a { @include loadify(0.4s
 }"
 `;
 
+exports[`Manifest examples long-shadow: .badge { @include long-shadow(#701a75, 26px, bottom-right, transparent 1`] = `
+".badge {
+  box-shadow: 1.4142px 1.4142px #701a75, 2.8284px 2.8284px color-mix(in oklab, #701a75 92.31%, transparent), 4.2426px 4.2426px color-mix(in oklab, #701a75 84.62%, transparent), 5.6568px 5.6568px color-mix(in oklab, #701a75 76.92%, transparent), 7.071px 7.071px color-mix(in oklab, #701a75 69.23%, transparent), 8.4852px 8.4852px color-mix(in oklab, #701a75 61.54%, transparent), 9.8994px 9.8994px color-mix(in oklab, #701a75 53.85%, transparent), 11.3136px 11.3136px color-mix(in oklab, #701a75 46.15%, transparent), 12.7278px 12.7278px color-mix(in oklab, #701a75 38.46%, transparent), 14.142px 14.142px color-mix(in oklab, #701a75 30.77%, transparent), 15.5562px 15.5562px color-mix(in oklab, #701a75 23.08%, transparent), 16.9704px 16.9704px color-mix(in oklab, #701a75 15.38%, transparent), 18.3846px 18.3846px color-mix(in oklab, #701a75 7.69%, transparent);
+}"
+`;
+
 exports[`Manifest examples long-shadow: .button { @include long-shadow(currentColor, 10px, bottom-right, $step 1`] = `
 ".button {
   box-shadow: 1.4142px 1.4142px currentColor, 2.8284px 2.8284px currentColor, 4.2426px 4.2426px currentColor, 5.6568px 5.6568px currentColor, 7.071px 7.071px currentColor;
@@ -1645,18 +1651,6 @@ exports[`Manifest examples long-shadow: .button { @include long-shadow(currentCo
 }
 .button:active {
   box-shadow: 1.4142px 1.4142px currentColor, 2.8284px 2.8284px currentColor;
-}"
-`;
-
-exports[`Manifest examples long-shadow: .sticker { @include long-shadow(#701a75, 26px, bottom-right, transpare 1`] = `
-".sticker {
-  box-shadow: 1.4142px 1.4142px #701a75, 2.8284px 2.8284px color-mix(in oklab, #701a75 92.31%, transparent), 4.2426px 4.2426px color-mix(in oklab, #701a75 84.62%, transparent), 5.6568px 5.6568px color-mix(in oklab, #701a75 76.92%, transparent), 7.071px 7.071px color-mix(in oklab, #701a75 69.23%, transparent), 8.4852px 8.4852px color-mix(in oklab, #701a75 61.54%, transparent), 9.8994px 9.8994px color-mix(in oklab, #701a75 53.85%, transparent), 11.3136px 11.3136px color-mix(in oklab, #701a75 46.15%, transparent), 12.7278px 12.7278px color-mix(in oklab, #701a75 38.46%, transparent), 14.142px 14.142px color-mix(in oklab, #701a75 30.77%, transparent), 15.5562px 15.5562px color-mix(in oklab, #701a75 23.08%, transparent), 16.9704px 16.9704px color-mix(in oklab, #701a75 15.38%, transparent), 18.3846px 18.3846px color-mix(in oklab, #701a75 7.69%, transparent);
-}"
-`;
-
-exports[`Manifest examples long-shadow: .switch__knob { @include long-shadow(#fb7185, 46px, right, $step: 2px) 1`] = `
-".switch__knob {
-  box-shadow: 2px 0 #fb7185, 4px 0 #fb7185, 6px 0 #fb7185, 8px 0 #fb7185, 10px 0 #fb7185, 12px 0 #fb7185, 14px 0 #fb7185, 16px 0 #fb7185, 18px 0 #fb7185, 20px 0 #fb7185, 22px 0 #fb7185, 24px 0 #fb7185, 26px 0 #fb7185, 28px 0 #fb7185, 30px 0 #fb7185, 32px 0 #fb7185, 34px 0 #fb7185, 36px 0 #fb7185, 38px 0 #fb7185, 40px 0 #fb7185, 42px 0 #fb7185, 44px 0 #fb7185, 46px 0 #fb7185;
 }"
 `;
 
