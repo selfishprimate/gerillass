@@ -66,7 +66,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="`$size` is the tile and `$thickness` the dot, so a big tile with a big dot gives confetti rather than a texture.">
 ```scss
 .confetti {
-  @include background-pattern(dots, $color: #f472b6 #38bdf8, $background: #fdf2f8, $size: 34px, $thickness: 5px);
+  @include background-pattern(dots, $color: #d8b4fe #a5b4fc, $background: #faf5ff, $size: 34px, $thickness: 5px);
 }
 ```
 ```html
@@ -121,7 +121,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 </style>
 <div class="shop">
   <div class="awning"></div>
-  <div><b>Kahve Durağı</b><br>Open until six</div>
+  <div><b>The Coffee Stop</b><br>Open until six</div>
 </div>
 ```
 </Example>
@@ -143,7 +143,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="Three colours become three stripes in turn, each one `$thickness` wide.">
 ```scss
 .pole {
-  @include background-pattern(stripes, $color: #ef4444 #ffffff #1d4ed8, $thickness: 10px, $angle: 60deg);
+  @include background-pattern(stripes, $color: #334155 #f8fafc #94a3b8, $thickness: 10px, $angle: 60deg);
 }
 ```
 ```html
@@ -305,7 +305,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="A tighter tile and a thicker line give a woven texture. The two colours are the two directions, so they read as threads crossing.">
 ```scss
 .weave {
-  @include background-pattern(crosshatch, $color: #a16207 #ea580c, $background: #fffbeb, $size: 10px, $thickness: 3px);
+  @include background-pattern(crosshatch, $color: #d6d3d1 #a8a29e, $background: #fafaf9, $size: 10px, $thickness: 3px);
 }
 ```
 ```html
@@ -321,7 +321,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="A knitted band across a card. The tile sets how wide each stitch is.">
 ```scss
 .knit {
-  @include background-pattern(zigzag, $color: #7c3aed, $background: #ede9fe, $size: 40px);
+  @include background-pattern(zigzag, $color: #c4b5fd, $background: #f5f3ff, $size: 40px);
 }
 ```
 ```html
@@ -335,7 +335,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="A smaller tile in two colours turns the same pattern into a woven trim.">
 ```scss
 .trim {
-  @include background-pattern(zigzag, $color: #0f766e, $background: #ccfbf1, $size: 18px);
+  @include background-pattern(zigzag, $color: #99f6e4, $background: #f0fdfa, $size: 18px);
 }
 ```
 ```html
@@ -392,7 +392,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="A large tile in two close colours turns the arrows into a woven chevron cloth.">
 ```scss
 .cloth {
-  @include background-pattern(chevron, $color: #b45309, $background: #fef3c7, $size: 44px);
+  @include background-pattern(chevron, $color: #fcd34d, $background: #fffbeb, $size: 44px);
 }
 ```
 ```html
@@ -408,7 +408,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="A festival poster header. The angle rotates the triangle, so a quarter turn points it at another edge.">
 ```scss
 .poster-top {
-  @include background-pattern(triangles, $color: #16a34a, $background: #dcfce7, $size: 26px, $angle: 135deg);
+  @include background-pattern(triangles, $color: #86efac, $background: #f0fdf4, $size: 26px, $angle: 135deg);
 }
 ```
 ```html
@@ -427,7 +427,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="Pointed the other way, at a smaller tile, in two strong colours.">
 ```scss
 .flags {
-  @include background-pattern(triangles, $color: #ea580c, $background: #fff7ed, $size: 16px, $angle: 315deg);
+  @include background-pattern(triangles, $color: #fdba74, $background: #fff7ed, $size: 16px, $angle: 315deg);
 }
 ```
 ```html
@@ -457,7 +457,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="A pricing card on a field of cubes. Three colours, seven gradient layers, one include.">
 ```scss
 .plan {
-  @include background-pattern(isometric, $color: #c4b5fd #a78bfa #7c3aed, $size: 26px);
+  @include background-pattern(isometric, $color: #ede9fe #ddd6fe #c4b5fd, $size: 26px);
 }
 ```
 ```html
@@ -489,7 +489,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="A community panel, where the three colours give the cells their depth.">
 ```scss
 .community {
-  @include background-pattern(honeycomb, $color: #fde68a #fbbf24 #f59e0b, $size: 26px);
+  @include background-pattern(honeycomb, $color: #fef3c7 #fde68a #fcd34d, $size: 26px);
 }
 ```
 ```html
@@ -504,7 +504,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="A larger tile in three blues, which reads as tiling rather than as a texture.">
 ```scss
 .hive {
-  @include background-pattern(honeycomb, $color: #bfdbfe #60a5fa #1d4ed8, $size: 44px);
+  @include background-pattern(honeycomb, $color: #e0f2fe #bae6fd #7dd3fc, $size: 44px);
 }
 ```
 ```html
@@ -520,7 +520,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="A wall behind a quotation. `$size` is the brick and the ground shows through as the mortar.">
 ```scss
 .wall {
-  @include background-pattern(brick, $color: #b91c1c #7f1d1d, $background: #fee2e2, $size: 44px);
+  @include background-pattern(brick, $color: #c98a72 #ac6d57, $background: #f7efec, $size: 44px);
 }
 ```
 ```html
@@ -572,7 +572,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="A smaller tile fills a panel with fish scales.">
 ```scss
 .scales {
-  @include background-pattern(waves, $color: #14b8a6, $background: #ccfbf1, $size: 18px);
+  @include background-pattern(waves, $color: #5eead4, $background: #f0fdfa, $size: 18px);
 }
 ```
 ```html
@@ -607,7 +607,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="The same weave at twice the size, in brown on sand.">
 ```scss
 .tweed {
-  @include background-pattern(houndstooth, $color: #7c2d12 #fed7aa, $size: 24px);
+  @include background-pattern(houndstooth, $color: #b08968 #f3e8df, $size: 24px);
 }
 ```
 ```html
@@ -623,7 +623,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="Two translucent bands crossing, so the crossings darken on their own. That is what makes it read as cloth rather than as a grid, and an opaque colour still works.">
 ```scss
 .picnic {
-  @include background-pattern(gingham, $color: #1d4ed8, $size: 40px);
+  @include background-pattern(gingham, $color: #93c5fd, $size: 40px);
 }
 ```
 ```html
@@ -638,7 +638,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="A smaller check in red on cream is the tablecloth of every trattoria. `$thickness` is the band, and it defaults to half the tile.">
 ```scss
 .cloth {
-  @include background-pattern(gingham, $color: #b91c1c, $background: #fff7ed, $size: 22px);
+  @include background-pattern(gingham, $color: #fda4af, $background: #fff7ed, $size: 22px);
 }
 ```
 ```html
@@ -654,7 +654,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="Diamonds in two colours, the pattern of a jester's coat. One colour draws the diamonds and `$background` is what shows between them.">
 ```scss
 .jester {
-  @include background-pattern(harlequin, $color: #0f766e, $background: #ccfbf1, $size: 44px);
+  @include background-pattern(harlequin, $color: #5eead4, $background: #f0fdfa, $size: 44px);
 }
 ```
 ```html
@@ -731,7 +731,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="Rings spreading from the middle, again drawn from the box rather than a tile. `$size` is the gap between them and `$thickness` the line.">
 ```scss
 .radar {
-  @include background-pattern(concentric, $color: #be123c, $background: #fff1f2, $size: 16px, $thickness: 2px);
+  @include background-pattern(concentric, $color: #fb7185, $background: #fff1f2, $size: 16px, $thickness: 2px);
 }
 ```
 ```html
