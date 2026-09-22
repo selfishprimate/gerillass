@@ -44,7 +44,7 @@ The **Columnizer** Sass mixin helps you **create evenly divided hypothetical col
 </div>
 ```
 
-<Example caption="Now let's get cracking. Just call the mixin inside the `.parent-element{}` selector and pass a value for the number of columns.">
+<Example caption="Three columns, five cards. The last row holds what is left over, each still a third of the row wide, which is the part `$fill` changes.">
 ```scss
 .parent-element{
   @include columnizer(3);
@@ -64,12 +64,11 @@ The **Columnizer** Sass mixin helps you **create evenly divided hypothetical col
   <div class="item"><i>3</i><b>Shipped</b><span>18 this month</span></div>
   <div class="item"><i>4</i><b>Archive</b><span>310 items</span></div>
   <div class="item"><i>5</i><b>Team</b><span>7 people</span></div>
-  <div class="item"><i>6</i><b>Billing</b><span>Paid to June</span></div>
 </div>
 ```
 </Example>
 
-<Example caption="Let's pass a value for the `$gutter` argument to put space between the items.">
+<Example caption="The same five cards with a gutter. It is written as `gap`, so it separates the rows as well as the columns.">
 ```scss
 .parent-element{
   @include columnizer(3, 20px);
@@ -89,12 +88,11 @@ The **Columnizer** Sass mixin helps you **create evenly divided hypothetical col
   <div class="item"><i>3</i><b>Shipped</b><span>18 this month</span></div>
   <div class="item"><i>4</i><b>Archive</b><span>310 items</span></div>
   <div class="item"><i>5</i><b>Team</b><span>7 people</span></div>
-  <div class="item"><i>6</i><b>Billing</b><span>Paid to June</span></div>
 </div>
 ```
 </Example>
 
-<Example caption="To make the orphans fill the gap, let's pass the `true` value at the end.">
+<Example caption="The same call again with `true` at the end: the two cards left on the last row grow to fill it, instead of sitting a third wide with a hole beside them.">
 ```scss
 .parent-element{
   @include columnizer(3, 20px, true);
@@ -114,12 +112,11 @@ The **Columnizer** Sass mixin helps you **create evenly divided hypothetical col
   <div class="item"><i>3</i><b>Shipped</b><span>18 this month</span></div>
   <div class="item"><i>4</i><b>Archive</b><span>310 items</span></div>
   <div class="item"><i>5</i><b>Team</b><span>7 people</span></div>
-  <div class="item"><i>6</i><b>Billing</b><span>Paid to June</span></div>
 </div>
 ```
 </Example>
 
-<Example caption="You can use either the `$gutter` or the `$fill` argument optionally. But remember, **the `$fill` argument should always come last**.">
+<Example caption="`$gutter` and `$fill` are both optional, and `$fill` always comes last. Three columns, no gutter, and the last row filled.">
 ```scss
 .parent-element{
   @include columnizer(3, true);
@@ -139,12 +136,11 @@ The **Columnizer** Sass mixin helps you **create evenly divided hypothetical col
   <div class="item"><i>3</i><b>Shipped</b><span>18 this month</span></div>
   <div class="item"><i>4</i><b>Archive</b><span>310 items</span></div>
   <div class="item"><i>5</i><b>Team</b><span>7 people</span></div>
-  <div class="item"><i>6</i><b>Billing</b><span>Paid to June</span></div>
 </div>
 ```
 </Example>
 
-<Example caption="Now let's try it with the **breakpoint mixin** to show you how these mixins work harmoniously together.">
+<Example caption="Two columns below large and four above it, with the last row filled at both sizes. `breakpoint` and `columnizer` compose, which is the point of this one.">
 ```scss
 .parent-element{
   @include columnizer(2, 10px, true);
@@ -167,7 +163,6 @@ The **Columnizer** Sass mixin helps you **create evenly divided hypothetical col
   <div class="item"><i>3</i><b>Shipped</b><span>18 this month</span></div>
   <div class="item"><i>4</i><b>Archive</b><span>310 items</span></div>
   <div class="item"><i>5</i><b>Team</b><span>7 people</span></div>
-  <div class="item"><i>6</i><b>Billing</b><span>Paid to June</span></div>
 </div>
 ```
 </Example>

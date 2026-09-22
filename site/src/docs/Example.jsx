@@ -69,9 +69,9 @@ const FRAME_BASE = `
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #f1f5f9;
+    background-color: #f2f2eb;
     border-radius: 12px;
-    color: #64748b;
+    color: #657167;
     font-weight: 700;
     font-variant-numeric: tabular-nums;
   }
