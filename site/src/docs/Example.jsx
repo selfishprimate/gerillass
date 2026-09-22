@@ -62,19 +62,21 @@ const FRAME_BASE = `
     demo from the next on a page where the demos sat inline; here each one has
     a frame to itself and a 10rem margin only makes the frame taller.
   */
-  .list-wrapper { display: flex; }
+  .list-wrapper { display: flex; gap: 10px; }
   .list-wrapper .list-item {
     flex: 1;
-    height: 40px;
+    height: 56px;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #eef2f3;
-    border-radius: 5px;
+    background-color: #f1f5f9;
+    border-radius: 12px;
+    color: #64748b;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
   }
-  .list-wrapper .list-item:not(:last-of-type) { margin-right: 1rem; }
   @media (min-width: 480px) {
-    .list-wrapper .list-item { height: 70px; font-size: 2em; }
+    .list-wrapper .list-item { height: 72px; font-size: 1.25em; }
   }
 
   .text-shadow-container { height: 100px; display: flex; align-items: center; }

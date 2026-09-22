@@ -47,8 +47,8 @@ Let's say you have a list of items wrapped in a container, just like the example
 .list-wrapper{
   .list-item{
     @include except(first){
-      background-color: #5bc0bb;
-      color: white;
+      background-color: #4f46e5;
+      color: #fff;
     }
   }
 }
@@ -70,8 +70,8 @@ Let's say you have a list of items wrapped in a container, just like the example
 .list-wrapper{
   .list-item{
     @include except(last){
-      background-color: #5bc0bb;
-      color: white;
+      background-color: #4f46e5;
+      color: #fff;
     }
   }
 }
@@ -93,8 +93,8 @@ Let's say you have a list of items wrapped in a container, just like the example
 .list-wrapper{
   .list-item{
     @include except(3){
-      background-color: #5bc0bb;
-      color: white;
+      background-color: #4f46e5;
+      color: #fff;
     }
   }
 }
@@ -116,8 +116,8 @@ Let's say you have a list of items wrapped in a container, just like the example
 .list-wrapper{
   .list-item{
     @include except(even){
-      background-color: #5bc0bb;
-      color: white;
+      background-color: #4f46e5;
+      color: #fff;
     }
   }
 }
@@ -145,8 +145,8 @@ Remember that when you target multiple items in the list, the arguments you pass
 .list-wrapper{
   .list-item{
     @include except(1, 4, 5){
-      background-color: #5bc0bb;
-      color: white;
+      background-color: #4f46e5;
+      color: #fff;
     }
   }
 }
@@ -181,20 +181,20 @@ When you pass arguments for the `id` or `class` attributes of the items, don't f
 .list-wrapper{
   .list-item{
     @include except(".exclude"){
-      background-color: #5bc0bb;
-      color: white;
+      background-color: #4f46e5;
+      color: #fff;
     }
   }
 }
 ```
 ```html
 <div class="list-wrapper example06">
-  <div class="list-item exclude">01</div>
+  <div class="list-item">01</div>
   <div class="list-item">02</div>
   <div class="list-item">03</div>
   <div class="list-item">04</div>
   <div class="list-item">05</div>
-  <div class="list-item exclude">06</div>
+  <div class="list-item">06</div>
 </div>
 ```
 </Example>
@@ -210,20 +210,20 @@ When you pass arguments for the `id` or `class` attributes of the items, don't f
 .list-wrapper{
   .list-item{
     @include except(-2){
-      background-color: #5bc0bb;
-      color: white;
+      background-color: #4f46e5;
+      color: #fff;
     }
   }
 }
 ```
 ```html
 <div class="list-wrapper example07">
-    <div class="list-item exclude">01</div>
+    <div class="list-item">01</div>
     <div class="list-item">02</div>
     <div class="list-item">03</div>
     <div class="list-item">04</div>
     <div class="list-item">05</div>
-    <div class="list-item exclude">06</div>
+    <div class="list-item">06</div>
 </div>
 ```
 </Example>
@@ -233,20 +233,20 @@ When you pass arguments for the `id` or `class` attributes of the items, don't f
 .list-wrapper {
   .list-item {
     @include except(-2, -4) {
-      background-color: #5bc0bb;
-      color: white;
+      background-color: #4f46e5;
+      color: #fff;
     }
   }
 }
 ```
 ```html
 <div class="list-wrapper example08">
-  <div class="list-item exclude">01</div>
+  <div class="list-item">01</div>
   <div class="list-item">02</div>
   <div class="list-item">03</div>
   <div class="list-item">04</div>
   <div class="list-item">05</div>
-  <div class="list-item exclude">06</div>
+  <div class="list-item">06</div>
 </div>
 ```
 </Example>
@@ -256,20 +256,20 @@ When you pass arguments for the `id` or `class` attributes of the items, don't f
 .list-wrapper {
   .list-item {
     @include except(1, -1, -2) {
-      background-color: #5bc0bb;
-      color: white;
+      background-color: #4f46e5;
+      color: #fff;
     }
   }
 }
 ```
 ```html
 <div class="list-wrapper example09">
-  <div class="list-item exclude">01</div>
+  <div class="list-item">01</div>
   <div class="list-item">02</div>
   <div class="list-item">03</div>
   <div class="list-item">04</div>
   <div class="list-item">05</div>
-  <div class="list-item exclude">06</div>
+  <div class="list-item">06</div>
 </div>
 ```
 </Example>

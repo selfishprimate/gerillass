@@ -47,8 +47,8 @@ Suppose you have a group of items like the ones below, and you want to apply sty
 .list-wrapper{
   .list-item{
     @include only(first) {
-      background-color: #5bc0bb;
-      color: white;
+      background-color: #4f46e5;
+      color: #fff;
     }
   }
 }
@@ -70,8 +70,8 @@ Suppose you have a group of items like the ones below, and you want to apply sty
 .list-wrapper{
   .list-item{
     @include only(last) {
-      background-color: #5bc0bb;
-      color: white;
+      background-color: #4f46e5;
+      color: #fff;
     }
   }
 }
@@ -93,8 +93,8 @@ Suppose you have a group of items like the ones below, and you want to apply sty
 .list-wrapper{
   .list-item{
     @include only(2) {
-      background-color: #5bc0bb;
-      color: white;
+      background-color: #4f46e5;
+      color: #fff;
     }
   }
 }
@@ -116,8 +116,8 @@ Suppose you have a group of items like the ones below, and you want to apply sty
 .list-wrapper{
   .list-item{
     @include only(odd){
-      background-color: #5bc0bb;
-      color: white;
+      background-color: #4f46e5;
+      color: #fff;
     }
   }
 }
@@ -145,8 +145,8 @@ Remember that when you make a multiple selection, the arguments you pass must be
 .list-wrapper{
   .list-item{
     @include only(4, 5, 6) {
-      background-color: #5bc0bb;
-      color: white;
+      background-color: #4f46e5;
+      color: #fff;
     }
   }
 }
@@ -174,20 +174,20 @@ Remember that when you make a multiple selection, the arguments you pass must be
 .list-wrapper {
   .list-item {
     @include only(-3) {
-      background-color: #5bc0bb;
-      color: white;
+      background-color: #4f46e5;
+      color: #fff;
     }
   }
 }
 ```
 ```html
 <div class="list-wrapper example06">
-  <div class="list-item exclude">01</div>
+  <div class="list-item">01</div>
   <div class="list-item">02</div>
   <div class="list-item">03</div>
   <div class="list-item">04</div>
   <div class="list-item">05</div>
-  <div class="list-item exclude">06</div>
+  <div class="list-item">06</div>
 </div>
 ```
 </Example>
@@ -197,20 +197,20 @@ Remember that when you make a multiple selection, the arguments you pass must be
 .list-wrapper {
   .list-item {
     @include only(-1, -2, -4) {
-      background-color: #5bc0bb;
-      color: white;
+      background-color: #4f46e5;
+      color: #fff;
     }
   }
 }
 ```
 ```html
 <div class="list-wrapper example07">
-  <div class="list-item exclude">01</div>
+  <div class="list-item">01</div>
   <div class="list-item">02</div>
   <div class="list-item">03</div>
   <div class="list-item">04</div>
   <div class="list-item">05</div>
-  <div class="list-item exclude">06</div>
+  <div class="list-item">06</div>
 </div>
 ```
 </Example>
@@ -220,20 +220,20 @@ Remember that when you make a multiple selection, the arguments you pass must be
 .list-wrapper {
   .list-item {
     @include only(1, -2) {
-      background-color: #5bc0bb;
-      color: white;
+      background-color: #4f46e5;
+      color: #fff;
     }
   }
 }
 ```
 ```html
 <div class="list-wrapper example08">
-  <div class="list-item exclude">01</div>
+  <div class="list-item">01</div>
   <div class="list-item">02</div>
   <div class="list-item">03</div>
   <div class="list-item">04</div>
   <div class="list-item">05</div>
-  <div class="list-item exclude">06</div>
+  <div class="list-item">06</div>
 </div>
 ```
 </Example>
