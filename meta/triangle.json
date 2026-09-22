@@ -38,11 +38,11 @@
     ".caret { @include triangle(\"bottom\", black, 10px 8px); }",
     ".arrow { @include triangle(\"left\", red); }",
     ".arrow { @include triangle(\"right\", var(--accent), 6px 8px); }",
-    ".arrow { @include triangle(\"right\", currentColor); }",
+    ".arrow { @include triangle(\"right\", rgb(15 23 42)); }",
     ".arrow { @include triangle(\"top\", color-mix(in srgb, red 50%, blue)); }",
-    ".arrow { @include triangle(\"bottom\", currentColor, var(--caret-w) var(--caret-h)); }",
-    ".next { @include triangle(\"inline-end\", currentColor, 8px 12px); }",
-    ".sort { @include triangle(\"block-start\", currentColor); }"
+    ".arrow { @include triangle(\"bottom\", hsl(220 39% 11%), var(--caret-w) var(--caret-h)); }",
+    ".next { @include triangle(\"inline-end\", crimson, 8px 12px); }",
+    ".sort { @include triangle(\"block-start\", oklch(0.55 0.2 25)); }"
   ],
   "rejects": [
     ".caret { @include triangle(sideways); }",

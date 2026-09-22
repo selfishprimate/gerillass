@@ -245,24 +245,25 @@ The **Text Shadow Sass mixin** writes one or more text shadows. Each one is a di
 ```
 </Example>
 
-<Example caption="A glow that follows the text colour. `currentColor` in the colour slot means one rule lights every button and heading in whatever colour it already has.">
+<Example caption="A glow that follows the text colour. `currentColor` reads the element's own `color`, so one shadow rule lights all three of these and the colours below it are the only thing that differs.">
 ```scss
 .glow {
   @include text-shadow(top currentColor 0px 14px);
 }
+
+.glow--pink { color: #f0abfc; }
+.glow--cyan { color: #67e8f9; }
+.glow--lime { color: #bef264; }
 ```
 ```html
 <style>
   .neon-row { display: flex; flex-wrap: wrap; gap: 24px; padding: 24px; border-radius: 10px; background: #09090b; }
   .glow { margin: 0; font: 700 30px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; }
-  .glow.a { color: #f0abfc; }
-  .glow.b { color: #67e8f9; }
-  .glow.c { color: #bef264; }
 </style>
 <div class="neon-row">
-  <p class="glow a">Pink</p>
-  <p class="glow b">Cyan</p>
-  <p class="glow c">Lime</p>
+  <p class="glow glow--pink">Pink</p>
+  <p class="glow glow--cyan">Cyan</p>
+  <p class="glow glow--lime">Lime</p>
 </div>
 ```
 </Example>

@@ -2480,10 +2480,10 @@ exports[`Manifest examples text-image: .a { @include text-image("/img/t.png", $f
 }"
 `;
 
-exports[`Manifest examples text-image: .a { @include text-image(var(--texture), $fallback: currentColor); } 1`] = `
+exports[`Manifest examples text-image: .a { @include text-image(var(--texture), $fallback: hsl(220 39% 11%)); 1`] = `
 ".a {
   background-image: var(--texture);
-  background-color: currentColor;
+  background-color: hsl(220, 39%, 11%);
   background-size: cover;
   background-position: center;
   -webkit-background-clip: text;
@@ -2554,9 +2554,9 @@ exports[`Manifest examples text-shadow: .a { @include text-shadow(top var(--shad
 }"
 `;
 
-exports[`Manifest examples text-stroke: .a { @include text-stroke(1px, currentColor, center); } 1`] = `
+exports[`Manifest examples text-stroke: .a { @include text-stroke(1px, rgb(15 23 42), center); } 1`] = `
 ".a {
-  -webkit-text-stroke-color: currentColor;
+  -webkit-text-stroke-color: rgb(15, 23, 42);
   -webkit-text-stroke-width: 1px;
 }"
 `;
@@ -2655,14 +2655,14 @@ exports[`Manifest examples tokens: [data-theme="dark"] { @include tokens((bg: #0
 }"
 `;
 
-exports[`Manifest examples triangle: .arrow { @include triangle("bottom", currentColor, var(--caret-w) var( 1`] = `
+exports[`Manifest examples triangle: .arrow { @include triangle("bottom", hsl(220 39% 11%), var(--caret-w)  1`] = `
 ".arrow {
   content: "";
   height: 0;
   width: 0;
   display: inline-block;
   border-style: solid;
-  border-color: currentColor transparent transparent;
+  border-color: hsl(220, 39%, 11%) transparent transparent;
   border-width: var(--caret-h) calc(var(--caret-w) / 2) 0;
 }"
 `;
@@ -2679,14 +2679,14 @@ exports[`Manifest examples triangle: .arrow { @include triangle("left", red); } 
 }"
 `;
 
-exports[`Manifest examples triangle: .arrow { @include triangle("right", currentColor); } 1`] = `
+exports[`Manifest examples triangle: .arrow { @include triangle("right", rgb(15 23 42)); } 1`] = `
 ".arrow {
   content: "";
   height: 0;
   width: 0;
   display: inline-block;
   border-style: solid;
-  border-color: transparent transparent transparent currentColor;
+  border-color: transparent transparent transparent rgb(15, 23, 42);
   border-width: 4px 0 4px 10px;
 }"
 `;
@@ -2727,7 +2727,7 @@ exports[`Manifest examples triangle: .caret { @include triangle("bottom", black,
 }"
 `;
 
-exports[`Manifest examples triangle: .next { @include triangle("inline-end", currentColor, 8px 12px); } 1`] = `
+exports[`Manifest examples triangle: .next { @include triangle("inline-end", crimson, 8px 12px); } 1`] = `
 ".next {
   content: "";
   height: 0;
@@ -2735,14 +2735,14 @@ exports[`Manifest examples triangle: .next { @include triangle("inline-end", cur
   display: inline-block;
   border-style: solid;
   border-color: transparent;
-  border-inline-start-color: currentColor;
+  border-inline-start-color: crimson;
   border-block-width: 6px;
   border-inline-start-width: 8px;
   border-inline-end-width: 0;
 }"
 `;
 
-exports[`Manifest examples triangle: .sort { @include triangle("block-start", currentColor); } 1`] = `
+exports[`Manifest examples triangle: .sort { @include triangle("block-start", oklch(0.55 0.2 25)); } 1`] = `
 ".sort {
   content: "";
   height: 0;
@@ -2750,7 +2750,7 @@ exports[`Manifest examples triangle: .sort { @include triangle("block-start", cu
   display: inline-block;
   border-style: solid;
   border-color: transparent;
-  border-block-end-color: currentColor;
+  border-block-end-color: oklch(55% 0.2 25deg);
   border-inline-width: 5px;
   border-block-start-width: 0;
   border-block-end-width: 8px;
