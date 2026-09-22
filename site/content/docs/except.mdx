@@ -47,7 +47,7 @@ Let's say you have a list of items wrapped in a container, just like the example
 .list-wrapper{
   .list-item{
     @include except(first){
-      background-color: #668f80;
+      background-color: #2f3937;
       color: #fafaf8;
     }
   }
@@ -70,7 +70,7 @@ Let's say you have a list of items wrapped in a container, just like the example
 .list-wrapper{
   .list-item{
     @include except(last){
-      background-color: #668f80;
+      background-color: #2f3937;
       color: #fafaf8;
     }
   }
@@ -93,7 +93,7 @@ Let's say you have a list of items wrapped in a container, just like the example
 .list-wrapper{
   .list-item{
     @include except(3){
-      background-color: #668f80;
+      background-color: #2f3937;
       color: #fafaf8;
     }
   }
@@ -116,7 +116,7 @@ Let's say you have a list of items wrapped in a container, just like the example
 .list-wrapper{
   .list-item{
     @include except(even){
-      background-color: #668f80;
+      background-color: #2f3937;
       color: #fafaf8;
     }
   }
@@ -145,7 +145,7 @@ Remember that when you target multiple items in the list, the arguments you pass
 .list-wrapper{
   .list-item{
     @include except(1, 4, 5){
-      background-color: #668f80;
+      background-color: #2f3937;
       color: #fafaf8;
     }
   }
@@ -181,7 +181,7 @@ When you pass arguments for the `id` or `class` attributes of the items, don't f
 .list-wrapper{
   .list-item{
     @include except(".exclude"){
-      background-color: #668f80;
+      background-color: #2f3937;
       color: #fafaf8;
     }
   }
@@ -210,7 +210,7 @@ When you pass arguments for the `id` or `class` attributes of the items, don't f
 .list-wrapper{
   .list-item{
     @include except(-2){
-      background-color: #668f80;
+      background-color: #2f3937;
       color: #fafaf8;
     }
   }
@@ -233,7 +233,7 @@ When you pass arguments for the `id` or `class` attributes of the items, don't f
 .list-wrapper {
   .list-item {
     @include except(-2, -4) {
-      background-color: #668f80;
+      background-color: #2f3937;
       color: #fafaf8;
     }
   }
@@ -256,7 +256,7 @@ When you pass arguments for the `id` or `class` attributes of the items, don't f
 .list-wrapper {
   .list-item {
     @include except(1, -1, -2) {
-      background-color: #668f80;
+      background-color: #2f3937;
       color: #fafaf8;
     }
   }
