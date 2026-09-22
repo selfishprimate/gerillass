@@ -40,7 +40,16 @@ The **Adaptive Sass mixin** gives you the fastest and most consistent way to app
 }
 ```
 ```html
-<div class="main-container" style="background: #5bc0bb; color: white; padding: 16px">Centred, with a max-width that steps up at every breakpoint.</div>
+<style>
+  body { background: #eef2ff; font: 14px/1.6 Inter, ui-sans-serif, system-ui, sans-serif; color: #1e1b4b; padding: 22px 0; }
+  .main-container { padding: 26px; border-radius: 18px; background: #fff; box-shadow: 0 10px 30px rgb(30 27 75 / 0.08); }
+  .main-container h3 { margin: 0 0 6px; font: 700 20px Inter, ui-sans-serif, system-ui, sans-serif; }
+  .main-container p { margin: 0; color: #4338ca; }
+</style>
+<div class="main-container">
+  <h3>Release notes</h3>
+  <p>Centred, with a maximum width that steps up at every breakpoint, so a paragraph never runs the width of a monitor.</p>
+</div>
 ```
 </Example>
 
@@ -51,7 +60,16 @@ The **Adaptive Sass mixin** gives you the fastest and most consistent way to app
 }
 ```
 ```html
-<div class="main-container" style="background: #5bc0bb; color: white; padding: 16px">The gutter keeps this much room from each edge on a narrow screen.</div>
+<style>
+  body { background: #0f172a; font: 14px/1.6 Inter, ui-sans-serif, system-ui, sans-serif; color: #e2e8f0; padding: 22px 0; }
+  .main-container { padding: 22px 24px; border-radius: 16px; background: rgb(226 232 240 / 0.08); border: 1px solid rgb(226 232 240 / 0.14); }
+  .main-container h3 { margin: 0 0 6px; font: 700 18px Inter, ui-sans-serif, system-ui, sans-serif; }
+  .main-container p { margin: 0; color: #94a3b8; }
+</style>
+<div class="main-container">
+  <h3>A gutter of 2em</h3>
+  <p>On a narrow screen the container keeps this much room from each edge, which is what stops text touching the glass.</p>
+</div>
 ```
 </Example>
 

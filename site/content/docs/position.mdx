@@ -31,8 +31,13 @@ The **Position Sass mixin** provides a one-line method to quickly set both the p
 }
 ```
 ```html
-<div style="position: relative; height: 160px; background: #eef2f3; border-radius: 6px">
-  <div class="element" style="background: #5bc0bb"></div>
+<style>
+  body { background: #f8fafc; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; }
+  .stage { position: relative; overflow: hidden; height: 180px; border-radius: 16px; background: url("/images/landscape.webp") center/cover; }
+  .element { display: grid; align-content: end; padding: 16px 18px; background: linear-gradient(transparent 35%, rgb(15 23 42 / 0.85)); color: #f8fafc; font-weight: 700; }
+</style>
+<div class="stage">
+  <div class="element">Every inset at zero, so the scrim covers the picture</div>
 </div>
 ```
 </Example>
@@ -44,7 +49,19 @@ The **Position Sass mixin** provides a one-line method to quickly set both the p
 }
 ```
 ```html
-<div class="element" style="background: #5bc0bb"></div>
+<style>
+  body { margin: 0; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; }
+  .page { padding: 18px; }
+  .page p { margin: 0 0 10px; color: #64748b; }
+  .element { display: grid; place-items: center; background: rgb(15 23 42 / 0.55); }
+  .dialog { width: 260px; padding: 20px; border-radius: 16px; background: #fff; text-align: center; box-shadow: 0 20px 50px rgb(15 23 42 / 0.35); }
+  .dialog b { display: block; margin-bottom: 4px; font-size: 16px; }
+  .dialog span { color: #64748b; font-size: 13px; }
+</style>
+<div class="page"><p>The page behind it.</p><p>Fixed with every inset at zero covers the whole viewport, which is what a modal's backdrop is.</p></div>
+<div class="element">
+  <div class="dialog"><b>Discard the draft?</b><span>It has not been saved anywhere yet.</span></div>
+</div>
 ```
 </Example>
 
@@ -55,7 +72,19 @@ The **Position Sass mixin** provides a one-line method to quickly set both the p
 }
 ```
 ```html
-<div class="element" style="background: #5bc0bb"></div>
+<style>
+  body { margin: 0; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; background: #0f172a; }
+  .rail { position: fixed; inset: 0 auto 0 0; width: 50px; display: grid; justify-items: center; align-content: start; gap: 14px; padding-top: 16px; color: #94a3b8; }
+  .rail span { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 10px; background: rgb(226 232 240 / 0.12); font-size: 13px; }
+  .element { padding: 18px 20px; border-radius: 14px; background: #f8fafc; }
+  .element b { display: block; margin-bottom: 4px; font-size: 16px; }
+  .element p { margin: 0; color: #475569; }
+</style>
+<div class="rail"><span>G</span><span>◧</span><span>◔</span></div>
+<div class="element">
+  <b>A panel that leaves the rail alone</b>
+  <p>Ten pixels from three edges and fifty from the left, which is how wide the rail is.</p>
+</div>
 ```
 </Example>
 
@@ -66,8 +95,14 @@ The **Position Sass mixin** provides a one-line method to quickly set both the p
 }
 ```
 ```html
-<div style="position: relative; height: 160px; background: #eef2f3; border-radius: 6px">
-  <div class="element" style="height: 48px; background: #5bc0bb"></div>
+<style>
+  body { background: #f8fafc; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; }
+  .stage { position: relative; overflow: hidden; height: 190px; border-radius: 16px; background: url("/images/landscape.webp") center/cover; }
+  .element { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-radius: 12px; background: rgb(248 250 252 / 0.94); font-weight: 600; }
+  .element a { padding: 8px 14px; border-radius: 999px; background: #0f172a; color: #fff; font-size: 13px; text-decoration: none; }
+</style>
+<div class="stage">
+  <div class="element">Lysefjord, Norway<a href="#">Open</a></div>
 </div>
 ```
 </Example>
@@ -79,11 +114,22 @@ The **Position Sass mixin** provides a one-line method to quickly set both the p
 }
 ```
 ```html
-<div dir="ltr" style="position: relative; height: 72px; background: #eef2f3; border-radius: 6px; margin-bottom: 8px">
-  <span class="badge" style="padding: 2px 10px; background: #5bc0bb; color: #fff; border-radius: 999px; font: 500 12px/1.6 system-ui, sans-serif">New</span>
+<style>
+  body { background: #f8fafc; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; }
+  .card { position: relative; margin-bottom: 10px; padding: 18px 18px 18px 18px; border-radius: 14px; background: #fff; box-shadow: 0 4px 14px rgb(15 23 42 / 0.08); }
+  .card b { display: block; padding-top: 22px; font-size: 15px; }
+  .card span.sub { color: #64748b; font-size: 13px; }
+  .badge { padding: 5px 12px; border-radius: 999px; background: #dcfce7; color: #166534; font: 700 11px Inter, ui-sans-serif, system-ui, sans-serif; letter-spacing: 0.06em; text-transform: uppercase; }
+</style>
+<div class="card" dir="ltr">
+  <span class="badge">New</span>
+  <b>Container queries</b>
+  <span class="sub">The badge sits at the start of the line, whichever way the line runs.</span>
 </div>
-<div dir="rtl" lang="ar" style="position: relative; height: 72px; background: #eef2f3; border-radius: 6px">
-  <span class="badge" style="padding: 2px 10px; background: #5bc0bb; color: #fff; border-radius: 999px; font: 500 12px/1.6 system-ui, sans-serif">جديد</span>
+<div class="card" dir="rtl" lang="ar">
+  <span class="badge">جديد</span>
+  <b>استعلامات الحاوية</b>
+  <span class="sub">الشارة في بداية السطر.</span>
 </div>
 ```
 </Example>

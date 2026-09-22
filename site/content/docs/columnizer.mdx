@@ -52,29 +52,19 @@ The **Columnizer** Sass mixin helps you **create evenly divided hypothetical col
 ```
 ```html
 <style>
-.parent-element .item {
-  padding: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #5bc0bb;
-  font-weight: bold;
-  color: #d8f7f5;
-}
-.parent-element .item:nth-of-type(even) {
-  background-color: #d8f7f5;
-  color: #5bc0bb;
-}
+  body { background: #f8fafc; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; }
+  .item { padding: 16px; border-radius: 14px; background: #fff; box-shadow: 0 4px 14px rgb(15 23 42 / 0.07); }
+  .item b { display: block; font-size: 15px; }
+  .item span { color: #64748b; font-size: 13px; }
+  .item i { display: block; width: 28px; height: 28px; margin-bottom: 10px; border-radius: 9px; background: #e0e7ff; color: #4338ca; font: 700 13px/28px Inter, ui-sans-serif, system-ui, sans-serif; font-style: normal; text-align: center; }
 </style>
-<div class="columnizer parent-element example01">
-  <div class="item">01</div>
-  <div class="item">02</div>
-  <div class="item">03</div>
-  <div class="item">04</div>
-  <div class="item">05</div>
-  <div class="item">06</div>
-  <div class="item">07</div>
-  <div class="item">08</div>
+<div class="parent-element">
+  <div class="item"><i>1</i><b>Drafts</b><span>4 waiting</span></div>
+  <div class="item"><i>2</i><b>Reviews</b><span>2 waiting</span></div>
+  <div class="item"><i>3</i><b>Shipped</b><span>18 this month</span></div>
+  <div class="item"><i>4</i><b>Archive</b><span>310 items</span></div>
+  <div class="item"><i>5</i><b>Team</b><span>7 people</span></div>
+  <div class="item"><i>6</i><b>Billing</b><span>Paid to June</span></div>
 </div>
 ```
 </Example>
@@ -87,29 +77,19 @@ The **Columnizer** Sass mixin helps you **create evenly divided hypothetical col
 ```
 ```html
 <style>
-.parent-element .item {
-  padding: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #5bc0bb;
-  font-weight: bold;
-  color: #d8f7f5;
-}
-.parent-element .item:nth-of-type(even) {
-  background-color: #d8f7f5;
-  color: #5bc0bb;
-}
+  body { background: #f8fafc; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; }
+  .item { padding: 16px; border-radius: 14px; background: #fff; box-shadow: 0 4px 14px rgb(15 23 42 / 0.07); }
+  .item b { display: block; font-size: 15px; }
+  .item span { color: #64748b; font-size: 13px; }
+  .item i { display: block; width: 28px; height: 28px; margin-bottom: 10px; border-radius: 9px; background: #e0e7ff; color: #4338ca; font: 700 13px/28px Inter, ui-sans-serif, system-ui, sans-serif; font-style: normal; text-align: center; }
 </style>
-<div class="columnizer parent-element example02">
-  <div class="item">01</div>
-  <div class="item">02</div>
-  <div class="item">03</div>
-  <div class="item">04</div>
-  <div class="item">05</div>
-  <div class="item">06</div>
-  <div class="item">07</div>
-  <div class="item">08</div>
+<div class="parent-element">
+  <div class="item"><i>1</i><b>Drafts</b><span>4 waiting</span></div>
+  <div class="item"><i>2</i><b>Reviews</b><span>2 waiting</span></div>
+  <div class="item"><i>3</i><b>Shipped</b><span>18 this month</span></div>
+  <div class="item"><i>4</i><b>Archive</b><span>310 items</span></div>
+  <div class="item"><i>5</i><b>Team</b><span>7 people</span></div>
+  <div class="item"><i>6</i><b>Billing</b><span>Paid to June</span></div>
 </div>
 ```
 </Example>
@@ -122,29 +102,19 @@ The **Columnizer** Sass mixin helps you **create evenly divided hypothetical col
 ```
 ```html
 <style>
-.parent-element .item {
-  padding: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #5bc0bb;
-  font-weight: bold;
-  color: #d8f7f5;
-}
-.parent-element .item:nth-of-type(even) {
-  background-color: #d8f7f5;
-  color: #5bc0bb;
-}
+  body { background: #f8fafc; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; }
+  .item { padding: 16px; border-radius: 14px; background: #fff; box-shadow: 0 4px 14px rgb(15 23 42 / 0.07); }
+  .item b { display: block; font-size: 15px; }
+  .item span { color: #64748b; font-size: 13px; }
+  .item i { display: block; width: 28px; height: 28px; margin-bottom: 10px; border-radius: 9px; background: #e0e7ff; color: #4338ca; font: 700 13px/28px Inter, ui-sans-serif, system-ui, sans-serif; font-style: normal; text-align: center; }
 </style>
-<div class="columnizer parent-element example03">
-  <div class="item">01</div>
-  <div class="item">02</div>
-  <div class="item">03</div>
-  <div class="item">04</div>
-  <div class="item">05</div>
-  <div class="item">06</div>
-  <div class="item">07</div>
-  <div class="item">08</div>
+<div class="parent-element">
+  <div class="item"><i>1</i><b>Drafts</b><span>4 waiting</span></div>
+  <div class="item"><i>2</i><b>Reviews</b><span>2 waiting</span></div>
+  <div class="item"><i>3</i><b>Shipped</b><span>18 this month</span></div>
+  <div class="item"><i>4</i><b>Archive</b><span>310 items</span></div>
+  <div class="item"><i>5</i><b>Team</b><span>7 people</span></div>
+  <div class="item"><i>6</i><b>Billing</b><span>Paid to June</span></div>
 </div>
 ```
 </Example>
@@ -157,29 +127,19 @@ The **Columnizer** Sass mixin helps you **create evenly divided hypothetical col
 ```
 ```html
 <style>
-.parent-element .item {
-  padding: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #5bc0bb;
-  font-weight: bold;
-  color: #d8f7f5;
-}
-.parent-element .item:nth-of-type(even) {
-  background-color: #d8f7f5;
-  color: #5bc0bb;
-}
+  body { background: #f8fafc; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; }
+  .item { padding: 16px; border-radius: 14px; background: #fff; box-shadow: 0 4px 14px rgb(15 23 42 / 0.07); }
+  .item b { display: block; font-size: 15px; }
+  .item span { color: #64748b; font-size: 13px; }
+  .item i { display: block; width: 28px; height: 28px; margin-bottom: 10px; border-radius: 9px; background: #e0e7ff; color: #4338ca; font: 700 13px/28px Inter, ui-sans-serif, system-ui, sans-serif; font-style: normal; text-align: center; }
 </style>
-<div class="columnizer parent-element example04">
-  <div class="item">01</div>
-  <div class="item">02</div>
-  <div class="item">03</div>
-  <div class="item">04</div>
-  <div class="item">05</div>
-  <div class="item">06</div>
-  <div class="item">07</div>
-  <div class="item">08</div>
+<div class="parent-element">
+  <div class="item"><i>1</i><b>Drafts</b><span>4 waiting</span></div>
+  <div class="item"><i>2</i><b>Reviews</b><span>2 waiting</span></div>
+  <div class="item"><i>3</i><b>Shipped</b><span>18 this month</span></div>
+  <div class="item"><i>4</i><b>Archive</b><span>310 items</span></div>
+  <div class="item"><i>5</i><b>Team</b><span>7 people</span></div>
+  <div class="item"><i>6</i><b>Billing</b><span>Paid to June</span></div>
 </div>
 ```
 </Example>
@@ -195,28 +155,19 @@ The **Columnizer** Sass mixin helps you **create evenly divided hypothetical col
 ```
 ```html
 <style>
-.parent-element .item {
-  padding: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #5bc0bb;
-  font-weight: bold;
-  color: #d8f7f5;
-}
-.parent-element .item:nth-of-type(even) {
-  background-color: #d8f7f5;
-  color: #5bc0bb;
-}
+  body { background: #f8fafc; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; }
+  .item { padding: 16px; border-radius: 14px; background: #fff; box-shadow: 0 4px 14px rgb(15 23 42 / 0.07); }
+  .item b { display: block; font-size: 15px; }
+  .item span { color: #64748b; font-size: 13px; }
+  .item i { display: block; width: 28px; height: 28px; margin-bottom: 10px; border-radius: 9px; background: #e0e7ff; color: #4338ca; font: 700 13px/28px Inter, ui-sans-serif, system-ui, sans-serif; font-style: normal; text-align: center; }
 </style>
-<div class="columnizer parent-element example05">
-  <div class="item">01</div>
-  <div class="item">02</div>
-  <div class="item">03</div>
-  <div class="item">04</div>
-  <div class="item">05</div>
-  <div class="item">06</div>
-  <div class="item">07</div>
+<div class="parent-element">
+  <div class="item"><i>1</i><b>Drafts</b><span>4 waiting</span></div>
+  <div class="item"><i>2</i><b>Reviews</b><span>2 waiting</span></div>
+  <div class="item"><i>3</i><b>Shipped</b><span>18 this month</span></div>
+  <div class="item"><i>4</i><b>Archive</b><span>310 items</span></div>
+  <div class="item"><i>5</i><b>Team</b><span>7 people</span></div>
+  <div class="item"><i>6</i><b>Billing</b><span>Paid to June</span></div>
 </div>
 ```
 </Example>
