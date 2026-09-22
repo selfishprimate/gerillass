@@ -25,37 +25,46 @@ The **Text Image** Sass mixin helps you clip the background image of a selected 
 
 <Example caption="Simply call the mixin inside the selector and pass the URL of an image." listing="<h2 class=&quot;element&quot;>Text Image is Awesome!</h2>">
 ```scss
-.element{
-  @include text-image("/images/backgrounds/05.jpg");
+.element {
+  @include text-image("/images/landscape.webp");
 }
 ```
 ```html
-<h2 class="element sandbox text">Text Image is Awesome!</h2>
+<style>
+  body { background: #f8fafc; }
+  .element { margin: 0; font: 800 56px/1.05 Inter, ui-sans-serif, system-ui, sans-serif; letter-spacing: -0.03em; }
+</style>
+<h2 class="element">Summer issue</h2>
 ```
 </Example>
 
-<Example caption="The `$image` argument is optional. This is especially useful when the image is loaded from the markup, as in the example below." listing="<h2 class=&quot;element&quot; style=&quot;background-image: url(/images/backgrounds/02.jpg)&quot;>Text Image is Awesome!</h2>">
+<Example caption="The `$image` argument is optional. This is especially useful when the image is loaded from the markup, as in the example below." listing="<h2 class=&quot;element&quot; style=&quot;background-image: url(/images/landscape.webp)&quot;>Text Image is Awesome!</h2>">
 ```scss
-.element{
+.element {
   @include text-image;
 }
 ```
 ```html
-<h2 class="element sandbox text" style="background-image: url(/images/backgrounds/02.jpg)">Text Image is Awesome!</h2>
+<style>
+  body { background: #f8fafc; }
+  .element { margin: 0; font: 800 56px/1.05 Inter, ui-sans-serif, system-ui, sans-serif; letter-spacing: -0.03em; }
+</style>
+<h2 class="element" style="background-image: url(/images/landscape.webp)">Golden hour</h2>
 ```
 </Example>
 
 <Example caption="Pass a `$fallback` colour and the letters have something to fall back to. The colour goes under the image as a `background-color`, so it fills them whenever the image does not arrive: a 404, a blocked host, a slow connection." listing="<h2 class=&quot;title&quot;>Text Image is Awesome!</h2>">
 ```scss
 .title {
-  @include text-image("/images/backgrounds/02.jpg", $fallback: #b45309);
+  @include text-image("/images/landscape.webp", $fallback: #0369a1);
 }
 ```
 ```html
 <style>
-  .title { margin: 0; font: 800 44px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; }
+  body { background: #f8fafc; }
+  .title { margin: 0; font: 800 56px/1.05 Inter, ui-sans-serif, system-ui, sans-serif; letter-spacing: -0.03em; }
 </style>
-<h2 class="title">Text Image is Awesome!</h2>
+<h2 class="title">Golden hour</h2>
 ```
 </Example>
 

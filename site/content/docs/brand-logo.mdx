@@ -39,20 +39,19 @@ In this example, I create a logo for **Coolors**. You can use your own brand's l
 &#32;&#32;<a href=&quot;#&quot;>Coolors</a>
 </h1>">
 ```scss
-.brand-logo{
+.brand-logo {
   @include brand-logo(
-    $width: 100px,
-    $height: 30px,
-    $image-url: "https://coolors.co/assets/img/logo.svg"
+    $width: 196px,
+    $height: 42px,
+    $image-url: "/images/logo/logo.svg"
   );
 }
 ```
 ```html
-Now simply call the mixin as in the example below, and change the argument values to fit your brand logo.
-
-<h1 class="brand-logo example01">
-  <a href="#">Coolors</a>
-</h1>
+<style>
+  body { background: #fafaf8; }
+</style>
+<h1 class="brand-logo"><a href="#">Gerillass</a></h1>
 ```
 </Example>
 
@@ -66,17 +65,18 @@ Note that the `background-image` declaration has disappeared from the generated 
 &#32;&#32;<a href=&quot;#&quot;>Coolors</a>
 </h1>">
 ```scss
-.brand-logo{
+.brand-logo {
   @include brand-logo(
-    $width: 100px,
-    $height: 30px
+    $width: 196px,
+    $height: 42px
   );
 }
 ```
 ```html
-<h1 class="brand-logo" style="background-image: url(https://coolors.co/assets/img/logo.svg);">
-  <a href="#">Coolors</a>
-</h1>
+<style>
+  body { background: #fafaf8; }
+</style>
+<h1 class="brand-logo" style="background-image: url(/images/logo/logo.svg)"><a href="#">Gerillass</a></h1>
 ```
 </Example>
 

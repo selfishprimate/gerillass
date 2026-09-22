@@ -18,27 +18,37 @@ The **Placeholder Shown Sass mixin** helps you style an `<input>` or `<textarea>
 
 <Example caption="Simply call the mixin and write your style rules.">
 ```scss
-input{
-  @include placeholder-shown{
-    background-color: yellow;
+input {
+  @include placeholder-shown {
+    border-style: dashed;
+    background-color: #f8fafc;
   }
 }
 ```
 ```html
-<input type="text" placeholder="Empty, so the placeholder shows" style="width: 100%; margin-bottom: 8px" />
-<input type="text" value="Typed in, so it does not" style="width: 100%" />
+<style>
+  body { background: #fff; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; display: grid; gap: 10px; max-width: 340px; }
+  input { width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 12px; font: inherit; color: inherit; }
+</style>
+<input type="text" placeholder="Empty, so the outline is dashed" />
+<input type="text" value="Filled in, so it is not" />
 ```
 </Example>
 
 <Example caption="When you call the mixin at the root of your stylesheet, it targets all the `<input>` and `<textarea>` elements.">
 ```scss
-@include placeholder-shown{
-  background-color: yellow;
+@include placeholder-shown {
+  border-style: dashed;
+  background-color: #f8fafc;
 }
 ```
 ```html
-<input type="text" placeholder="Empty" style="width: 100%; margin-bottom: 8px" />
-<textarea placeholder="Also empty" rows="2" style="width: 100%"></textarea>
+<style>
+  body { background: #fff; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; display: grid; gap: 10px; max-width: 340px; }
+  input, textarea { width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 12px; font: inherit; color: inherit; }
+</style>
+<input type="text" placeholder="Empty" />
+<textarea placeholder="Also empty" rows="2"></textarea>
 ```
 </Example>
 
