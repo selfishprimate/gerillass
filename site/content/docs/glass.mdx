@@ -20,14 +20,6 @@ The **Glass** Sass mixin writes a frosted glass panel: a tint, a blur of whateve
 
 </Hint>
 
-## Why this needs a mixin
-
-The blur is one declaration. Everything around it is the part that goes wrong, and all of it was measured in Chrome 152, Firefox 156 and Safari 26.6.2:
-
-- **the fallback.** With no support the panel is whatever `background` says, and the translucent tint glass wants is unreadable over a photograph. The tint therefore belongs inside `@supports`, with a more opaque version outside, which the mixin computes by raising the tint's own alpha.
-- **the prefix.** All three keep the unprefixed property. Only Safari answers for `-webkit-backdrop-filter`, which is what a Safari before 18 understands, so both are written and both are in the condition.
-- **an opaque tint.** It blurs the backdrop and then covers it, so the effect disappears with the CSS still valid. That call is refused rather than shipped.
-
 ## Arguments
 
 <Arguments of="glass" footnote="It writes no `box-shadow`: a glass card usually wants a drop shadow too, and owning the property would stop you adding one.">

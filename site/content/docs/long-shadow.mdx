@@ -20,19 +20,6 @@ The **Long Shadow** Sass mixin draws the long shadow of flat design: a solid blo
 
 </Hint>
 
-## Why this needs a mixin
-
-`box-shadow` draws one copy of the element, so a long shadow is the copies themselves, each a step further along. What you write is a list rather than a value, and its length is the length of the shadow divided by the step:
-
-```css
-.button {
-  /* what one line of Sass writes: forty of these */
-  box-shadow: 0.7071px 0.7071px #0f172a, 1.4142px 1.4142px #0f172a, /* … */ 28.284px 28.284px #0f172a;
-}
-```
-
-Shortening the shadow by hand means rewriting every layer, and turning it means recomputing both offsets of all of them.
-
 ## Arguments
 
 <Arguments of="long-shadow" footnote="The direction is measured from the top and clockwise, as `gradient` measures one, so a diagonal shadow sits the same distance away as a straight one.">

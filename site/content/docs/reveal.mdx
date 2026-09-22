@@ -20,20 +20,6 @@ The **Reveal** Sass mixin animates something in and out of the page: a popover, 
 
 </Hint>
 
-## Why this needs a mixin
-
-`display: none` could not be transitioned, which is why fading a menu in was a JavaScript job for years. CSS can do it now, and it takes three things that have to agree. Measured in Chrome 152, Firefox 156 and Safari 26.6.2, on a popover, a modal dialog and a class-toggled element, reading the computed opacity 80ms into each direction:
-
-| What is written | On the way in | On the way out |
-|---|---|---|
-| all of it | animates in all three | Chrome and Safari |
-| without `@starting-style` | **nothing, in any browser** | animates |
-| without `allow-discrete` on `display` | animates | **nothing, in any browser** |
-
-Neither failure says anything. The CSS is valid, the transition is there, and half the effect is missing. Both are in the repository's lab as demos you can click, beside the mixin on the same three shapes.
-
-`@starting-style` also has to come **after** the rule it starts from. Written before it, it does nothing, and again without a word.
-
 <Hint kind="danger">
 
 **Firefox does not run the exit.** Measured in Firefox 156 on all three shapes: the element animates in and then disappears at once, although the browser answers `true` for `CSS.supports("transition-behavior", "allow-discrete")`. Chrome 152 and Safari 26.6.2 animate both ways. What a Firefox user gets is the entry animation and an instant close, which is a smaller effect rather than a broken one.
