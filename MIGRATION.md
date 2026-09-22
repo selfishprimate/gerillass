@@ -1793,6 +1793,46 @@ calls before and after it, with identical output.
 
 ---
 
+## Added: `glass`
+
+A frosted glass panel: a tint, a blur of what is behind it, and the fallback a
+browser without `backdrop-filter` shows instead. Nothing else changed, so it
+breaks no call.
+
+```scss
+.panel {
+  @include glass;
+}
+
+.card {
+  @include glass(20px, rgb(255 255 255 / 0.12), 160%, rgb(255 255 255 / 0.3), rgb(30 41 59 / 0.92));
+}
+```
+
+The blur is one declaration; what it needs around it is not. Measured in
+Chrome 152, Firefox 156 and Safari 26.6.2, the last two in a real window
+because headless Firefox paints no `backdrop-filter` at all: all three keep the
+unprefixed property and only Safari answers for `-webkit-backdrop-filter`,
+which is what a Safari before 18 understands, so both are written and both are
+in the `@supports` condition. Without support the panel is whatever
+`background` says, and a translucent tint over a photograph is unreadable, so
+the tint sits inside `@supports` and the mixin writes the tint with its alpha
+raised to 0.88 outside. An opaque tint is refused, since it blurs the backdrop
+and then covers it.
+
+Two things it cannot do anything about. An ancestor with a `transform`, a
+`filter`, `opacity` below 1 or `will-change` becomes the backdrop root, so
+nothing outside it is blurred, and the same ancestor is a stacking context, so
+the panel cannot rise above a later sibling: measured in all three, the tint
+stayed, the blur was gone and the decoration painted over the panel's text. And
+the fallback keeps the tint's hue, so white text chosen for glass over a dark
+photograph disappears into a white fallback; that call passes its own dark
+`$fallback`.
+
+It writes no `box-shadow`, so a drop shadow is still yours to add.
+
+---
+
 # Migrating to Gerillass 3.0.0
 
 Written while 3.0.0 is being prepared, and added to as its changes land. So far

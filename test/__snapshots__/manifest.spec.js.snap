@@ -1408,6 +1408,61 @@ exports[`Manifest examples fontSource: .a { content: "#{fontSource("Inter", "/fo
 }"
 `;
 
+exports[`Manifest examples glass: .bar { @include glass(16px, rgb(15 23 42 / 0.45), 1.4, rgb(148 163 184 1`] = `
+".bar {
+  background: rgba(15, 23, 42, 0.88);
+  border: 1px solid rgba(148, 163, 184, 0.4);
+}
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .bar {
+    background: rgba(15, 23, 42, 0.45);
+    -webkit-backdrop-filter: blur(16px) saturate(1.4);
+    backdrop-filter: blur(16px) saturate(1.4);
+  }
+}"
+`;
+
+exports[`Manifest examples glass: .card { @include glass(24px, rgb(255 255 255 / 0.12), 180%); } 1`] = `
+".card {
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+}
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .card {
+    background: rgba(255, 255, 255, 0.12);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    backdrop-filter: blur(24px) saturate(180%);
+  }
+}"
+`;
+
+exports[`Manifest examples glass: .panel { @include glass; } 1`] = `
+".panel {
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+}
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .panel {
+    background: rgba(255, 255, 255, 0.18);
+    -webkit-backdrop-filter: blur(12px) saturate(1.6);
+    backdrop-filter: blur(12px) saturate(1.6);
+  }
+}"
+`;
+
+exports[`Manifest examples glass: .sheet { @include glass(10px, var(--sheet-tint), 1.6, false, rgb(30 41 1`] = `
+".sheet {
+  background: rgba(30, 41, 59, 0.92);
+}
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .sheet {
+    background: var(--sheet-tint);
+    -webkit-backdrop-filter: blur(10px) saturate(1.6);
+    backdrop-filter: blur(10px) saturate(1.6);
+  }
+}"
+`;
+
 exports[`Manifest examples gradient: .a { @include gradient((black 0 25%, white 0 50%), conic, $repeating:  1`] = `
 ".a {
   background-image: repeating-conic-gradient(black 0 25%, white 0 50%);

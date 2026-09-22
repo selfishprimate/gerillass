@@ -1,0 +1,27 @@
+@use "gerillass" as *;
+
+.panel {
+  position: absolute;
+  inset: auto 18px 18px;
+  z-index: 1;
+  padding: 16px 18px;
+  border-radius: 12px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+// Without the mixin: the tint alone, which is what a browser with no support
+// shows for a hand-written glass panel.
+.without {
+  background: rgb(255 255 255 / 0.18);
+  border: 1px solid rgb(255 255 255 / 0.35);
+}
+
+.with {
+  @include glass;
+}
+
+.dark {
+  color: #e2e8f0;
+  @include glass(20px, rgb(15 23 42 / 0.45), 1.4, rgb(148 163 184 / 0.4));
+}

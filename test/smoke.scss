@@ -52,6 +52,7 @@
 .escape-to-parent { @include escape-to-parent(".parent") { color: red; } }
 .except { @include except("first") { color: red; } }
 .focus-ring { @include focus-ring; }
+.glass { @include glass(16px, rgb(255 255 255 / 0.2), 1.6, true); }
 .gradient { @include gradient((red, blue), conic, $from: 45deg, $in: oklab); }
 .hide { @include hide; }
 .hide-focusable { @include hide(focusable); }

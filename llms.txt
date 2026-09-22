@@ -1,6 +1,6 @@
 # Gerillass
 
-> A Sass toolkit of 55 mixins and 24 functions, built to be read by coding agents as well as by people. Every member is described in a machine-readable manifest whose examples and refusals are executed by the test suite, so the documentation cannot drift away from the code.
+> A Sass toolkit of 56 mixins and 24 functions, built to be read by coding agents as well as by people. Every member is described in a machine-readable manifest whose examples and refusals are executed by the test suite, so the documentation cannot drift away from the code.
 
 Gerillass is a pure Sass library. There is no build step and no runtime dependency: the `.scss` sources are the deliverable, and the package installs nothing else. It needs Dart Sass; LibSass and node-sass are not supported. This file describes Gerillass 3.0.0.
 
@@ -39,6 +39,7 @@ Arguments are validated and refused with a message naming what is accepted, so a
 - [except($params...)](https://docs.gerillass.com/docs/except/): Selects every sibling but the ones named, counted by tag or by a selector you name.
 - [focus-ring($width: 2px, $offset: 2px, $color: currentColor)](https://docs.gerillass.com/docs/focus-ring/): Draws a keyboard focus ring with outline on :focus-visible, which survives forced-colors mode where a box-shadow ring disappears.
 - [font-face($font-family, $file-path, $font-style: normal, $font-weight: 400, $file-formats: woff2, $font-display: null)](https://docs.gerillass.com/docs/font-face/): Emits an @font-face rule for one family across several file formats.
+- [glass($blur: 12px, $tint: rgb(255 255 255 / 0.18), $saturate: 1.6, $edge: true, $fallback: null)](https://docs.gerillass.com/docs/glass/): A glass surface: a panel that blurs whatever is behind it, with the fallback a browser without backdrop-filter needs.
 - [gradient($colors, $type: linear, $direction: null, $shape: null, $position: null, $from: null, $in: null, $repeating: false)](https://docs.gerillass.com/docs/gradient/): A linear, radial or conic gradient as background-image, plain or repeating, with an optional colour interpolation space.
 - [hide($toggle: "hide")](https://docs.gerillass.com/docs/hide/): Visually hides an element while keeping it available to screen readers, either always or until it or anything inside it has keyboard focus.
 - [loadify($params...)](https://docs.gerillass.com/docs/loadify/): Fades elements in on page load.

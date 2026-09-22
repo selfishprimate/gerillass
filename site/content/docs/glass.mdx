@@ -1,0 +1,130 @@
+---
+title: "Glass"
+page_title: "Glass Sass Mixin"
+page_description: "The Glass Sass mixin writes a frosted glass panel with backdrop-filter, the prefixed property older Safari needs and the opaque fallback a browser without support has to fall back to."
+page_keywords: "CSS glassmorphism, backdrop-filter Sass, frosted glass CSS, webkit-backdrop-filter, glass card CSS, backdrop-filter fallback, Gerillass glass"
+page_image: "gerillass-background-image.jpg"
+---
+
+# Glass
+
+<Member name="glass">
+
+The **Glass** Sass mixin writes a frosted glass panel: a tint, a blur of whatever is behind it, and the fallback a browser without `backdrop-filter` shows instead.
+
+</Member>
+
+<Hint kind="warning">
+
+**New in Gerillass 4.0.0.**
+
+</Hint>
+
+## Why this needs a mixin
+
+The blur is one declaration. Everything around it is the part that goes wrong, and all of it was measured in Chrome 152, Firefox 156 and Safari 26.6.2:
+
+- **the fallback.** With no support the panel is whatever `background` says, and the translucent tint glass wants is unreadable over a photograph. The tint therefore belongs inside `@supports`, with a more opaque version outside, which the mixin computes by raising the tint's own alpha.
+- **the prefix.** All three keep the unprefixed property. Only Safari answers for `-webkit-backdrop-filter`, which is what a Safari before 18 understands, so both are written and both are in the condition.
+- **an opaque tint.** It blurs the backdrop and then covers it, so the effect disappears with the CSS still valid. That call is refused rather than shipped.
+
+## Arguments
+
+<Arguments of="glass" footnote="It writes no `box-shadow`: a glass card usually wants a drop shadow too, and owning the property would stop you adding one.">
+  <Argument name="$blur" type="number">How far the backdrop is blurred, <code>12px</code> by default. A length, a <code>var()</code> or a <code>calc()</code>. A percentage is refused, since <code>blur()</code> takes a length.</Argument>
+  <Argument name="$tint" type="color">The panel's own colour, <code>rgb(255 255 255 / 0.18)</code> by default. It has to have an alpha, or the blurred backdrop is covered by it.</Argument>
+  <Argument name="$saturate" type="number">How much the backdrop's colour is lifted, <code>1.6</code> by default. A number, a percentage or a <code>var()</code>. <code>1</code> leaves the colours alone.</Argument>
+  <Argument name="$edge" type="boolean"><code>true</code>, the default, writes a light hairline; <code>false</code> writes no border; a colour writes that border instead.</Argument>
+  <Argument name="$fallback" type="color">The panel a browser without <code>backdrop-filter</code> shows. Left out, it is the tint with its alpha raised to <code>0.88</code>, so a tint only the browser knows, such as a <code>var()</code>, has to pass one.</Argument>
+</Arguments>
+
+## Examples
+
+<Example caption="A card. The tint is white at 12% over a photograph, and `$fallback` is dark on purpose: without it the fallback would be white at 88%, which the white lettering would vanish into. Pass the fallback whenever the text is chosen for the glass rather than for the panel.">
+```scss
+.card {
+  @include glass(20px, rgb(255 255 255 / 0.12), 160%, rgb(255 255 255 / 0.3), rgb(30 41 59 / 0.92));
+}
+```
+```html
+<style>
+  body { min-height: 270px; display: grid; place-items: center; background: radial-gradient(circle at 15% 20%, #f472b6 0 22%, transparent 23%), radial-gradient(circle at 80% 15%, #22d3ee 0 26%, transparent 27%), radial-gradient(circle at 70% 85%, #a3e635 0 24%, transparent 25%), linear-gradient(135deg, #1e1b4b, #4c1d95 45%, #831843); }
+  .card { width: 320px; aspect-ratio: 1.586; border-radius: 18px; padding: 22px; display: grid; align-content: space-between; color: #f8fafc; font: 600 14px Inter, ui-sans-serif, system-ui, sans-serif; }
+  .card__brand { display: flex; justify-content: space-between; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; opacity: 0.8; }
+  .card__number { font: 700 21px ui-monospace, SFMono-Regular, monospace; letter-spacing: 0.08em; }
+  .card__row { display: flex; justify-content: space-between; font-size: 13px; }
+  .card__row span:first-child { letter-spacing: 0.06em; }
+</style>
+<div class="card">
+  <div class="card__brand"><span>Debit</span><span>Gerillass</span></div>
+  <div class="card__number">4921 •••• •••• 3087</div>
+  <div class="card__row"><span>A. MORGAN</span><span>08 / 29</span></div>
+</div>
+```
+</Example>
+
+<Example caption="A player over its own cover art, which is the other place this pattern earns its keep: the panel is dark, the edge is a colour of its own, and `$saturate` is left at `1` because the art underneath is already bright.">
+```scss
+.player {
+  @include glass(18px, rgb(15 23 42 / 0.55), 1, rgb(148 163 184 / 0.45));
+}
+```
+```html
+<style>
+  body { min-height: 260px; display: grid; place-items: center; background: conic-gradient(from 210deg at 35% 40%, #f97316, #db2777, #6366f1, #0ea5e9, #f97316); }
+  .player { width: 340px; border-radius: 16px; padding: 16px; display: flex; gap: 14px; align-items: center; color: #e2e8f0; font: 14px Inter, ui-sans-serif, system-ui, sans-serif; }
+  .player__art { width: 56px; height: 56px; border-radius: 10px; background: linear-gradient(140deg, #fbbf24, #db2777); flex: none; }
+  .player__meta { display: grid; gap: 2px; }
+  .player__title { font-weight: 700; }
+  .player__artist { font-size: 13px; opacity: 0.75; }
+  .player__bar { margin-top: 8px; height: 4px; border-radius: 999px; background: rgb(255 255 255 / 0.25); }
+  .player__bar span { display: block; width: 62%; height: 100%; border-radius: 999px; background: #e2e8f0; }
+</style>
+<div class="player">
+  <div class="player__art"></div>
+  <div class="player__meta">
+    <span class="player__title">Static Bloom</span>
+    <span class="player__artist">The Cascade</span>
+    <div class="player__bar"><span></span></div>
+  </div>
+</div>
+```
+</Example>
+
+## Before you use it
+
+<Hint kind="danger">
+
+**An ancestor that makes a backdrop root takes the blur with it.** A `transform`, a `filter`, `opacity` below 1 or `will-change` on any ancestor means nothing outside that ancestor is blurred, and because the same ancestor is a stacking context, the panel cannot rise above a later sibling either. Measured in all three browsers on a panel inside a wrapper with `transform: translateZ(0)`: the tint stayed, the blur was gone, and the decoration painted over the panel's own text. No mixin can write around this. Move the panel out of that ancestor, or take the transform off.
+
+</Hint>
+
+<Hint kind="info">
+
+**The fallback is the tint, more opaque**, so a white tint gives a white panel. Text picked to sit on glass over a dark photograph can disappear into it, which is why the card above passes a dark `$fallback` of its own.
+
+</Hint>
+
+## What it refuses
+
+```scss
+.a {
+  @include glass(4%);
+  @include glass(12px, #fff);
+  @include glass(12px, var(--tint));
+  @include glass(12px, rgb(255 255 255 / 0.2), 10px);
+}
+```
+```text
+Error: `4%` is not a valid $blur for `glass`: a percentage does not work here. It is written into `blur()`, which takes a length.
+Error: `#fff` is opaque, so `glass` would blur the backdrop and then cover it. Pass a colour with an alpha, such as `rgb(255 255 255 / 0.18)`.
+Error: `glass` cannot work out a fallback from `var(--tint)`, because only the browser knows that colour. Pass `$fallback` as well: the panel a browser without `backdrop-filter` shows, opaque enough to read on, such as `rgb(255 255 255 / 0.88)`.
+Error: `10px` is not a valid $saturate for `glass`. Pass a number such as `1.6`, a percentage such as `160%`, or `1` to leave the colours alone.
+```
+
+## Related Links
+
+- [Background Image](/docs/background-image)
+- [Background Pattern](/docs/background-pattern)
+- [CSS backdrop-filter](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/backdrop-filter)
+- [CSS @supports](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@supports)

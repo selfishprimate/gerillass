@@ -9,7 +9,7 @@ Gerillass is a **pure Sass library** — a toolkit of mixins and functions, in t
 Two consequences follow from this and drive most decisions in the repo:
 
 1. **`package.json` must have no `dependencies`.** Everything (`jest`, `sass`, `sass-true`, `glob`) belongs in `devDependencies`. Consumers get only `.scss` files, so a runtime dependency here forces the entire test toolchain onto every downstream project. This was the cause of 24 Dependabot alerts fixed in v1.3.3 — do not reintroduce it.
-2. **Only `scss/` ships.** `.npmignore` excludes `test`, `assets`, `meta`, `tools`, dotfiles and `*.md`; npm always adds `README.md`, `LICENSE.md` and `package.json` back. Verify with `npm pack --dry-run` before any release (120 files, a 142 kB tarball for 4.0.0, which merged `background-dots` and `background-stripes` into one `background-pattern` and added `scss/internal/_key-end.scss`, `_device-size.scss`, `_nth-of.scss`, `_time-problem.scss`, `_range-problem.scss` and `_shadow-direction.scss`).
+2. **Only `scss/` ships.** `.npmignore` excludes `test`, `assets`, `meta`, `tools`, dotfiles and `*.md`; npm always adds `README.md`, `LICENSE.md` and `package.json` back. Verify with `npm pack --dry-run` before any release (121 files, a 145 kB tarball for 4.0.0, which merged `background-dots` and `background-stripes` into one `background-pattern` and added `scss/internal/_key-end.scss`, `_device-size.scss`, `_nth-of.scss`, `_time-problem.scss`, `_range-problem.scss` and `_shadow-direction.scss`).
 3. **The gem is the same library, not a port.** `gerillass.gemspec` ships `scss/`, `gerillass.json` and `SKILL.md`, plus `lib/`, `LICENSE.md` and `README.md`, reads its version from `package.json`, and has no runtime dependencies. `lib/` only tells Rails, Jekyll or a plain `sass-embedded` compile where `scss/` is. `.npmignore` keeps `lib`, the gemspec and `*.gem` out of the npm package. Keep the gemspec ASCII: RubyGems reads it in the locale's encoding, and a literal non-ASCII character fails to load.
 
 Dart Sass only. LibSass/node-sass has been unsupported since v1.3.0.
@@ -299,7 +299,7 @@ Four layers, loaded in dependency order by `scss/_gerillass.scss`. The order is 
 | 1 | `scss/lists/` | flat value lists (`$list-of-buttons`) | `list-of-` prefix, `!default` |
 | 2 | `scss/maps/` | keyed config (`$map-for-breakpoints`) | `map-for-` prefix, `!default` |
 | 3 | `scss/utilities/` | 24 helper **functions** | `camelCase` |
-| 4 | `scss/library/` | 55 **mixins** — the bulk of the API | `kebab-case` |
+| 4 | `scss/library/` | 56 **mixins** — the bulk of the API | `kebab-case` |
 
 `_gerillass.scss` lists every partial explicitly. **A new file is invisible until you add its `@import` line there**, in the correct layer block.
 
@@ -402,10 +402,10 @@ Four levels, and knowing which one covers a member tells you what you can trust:
 
 | Level | Proves | Coverage |
 |---|---|---|
-| `test/smoke.scss` | the mixin evaluates at all | 55/55 mixins |
-| snapshot of `meta/` examples | the output cannot change unnoticed | 79/79 members |
-| `meta/` rejects | bad input is refused with a real message | 69/79 |
-| sass-true spec in `test/` | the CSS is **correct** | 43/79 |
+| `test/smoke.scss` | the mixin evaluates at all | 56/56 mixins |
+| snapshot of `meta/` examples | the output cannot change unnoticed | 80/80 members |
+| `meta/` rejects | bad input is refused with a real message | 70/80 |
+| sass-true spec in `test/` | the CSS is **correct** | 44/80 |
 
 Only the last one catches an output that was wrong from the start; a snapshot
 records a wrong value as correct. Hand-written specs are therefore reserved for
@@ -940,7 +940,9 @@ Two pieces of work are open:
   rewritten on `reveal`, branched from `auto-grid`; and `long-shadow`, the
   long shadow of flat design as a stack of `box-shadow` copies, on
   `long-shadow`, branched from `reveal`, which also moved the shadow directions
-  `text-shadow` had to itself into `scss/internal/_shadow-direction.scss`.
+  `text-shadow` had to itself into `scss/internal/_shadow-direction.scss`; and
+  `glass`, a `backdrop-filter` panel with the fallback and the prefix around it,
+  on `glass`, branched from `long-shadow`.
   The last three come from `todos/library-review.md`, and the last three
   patterns, `glow`, `vignette` and `mesh`, from the survey in
   `todos/saas-hero-backgrounds.md`. Each has a `MIGRATION.md` section.
@@ -1008,16 +1010,21 @@ each one closes:
    `max($min, (100% - ($limit - 1) * $gap) / $limit)`, which has to be edited in
    three places by hand every time the limit or the gap changes. `columnizer`
    stays as it is: it is flexbox and wants a column count.
-2. **Decorative, in the spirit of `background-pattern` and `scissors`:** `glass`
-   (`backdrop-filter` with a `@supports` fallback, which is unreadable without
-   it), `edge-fade` (`mask-image` on a scroll container), `theme`
-   (`color-scheme` plus `light-dark()`, where forgetting the first makes the
-   second silently pick light). `theme` is now part of the token layer in
+2. ~~**`glass`**~~ **done for 4.0.0 on the `glass` branch.** It is the fallback
+   and the prefix that earn it, not the blur: with no support the panel is the
+   tint alone, which is unreadable over a photograph, so the tint sits inside
+   `@supports` and the mixin writes it again outside with its alpha raised to
+   0.88. What is left is `edge-fade` (`mask-image` on a scroll container) and
+   `theme` (`color-scheme` plus `light-dark()`, where forgetting the first makes
+   the second silently pick light). `theme` is now part of the token layer in
    `todos/design-tokens.md`.
 
 `long-shadow` is in too, on its own branch for 4.0.0: the count of layers is
 the length over the step, so one line of Sass writes forty of them, which is the
-leverage bar rather than the trap bar. `todos/library-review.md` item 8 has what
+leverage bar rather than the trap bar. `glass` followed it, for the opposite
+reason: it writes little, and what it writes is the `@supports` fallback, the
+prefixed property and the refusal of an opaque tint, none of which a caller
+gets right by accident. `todos/library-review.md` item 8 has what
 was measured. `auto-grid` was the one that closed a real defect and it is in.
 The rest are decorative and can wait for a release that wants them.
 

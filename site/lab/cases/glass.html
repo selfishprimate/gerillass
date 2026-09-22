@@ -1,0 +1,20 @@
+<style>
+  .scene { position: relative; height: 170px; margin-bottom: 22px; border-radius: 16px; overflow: hidden;
+    background: linear-gradient(120deg, #f472b6, #facc15 35%, #22d3ee 70%, #6366f1); }
+  .scene::after { content: ""; position: absolute; inset: 0;
+    background: repeating-linear-gradient(45deg, rgb(255 255 255 / 0.45) 0 14px, transparent 14px 34px),
+                radial-gradient(circle at 25% 70%, #ef4444 0 42px, transparent 43px); }
+  .rooted { position: absolute; inset: 0; transform: translateZ(0); }
+</style>
+
+<p>Without the mixin: the tint alone, and the stripes run through the text.</p>
+<div class="scene"><div class="panel without">Balance $12,480</div></div>
+
+<p>With the mixin.</p>
+<div class="scene"><div class="panel with">Balance $12,480</div></div>
+
+<p>A dark tint, a heavier blur, its own edge colour.</p>
+<div class="scene"><div class="panel dark">Balance $12,480</div></div>
+
+<p>Inside a wrapper with a transform: the blur is gone and the decoration paints over the panel.</p>
+<div class="scene"><div class="rooted"><div class="panel with">Balance $12,480</div></div></div>

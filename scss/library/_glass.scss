@@ -1,0 +1,108 @@
+@charset "UTF-8";
+
+@use "sass:color";
+@use "sass:math";
+@use "sass:meta";
+@use "sass:string";
+@use "../internal/color-problem" as *;
+@use "../internal/is-css-function" as *;
+@use "../internal/length-problem" as *;
+
+// A glass surface: a panel that blurs whatever is behind it, with the fallback
+// a browser without `backdrop-filter` needs.
+//
+// The blur itself is one declaration. What is not one declaration is everything
+// around it, and each of these was measured in Chrome 152, Firefox 156 and
+// Safari 26.6.2 before this was written, the last two in a real window because
+// headless Firefox paints no `backdrop-filter` at all:
+//
+// - **the fallback.** With no support the panel is whatever `background` says,
+//   and the translucent tint a glass panel wants is unreadable on a busy
+//   photograph: the stripes behind the demo ran straight through the text. So
+//   the tint goes inside `@supports` and a more opaque version of it is written
+//   outside, which this computes by raising the tint's own alpha rather than
+//   asking for a second colour.
+// - **the prefix.** All three keep the unprefixed property; only Safari also
+//   answers for `-webkit-backdrop-filter`, which is what a Safari before 18
+//   understands. One line, so both are written.
+// - **the tint cannot be opaque.** An opaque background covers the blurred
+//   backdrop with itself, and the effect disappears with the CSS still valid.
+//   Measured on a panel at `rgb(255 255 255 / 1)`: no blur visible anywhere.
+// - **`blur()` takes a length.** `blur(4%)` is refused by all three, so a
+//   percentage is refused here too.
+//
+// One thing no mixin can write around, and the reason the documentation says it
+// twice: an ancestor with a `transform`, a `filter`, `opacity` below 1 or
+// `will-change` becomes the backdrop root, and nothing outside it is blurred.
+// The same ancestor is a stacking context, so the panel cannot rise above a
+// later sibling either. Measured in all three: the panel keeps its tint, the
+// blur is gone, and the decoration painted over the text.
+
+// The hairline a glass edge catches, when $edge is left at true.
+$-edge: rgb(255 255 255 / 0.35);
+// Below this the fallback is not readable over a photograph, which is what the
+// panel sits on when it is glass at all.
+$-fallback-alpha: 0.88;
+
+@mixin glass($blur: 12px, $tint: rgb(255 255 255 / 0.18), $saturate: 1.6, $edge: true, $fallback: null) {
+  $problem: lengthProblem($blur, $percent: false, $negative: false);
+  @if $problem {
+    @error "`#{meta.inspect($blur)}` is not a valid $blur for `glass`: #{$problem}. It is written into `blur()`, which takes a length.";
+  }
+
+  $problem: colorProblem($tint, $css-wide: false);
+  @if $problem {
+    @error "`#{meta.inspect($tint)}` is not a valid $tint for `glass`: #{$problem}. It is the panel's own colour, and it has to let the blurred backdrop through, so give it an alpha, such as `rgb(255 255 255 / 0.18)`.";
+  }
+  // `color.channel` rather than `color.alpha`, which Dart Sass answers only for
+  // a legacy colour: an `oklch()` tint ended the build with its own message.
+  @if meta.type-of($tint) == "color" and color.channel($tint, "alpha") == 1 {
+    @error "`#{meta.inspect($tint)}` is opaque, so `glass` would blur the backdrop and then cover it. Pass a colour with an alpha, such as `rgb(255 255 255 / 0.18)`.";
+  }
+
+  // A multiplier or a percentage, or an expression only the browser resolves.
+  @if meta.type-of($saturate) == "number" {
+    @if (math.unit($saturate) != "" and math.unit($saturate) != "%") or $saturate < 0 {
+      @error "`#{meta.inspect($saturate)}` is not a valid $saturate for `glass`. Pass a number such as `1.6`, a percentage such as `160%`, or `1` to leave the colours alone.";
+    }
+  } @else if not isCssFunction($saturate, ("var", "calc", "clamp", "min", "max", "env")) {
+    @error "`#{meta.inspect($saturate)}` is not a valid $saturate for `glass`. Pass a number such as `1.6`, a percentage such as `160%`, or a `var()`.";
+  }
+
+  @if $edge != true and $edge != false {
+    $problem: colorProblem($edge, $css-wide: false);
+    @if $problem {
+      @error "`#{meta.inspect($edge)}` is not a valid $edge for `glass`: #{$problem}. Pass `true` for a light hairline, `false` for none, or the colour the edge should be.";
+    }
+  }
+
+  // The panel outside `@supports`, which is what a browser with no
+  // `backdrop-filter` renders, and what the text has to stay readable on.
+  $opaque: $fallback;
+  @if $opaque == null {
+    @if meta.type-of($tint) != "color" {
+      @error "`glass` cannot work out a fallback from `#{meta.inspect($tint)}`, because only the browser knows that colour. Pass `$fallback` as well: the panel a browser without `backdrop-filter` shows, opaque enough to read on, such as `rgb(255 255 255 / 0.88)`.";
+    }
+    $opaque: color.change($tint, $alpha: math.max(color.channel($tint, "alpha"), $-fallback-alpha));
+  } @else {
+    $problem: colorProblem($opaque, $css-wide: false);
+    @if $problem {
+      @error "`#{meta.inspect($fallback)}` is not a valid $fallback for `glass`: #{$problem}.";
+    }
+  }
+
+  background: $opaque;
+  @if $edge != false {
+    border: 1px solid if($edge == true, $-edge, $edge);
+  }
+
+  // `-webkit-backdrop-filter` is in the condition as well as in the block, so a
+  // Safari that has only the prefixed property still takes the tint.
+  @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+    $filter: string.unquote("blur(#{$blur}) saturate(#{$saturate})");
+
+    background: $tint;
+    -webkit-backdrop-filter: $filter;
+    backdrop-filter: $filter;
+  }
+}

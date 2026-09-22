@@ -1137,6 +1137,84 @@
       ]
     },
     {
+      "name": "glass",
+      "kind": "mixin",
+      "arguments": [
+        {
+          "name": "$blur",
+          "default": "12px",
+          "accepts": [
+            "a length, such as 12px or 1rem",
+            "a var() or calc()",
+            "not a percentage, which blur() drops"
+          ]
+        },
+        {
+          "name": "$tint",
+          "default": "rgb(255 255 255 / 0.18)",
+          "accepts": [
+            "a colour with an alpha, such as rgb(255 255 255 / 0.18)",
+            "a var() or color-mix(), with $fallback passed as well",
+            "not an opaque colour"
+          ]
+        },
+        {
+          "name": "$saturate",
+          "default": "1.6",
+          "accepts": [
+            "a number, such as 1.6",
+            "a percentage, such as 160%",
+            "a var() or calc()"
+          ]
+        },
+        {
+          "name": "$edge",
+          "default": "true",
+          "accepts": [
+            "true, the default, for a light hairline",
+            "false, for no border",
+            "the colour the edge should be"
+          ]
+        },
+        {
+          "name": "$fallback",
+          "default": "null",
+          "accepts": [
+            "the colour a browser without backdrop-filter shows",
+            "nothing, to raise the tint's own alpha to 0.88"
+          ]
+        }
+      ],
+      "file": "scss/library/_glass.scss",
+      "signature": "glass($blur: 12px, $tint: rgb(255 255 255 / 0.18), $saturate: 1.6, $edge: true, $fallback: null)",
+      "summary": "A glass surface: a panel that blurs whatever is behind it, with the fallback a browser without backdrop-filter needs.",
+      "caveats": [
+        "An ancestor with a `transform`, a `filter`, `opacity` below 1 or `will-change` becomes the backdrop root, and nothing outside it is blurred. The same ancestor is a stacking context, so the panel cannot rise above a later sibling either. Measured in Chrome 152, Firefox 156 and Safari 26.6.2 on a panel inside a wrapper with `transform: translateZ(0)`: the tint stayed, the blur was gone, and the scene's own decoration painted over the panel's text. No mixin can write around this; move the panel out of that ancestor.",
+        "The tint has to let the backdrop through. An opaque `$tint` blurs what is behind and then covers it with itself, so the effect disappears while the CSS stays valid, which is why an opaque colour is refused.",
+        "Measured in Chrome 152, Firefox 156 and Safari 26.6.2: all three keep the unprefixed `backdrop-filter`, and only Safari answers for `-webkit-backdrop-filter`, which is what a Safari before 18 understands. Both are written, and both are in the `@supports` condition. `blur()` takes a length: `blur(4%)` is dropped by all three.",
+        "Without support the panel is whatever `background` says, so the tint sits inside `@supports` and a more opaque version of it outside. The fallback is the tint with its alpha raised to 0.88, computed here, unless `$fallback` says otherwise; a tint only the browser knows, such as a `var()`, cannot be raised, so that call has to pass `$fallback` itself.",
+        "The fallback keeps the tint's hue, so a white tint gives a near white panel. Text chosen to sit on glass over a dark photograph disappears into it, and that call should pass a dark `$fallback` of its own.",
+        "It writes no `box-shadow`. A glass card usually wants a drop shadow as well, and owning the property would mean a caller could not add one without repeating what the mixin wrote."
+      ],
+      "examples": [
+        ".panel { @include glass; }",
+        ".card { @include glass(24px, rgb(255 255 255 / 0.12), 180%); }",
+        ".bar { @include glass(16px, rgb(15 23 42 / 0.45), 1.4, rgb(148 163 184 / 0.4)); }",
+        ".sheet { @include glass(10px, var(--sheet-tint), 1.6, false, rgb(30 41 59 / 0.92)); }"
+      ],
+      "rejects": [
+        ".a { @include glass(4%); }",
+        ".a { @include glass(-4px); }",
+        ".a { @include glass(12px, nonsense); }",
+        ".a { @include glass(12px, #fff); }",
+        ".a { @include glass(12px, rgb(255 255 255 / 0.2), 10px); }",
+        ".a { @include glass(12px, rgb(255 255 255 / 0.2), -1); }",
+        ".a { @include glass(12px, rgb(255 255 255 / 0.2), 1.6, nonsense); }",
+        ".a { @include glass(12px, var(--tint)); }",
+        ".a { @include glass(12px, rgb(255 255 255 / 0.2), 1.6, true, nonsense); }"
+      ]
+    },
+    {
       "name": "gradient",
       "kind": "mixin",
       "arguments": [

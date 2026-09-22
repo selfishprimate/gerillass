@@ -5,7 +5,7 @@ description: Use the Gerillass Sass mixin library — loading it, the mixin cata
 
 # Gerillass
 
-A Sass mixin library: 55 mixins and 24 functions that emit CSS from
+A Sass mixin library: 56 mixins and 24 functions that emit CSS from
 semantic declarations. It is Sass source only — there is no runtime and no
 utility classes, so styles live in your stylesheet and your markup stays clean.
 
@@ -100,6 +100,7 @@ a dropped declaration rather than an error.
 | `except` | `.a { @include except(#ff0000) { margin: 0; } }` |
 | `focus-ring` | `@include focus-ring;` |
 | `font-face` | `.a { @include font-face("Inter", "/fonts/inter"); }` |
+| `glass` | `.a { @include glass(4%); }` |
 | `gradient` | `.a { @include gradient((red, blue), sideways); }` |
 | `hide` | `.a { @include hide(nonsense); }` |
 | `loadify` | `@include loadify(nonsense);` |
@@ -245,6 +246,15 @@ a dropped declaration rather than an error.
 
 - `$file-formats` defaults to `woff2`. A project that ships only `.woff` or `.ttf` and passes no formats gets no font, silently, in Chrome, Firefox and Safari. Pass the formats you have files for. Until 4.0.0 the default was `eot woff2 woff ttf svg`, which made webpack, esbuild and Parcel fail on a missing `.eot`.
 - Must be called at the root of a stylesheet, not inside a selector.
+
+**`glass`**
+
+- An ancestor with a `transform`, a `filter`, `opacity` below 1 or `will-change` becomes the backdrop root, and nothing outside it is blurred. The same ancestor is a stacking context, so the panel cannot rise above a later sibling either. Measured in Chrome 152, Firefox 156 and Safari 26.6.2 on a panel inside a wrapper with `transform: translateZ(0)`: the tint stayed, the blur was gone, and the scene's own decoration painted over the panel's text. No mixin can write around this; move the panel out of that ancestor.
+- The tint has to let the backdrop through. An opaque `$tint` blurs what is behind and then covers it with itself, so the effect disappears while the CSS stays valid, which is why an opaque colour is refused.
+- Measured in Chrome 152, Firefox 156 and Safari 26.6.2: all three keep the unprefixed `backdrop-filter`, and only Safari answers for `-webkit-backdrop-filter`, which is what a Safari before 18 understands. Both are written, and both are in the `@supports` condition. `blur()` takes a length: `blur(4%)` is dropped by all three.
+- Without support the panel is whatever `background` says, so the tint sits inside `@supports` and a more opaque version of it outside. The fallback is the tint with its alpha raised to 0.88, computed here, unless `$fallback` says otherwise; a tint only the browser knows, such as a `var()`, cannot be raised, so that call has to pass `$fallback` itself.
+- The fallback keeps the tint's hue, so a white tint gives a near white panel. Text chosen to sit on glass over a dark photograph disappears into it, and that call should pass a dark `$fallback` of its own.
+- It writes no `box-shadow`. A glass card usually wants a drop shadow as well, and owning the property would mean a caller could not add one without repeating what the mixin wrote.
 
 **`hide`**
 
@@ -437,6 +447,7 @@ a dropped declaration rather than an error.
 | `except($params...)` | Selects every sibling but the ones named, counted by tag or by a selector you name. |
 | `focus-ring($width: 2px, $offset: 2px, $color: currentColor)` | Draws a keyboard focus ring with outline on :focus-visible, which survives forced-colors mode where a box-shadow ring disappears. |
 | `font-face($font-family, $file-path, $font-style: normal, $font-weight: 400, $file-formats: woff2, $font-display: null)` | Emits an @font-face rule for one family across several file formats. Must be called at the root. |
+| `glass($blur: 12px, $tint: rgb(255 255 255 / 0.18), $saturate: 1.6, $edge: true, $fallback: null)` | A glass surface: a panel that blurs whatever is behind it, with the fallback a browser without backdrop-filter needs. |
 | `gradient($colors, $type: linear, $direction: null, $shape: null, $position: null, $from: null, $in: null, $repeating: false)` | A linear, radial or conic gradient as background-image, plain or repeating, with an optional colour interpolation space. Replaced linear-gradient and radial-gradient in 3.0.0. |
 | `hide($toggle: "hide")` | Visually hides an element while keeping it available to screen readers, either always or until it or anything inside it has keyboard focus. |
 | `loadify($params...)` | Fades elements in on page load. Call `loadify(init)` once at the root to write the keyframes, then the mixin on each element. |

@@ -1,0 +1,135 @@
+// The part worth pinning is the fallback: the panel a browser without
+// `backdrop-filter` renders is computed from the tint by raising its alpha,
+// and a tint only the browser knows cannot be raised at all. The rest is the
+// shape of the `@supports` block, which is where the prefixed property has to
+// stay for a Safari before 18.
+@use 'true' as *;
+@use '../../scss/library/glass' as *;
+
+@include describe('glass()') {
+  @include it('Writes the tint inside @supports and an opaque fallback outside.') {
+    @include assert {
+      @include output {
+        .a {
+          @include glass(10px, rgb(255 255 255 / 0.2), 1.5);
+        }
+      }
+      @include expect {
+        .a {
+          background: rgba(255, 255, 255, 0.88);
+          border: 1px solid rgba(255, 255, 255, 0.35);
+        }
+        @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+          .a {
+            background: rgba(255, 255, 255, 0.2);
+            -webkit-backdrop-filter: blur(10px) saturate(1.5);
+            backdrop-filter: blur(10px) saturate(1.5);
+          }
+        }
+      }
+    }
+  }
+
+  @include it('Leaves a tint already more opaque than the fallback alone.') {
+    @include assert {
+      @include output {
+        .a {
+          @include glass(4px, rgb(15 23 42 / 0.94), 1);
+        }
+      }
+      @include expect {
+        .a {
+          background: rgba(15, 23, 42, 0.94);
+          border: 1px solid rgba(255, 255, 255, 0.35);
+        }
+        @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+          .a {
+            background: rgba(15, 23, 42, 0.94);
+            -webkit-backdrop-filter: blur(4px) saturate(1);
+            backdrop-filter: blur(4px) saturate(1);
+          }
+        }
+      }
+    }
+  }
+
+  @include it('Takes a colour for the edge, and writes no border for false.') {
+    @include assert {
+      @include output {
+        .a {
+          @include glass(4px, rgb(255 255 255 / 0.9), 1, #94a3b8);
+        }
+        .b {
+          @include glass(4px, rgb(255 255 255 / 0.9), 1, false);
+        }
+      }
+      @include expect {
+        .a {
+          background: rgba(255, 255, 255, 0.9);
+          border: 1px solid #94a3b8;
+        }
+        @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+          .a {
+            background: rgba(255, 255, 255, 0.9);
+            -webkit-backdrop-filter: blur(4px) saturate(1);
+            backdrop-filter: blur(4px) saturate(1);
+          }
+        }
+        .b {
+          background: rgba(255, 255, 255, 0.9);
+        }
+        @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+          .b {
+            background: rgba(255, 255, 255, 0.9);
+            -webkit-backdrop-filter: blur(4px) saturate(1);
+            backdrop-filter: blur(4px) saturate(1);
+          }
+        }
+      }
+    }
+  }
+
+  @include it('Writes a saturation given as a percentage, and a blur in any unit.') {
+    @include assert {
+      @include output {
+        .a {
+          @include glass(0.75rem, rgb(255 255 255 / 0.9), 180%, false);
+        }
+      }
+      @include expect {
+        .a {
+          background: rgba(255, 255, 255, 0.9);
+        }
+        @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+          .a {
+            background: rgba(255, 255, 255, 0.9);
+            -webkit-backdrop-filter: blur(0.75rem) saturate(180%);
+            backdrop-filter: blur(0.75rem) saturate(180%);
+          }
+        }
+      }
+    }
+  }
+
+  @include it('Takes a tint the browser resolves when the fallback is given.') {
+    @include assert {
+      @include output {
+        .a {
+          @include glass(6px, var(--tint), var(--sat), false, rgb(30 41 59 / 0.92));
+        }
+      }
+      @include expect {
+        .a {
+          background: rgba(30, 41, 59, 0.92);
+        }
+        @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+          .a {
+            background: var(--tint);
+            -webkit-backdrop-filter: blur(6px) saturate(var(--sat));
+            backdrop-filter: blur(6px) saturate(var(--sat));
+          }
+        }
+      }
+    }
+  }
+}
