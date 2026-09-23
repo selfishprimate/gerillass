@@ -16,7 +16,12 @@ The **Auto Grid** Sass mixin lays out as many columns as the container holds, ea
 
 <Hint kind="warning">
 
-**New in Gerillass 4.0.0.**
+**New in Gerillass 4.0.0.** Nothing was removed for it. **Columnizer** stays as
+it is, for a set number of flexbox columns; this one is given the width a
+column may shrink to and works the count out itself, so the grid rewraps with
+the container rather than at a breakpoint. On an older version you write the
+track list by hand, and the `min(100%, …)` below is the part that is easy to
+miss.
 
 </Hint>
 
