@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
+import { motion } from "framer-motion";
 import { Controlled as CodeMirror } from "react-codemirror2";
 
 import "codemirror/lib/codemirror.css";
@@ -19,6 +20,7 @@ import { fetchVersions, FALLBACK } from "./versions";
 import Select from "components/Select";
 
 
+import { ARRIVE } from "animation";
 import { listMixins, mixinTitle } from "./mixins";
 import DEMOS from "./demos.json";
 
@@ -599,19 +601,22 @@ class Playground extends Component {
       <>
         {isOpen && (
           /*
-            No fade, in or out. The window inside carries a nine piece mask on
-            each editor and a drop shadow around itself, and a mask and a
-            filter are re-rasterised on every frame of an opacity, so fading
-            the scrim over them is not a fade, it is the window being redrawn.
-            Scrim and window arrive together and leave together.
+            The window travels a few pixels up into place; the scrim it sits on
+            is simply there, and nothing changes opacity. Each editor carries a
+            nine piece mask and the window a drop shadow, and a mask and a
+            filter are re-rasterised on every frame of an opacity, which is
+            what every fade tried here was reported as. See src/animation.js.
           */
           <div
             className="playground"
             onClick={this.handleBackdrop}
             role="presentation"
           >
-            <div
+            <motion.div
               className="playground__window"
+              initial={{ y: 14 }}
+              animate={{ y: 0 }}
+              transition={ARRIVE}
               role="dialog"
               aria-modal="true"
               aria-labelledby="playground-title"
@@ -807,7 +812,7 @@ class Playground extends Component {
                   </button>
                 </div>
               </footer>
-            </div>
+            </motion.div>
           </div>
         )}
       </>,

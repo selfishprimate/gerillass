@@ -1,5 +1,8 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+import { motion } from "framer-motion";
+
+import { ARRIVE } from "animation";
 import { useNavigate } from "react-router-dom";
 import { Command } from "cmdk";
 
@@ -145,12 +148,12 @@ function SearchCommand() {
       </button>
 
       {/*
-        Nothing here animates, and that is the fix rather than the taste. The
-        scrim carries a `backdrop-filter` and the dialog a nine piece mask
-        inside a `drop-shadow` frame; a filter and a mask are re-rasterised on
-        every frame of an opacity or a transform, which is why the palette's
-        spring was reported as flicker rather than as movement on 23 September
-        2026. It opens where it opens.
+        The dialog travels a few pixels down into place; the scrim it sits on
+        is simply there. Nothing changes opacity, which is the one thing this
+        palette cannot afford: the scrim carries a `backdrop-filter` and the
+        dialog a nine piece mask inside a `drop-shadow` frame, and a filter and
+        a mask are re-rasterised on every frame of an opacity. See
+        src/animation.js.
       */}
       {mounted &&
         createPortal(
@@ -166,7 +169,12 @@ function SearchCommand() {
                   The frame carries the shadow, since the dialog's mask would
                   cut a shadow of its own away.
                 */}
-                <div className="palette__frame">
+                <motion.div
+                  className="palette__frame"
+                  initial={{ y: -8 }}
+                  animate={{ y: 0 }}
+                  transition={ARRIVE}
+                >
                   <Command
                     className="palette__dialog"
                     label="Search the documentation"
@@ -238,7 +246,7 @@ function SearchCommand() {
                       ))}
                     </Command.List>
                   </Command>
-                </div>
+                </motion.div>
               </div>
             ) : null}
           </>,

@@ -19,13 +19,21 @@ export const SETTLE = {
 export const LEAVE = { duration: 0.18, ease: "easeIn" };
 
 /*
-  A page does not arrive. Two versions of a page reveal were tried, a spring
-  from nothing and a fade from 0.6, and both read as the content blinking:
-  what is on screen is at full brightness, so anything starting below it dips.
-  components/PageContent has the long version. These curves are for the
-  playground window, the palette and the scrim, which are objects arriving over
-  the site rather than the site itself.
+  Arriving, and the shape of it is a constraint rather than a taste.
+
+  Everything that arrives on this site carries a mask, a drop shadow or a
+  backdrop filter: the code blocks and the playground's editors are cut to a
+  nine piece mask, the palette's frame is a `drop-shadow`, its scrim a
+  `backdrop-filter`. A filter and a mask are re-rasterised on every frame of an
+  **opacity** change, which is why every fade tried here was reported as
+  flicker rather than as movement. A **transform** on a promoted layer is not:
+  the element is rasterised once and the layer is moved.
+
+  So nothing fades. Things travel a few pixels, quickly, on an ease that
+  decelerates -- and whatever moves carries `will-change: transform` so the
+  browser promotes it before the first frame.
 */
+export const ARRIVE = { duration: 0.22, ease: [0.22, 1, 0.36, 1] };
 
 /*
   The dimmed page behind a dialog. Opacity only: it covers the whole viewport,

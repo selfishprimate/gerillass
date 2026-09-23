@@ -633,21 +633,26 @@ chrome blinking on every load. The four home page sections keep theirs; the
 header does not. Captured at four virtual-time budgets from 150ms, the header
 is now identical in all of them.
 
-### A page does not animate as it arrives
+### Arriving: a transform, never an opacity
 
-Two versions were tried and both were reported as a blink: a spring from
-`opacity: 0` and ten pixels down, and then a gentler fade from 0.6. The reason
-is the same for both. The page being replaced is on screen at full brightness,
-so anything that starts below it dips the content the reader is looking at and
-brings it back, which is what a blink is. A crossfade is the only shape that
-would not, and it means laying out two pages at once.
+This took four attempts and the rule that came out of it is in `animation.js`:
+**nothing on this site fades in.** Everything that arrives carries a mask, a
+drop shadow or a backdrop filter -- the code blocks and the playground's
+editors are cut to a nine piece mask, the palette's frame is a `drop-shadow`,
+its scrim a `backdrop-filter` -- and a filter and a mask are re-rasterised on
+every frame of an opacity change. That is what every fade tried here was
+reported as: flicker rather than movement. A transform is composited instead.
 
-`components/PageContent` is a plain `<main>` with no key, so React updates the
-element in place: measured with a MutationObserver over a navigation, `main` is
-never removed and added, it stays at `opacity: 1` the whole way through, and
-the content swaps in one commit. The curves in `animation.js` are for the
-playground window, the palette and the scrim, which are objects arriving over
-the site rather than the site itself.
+So there is one curve, `ARRIVE`, and three things travel a few pixels on it: a
+documentation page by 8px, the palette's dialog by 8px, the playground's window
+by 14px. Nothing changes opacity, the scrims are simply there, and a page being
+replaced is at full brightness the whole time, so there is nothing to dip.
+
+`PageContent` keys the `<main>` on the path, which is what re-runs the
+movement, and leaves the first page of a document alone: `initial` is written
+into the markup by the prerender, so without the guard all 88 built files carry
+the transform and a reader with no JavaScript gets a page 8px out of place.
+Checked in the built output, where it says `transform:none`.
 
 ### A new page opens at the top
 
@@ -877,8 +882,9 @@ against the live site along with the trailing-slash form and the two aliases.
 
 ## Search
 
-**The playground opens and closes in one step.** Taking the window's spring
-off while the scrim kept fading left the two out of step -- the window arrived
+**The playground opens and closes in one step**, and its window travels rather
+than fades. Taking the window's spring off while the scrim kept fading left the
+two out of step -- the window arrived
 over a backdrop that was still coming in, and on the way out it vanished while
 the scrim held the page for 400ms -- which reads as opening twice and closing
 twice. Neither animates now, `AnimatePresence` is gone, and `handleClose`
@@ -897,14 +903,11 @@ new `react-codemirror2` mounted 700ms in; now only the message moves, the two
 editors are created once, and an error leaves the last CSS that compiled on
 screen with the message above it.
 
-**Nothing in the palette animates**, and that is a fix rather than a taste. The
-scrim carries a `backdrop-filter` and the dialog a nine piece mask inside a
-`drop-shadow` frame; a filter and a mask are re-rasterised on every frame of an
-opacity or a transform, so the spring the palette used to open on was reported
-as flicker rather than as movement. The playground window lost its own
-entrance, and its three staggered bands with it, for the same reason: its
-editors carry the same mask. The scrim behind the playground still fades, since
-it carries neither.
+**The palette's dialog travels 8px into place and nothing fades**, for the
+reason under *Arriving*: the scrim carries a `backdrop-filter` and the dialog a
+nine piece mask inside a `drop-shadow` frame, and an opacity across either is
+re-rasterised every frame. The playground's three staggered bands went the same
+way and did not come back; one movement on the window is enough.
 
 The palette is **anchored near the top, not centred**. Centred, the dialog is
 recentred on every keystroke: the list is as tall as its results, so narrowing
