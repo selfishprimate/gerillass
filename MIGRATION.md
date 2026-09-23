@@ -55,6 +55,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `placeholder` writes one rule instead of five | breaking only before 2017 |
 | `clearfix` was removed | breaking, loud |
 | `adaptive` skips a zero breakpoint by value, not by the name `xsmall` | fixes a lost container; no change with the default map |
+| `adaptive`'s gutter defaults to `0` rather than `30px` | breaking, silent: every container is 60px wider at each step |
 | `reset-css` is a modern reset rather than Meyer's 2011 one | breaking, silent, and visible |
 | `only` and `except` take `$of`, the selector to count by | not breaking |
 | `ellipsis` and `line-clamp` became `truncate` | breaking, loud |
@@ -1388,6 +1389,47 @@ lines to keep:
 ```
 
 `/docs/clearfix` now redirects to this section.
+
+---
+
+## Change: `adaptive` has no gutter by default
+
+The gutter is subtracted from the maximum width at every breakpoint, and it
+defaulted to `30px`, so a container called `xlarge` was 1140px rather than
+1200px. It is `0` now: the container is exactly the width its breakpoint is
+named after.
+
+```scss
+.main-container {
+  @include adaptive;
+}
+```
+
+```css
+/* Before */
+@media (min-width: 1200px) { .main-container { max-width: calc(1200px - 30px * 2); } }
+
+/* After */
+@media (min-width: 1200px) { .main-container { max-width: 1200px; } }
+```
+
+**Every container gets 60px wider at each step**, silently, which is the whole
+of the change. Nothing else moves: the mixin still writes `margin: 0 auto`, it
+still writes no query for the first breakpoint, and below `small` the container
+still fills the screen, since there is no maximum there to subtract from.
+
+To keep what you had, pass the gutter you were getting:
+
+```scss
+.main-container {
+  @include adaptive(30px);
+}
+```
+
+A zero gutter is also no longer written as a subtraction. `adaptive(0)` used to
+compile to `calc(576px - 0px * 2)` and now writes `576px`; measured in Chrome
+152, Firefox 156 and Safari 26.6.2, both forms compute to the same 576px, so
+this half changes nothing but the stylesheet's size.
 
 ---
 

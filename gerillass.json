@@ -18,18 +18,19 @@
       "arguments": [
         {
           "name": "$gutter",
-          "default": "30px",
+          "default": "0",
           "accepts": [
-            "a length subtracted from each side at every breakpoint"
+            "a length subtracted from the maximum width at every breakpoint, zero by default"
           ]
         }
       ],
       "file": "scss/library/_adaptive.scss",
-      "signature": "adaptive($gutter: 30px)",
+      "signature": "adaptive($gutter: 0)",
       "summary": "Centred container whose max-width steps up at every breakpoint, full width below the first.",
       "caveats": [
         "The first breakpoint is the width every screen already has, so no query is written for it and the container is full width below the next one. That is the point of the mixin: the side space comes from the step, and it grows as the viewport passes each breakpoint.",
-        "A breakpoint of zero is skipped by its value since 4.0.0. It used to be dropped by name, `map.remove($map, \"xsmall\")`, and `$map-for-breakpoints` is `!default`: a project naming its own breakpoints kept the zero entry, and the mixin wrote `@media (min-width: 0)` with `max-width: calc(0 - 30px * 2)` in it. Measured in Chrome 152, Firefox 156 and Safari 26.6.2, that calculation is invalid and the declaration is dropped; written as `0px` it computes to -60px, the browser clamps it to 0, and the container is 0 wide at every size. With the default map the CSS is exactly what it always was."
+        "The gutter is zero by default since 4.0.0, so the container is exactly the breakpoint wide. It was 30px, which made every container 60px narrower than the width it was named after, and a zero gutter is not written as a subtraction at all: `max-width: 576px` rather than `calc(576px - 0px * 2)`. Measured in Chrome 152, Firefox 156 and Safari 26.6.2, the two forms compute to the same 576px.",
+        "A breakpoint of zero is skipped by its value since 4.0.0. It used to be dropped by name, `map.remove($map, \"xsmall\")`, and `$map-for-breakpoints` is `!default`: a project naming its own breakpoints kept the zero entry, and the mixin wrote `@media (min-width: 0)` with a `max-width` calculation in it. Measured in Chrome 152, Firefox 156 and Safari 26.6.2, that calculation is invalid with a unitless key and the declaration is dropped; written as `0px` with the old 30px gutter it computed to -60px, the browser clamped it to 0, and the container was 0 wide at every size."
       ],
       "examples": [
         ".wrap { @include adaptive; }",

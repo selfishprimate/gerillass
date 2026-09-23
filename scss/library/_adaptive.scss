@@ -1,13 +1,16 @@
 @charset "UTF-8";
 
-@use "sass:math";
 @use "sass:meta";
 @use "sass:string";
 @use "../maps/map-for-breakpoints" as *;
 @use "../internal/length-problem" as *;
 @use "../utilities/clear-unit" as *;
 
-@mixin adaptive($gutter: 30px) {
+// The gutter defaults to zero, so the container is exactly the breakpoint wide
+// and a band inside it reaches both edges. It was 30px until 4.0.0, which made
+// the container 60px narrower than the width it was named after at every step,
+// and a caller who wanted the width had to pass a zero to get it.
+@mixin adaptive($gutter: 0) {
   // The gutter is subtracted twice inside calc(), which in Chrome 152 kept a
   // length, a percentage, a negative length and var(), and dropped the
   // max-width for a word, a CSS-wide keyword, a unitless number and a unit that
@@ -16,11 +19,14 @@
   @if $problem {
     @error "`#{meta.inspect($gutter)}` is not a valid $gutter for `adaptive`: #{$problem}. A browser drops the max-width at every breakpoint.";
   }
-  // A unitless 0 made `calc(576px - 0 * 2)`, a length minus a number, which was
-  // dropped; 0px is kept.
-  @if (meta.type-of($gutter) == "number" and math.is-unitless($gutter)) or (meta.type-of($gutter) == "string" and string.unquote($gutter) == string.unquote("0")) {
-    $gutter: 0px;
-  }
+  // Zero is the default, and a zero gutter is not a subtraction: it used to
+  // write `calc(576px - (0px * 2))`, which computes to the same width and says
+  // nothing. A unitless 0 needed the unit for the calc's sake -- `calc(576px -
+  // 0 * 2)` is a length minus a number and was dropped -- and with no calc to
+  // write it does not need it either. Only a literal zero takes this branch; a
+  // var() or a calc() is written as it is, since Sass cannot know what it holds.
+  $zero-gutter: (meta.type-of($gutter) == "number" and clearUnit($gutter) == 0) or
+    (meta.type-of($gutter) == "string" and string.unquote($gutter) == string.unquote("0"));
   margin: 0 auto;
   // The first breakpoint is the width every screen already has, so it is not a
   // query. It used to be dropped by name, `map.remove($map, "xsmall")`, and the
@@ -38,7 +44,11 @@
     $zero: meta.type-of($value) == "number" and clearUnit($value) == 0;
     @if not $zero {
       @media (min-width: #{$value}) {
-        max-width: calc(#{$value} - (#{$gutter} * 2));
+        @if $zero-gutter {
+          max-width: #{$value};
+        } @else {
+          max-width: calc(#{$value} - (#{$gutter} * 2));
+        }
       }
     }
   }

@@ -37,27 +37,27 @@ exports[`Manifest examples adaptive: .wrap { @include adaptive; } 1`] = `
 }
 @media (min-width: 576px) {
   .wrap {
-    max-width: calc(576px - 30px * 2);
+    max-width: 576px;
   }
 }
 @media (min-width: 768px) {
   .wrap {
-    max-width: calc(768px - 30px * 2);
+    max-width: 768px;
   }
 }
 @media (min-width: 992px) {
   .wrap {
-    max-width: calc(992px - 30px * 2);
+    max-width: 992px;
   }
 }
 @media (min-width: 1200px) {
   .wrap {
-    max-width: calc(1200px - 30px * 2);
+    max-width: 1200px;
   }
 }
 @media (min-width: 1400px) {
   .wrap {
-    max-width: calc(1400px - 30px * 2);
+    max-width: 1400px;
   }
 }"
 `;

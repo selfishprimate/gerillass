@@ -28,59 +28,15 @@ The **Adaptive Sass mixin** gives you the fastest and most consistent way to app
 ## Arguments
 
 <Arguments of="adaptive" footnote="Apply this mixin to the container element of your layout, then narrow or widen your browser window to test it!">
-  <Argument name="$gutter" type="number (with unit)">Accepts one value and applies it to all the breakpoints. The default value is <code>30px</code>. A length, a percentage, a negative length, <code>var()</code> or a maths function. <code>0</code> is written as <code>0px</code>, because the gutter is subtracted inside <code>calc()</code>.</Argument>
+  <Argument name="$gutter" type="number (with unit)">Accepts one value and applies it to all the breakpoints. The default is <code>0</code>, so the container is exactly the breakpoint wide; a zero is written as the width itself rather than as a subtraction. A length, a percentage, a negative length, <code>var()</code> or a maths function. <code>0</code> is written as <code>0px</code>, because the gutter is subtracted inside <code>calc()</code>.</Argument>
 </Arguments>
 
 ## Examples
 
-<Example resizable caption="The result box is a viewport of its own, so drag its corner. The container is centred and keeps a `30px` gutter, and its maximum width steps at 576, 768, 992, 1200 and 1400: between two of those it stays where it is while the page grows around it, and that is the step." >
+<Example resizable caption="The result box is a viewport of its own, so drag its corner. The container is centred, and with the default gutter of `0` it is exactly the breakpoint wide: the band inside reaches both of its edges, and below `small` there is no maximum at all. Between two breakpoints the container stays where it is while the page grows around it, and that is the step." >
 ```scss
 .main-container{
   @include adaptive;
-}
-```
-```html
-<style>
-  body { margin: 0; padding: 20px 0; background: #dee0cd; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
-  .main-container { padding: 18px; border-radius: 14px; background: #fafaf8; box-shadow: 0 8px 24px rgb(47 57 55 / 0.1); }
-  .bar { display: flex; align-items: center; justify-content: space-between; padding-bottom: 14px; border-bottom: 1px solid #dee0cd; }
-  .bar b { font: 700 16px Inter, ui-sans-serif, system-ui, sans-serif; }
-  .bar span { padding: 4px 10px; border-radius: 999px; background: #2f3937; color: #fafaf8; font-size: 12px; font-weight: 600; }
-  .row { display: flex; gap: 12px; margin-top: 14px; }
-  .row div { flex: 1; height: 74px; border-radius: 10px; background: #f2f2eb; }
-  .row div:first-child { flex: 2; background: #668f80; }
-</style>
-<div class="main-container">
-  <div class="bar"><b>Dashboard</b><span>Share</span></div>
-  <div class="row"><div></div><div></div><div></div></div>
-</div>
-```
-</Example>
-
-<Example resizable caption="A gutter in any length unit. `px`, `em`, `rem` and percentages all work. It is subtracted from the maximum width rather than added as padding, so it is what keeps the container off the edge of the screen at a breakpoint: at exactly 768 this one is 768 minus two gutters wide, and below `small` there is no maximum, so the container fills the screen whatever the gutter says." >
-```scss
-.main-container{
-  @include adaptive(2em);
-}
-```
-```html
-<style>
-  body { background: #222c25; font: 14px/1.6 Inter, ui-sans-serif, system-ui, sans-serif; color: #f2f2eb; padding: 22px 0; }
-  .main-container { padding: 22px 24px; border-radius: 16px; background: rgb(242 242 235 / 0.08); border: 1px solid rgb(242 242 235 / 0.14); }
-  .main-container h3 { margin: 0 0 6px; font: 700 18px Inter, ui-sans-serif, system-ui, sans-serif; }
-  .main-container p { margin: 0; color: rgb(242 242 235 / 0.72); }
-</style>
-<div class="main-container">
-  <h3>A gutter of 2em</h3>
-  <p>On a narrow screen the container keeps this much room from each edge, which is what stops text touching the glass.</p>
-</div>
-```
-</Example>
-
-<Example resizable caption="A gutter of `0` is a gutter: nothing is set aside at the sides, so the container is exactly the breakpoint wide and a band inside it reaches both of its edges. Below `small` there is no maximum at all and it fills the screen, which is what a full width header wants. It is written as `0px`, because a bare zero inside the `calc()` is dropped and the `max-width` with it." >
-```scss
-.main-container{
-  @include adaptive(0);
 }
 ```
 ```html
@@ -98,7 +54,34 @@ The **Adaptive Sass mixin** gives you the fastest and most consistent way to app
   <div class="band"><b>Sold out</b><span>Next show on Friday</span></div>
   <div class="text">
     <h3>Edge to edge</h3>
-    <p>The band above reaches both sides of the container, and the container is the breakpoint's own width: with a gutter it would stop 30px short of each.</p>
+    <p>Nothing is set aside at the sides, so the bar reaches both edges of the container and the container is the breakpoint's own width.</p>
+  </div>
+</div>
+```
+</Example>
+
+<Example resizable caption="The same page with a gutter of `2em`. It is subtracted from the maximum width rather than added as padding, so the container stops two gutters short of each breakpoint and the bar stops with it. `px`, `em`, `rem` and percentages all work." >
+```scss
+.main-container{
+  @include adaptive(2em);
+}
+```
+```html
+<style>
+  body { margin: 0; padding: 0; background: #dee0cd; font: 14px/1.6 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
+  .main-container { background: #fafaf8; }
+  .band { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 20px; background: #2f3937; color: #fafaf8; }
+  .band b { font: 700 16px Inter, ui-sans-serif, system-ui, sans-serif; }
+  .band span { font-size: 13px; color: #dee0cd; }
+  .text { padding: 18px 20px; }
+  .text h3 { margin: 0 0 6px; font: 700 18px Inter, ui-sans-serif, system-ui, sans-serif; }
+  .text p { margin: 0; color: #657167; }
+</style>
+<div class="main-container">
+  <div class="band"><b>Sold out</b><span>Next show on Friday</span></div>
+  <div class="text">
+    <h3>Two gutters short</h3>
+    <p>Drag the box past 768: the container stops at 768 less two gutters, and the page shows on both sides of it.</p>
   </div>
 </div>
 ```
@@ -106,7 +89,7 @@ The **Adaptive Sass mixin** gives you the fastest and most consistent way to app
 
 ## What it refuses
 
-A gutter the browser drops stops the build. It is subtracted inside `calc()` at every breakpoint, and measured in Chrome 152 a word, a CSS-wide keyword, a unitless number and a unit that is not a length each drop the `max-width`, leaving the container at full width. Until 2.3.1 these compiled. `adaptive(0)` used to be one of them, `calc(576px - 0 * 2)`, and is now written with `0px`.
+A gutter the browser drops stops the build. It is subtracted inside `calc()` at every breakpoint, and measured in Chrome 152 a word, a CSS-wide keyword, a unitless number and a unit that is not a length each drop the `max-width`, leaving the container at full width. Until 2.3.1 these compiled. `adaptive(0)` used to be one of them, `calc(576px - 0 * 2)`; a zero gutter is not written as a subtraction at all now, and is the default.
 
 ```scss
 .main-container {

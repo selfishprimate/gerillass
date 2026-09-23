@@ -677,7 +677,8 @@ position, `columnizer`'s count and gutter and `adaptive`'s gutter, with value
 sets measured by testing every compiled sweep call's own CSS in Chrome. It
 turned two broken calls into working ones instead of refusing them:
 `adaptive(0)` and `columnizer(3, 0)` now write `0px`, since a unitless 0 inside
-their `calc()` was dropped. Chunk 4 made `position` raise on an offset a
+their `calc()` was dropped. `adaptive` writes no `calc()` at all for a zero
+since 4.0.0, where zero became its default. Chunk 4 made `position` raise on an offset a
 browser drops instead of warning through `validateLength`, which had warned
 about working values such as `AUTO` and stayed silent for `10deg`. S7, and with
 it the plan, is done and released in 2.3.1.
@@ -925,7 +926,9 @@ Two pieces of work are open:
   `text-fill-guard`; and `clearfix` removed in favour of `display: flow-root`,
   on `remove-clearfix`, branched from `placeholder-standard`; and `adaptive`
   skipping a zero breakpoint by value rather than by name, on `adaptive-zero`,
-  branched from `remove-clearfix`; and `reset-css` rewritten as a modern reset
+  branched from `remove-clearfix`, whose gutter also defaults to `0` rather
+  than `30px` since 23 September 2026, so a container is the width its
+  breakpoint is named after; and `reset-css` rewritten as a modern reset
   inside `:where()`, on `reset-modern`, branched from `adaptive-zero`; and `$of`
   on `only` and `except`, counting by a selector rather than by tag, on
   `nth-of`, branched from `reset-modern`; and `ellipsis` and `line-clamp`

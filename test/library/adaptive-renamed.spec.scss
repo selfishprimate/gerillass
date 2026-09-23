@@ -1,13 +1,13 @@
 // The case that used to lose the container. `adaptive` dropped the first
 // breakpoint by name, `map.remove($map, "xsmall")`, and the map is `!default`:
 // a project naming its own breakpoints kept the zero entry, so the mixin wrote
-// `@media (min-width: 0px) { max-width: calc(0px - 30px * 2) }`. Measured in
-// Chrome 152, Firefox 156 and Safari 26.6.2, the browser clamps that to 0 and
-// the container is 0 wide at every size. It skips by value now.
+// `@media (min-width: 0px) { max-width: calc(0px - 30px * 2) }`, back when the
+// gutter defaulted to 30px. Measured in Chrome 152, Firefox 156 and Safari
+// 26.6.2, the browser clamps that to 0 and the container is 0 wide at every
+// size. It skips by value now.
 //
 // The map is configured here, before `adaptive` loads it, which is why this
 // lives in a file of its own rather than beside the other cases.
-@use 'sass:string';
 @use 'true' as *;
 @use '../../scss/maps/map-for-breakpoints' with ($map-for-breakpoints: ("sm": 0px, "md": 700px));
 @use '../../scss/library/adaptive' as *;
@@ -20,7 +20,7 @@
       }
       @include expect {
         .wrap { margin: 0 auto; }
-        @media (min-width: 700px) { .wrap { max-width: string.unquote("calc(700px - 30px * 2)"); } }
+        @media (min-width: 700px) { .wrap { max-width: 700px; } }
       }
     }
   }

@@ -1,33 +1,52 @@
-// adaptive writes its gutter into calc() at every breakpoint. Measured in
-// Chrome 152, a unitless 0 there, `calc(576px - 0 * 2)`, subtracts a number
-// from a length and the max-width is dropped, so 0 is written as 0px. A length,
-// a percentage and var() were kept. The calc() is written by interpolation, so
-// the expectations are unquoted strings: Sass would reduce them otherwise.
+// adaptive writes its gutter into calc() at every breakpoint, unless the
+// gutter is zero: a zero subtracts nothing, so the width is written on its own.
+// That is the default since 4.0.0. Measured in Chrome 152, Firefox 156 and
+// Safari 26.6.2, `max-width: 576px` and `calc(576px - 0px * 2)` compute to the
+// same 576px; a unitless 0 inside the calc, `calc(576px - 0 * 2)`, is a length
+// minus a number and the declaration was dropped. A length, a percentage and
+// var() are kept. The calc() is written by interpolation, so those expectations
+// are unquoted strings: Sass would reduce them otherwise.
 @use 'sass:string';
 @use 'true' as *;
 @use '../../scss/gerillass' as *;
 
 @include describe('adaptive()') {
-  @include it('A gutter of 0 is written as 0px so calc() keeps a length.') {
+  @include it('The default is no gutter, so each width is written on its own.') {
     @include assert {
       @include output {
-        .wrap { @include adaptive(0); }
+        .wrap { @include adaptive; }
       }
       @include expect {
         .wrap { margin: 0 auto; }
-        @media (min-width: 576px) { .wrap { max-width: string.unquote("calc(576px - 0px * 2)"); } }
-        @media (min-width: 768px) { .wrap { max-width: string.unquote("calc(768px - 0px * 2)"); } }
-        @media (min-width: 992px) { .wrap { max-width: string.unquote("calc(992px - 0px * 2)"); } }
-        @media (min-width: 1200px) { .wrap { max-width: string.unquote("calc(1200px - 0px * 2)"); } }
-        @media (min-width: 1400px) { .wrap { max-width: string.unquote("calc(1400px - 0px * 2)"); } }
+        @media (min-width: 576px) { .wrap { max-width: 576px; } }
+        @media (min-width: 768px) { .wrap { max-width: 768px; } }
+        @media (min-width: 992px) { .wrap { max-width: 992px; } }
+        @media (min-width: 1200px) { .wrap { max-width: 1200px; } }
+        @media (min-width: 1400px) { .wrap { max-width: 1400px; } }
       }
     }
   }
 
-  @include it('Skips a breakpoint of zero, whatever it is called.') {
+  @include it('A gutter written as zero is the same, in any unit.') {
     @include assert {
       @include output {
-        .wrap { @include adaptive; }
+        .wrap { @include adaptive(0px); }
+      }
+      @include expect {
+        .wrap { margin: 0 auto; }
+        @media (min-width: 576px) { .wrap { max-width: 576px; } }
+        @media (min-width: 768px) { .wrap { max-width: 768px; } }
+        @media (min-width: 992px) { .wrap { max-width: 992px; } }
+        @media (min-width: 1200px) { .wrap { max-width: 1200px; } }
+        @media (min-width: 1400px) { .wrap { max-width: 1400px; } }
+      }
+    }
+  }
+
+  @include it('A gutter is subtracted from every width.') {
+    @include assert {
+      @include output {
+        .wrap { @include adaptive(30px); }
       }
       @include expect {
         .wrap { margin: 0 auto; }
