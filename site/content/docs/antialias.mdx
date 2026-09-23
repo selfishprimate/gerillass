@@ -17,12 +17,12 @@ The **Antialias** Sass mixin draws text with greyscale antialiasing instead of s
 ## Arguments
 
 <Arguments of="antialias" footnote="Please check out the links at the end of the page for more information about font smoothing.">
-  <Argument name="$value" type="string">Accepts the <code>only</code> value. Use it when you want to apply the styles to one specific HTML element.</Argument>
+  <Argument name="$value" type="string">Accepts <code>only</code>, which keeps the smoothing on the element the mixin is called in and leaves its descendants alone. With no argument the element and everything inside it are smoothed, and at the root of a stylesheet that is every element on the page. <code>only</code> at the root stops the build, since there is no element to limit it to.</Argument>
 </Arguments>
 
 ## Examples
 
-<Example caption="The mixin on the lower block and nothing on the upper one, which is the only way to see it: on macOS the lower letters are drawn thinner, and on Windows and Linux neither property does anything, so the two are identical there.">
+<Example caption="The mixin on the lower block and nothing on the upper one, which is the only way to see it: on macOS the lower letters are drawn thinner. Neither property is implemented outside macOS, so on Windows and Linux the two blocks are the same.">
 ```scss
 .element {
   @include antialias;
@@ -42,7 +42,7 @@ The **Antialias** Sass mixin draws text with greyscale antialiasing instead of s
 ```
 </Example>
 
-<Example caption="Pass the `only` value as an argument to apply the style rules to only one specific HTML element.">
+<Example caption="With `only` the smoothing stops at the element: its descendants keep whatever the page draws them with. Without it, as above, they are smoothed too.">
 ```scss
 .element{
   @include antialias(only);
@@ -58,7 +58,7 @@ The **Antialias** Sass mixin draws text with greyscale antialiasing instead of s
 
 <Hint kind="warning">
 
-**macOS only, and non-standard.** Neither property does anything on Windows or Linux, and on macOS only two of the three engines respond:
+**macOS only, and non-standard.** Neither property is implemented outside macOS, and on macOS only two of the three engines respond:
 
 | | Does the text render differently |
 |---|---|
@@ -73,6 +73,28 @@ The **Antialias** Sass mixin draws text with greyscale antialiasing instead of s
 **Changed in Gerillass 4.0.0.** Called inside a selector with no argument, the descendants are written inside `:where()`, so a rule of your own for one of them wins where it used to lose.
 
 </Hint>
+
+## What it refuses
+
+`only` needs an element to be *only* about, so at the root of a stylesheet it stops the build rather than smoothing the page and hiding the misunderstanding.
+
+```scss
+@include antialias(only);
+```
+```text
+Error: `only` has no meaning at the root of a stylesheet, because there is no selector to limit the effect to. Call `antialias("only")` inside a selector, or pass no argument at all.
+```
+
+Any other argument is refused with the two forms that work.
+
+```scss
+.element {
+  @include antialias(bogus);
+}
+```
+```text
+Error: `bogus` is not a valid argument for `antialias`. Pass `"only"` inside a selector to affect just that element, or pass no argument at all.
+```
 
 ## Related Links
 * [Stop Fixing Font Smoothing](https://usabilitypost.com/2012/11/05/stop-fixing-font-smoothing/)  
