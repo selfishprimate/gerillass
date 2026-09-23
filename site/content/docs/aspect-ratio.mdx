@@ -13,9 +13,11 @@ aliases:
 
 <Member name="aspect-ratio">
 
-The **Aspect Ratio Sass mixin** holds an element to the ratio you give it. The
-CSS property alone is not enough: the mixin writes it, and the declarations
-around it that the property leaves you to find out about.
+The **Aspect Ratio Sass mixin** holds an element to the ratio you give it, and
+writes the declarations the CSS property leaves you to find out about:
+`object-fit`, so an image is cropped rather than stretched, `border: 0` for an
+`<iframe>`'s 2px default border, and `height: auto`, so a `height` attribute
+cannot beat the ratio.
 
 </Member>
 
@@ -25,18 +27,6 @@ around it that the property leaves you to find out about.
 Video**, which were byte-identical to each other and are both gone. It goes on
 **the element itself**, not on a wrapper around it. See [Coming from Ratio Box
 or Responsive Video](#coming-from-ratio-box-or-responsive-video).
-
-</Hint>
-
-<Hint kind="info">
-
-**Why the extra declarations?** Each closes a gap the property leaves open. `display: block` and `width: 100%` make the element fill
-its container, which is what a ratio is usually for. `object-fit` crops an
-`<img>` where a ratio alone stretches it. `border: 0` takes off an `<iframe>`'s
-2px default border, which otherwise overflows the container by 4px. And
-`height: auto` stops a `height` attribute beating the ratio, in a way that a
-height you set yourself still wins. See [Images and embeds with a height
-attribute](#images-and-embeds-with-a-height-attribute).
 
 </Hint>
 
