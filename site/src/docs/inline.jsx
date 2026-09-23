@@ -10,11 +10,18 @@ import React from "react";
   from took the same prose as an attribute and ran it through a Markdown filter
   on the way out.
 
-  So the attributes keep their Markdown and it is rendered here. Backticks and
-  bold only, which is all these captions have ever used, and anything longer
-  than a sentence belongs in the page body rather than in an attribute.
+  So the attributes keep their Markdown and it is rendered here: backticks,
+  bold and links, which is what these captions use. Anything longer than a
+  sentence belongs in the page body rather than in an attribute.
+
+  Links were the third of those and were missing, so six footnotes printed
+  `See the [examples](#examples) for more.` with the brackets showing. A link
+  inside the site goes through the router the way the prose ones do; a bare
+  fragment stays an anchor, since it is a jump within the page.
 */
-const PATTERN = /`([^`]+)`|\*\*([^*]+)\*\*/g;
+import DocLink from "./DocLink";
+
+const PATTERN = /`([^`]+)`|\*\*([^*]+)\*\*|\[([^\]]+)\]\(([^)\s]+)\)/g;
 
 export default function inline(text) {
   if (!text) return null;
@@ -31,7 +38,13 @@ export default function inline(text) {
   while ((match = pattern.exec(text))) {
     if (match.index > last) out.push(text.slice(last, match.index));
 
-    if (match[1] !== undefined) {
+    if (match[3] !== undefined) {
+      out.push(
+        <DocLink key={key++} href={match[4]}>
+          {inline(match[3])}
+        </DocLink>
+      );
+    } else if (match[1] !== undefined) {
       // Code is literal all the way down: backticks win, and nothing inside
       // them is markup.
       out.push(<code key={key++}>{match[1]}</code>);

@@ -1,18 +1,28 @@
 @import "assets/scss/abstract";
 
+/*
+  The same drawn edge the code blocks and the buttons have, so a note on a
+  documentation page belongs to the site rather than to Bootstrap. It is the
+  nine piece mask, which is the one that survives any height: a hint runs from
+  one line to a paragraph with a table in it.
+
+  The padding is what the drawing costs. The corner pieces are 30px and the
+  edges wobble by a few of those, so the text starts further in than a
+  rectangle would need; at the old 14px it sat on the wobble.
+*/
 .hint {
   margin: 0 0 1.75rem;
-  padding: remify(14px) remify(18px);
-  border-radius: remify(12px);
+  padding: remify(22px) remify(26px);
   background: $alabaster;
 
+  @include hand-drawn-block;
+
   /*
-    A shade smaller and tighter than the prose around it. A hint is an aside,
-    and set at the body size with the body's rhythm it read as another
-    paragraph that happened to be sitting on a tint.
+    The prose's own size. It was 14px for a while, on the argument that an
+    aside should be quieter than the page; read on the page it was simply
+    small, and the drawn edge is what sets a hint apart now.
   */
-  font-size: remify(14px);
-  line-height: 1.5;
+  line-height: 1.6;
 
   > :first-child { margin-top: 0; }
   > :last-child { margin-bottom: 0; }

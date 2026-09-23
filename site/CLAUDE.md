@@ -319,6 +319,18 @@ table renders as a paragraph of pipes, silently. Two pages use one, and
 `src/docs/content.scss` is what styles them: nothing on this site had a table
 in its prose before the port.
 
+### The hints
+
+`<Hint kind>` is the site's alert, and it carries the same drawn edge as the
+code blocks and the buttons: `hand-drawn-block`, the nine piece mask, since a
+hint runs from one line to a paragraph with a table in it and a single
+stretched drawing pulls its corners out of shape. Two things follow from the
+mask. The padding is 22px by 26px, because the corner pieces are 30px and the
+edges wobble, and at the old 14px the text sat on the wobble. And the text is
+the page's own size: it was 14px on the argument that an aside should be
+quieter, which read as small rather than quiet, and the drawn edge is what
+sets a hint apart now.
+
 ### How a member's page opens
 
 `<Member>` reproduces the shape the documentation has always had, and it is not
@@ -412,9 +424,11 @@ content column near 1380px.
 its component as a string, and a string rendered by React is text: 47 pages
 were showing a literal `<code>$gutter</code>`, angle brackets and all, because
 the Hugo shortcodes they came from ran the same prose through a Markdown filter
-on the way out. `src/docs/inline.jsx` renders backticks and bold from those
-strings. An `<Argument>` description is different: it becomes JSX children,
-where a tag is a tag.
+on the way out. `src/docs/inline.jsx` renders backticks, bold and links from
+those strings; links were missing until six footnotes were found printing
+`See the [examples](#examples) for more.` with the brackets showing. An
+`<Argument>` description is different: it becomes JSX children, where a tag is
+a tag.
 
 ### The type scale
 
