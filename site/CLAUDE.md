@@ -856,6 +856,26 @@ and Safari 26.6.2: `elementFromPoint` over the frame's right edge answers the
 strip in all three, the frame beyond it, and a `pointerdown` on the strip
 reaches the handler.
 
+**The frame is read again as the box moves.** Its height is measured from the
+demo's own body, and nothing tells the component that a box a reader is
+dragging has changed width: `window.resize` does not fire for it. That is
+invisible on `adaptive`, whose demo is a band of text at any width, and glaring
+on `aspect-ratio`, where the demo's height *is* its width over the ratio: the
+frame kept the height it had when it was wide, so narrowing the box left a
+456px frame around a 200px card. The handler now re-reads on a frame callback
+as it drags, and once more after the pointer is up. Measured on the seven demos
+of that page, dragged from 530px to 280px: every frame followed, at 1.65, 1.29,
+1.01 and 1.43 for 16/9, 4/3, 1:1 and 1.5, the difference from the ratio being
+the frame's own 16px of padding.
+
+**A stated `height` is a floor, so a resizable example should not carry one.**
+The YouTube embed did, 420px, and it was the one demo of the seven that stayed
+420px tall at every width.
+
+**The line above the box is the page's own.** `hint` overrides the default
+"See the changes by resizing the box below.", because what changes with the
+width is the point of the example and it is not the same sentence twice.
+
 ### Which pages still have no demo
 
 Nine mixins show none, and the reason differs:

@@ -43,16 +43,29 @@ or Responsive Video](#coming-from-ratio-box-or-responsive-video).
 
 ## Examples
 
-<Example caption="Called with no arguments the ratio is 16/9, and `object-fit` is `cover`.">
+<Example
+  caption="Called with no arguments the ratio is 16/9, and `object-fit` is `cover`. On an element with no content of its own, such as this card, the ratio is the whole of it."
+  resizable
+  hint="Drag the right edge. The card's height follows its width, so the shape holds at every size."
+>
 ```scss
 .element {
   @include aspect-ratio;
 }
 ```
+```html
+<style>
+  body { margin: 0; padding: 16px; background: #f2f2eb; }
+  .element { display: grid; place-items: center; border-radius: 14px; background: #2f3937; color: #fafaf8; font: 600 15px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; }
+</style>
+<div class="element">16 / 9</div>
+```
 </Example>
 
 <Example
-  caption="Because object-fit defaults to cover, the image is cropped to fill the box rather than stretched."
+  caption="Because `object-fit` defaults to `cover`, the image is cropped to fill the box rather than stretched."
+  resizable
+  hint="Drag the right edge. The frame stays 16 by 9 and the photograph is cropped into it, never squashed."
 >
 ```scss
 .element {
@@ -65,7 +78,9 @@ or Responsive Video](#coming-from-ratio-box-or-responsive-video).
 </Example>
 
 <Example
-  caption="A colon and a slash mean the same thing, so 16:9 and 16/9 give identical output."
+  caption="A colon and a slash mean the same thing, so `16:9` and `16/9` give identical output."
+  resizable
+  hint="Drag the right edge. The same photograph, held at 4 by 3 this time."
 >
 ```scss
 .element {
@@ -79,6 +94,8 @@ or Responsive Video](#coming-from-ratio-box-or-responsive-video).
 
 <Example
   caption="Pass a second value to change how the content fills the box. Here the box is square and the whole image stays visible."
+  resizable
+  hint="Drag the right edge. The box stays square, and `contain` keeps the whole photograph inside it, so the background shows above and below."
 >
 ```scss
 .element {
@@ -92,20 +109,30 @@ or Responsive Video](#coming-from-ratio-box-or-responsive-video).
 </Example>
 
 <Example
-  caption="1.5 means 1.5 to 1. Passing null as the second argument leaves object-fit out, which is what you want when the element has no content of its own to fit."
+  caption="1.5 means 1.5 to 1, so the card is half as wide again as it is tall. Passing `null` as the second argument leaves `object-fit` out of the compiled CSS, which is what you want when the element has no content of its own to fit."
+  resizable
+  hint="Drag the right edge. The height is always the width divided by 1.5."
 >
 ```scss
 .element {
   @include aspect-ratio(1.5, null);
 }
 ```
+```html
+<style>
+  body { margin: 0; padding: 16px; background: #f2f2eb; }
+  .element { display: grid; place-items: center; border-radius: 14px; background: #668f80; color: #fafaf8; font: 600 15px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; }
+</style>
+<div class="element">1.5 to 1</div>
+```
 </Example>
 
 <Example
   caption="Apply the mixin to the iframe itself, and paste the embed code as it comes, `width` and `height` attributes included. There is no wrapper element and no padding hack."
+  resizable
+  hint="Drag the right edge. The player keeps its 16 by 9 shape, whatever the `width` and `height` attributes on it say."
   listing="<iframe class=&quot;element&quot; width=&quot;560&quot; height=&quot;315&quot; src=&quot;https://www.youtube.com/embed/JBc6JiRlsOU&quot; title=&quot;YouTube video player&quot; allowfullscreen></iframe>"
   interactive
-  height={420}
 >
 ```scss
 .element {
@@ -119,11 +146,23 @@ or Responsive Video](#coming-from-ratio-box-or-responsive-video).
 
 ## Images and embeds with a height attribute
 
-Writing `width` and `height` on an `<img>` is the usual advice against layout
-shift, and embed codes write them on their `<iframe>`. A `height` attribute is a
-definite height, though, and with `width: 100%` also definite the browser
-ignores `aspect-ratio`. Measured in Chrome 152, Firefox 156 and Safari 26.6.2 in
-a 300px box, before 4.0.0:
+The two are for different moments, which is why an element carries both.
+
+The `width` and `height` attributes are read before the file arrives. The
+browser divides one by the other, holds that much space open, and the rest of
+the page does not jump when the image lands. They are not a size: an `<img>`
+with `width: 100%` is as wide as its container, not 1400px. Writing them is the
+usual advice against layout shift, and embed codes write them on their
+`<iframe>` for you.
+
+The mixin's ratio is for afterwards. It is the shape you want the element to
+be, whatever proportions the file itself has, and `object-fit` decides what
+happens to the picture inside that shape.
+
+They collide in one place. A `height` attribute is also a definite height, and
+with `width: 100%` also definite the browser has both dimensions already and
+ignores `aspect-ratio` entirely. Measured in Chrome 152, Firefox 156 and Safari
+26.6.2 in a 300px box, before 4.0.0:
 
 | Element | Before 4.0.0 | Since 4.0.0 |
 |---|---|---|
@@ -146,7 +185,9 @@ with `height: 400px` stayed 400px tall in all three browsers. A plain
 `height: auto` in the mixin's own rule would have shrunk it to 225px.
 
 <Example
-  caption="The width and height attributes stay, so the browser reserves the space before the file arrives, and the ratio still holds."
+  caption="The file is a 1400 by 933 photograph and the attributes say so, so the browser reserves the right space before it arrives. The mixin then holds the element at 4:3 and crops the photograph into that."
+  resizable
+  hint="Drag the right edge. The attributes never make the image 1400 by 933; the ratio is what decides its height."
   listing="<img class=&quot;element&quot; src=&quot;/images/landscape.webp&quot; width=&quot;1400&quot; height=&quot;933&quot; alt=&quot;A wide landscape at first light&quot;>"
 >
 ```scss
@@ -160,7 +201,7 @@ with `height: 400px` stayed 400px tall in all three browsers. A plain
 </Example>
 
 <Example
-  caption="If you want the ratio without the rest of the mixin, validateRatio accepts the same values and returns just the ratio."
+  caption="If you want the ratio without the rest of the mixin, `validateRatio` accepts the same values and returns just the ratio. The compiled CSS beside it is the whole output: one declaration, with no `object-fit`, `border` or `height` to go with it."
 >
 ```scss
 .element {

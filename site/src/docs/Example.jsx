@@ -95,7 +95,7 @@ const FRAME_BASE = `
 */
 const heights = new Map();
 
-function Example({ source, css, html, listing, title, caption, height, interactive = false, resizable = false }) {
+function Example({ source, css, html, listing, title, caption, hint, height, interactive = false, resizable = false }) {
   const [measured, setMeasured] = useState(null);
   const frame = useRef(null);
 
@@ -158,6 +158,16 @@ function Example({ source, css, html, listing, title, caption, height, interacti
     held to a ratio, and at first paint it has no height at all: the box came
     out 160px tall around a 587px image without them.
   */
+  /*
+    The reader is kept on a ref as well, because the drag handle below needs
+    it. A demo held to a ratio is exactly as tall as it is wide divided by the
+    ratio, so narrowing the box without reading the frame again leaves the
+    frame at the height it had when it was wide: a 456px box around a 200px
+    card. Nothing else tells us the width changed -- `window.resize` does not
+    fire for a box a reader drags.
+  */
+  const reread = useRef(null);
+
   useEffect(() => {
     const el = frame.current;
     if (!el) return undefined;
@@ -171,6 +181,7 @@ function Example({ source, css, html, listing, title, caption, height, interacti
         setMeasured(h);
       }
     };
+    reread.current = read;
 
     /*
       Read on every frame until the demo has a height, rather than waiting for
@@ -193,6 +204,7 @@ function Example({ source, css, html, listing, title, caption, height, interacti
 
     return () => {
       cancelAnimationFrame(raf);
+      reread.current = null;
       el.removeEventListener("load", read);
       window.removeEventListener("resize", read);
       timers.forEach(clearTimeout);
@@ -260,14 +272,31 @@ function Example({ source, css, html, listing, title, caption, height, interacti
     const start = event.clientX;
     const from = el.getBoundingClientRect().width;
     const room = el.parentElement ? el.parentElement.getBoundingClientRect().width : from;
+    /*
+      The frame is read again as the box moves, on a frame callback so a fast
+      drag does not ask for a dozen readings between two paints. The last
+      reading is taken after the pointer is up as well: the demo may still be
+      settling on the final width.
+    */
+    let pending = 0;
+    const measure = () => {
+      if (pending) return;
+      pending = requestAnimationFrame(() => {
+        pending = 0;
+        reread.current?.();
+      });
+    };
     const follow = (move) => {
       const next = Math.max(280, Math.min(room, from + (move.clientX - start)));
       el.style.width = `${Math.round(next)}px`;
+      measure();
     };
     const stop = () => {
       window.removeEventListener("pointermove", follow);
       window.removeEventListener("pointerup", stop);
       document.body.classList.remove("is-resizing-example");
+      cancelAnimationFrame(pending);
+      reread.current?.();
     };
     document.body.classList.add("is-resizing-example");
     window.addEventListener("pointermove", follow);
@@ -309,12 +338,15 @@ function Example({ source, css, html, listing, title, caption, height, interacti
         breakpoint and a reader would see one step of it. A page marks such an
         example `resizable`, and the result box takes a drag handle: the frame
         is its own viewport, so the media queries inside it answer the box
-        rather than the window. It is CSS `resize` on the box, with a strip of
-        padding under the frame so the corner belongs to the box and not to the
-        iframe over it.
+        rather than the window. The handle is a strip laid over the frame's
+        right edge; CSS `resize` puts a grabber in the corner and nowhere else.
+
+        The line above it says what to watch for, and a page can write its own
+        with `hint`: what changes with the width is the point of the example,
+        and it is not the same thing twice on two different pages.
       */}
       {rendered && resizable ? (
-        <p className="example__hint">See the changes by resizing the box below.</p>
+        <p className="example__hint">{inline(hint || "See the changes by resizing the box below.")}</p>
       ) : null}
 
       {rendered ? (
