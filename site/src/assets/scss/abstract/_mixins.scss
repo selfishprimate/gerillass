@@ -24,4 +24,30 @@
   border-radius: 0;
   -webkit-mask: $mask;
   mask: $mask;
+
+  /*
+    A masked box is rendered through an offscreen buffer, and a page carrying
+    a column of them costs the paint around it. On a documentation page the
+    snow of `.main-wrapper` simply stopped being painted: the reader saw the
+    camouflage of `html` behind the prose, from a band a few thousand pixels
+    down to the end of the page, and it stayed that way until they scrolled.
+    It is the condition a background tab comes back in, which is where the
+    maintainer kept meeting it.
+
+    Bisected in Chrome 152 on a 3008px viewport at a device pixel ratio of 2,
+    over the built stylesheet rule by rule, against a static copy of
+    `/docs/installation` with the scripts stripped: with all 692 rules the
+    background is missing at a quarter and at half of the page, with 333 of
+    them it is painted, and the rule between the two is this mask. A page of
+    the same height and markup with no mask paints, and so does a synthetic
+    page of 1600 paragraphs at 66662px.
+
+    `contain: paint` says what is already true of a masked box -- nothing it
+    paints reaches outside its own border box -- and it is what lets the
+    browser keep the two apart. Measured at 25%, 55% and 80% of the page, the
+    background is painted at each. `will-change: transform` fixes it too, by
+    giving every block a layer of its own, which is the same result at a
+    memory cost.
+  */
+  contain: paint;
 }

@@ -1082,6 +1082,25 @@ chosen for a reason:
   drawing each mask onto a canvas at the block's real size and sampling it at
   the corners of the copy button, the label and the command: all inside.
 
+**A masked block carries `contain: paint`, and that is not an optimisation.**
+Without it the snow of `.main-wrapper` stopped being painted on long
+documentation pages: from a band a few thousand pixels down to the end of the
+page the reader saw the camouflage of `html` behind the prose, and it stayed
+that way until they scrolled, which is the state a tab comes back in from
+another tab. Bisected in Chrome 152 on a 3008px viewport at a device pixel
+ratio of 2, over the built stylesheet rule by rule, against a static copy of
+`/docs/installation` with its scripts stripped: with all 692 rules the
+background is missing at a quarter and at half of the page, with the first 333
+it is painted, and the rule between them is the code block's mask. The same
+markup with no mask paints, and so does a synthetic page of 1600 paragraphs at
+66662px, so it is the mask rather than the length. A masked box renders
+through an offscreen buffer and nothing it paints reaches outside its border
+box, which is what `contain: paint` states; measured at 25%, 55% and 80% of
+the page, the background is painted at each, and the drawn edges are unchanged
+in Chrome and Firefox. `will-change: transform` fixes it too, by giving every
+block a layer of its own, which is the same result at a memory cost. Safari
+was not checked.
+
 A mask image that fails to load masks the whole element away, per the CSS
 Masking spec (not tested here), which is why every mask lives in `public/`,
 same-origin. The policy's `img-src 'self'` covers them; the deployed header was
