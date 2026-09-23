@@ -523,30 +523,34 @@ class Playground extends Component {
     if (event.target === event.currentTarget) this.handleClose();
   }
 
+  /*
+    The output editor is mounted once and never taken away. It used to be
+    replaced by the message: an error while typing, or the moment before the
+    compiler is warm, returned a `<div>` instead of the editor, so CodeMirror
+    was torn down and a fresh one built as soon as the error cleared -- the
+    right half of the window closing and opening again on every keystroke that
+    did not parse. Measured with a MutationObserver on a first open: a
+    `playground__message` removed and a whole new `react-codemirror2` mounted
+    700ms in. A message now sits above the CSS, as a warning already did, and
+    the last CSS that compiled stays where it is.
+  */
   renderOutput() {
     const { css, warnings, error, isCompiling, version } = this.state;
+    const warming = !version || (isCompiling && !css);
 
-    if (error) {
-      return (
-        <div className="playground__message playground__message--error">
-          <AlertIcon size={18} className="playground__message__icon" />
-          <pre>{error}</pre>
-        </div>
-      );
-    }
-    if (!version || (isCompiling && !css)) {
-      return (
-        <div className="playground__message">
-          <p>Warming up the Sass compiler…</p>
-        </div>
-      );
-    }
-    /*
-      A warning sits above the CSS rather than in its place: the CSS still
-      compiled, and the warning is about what it will do.
-    */
     return (
       <>
+        {error ? (
+          <div className="playground__message playground__message--error" role="status">
+            <AlertIcon size={18} className="playground__message__icon" />
+            <pre>{error}</pre>
+          </div>
+        ) : null}
+        {!error && warming ? (
+          <div className="playground__message">
+            <p>Warming up the Sass compiler…</p>
+          </div>
+        ) : null}
         {warnings.length > 0 && (
           <div
             className="playground__message playground__message--warning"

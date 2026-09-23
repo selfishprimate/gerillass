@@ -877,6 +877,17 @@ against the live site along with the trailing-slash form and the two aliases.
 
 ## Search
 
+**The playground's output editor is mounted once.** It used to be returned
+*instead of* the message: an error while typing, or the moment before the
+compiler is warm, rendered a `<div>` in its place, so CodeMirror was torn down
+and a fresh one built as soon as the error cleared. That is the right half of
+the window closing and opening again on every keystroke that does not parse,
+and it is what the flicker there turned out to be. Measured with a
+MutationObserver on a first open: a `playground__message` removed and a whole
+new `react-codemirror2` mounted 700ms in; now only the message moves, the two
+editors are created once, and an error leaves the last CSS that compiled on
+screen with the message above it.
+
 **Nothing in the palette animates**, and that is a fix rather than a taste. The
 scrim carries a `backdrop-filter` and the dialog a nine piece mask inside a
 `drop-shadow` frame; a filter and a mask are re-rasterised on every frame of an
