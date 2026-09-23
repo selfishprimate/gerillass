@@ -10,6 +10,15 @@
   labels, and the only thing still framed is the demo, which needs a surface to
   be a demo at all.
 */
+body.is-resizing-example {
+  cursor: ew-resize;
+  user-select: none;
+
+  iframe {
+    pointer-events: none;
+  }
+}
+
 .example {
   margin: 0 0 3rem;
 
@@ -36,6 +45,53 @@
     border-radius: remify(16px);
     overflow: hidden;
     background: $white;
+  }
+
+  /*
+    The width of the frame is the viewport the demo's media queries answer, so
+    a box that can be dragged, or set to a breakpoint, is the only way to show
+    one on a page. The padding under the frame is what makes the corner
+    grabbable: without it the iframe covers the resizer and the drag never
+    starts.
+  */
+  &__hint + &__result--resizable {
+    margin-top: remify(8px);
+  }
+
+  &__result--resizable {
+    position: relative;
+    resize: horizontal;
+    min-width: remify(280px);
+    max-width: 100%;
+    padding-right: remify(14px);
+    padding-bottom: remify(14px);
+
+    /*
+      The corner is squared off because the resizer is drawn in it. Measured in
+      Chrome 152, Firefox 156 and Safari 26.6.2 with `elementFromPoint`: at the
+      page's own 16px radius Safari answered the body there, so a drag started
+      on nothing.
+    */
+    border-bottom-right-radius: remify(4px);
+  }
+
+  /* The page's own prose, above the box rather than inside it. */
+  &__hint {
+    margin: remify(12px) 0 0;
+  }
+
+  /*
+    The right edge, dragged. Nothing is drawn there: the cursor over the strip
+    is what says the box can be pulled, and a bar of its own was furniture.
+  */
+  &__grip {
+    position: absolute;
+    top: remify(10px);
+    right: 0;
+    bottom: remify(24px);
+    width: remify(14px);
+    cursor: ew-resize;
+    touch-action: none;
   }
 
   &__label {

@@ -82,9 +82,16 @@ const FRAME_BASE = `
   .text-shadow-container { height: 100px; display: flex; align-items: center; }
 `;
 
-function Example({ source, css, html, listing, title, caption, height, interactive = false }) {
+function Example({ source, css, html, listing, title, caption, height, interactive = false, resizable = false }) {
   const [measured, setMeasured] = useState(null);
   const frame = useRef(null);
+
+  /*
+    A demo whose subject is the width of the viewport shows one width of it in
+    a frame of one width. The frame is its own viewport, so a page can mark an
+    example `resizable` and the result box takes a drag handle: the media
+    queries inside answer the box rather than the window.
+  */
 
   // Re-attach the observer when the demo itself changes, not on every render.
   const rendered = html;
@@ -205,6 +212,36 @@ function Example({ source, css, html, listing, title, caption, height, interacti
     };
   }, [srcDocKey]);
 
+  const frameHeight = Math.max(measured ?? 160, height ?? 0);
+
+  /*
+    The right edge, dragged. CSS `resize` puts a grabber in the corner and
+    nowhere else, and the corner is a small target for a box a reader is meant
+    to play with, so the edge is a strip of its own: it sets the box's width
+    directly and the corner keeps working beside it.
+  */
+  const box = useRef(null);
+  const dragEdge = (event) => {
+    const el = box.current;
+    if (!el) return;
+    event.preventDefault();
+    const start = event.clientX;
+    const from = el.getBoundingClientRect().width;
+    const room = el.parentElement ? el.parentElement.getBoundingClientRect().width : from;
+    const follow = (move) => {
+      const next = Math.max(280, Math.min(room, from + (move.clientX - start)));
+      el.style.width = `${Math.round(next)}px`;
+    };
+    const stop = () => {
+      window.removeEventListener("pointermove", follow);
+      window.removeEventListener("pointerup", stop);
+      document.body.classList.remove("is-resizing-example");
+    };
+    document.body.classList.add("is-resizing-example");
+    window.addEventListener("pointermove", follow);
+    window.addEventListener("pointerup", stop);
+  };
+
   const srcDoc =`<!doctype html><html><head><meta charset="utf-8"><style>${FRAME_BASE}${css}</style></head><body>${rendered}</body></html>`;
 
   return (
@@ -234,9 +271,35 @@ function Example({ source, css, html, listing, title, caption, height, interacti
         empty box -- was showing an empty frame under a Result label, which
         reads as a demo that failed rather than as one that was never there.
       */}
+      {/*
+        A demo whose subject is the width of the viewport cannot show anything
+        in a frame of one fixed width: adaptive steps its container at every
+        breakpoint and a reader would see one step of it. A page marks such an
+        example `resizable`, and the result box takes a drag handle: the frame
+        is its own viewport, so the media queries inside it answer the box
+        rather than the window. It is CSS `resize` on the box, with a strip of
+        padding under the frame so the corner belongs to the box and not to the
+        iframe over it.
+      */}
+      {rendered && resizable ? (
+        <p className="example__hint">See the changes by resizing the box below.</p>
+      ) : null}
+
       {rendered ? (
-      <div className="example__result">
+      <div
+        className={`example__result${resizable ? " example__result--resizable" : ""}`}
+        ref={resizable ? box : undefined}
+      >
         <div className="example__label">Result</div>
+        {resizable ? (
+          <span
+            className="example__grip"
+            role="separator"
+            aria-orientation="vertical"
+            aria-label="Resize the result box"
+            onPointerDown={dragEdge}
+          />
+        ) : null}
         <iframe
           ref={frame}
           className="example__frame"
@@ -247,7 +310,7 @@ function Example({ source, css, html, listing, title, caption, height, interacti
             the frame shrank to 32px around an element that filled it. A page
             demonstrating that says how tall the frame should be.
           */
-          style={{ height: `${Math.max(measured ?? 160, height ?? 0)}px` }}
+          style={{ height: `${frameHeight}px` }}
           title={title ? `${title}, rendered` : "Rendered example"}
           /*
             Scripts are off unless a demo asks for them. Only one kind does --

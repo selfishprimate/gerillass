@@ -65,9 +65,11 @@ The **Breakpoint** Sass mixin helps you create scalable media queries and breakp
 ```
 </Example>
 
-<Example caption="With a predefined value, `max` ends **just under** it, at `767.98px` for `medium`, so it hands over to `min, medium` without both applying at 768px.">
+<Example resizable caption="With a predefined value, `max` ends **just under** it, at `767.98px` for `medium`, so it hands over to `min, medium` without both applying at 768px. The result box below is a viewport of its own: drag its corner past 768 and the card turns the corner with it." >
 ```scss
 .element{
+  display: flex;
+  gap: 16px;
   @include breakpoint(max, medium) {
     flex-direction: column;
   };
@@ -75,6 +77,22 @@ The **Breakpoint** Sass mixin helps you create scalable media queries and breakp
     flex-direction: row;
   };
 }
+```
+```html
+<style>
+  body { margin: 0; padding: 18px; background: #f2f2eb; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
+  .element { padding: 18px; border-radius: 14px; background: #fafaf8; }
+  .element img { width: 120px; height: 120px; border-radius: 12px; object-fit: cover; flex: none; }
+  .element h3 { margin: 0 0 6px; font: 700 18px Inter, ui-sans-serif, system-ui, sans-serif; }
+  .element p { margin: 0; color: #657167; }
+</style>
+<div class="element">
+  <img src="/images/landscape.webp" alt="">
+  <div>
+    <h3>Lysefjord</h3>
+    <p>Below 768 the picture sits above the text, and from 768 upwards beside it. One rule each way, and nothing in the markup changes.</p>
+  </div>
+</div>
 ```
 </Example>
 

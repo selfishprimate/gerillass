@@ -736,18 +736,31 @@ route if there is more than one, so the third time it will say so.
 Writing the sequence as `&#36;` in a page avoids it too, but the guard is the
 part that does not depend on remembering.
 
+### A demo the reader can resize
+
+`<Example resizable>` gives the result box a width of its own: CSS `resize` on
+the box for the corner, a 14px strip down the right edge with `ew-resize` and a
+pointer handler for the edge, and a line of the page's own prose above it
+saying so. The frame is its own viewport, so a `@media` query inside it answers
+the box rather than the window, which is the only way a page can show a
+breakpoint.
+
+Two things were measured before it went in. The corner is squared off to 4px:
+with the page's 16px radius, `elementFromPoint` at the corner answered the body
+in Safari 26.6.2, so the drag began on nothing; at 4px all three browsers
+answer the box. And the strip of padding under and to the right of the frame is
+what keeps the corner and the edge out of the iframe, which would otherwise
+swallow the pointer.
+
 ### Which pages still have no demo
 
-160 of the 239 examples render one. Eleven mixins still show none, and the
-reason differs:
+Nine mixins show none, and the reason differs:
 
-- **A viewport is the subject.** `breakpoint`, `smartphone`, `tablet`,
-  `screen-agent` and `remove` all turn on how wide the window is, and a demo
-  frame is a fixed width. `remove` is worse: a working demo of it is an empty
-  box.
-- **The subject is a comparison.** `border-box` and `antialias` change one box
-  in a way that only reads against an unchanged one, and building the pair
-  means writing CSS the mixin did not emit.
+- **A device is the subject.** `smartphone`, `tablet` and `screen-agent` read
+  `device-width`, `device-height` and the pixel ratio, which belong to the
+  screen and not to the frame, so resizing the box proves nothing. `breakpoint`
+  and `remove` were on this list until 4.0.0 and now carry a `resizable` demo,
+  as does `adaptive`.
 - **Nothing is meant to be visible.** `container` sets `container-type`,
   which shows nothing until a `@container` rule reads it. `hide` was on this
   list until 4.0.0, when its page gained an icon toolbar, skip links revealed
@@ -756,6 +769,12 @@ reason differs:
   and `reset-css` a page to reset. `escape-to-parent` was on this list until
   4.0.0, when its page gained three demos that carry the theme or state class
   on a wrapper inside the frame itself.
+
+`border-box` and `antialias` were on this list too, as comparisons that only
+read against an unchanged control. Both now have one: the mixin goes on one
+element and the other is left alone, which takes no CSS the mixin did not emit
+-- except in `border-box`, where the frame's own base sets `box-sizing:
+border-box` on everything, so the control carries `content-box` of its own.
 
 None of these is a defect. They are recorded so nobody spends an afternoon
 rediscovering why.

@@ -33,7 +33,7 @@ The **Adaptive Sass mixin** gives you the fastest and most consistent way to app
 
 ## Examples
 
-<Example caption="The default: a centred container with a maximum width that steps up at every breakpoint, and a `30px` gutter on either side.">
+<Example resizable caption="The result box is a viewport of its own, so drag its corner. The container is centred and keeps a `30px` gutter, and its maximum width steps at 576, 768, 992, 1200 and 1400: between two of those it stays where it is while the page grows around it, and that is the step." >
 ```scss
 .main-container{
   @include adaptive;
@@ -41,19 +41,23 @@ The **Adaptive Sass mixin** gives you the fastest and most consistent way to app
 ```
 ```html
 <style>
-  body { background: #f2f2eb; font: 14px/1.6 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; padding: 22px 0; }
-  .main-container { padding: 26px; border-radius: 18px; background: #fff; box-shadow: 0 10px 30px rgb(47 57 55 / 0.08); }
-  .main-container h3 { margin: 0 0 6px; font: 700 20px Inter, ui-sans-serif, system-ui, sans-serif; }
-  .main-container p { margin: 0; color: #657167; }
+  body { margin: 0; padding: 20px 0; background: #dee0cd; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
+  .main-container { padding: 18px; border-radius: 14px; background: #fafaf8; box-shadow: 0 8px 24px rgb(47 57 55 / 0.1); }
+  .bar { display: flex; align-items: center; justify-content: space-between; padding-bottom: 14px; border-bottom: 1px solid #dee0cd; }
+  .bar b { font: 700 16px Inter, ui-sans-serif, system-ui, sans-serif; }
+  .bar span { padding: 4px 10px; border-radius: 999px; background: #2f3937; color: #fafaf8; font-size: 12px; font-weight: 600; }
+  .row { display: flex; gap: 12px; margin-top: 14px; }
+  .row div { flex: 1; height: 74px; border-radius: 10px; background: #f2f2eb; }
+  .row div:first-child { flex: 2; background: #668f80; }
 </style>
 <div class="main-container">
-  <h3>Release notes</h3>
-  <p>Centred, with a maximum width that steps up at every breakpoint, so a paragraph never runs the width of a monitor.</p>
+  <div class="bar"><b>Dashboard</b><span>Share</span></div>
+  <div class="row"><div></div><div></div><div></div></div>
 </div>
 ```
 </Example>
 
-<Example caption="A gutter in any length unit. `px`, `em`, `rem` and percentages all work, and the gutter is what keeps the text off the edge of a phone.">
+<Example resizable caption="A gutter in any length unit. `px`, `em`, `rem` and percentages all work, and the gutter is what keeps the text off the edge of a phone: drag the box narrow to see how little room that leaves." >
 ```scss
 .main-container{
   @include adaptive(2em);
