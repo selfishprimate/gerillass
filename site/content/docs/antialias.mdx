@@ -56,19 +56,19 @@ The **Antialias** Sass mixin draws text with greyscale antialiasing instead of s
 ```
 </Example>
 
-<Hint kind="warning">
+## Which engines respond
 
-**macOS only, and non-standard.** Neither property is implemented outside macOS, and on macOS only two of the three engines respond:
+Both properties are non-standard and neither is implemented outside macOS. On macOS two of the three engines draw the text differently, measured by screenshotting the same page with and without the mixin and comparing the images:
 
-| | Does the text render differently |
+| Engine | Does the text render differently |
 |---|---|
-| Chrome 152 | yes |
-| Safari 26.6.2 | yes |
-| Firefox 156 | no, the image is identical to the byte |
+| Chrome 152 | Yes |
+| Safari 26.6.2 | Yes |
+| Firefox 156 | No, the image is identical to the byte |
 
-</Hint>
+Firefox is the odd one because `-moz-osx-font-smoothing: grayscale` is its own property and has nothing left to do: Firefox on macOS draws greyscale already, so asking for greyscale asks for what it does. The mixin still writes it, since a future engine may need it and it costs one declaration.
 
-<Hint kind="info">
+<Hint kind="warning">
 
 **Changed in Gerillass 4.0.0.** Called inside a selector with no argument, the descendants are written inside `:where()`, so a rule of your own for one of them wins where it used to lose.
 

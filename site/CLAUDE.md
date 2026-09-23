@@ -315,9 +315,18 @@ drift:
 | `<Hint kind>` | info, warning or danger |
 
 Markdown tables need `remark-gfm`, which is in the plugin list. Without it a
-table renders as a paragraph of pipes, silently. Two pages use one, and
-`src/docs/content.scss` is what styles them: nothing on this site had a table
-in its prose before the port.
+table renders as a paragraph of pipes, silently. `src/docs/content.scss` is
+what styles them: nothing on this site had a table in its prose before the
+port.
+
+**A table goes in the prose, not inside a `<Hint>`.** The hint's own padding
+and the table's columns fight each other, and the result on antialias was a
+header with an empty first cell and three rows of floating text. Two columns
+is as wide as the content column takes: a third made "Chrome 152" wrap.
+
+**A version note is always `kind="warning"`.** Six of the thirty were `info`,
+which is the paler surface, so the same kind of sentence came in two colours
+depending on the page.
 
 ### The hints
 
