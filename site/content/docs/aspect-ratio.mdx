@@ -13,9 +13,9 @@ aliases:
 
 <Member name="aspect-ratio">
 
-The **Aspect Ratio Sass mixin** holds an element to the ratio you give it. CSS
-has an `aspect-ratio` property of its own, and this mixin adds the four things
-that property leaves out.
+The **Aspect Ratio Sass mixin** holds an element to the ratio you give it. The
+CSS property alone is not enough: the mixin writes it, and the declarations
+around it that the property leaves you to find out about.
 
 </Member>
 
@@ -30,7 +30,12 @@ or Responsive Video](#coming-from-ratio-box-or-responsive-video).
 
 <Hint kind="info">
 
-**Why the extra declarations?** A ratio on its own stretches an `<img>` rather than cropping it, and an `<iframe>` overflows its container by its 2px default border, so the mixin writes `object-fit` and `border: 0`. A `height` attribute, which images and embed codes usually carry, beats the ratio outright, so it writes `height: auto` too, in a way that a height you set yourself still wins. See [Images and embeds with a height
+**Why the extra declarations?** Each closes a gap the property leaves open. `display: block` and `width: 100%` make the element fill
+its container, which is what a ratio is usually for. `object-fit` crops an
+`<img>` where a ratio alone stretches it. `border: 0` takes off an `<iframe>`'s
+2px default border, which otherwise overflows the container by 4px. And
+`height: auto` stops a `height` attribute beating the ratio, in a way that a
+height you set yourself still wins. See [Images and embeds with a height
 attribute](#images-and-embeds-with-a-height-attribute).
 
 </Hint>
@@ -39,7 +44,7 @@ attribute](#images-and-embeds-with-a-height-attribute).
 
 <Arguments of="aspect-ratio" footnote="Pass null as the second argument to leave object-fit out of the output entirely.">
   <Argument name="$ratio (16/9)" type="string, number, function">
-    The ratio to hold. Accepts a slash separated string such as <code>16/9</code>, a colon separated string such as <code>16:9</code>, a bare number, where <code>1.5</code> means 1.5 to 1, or <code>var()</code>, which is written as it is. The default is <code>16/9</code>. Anything else is refused with an error.
+    The ratio to hold. Accepts a slash separated string such as <code>16/9</code>, a colon separated string such as <code>16:9</code>, a bare number, where <code>1.5</code> means 1.5 to 1, or <code>var()</code>, which is written as it is. Left out it is <code>null</code>, which is read as <code>16/9</code>. Anything else is refused with an error.
   </Argument>
   <Argument name="$fit (cover)" type="string">
     Sets the <code>object-fit</code> property. Accepts <code>fill</code>, <code>contain</code>, <code>cover</code>, <code>none</code>, <code>scale-down</code>, or <code>null</code> to leave <code>object-fit</code> alone. The default is <code>cover</code>.
@@ -48,7 +53,7 @@ attribute](#images-and-embeds-with-a-height-attribute).
 
 ## Examples
 
-<Example title="No arguments" caption="Call it without arguments and the ratio is 16/9.">
+<Example caption="Called with no arguments the ratio is 16/9, and `object-fit` is `cover`.">
 ```scss
 .element {
   @include aspect-ratio;
@@ -57,7 +62,6 @@ attribute](#images-and-embeds-with-a-height-attribute).
 </Example>
 
 <Example
-  title="On an image"
   caption="Because object-fit defaults to cover, the image is cropped to fill the box rather than stretched."
 >
 ```scss
@@ -71,7 +75,6 @@ attribute](#images-and-embeds-with-a-height-attribute).
 </Example>
 
 <Example
-  title="A different ratio"
   caption="A colon and a slash mean the same thing, so 16:9 and 16/9 give identical output."
 >
 ```scss
@@ -85,7 +88,6 @@ attribute](#images-and-embeds-with-a-height-attribute).
 </Example>
 
 <Example
-  title="Containing instead of cropping"
   caption="Pass a second value to change how the content fills the box. Here the box is square and the whole image stays visible."
 >
 ```scss
@@ -100,7 +102,6 @@ attribute](#images-and-embeds-with-a-height-attribute).
 </Example>
 
 <Example
-  title="A bare number, and no object-fit"
   caption="1.5 means 1.5 to 1. Passing null as the second argument leaves object-fit out, which is what you want when the element has no content of its own to fit."
 >
 ```scss
@@ -111,7 +112,6 @@ attribute](#images-and-embeds-with-a-height-attribute).
 </Example>
 
 <Example
-  title="An embedded video"
   caption="Apply the mixin to the iframe itself, and paste the embed code as it comes, `width` and `height` attributes included. There is no wrapper element and no padding hack."
   listing="<iframe class=&quot;element&quot; width=&quot;560&quot; height=&quot;315&quot; src=&quot;https://www.youtube.com/embed/JBc6JiRlsOU&quot; title=&quot;YouTube video player&quot; allowfullscreen></iframe>"
   interactive
@@ -156,7 +156,6 @@ with `height: 400px` stayed 400px tall in all three browsers. A plain
 `height: auto` in the mixin's own rule would have shrunk it to 225px.
 
 <Example
-  title="An image with its dimensions in the markup"
   caption="The width and height attributes stay, so the browser reserves the space before the file arrives, and the ratio still holds."
   listing="<img class=&quot;element&quot; src=&quot;/images/landscape.webp&quot; width=&quot;1400&quot; height=&quot;933&quot; alt=&quot;A wide landscape at first light&quot;>"
 >
@@ -171,7 +170,6 @@ with `height: 400px` stayed 400px tall in all three browsers. A plain
 </Example>
 
 <Example
-  title="The ratio on its own"
   caption="If you want the ratio without the rest of the mixin, validateRatio accepts the same values and returns just the ratio."
 >
 ```scss
@@ -180,6 +178,30 @@ with `height: 400px` stayed 400px tall in all three browsers. A plain
 }
 ```
 </Example>
+
+## What it refuses
+
+A ratio the browser cannot read stops the build. A string ratio separates its two numbers with a slash or a colon, and anything else, a dash included, is refused rather than written into the declaration for the browser to drop.
+
+```scss
+.element {
+  @include aspect-ratio("16-9");
+}
+```
+```text
+Error: `16-9` is not a valid ratio. A string ratio must separate width and height with `/` or `:`, like `"16/9"` or `"16:9"`.
+```
+
+A fit that is not one of the five `object-fit` keywords is refused too, with the list.
+
+```scss
+.element {
+  @include aspect-ratio("16:9", squish);
+}
+```
+```text
+Error: `squish` is not a valid $fit for `aspect-ratio`. Pass one of: fill, contain, cover, none, scale-down, or null to leave object-fit alone.
+```
 
 ## Coming from Ratio Box or Responsive Video
 
