@@ -77,7 +77,7 @@ read from Xcode's own device profiles rather than from a specification page.
 
 <Hint kind="warning">
 
-**This reads the screen, not the window.** `device-width` and `device-height` answer the size of the device's screen, so a tablet running the page beside another app in a split view still matches: the window is narrower, the screen is not. Measured in Chrome 152, Firefox 156 and Safari 26.6.2: a query at the screen's own size matched, and the same query one pixel off did not. For a rule that follows the window, use [breakpoint](/docs/breakpoint); for one that follows a component's own width, [container query](/docs/container-query).
+**This reads the screen, not the window.** `device-width` and `device-height` answer the size of the device's screen, so a tablet running the page beside another app in a split view still matches: the window is narrower, the screen is not. For a rule that follows the window use [breakpoint](/docs/breakpoint), and for one that follows a component's own width, [container query](/docs/container-query).
 
 </Hint>
 

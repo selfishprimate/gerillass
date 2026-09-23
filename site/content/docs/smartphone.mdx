@@ -64,7 +64,7 @@ and S25 are the one size two other sources state alike.
 
 <Hint kind="warning">
 
-**An Android size is the default display setting.** Android's Display size control changes the density the screen is measured in, so a phone whose owner has moved that slider answers a different `device-width` and matches no entry here. The Apple entries have no such setting. Some phones are deliberately missing, and the reason is worth saying out loud, because the query is an exact match and a size one pixel out matches nothing at all. A folding phone has two screens where an entry holds one size. And where sources disagree, nothing is written: the Galaxy A55 is 360 x 800 in Chrome's list, which implies an 810 x 1800 panel the phone does not have, the Moto G Power implies a 720 x 1440 one no model has, and the Galaxy S24 Ultra is 384 x 832 in one database and 412 x 891 in another. The budget A series, the models that lead the usage charts, are absent for that reason rather than from neglect.
+**Some phones are deliberately missing.** The query is an exact match, so a size one pixel out matches nothing, and nothing is written where sources disagree: several popular Android models are listed at two different sizes in two databases, and a folding phone has two screens where an entry holds one. Android's own Display size control changes the density a screen is measured in, so a phone whose owner has moved that slider matches no entry either.
 
 </Hint>
 
@@ -98,7 +98,7 @@ and S25 are the one size two other sources state alike.
 
 <Hint kind="warning">
 
-**This reads the screen, not the window.** `device-width` and `device-height` answer the size of the device's screen, so resizing a desktop window to 393px matches nothing here, and neither does a phone with display zoom switched on, which reports a different screen. Measured in Chrome 152, Firefox 156 and Safari 26.6.2: a query at the screen's own size matched, and the same query one pixel off did not. For a rule that follows the window, use [breakpoint](/docs/breakpoint); for one that follows a component's own width, [container query](/docs/container-query).
+**This reads the screen, not the window.** `device-width` and `device-height` answer the size of the device's screen, so resizing a desktop window to 393px matches nothing here, and neither does a phone with display zoom switched on, which reports a different screen. For a rule that follows the window use [breakpoint](/docs/breakpoint), and for one that follows a component's own width, [container query](/docs/container-query).
 
 </Hint>
 

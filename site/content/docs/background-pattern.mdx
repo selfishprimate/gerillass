@@ -911,7 +911,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 
 <Hint kind="info">
 
-**Which patterns let an image through.** The image is the last background layer, so it shows wherever the pattern leaves a gap. Rendered in Chrome 152, Firefox 156 and Safari 26.6.2: `dots`, `grid`, `crosshatch`, `zigzag`, `chevron`, `triangles`, `waves`, `brick`, `houndstooth`, `gingham`, `harlequin`, `glow`, `vignette`, `mesh` and `stripes` in one colour show the picture through. Four cover every pixel of it: `checkerboard`, `isometric` and `honeycomb` with their solid faces, and `stripes` with more than one colour, since the colours fill the whole period. Those four refuse `$image` instead of hiding it, and the message says what to do: a pattern with gaps, or one colour.
+**Which patterns let an image through.** The image is the last background layer, so it shows wherever the pattern leaves a gap. Four cover every pixel of it and refuse `$image` rather than hiding it: `checkerboard`, `isometric`, `honeycomb`, and `stripes` with more than one colour. The other sixteen let it through.
 
 </Hint>
 

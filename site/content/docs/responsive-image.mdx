@@ -29,13 +29,13 @@ img {
 
 <Hint kind="warning">
 
-**Changed in Gerillass 4.0.0.** The mixin used to write `width: 100%`, which **upscales**: measured in Chrome 152, Firefox 156 and Safari 26.6.2, a 100 by 50 image in a 600px container was drawn at 600 by 300 in all three, six times its own size. It is `max-inline-size: 100%` now, so a small image is left at its own size and a large one still fits the container. If a call of yours was stretching a small image on purpose, write `width: 100%` beside the include.
+**Changed in Gerillass 4.0.0.** The mixin used to write `width: 100%`, which upscales: a 100 by 50 image in a 600px container was drawn six times its own size. It is `max-inline-size: 100%` now, so a small image keeps its size and a large one still fits. If a call of yours was stretching a small image on purpose, write `width: 100%` beside the include.
 
 </Hint>
 
 <Hint kind="info">
 
-**The `height` attribute no longer squashes the image.** `<img width="1200" height="600">` carries a definite height, so with the width at 100% the image was drawn 600 by 600 rather than 600 by 300. The mixin writes `height: auto` inside `:where()`, which beats the attribute and loses to any `height` your stylesheet sets: with `.card img { height: 200px }` the image stayed 200px tall in all three browsers.
+**The `height` attribute no longer squashes the image.** `<img width="1200" height="600">` carries a definite height, so at 100% width the image came out square. The mixin writes `height: auto` inside `:where()`, which beats the attribute and loses to any `height` your stylesheet sets.
 
 </Hint>
 

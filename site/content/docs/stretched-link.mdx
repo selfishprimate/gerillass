@@ -97,7 +97,7 @@ It can be useful with HTML radio buttons or checkbox list design patterns, to co
 
 <Hint kind="info">
 
-**Changed in Gerillass 4.0.0.** The overlay used to carry `background-color: rgba(0, 0, 0, 0)`, an IE10 fix for a transparent pseudo-element not taking the click, and four separate offsets. It is `inset: 0` now and the colour is gone. Measured in Chrome 152, Firefox 156 and Safari 26.6.2 by asking what a click in the far corner of the card hits: the link, with the old CSS and with the new, in all three. `pointer-events: auto` stays, and it is doing something: with an ancestor at `pointer-events: none` the corner answers the link with it and the body without it.
+**Changed in Gerillass 4.0.0.** The overlay used to carry an IE10 fix, a transparent `background-color`, and four separate offsets; it is `inset: 0` now. A click in the far corner of the card hits the link either way. `pointer-events: auto` stays, and it is doing something: with an ancestor at `pointer-events: none` the corner answers the link only with it.
 
 </Hint>
 

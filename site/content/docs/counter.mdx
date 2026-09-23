@@ -16,7 +16,7 @@ The **Counter** Sass mixin numbers the children of the element you include it in
 
 <Hint kind="warning">
 
-**Changed in Gerillass 4.0.0.** The mixin used to read three classes, `counter-start`, `counter-continue` and `counter-item`. It now numbers the direct children of the element it is included in, and `$name`, `$continue`, `$start` and `$items` do what the classes did and more. A list carries on from another by naming it, `$continue: tips`, so several split lists on one page keep their own counts. The numbers also survive children that are containers, which showed 1 on every item before. See the migration guide.
+**Changed in Gerillass 4.0.0.** The mixin used to read three classes, `counter-start`, `counter-continue` and `counter-item`. It numbers the direct children of the element it is included in now, and `$name`, `$continue`, `$start` and `$items` do what the classes did and more. See the migration guide.
 
 </Hint>
 
@@ -502,7 +502,7 @@ The **Counter** Sass mixin numbers the children of the element you include it in
 
 <Hint kind="warning">
 
-**Containers, measured in Chrome 152, Firefox 156 and Safari 26.6.2.** A list that is a container numbers its items in all three. Two things do not work. `$continue` cannot carry a count into or out of a list that is a container, since containment keeps the count inside it; pass `$start` with the first number instead. And in Safari a number reads 0 when **the numbered item itself** is a container, while Chrome and Firefox show the right number; put `container-type` on an element inside the item instead, which works in all three.
+**Two things containers break.** `$continue` cannot carry a count into or out of a list that is a container, since containment keeps the count inside it; pass `$start` with the first number instead. And in Safari a number reads 0 when the numbered item itself is a container, so put `container-type` on an element inside the item.
 
 </Hint>
 

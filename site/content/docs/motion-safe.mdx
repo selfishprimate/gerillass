@@ -31,7 +31,7 @@ That override has to name every animation and every transition on the page, incl
 
 <Hint kind="warning">
 
-**Keep the visible state outside the block.** When the block does not apply, only the base rule is left. An element hidden in its base rule, `opacity: 0`, and faded in by an animation inside the block stays invisible for exactly the people who asked for less motion. Put the start of the motion in the keyframes, `from { opacity: 0; }`, and leave the base rule showing the element. [Loadify](/docs/loadify) handles the same case by applying the end state directly.
+**Keep the visible state outside the block.** When the block does not apply, only the base rule is left, so an element hidden with `opacity: 0` and faded in by an animation inside the block stays invisible for exactly the people who asked for less motion. Put the start of the motion in the keyframes and leave the base rule showing the element.
 
 </Hint>
 

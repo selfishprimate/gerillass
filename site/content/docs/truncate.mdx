@@ -149,7 +149,7 @@ Error: `$display` does nothing for `truncate(3)`: clamping more than one line ta
 
 <Hint kind="info">
 
-**All five declarations of the clamp are needed.** Measured on a paragraph running to five lines, clamped to three: without `-webkit-box-orient: vertical`, without `display: -webkit-box`, or with the standard `line-clamp` alone, all five lines were drawn and nothing warned; without `overflow: hidden` the box was three lines tall and the rest of the text spilled out below it. `CSS.supports("line-clamp: 3")` still answers false in Chrome 152, Firefox 156 and Safari 26.6.2, so the standard property is written for the future and the prefixed trio does the work.
+**All five declarations of the clamp are needed.** Drop `display: -webkit-box` or `-webkit-box-orient`, or write the standard `line-clamp` alone, and every line is drawn with no warning; drop `overflow: hidden` and the rest of the text spills out below the box. `CSS.supports("line-clamp: 3")` still answers false in all three browsers, so the standard property is written for the future and the prefixed trio does the work.
 
 </Hint>
 

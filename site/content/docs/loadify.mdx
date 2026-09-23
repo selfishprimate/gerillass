@@ -112,29 +112,22 @@ The **Loadify** Sass mixin fades an element in as the page arrives, and gives a 
 
 <Hint kind="warning">
 
-**Changed in Gerillass 4.0.0.** Until then the element was written as `opacity: 0; visibility: hidden` and the animation was the thing that revealed it, so anything that stopped the animation left the content invisible for good. Measured in Chrome 152, Firefox 156 and Safari 26.6.2 with a later `animation: none`, which a component or a reset can easily write: the element computed to `opacity: 0` and `visibility: hidden` in all three, gone from the page and from the accessibility tree with it. It now computes to `opacity: 1` and `visible` in all three.
+**Changed in Gerillass 4.0.0.** The element used to be hidden and revealed by the animation, so anything that stopped the animation -- a later `animation: none`, which a component or a reset writes easily -- left the content invisible for good, and gone from the accessibility tree with it. It is visible now and the animation only fades it in.
 
 </Hint>
 
 <Hint kind="danger">
 
-**A time needs its unit, and there is one time per argument.** Both were accepted until 4.0.0 and both produced CSS that does nothing, which is why they stop the build now.
+**A time needs its unit, and there is one time per argument.** Both were accepted until 4.0.0 and both wrote CSS that does nothing: a bare `0` is read as the iteration count in the `animation` shorthand, so the fade never runs, and a second time makes the browser drop the whole declaration. Write `loadify(0s)` and `loadify(0.2s, 0.4s)`.
 
 ```scss
 .a {
   @include loadify(0);
 }
-
-.b {
-  @include loadify(0.2s 0.4s);
-}
 ```
 ```text
 Error: `0` is not a valid time: a time needs its unit, and a bare `0` is read as the iteration count in the `animation` shorthand, where it stops the animation from running at all. Write `0s`.
-Error: `0.2s 0.4s` is not a valid delay for `loadify`, which takes one time. A second one in the `animation` shorthand makes a browser drop the declaration, so nothing fades.
 ```
-
-Measured in Chrome 152, Firefox 156 and Safari 26.6.2, on the CSS each call used to write: `animation: loadify 0.5s 0 backwards` computed to an `animation-iteration-count` of **0**, so the fade never ran, and `animation: loadify 0.5s 0.2s 0.4s backwards` computed to `animation-name: none`, the whole declaration dropped. Neither browser said anything. Write `loadify(0s)` and `loadify(0.2s, 0.4s)`.
 
 </Hint>
 

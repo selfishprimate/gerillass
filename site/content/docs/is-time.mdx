@@ -81,16 +81,7 @@ Error: `0` is not a valid time: a time needs its unit, and a bare `0` is read as
 
 <Hint kind="danger">
 
-**A bare `0` is not a time in any browser.** Measured in Chrome 152, Firefox 156 and Safari 26.6.2, each declaration written after a working `5s`, so a dropped one leaves the `5s` standing:
-
-| Written | Computed |
-|---|---|
-| `transition-duration: 0` | `5s`, the declaration is dropped |
-| `animation-duration: 0` | `5s`, dropped |
-| `animation-delay: 0` | `5s`, dropped |
-| `animation: fade 0.5s 0 backwards` | kept, and `animation-iteration-count` is **0**, so the animation never runs |
-
-The last row is the one that costs an afternoon: nothing is dropped and nothing warns, the browser simply reads the bare number as an iteration count. `0s` does what was meant.
+**A bare `0` is not a time in any browser.** `transition-duration: 0`, `animation-duration: 0` and `animation-delay: 0` are each dropped, and the expensive one is the shorthand: `animation: fade 0.5s 0 backwards` is kept, with the bare number read as the iteration count, so the animation never runs and nothing warns. `0s` does what was meant.
 
 </Hint>
 

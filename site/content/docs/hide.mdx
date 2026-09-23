@@ -148,7 +148,7 @@ Measured in Chrome 152, Firefox 156 and Safari 26.6.2, with the same result in e
 
 <Hint kind="warning">
 
-**Give a container that clips its content `position: relative`.** A hidden element is absolutely positioned, and with no positioned ancestor it escapes a horizontal carousel or a collapsed `height: 0; overflow: hidden` panel. Chrome and Safari then make the page wider or longer to reach it: measured, a hidden label on the fourth card of a carousel made a 1024px page 1549px wide, and one in a collapsed panel made it 3227px long. Firefox does not. `position: relative` on the container fixed both in all three browsers.
+**Give a container that clips its content `position: relative`.** A hidden element is absolutely positioned, and with no positioned ancestor it escapes a carousel or a collapsed panel: in Chrome and Safari the page then grows to reach it, by hundreds of pixels. `position: relative` on the container fixes it.
 
 </Hint>
 

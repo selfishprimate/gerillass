@@ -48,7 +48,7 @@ Error: 'brand' is not a color value, please replace it with a valid one.
 
 <Hint kind="info">
 
-**One colour, not a list.** `isColor` answers a list, because `isColor(red blue)` is a fair question, and `tint` mixes a single colour towards white. Until 4.0.0 a list walked past the guard and the build ended with Sass's own `$color2: (red blue) is not a color`, which names neither the function nor the argument.
+**One colour, not a list.** `isColor` answers a list, because `isColor(red blue)` is a fair question, and `tint` mixes a single colour. Until 4.0.0 a list walked past the guard and ended the build with Sass's own message, which names neither the function nor the argument.
 
 ```scss
 .a {

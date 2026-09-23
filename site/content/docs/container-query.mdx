@@ -17,7 +17,7 @@ A size on its own matches that exact width and no other, `(width: 400px)`, which
 
 <Hint kind="danger">
 
-**Put the container on an ancestor of the element you are styling.** This is the one thing to get right, and nothing tells you when you get it wrong. An element is never matched by a `@container` rule that reads its own container. Measured in a browser: a 600px element carrying `container-type: inline-size` did **not** match `@container (min-width: 400px)`, while a child of it did. An element with no container ancestor at all matches nothing. There is no warning in either case; the rule is just never applied.
+**Put the container on an ancestor of the element you are styling.** This is the one thing to get right, and nothing tells you when you get it wrong: an element is never matched by a `@container` rule that reads its own container, and one with no container ancestor matches nothing. The rule is simply never applied.
 
 </Hint>
 
@@ -105,7 +105,7 @@ The markup all of these assume: the container on the parent, the query on the ch
 
 <Hint kind="info">
 
-**Why `width <` rather than a smaller number.** Until 4.0.0 a range ended on the name, `(max-width: 768px)`, and both neighbouring ranges applied to a container exactly 768px wide, measured in Chrome 152, Firefox 156 and Safari 26.6.2. Container widths are often fractional, and browsers store them in small steps: Firefox in 1/60px and Safari in 1/64px. An end of `767.98px` left a 767.984375px container in no range in Safari, while `(width < 768px)` left none in either. Chrome counts widths within about 1/64px of a boundary as equal, so there a container that close to 768px matches both ranges whichever way the end is written. Range syntax works in `@container` in every browser that supports container queries.
+**Why `width <` rather than a smaller number.** A range used to end on the name, so both neighbouring ranges applied to a container exactly that wide. Container widths are usually fractional -- Firefox lays them out in 1/60px and Safari in 1/64px -- and a `.98` end left those widths in no range at all, where `width <` leaves neither a gap nor an overlap. Range syntax works in `@container` in every browser that has container queries.
 
 </Hint>
 

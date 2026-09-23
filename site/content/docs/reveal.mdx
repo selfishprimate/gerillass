@@ -164,7 +164,7 @@ The frames on this page run no script, so a demo here is driven by HTML alone, a
 
 <Hint kind="danger">
 
-**Do not set `display` on a popover this is on.** An author's `display` beats the rule a browser hides a closed popover with, so the element never leaves. Measured in Chrome 152, Firefox 156 and Safari 26.6.2: a popover carrying `display: grid`, which is how the menu above was first written, reported `display: grid` and `opacity: 0` after it was closed, invisible but still on the page and still taking clicks. Lay its contents out on a child instead, as that demo does now.
+**Do not set `display` on a popover this is on.** An author's `display` beats the rule a browser hides a closed popover with, so the element never leaves: it stays invisible on the page and still takes clicks. Lay its contents out on a child instead, as the menu above does.
 
 </Hint>
 
@@ -202,7 +202,7 @@ Measured in Chrome 152, Firefox 156 and Safari 26.6.2, with five of them on one 
 
 <Hint kind="info">
 
-**What does close another is HTML, not this mixin.** A `popover` closes any other `popover` that is open, and `showModal()` closes them all. That is the popover API's own behaviour and it happens with or without this mixin; what the mixin adds is that the one being closed animates out properly. If two should be open at once, write `popover="manual"` on them: in the same measurement the manual one stayed open through every other one opening and closing.
+**What closes one popover is HTML, not this mixin.** A `popover` closes any other that is open, and `showModal()` closes them all; what the mixin adds is that the one being closed animates out properly. If two should be open at once, write `popover="manual"` on them.
 
 </Hint>
 

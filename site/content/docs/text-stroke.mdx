@@ -22,7 +22,7 @@ The **Text Stroke Sass mixin** outlines text. It takes the width first, then the
 
 <Hint kind="info">
 
-**Why `outside` exists.** `-webkit-text-stroke` centres the outline on the edge of the glyph, so half of it is painted over the letter. Measured at 200px in Chrome 152, Firefox 156 and Safari 26.6.2, a 20px stroke cut the letter's own ink from 11213 pixels to 3174, and a 40px stroke left none of it: the word turns into a blob. `$style: outside` writes `paint-order: stroke fill`, which paints the outline first and the letter over it, and doubles the width, since half of the stroke is then hidden. All three engines do this.
+**Why `outside` exists.** `-webkit-text-stroke` centres the outline on the edge of the glyph, so half of it is painted over the letter: at 200px a 40px stroke left none of the letter's own ink and the word became a blob. `$style: outside` writes `paint-order: stroke fill`, which paints the outline first and the letter over it, and doubles the width, since half the stroke is then hidden.
 
 </Hint>
 

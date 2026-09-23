@@ -16,7 +16,7 @@ The **Escape to Parent** Sass mixin writes the rule again with another selector 
 
 <Hint kind="warning">
 
-**Changed in Gerillass 4.0.0.** The mixin used to paste the selector onto the front of the parent as text, which went wrong in three ways: `.c, .d { .b { … } }` came out as `.theme.c .b, .d .b`, so the second half applied with no theme at all; `ul li` came out as `.themeul li`, an element nothing is called; and a list argument split, leaving a bare `.theme` that painted every element carrying that class. All three are fixed, so the CSS a call writes can change. See the migration guide.
+**Changed in Gerillass 4.0.0.** The selector is attached with Sass's own selector functions rather than pasted on as text, which used to drop the theme from the second half of `.c, .d`, turn `ul li` into `.themeul li`, and split a list argument. The CSS a call writes can change; see the migration guide.
 
 </Hint>
 

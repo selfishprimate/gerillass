@@ -30,13 +30,7 @@ or Responsive Video](#coming-from-ratio-box-or-responsive-video).
 
 <Hint kind="info">
 
-**Why the extra declarations?** An `<img>` given a ratio but no `object-fit` is
-stretched rather than cropped, and an `<iframe>` carries a 2px default border,
-so `width: 100%` makes it overflow its container by 4px. The mixin sets
-`object-fit` and `border: 0` to close both gaps. And an element with a `height`
-attribute, which images and embed codes usually have, ignores the ratio
-altogether, so the mixin also writes `height: auto`, in a way that a height you
-set yourself still wins. See [Images and embeds with a height
+**Why the extra declarations?** A ratio on its own stretches an `<img>` rather than cropping it, and an `<iframe>` overflows its container by its 2px default border, so the mixin writes `object-fit` and `border: 0`. A `height` attribute, which images and embed codes usually carry, beats the ratio outright, so it writes `height: auto` too, in a way that a height you set yourself still wins. See [Images and embeds with a height
 attribute](#images-and-embeds-with-a-height-attribute).
 
 </Hint>

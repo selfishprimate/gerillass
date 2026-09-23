@@ -13,7 +13,7 @@ A value that grows with the viewport between two widths and then stops. `fluid(2
 
 <Hint kind="danger">
 
-**This is why the function exists.** Written by hand, a fluid value usually comes out as pure `vw`, and a `vw`-only value ignores browser text zoom. Measured: raising the root font size, which is exactly what text zoom does, moved the value this function returns from **20.83px to 34.17px**, while an equivalent `vw`-only value stayed at **19.74px** and did not respond at all. A `vw`-only value fails [WCAG 1.4.4](https://www.w3.org/WAI/WCAG21/Understanding/resize-text.html). The preferred value here keeps a `rem` term so it does not.
+**This is why the function exists.** A fluid value written by hand usually comes out as pure `vw`, and a `vw`-only value ignores browser text zoom: raising the root font size moved this function's value from 20.83px to 34.17px, while the `vw`-only one stayed at 19.74px. That failure is [WCAG 1.4.4](https://www.w3.org/WAI/WCAG21/Understanding/resize-text.html); the preferred value here keeps a `rem` term so it does not.
 
 </Hint>
 

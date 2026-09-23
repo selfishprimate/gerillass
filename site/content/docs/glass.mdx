@@ -166,7 +166,7 @@ The **Glass** Sass mixin writes a frosted glass panel: a tint, a blur of whateve
 
 <Hint kind="danger">
 
-**An ancestor that makes a backdrop root takes the blur with it.** A `transform`, a `filter`, `opacity` below 1 or `will-change` on any ancestor means nothing outside that ancestor is blurred, and because the same ancestor is a stacking context, the panel cannot rise above a later sibling either. Measured in all three browsers on a panel inside a wrapper with `transform: translateZ(0)`: the tint stayed, the blur was gone, and the decoration painted over the panel's own text. No mixin can write around this. Move the panel out of that ancestor, or take the transform off.
+**An ancestor that makes a backdrop root takes the blur with it.** A `transform`, a `filter`, `opacity` below 1 or `will-change` on any ancestor means nothing outside it is blurred, and since the same ancestor is a stacking context, the panel cannot rise above a later sibling either. No mixin can write around this: move the panel out of that ancestor, or take the transform off.
 
 </Hint>
 

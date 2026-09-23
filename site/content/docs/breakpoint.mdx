@@ -14,7 +14,7 @@ The **Breakpoint** Sass mixin helps you create scalable media queries and breakp
 
 <Hint kind="info">
 
-**Tip:** There are predefined values for breakpoints in the `_map-for-breakpoints.scss` file based on Bootstrap's breakpoint values: `xsmall` at 0, `small` at 576px, `medium` at 768px, `large` at 992px, `xlarge` at 1200px and `xxl` at 1400px. **You can add more values here to expand the list or replace existing ones with yours**. `xxl` is new in Gerillass 4.0.0, where Bootstrap has had it since 2021.
+**Tip:** The breakpoints live in `_map-for-breakpoints.scss` and follow Bootstrap's: `xsmall` at 0, `small` at 576px, `medium` at 768px, `large` at 992px, `xlarge` at 1200px and `xxl` at 1400px, which is new in 4.0.0. **Add your own or replace them there.**
 
 </Hint>
 
@@ -149,7 +149,7 @@ The **Breakpoint** Sass mixin helps you create scalable media queries and breakp
 
 <Hint kind="warning">
 
-**Why not one pixel under?** Until 4.0.0 a range ended 1 below a predefined value, `767px`, and `max` included the value itself, `768px`. Measured in Chrome 152, Firefox 156 and Safari 26.6.2: `max, medium` and `min, medium` both applied at exactly 768px in all three. Chrome and Firefox lay out fractional viewport widths, such as 767.5px in a frame or 767.27px with the display scaled to 110%, and there no range applied at all. With a map in `rem`, 1 under `48rem` is `47rem`, 16px short, and nothing applied from 752px to 768px. Ending 0.02px under, or 0.01rem under, left no overlap and no gap at any width measured. The CSS range syntax, `(width < 768px)`, measured as clean too, but Safari only supports it in media queries from 16.4 and drops the whole rule before that.
+**Why not one pixel under?** A range used to end 1 below the key, `767px`, which left a gap at every fractional width a scaled display produces, and 16px of one with a map in `rem`. It ends 0.02px under a pixel key now, and 0.01 of a unit under one in `rem` or `em`, so the ranges meet exactly. The CSS range syntax would do the same, but Safari drops the whole rule before 16.4.
 
 </Hint>
 

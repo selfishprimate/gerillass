@@ -19,7 +19,7 @@ The **Center** Sass mixin allows you to center elements (**those with a `positio
 
 <Hint kind="info">
 
-**`transform` stays yours.** Since 4.0.0 the mixin writes the individual `translate` property instead, so a `transform` of your own, a rotation, a hover that scales, composes with the centring rather than replacing it. Until then a single `transform: scale(1.05)` on hover moved the element off centre: measured in Chrome 152, Firefox 156 and Safari 26.6.2, a 100 by 50 element centred in a 400 by 200 box sat 50px right and 25px below the middle in all three, and now stays where it is.
+**`transform` stays yours.** Since 4.0.0 the mixin writes the individual `translate` property, so a rotation or a hover that scales composes with the centring rather than replacing it. Until then a single `transform: scale(1.05)` on hover moved the element off centre.
 
 </Hint>
 

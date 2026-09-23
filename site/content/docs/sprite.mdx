@@ -103,7 +103,7 @@ Error: `"/img/a.png" "/img/b.png"` is not a valid image path for `sprite`: with 
 
 <Hint kind="warning">
 
-**Changed in Gerillass 4.0.0.** With one argument the mixin has to tell an image from a position, and both can be strings. It used to read the last four characters and take only `.png`, `.jpg` and `.svg`, so `.webp`, `.avif`, `.gif`, `.jpeg`, an upper case `.PNG`, a path with a query such as `sprite.png?v=2` and a data URI were all refused. It now asks whether the value is a position, and a string that is not one is the path. A single `var()` is read as the position; for an image held in a custom property, pass it with a position: `sprite(var(--sprite), 0 0)`.
+**Changed in Gerillass 4.0.0.** With one argument the mixin has to tell an image from a position, and both can be strings. It used to read the last four characters and take only `.png`, `.jpg` and `.svg`, so `.webp`, an upper case `.PNG`, a path with a query and a data URI were all refused. It asks whether the value is a position now, and anything else is the path. A single `var()` is read as the position; for an image in a custom property, pass a position with it.
 
 </Hint>
 

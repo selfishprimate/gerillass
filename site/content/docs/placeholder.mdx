@@ -52,7 +52,7 @@ The **Placeholder Sass mixin** helps you style the **placeholder text** in an `<
 
 <Hint kind="info">
 
-**Changed in Gerillass 4.0.0.** The mixin used to write five rules, the standard one and four prefixed ancestors. Measured in Chrome 152, Firefox 156 and Safari 26.6.2, by giving each selector a colour of its own and asking what actually painted: `:-ms-input-placeholder` and the single-colon `:-moz-placeholder` parse in none of the three, and `::-webkit-input-placeholder` and `::-moz-placeholder` are each their own engine's alias for `::placeholder`, which was written anyway. So one rule is left, and every browser since Chrome 57, Firefox 51 and Safari 10.1, all from 2017, understands it.
+**Changed in Gerillass 4.0.0.** The mixin used to write five rules, the standard one and four prefixed. Two of those parse in no browser at all and the other two are aliases for `::placeholder`, which was written anyway, so one rule is left: every browser since 2017 understands it.
 
 </Hint>
 

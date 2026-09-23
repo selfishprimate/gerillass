@@ -16,7 +16,7 @@ The **Text Shadow Sass mixin** writes one or more text shadows. Each one is a di
 
 <Hint kind="warning">
 
-**Changed in Gerillass 4.0.0.** A direction may now be an angle, such as `30deg`, and the eight keywords are the 45 degree steps of that same circle, measured from the top and clockwise, as [Gradient](/docs/gradient) measures them. A shadow now sits the same distance from the text whichever way it points, so a diagonal keyword lands closer than it did: multiply an old diagonal distance by `0.7071` to keep the previous look. The mixin also refuses what browsers drop, and `$step` sets how far apart a filled shadow's layers sit.
+**Changed in Gerillass 4.0.0.** A direction may be an angle, such as `30deg`, and the eight keywords are the 45 degree steps of that circle, measured from the top and clockwise, as [Gradient](/docs/gradient) measures them. A shadow sits the same distance from the text whichever way it points, so a diagonal keyword lands closer than it did: multiply an old diagonal distance by `0.7071` to keep the previous look.
 
 </Hint>
 
@@ -423,7 +423,7 @@ A `text-shadow` transitions from one layer to another when both states have the 
 
 <Hint kind="info">
 
-**What the mixin refuses, and why.** Measured in Chrome 152, Firefox 156 and Safari 26.6.2: one broken layer drops the whole `text-shadow` declaration, so a shadow nobody notices is worse than a build that stops. A direction that is neither a keyword nor an angle, a colour a browser does not know, a negative or unitless distance, and a negative blur all raise instead. A distance written as `var()` or `calc()` cannot be filled with `true`, since the number of layers is counted while the stylesheet compiles.
+**What the mixin refuses, and why.** One broken layer drops the whole `text-shadow` declaration, and a shadow nobody notices is worse than a build that stops, so a direction that is neither a keyword nor an angle, a colour a browser does not know, a negative or unitless distance and a negative blur all raise. A distance written as `var()` or `calc()` cannot be filled with `true`, since the layers are counted while the stylesheet compiles.
 
 </Hint>
 

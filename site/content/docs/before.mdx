@@ -157,9 +157,9 @@ The **Before** Sass mixin helps you generate content or a style element before t
 
 <Hint kind="info">
 
-**This `counter()` is not the [Counter](/docs/counter) mixin.** `counter(step)` above is the CSS function that reads a counter's current value, and `before` passes it through, as it does `var()`, `attr()` and `counters()`. The counter itself, `step`, is created by `counter-reset: step` on the list and advanced by `counter-increment: step` on each item, which you write yourself, as in the Sass above.
+**This `counter()` is not the [Counter](/docs/counter) mixin.** It is the CSS function that reads a counter's value, and `before` passes it through as it does `var()` and `attr()`; the counter itself is reset and incremented by the rules above.
 
-The Counter mixin does all three for you: it resets a counter on the element you include it in, advances it on each child, and writes the number into that child's `::before`, with optional text around it and your styles in the block. Reach for it when numbering a list is the whole job. Use `before` with `counter()` when the number is one part of a longer `content`, or when the element that shows the number is not the one being counted.
+Reach for the Counter mixin when numbering a list is the whole job: it does all three for you. Use `before` with `counter()` when the number is one part of a longer `content`.
 
 </Hint>
 
@@ -258,7 +258,7 @@ q {
 
 <Hint kind="warning">
 
-**What the default overrides, and what it does not.** Measured in Chrome 152, Firefox 156 and Safari 26.6.2: the default is written as `:where(.status)::before`, which has only the pseudo-element's specificity, so a `content` in the block, or in any rule for the element with a class or an element selector, before or after the include, still wins. Three things lose to it. A `content` that only comes from another state, such as `:hover` or a media query, leaves the empty box drawn the rest of the time, so write `content: none` in the block. On a `q` element it replaces the browser's quotation marks, which the example above keeps with `open-quote`. And a bare `::before { content: ... }` rule written before the include loses, since both have the same specificity.
+**The default is easy to override, with two exceptions.** If the content only comes from another state, such as `:hover`, write `content: none` in the block and let the state put it back, or the empty box is drawn the rest of the time. On a `q` element it replaces the browser's quotation marks, which the example above keeps with `open-quote`.
 
 </Hint>
 

@@ -58,7 +58,7 @@ The **Antialias** Sass mixin draws text with greyscale antialiasing instead of s
 
 <Hint kind="warning">
 
-**macOS only, and non-standard.** Neither property does anything on Windows or Linux, and on macOS only two of the three engines respond. Measured by screenshotting the same page with and without the mixin and comparing the images, headless and in a real window:
+**macOS only, and non-standard.** Neither property does anything on Windows or Linux, and on macOS only two of the three engines respond:
 
 | | Does the text render differently |
 |---|---|
@@ -66,13 +66,11 @@ The **Antialias** Sass mixin draws text with greyscale antialiasing instead of s
 | Safari 26.6.2 | yes |
 | Firefox 156 | no, the image is identical to the byte |
 
-`-moz-osx-font-smoothing: grayscale` is Firefox's own property, and it has nothing left to do: Firefox on macOS draws greyscale already, so asking for greyscale asks for what it does. The mixin still writes it, since a future engine may need it and it costs one declaration.
-
 </Hint>
 
 <Hint kind="info">
 
-**Changed in Gerillass 4.0.0.** Called inside a selector with no argument, the descendants are now written inside `:where()`, so a rule your own stylesheet has for one of them wins. Until then the rule was `.a *`, which is (0,1,0) and overrode it: measured in Chrome 152, Firefox 156 and Safari 26.6.2, a `.page-rule` written before the include lost in all three and now wins in all three. Also, this page used to say the mixin turned subpixel rendering on. It turns it off.
+**Changed in Gerillass 4.0.0.** Called inside a selector with no argument, the descendants are written inside `:where()`, so a rule of your own for one of them wins where it used to lose.
 
 </Hint>
 

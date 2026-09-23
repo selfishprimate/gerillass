@@ -103,7 +103,7 @@ The **After** Sass mixin helps you generate content or a style element after the
 
 <Hint kind="warning">
 
-**What the default overrides, and what it does not.** Measured in Chrome 152, Firefox 156 and Safari 26.6.2: the default is written as `:where(.bell)::after`, which has only the pseudo-element's specificity, so a `content` in the block, or in any rule for the element with a class or an element selector, before or after the include, still wins. Three things lose to it. A `content` that only comes from another state, such as `:hover` or a media query, leaves the empty box drawn the rest of the time, so write `content: none` in the block and let the state put it back. On a `q` element it replaces the browser's quotation marks; write `content: close-quote` in the block to keep them. And a bare `::after { content: ... }` rule written before the include loses, since both have the same specificity.
+**The default is easy to override, with two exceptions.** If the content only comes from another state, such as `:hover`, write `content: none` in the block and let the state put it back, or the empty box is drawn the rest of the time. On a `q` element it replaces the browser's quotation marks, so write `content: close-quote` to keep them.
 
 </Hint>
 

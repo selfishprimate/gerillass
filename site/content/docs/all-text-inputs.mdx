@@ -35,7 +35,7 @@ A browser draws an `input` whose `type` it does not recognise as a text field, a
 
 <Hint kind="warning">
 
-**Until 4.0.0 a colour picker was styled as a text field**, and the swatch was stretched into a thin bar inside the box in all three browsers. It was on the list of matched types, and an `input` with a `type` the browser does not know, such as `type="foo"`, was not, though it is drawn as a text field. The selector also matched any element with a `type` attribute of those values, not only `input`. It is now `:where(input):not(...)` plus `textarea`, with the same specificity as before for typed inputs.
+**Changed in Gerillass 4.0.0.** The list is now `input` less the types that are not text fields, so a colour picker is left alone, a type the browser does not know is styled like the text field it draws, and an element that merely carries a `type` attribute is not touched.
 
 </Hint>
 
@@ -140,7 +140,7 @@ select {
 
 <Hint kind="warning">
 
-**`:invalid` marks an empty required field as an error before anyone has typed.** Measured in Chrome 152: on page load an empty required field already matches `:invalid`, so an error style shows up on a form nobody has touched. `:user-invalid` waits for the user. It did not match on load, nor after focusing the field and leaving it empty. An email field with `abc` typed in matched only once the field was left, and pressing Submit made an untouched empty required field match. For error styles, prefer `user-invalid`.
+**Prefer `user-invalid` to `invalid` for error styles.** An empty required field matches `:invalid` on page load, so the error shows on a form nobody has touched; `:user-invalid` waits until the field has been filled in and left, or the form submitted.
 
 </Hint>
 

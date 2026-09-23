@@ -13,7 +13,7 @@ A media query asks how wide the **viewport** is. That is the wrong question for 
 
 <Hint kind="danger">
 
-**The rule that asks has to sit on a descendant.** An element is never matched by a `@container` rule that reads its own container. Measured in a browser: a 600px element carrying `container-type: inline-size` did **not** match `@container (min-width: 400px)`, while a child of it did. An element with no container ancestor at all matches nothing. Both fail silently, with no warning. The rule is simply never applied.
+**The rule that asks has to sit on a descendant.** An element is never matched by a `@container` rule that reads its own container, and one with no container ancestor matches nothing. Both fail silently: the rule is simply never applied.
 
 </Hint>
 

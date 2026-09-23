@@ -142,7 +142,7 @@ The **All Buttons** Sass mixin helps you target all the HTML button elements in 
 
 <Hint kind="warning">
 
-**Changed in Gerillass 4.0.0.** The three input types used to be written without `input`, as `[type='button']`, which matches anything carrying that attribute: measured in Chrome 152, Firefox 156 and Safari 26.6.2, `<a type="button">` and a custom element with the same attribute both took the button styles in all three. They are `input[type='button']` and so on now. `input[type='image']`, a submit button drawn as an image, has joined the list: it matched none of the old entries, so it was left out of every rule the mixin wrote.
+**Changed in Gerillass 4.0.0.** The input types are selected with `input` now, so `<a type="button">` and anything else carrying the attribute is left alone, and `input[type='image']` has joined the list.
 
 </Hint>
 

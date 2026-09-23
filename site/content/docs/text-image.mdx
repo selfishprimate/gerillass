@@ -70,13 +70,13 @@ The **Text Image** Sass mixin helps you clip the background image of a selected 
 
 <Hint kind="danger">
 
-**Without a fallback, an image that does not load takes the text with it.** The mixin makes the letters transparent and the image is the only thing painting them. Measured in Chrome 152 with a path that 404s: the box was pixel for pixel one whose text is transparent and which has no background at all, so a broken image is not a broken image, it is a lost heading. With `$fallback` the same box rendered its letters in that colour.
+**Without a fallback, an image that does not load takes the text with it.** The letters are transparent and the image is the only thing painting them, so a path that 404s leaves a box with nothing in it at all. `$fallback` paints the letters in a colour when it does.
 
 </Hint>
 
 <Hint kind="info">
 
-**Forced colours are handled since 4.0.0.** In that mode the browser forces `background-image: none` and forces `color`, but `-webkit-text-fill-color` is not a forced property, so the transparent fill survived and the text disappeared. The mixin now writes a `@media (forced-colors: active)` block that gives both properties back: measured with forced colours on, the computed fill colour was `rgba(0, 0, 0, 0)` before and is black now, in Chrome 152 and Firefox 156.
+**Forced colours are handled since 4.0.0.** In that mode the browser forces `background-image: none` but `-webkit-text-fill-color` is not a forced property, so the transparent fill survived and the text disappeared. The mixin gives both back in a `@media (forced-colors: active)` block.
 
 </Hint>
 
