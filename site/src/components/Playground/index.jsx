@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import { Controlled as CodeMirror } from "react-codemirror2";
-import { motion, AnimatePresence } from "framer-motion";
 
 import "codemirror/lib/codemirror.css";
 import "codemirror/mode/css/css";
@@ -349,15 +348,15 @@ class Playground extends Component {
     if (event.key === "Escape") this.handleClose();
   }
 
+  /*
+    Closing is one step. Nothing animates out, so there is nothing to wait for:
+    the window and its scrim go together and the route changes with them. It
+    used to hold both on screen for 400ms while an exit played, which read as
+    the playground closing twice.
+  */
   handleClose() {
     if (!this.state.isOpen) return;
-    this.setState({ isOpen: false });
-    /*
-      Leaving cannot wait on the animation reporting back. A tab that is not on
-      screen is given no frames, so the movement never finishes there — and the
-      route change, not the movement, is what actually closes the playground.
-    */
-    this.leaveTimer = setTimeout(this.finishClose, 400);
+    this.setState({ isOpen: false }, this.finishClose);
   }
 
   finishClose() {
@@ -597,16 +596,19 @@ class Playground extends Component {
     const status = isCompiling ? "compiling…" : error ? "error" : `${bytes} B${warned}`;
 
     return ReactDOM.createPortal(
-      <AnimatePresence onExitComplete={this.finishClose}>
+      <>
         {isOpen && (
-          <motion.div
+          /*
+            No fade, in or out. The window inside carries a nine piece mask on
+            each editor and a drop shadow around itself, and a mask and a
+            filter are re-rasterised on every frame of an opacity, so fading
+            the scrim over them is not a fade, it is the window being redrawn.
+            Scrim and window arrive together and leave together.
+          */
+          <div
             className="playground"
             onClick={this.handleBackdrop}
             role="presentation"
-            initial={{ opacity: this.props.openedOverSite ? 0 : 1 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0, transition: { duration: 0.2, ease: "easeIn" } }}
-            transition={{ duration: 0.2, ease: "easeOut" }}
           >
             <div
               className="playground__window"
@@ -720,13 +722,7 @@ class Playground extends Component {
                       </span>
                     </div>
                     {DEMOS[mixin] && (
-                      <motion.p
-                        className="playground__editor__note"
-                        key={mixin}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.25, ease: "easeOut" }}
-                      >
+                      <p className="playground__editor__note" key={mixin}>
                         <span aria-hidden="true">{"// "}</span>
                         {DEMOS[mixin].description} Learn more about{" "}
                         {DEMOS[mixin].title || mixinTitle(mixin)}:{" "}
@@ -742,7 +738,7 @@ class Playground extends Component {
                         >
                           {`gerillass.com${DOCS}/${mixin}`}
                         </a>
-                      </motion.p>
+                      </p>
                     )}
                     <CodeMirror
                       value={source}
@@ -812,9 +808,9 @@ class Playground extends Component {
                 </div>
               </footer>
             </div>
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>,
+      </>,
       document.body,
     );
   }

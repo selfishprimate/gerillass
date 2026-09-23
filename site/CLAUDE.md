@@ -877,6 +877,15 @@ against the live site along with the trailing-slash form and the two aliases.
 
 ## Search
 
+**The playground opens and closes in one step.** Taking the window's spring
+off while the scrim kept fading left the two out of step -- the window arrived
+over a backdrop that was still coming in, and on the way out it vanished while
+the scrim held the page for 400ms -- which reads as opening twice and closing
+twice. Neither animates now, `AnimatePresence` is gone, and `handleClose`
+finishes in its own callback rather than on a timer. Measured with a
+MutationObserver: one `+playground` on open, one `-playground` on close, and
+the route changes with it.
+
 **The playground's output editor is mounted once.** It used to be returned
 *instead of* the message: an error while typing, or the moment before the
 compiler is warm, rendered a `<div>` in its place, so CodeMirror was torn down
