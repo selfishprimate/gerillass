@@ -623,25 +623,21 @@ one reported "An internal error occurred" and nothing else:
 
 It currently holds at 77 member pages for 77 members, one to one, with four guides beside them. `clearfix` was removed in 4.0.0 and its page went with it, with `/docs/clearfix` redirected in `public/_redirects`.
 
-### A page fades in, and never from nothing
+### A page does not animate as it arrives
 
-`components/PageContent` is the `<main>` element itself, keyed on the path, and
-framer fades it from `opacity: 0.6` to 1 over 0.18s with no movement at all.
-The number is the whole point. It started at `opacity: 0`, ten pixels down, on
-the site's own spring, and that reads as a blink rather than as an arrival:
-the content of the page somebody asked for is missing for a moment. Measured
-30ms after a click on a sidebar link, `main` computed to `opacity: 0`.
+Two versions were tried and both were reported as a blink: a spring from
+`opacity: 0` and ten pixels down, and then a gentler fade from 0.6. The reason
+is the same for both. The page being replaced is on screen at full brightness,
+so anything that starts below it dips the content the reader is looking at and
+brings it back, which is what a blink is. A crossfade is the only shape that
+would not, and it means laying out two pages at once.
 
-**The first page of a document is not faded**, guarded by a module variable in
-that file. `initial` is written into the markup by the prerender, so without
-the guard all 88 built files carried `style="opacity:0.6"` and anybody without
-JavaScript read a dimmed page. It was caught in the built output and is worth
-checking there after any change to this: `grep -o '<main[^>]*>' site/dist/docs/counter.html`.
-
-What could not be measured here is the fade finishing: framer drives it with
-`requestAnimationFrame`, and the browser pane this repository is worked in
-reports itself hidden, where a frame callback never runs. The initial state and
-the built markup were measured; the curve was not.
+`components/PageContent` is a plain `<main>` with no key, so React updates the
+element in place: measured with a MutationObserver over a navigation, `main` is
+never removed and added, it stays at `opacity: 1` the whole way through, and
+the content swaps in one commit. The curves in `animation.js` are for the
+playground window, the palette and the scrim, which are objects arriving over
+the site rather than the site itself.
 
 ### A new page opens at the top
 

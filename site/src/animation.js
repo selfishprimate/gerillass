@@ -19,15 +19,13 @@ export const SETTLE = {
 export const LEAVE = { duration: 0.18, ease: "easeIn" };
 
 /*
-  A page arriving. Opacity only, from most of the way there, over less than a
-  fifth of a second: a page rising from nothing on the site's own spring was
-  measured as a blink rather than as an arrival, which is what components/
-  PageContent has the long version of.
+  A page does not arrive. Two versions of a page reveal were tried, a spring
+  from nothing and a fade from 0.6, and both read as the content blinking:
+  what is on screen is at full brightness, so anything starting below it dips.
+  components/PageContent has the long version. These curves are for the
+  playground window, the palette and the scrim, which are objects arriving over
+  the site rather than the site itself.
 */
-export const PAGE_MOTION = {
-  arriving: { opacity: 0.6 },
-  here: { opacity: 1, transition: { duration: 0.18, ease: "easeOut" } },
-};
 
 /*
   The dimmed page behind a dialog. Opacity only: it covers the whole viewport,
