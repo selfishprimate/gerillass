@@ -54,7 +54,11 @@ All three browsers agree. `minmax()` takes its first value as a hard minimum, so
 
 ## Examples
 
-<Example caption="The default: columns of at least 16rem, as many as fit.">
+<Example
+  caption="The default: columns of at least 16rem, as many as fit."
+  resizable
+  hint="Drag the right edge. The column count follows the box, and the last row stretches to fill it."
+>
 ```scss
 .cards {
   @include auto-grid;
@@ -75,7 +79,11 @@ All three browsers agree. `minmax()` takes its first value as a hard minimum, so
 ```
 </Example>
 
-<Example caption="Narrower columns and a wider gap. The number of columns follows the container, not a breakpoint.">
+<Example
+  caption="Narrower columns and a wider gap. The number of columns follows the container, not a breakpoint."
+  resizable
+  hint="Drag the right edge. Narrow it far enough and the eight squares end up in one column, with nothing overflowing."
+>
 ```scss
 .tiles {
   @include auto-grid(9rem, 1.5rem);
@@ -83,7 +91,7 @@ All three browsers agree. `minmax()` takes its first value as a hard minimum, so
 ```
 ```html
 <style>
-  .tiles > * { aspect-ratio: 1; display: grid; place-items: center; border-radius: 10px; background: #fafaf8; color: #668f80; font: 600 14px Inter, ui-sans-serif, system-ui, sans-serif; }
+  .tiles > * { aspect-ratio: 1; display: grid; place-items: center; border-radius: 10px; background: #bfc1a4; color: #2f3937; font: 600 14px Inter, ui-sans-serif, system-ui, sans-serif; }
 </style>
 <div class="tiles">
   <div>01</div>
@@ -98,7 +106,11 @@ All three browsers agree. `minmax()` takes its first value as a hard minimum, so
 ```
 </Example>
 
-<Example caption="A ceiling of three columns. On a wide screen the grid stops at three and the columns grow instead of a fourth appearing, and on a narrow one it still wraps down to one.">
+<Example
+  caption="A ceiling of three columns. On a wide screen the grid stops at three and the columns grow instead of a fourth appearing, and on a narrow one it still wraps down to one."
+  resizable
+  hint="Drag the right edge. However wide the box gets there are never more than three columns."
+>
 ```scss
 .team {
   @include auto-grid(12rem, 1rem, 3);
@@ -119,7 +131,11 @@ All three browsers agree. `minmax()` takes its first value as a hard minimum, so
 ```
 </Example>
 
-<Example caption="`$fill: true` keeps the empty columns standing, so two cards in a wide row stay card-sized instead of stretching across it.">
+<Example
+  caption="`$fill: true` keeps the empty columns standing, so two cards in a wide row stay card-sized instead of stretching across it."
+  resizable
+  hint="Drag the right edge. The two cards keep their width and the room to their right is the columns nobody filled."
+>
 ```scss
 .shelf {
   @include auto-grid(12rem, 1rem, $fill: true);
@@ -136,7 +152,11 @@ All three browsers agree. `minmax()` takes its first value as a hard minimum, so
 ```
 </Example>
 
-<Example caption="The sizes can come from custom properties, which is how a grid follows a theme or a container query.">
+<Example
+  caption="The sizes can come from custom properties, which is how a grid follows a theme or a container query."
+  resizable
+  hint="Drag the right edge. The custom properties reach the browser unevaluated, so the grid is as responsive as any other."
+>
 ```scss
 .feed {
   --card-min: 14rem;
@@ -147,7 +167,7 @@ All three browsers agree. `minmax()` takes its first value as a hard minimum, so
 ```
 ```html
 <style>
-  .feed > * { padding: 16px; border-radius: 10px; background: #f2f2eb; color: #668f80; font: 500 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .feed > * { padding: 16px; border: 1px solid #dee0cd; border-radius: 10px; background: #f2f2eb; color: #2f3937; font: 500 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
 </style>
 <div class="feed">
   <div>A post</div>
@@ -173,21 +193,15 @@ Chrome 152, Firefox 156 and Safari 26.6.2 agree, to within the sub-pixel each en
 
 A ceiling on the column count is not a property. It comes out of the track minimum, which has to grow until only that many columns fit:
 
+<Example caption="The `3` and the `4` both follow `$limit`, and the `1rem` follows `$gap`.">
 ```scss
 .team {
   @include auto-grid(10rem, 1rem, 4);
 }
 ```
+</Example>
 
-```css
-.team {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, max(10rem, (100% - 3 * 1rem) / 4)), 1fr));
-}
-```
-
-The `3` and the `4` both follow `$limit`, and the `1rem` follows `$gap`, which is why this is worth a mixin: written by hand, changing the limit means editing the same expression in three places. Measured in a 1000px container with six items, all three browsers lay out exactly four 238px columns; in a 250px container the same call lays out one 250px column, because the `min(100%, …)` is still there.
+That is why this is worth a mixin: written by hand, changing the limit means editing the same expression in three places. Measured in a 1000px container with six items, all three browsers lay out exactly four 238px columns; in a 250px container the same call lays out one 250px column, because the `min(100%, …)` is still there.
 
 <Hint kind="info">
 
@@ -197,20 +211,46 @@ The `3` and the `4` both follow `$limit`, and the `1rem` follows `$gap`, which i
 
 ## What it refuses
 
+Each refusal was measured before it was written. In all three browsers a
+keyword in the track minimum, a negative gap and a word for a gap each drop the
+declaration they are in, while a length, a percentage, a `var()` and a `calc()`
+are kept.
+
+`$min` lands inside `min()`, which takes no keyword, so a keyword there costs
+the whole track list rather than one value.
+
 ```scss
 .cards {
   @include auto-grid(min-content);
-  @include auto-grid(20rem, -1rem);
-  @include auto-grid(20rem, 1rem, 0);
 }
 ```
 ```text
 Error: `min-content` is not a valid $min for `auto-grid`: it is not a length. It is the smallest a column may be, and a browser drops the whole track list.
-Error: `-1rem` is not a valid $gap for `auto-grid`: a length below zero does not work here. A browser drops the declaration and the columns touch.
-Error: `0` is not a valid $limit for `auto-grid`. Pass a whole number of columns that is at least 1.
 ```
 
-Each refusal was measured before it was written. In all three browsers a keyword in the track minimum, a negative gap and a word for a gap each drop the declaration they are in, while a length, a percentage, a `var()` and a `calc()` are kept.
+A gap below zero is dropped, which leaves the rows and columns touching.
+
+```scss
+.cards {
+  @include auto-grid(20rem, -1rem);
+}
+```
+```text
+Error: `-1rem` is not a valid $gap for `auto-grid`: a length below zero does not work here. A browser drops the declaration and the columns touch.
+```
+
+`$limit` is arithmetic in the track formula rather than a value the browser
+reads, so it has to be a whole number of at least one column. A `var()` is
+refused for the same reason.
+
+```scss
+.cards {
+  @include auto-grid(20rem, 1rem, 0);
+}
+```
+```text
+Error: `0` is not a valid $limit for `auto-grid`. Pass a whole number of columns that is at least 1.
+```
 
 ## Related Links
 
