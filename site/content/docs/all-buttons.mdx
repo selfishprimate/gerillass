@@ -22,7 +22,7 @@ The **All Buttons** Sass mixin helps you target all the HTML button elements in 
 
 ## Examples
 
-<Example caption="Called at the root of the stylesheet, it reaches every kind of button: a `<button>`, a submit input and a reset input.">
+<Example caption="Called at the root of the stylesheet it reaches every element the browser draws as a button: `<button>` and the four input types, `submit`, `reset`, `button` and `image`.">
 ```scss
 @include all-buttons {
   padding: 11px 20px;
@@ -40,23 +40,6 @@ The **All Buttons** Sass mixin helps you target all the HTML button elements in 
 <button type="button">Save changes</button>
 <input type="submit" value="Submit" />
 <input type="reset" value="Reset" />
-```
-</Example>
-
-<Example caption="A pseudo-class as the argument styles the same set in that state.">
-```scss
-@include all-buttons(hover) {
-  background-color: #2f3937;
-}
-```
-```html
-<style>
-  body { background: #fafaf8; display: flex; gap: 10px; flex-wrap: wrap; }
-  button, input { padding: 11px 20px; border: 0; border-radius: 10px; background: #668f80; color: #fff; font: 600 14px Inter, ui-sans-serif, system-ui, sans-serif; }
-</style>
-<button type="button">Hover me</button>
-<input type="submit" value="Or me" />
-<input type="reset" value="Or me" />
 ```
 </Example>
 
@@ -125,7 +108,7 @@ The **All Buttons** Sass mixin helps you target all the HTML button elements in 
 
 <Example caption="For a focus ring, reach for `focus-visible` rather than `focus`. Measured in Chrome 152 and Firefox 156: a mouse click matches `:focus` but not `:focus-visible`, while arriving with the Tab key matches both, so a ring written for `focus` is shown to everyone who clicks.">
 ```scss
-@include all-buttons("focus-visible") {
+@include all-buttons(focus-visible) {
   outline: 2px solid #668f80;
   outline-offset: 3px;
 }
@@ -142,7 +125,7 @@ The **All Buttons** Sass mixin helps you target all the HTML button elements in 
 
 <Hint kind="warning">
 
-**Changed in Gerillass 4.0.0.** The input types are selected with `input` now, so `<a type="button">` and anything else carrying the attribute is left alone, and `input[type='image']` has joined the list.
+**Changed in Gerillass 4.0.0.** The input types are selected with `input` now, so `<a type="button">` and anything else carrying the attribute is left alone, and `input[type='image']` has joined the list. A `<div role="button">` is not in it and never was: it is not a button to the browser either, so style it yourself.
 
 </Hint>
 
@@ -151,4 +134,4 @@ The **All Buttons** Sass mixin helps you target all the HTML button elements in 
 - [All Text Inputs](/docs/all-text-inputs)
 - [CSS :is](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:is)
 - [CSS :focus-visible](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:focus-visible)
-- [CSS cursor](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/cursor)
+- [HTML input type=image](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/input/image)
