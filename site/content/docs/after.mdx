@@ -22,7 +22,7 @@ The **After** Sass mixin helps you generate content or a style element after the
 
 ## Examples
 
-<Example caption="A string is written straight into `content`. That is the whole of the short form.">
+<Example caption="A string is written straight into `content`. The markup is printed first: `/ month` is nowhere in it, which is the point of a pseudo-element." listing="<span class=&quot;price&quot;>$19</span>">
 ```scss
 .price {
   @include after(" / month");
@@ -37,7 +37,7 @@ The **After** Sass mixin helps you generate content or a style element after the
 ```
 </Example>
 
-<Example caption="A declaration block styles the pseudo-element instead, and it needs no text: with no argument the mixin writes `content: &quot;&quot;` for you, so a block of styles alone draws a shape. Until 4.0.0 this drew nothing, because a pseudo-element with no `content` is not rendered.">
+<Example caption="A declaration block styles the pseudo-element instead, and it needs no text: with no argument the mixin writes `content: &quot;&quot;` for you, so a block of styles alone draws a shape. The dot is not in the markup either. Until 4.0.0 this drew nothing, because a pseudo-element with no `content` is not rendered." listing="<button class=&quot;bell&quot; aria-label=&quot;Notifications&quot;>&#128276;</button>">
 ```scss
 .bell {
   @include after {
