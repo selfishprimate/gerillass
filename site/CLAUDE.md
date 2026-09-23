@@ -752,19 +752,21 @@ part that does not depend on remembering.
 
 ### A demo the reader can resize
 
-`<Example resizable>` gives the result box a width of its own: CSS `resize` on
-the box for the corner, a 14px strip down the right edge with `ew-resize` and a
-pointer handler for the edge, and a line of the page's own prose above it
-saying so. The frame is its own viewport, so a `@media` query inside it answers
-the box rather than the window, which is the only way a page can show a
-breakpoint.
+`<Example resizable>` gives the result box a width of its own: a 14px strip
+down its right edge with `ew-resize` and a pointer handler that sets the box's
+width, and a line of the page's own prose above it saying so. The frame is its
+own viewport, so a `@media` query inside it answers the box rather than the
+window, which is the only way a page can show a breakpoint.
 
-Two things were measured before it went in. The corner is squared off to 4px:
-with the page's 16px radius, `elementFromPoint` at the corner answered the body
-in Safari 26.6.2, so the drag began on nothing; at 4px all three browsers
-answer the box. And the strip of padding under and to the right of the frame is
-what keeps the corner and the edge out of the iframe, which would otherwise
-swallow the pointer.
+**The strip is laid over the frame, not beside it.** CSS `resize` was tried
+first and does work -- but it puts a grabber in the corner and nowhere else,
+and hit-testing it meant a band of padding down the right and along the bottom,
+which read as a gap inside the box. An element painted over an iframe takes the
+pointer normally; it was the native resizer, hit-tested under the box's own
+children, that the iframe was swallowing. Measured in Chrome 152, Firefox 156
+and Safari 26.6.2: `elementFromPoint` over the frame's right edge answers the
+strip in all three, the frame beyond it, and a `pointerdown` on the strip
+reaches the handler.
 
 ### Which pages still have no demo
 

@@ -58,37 +58,24 @@ body.is-resizing-example {
     margin-top: remify(8px);
   }
 
+  /*
+    The right edge, dragged. It is a strip of the example's own, laid over the
+    frame rather than beside it: CSS `resize` puts a grabber in the corner and
+    nowhere else, and buying that corner cost a band of padding down the right
+    and along the bottom, which read as a gap in the box. An element painted
+    over an iframe takes the pointer normally -- it is the native resizer,
+    hit-tested under the box's children, that the iframe was swallowing.
+  */
   &__result--resizable {
     position: relative;
-    resize: horizontal;
-    min-width: remify(280px);
-    max-width: 100%;
-    padding-right: remify(14px);
-    padding-bottom: remify(14px);
-
-    /*
-      The corner is squared off because the resizer is drawn in it. Measured in
-      Chrome 152, Firefox 156 and Safari 26.6.2 with `elementFromPoint`: at the
-      page's own 16px radius Safari answered the body there, so a drag started
-      on nothing.
-    */
-    border-bottom-right-radius: remify(4px);
   }
 
-  /* The page's own prose, above the box rather than inside it. */
-  &__hint {
-    margin: remify(12px) 0 0;
-  }
-
-  /*
-    The right edge, dragged. Nothing is drawn there: the cursor over the strip
-    is what says the box can be pulled, and a bar of its own was furniture.
-  */
   &__grip {
     position: absolute;
-    top: remify(10px);
+    z-index: 1;
+    top: remify(34px);
     right: 0;
-    bottom: remify(24px);
+    bottom: 0;
     width: remify(14px);
     cursor: ew-resize;
     touch-action: none;
