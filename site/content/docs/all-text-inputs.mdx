@@ -189,6 +189,19 @@ select {
 ```
 </Example>
 
+## What it refuses
+
+A state the mixin does not know stops the build, with the list it does know. `:checked` is the one people reach for, and it belongs to a checkbox or a radio, neither of which this mixin selects.
+
+```scss
+@include all-text-inputs(checked) {
+  color: #db504a;
+}
+```
+```text
+Error: `checked` is not a valid $pseudo for `all-text-inputs`. Pass one of: hover, focus, focus-visible, active, invalid, user-invalid, required, disabled, or nothing for the plain state.
+```
+
 ## Related Links
 
 - [All Buttons](/docs/all-buttons)

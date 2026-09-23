@@ -126,12 +126,12 @@
           "accepts": [
             "hover",
             "focus",
+            "focus-visible",
             "active",
             "invalid",
+            "user-invalid",
             "required",
             "disabled",
-            "focus-visible",
-            "user-invalid",
             "null for the plain state"
           ]
         }
