@@ -53,6 +53,13 @@ const ALL_OPEN = { html: true, scss: true, source: true, css: true };
 */
 const SPLIT = { initial: 50, minPx: 200, step: 2 };
 
+/*
+  The same thing again, horizontally, for the strip of messages under the
+  preview: its share of the right-hand column, with both the page above it and
+  the strip itself able to come down to a readable minimum.
+*/
+const TRAY = { initial: 32, minPx: 72, step: 4 };
+
 const LOADS_LIBRARY = /@(use|forward|import)\s+["'](pkg:)?gerillass/;
 
 // eslint-disable-next-line no-control-regex
@@ -181,6 +188,19 @@ function splitBounds(width) {
 
 function clampSplit(value, width) {
   const { min, max } = splitBounds(width);
+  return Math.min(max, Math.max(min, value));
+}
+
+/* The same, from the height of the preview column rather than the lab's width. */
+function trayBounds(height) {
+  const box = height || (typeof window === "undefined" ? 800 : window.innerHeight) || 800;
+  const edge = (TRAY.minPx / box) * 100;
+  if (edge >= 50) return { min: 50, max: 50 };
+  return { min: edge, max: 100 - edge };
+}
+
+function clampTray(value, height) {
+  const { min, max } = trayBounds(height);
   return Math.min(max, Math.max(min, value));
 }
 
@@ -341,9 +361,10 @@ function Lab() {
   const [open, setOpen] = useState(() => ({ ...ALL_OPEN, ...readStored("lab:open", {}) }));
   const [order, setOrder] = useState(readOrder);
   const [split, setSplit] = useState(() => clampSplit(readStored("lab:split", SPLIT.initial)));
+  const [tray, setTray] = useState(() => clampTray(readStored("lab:tray", TRAY.initial)));
   const [shown, setShown] = useState(() => readStored("lab:shown", {}));
   const [preview, setPreview] = useState(() => readStored("lab:preview", true) !== false);
-  const [dragging, setDragging] = useState(false);
+  const [dragging, setDragging] = useState(null);
   const [movingPanel, setMovingPanel] = useState(null);
   const [dropTarget, setDropTarget] = useState(null);
   const [saving, setSaving] = useState(null);
@@ -353,6 +374,7 @@ function Lab() {
   useEffect(() => writeStored("lab:open", open), [open]);
   useEffect(() => writeStored("lab:order", order), [order]);
   useEffect(() => writeStored("lab:split", split), [split]);
+  useEffect(() => writeStored("lab:tray", tray), [tray]);
   useEffect(() => writeStored("lab:shown", shown), [shown]);
   useEffect(() => writeStored("lab:preview", preview), [preview]);
 
@@ -483,20 +505,18 @@ function Lab() {
   });
 
   const labRef = useRef(null);
+  const renderRef = useRef(null);
 
   /*
-    Dragging the divider. The iframe would swallow the pointer as soon as it
-    passed over the preview, so while a drag is on it ignores the pointer.
+    Dragging a divider, either of them. The iframe would swallow the pointer as
+    soon as it passed over the preview, so while a drag is on it ignores the
+    pointer, and the whole page carries the cursor of the divider being moved.
   */
-  const startDrag = (event) => {
+  const drag = (axis, follow) => (event) => {
     event.preventDefault();
-    setDragging(true);
-    const follow = (moveEvent) => {
-      const box = labRef.current.getBoundingClientRect();
-      setSplit(clampSplit(((moveEvent.clientX - box.left) / box.width) * 100, box.width));
-    };
+    setDragging(axis);
     const stop = () => {
-      setDragging(false);
+      setDragging(null);
       window.removeEventListener("pointermove", follow);
       window.removeEventListener("pointerup", stop);
     };
@@ -504,10 +524,29 @@ function Lab() {
     window.addEventListener("pointerup", stop);
   };
 
+  const startDrag = drag("column", (event) => {
+    const box = labRef.current.getBoundingClientRect();
+    setSplit(clampSplit(((event.clientX - box.left) / box.width) * 100, box.width));
+  });
+
+  /* Measured from the bottom edge, because it is the strip that is being sized. */
+  const startTrayDrag = drag("row", (event) => {
+    const box = renderRef.current.getBoundingClientRect();
+    setTray(clampTray(((box.bottom - event.clientY) / box.height) * 100, box.height));
+  });
+
   const nudge = (event) => {
     const width = labRef.current ? labRef.current.getBoundingClientRect().width : null;
     if (event.key === "ArrowLeft") setSplit((value) => clampSplit(value - SPLIT.step, width));
     else if (event.key === "ArrowRight") setSplit((value) => clampSplit(value + SPLIT.step, width));
+    else return;
+    event.preventDefault();
+  };
+
+  const nudgeTray = (event) => {
+    const height = renderRef.current ? renderRef.current.getBoundingClientRect().height : null;
+    if (event.key === "ArrowUp") setTray((value) => clampTray(value + TRAY.step, height));
+    else if (event.key === "ArrowDown") setTray((value) => clampTray(value - TRAY.step, height));
     else return;
     event.preventDefault();
   };
@@ -672,6 +711,37 @@ function Lab() {
     ),
   };
 
+  /*
+    Where a message goes. It used to sit above the source, between the case's
+    name and the folds, so a compile error pushed every fold down the page
+    while somebody was typing in one of them. It belongs under the preview
+    instead: that column is the one being watched when the Sass is wrong, and
+    nothing in the source moves when a message arrives or leaves. There it is a
+    strip with a divider of its own, dragged like the one between the halves,
+    and each message is a band the full width of the column rather than a card
+    floating in it. With the preview hidden there is no such column, so the
+    messages go back above the source, in their own boxes, rather than
+    disappearing.
+  */
+  const messages = (saveError || result.error || result.warnings.length > 0) && (
+    <>
+      {saveError && (
+        <pre className="lab__message lab__message--error">{`Not saved. ${saveError}`}</pre>
+      )}
+      {result.error && (
+        <pre className="lab__message lab__message--error">
+          {result.error}
+          {lastGood ? "\n\nThe preview shows the last successful compile." : ""}
+        </pre>
+      )}
+      {result.warnings.map((warning) => (
+        <pre key={warning} className="lab__message lab__message--warning">
+          {warning}
+        </pre>
+      ))}
+    </>
+  );
+
   return (
     /*
       Two halves of the window with a full-height divider between them: the
@@ -685,7 +755,7 @@ function Lab() {
     */
     <main
       ref={labRef}
-      className={`lab${dragging ? " is-dragging" : ""}`}
+      className={`lab${dragging ? ` is-dragging is-dragging--${dragging}` : ""}`}
       style={{
         gridTemplateColumns: preview
           ? `minmax(0, ${split}fr) auto minmax(0, ${100 - split}fr)`
@@ -741,20 +811,7 @@ function Lab() {
               </button>
             </div>
 
-            {saveError && (
-              <pre className="lab__message lab__message--error">{`Not saved. ${saveError}`}</pre>
-            )}
-            {result.error && (
-              <pre className="lab__message lab__message--error">
-                {result.error}
-                {lastGood ? "\n\nThe preview shows the last successful compile." : ""}
-              </pre>
-            )}
-            {result.warnings.map((warning) => (
-              <pre key={warning} className="lab__message lab__message--warning">
-                {warning}
-              </pre>
-            ))}
+            {!preview && messages && <div className="lab__messages">{messages}</div>}
 
             <div className="lab__panels">{order.map((id) => panels[id])}</div>
           </div>
@@ -763,7 +820,7 @@ function Lab() {
 
       {preview && (
         <div
-          className="lab__divider"
+          className="lab__divider lab__divider--column"
           role="separator"
           aria-orientation="vertical"
           aria-label="Resize the lab and the preview"
@@ -778,12 +835,32 @@ function Lab() {
       )}
 
       {preview && (
-        <div id="lab-preview" className="lab__render">
+        <div id="lab-preview" className="lab__render" ref={renderRef}>
           <iframe
             className="lab__frame"
             title={`${name} preview`}
             srcDoc={previewDocument(result.error ? lastGood : result.css, html)}
           />
+          {messages && (
+            <>
+              <div
+                className="lab__divider lab__divider--row"
+                role="separator"
+                aria-orientation="horizontal"
+                aria-label="Resize the preview and the messages"
+                aria-valuemin={Math.round(trayBounds(null).min)}
+                aria-valuemax={Math.round(trayBounds(null).max)}
+                aria-valuenow={Math.round(tray)}
+                tabIndex={0}
+                onPointerDown={startTrayDrag}
+                onKeyDown={nudgeTray}
+                onDoubleClick={() => setTray(TRAY.initial)}
+              />
+              <div className="lab__messages" style={{ flexBasis: `${tray}%` }}>
+                {messages}
+              </div>
+            </>
+          )}
         </div>
       )}
     </main>

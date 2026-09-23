@@ -24,12 +24,14 @@
 
   /* Nothing in the page takes the pointer from the divider while it moves. */
   &.is-dragging {
-    cursor: col-resize;
     user-select: none;
 
     iframe {
       pointer-events: none;
     }
+
+    &--column { cursor: col-resize; }
+    &--row { cursor: row-resize; }
   }
 
   /*
@@ -204,19 +206,68 @@
     opacity: 0.7;
   }
 
+  /*
+    Messages sit under the preview, where nothing moves when one arrives; with
+    the preview hidden they go above the source instead. Under the preview they
+    are a strip rather than a card: it is a half of the window with a divider
+    above it, like the two halves themselves, so each message fills its width
+    and the strip scrolls when there is more than it can show. Above the source
+    there is no strip to fill, so they keep their own edges there.
+  */
+  &__messages {
+    display: grid;
+    min-height: 0;
+    overflow: auto;
+  }
+
+  /*
+    A column rather than a grid, so the messages fill the strip: each one is as
+    tall as its text and they share whatever is left, which means a single
+    message covers the whole strip instead of leaving a band of the preview's
+    white under it.
+  */
+  &__render &__messages {
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 auto;
+    overflow: hidden;
+  }
+
+  &__render &__message {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: auto;
+  }
+
+  &__source &__messages {
+    gap: remify(8px);
+    flex: none;
+    max-height: 45%;
+    margin: remify(12px) remify(24px) 0;
+  }
+
   &__message {
     flex: none;
-    max-height: remify(160px);
-    margin: remify(12px) remify(24px) 0;
-    padding: remify(10px) remify(12px);
-    overflow: auto;
+    margin: 0;
+    padding: remify(12px) remify(16px);
     font-family: $tertiary-font-family;
     font-size: remify(13px);
     white-space: pre-wrap;
-    border-radius: remify(8px);
 
     &--error { color: #7a1f1a; background: #fbe4e2; }
     &--warning { color: #6b5412; background: #fbf1d3; }
+  }
+
+  /* In the strip a message is one band, and two of them meet on a hairline. */
+  &__render &__message + &__message {
+    border-top: 1px solid rgba($primary-color, 0.12);
+  }
+
+  &__source &__message {
+    max-height: remify(200px);
+    padding: remify(10px) remify(12px);
+    overflow: auto;
+    border-radius: remify(8px);
   }
 
   &__panels {
@@ -521,40 +572,70 @@
   }
 
   /*
-    A line the full height of the window, with a wider invisible target on both
-    sides of it, so it is easy to grab without taking room from either half.
+    A line between two halves, with a wider invisible target on both sides of
+    it so it is easy to grab without taking room from either. Two of them: the
+    full height of the window between the lab and the preview, and the width of
+    the preview between the page and the messages under it.
   */
   &__divider {
     position: relative;
     z-index: 1;
-    width: 1px;
+    flex: none;
     background: $eggshell;
-    cursor: col-resize;
     touch-action: none;
     transition: background $global-transition;
 
     &::before {
       content: "";
       position: absolute;
-      top: 0;
-      bottom: 0;
-      left: remify(-6px);
-      right: remify(-6px);
     }
 
     &:hover,
-    &:focus-visible,
-    .is-dragging & {
+    &:focus-visible {
       background: $accent-color;
     }
 
     &:focus-visible {
       outline: 0;
     }
+
+    &--column {
+      width: 1px;
+      cursor: col-resize;
+
+      &::before {
+        top: 0;
+        bottom: 0;
+        left: remify(-6px);
+        right: remify(-6px);
+      }
+
+      .is-dragging--column & {
+        background: $accent-color;
+      }
+    }
+
+    &--row {
+      height: 1px;
+      cursor: row-resize;
+
+      &::before {
+        left: 0;
+        right: 0;
+        top: remify(-6px);
+        bottom: remify(-6px);
+      }
+
+      .is-dragging--row & {
+        background: $accent-color;
+      }
+    }
   }
 
-  /* Nothing but the page: white, edge to edge. */
+  /* The page, and under it whatever the compile had to say. */
   &__render {
+    display: flex;
+    flex-direction: column;
     min-width: 0;
     min-height: 0;
     background: $white;
@@ -562,8 +643,9 @@
 
   &__frame {
     display: block;
+    flex: 1 1 auto;
     width: 100%;
-    height: 100%;
+    min-height: 0;
     background: $white;
     border: 0;
   }

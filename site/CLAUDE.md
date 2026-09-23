@@ -969,12 +969,22 @@ size and `screen-agent` its pixel density.
 A case is two files in `site/lab/cases`: `name.scss` and `name.html`. The Sass
 gets `@use "gerillass" as *;` on its first line unless it loads the library
 itself, on the same line so an error's line number is the file's. For the open
-case the page shows the library's `@warn` and `@error` messages and the compiled
-CSS on the left half of the window, and the HTML rendered with that CSS in an
-iframe filling the right half, with a divider between them that can be
-dragged. A button beside the case's name hides the preview and the divider and
-gives the lab the whole window; the choice is kept in localStorage, and the
-divider comes back where it was. The library files the case calls are found from its Sass (an
+case the page shows the case's source and the compiled CSS on the left half of
+the window, and the HTML rendered with that CSS in an iframe filling the right
+half, with a divider between them that can be dragged. A button beside the
+case's name hides the preview and the divider and gives the lab the whole
+window; the choice is kept in localStorage, and the divider comes back where it
+was.
+
+**The library's `@warn` and `@error` messages are a strip under the preview**,
+with a divider of its own that drags the same way and remembers where it was
+left. They sat above the source until 23 September 2026, where an error
+arriving pushed every fold down the page while somebody was typing in one of
+them. In the strip a message is a band the width of the column rather than a
+card, because the strip is a half of the window like the other two and a rounded
+box floating in it read as something else. With the preview hidden there is no
+column to sit under, so the messages go back above the source and keep their
+own edges there. The library files the case calls are found from its Sass (an
 `@include`, with or without `gls-`, or a call to a function's camelCase name)
 and shown in a Library panel. The case's name is its file name in title case,
 and the line under it is the first sentence of that first member's summary in
