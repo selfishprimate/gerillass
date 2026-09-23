@@ -19,14 +19,10 @@ export const SETTLE = {
 export const LEAVE = { duration: 0.18, ease: "easeIn" };
 
 /*
-  A page. It rises a little as it arrives -- less than the playground window,
-  which is an object landing on top of the site; a page is the site, so it
-  moves just enough to say something replaced something else.
+  A page used to rise a little as it arrived, on these same curves. It is gone:
+  starting the content at nothing and springing it in reads as a blink on a
+  page somebody opened to read. See components/PageContent.
 */
-export const PAGE_MOTION = {
-  hidden: { opacity: 0, y: 10, transition: LEAVE },
-  shown: { opacity: 1, y: 0, transition: SETTLE },
-};
 
 /*
   The dimmed page behind a dialog. Opacity only: it covers the whole viewport,

@@ -623,6 +623,19 @@ one reported "An internal error occurred" and nothing else:
 
 It currently holds at 77 member pages for 77 members, one to one, with four guides beside them. `clearfix` was removed in 4.0.0 and its page went with it, with `/docs/clearfix` redirected in `public/_redirects`.
 
+### A page does not animate as it arrives
+
+It used to: `components/PageContent` started each new page at `opacity: 0`, ten
+pixels down, and sprang it into place, so that the part of the window which had
+changed was the part that moved. On the site that reads as a blink -- the page
+you asked for is not there for a moment and then arrives -- and it went on
+23 September 2026. `PageContent` is a plain `<main>` now, with no `key`, so
+React updates the element in place: measured with a MutationObserver over a
+navigation, the element is never removed and added, and `main` stays at
+`opacity: 1` throughout. The movement language in `animation.js` is still there
+for the playground window, the palette and the scrim, which are objects
+arriving over the site rather than the site itself.
+
 ### A new page opens at the top
 
 `components/ScrollToTop` puts it there, and two details are what make it look
