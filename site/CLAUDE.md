@@ -623,6 +623,24 @@ one reported "An internal error occurred" and nothing else:
 
 It currently holds at 77 member pages for 77 members, one to one, with four guides beside them. `clearfix` was removed in 4.0.0 and its page went with it, with `/docs/clearfix` redirected in `public/_redirects`.
 
+### A new page opens at the top
+
+`components/ScrollToTop` puts it there, and two details are what make it look
+like nothing happened rather than like a jump. It is a layout effect, so the
+scroll is set in the same commit as the new page and before the browser paints
+it; as a plain effect the reader saw the new page at the old position for a
+frame. And the scroll is asked for with `behavior: "instant"`, because `html`
+carries `scroll-behavior: smooth` for anchor links and an explicit behaviour is
+the only thing that beats it from inside that effect. Setting
+`style.scrollBehavior = "auto"` around the call was tried and does not work
+there: the scroll is asked for before the style is recalculated, so the browser
+still reads `smooth`. Measured on the dev server with `scrollTo` wrapped to
+report the position it leaves behind: 2069 of 2400 that way, 0 with the
+keyword.
+
+An anchor link, the back button and the playground are left alone, which the
+component says at its head.
+
 ### The head, on a client-side navigation
 
 `useDocumentHead` takes out the `index.html` tags a documentation page replaces
