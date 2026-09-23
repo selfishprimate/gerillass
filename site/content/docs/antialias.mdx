@@ -22,11 +22,23 @@ The **Antialias** Sass mixin draws text with greyscale antialiasing instead of s
 
 ## Examples
 
-<Example caption="If you call it inside a selector without passing a value, the style rules apply to that element and all of its children.">
+<Example caption="The mixin on the lower block and nothing on the upper one, which is the only way to see it: on macOS the lower letters are drawn thinner, and on Windows and Linux neither property does anything, so the two are identical there.">
 ```scss
-.element{
+.element {
   @include antialias;
 }
+```
+```html
+<style>
+  body { margin: 0; background: #222c25; font: 300 30px/1.35 Inter, ui-sans-serif, system-ui, sans-serif; color: #fafaf8; }
+  .stack { display: grid; gap: 2px; }
+  .stack > div { padding: 18px 22px; }
+  .stack small { display: block; margin-bottom: 4px; font: 600 11px/1 Inter, ui-sans-serif, system-ui, sans-serif; letter-spacing: 0.12em; text-transform: uppercase; color: #bdc488; }
+</style>
+<div class="stack">
+  <div><small>Subpixel, the default</small>Handgloves</div>
+  <div class="element"><small>Greyscale</small>Handgloves</div>
+</div>
 ```
 </Example>
 
