@@ -2,9 +2,13 @@
 
 .header {
   position: relative;
-  /* Animation */
-  opacity: 0;
-  animation: setBack 0.5s 0.1s forwards;
+  /*
+    No entrance. The header used to start at `opacity: 0` and fade in a tenth
+    of a second later, which is the landing page's choreography: on a
+    documentation page or the playground it is the site's chrome blinking on
+    every load, which is what it was reported as on 23 September 2026. The
+    sections of the home page keep theirs.
+  */
   @include breakpoint(min, small) {
     margin-bottom: 2rem;
   }

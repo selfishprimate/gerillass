@@ -623,6 +623,16 @@ one reported "An internal error occurred" and nothing else:
 
 It currently holds at 77 member pages for 77 members, one to one, with four guides beside them. `clearfix` was removed in 4.0.0 and its page went with it, with `/docs/clearfix` redirected in `public/_redirects`.
 
+### The header does not fade in
+
+`.header` carried `opacity: 0` and `animation: setBack 0.5s 0.1s forwards`,
+which is the landing page's choreography: the hero, Featured, Install and
+Benefits come in behind it on a stagger. On a documentation page or the
+playground there is nothing behind it, so what the reader gets is the site's
+chrome blinking on every load. The four home page sections keep theirs; the
+header does not. Captured at four virtual-time budgets from 150ms, the header
+is now identical in all of them.
+
 ### A page does not animate as it arrives
 
 Two versions were tried and both were reported as a blink: a spring from
