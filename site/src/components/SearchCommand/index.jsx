@@ -1,12 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
-import { AnimatePresence, motion } from "framer-motion";
 import { Command } from "cmdk";
 
 import { SearchIcon } from "components/Icons";
 import { pages } from "virtual:docs-index";
-import { SCRIM_MOTION, DIALOG_MOTION } from "animation";
 
 import "./search-command.scss";
 
@@ -29,12 +27,7 @@ import "./search-command.scss";
   guides. The guides are reachable from the sidebar on every page, so they sit
   at the bottom here rather than at the top.
 */
-/*
-  cmdk's Command forwards its ref to the element it renders, which is what
-  lets framer drive it directly. Wrapping it in a motion div instead would put
-  a box between the scrim's centring and the dialog it is centring.
-*/
-const MotionCommand = motion.create(Command);
+
 
 const GROUPS = [
   { kind: "mixin", label: "Mixins" },
@@ -87,10 +80,8 @@ function SearchCommand() {
   const navigate = useNavigate();
 
   /*
-    The portal is mounted whether or not the palette is open, because
-    AnimatePresence can only animate a child out if it is still there to be
-    animated. That needs a document, and the build machine has none, so it
-    waits for the first effect rather than for `open`.
+    A portal needs a document, and the build machine has none, so it waits for
+    the first effect rather than for `open`.
   */
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
@@ -153,34 +144,31 @@ function SearchCommand() {
         Search
       </button>
 
+      {/*
+        Nothing here animates, and that is the fix rather than the taste. The
+        scrim carries a `backdrop-filter` and the dialog a nine piece mask
+        inside a `drop-shadow` frame; a filter and a mask are re-rasterised on
+        every frame of an opacity or a transform, which is why the palette's
+        spring was reported as flicker rather than as movement on 23 September
+        2026. It opens where it opens.
+      */}
       {mounted &&
         createPortal(
-          <AnimatePresence>
+          <>
             {open ? (
-              <motion.div
+              <div
                 className="palette"
-                variants={SCRIM_MOTION}
-                initial="hidden"
-                animate="shown"
-                exit="hidden"
                 onMouseDown={(event) => {
                   if (event.target === event.currentTarget) setOpen(false);
                 }}
               >
                 {/*
                   The frame carries the shadow, since the dialog's mask would
-                  cut a shadow of its own away. Variants still reach the
-                  dialog through it.
+                  cut a shadow of its own away.
                 */}
                 <div className="palette__frame">
-                  <MotionCommand
+                  <Command
                     className="palette__dialog"
-                    /*
-                      No initial, animate or exit of its own: a child with
-                      variants follows its parent through the same three states,
-                      so the scrim and the dialog cannot come apart.
-                    */
-                    variants={DIALOG_MOTION}
                     label="Search the documentation"
                     loop
                     /*
@@ -249,11 +237,11 @@ function SearchCommand() {
                         </Command.Group>
                       ))}
                     </Command.List>
-                  </MotionCommand>
+                  </Command>
                 </div>
-              </motion.div>
+              </div>
             ) : null}
-          </AnimatePresence>,
+          </>,
           document.body,
         )}
     </>

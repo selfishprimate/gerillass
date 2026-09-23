@@ -877,6 +877,15 @@ against the live site along with the trailing-slash form and the two aliases.
 
 ## Search
 
+**Nothing in the palette animates**, and that is a fix rather than a taste. The
+scrim carries a `backdrop-filter` and the dialog a nine piece mask inside a
+`drop-shadow` frame; a filter and a mask are re-rasterised on every frame of an
+opacity or a transform, so the spring the palette used to open on was reported
+as flicker rather than as movement. The playground window lost its own
+entrance, and its three staggered bands with it, for the same reason: its
+editors carry the same mask. The scrim behind the playground still fades, since
+it carries neither.
+
 The palette is **anchored near the top, not centred**. Centred, the dialog is
 recentred on every keystroke: the list is as tall as its results, so narrowing
 them from thirty-three to one moved the whole box up the screen under the

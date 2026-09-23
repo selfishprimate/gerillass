@@ -19,7 +19,6 @@ import { compile, COMPILER } from "./compiler";
 import { fetchVersions, FALLBACK } from "./versions";
 import Select from "components/Select";
 
-import { SETTLE, LEAVE } from "animation";
 
 import { listMixins, mixinTitle } from "./mixins";
 import DEMOS from "./demos.json";
@@ -33,25 +32,14 @@ import "./playground.scss";
   and the palette and the page reveals now move on them too.
 */
 
-const WINDOW_MOTION = {
-  hidden: {
-    opacity: 0,
-    y: 28,
-    scale: 0.99,
-    transition: { ...LEAVE, staggerChildren: 0.03, staggerDirection: -1 },
-  },
-  shown: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: { ...SETTLE, staggerChildren: 0.055, delayChildren: 0.04 },
-  },
-};
-
-const BAND_MOTION = {
-  hidden: { opacity: 0, y: 16, transition: LEAVE },
-  shown: { opacity: 1, y: 0, transition: SETTLE },
-};
+/*
+  The window used to come up on a spring, with its three bands settling in one
+  after another. It was reported as flicker on 23 September 2026, and what
+  makes it flicker rather than move is what it is made of: the editors carry a
+  nine piece mask and the window a drop shadow, and a mask and a filter are
+  re-rasterised on every frame of an opacity or a transform. The window is
+  simply there now; the scrim behind it still fades, since it carries neither.
+*/
 
 /*
   What the two selectors in the Sass bar are, in a line each. They introduce
@@ -616,17 +604,13 @@ class Playground extends Component {
             exit={{ opacity: 0, transition: { duration: 0.2, ease: "easeIn" } }}
             transition={{ duration: 0.2, ease: "easeOut" }}
           >
-            <motion.div
+            <div
               className="playground__window"
               role="dialog"
               aria-modal="true"
               aria-labelledby="playground-title"
-              variants={WINDOW_MOTION}
-              initial="hidden"
-              animate="shown"
-              exit="hidden"
             >
-              <motion.header className="playground__bar" variants={BAND_MOTION}>
+              <header className="playground__bar">
                 <div className="playground__bar__intro">
                   <h2 className="playground__title" id="playground-title">
                     Playground
@@ -660,9 +644,9 @@ class Playground extends Component {
                     <CloseIcon size={22} />
                   </button>
                 </div>
-              </motion.header>
+              </header>
 
-              <motion.div className="playground__panes" variants={BAND_MOTION}>
+              <div className="playground__panes">
                 <div className="playground__pane">
                   <div className="playground__pane__head">
                     <p className="playground__pane__note">
@@ -802,12 +786,9 @@ class Playground extends Component {
                     {this.renderOutput()}
                   </div>
                 </div>
-              </motion.div>
+              </div>
 
-              <motion.footer
-                className="playground__footer"
-                variants={BAND_MOTION}
-              >
+              <footer className="playground__footer">
                 <p className="playground__compiler">Compiled with {COMPILER}</p>
                 <div className="playground__footer__actions">
                   <code>{INSTALL_STEPS[0].command}</code>
@@ -825,8 +806,8 @@ class Playground extends Component {
                     )}
                   </button>
                 </div>
-              </motion.footer>
-            </motion.div>
+              </footer>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>,
