@@ -678,6 +678,13 @@ indent for prose lists and nothing else. The twelve lists the site uses as
 layout, the header's two, the footer's four, the sidebar, the supporters' two,
 the testimonial, the benefits and the Featured buttons, carry `role="list"`.
 
+**A list with another role has to say `list-style: none` itself.** Examples'
+tabs are a `<ul role="tablist">`, written by react-tabs, and cannot claim to be
+a list: the markers came back on the home page when the reset narrowed. The
+breadcrumb trail, an `<ol>` inside a `<nav>`, was already saying it. Those two
+are the only lists on the site with a role of their own; everything else either
+says `role="list"` or is prose.
+
 ### Editorial consistency
 
 Two things the upstream pages disagreed with themselves about, normalised in

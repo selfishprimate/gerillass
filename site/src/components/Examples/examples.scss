@@ -55,6 +55,14 @@
 
   &__tab-panels {
     &__tabs {
+      /*
+        react-tabs writes the list as a <ul role="tablist">, and since 4.0.0
+        reset-css only takes the markers off a list that says `role="list"`,
+        which this one cannot: it is a tablist. So it says so itself.
+      */
+      list-style: none;
+      padding-left: 0;
+
       &:focus {
         outline: none;
       }
