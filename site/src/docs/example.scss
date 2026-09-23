@@ -40,7 +40,7 @@ body.is-resizing-example {
   }
 
   &__result {
-    margin-top: remify(12px);
+    margin-top: remify(18px);
     border: 1px solid $eggshell;
     border-radius: remify(16px);
     overflow: hidden;
@@ -48,14 +48,17 @@ body.is-resizing-example {
   }
 
   /*
-    The width of the frame is the viewport the demo's media queries answer, so
-    a box that can be dragged, or set to a breakpoint, is the only way to show
-    one on a page. The padding under the frame is what makes the corner
-    grabbable: without it the iframe covers the resizer and the drag never
-    starts.
+    The line that tells a reader the box can be dragged: the page's own prose,
+    above the box rather than inside it. The space over it is the paragraph
+    rhythm rather than the 12px the code panes keep between themselves, since
+    a line of text set that close under a block of dark code sits on it.
   */
-  &__hint + &__result--resizable {
-    margin-top: remify(8px);
+  &__hint {
+    margin: remify(26px) 0 0;
+  }
+
+  &__hint + &__result {
+    margin-top: remify(12px);
   }
 
   /*
