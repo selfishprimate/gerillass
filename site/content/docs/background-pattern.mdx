@@ -52,9 +52,9 @@ Each pattern below is its own section, with the colours and the tile changed fro
 ```
 ```html
 <style>
-  .hero { padding: 30px 24px; border-radius: 10px; color: #1d4ed8; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .hero { padding: 30px 24px; border-radius: 10px; color: #2f3937; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
   .hero h2 { margin: 0 0 6px; font-size: 28px; }
-  .hero p { margin: 0; color: #334155; }
+  .hero p { margin: 0; color: #657167; }
 </style>
 <section class="hero">
   <h2>Patterns, not pictures</h2>
@@ -66,7 +66,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="`$size` is the tile and `$thickness` the dot, so a big tile with a big dot gives confetti rather than a texture.">
 ```scss
 .confetti {
-  @include background-pattern(dots, $color: #d8b4fe #a5b4fc, $background: #faf5ff, $size: 34px, $thickness: 5px);
+  @include background-pattern(dots, $color: #5bc0bb #bdc488, $background: #f2f2eb, $size: 34px, $thickness: 5px);
 }
 ```
 ```html
@@ -80,12 +80,12 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="`$stagger: false` lines the dots up in a grid instead of offsetting every other row. This is what `background-dots` called `$diagonal` until 4.0.0.">
 ```scss
 .card {
-  @include background-pattern(dots, $color: #94a3b8, $background: #f8fafc, $size: 18px, $stagger: false);
+  @include background-pattern(dots, $color: #8b9381, $background: #fafaf8, $size: 18px, $stagger: false);
 }
 ```
 ```html
 <style>
-  .card { display: grid; place-items: center; height: 140px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #475569; }
+  .card { display: grid; place-items: center; height: 140px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #657167; }
 </style>
 <div class="card">Lined up</div>
 ```
@@ -110,14 +110,14 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="A cafe awning. `$angle` turns the stripes and `$thickness` sets how wide each one is.">
 ```scss
 .awning {
-  @include background-pattern(stripes, $color: #e11d48 #fff1f2, $thickness: 14px, $angle: 90deg);
+  @include background-pattern(stripes, $color: #668f80 #f2f2eb, $thickness: 14px, $angle: 90deg);
 }
 ```
 ```html
 <style>
-  .shop { max-width: 360px; border-radius: 10px; overflow: hidden; border: 1px solid #fecdd3; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .shop { max-width: 360px; border-radius: 10px; overflow: hidden; border: 1px solid #dee0cd; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
   .awning { height: 46px; }
-  .shop div { padding: 16px 18px; color: #881337; }
+  .shop div { padding: 16px 18px; color: #2f3937; }
 </style>
 <div class="shop">
   <div class="awning"></div>
@@ -129,12 +129,12 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="A fine diagonal texture, where a thin stripe and a pale colour keep it quiet enough to put text on.">
 ```scss
 .panel {
-  @include background-pattern(stripes, $color: #e2e8f0, $background: #f8fafc, $thickness: 3px);
+  @include background-pattern(stripes, $color: #dee0cd, $background: #fafaf8, $thickness: 3px);
 }
 ```
 ```html
 <style>
-  .panel { display: grid; place-items: center; height: 140px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #475569; }
+  .panel { display: grid; place-items: center; height: 140px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #657167; }
 </style>
 <div class="panel">Pending review</div>
 ```
@@ -143,7 +143,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="Three colours become three stripes in turn, each one `$thickness` wide.">
 ```scss
 .pole {
-  @include background-pattern(stripes, $color: #334155 #f8fafc #94a3b8, $thickness: 10px, $angle: 60deg);
+  @include background-pattern(stripes, $color: #2f3937 #fafaf8 #8b9381, $thickness: 10px, $angle: 60deg);
 }
 ```
 ```html
@@ -157,7 +157,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="A photograph under the stripes. `$image` lays the picture in as the last background layer, so the pattern reads as a screen over it. The old mixins put it in a `::before` at `z-index: -1`, where an ancestor's own background could hide it.">
 ```scss
 .cover {
-  @include background-pattern(stripes, $color: rgb(15 23 42 / 0.22), $thickness: 2px, $image: "/images/backgrounds/02.jpg");
+  @include background-pattern(stripes, $color: rgb(34 44 37 / 0.25), $thickness: 2px, $image: "/images/backgrounds/02.jpg");
 }
 ```
 ```html
@@ -171,13 +171,13 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="The line and the period are set apart, so a hairline on a wide tile is two arguments: `$thickness` is the line and `$size` is one line plus its gap. This is the hatch the marketing pages fill their gutters with.">
 ```scss
 .gutter {
-  @include background-pattern(stripes, $color: rgb(15 23 42 / 0.5), $background: #f8fafc, $size: 10px, $thickness: 1px, $angle: 315deg);
+  @include background-pattern(stripes, $color: rgb(47 57 55 / 0.45), $background: #fafaf8, $size: 10px, $thickness: 1px, $angle: 315deg);
 }
 ```
 ```html
 <style>
   .gutter { display: grid; place-items: center; height: 170px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
-  .gutter span { padding: 10px 18px; border-radius: 8px; background: #f8fafc; font-weight: 600; color: #0f172a; }
+  .gutter span { padding: 10px 18px; border-radius: 8px; background: #fafaf8; font-weight: 600; color: #2f3937; }
 </style>
 <div class="gutter"><span>Nothing here yet</span></div>
 ```
@@ -188,14 +188,14 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="Graph paper behind a form. A second colour draws a heavier line every fifth cell.">
 ```scss
 .sheet {
-  @include background-pattern(grid, $color: #dbeafe #93c5fd, $background: #fff, $size: 1.25rem, $thickness: 1px);
+  @include background-pattern(grid, $color: #dee0cd #5bc0bb, $background: #fff, $size: 1.25rem, $thickness: 1px);
 }
 ```
 ```html
 <style>
-  .sheet { padding: 22px; border-radius: 10px; border: 1px solid #e2e8f0; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
-  .sheet label { display: block; margin-bottom: 6px; font-weight: 600; color: #0f172a; }
-  .sheet input { width: 100%; max-width: 260px; padding: 8px 10px; border: 1px solid #94a3b8; border-radius: 6px; background: #fff; font: inherit; }
+  .sheet { padding: 22px; border-radius: 10px; border: 1px solid #dee0cd; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .sheet label { display: block; margin-bottom: 6px; font-weight: 600; color: #2f3937; }
+  .sheet input { width: 100%; max-width: 260px; padding: 8px 10px; border: 1px solid #8b9381; border-radius: 6px; background: #fff; font: inherit; }
 </style>
 <div class="sheet">
   <label for="bp-name">Project name</label>
@@ -207,12 +207,12 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="The same pattern in reverse: pale lines on a dark ground, at a larger tile, which is the blueprint look.">
 ```scss
 .blueprint {
-  @include background-pattern(grid, $color: rgb(255 255 255 / 0.28) rgb(255 255 255 / 0.55), $background: #1e3a8a, $size: 2rem, $thickness: 1px);
+  @include background-pattern(grid, $color: rgb(255 255 255 / 0.28) rgb(255 255 255 / 0.55), $background: #2f3937, $size: 2rem, $thickness: 1px);
 }
 ```
 ```html
 <style>
-  .blueprint { display: grid; place-items: center; height: 160px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #dbeafe; }
+  .blueprint { display: grid; place-items: center; height: 160px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #dee0cd; }
 </style>
 <div class="blueprint">Sheet 3 of 9</div>
 ```
@@ -221,12 +221,12 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="`$axis: block` keeps the horizontal lines only, which turns the grid into ruled paper.">
 ```scss
 .note {
-  @include background-pattern(grid, $axis: block, $color: #bae6fd, $background: #fffbeb, $size: 1.75rem, $thickness: 1px);
+  @include background-pattern(grid, $axis: block, $color: #bfc1a4, $background: #f2f2eb, $size: 1.75rem, $thickness: 1px);
 }
 ```
 ```html
 <style>
-  .note { padding: 14px 18px; border-radius: 10px; font: 17px/1.75rem "Segoe Print", Bradley Hand, cursive, sans-serif; color: #0f172a; }
+  .note { padding: 14px 18px; border-radius: 10px; font: 17px/1.75rem "Segoe Print", Bradley Hand, cursive, sans-serif; color: #2f3937; }
   .note p { margin: 0; }
 </style>
 <div class="note">
@@ -256,14 +256,14 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="A finish line above a results card. `$size` is the square, not the tile, so 10px squares repeat every 20px.">
 ```scss
 .finish {
-  @include background-pattern(checkerboard, $color: #111827 #f9fafb, $size: 10px);
+  @include background-pattern(checkerboard, $color: #2f3937 #fafaf8, $size: 10px);
 }
 ```
 ```html
 <style>
-  .race { max-width: 360px; border-radius: 10px; overflow: hidden; border: 1px solid #e5e7eb; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .race { max-width: 360px; border-radius: 10px; overflow: hidden; border: 1px solid #dee0cd; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
   .finish { height: 40px; }
-  .race div { padding: 16px 18px; color: #111827; }
+  .race div { padding: 16px 18px; color: #2f3937; }
 </style>
 <div class="race">
   <div class="finish"></div>
@@ -275,7 +275,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="Bigger squares in two soft colours read as a tablecloth rather than a flag.">
 ```scss
 .cloth {
-  @include background-pattern(checkerboard, $color: #fecaca #fff7ed, $size: 26px);
+  @include background-pattern(checkerboard, $color: #bdc488 #f2f2eb, $size: 26px);
 }
 ```
 ```html
@@ -291,12 +291,12 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="An empty state marked out with hatching rather than a grey box. `$angle` turns both sets of lines together.">
 ```scss
 .empty {
-  @include background-pattern(crosshatch, $color: #e2e8f0, $background: #f8fafc, $size: 14px, $thickness: 1px, $angle: 30deg);
+  @include background-pattern(crosshatch, $color: #dee0cd, $background: #fafaf8, $size: 14px, $thickness: 1px, $angle: 30deg);
 }
 ```
 ```html
 <style>
-  .empty { display: grid; place-items: center; height: 150px; border-radius: 10px; border: 1px dashed #cbd5e1; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #64748b; }
+  .empty { display: grid; place-items: center; height: 150px; border-radius: 10px; border: 1px dashed #bfc1a4; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #657167; }
 </style>
 <div class="empty">Drop a file here</div>
 ```
@@ -305,7 +305,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="A tighter tile and a thicker line give a woven texture. The two colours are the two directions, so they read as threads crossing.">
 ```scss
 .weave {
-  @include background-pattern(crosshatch, $color: #d6d3d1 #a8a29e, $background: #fafaf9, $size: 10px, $thickness: 3px);
+  @include background-pattern(crosshatch, $color: #dee0cd #8b9381, $background: #f2f2eb, $size: 10px, $thickness: 3px);
 }
 ```
 ```html
@@ -321,7 +321,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="A knitted band across a card. The tile sets how wide each stitch is.">
 ```scss
 .knit {
-  @include background-pattern(zigzag, $color: #c4b5fd, $background: #f5f3ff, $size: 40px);
+  @include background-pattern(zigzag, $color: #bdc488, $background: #f2f2eb, $size: 40px);
 }
 ```
 ```html
@@ -335,7 +335,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="A smaller tile in two colours turns the same pattern into a woven trim.">
 ```scss
 .trim {
-  @include background-pattern(zigzag, $color: #99f6e4, $background: #f0fdfa, $size: 18px);
+  @include background-pattern(zigzag, $color: #5bc0bb, $background: #f2f2eb, $size: 18px);
 }
 ```
 ```html
@@ -351,7 +351,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="A ticket, cut along the top and the bottom. The tile sets how wide each tooth is, and the lower strip is the same include flipped, so the teeth meet the body from the other side.">
 ```scss
 .ticket-edge {
-  @include background-pattern(chevron, $color: #fff, $background: #f43f5e, $size: 18px);
+  @include background-pattern(chevron, $color: #fff, $background: #668f80, $size: 18px);
 }
 ```
 ```html
@@ -359,7 +359,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
   .ticket { max-width: 320px; border-radius: 10px; overflow: hidden; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
   .ticket-edge { height: 14px; }
   .ticket-edge.bottom { transform: scaleY(-1); }
-  .ticket-body { padding: 16px 18px; background: #f43f5e; color: #fff; }
+  .ticket-body { padding: 16px 18px; background: #668f80; color: #fff; }
   .ticket-body b { display: block; font-size: 20px; }
 </style>
 <div class="ticket">
@@ -373,13 +373,13 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="A band of arrows under a step heading, pointing the way through a flow.">
 ```scss
 .flow-band {
-  @include background-pattern(chevron, $color: #0ea5e9, $background: #e0f2fe, $size: 22px);
+  @include background-pattern(chevron, $color: #668f80, $background: #dee0cd, $size: 22px);
 }
 ```
 ```html
 <style>
-  .flow { border-radius: 10px; overflow: hidden; border: 1px solid #bae6fd; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
-  .flow p { margin: 0; padding: 14px 18px; color: #0c4a6e; }
+  .flow { border-radius: 10px; overflow: hidden; border: 1px solid #bfc1a4; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .flow p { margin: 0; padding: 14px 18px; color: #2f3937; }
   .flow-band { height: 44px; }
 </style>
 <div class="flow">
@@ -392,7 +392,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="A large tile in two close colours turns the arrows into a woven chevron cloth.">
 ```scss
 .cloth {
-  @include background-pattern(chevron, $color: #fcd34d, $background: #fffbeb, $size: 44px);
+  @include background-pattern(chevron, $color: #bdc488, $background: #f2f2eb, $size: 44px);
 }
 ```
 ```html
@@ -408,14 +408,14 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="A festival poster header. The angle rotates the triangle, so a quarter turn points it at another edge.">
 ```scss
 .poster-top {
-  @include background-pattern(triangles, $color: #86efac, $background: #f0fdf4, $size: 26px, $angle: 135deg);
+  @include background-pattern(triangles, $color: #bdc488, $background: #f2f2eb, $size: 26px, $angle: 135deg);
 }
 ```
 ```html
 <style>
-  .poster { max-width: 360px; border-radius: 10px; overflow: hidden; border: 1px solid #bbf7d0; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .poster { max-width: 360px; border-radius: 10px; overflow: hidden; border: 1px solid #dee0cd; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
   .poster-top { height: 70px; }
-  .poster div { padding: 16px 18px; color: #14532d; }
+  .poster div { padding: 16px 18px; color: #2f3937; }
 </style>
 <div class="poster">
   <div class="poster-top"></div>
@@ -427,7 +427,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="Pointed the other way, at a smaller tile, in two strong colours.">
 ```scss
 .flags {
-  @include background-pattern(triangles, $color: #fdba74, $background: #fff7ed, $size: 16px, $angle: 315deg);
+  @include background-pattern(triangles, $color: #bfc1a4, $background: #fafaf8, $size: 16px, $angle: 315deg);
 }
 ```
 ```html
@@ -438,7 +438,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 ```
 </Example>
 
-<Example caption="The tile and the colour from custom properties. Every offset is derived from the tile in `calc()`, which is what keeps the tiles lined up when the browser is the one that knows the size." listing="<div class=&quot;tile&quot; style=&quot;--tile: 30px; --ink: #34d399&quot;></div>">
+<Example caption="The tile and the colour from custom properties. Every offset is derived from the tile in `calc()`, which is what keeps the tiles lined up when the browser is the one that knows the size." listing="<div class=&quot;tile&quot; style=&quot;--tile: 30px; --ink: #5bc0bb&quot;></div>">
 ```scss
 .tile {
   @include background-pattern(triangles, $size: var(--tile), $color: var(--ink), $background: #fff);
@@ -448,7 +448,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <style>
   .tile { height: 140px; border-radius: 10px; }
 </style>
-<div class="tile" style="--tile: 30px; --ink: #34d399"></div>
+<div class="tile" style="--tile: 30px; --ink: #5bc0bb"></div>
 ```
 </Example>
 
@@ -457,23 +457,23 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="A pricing card on a field of cubes. Three colours, seven gradient layers, one include.">
 ```scss
 .plan {
-  @include background-pattern(isometric, $color: #ede9fe #ddd6fe #c4b5fd, $size: 26px);
+  @include background-pattern(isometric, $color: #f2f2eb #dee0cd #bfc1a4, $size: 26px);
 }
 ```
 ```html
 <style>
   .plan { padding: 24px; border-radius: 12px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
   .plan div { padding: 18px; border-radius: 10px; background: rgb(255 255 255 / 0.92); }
-  .plan b { display: block; font-size: 26px; color: #4c1d95; }
+  .plan b { display: block; font-size: 26px; color: #2f3937; }
 </style>
 <div class="plan"><div><b>$19</b>per editor, per month</div></div>
 ```
 </Example>
 
-<Example caption="Three greys at a small tile give the same cubes as a quiet texture. The order of the colours is the order the faces are lit.">
+<Example caption="Three tones at a small tile give the same cubes as a quiet texture. The order of the colours is the order the faces are lit.">
 ```scss
 .stone {
-  @include background-pattern(isometric, $color: #e5e7eb #d1d5db #9ca3af, $size: 16px);
+  @include background-pattern(isometric, $color: #dee0cd #5bc0bb #2f3937, $size: 16px);
 }
 ```
 ```html
@@ -489,22 +489,22 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="A community panel, where the three colours give the cells their depth.">
 ```scss
 .community {
-  @include background-pattern(honeycomb, $color: #fef3c7 #fde68a #fcd34d, $size: 26px);
+  @include background-pattern(honeycomb, $color: #f2f2eb #dee0cd #bdc488, $size: 26px);
 }
 ```
 ```html
 <style>
   .community { display: grid; place-items: center; height: 150px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
-  .community span { padding: 10px 16px; border-radius: 999px; background: rgb(255 255 255 / 0.92); font-weight: 600; color: #78350f; }
+  .community span { padding: 10px 16px; border-radius: 999px; background: rgb(255 255 255 / 0.92); font-weight: 600; color: #2f3937; }
 </style>
 <div class="community"><span>1,248 contributors</span></div>
 ```
 </Example>
 
-<Example caption="A larger tile in three blues, which reads as tiling rather than as a texture.">
+<Example caption="A larger tile in three close tones, which reads as tiling rather than as a texture.">
 ```scss
 .hive {
-  @include background-pattern(honeycomb, $color: #e0f2fe #bae6fd #7dd3fc, $size: 44px);
+  @include background-pattern(honeycomb, $color: #dee0cd #bfc1a4 #5bc0bb, $size: 44px);
 }
 ```
 ```html
@@ -520,22 +520,22 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="A wall behind a quotation. `$size` is the brick and the ground shows through as the mortar.">
 ```scss
 .wall {
-  @include background-pattern(brick, $color: #c98a72 #ac6d57, $background: #f7efec, $size: 44px);
+  @include background-pattern(brick, $color: #8b9381 #657167, $background: #f2f2eb, $size: 44px);
 }
 ```
 ```html
 <style>
   .wall { display: grid; place-items: center; padding: 26px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
-  .wall blockquote { margin: 0; padding: 14px 18px; border-radius: 8px; background: rgb(255 255 255 / 0.92); color: #7f1d1d; font-style: italic; }
+  .wall blockquote { margin: 0; padding: 14px 18px; border-radius: 8px; background: rgb(255 255 255 / 0.92); color: #2f3937; font-style: italic; }
 </style>
 <div class="wall"><blockquote>Another brick in the stylesheet.</blockquote></div>
 ```
 </Example>
 
-<Example caption="Smaller bricks in two greys give a pavement rather than a wall.">
+<Example caption="Smaller bricks in two close tones give a pavement rather than a wall.">
 ```scss
 .pavement {
-  @include background-pattern(brick, $color: #9ca3af #6b7280, $background: #e5e7eb, $size: 24px);
+  @include background-pattern(brick, $color: #bfc1a4 #8b9381, $background: #dee0cd, $size: 24px);
 }
 ```
 ```html
@@ -551,15 +551,15 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="Scallops as a section divider, between two blocks of colour.">
 ```scss
 .divider {
-  @include background-pattern(waves, $color: #0ea5e9, $background: #e0f2fe, $size: 34px);
+  @include background-pattern(waves, $color: #668f80, $background: #dee0cd, $size: 34px);
 }
 ```
 ```html
 <style>
   .stack { border-radius: 10px; overflow: hidden; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
-  .stack .top { padding: 16px 18px; background: #0ea5e9; color: #fff; }
+  .stack .top { padding: 16px 18px; background: #668f80; color: #fff; }
   .divider { height: 34px; }
-  .stack .bottom { padding: 16px 18px; background: #e0f2fe; color: #0c4a6e; }
+  .stack .bottom { padding: 16px 18px; background: #dee0cd; color: #2f3937; }
 </style>
 <div class="stack">
   <div class="top">Above the fold</div>
@@ -572,7 +572,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="A smaller tile fills a panel with fish scales.">
 ```scss
 .scales {
-  @include background-pattern(waves, $color: #5eead4, $background: #f0fdfa, $size: 18px);
+  @include background-pattern(waves, $color: #5bc0bb, $background: #f2f2eb, $size: 18px);
 }
 ```
 ```html
@@ -588,14 +588,14 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="A fabric swatch on a product card. Two colours are all it takes, and the second becomes the ground.">
 ```scss
 .swatch {
-  @include background-pattern(houndstooth, $color: #111827 #f5f5f4, $size: 12px);
+  @include background-pattern(houndstooth, $color: #2f3937 #f2f2eb, $size: 12px);
 }
 ```
 ```html
 <style>
-  .product { max-width: 320px; border-radius: 10px; overflow: hidden; border: 1px solid #e5e7eb; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .product { max-width: 320px; border-radius: 10px; overflow: hidden; border: 1px solid #dee0cd; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
   .swatch { height: 140px; }
-  .product div { padding: 14px 18px; color: #111827; }
+  .product div { padding: 14px 18px; color: #2f3937; }
 </style>
 <div class="product">
   <div class="swatch"></div>
@@ -604,10 +604,10 @@ Each pattern below is its own section, with the colours and the tile changed fro
 ```
 </Example>
 
-<Example caption="The same weave at twice the size, in brown on sand.">
+<Example caption="The same weave at twice the size, in sage on cream.">
 ```scss
 .tweed {
-  @include background-pattern(houndstooth, $color: #b08968 #f3e8df, $size: 24px);
+  @include background-pattern(houndstooth, $color: #8b9381 #f2f2eb, $size: 24px);
 }
 ```
 ```html
@@ -623,22 +623,22 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="Two translucent bands crossing, so the crossings darken on their own. That is what makes it read as cloth rather than as a grid, and an opaque colour still works.">
 ```scss
 .picnic {
-  @include background-pattern(gingham, $color: #93c5fd, $size: 40px);
+  @include background-pattern(gingham, $color: #5bc0bb, $size: 40px);
 }
 ```
 ```html
 <style>
   .picnic { display: grid; place-items: center; height: 170px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
-  .picnic span { padding: 10px 16px; border-radius: 8px; background: rgb(255 255 255 / 0.92); font-weight: 600; color: #1e3a8a; }
+  .picnic span { padding: 10px 16px; border-radius: 8px; background: rgb(255 255 255 / 0.92); font-weight: 600; color: #2f3937; }
 </style>
 <div class="picnic"><span>Table for two</span></div>
 ```
 </Example>
 
-<Example caption="A smaller check in red on cream is the tablecloth of every trattoria. `$thickness` is the band, and it defaults to half the tile.">
+<Example caption="A smaller check on cream is the tablecloth of every trattoria. `$thickness` is the band, and it defaults to half the tile.">
 ```scss
 .cloth {
-  @include background-pattern(gingham, $color: #fda4af, $background: #fff7ed, $size: 22px);
+  @include background-pattern(gingham, $color: #bdc488, $background: #fafaf8, $size: 22px);
 }
 ```
 ```html
@@ -654,13 +654,13 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="Diamonds in two colours, the pattern of a jester's coat. One colour draws the diamonds and `$background` is what shows between them.">
 ```scss
 .jester {
-  @include background-pattern(harlequin, $color: #5eead4, $background: #f0fdfa, $size: 44px);
+  @include background-pattern(harlequin, $color: #5bc0bb, $background: #f2f2eb, $size: 44px);
 }
 ```
 ```html
 <style>
   .jester { display: grid; place-items: center; height: 170px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
-  .jester span { padding: 10px 16px; border-radius: 999px; background: rgb(255 255 255 / 0.92); font-weight: 600; color: #134e4a; }
+  .jester span { padding: 10px 16px; border-radius: 999px; background: rgb(255 255 255 / 0.92); font-weight: 600; color: #2f3937; }
 </style>
 <div class="jester"><span>Carnival</span></div>
 ```
@@ -669,7 +669,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="At a smaller tile in two close colours it is a quiet argyle-ish texture rather than a costume.">
 ```scss
 .texture {
-  @include background-pattern(harlequin, $color: #e2e8f0, $background: #f8fafc, $size: 22px);
+  @include background-pattern(harlequin, $color: #dee0cd, $background: #fafaf8, $size: 22px);
 }
 ```
 ```html
@@ -685,13 +685,13 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="Rays from the middle of the box, not a tile, so nothing here repeats. `$angle` is how wide one ray is and they repeat at twice that.">
 ```scss
 .hero {
-  @include background-pattern(sunburst, $color: #b45309, $background: #fffbeb);
+  @include background-pattern(sunburst, $color: #668f80, $background: #f2f2eb);
 }
 ```
 ```html
 <style>
   .hero { display: grid; place-items: center; height: 190px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
-  .hero span { padding: 12px 20px; border-radius: 999px; background: #fffbeb; font-weight: 700; color: #7c2d12; }
+  .hero span { padding: 12px 20px; border-radius: 999px; background: #f2f2eb; font-weight: 700; color: #2f3937; }
 </style>
 <div class="hero"><span>Grand opening</span></div>
 ```
@@ -700,12 +700,12 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="A narrow ray in a pale colour is quiet enough to put a whole section on.">
 ```scss
 .section {
-  @include background-pattern(sunburst, $color: rgb(29 78 216 / 0.14), $background: #eff6ff, $angle: 3deg);
+  @include background-pattern(sunburst, $color: rgb(102 143 128 / 0.16), $background: #fafaf8, $angle: 3deg);
 }
 ```
 ```html
 <style>
-  .section { display: grid; place-items: center; height: 180px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #1e3a8a; }
+  .section { display: grid; place-items: center; height: 180px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
 </style>
 <div class="section">Everything in one place</div>
 ```
@@ -714,13 +714,13 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="`$origin` moves the point the rays come from. At the top edge they fan downwards, which is the light behind a hero rather than a starburst.">
 ```scss
 .beams {
-  @include background-pattern(sunburst, $color: rgb(56 189 248 / 0.35), $background: #0b1220, $angle: 5deg, $origin: 50% 0%);
+  @include background-pattern(sunburst, $color: rgb(91 192 187 / 0.35), $background: #222c25, $angle: 5deg, $origin: 50% 0%);
 }
 ```
 ```html
 <style>
   .beams { display: grid; place-items: center; height: 200px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
-  .beams h4 { margin: 0; font-size: 24px; font-weight: 700; color: #f8fafc; }
+  .beams h4 { margin: 0; font-size: 24px; font-weight: 700; color: #fafaf8; }
 </style>
 <div class="beams"><h4>Ship it tonight</h4></div>
 ```
@@ -731,13 +731,13 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="Rings spreading from the middle, again drawn from the box rather than a tile. `$size` is the gap between them and `$thickness` the line.">
 ```scss
 .radar {
-  @include background-pattern(concentric, $color: #fb7185, $background: #fff1f2, $size: 16px, $thickness: 2px);
+  @include background-pattern(concentric, $color: #5bc0bb, $background: #f2f2eb, $size: 16px, $thickness: 2px);
 }
 ```
 ```html
 <style>
   .radar { display: grid; place-items: center; height: 190px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
-  .radar span { padding: 10px 16px; border-radius: 8px; background: rgb(255 255 255 / 0.92); font-weight: 600; color: #881337; }
+  .radar span { padding: 10px 16px; border-radius: 8px; background: rgb(255 255 255 / 0.92); font-weight: 600; color: #2f3937; }
 </style>
 <div class="radar"><span>Signal found</span></div>
 ```
@@ -746,7 +746,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="A wider gap and a hairline turn it into a contour map rather than a target.">
 ```scss
 .contour {
-  @include background-pattern(concentric, $color: rgb(15 118 110 / 0.5), $background: #ecfeff, $size: 34px, $thickness: 1px);
+  @include background-pattern(concentric, $color: rgb(102 143 128 / 0.5), $background: #f2f2eb, $size: 34px, $thickness: 1px);
 }
 ```
 ```html
@@ -760,7 +760,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="An origin off the middle, and outside the box, turns the rings into a hillside on a map rather than a target.">
 ```scss
 .map {
-  @include background-pattern(concentric, $color: rgb(120 53 15 / 0.45), $background: #fef3c7, $size: 26px, $thickness: 1.5px, $origin: 12% 115%);
+  @include background-pattern(concentric, $color: rgb(47 57 55 / 0.35), $background: #dee0cd, $size: 26px, $thickness: 1.5px, $origin: 12% 115%);
 }
 ```
 ```html
@@ -776,14 +776,14 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="One ellipse of light rising from the bottom edge, which is the hero background attio.com ships. Nothing is blurred: a radial gradient is already soft. `$color` takes two, the middle of the light and the colour it fades through.">
 ```scss
 .hero {
-  @include background-pattern(glow, $color: #e6ecff #bccbff, $background: #f8fafc);
+  @include background-pattern(glow, $color: #dee0cd #f2f2eb, $background: #fafaf8);
 }
 ```
 ```html
 <style>
   .hero { display: grid; place-items: center; gap: 14px; height: 220px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; text-align: center; }
-  .hero h4 { margin: 0; font-size: 26px; font-weight: 700; color: #1e1b4b; }
-  .hero span { padding: 10px 18px; border-radius: 999px; background: #1e1b4b; font-weight: 600; color: #fff; }
+  .hero h4 { margin: 0; font-size: 26px; font-weight: 700; color: #222c25; }
+  .hero span { padding: 10px 18px; border-radius: 999px; background: #222c25; font-weight: 600; color: #fff; }
 </style>
 <div class="hero">
   <h4>Every account, one place</h4>
@@ -795,13 +795,13 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="`$origin` is where the light comes from and `$size` how far it reaches, so a corner bloom on a dark page is two arguments. This is retool.com's, one layer of it.">
 ```scss
 .panel {
-  @include background-pattern(glow, $color: #2d4c71 #14243a, $background: #0b1220, $origin: 0% 100%, $size: 80% 70%);
+  @include background-pattern(glow, $color: #668f80 #2f3937, $background: #222c25, $origin: 0% 100%, $size: 80% 70%);
 }
 ```
 ```html
 <style>
-  .panel { display: grid; align-content: end; gap: 8px; height: 220px; padding: 24px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #cbd5e1; }
-  .panel h4 { margin: 0; font-size: 22px; font-weight: 700; color: #f8fafc; }
+  .panel { display: grid; align-content: end; gap: 8px; height: 220px; padding: 24px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #bfc1a4; }
+  .panel h4 { margin: 0; font-size: 22px; font-weight: 700; color: #fafaf8; }
 </style>
 <div class="panel">
   <h4>Built for the back office</h4>
@@ -810,10 +810,10 @@ Each pattern below is its own section, with the colours and the tile changed fro
 ```
 </Example>
 
-<Example caption="A warm glow from the top right, over a photograph. The picture is the last layer, so the light sits on it.">
+<Example caption="A glow from the top right, over a photograph. The picture is the last layer, so the light sits on it.">
 ```scss
 .cover {
-  @include background-pattern(glow, $color: rgb(251 191 36 / 0.55) rgb(249 115 22 / 0.3), $origin: 100% 0%, $size: 70% 90%, $image: "/images/backgrounds/06.jpg");
+  @include background-pattern(glow, $color: rgb(91 192 187 / 0.5) rgb(102 143 128 / 0.3), $origin: 100% 0%, $size: 70% 90%, $image: "/images/backgrounds/06.jpg");
 }
 ```
 ```html
@@ -829,7 +829,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="The other way round: clear in the middle, the colour at the edges. Over a photograph it is the oldest trick there is for keeping the eye off the corners.">
 ```scss
 .photo {
-  @include background-pattern(vignette, $color: rgb(2 6 23 / 0.8), $size: 78% 72%, $image: "/images/backgrounds/04.jpg");
+  @include background-pattern(vignette, $color: rgb(34 44 37 / 0.8), $size: 78% 72%, $image: "/images/backgrounds/04.jpg");
 }
 ```
 ```html
@@ -843,12 +843,12 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="With no image it lights a flat panel, which is enough to put a quote in the middle of.">
 ```scss
 .quote {
-  @include background-pattern(vignette, $color: rgb(2 6 23 / 0.8), $background: #1e293b, $size: 70% 70%);
+  @include background-pattern(vignette, $color: rgb(34 44 37 / 0.8), $background: #222c25, $size: 70% 70%);
 }
 ```
 ```html
 <style>
-  .quote { display: grid; place-items: center; height: 200px; padding: 32px; border-radius: 10px; font: 17px/1.6 Inter, ui-sans-serif, system-ui, sans-serif; text-align: center; color: #e2e8f0; }
+  .quote { display: grid; place-items: center; height: 200px; padding: 32px; border-radius: 10px; font: 17px/1.6 Inter, ui-sans-serif, system-ui, sans-serif; text-align: center; color: #dee0cd; }
 </style>
 <div class="quote">“We replaced four spreadsheets with one page.”</div>
 ```
@@ -857,17 +857,17 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="A vignette in the page's own colour fades a pattern out at the edges. It takes two elements, since a second call would replace the first: one mixin call writes one `background-image`.">
 ```scss
 .plan {
-  @include background-pattern(grid, $color: rgb(30 64 175 / 0.35), $background: #f8fafc, $size: 22px, $thickness: 1px);
+  @include background-pattern(grid, $color: rgb(47 57 55 / 0.3), $background: #fafaf8, $size: 22px, $thickness: 1px);
 }
 
 .plan__fade {
-  @include background-pattern(vignette, $color: #f8fafc, $size: 60% 55%);
+  @include background-pattern(vignette, $color: #fafaf8, $size: 60% 55%);
 }
 ```
 ```html
 <style>
   .plan { height: 200px; border-radius: 10px; }
-  .plan__fade { display: grid; place-items: center; height: 100%; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; font-weight: 600; color: #1e3a8a; }
+  .plan__fade { display: grid; place-items: center; height: 100%; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; font-weight: 600; color: #2f3937; }
 </style>
 <div class="plan"><div class="plan__fade">Draw the floor plan</div></div>
 ```
@@ -878,14 +878,14 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="Three blobs of colour and a ground, the static half of the aurora look. Every colour after the first moves to its own corner.">
 ```scss
 .aurora {
-  @include background-pattern(mesh, $color: #f0abfc #67e8f9 #fdba74, $background: #faf5ff);
+  @include background-pattern(mesh, $color: #bdc488 #5bc0bb #bfc1a4, $background: #f2f2eb);
 }
 ```
 ```html
 <style>
   .aurora { display: grid; place-items: center; gap: 12px; height: 220px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; text-align: center; }
-  .aurora h4 { margin: 0; font-size: 26px; font-weight: 700; color: #3b0764; }
-  .aurora p { margin: 0; color: #6b21a8; }
+  .aurora h4 { margin: 0; font-size: 26px; font-weight: 700; color: #222c25; }
+  .aurora p { margin: 0; color: #2f3937; }
 </style>
 <div class="aurora">
   <h4>Design without the file</h4>
@@ -894,16 +894,16 @@ Each pattern below is its own section, with the colours and the tile changed fro
 ```
 </Example>
 
-<Example caption="A fourth colour adds a fourth blob, in the bottom left. Saturated colours on a dark ground are what the app screenshot pages use.">
+<Example caption="A fourth colour adds a fourth blob, in the bottom left. Colour on a dark ground is what the app screenshot pages use.">
 ```scss
 .stage {
-  @include background-pattern(mesh, $color: rgb(124 58 237 / 0.55) rgb(14 165 233 / 0.5) rgb(244 63 94 / 0.45) rgb(34 197 94 / 0.4), $background: #0b1220);
+  @include background-pattern(mesh, $color: rgb(102 143 128 / 0.55) rgb(91 192 187 / 0.5) rgb(189 196 136 / 0.45) rgb(191 193 164 / 0.4), $background: #222c25);
 }
 ```
 ```html
 <style>
   .stage { display: grid; place-items: center; height: 220px; padding: 24px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
-  .stage span { padding: 18px 26px; border-radius: 12px; background: rgb(15 23 42 / 0.72); font-weight: 600; color: #e2e8f0; }
+  .stage span { padding: 18px 26px; border-radius: 12px; background: rgb(34 44 37 / 0.72); font-weight: 600; color: #dee0cd; }
 </style>
 <div class="stage"><span>Your dashboard, on a good day</span></div>
 ```
