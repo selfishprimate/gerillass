@@ -614,7 +614,7 @@ class Playground extends Component {
           >
             <motion.div
               className="playground__window"
-              initial={{ y: 14 }}
+              initial={{ y: 22 }}
               animate={{ y: 0 }}
               transition={ARRIVE}
               role="dialog"

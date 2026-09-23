@@ -643,9 +643,10 @@ its scrim a `backdrop-filter` -- and a filter and a mask are re-rasterised on
 every frame of an opacity change. That is what every fade tried here was
 reported as: flicker rather than movement. A transform is composited instead.
 
-So there is one curve, `ARRIVE`, and three things travel a few pixels on it: a
-documentation page by 8px, the palette's dialog by 8px, the playground's window
-by 14px. Nothing changes opacity, the scrims are simply there, and a page being
+So there is one curve, `ARRIVE` -- 0.42s on an ease that decelerates hard --
+and three things travel on it: a documentation page by 14px, the palette's
+dialog by 12px, the playground's window by 22px. The first version was 0.22s
+over half those distances and read as curt. Nothing changes opacity, the scrims are simply there, and a page being
 replaced is at full brightness the whole time, so there is nothing to dip.
 
 `PageContent` keys the `<main>` on the path, which is what re-runs the

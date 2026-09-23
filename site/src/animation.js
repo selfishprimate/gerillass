@@ -29,11 +29,12 @@ export const LEAVE = { duration: 0.18, ease: "easeIn" };
   flicker rather than as movement. A **transform** on a promoted layer is not:
   the element is rasterised once and the layer is moved.
 
-  So nothing fades. Things travel a few pixels, quickly, on an ease that
-  decelerates -- and whatever moves carries `will-change: transform` so the
-  browser promotes it before the first frame.
+  So nothing fades. Things travel a few pixels on an ease that decelerates
+  hard: most of the distance goes at once and the last of it settles, which is
+  what reads as smooth rather than as a jump. The first attempt was 0.22s over
+  half these distances and came out curt.
 */
-export const ARRIVE = { duration: 0.22, ease: [0.22, 1, 0.36, 1] };
+export const ARRIVE = { duration: 0.42, ease: [0.16, 1, 0.3, 1] };
 
 /*
   The dimmed page behind a dialog. Opacity only: it covers the whole viewport,

@@ -50,7 +50,7 @@ function PageContent({ className = "content", children }) {
     <motion.main
       key={SAME_PAGE.includes(pathname) ? "/" : pathname}
       className={className}
-      initial={arriving ? { y: 8 } : false}
+      initial={arriving ? { y: 14 } : false}
       animate={{ y: 0 }}
       transition={ARRIVE}
     >

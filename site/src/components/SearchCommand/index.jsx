@@ -171,7 +171,7 @@ function SearchCommand() {
                 */}
                 <motion.div
                   className="palette__frame"
-                  initial={{ y: -8 }}
+                  initial={{ y: -12 }}
                   animate={{ y: 0 }}
                   transition={ARRIVE}
                 >
