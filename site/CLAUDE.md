@@ -867,6 +867,19 @@ against the live site along with the trailing-slash form and the two aliases.
 
 ## Search
 
+The palette is **anchored near the top, not centred**. Centred, the dialog is
+recentred on every keystroke: the list is as tall as its results, so narrowing
+them from thirty-three to one moved the whole box up the screen under the
+reader's eyes, which is what reads as flicker. Measured from a probe page in
+`site/public`, typing `c`, `col`, `colum`: the dialog's top was 96px at each of
+them, where before it moved with every letter.
+
+The list carries `height: var(--cmdk-list-height)` with a 120ms transition and
+`max-height: 46vh`. cmdk measures its own results and writes that variable from
+a frame callback, so the height is a value to animate rather than a layout to
+reflow; if the variable never arrives the list is simply 46vh, which is stable
+too.
+
 `components/SearchCommand` is a command palette over `virtual:docs-index`, the
 same module the sidebar reads, so it cannot fall behind the pages. Eighty of
 them is more than a menu holds, and what a reader is doing is looking for a

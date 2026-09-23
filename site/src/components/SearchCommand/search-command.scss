@@ -90,9 +90,16 @@ kbd {
   inset: 0;
   z-index: 9999;
   display: flex;
-  align-items: center;
+  /*
+    Anchored near the top rather than centred. Centred, the dialog is
+    recentred on every keystroke -- the list is as tall as its results, so
+    narrowing them from thirty-three to one moved the whole box up the screen
+    under the reader's eyes, which is what reads as flicker. From the top its
+    edge stays put and only the bottom moves.
+  */
+  align-items: flex-start;
   justify-content: center;
-  padding: remify(16px);
+  padding: min(12vh, remify(120px)) remify(16px) remify(16px);
   /*
     Khaki rather than the text colour. $crayola over a page this warm reads as
     grey smoke; $artichoke is the palette's khaki and $charleston-green is its
@@ -129,7 +136,6 @@ kbd {
 
   &__dialog {
     width: 100%;
-    max-height: 46vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -179,9 +185,24 @@ kbd {
     cursor: pointer;
   }
 
+  /*
+    The list is as tall as its own results, and gets there over a tenth of a
+    second. Without a height it was the dialog that changed size on every
+    keystroke -- 353px to 273px to 178px typing `column` -- and a box jumping
+    under the cursor is what a reader sees as flicker. cmdk measures the
+    results and writes `--cmdk-list-height`, so the height is a value to
+    transition rather than a layout to reflow.
+  */
   &__list {
+    height: var(--cmdk-list-height, auto);
+    max-height: 46vh;
     overflow-y: auto;
     padding: $global-space * 0.5 $global-space * 0.75 $global-space * 0.75;
+    transition: height 120ms ease;
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
   }
 
   /* The same label the sidebar's groups carry. */
