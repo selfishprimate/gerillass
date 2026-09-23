@@ -75,7 +75,7 @@ const FROM_CLASS = /language-([\w-]+)/;
 */
 const HLJS_NAMES = { html: "xml", js: "javascript", text: "plaintext" };
 
-function CodeBlock({ label, language, children, className, ...rest }) {
+function CodeBlock({ label, language, children, className, wrap = false, ...rest }) {
   const [copied, setCopied] = useState(false);
   const timer = useRef(null);
 
@@ -112,7 +112,12 @@ function CodeBlock({ label, language, children, className, ...rest }) {
   }, [source]);
 
   return (
-    <div className="code-block">
+    /*
+      `wrap` is for a block that is not code: the library's own error message is
+      prose, and a sentence that runs off the right of the block and waits to be
+      scrolled is worse than a sentence on two lines.
+    */
+    <div className={`code-block${wrap ? " code-block--wrap" : ""}`}>
       <div className="code-block__bar">
         {label ? <span className="code-block__label">{label}</span> : null}
         {/*

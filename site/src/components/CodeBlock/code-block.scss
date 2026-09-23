@@ -89,4 +89,20 @@
   code {
     font-family: inherit;
   }
+
+  /*
+    A block of output rather than code. An error message is a sentence, and the
+    library's are long ones: left to scroll sideways like code, a reader sees
+    the first half of the message the page is there to show them.
+  */
+  &--wrap pre,
+  &--wrap code {
+    /*
+      `!important` for the same reason the rules above carry it: the theme
+      writes `white-space: pre` as an inline style on the <pre>, and an inline
+      style beats a stylesheet.
+    */
+    white-space: pre-wrap !important;
+    overflow-wrap: anywhere;
+  }
 }

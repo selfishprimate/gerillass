@@ -134,8 +134,19 @@ const LANGUAGE_NAMES = { scss: "Sass", css: "CSS", html: "HTML", js: "JavaScript
 
 function Fence(props) {
   const lang = String(props.children?.props?.className || "").match(/language-([\w-]+)/)?.[1];
-  const label = lang ? (lang in LANGUAGE_NAMES ? LANGUAGE_NAMES[lang] : lang.toUpperCase()) : null;
-  return <CodeBlock label={label} {...props} />;
+  const named = lang ? (lang in LANGUAGE_NAMES ? LANGUAGE_NAMES[lang] : lang.toUpperCase()) : null;
+
+  /*
+    A block with no language of its own is output rather than code, and on
+    these pages that means the library talking: every `text` fence in the
+    documentation is a message a refused call prints. It is labelled by what it
+    says rather than by the fence, so a block that is not a message keeps its
+    silence.
+  */
+  const body = String(props.children?.props?.children ?? "").trimStart();
+  const spoken = /^Error:/.test(body) ? "Error" : /^WARNING\b/i.test(body) ? "Warning" : null;
+
+  return <CodeBlock label={named ?? spoken} wrap={Boolean(spoken)} {...props} />;
 }
 
 function DocsMdx({ links = null, children }) {

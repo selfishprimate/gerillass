@@ -359,6 +359,13 @@ are load-bearing:
 - **A fenced block renders through `components/CodeBlock`**, the same component
   the landing page uses. Before this a fence was unstyled text, which is what
   made a listing of demo markup look like output that had failed to render.
+  A block with no language of its own is labelled by what it says rather than
+  by the fence: all 74 of the `text` fences in the documentation are a message
+  from a refused call, so one beginning `Error:` is labelled ERROR and one
+  beginning `WARNING` is labelled WARNING. Those two also wrap, with
+  `!important` over the theme's inline `white-space: pre`, because an error
+  message is a sentence and the library's are long enough that a reader saw
+  the first half of it and a scrollbar.
 - **A Markdown link goes through the router** when it points inside the site,
   via `src/docs/DocLink.jsx`. Every one of them was a plain `<a>`, so moving
   from one page to the next reloaded the whole application to reach a page the
