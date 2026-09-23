@@ -769,6 +769,21 @@ checkable and worth re-checking after any change here: 84 pages, 82 unique of
 each. The one that repeats is `/docs`, which carries the
 introduction's head because it redirects there.
 
+### A demo's box does not move twice
+
+A frame starts at 160px and is measured once srcDoc has been parsed, so on a
+page of eleven demos every box on it changed height at the same moment, a
+quarter of a second after the page arrived, and the page jumped under the
+reader. Two things fix it, both in `Example.jsx`:
+
+- **The heights are remembered**, in a module `Map` keyed by the document the
+  demo renders. Measured over three navigations: eleven boxes change height on
+  the first visit to a page and none on the way back to it, or to any page
+  sharing a demo.
+- **The first reading is polled on a frame callback** rather than waiting for
+  the next timer, which brought the first visit's change from 576ms to 375ms
+  in a hidden pane, where frame callbacks are throttled.
+
 ### Auditing the demos
 
 A structural check is not enough, and this was learned the hard way: an audit

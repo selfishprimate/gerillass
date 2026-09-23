@@ -82,6 +82,19 @@ const FRAME_BASE = `
   .text-shadow-container { height: 100px; display: flex; align-items: center; }
 `;
 
+/*
+  What each demo measured, by the document it renders. A frame starts at 160px
+  and grows to what it holds once srcDoc has been parsed, which on a page of
+  eleven demos lands a quarter of a second after the page does: every box on
+  the page changes height at once and the reader sees the page jump. A demo
+  seen once in this session starts at the height it had, so going back to a
+  page, or between two that share a demo, moves nothing.
+
+  A module variable rather than state: it belongs to the session, not to a
+  component that is mounted again on every navigation.
+*/
+const heights = new Map();
+
 function Example({ source, css, html, listing, title, caption, height, interactive = false, resizable = false }) {
   const [measured, setMeasured] = useState(null);
   const frame = useRef(null);
@@ -96,6 +109,7 @@ function Example({ source, css, html, listing, title, caption, height, interacti
   // Re-attach the observer when the demo itself changes, not on every render.
   const rendered = html;
   const srcDocKey = css + String(rendered);
+  const remembered = heights.get(srcDocKey) ?? null;
 
   /*
     The frame is left same-origin so its height can be read back and the box
@@ -152,15 +166,33 @@ function Example({ source, css, html, listing, title, caption, height, interacti
       const body = el.contentDocument?.body;
       if (!body) return;
       const h = Math.ceil(body.scrollHeight);
-      if (h > 0) setMeasured(h);
+      if (h > 0) {
+        heights.set(srcDocKey, h);
+        setMeasured(h);
+      }
     };
 
-    read();
+    /*
+      Read on every frame until the demo has a height, rather than waiting for
+      the next timer. srcDoc is parsed off the main thread's critical path, so
+      on a page of eleven demos the first reading that finds a body is a
+      quarter of a second after the page arrives; a frame callback catches it
+      as soon as it is there.
+    */
+    let frames = 0;
+    let raf = 0;
+    const poll = () => {
+      read();
+      if (++frames < 30 && !heights.has(srcDocKey)) raf = requestAnimationFrame(poll);
+    };
+    poll();
+
     el.addEventListener("load", read);
     window.addEventListener("resize", read);
-    const timers = [60, 250, 800, 2000].map((ms) => setTimeout(read, ms));
+    const timers = [250, 800, 2000].map((ms) => setTimeout(read, ms));
 
     return () => {
+      cancelAnimationFrame(raf);
       el.removeEventListener("load", read);
       window.removeEventListener("resize", read);
       timers.forEach(clearTimeout);
@@ -212,7 +244,7 @@ function Example({ source, css, html, listing, title, caption, height, interacti
     };
   }, [srcDocKey]);
 
-  const frameHeight = Math.max(measured ?? 160, height ?? 0);
+  const frameHeight = Math.max(measured ?? remembered ?? 160, height ?? 0);
 
   /*
     The right edge, dragged. CSS `resize` puts a grabber in the corner and
