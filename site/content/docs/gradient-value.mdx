@@ -44,7 +44,7 @@ A function returns one value, so it cannot write the fallback the mixin writes b
   padding: 20px;
   font: 700 24px/1.2 system-ui, sans-serif;
   color: #fff;
-  background-image: gradientValue((rgba(0, 0, 0, 0.75), transparent), $direction: top), url("/images/landscape.webp");
+  background-image: gradientValue((rgb(34 44 37 / 0.75), transparent), $direction: top), url("/images/landscape.webp");
   background-size: cover;
   background-position: center;
 }
@@ -57,8 +57,8 @@ A function returns one value, so it cannot write the fallback the mixin writes b
 <Example caption="A gradient as a mask, fading the element itself out towards the bottom.">
 ```scss
 .element{
-  background: #43c6ac;
-  mask-image: gradientValue((#000 40%, transparent));
+  background: #668f80;
+  mask-image: gradientValue((#222c25 40%, transparent));
 }
 ```
 ```html
@@ -70,7 +70,7 @@ A function returns one value, so it cannot write the fallback the mixin writes b
 ```scss
 .element{
   border: 6px solid;
-  border-image: gradientValue((#43c6ac, #191654), $direction: right) 1;
+  border-image: gradientValue((#668f80, #2f3937), $direction: right) 1;
 }
 ```
 ```html
@@ -83,7 +83,7 @@ A function returns one value, so it cannot write the fallback the mixin writes b
 .element{
   background-image:
     gradientValue((rgba(255, 255, 255, 0.6), transparent 60%), radial, $shape: circle, $position: top-left),
-    gradientValue((#6366f1, #ec4899), $direction: 135deg);
+    gradientValue((#5bc0bb, #ed6a5a), $direction: 135deg);
 }
 ```
 ```html
@@ -97,7 +97,7 @@ The function refuses what the `gradient` mixin refuses, and names itself in the 
 
 ```scss
 .element {
-  background-image: gradientValue(red blue, $shape: circle);
+  background-image: gradientValue(#ed6a5a #5bc0bb, $shape: circle);
 }
 ```
 ```text
@@ -108,7 +108,7 @@ A direction the browser drops stops it too, since the whole gradient goes with i
 
 ```scss
 .element {
-  mask-image: gradientValue(#000 transparent, $direction: "to center");
+  mask-image: gradientValue(#222c25 transparent, $direction: "to center");
 }
 ```
 ```text

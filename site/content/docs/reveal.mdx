@@ -52,9 +52,9 @@ The frames on this page run no script, so a demo here is driven by HTML alone, a
 <style>
   /* The popover is in the top layer and adds nothing to the page's height, so the frame is given room for it to open into. */
   body { min-height: 150px; }
-  button { padding: 8px 14px; border: 0; border-radius: 8px; background: #0f172a; color: #fff; font: 600 13px Inter, ui-sans-serif, system-ui, sans-serif; }
+  button { padding: 8px 14px; border: 0; border-radius: 8px; background: #222c25; color: #fff; font: 600 13px Inter, ui-sans-serif, system-ui, sans-serif; }
   /* A popover is in the top layer, where its containing block is the viewport: `inset: auto` does not keep it under the button, so the place is given. */
-  .tooltip { position: absolute; inset: auto; top: 60px; left: 16px; border: 0; border-radius: 10px; padding: 12px 14px; background: #0f172a; color: #f8fafc; font: 13px Inter, ui-sans-serif, system-ui, sans-serif; }
+  .tooltip { position: absolute; inset: auto; top: 60px; left: 16px; border: 0; border-radius: 10px; padding: 12px 14px; background: #222c25; color: #fafaf8; font: 13px Inter, ui-sans-serif, system-ui, sans-serif; }
 </style>
 <button popovertarget="tip">Toggle the popover</button>
 <div popover id="tip" class="tooltip">Fades and slides, both ways.</div>
@@ -74,8 +74,8 @@ The frames on this page run no script, so a demo here is driven by HTML alone, a
 ```html
 <style>
   body { min-height: 190px; }
-  button { padding: 8px 14px; border: 0; border-radius: 8px; background: #0f172a; color: #fff; font: 600 13px Inter, ui-sans-serif, system-ui, sans-serif; }
-  .card { position: absolute; inset: auto; top: 60px; left: 16px; width: 260px; border: 0; border-radius: 12px; padding: 14px 16px; background: #5bc0bb; color: #04312f; font: 13px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  button { padding: 8px 14px; border: 0; border-radius: 8px; background: #222c25; color: #fff; font: 600 13px Inter, ui-sans-serif, system-ui, sans-serif; }
+  .card { position: absolute; inset: auto; top: 60px; left: 16px; width: 260px; border: 0; border-radius: 12px; padding: 14px 16px; background: #668f80; color: #222c25; font: 13px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
   .card b { display: block; margin-bottom: 4px; font-size: 15px; }
   .card p { margin: 0; }
 </style>
@@ -101,11 +101,11 @@ The frames on this page run no script, so a demo here is driven by HTML alone, a
 ```html
 <style>
   body { min-height: 200px; }
-  button { padding: 8px 14px; border: 0; border-radius: 8px; background: #0f172a; color: #fff; font: 600 13px Inter, ui-sans-serif, system-ui, sans-serif; }
+  button { padding: 8px 14px; border: 0; border-radius: 8px; background: #222c25; color: #fff; font: 600 13px Inter, ui-sans-serif, system-ui, sans-serif; }
   /* No `display` on a popover: an author's `display` beats the rule a browser hides a closed one with. Written `display: grid` here, as the first draft of this demo was, the menu never left in any of the three browsers. */
-  .dropdown { position: absolute; inset: auto; top: 60px; left: 16px; width: 190px; border: 0; border-radius: 12px; padding: 8px; background: #0f172a; font: 600 13px Inter, ui-sans-serif, system-ui, sans-serif; }
-  .dropdown a { display: block; padding: 8px 10px; border-radius: 8px; color: #e2e8f0; text-decoration: none; }
-  .dropdown a:hover { background: #1e293b; }
+  .dropdown { position: absolute; inset: auto; top: 60px; left: 16px; width: 190px; border: 0; border-radius: 12px; padding: 8px; background: #222c25; font: 600 13px Inter, ui-sans-serif, system-ui, sans-serif; }
+  .dropdown a { display: block; padding: 8px 10px; border-radius: 8px; color: #f2f2eb; text-decoration: none; }
+  .dropdown a:hover { background: #2f3937; }
 </style>
 <button popovertarget="links">Toggle the menu</button>
 <nav popover id="links" class="dropdown">
@@ -129,12 +129,12 @@ The frames on this page run no script, so a demo here is driven by HTML alone, a
 ```html
 <style>
   body { min-height: 230px; }
-  button { padding: 8px 14px; border: 0; border-radius: 8px; background: #0f172a; color: #fff; font: 600 13px Inter, ui-sans-serif, system-ui, sans-serif; }
-  .sheet { position: fixed; inset: auto 0 0 0; border: 0; border-radius: 14px 14px 0 0; padding: 16px 18px; background: #f8fafc; color: #0f172a; font: 13px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  button { padding: 8px 14px; border: 0; border-radius: 8px; background: #222c25; color: #fff; font: 600 13px Inter, ui-sans-serif, system-ui, sans-serif; }
+  .sheet { position: fixed; inset: auto 0 0 0; border: 0; border-radius: 14px 14px 0 0; padding: 16px 18px; background: #fafaf8; color: #668f80; font: 13px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
   .sheet b { display: block; margin-bottom: 4px; font-size: 15px; }
   .sheet p { margin: 0; }
   /* The mixin fades the backdrop in and out; this is what it is made of. */
-  .sheet::backdrop { background: rgb(15 23 42 / 0.55); }
+  .sheet::backdrop { background: rgb(34 44 37 / 0.55); }
 </style>
 <button popovertarget="sheet">Open the sheet</button>
 <div popover id="sheet" class="sheet">
@@ -154,8 +154,8 @@ The frames on this page run no script, so a demo here is driven by HTML alone, a
 ```html
 <style>
   body { min-height: 140px; }
-  button { padding: 8px 14px; border: 0; border-radius: 8px; background: #0f172a; color: #fff; font: 600 13px Inter, ui-sans-serif, system-ui, sans-serif; }
-  .note { position: absolute; inset: auto; top: 60px; left: 16px; border: 0; border-radius: 999px; padding: 8px 14px; background: #1d4ed8; color: #eff6ff; font: 600 13px Inter, ui-sans-serif, system-ui, sans-serif; }
+  button { padding: 8px 14px; border: 0; border-radius: 8px; background: #222c25; color: #fff; font: 600 13px Inter, ui-sans-serif, system-ui, sans-serif; }
+  .note { position: absolute; inset: auto; top: 60px; left: 16px; border: 0; border-radius: 999px; padding: 8px 14px; background: #668f80; color: #fafaf8; font: 600 13px Inter, ui-sans-serif, system-ui, sans-serif; }
 </style>
 <button popovertarget="note">Toggle the note</button>
 <div popover id="note" class="note">Copied to the clipboard</div>

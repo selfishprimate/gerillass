@@ -48,8 +48,8 @@ The **Counter** Sass mixin numbers the children of the element you include it in
     height: 26px;
     margin-right: 12px;
     border-radius: 50%;
-    background: #18181b;
-    color: #fafafa;
+    background: #222c25;
+    color: #fafaf8;
     font-size: 12px;
     font-weight: 600;
   }
@@ -57,7 +57,7 @@ The **Counter** Sass mixin numbers the children of the element you include it in
 ```
 ```html
 <style>
-  .onboarding { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+  .onboarding { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
   .onboarding li { display: flex; align-items: center; }
 </style>
 <ol class="onboarding">
@@ -81,16 +81,16 @@ The **Counter** Sass mixin numbers the children of the element you include it in
     margin-bottom: 4px;
     font-size: 22px;
     font-weight: 800;
-    color: #2563eb;
+    color: #668f80;
   }
 }
 ```
 ```html
 <style>
-  .checkout { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; font-size: 13px; }
-  .checkout li { padding-top: 10px; border-top: 3px solid #2563eb; }
-  .checkout li:nth-child(n + 3) { border-color: #e4e4e7; color: #a1a1aa; }
-  .checkout li:nth-child(n + 3)::before { color: #a1a1aa; }
+  .checkout { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; font-size: 13px; }
+  .checkout li { padding-top: 10px; border-top: 3px solid #668f80; }
+  .checkout li:nth-child(n + 3) { border-color: #f2f2eb; color: #657167; }
+  .checkout li:nth-child(n + 3)::before { color: #657167; }
 </style>
 <ol class="checkout">
   <li>Cart</li>
@@ -114,13 +114,13 @@ The **Counter** Sass mixin numbers the children of the element you include it in
     font-weight: 700;
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: #71717a;
+    color: #657167;
   }
 }
 ```
 ```html
 <style>
-  .terms { margin: 0; padding: 0; display: grid; gap: 14px; font: 15px/1.5 Georgia, serif; color: #18181b; }
+  .terms { margin: 0; padding: 0; display: grid; gap: 14px; font: 15px/1.5 Georgia, serif; color: #2f3937; }
   .terms p { margin: 0; }
 </style>
 <div class="terms">
@@ -153,7 +153,7 @@ The **Counter** Sass mixin numbers the children of the element you include it in
   @include counter(decimal, ".", $name: habits) {
     margin-right: 8px;
     font-weight: 800;
-    color: #ea580c;
+    color: #69995d;
   }
 }
 
@@ -161,17 +161,17 @@ The **Counter** Sass mixin numbers the children of the element you include it in
   @include counter(decimal, ".", $continue: habits) {
     margin-right: 8px;
     font-weight: 800;
-    color: #ea580c;
+    color: #69995d;
   }
 }
 ```
 ```html
 <style>
-  .post { font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+  .post { font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
   .post ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
-  .post blockquote { margin: 12px 0; padding-left: 12px; border-left: 3px solid #ea580c; font-style: italic; color: #52525b; }
-  .post .photo { margin: 12px 0; height: 56px; border-radius: 6px; background: linear-gradient(135deg, #fed7aa, #fecdd3); }
-  .post .newsletter { margin: 12px 0; padding: 10px 12px; border-radius: 6px; background: #f4f4f5; font-size: 13px; color: #52525b; }
+  .post blockquote { margin: 12px 0; padding-left: 12px; border-left: 3px solid #69995d; font-style: italic; color: #657167; }
+  .post .photo { margin: 12px 0; height: 56px; border-radius: 6px; background: linear-gradient(135deg, #dee0cd, #bfc1a4); }
+  .post .newsletter { margin: 12px 0; padding: 10px 12px; border-radius: 6px; background: #fafaf8; font-size: 13px; color: #657167; }
 </style>
 <div class="post">
   <ol class="habits">
@@ -210,14 +210,14 @@ The **Counter** Sass mixin numbers the children of the element you include it in
 .ingredients {
   @include counter("(", lower-alpha, ")", $name: ingredients) {
     margin-right: 6px;
-    color: #a16207;
+    color: #69995d;
   }
 }
 
 .ingredients-more {
   @include counter("(", lower-alpha, ")", $continue: ingredients) {
     margin-right: 6px;
-    color: #a16207;
+    color: #69995d;
   }
 }
 
@@ -237,11 +237,11 @@ The **Counter** Sass mixin numbers the children of the element you include it in
 ```
 ```html
 <style>
-  .recipe { display: grid; grid-template-columns: 1fr 1.4fr; gap: 4px 20px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; font-size: 13px; }
-  .recipe h4 { grid-column: 1 / -1; margin: 10px 0 2px; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: #71717a; }
+  .recipe { display: grid; grid-template-columns: 1fr 1.4fr; gap: 4px 20px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; font-size: 13px; }
+  .recipe h4 { grid-column: 1 / -1; margin: 10px 0 2px; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: #657167; }
   .recipe h4:first-child { margin-top: 0; }
   .recipe ol { list-style: none; margin: 0; padding: 0; }
-  .recipe ol:nth-of-type(odd) { color: #52525b; }
+  .recipe ol:nth-of-type(odd) { color: #657167; }
 </style>
 <div class="recipe">
   <h4>Dough</h4>
@@ -278,18 +278,18 @@ The **Counter** Sass mixin numbers the children of the element you include it in
     margin-bottom: 4px;
     font-size: 12px;
     font-weight: 600;
-    color: #52525b;
+    color: #657167;
   }
 }
 ```
 ```html
 <style>
-  .book { font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+  .book { font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
   .book h4 { margin: 0 0 8px; font-size: 14px; }
   .book section + section { margin-top: 16px; }
   .gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
   .gallery figure { margin: 0; }
-  .gallery figure div { height: 48px; border-radius: 6px; background: linear-gradient(135deg, #bbf7d0, #bfdbfe); }
+  .gallery figure div { height: 48px; border-radius: 6px; background: linear-gradient(135deg, #dee0cd, #5bc0bb); }
 </style>
 <article class="book">
   <section>
@@ -320,13 +320,13 @@ The **Counter** Sass mixin numbers the children of the element you include it in
 .results {
   @include counter(".", $start: var(--first)) {
     min-width: 32px;
-    color: #71717a;
+    color: #657167;
   }
 }
 ```
 ```html
 <style>
-  .results { list-style: none; margin: 0; padding: 0; container-type: inline-size; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; color: #1d4ed8; }
+  .results { list-style: none; margin: 0; padding: 0; container-type: inline-size; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; color: #668f80; }
   .results li { display: flex; padding: 6px 0; }
 </style>
 <ol class="results" style="--first: 11">
@@ -350,14 +350,14 @@ The **Counter** Sass mixin numbers the children of the element you include it in
   @include counter("Q", decimal, ".", $items: ".question") {
     margin-right: 8px;
     font-weight: 700;
-    color: #7c3aed;
+    color: #668f80;
   }
 }
 ```
 ```html
 <style>
-  .faq { font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
-  .faq h4 { margin: 12px 0 4px; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: #71717a; }
+  .faq { font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
+  .faq h4 { margin: 12px 0 4px; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: #657167; }
   .faq h4:first-child { margin-top: 0; }
   .faq p { margin: 0 0 4px; }
 </style>
@@ -398,15 +398,15 @@ The **Counter** Sass mixin numbers the children of the element you include it in
 .toc-sections {
   @include counter(lower-alpha, ")", $name: section) {
     min-width: 20px;
-    color: #71717a;
+    color: #657167;
   }
 }
 ```
 ```html
 <style>
-  .toc, .toc-sections { list-style: none; margin: 0; padding: 0; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+  .toc, .toc-sections { list-style: none; margin: 0; padding: 0; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
   .toc > li::before, .toc-sections > li::before { display: inline-block; }
-  .toc-sections { padding-left: 28px; font-size: 14px; color: #3f3f46; }
+  .toc-sections { padding-left: 28px; font-size: 14px; color: #2f3937; }
 </style>
 <ol class="toc">
   <li>Getting started
@@ -446,11 +446,11 @@ The **Counter** Sass mixin numbers the children of the element you include it in
 ```
 ```html
 <style>
-  .destinations { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+  .destinations { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
   .destinations article { position: relative; overflow: hidden; height: 110px; padding: 12px; border-radius: 10px; color: #fff; font-weight: 600; }
-  .destinations article:nth-child(1) { background: linear-gradient(160deg, #0ea5e9, #1e3a8a); }
-  .destinations article:nth-child(2) { background: linear-gradient(160deg, #f97316, #9f1239); }
-  .destinations article:nth-child(3) { background: linear-gradient(160deg, #22c55e, #14532d); }
+  .destinations article:nth-child(1) { background: linear-gradient(160deg, #668f80, #2f3937); }
+  .destinations article:nth-child(2) { background: linear-gradient(160deg, #69995d, #db504a); }
+  .destinations article:nth-child(3) { background: linear-gradient(160deg, #69995d, #2f3937); }
 </style>
 <div class="destinations">
   <article>Lisbon</article>
@@ -474,7 +474,7 @@ The **Counter** Sass mixin numbers the children of the element you include it in
     display: block;
     font-size: 12px;
     font-weight: 700;
-    color: #0891b2;
+    color: #668f80;
   }
 
   > .break {
@@ -488,8 +488,8 @@ The **Counter** Sass mixin numbers the children of the element you include it in
 ```
 ```html
 <style>
-  .programme { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
-  .programme .break { padding: 6px 10px; border-radius: 6px; background: #f4f4f5; font-size: 13px; color: #71717a; }
+  .programme { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
+  .programme .break { padding: 6px 10px; border-radius: 6px; background: #fafaf8; font-size: 13px; color: #657167; }
 </style>
 <ol class="programme">
   <li>Designing with constraints</li>

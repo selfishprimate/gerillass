@@ -31,7 +31,7 @@ The **Text Image** Sass mixin helps you clip the background image of a selected 
 ```
 ```html
 <style>
-  body { background: #f8fafc; }
+  body { background: #fafaf8; }
   .element { margin: 0; font: 800 56px/1.05 Inter, ui-sans-serif, system-ui, sans-serif; letter-spacing: -0.03em; }
 </style>
 <h2 class="element">Summer issue</h2>
@@ -46,7 +46,7 @@ The **Text Image** Sass mixin helps you clip the background image of a selected 
 ```
 ```html
 <style>
-  body { background: #f8fafc; }
+  body { background: #fafaf8; }
   .element { margin: 0; font: 800 56px/1.05 Inter, ui-sans-serif, system-ui, sans-serif; letter-spacing: -0.03em; }
 </style>
 <h2 class="element" style="background-image: url(/images/landscape.webp)">Golden hour</h2>
@@ -56,12 +56,12 @@ The **Text Image** Sass mixin helps you clip the background image of a selected 
 <Example caption="Pass a `$fallback` colour and the letters have something to fall back to. The colour goes under the image as a `background-color`, so it fills them whenever the image does not arrive: a 404, a blocked host, a slow connection." listing="<h2 class=&quot;title&quot;>Text Image is Awesome!</h2>">
 ```scss
 .title {
-  @include text-image("/images/landscape.webp", $fallback: #0369a1);
+  @include text-image("/images/landscape.webp", $fallback: #2f3937);
 }
 ```
 ```html
 <style>
-  body { background: #f8fafc; }
+  body { background: #fafaf8; }
   .title { margin: 0; font: 800 56px/1.05 Inter, ui-sans-serif, system-ui, sans-serif; letter-spacing: -0.03em; }
 </style>
 <h2 class="title">Golden hour</h2>

@@ -32,9 +32,9 @@ The **Position Sass mixin** provides a one-line method to quickly set both the p
 ```
 ```html
 <style>
-  body { background: #f8fafc; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; }
+  body { background: #fafaf8; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #668f80; }
   .stage { position: relative; overflow: hidden; height: 180px; border-radius: 16px; background: url("/images/landscape.webp") center/cover; }
-  .element { display: grid; align-content: end; padding: 16px 18px; background: linear-gradient(transparent 35%, rgb(15 23 42 / 0.85)); color: #f8fafc; font-weight: 700; }
+  .element { display: grid; align-content: end; padding: 16px 18px; background: linear-gradient(transparent 35%, rgb(34 44 37 / 0.85)); color: #fafaf8; font-weight: 700; }
 </style>
 <div class="stage">
   <div class="element">Every inset at zero, so the scrim covers the picture</div>
@@ -50,13 +50,13 @@ The **Position Sass mixin** provides a one-line method to quickly set both the p
 ```
 ```html
 <style>
-  body { margin: 0; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; }
+  body { margin: 0; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #668f80; }
   .page { padding: 18px; }
-  .page p { margin: 0 0 10px; color: #64748b; }
-  .element { display: grid; place-items: center; background: rgb(15 23 42 / 0.55); }
-  .dialog { width: 260px; padding: 20px; border-radius: 16px; background: #fff; text-align: center; box-shadow: 0 20px 50px rgb(15 23 42 / 0.35); }
+  .page p { margin: 0 0 10px; color: #657167; }
+  .element { display: grid; place-items: center; background: rgb(34 44 37 / 0.55); }
+  .dialog { width: 260px; padding: 20px; border-radius: 16px; background: #fff; text-align: center; box-shadow: 0 20px 50px rgb(34 44 37 / 0.35); }
   .dialog b { display: block; margin-bottom: 4px; font-size: 16px; }
-  .dialog span { color: #64748b; font-size: 13px; }
+  .dialog span { color: #657167; font-size: 13px; }
 </style>
 <div class="page"><p>The page behind it.</p><p>Fixed with every inset at zero covers the whole viewport, which is what a modal's backdrop is.</p></div>
 <div class="element">
@@ -73,12 +73,12 @@ The **Position Sass mixin** provides a one-line method to quickly set both the p
 ```
 ```html
 <style>
-  body { margin: 0; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; background: #0f172a; }
-  .rail { position: fixed; inset: 0 auto 0 0; width: 50px; display: grid; justify-items: center; align-content: start; gap: 14px; padding-top: 16px; color: #94a3b8; }
-  .rail span { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 10px; background: rgb(226 232 240 / 0.12); font-size: 13px; }
-  .element { padding: 18px 20px; border-radius: 14px; background: #f8fafc; }
+  body { margin: 0; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #668f80; background: #222c25; }
+  .rail { position: fixed; inset: 0 auto 0 0; width: 50px; display: grid; justify-items: center; align-content: start; gap: 14px; padding-top: 16px; color: #657167; }
+  .rail span { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 10px; background: rgb(242 242 235 / 0.12); font-size: 13px; }
+  .element { padding: 18px 20px; border-radius: 14px; background: #fafaf8; }
   .element b { display: block; margin-bottom: 4px; font-size: 16px; }
-  .element p { margin: 0; color: #475569; }
+  .element p { margin: 0; color: #657167; }
 </style>
 <div class="rail"><span>G</span><span>◧</span><span>◔</span></div>
 <div class="element">
@@ -96,10 +96,10 @@ The **Position Sass mixin** provides a one-line method to quickly set both the p
 ```
 ```html
 <style>
-  body { background: #f8fafc; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; }
+  body { background: #fafaf8; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #668f80; }
   .stage { position: relative; overflow: hidden; height: 190px; border-radius: 16px; background: url("/images/landscape.webp") center/cover; }
-  .element { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-radius: 12px; background: rgb(248 250 252 / 0.94); font-weight: 600; }
-  .element a { padding: 8px 14px; border-radius: 999px; background: #0f172a; color: #fff; font-size: 13px; text-decoration: none; }
+  .element { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-radius: 12px; background: rgb(250 250 248 / 0.94); font-weight: 600; }
+  .element a { padding: 8px 14px; border-radius: 999px; background: #222c25; color: #fff; font-size: 13px; text-decoration: none; }
 </style>
 <div class="stage">
   <div class="element">Lysefjord, Norway<a href="#">Open</a></div>
@@ -115,11 +115,11 @@ The **Position Sass mixin** provides a one-line method to quickly set both the p
 ```
 ```html
 <style>
-  body { background: #f8fafc; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; }
-  .card { position: relative; margin-bottom: 10px; padding: 18px 18px 18px 18px; border-radius: 14px; background: #fff; box-shadow: 0 4px 14px rgb(15 23 42 / 0.08); }
+  body { background: #fafaf8; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #668f80; }
+  .card { position: relative; margin-bottom: 10px; padding: 18px 18px 18px 18px; border-radius: 14px; background: #fff; box-shadow: 0 4px 14px rgb(34 44 37 / 0.08); }
   .card b { display: block; padding-top: 22px; font-size: 15px; }
-  .card span.sub { color: #64748b; font-size: 13px; }
-  .badge { padding: 5px 12px; border-radius: 999px; background: #dcfce7; color: #166534; font: 700 11px Inter, ui-sans-serif, system-ui, sans-serif; letter-spacing: 0.06em; text-transform: uppercase; }
+  .card span.sub { color: #657167; font-size: 13px; }
+  .badge { padding: 5px 12px; border-radius: 999px; background: #f2f2eb; color: #69995d; font: 700 11px Inter, ui-sans-serif, system-ui, sans-serif; letter-spacing: 0.06em; text-transform: uppercase; }
 </style>
 <div class="card" dir="ltr">
   <span class="badge">New</span>

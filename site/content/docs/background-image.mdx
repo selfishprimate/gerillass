@@ -38,7 +38,7 @@ The **Background Image** Sass mixin allows you to apply background images to the
 <Example caption="A colour over the image. One colour is a flat wash, and the alpha decides how much of the photograph is left.">
 ```scss
 .element{
-  @include background-image("/images/backgrounds/07.jpg", rgba(255, 204, 153, 0.5));
+  @include background-image("/images/backgrounds/07.jpg", rgb(102 143 128 / 0.5));
 }
 ```
 ```html
@@ -55,7 +55,7 @@ The **Background Image** Sass mixin allows you to apply background images to the
 <Example caption="Several colours become a gradient over the image, which is what makes a photograph safe to put text on.">
 ```scss
 .element{
-  @include background-image("/images/backgrounds/07.jpg", rgba(0, 0, 0, 0.5) rgba(40, 102, 100, 0.8));
+  @include background-image("/images/backgrounds/07.jpg", rgb(34 44 37 / 0.5) rgb(47 57 55 / 0.8));
 }
 ```
 ```html
@@ -72,7 +72,7 @@ The **Background Image** Sass mixin allows you to apply background images to the
 <Example caption="`$filter-direction` turns that gradient. The stops here are sharp on purpose, so the angle is easy to read.">
 ```scss
 .element{
-  @include background-image("/images/backgrounds/07.jpg", rgba(0, 128, 128, 0.7) rgba(255, 192, 203, 0.8), right);
+  @include background-image("/images/backgrounds/07.jpg", rgb(47 57 55 / 0.7) rgb(91 192 187 / 0.8), right);
 }
 ```
 ```html
@@ -89,7 +89,7 @@ The **Background Image** Sass mixin allows you to apply background images to the
 <Example caption="There will be times when you want to **add a background image to an element using the style attribute**, like in the example below. **In those cases, just use `null` to skip the `$image-url` argument.**" listing="<div class=&quot;element&quot; style=&quot;background-image: url(/images/backgrounds/07.jpg)&quot;></div>">
 ```scss
 .element{
-  @include background-image(null, rgba(teal, 0.7) rgba(pink, 0.8), right);
+  @include background-image(null, rgba(#5bc0bb, 0.7) rgba(#bdc488, 0.8), right);
 }
 ```
 ```html
@@ -102,7 +102,7 @@ The **Background Image** Sass mixin allows you to apply background images to the
 </div>">
 ```scss
 .element{
-  @include background-image(null, rgba(teal, 0.7) rgba(pink, 0.8), right);
+  @include background-image(null, rgba(#5bc0bb, 0.7) rgba(#bdc488, 0.8), right);
 }
 ```
 ```html

@@ -47,7 +47,7 @@ The **Triangle** Sass mixin helps you generate triangles using the `::before` or
 .element {
   &::after {
     @include triangle(
-      $color: crimson,
+      $color: #db504a,
       $size: 6px
     ) {
       margin-left: 6px;
@@ -66,7 +66,7 @@ The **Triangle** Sass mixin helps you generate triangles using the `::before` or
   &::after {
     @include triangle(
       $direction: "bottom",
-      $color: crimson,
+      $color: #db504a,
       $size: 10px 6px
     ) {
       position: relative;
@@ -86,17 +86,17 @@ The **Triangle** Sass mixin helps you generate triangles using the `::before` or
 .element{
   @include triangle(
     $direction: "top",
-    $color: crimson,
+    $color: #db504a,
     $size: 100px 50px
   )
 }
 ```
 ```html
 <style>
-  body { background: #f8fafc; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; }
+  body { background: #fafaf8; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #668f80; }
   .wrap { position: relative; width: 300px; }
   .element { position: absolute; top: -50px; left: 40px; }
-  .tip { padding: 14px 16px; border-radius: 12px; background: crimson; color: #fff; font-weight: 600; }
+  .tip { padding: 14px 16px; border-radius: 12px; background: #db504a; color: #fff; font-weight: 600; }
 </style>
 <div class="wrap">
   <div class="element"></div>
@@ -108,7 +108,7 @@ The **Triangle** Sass mixin helps you generate triangles using the `::before` or
 <Example caption="**Logical directions** follow the writing direction. `inline-end` points to where a line ends: right in a left-to-right sentence, left in a right-to-left one, from the same rule. Measured in Chrome 152, each logical direction renders the same borders as its physical twin in both directions.">
 ```scss
 .next::after {
-  @include triangle("inline-end", crimson, 8px 12px);
+  @include triangle("inline-end", #db504a, 8px 12px);
   margin-inline-start: 8px;
 }
 ```

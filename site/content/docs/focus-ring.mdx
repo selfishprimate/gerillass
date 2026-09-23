@@ -55,7 +55,7 @@ Measured in Chrome 152, on buttons, a link and a text input:
 }
 
 .btn-primary {
-  @include focus-ring($color: #18181b);
+  @include focus-ring($color: #222c25);
 }
 ```
 ```html
@@ -67,10 +67,10 @@ Measured in Chrome 152, on buttons, a link and a text input:
     font: 500 14px/1 Inter, ui-sans-serif, system-ui, sans-serif;
     cursor: pointer; transition: background-color .15s, border-color .15s;
   }
-  .btn-primary { background: #18181b; color: #fafafa; border: 1px solid #18181b; }
-  .btn-primary:hover { background: #27272a; }
-  .btn-outline { background: #fff; color: #18181b; border: 1px solid #e4e4e7; }
-  .btn-outline:hover { background: #f4f4f5; }
+  .btn-primary { background: #222c25; color: #fafaf8; border: 1px solid #222c25; }
+  .btn-primary:hover { background: #2f3937; }
+  .btn-outline { background: #fff; color: #2f3937; border: 1px solid #f2f2eb; }
+  .btn-outline:hover { background: #fafaf8; }
 </style>
 <div class="row">
   <button class="btn btn-primary">Save changes</button>
@@ -84,27 +84,27 @@ Measured in Chrome 152, on buttons, a link and a text input:
 .input,
 .textarea,
 .select {
-  @include focus-ring(2px, 2px, #18181b);
+  @include focus-ring(2px, 2px, #222c25);
 }
 ```
 ```html
 <style>
-  .form { display: grid; gap: 14px; max-width: 360px; font: 14px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+  .form { display: grid; gap: 14px; max-width: 360px; font: 14px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
   .field { display: grid; gap: 6px; }
   .label { font-weight: 500; }
   .input, .textarea, .select {
-    width: 100%; border: 1px solid #e4e4e7; border-radius: 6px; background: #fff;
+    width: 100%; border: 1px solid #f2f2eb; border-radius: 6px; background: #fff;
     font: inherit; color: inherit; padding: 8px 12px;
   }
   .input, .select { height: 36px; }
   .textarea { min-height: 80px; resize: vertical; }
   .select {
     appearance: none; padding-right: 32px; cursor: pointer;
-    background-image: linear-gradient(45deg, transparent 50%, #71717a 50%), linear-gradient(135deg, #71717a 50%, transparent 50%);
+    background-image: linear-gradient(45deg, transparent 50%, #657167 50%), linear-gradient(135deg, #657167 50%, transparent 50%);
     background-position: calc(100% - 16px) 15px, calc(100% - 11px) 15px;
     background-size: 5px 5px; background-repeat: no-repeat;
   }
-  .input::placeholder, .textarea::placeholder { color: #a1a1aa; }
+  .input::placeholder, .textarea::placeholder { color: #657167; }
 </style>
 <form class="form" onsubmit="return false">
   <label class="field"><span class="label">Email</span><input class="input" type="email" placeholder="you@example.com"></label>
@@ -123,18 +123,18 @@ Measured in Chrome 152, on buttons, a link and a text input:
 <Example caption="A menu inside a card that clips its content. The items fill the card edge to edge, so the ring is drawn 4px inside each of them. **Click an empty spot in the result, then press the Tab key on your keyboard.**">
 ```scss
 .menu-item {
-  @include focus-ring(2px, -4px, #18181b);
+  @include focus-ring(2px, -4px, #222c25);
 }
 ```
 ```html
 <style>
-  .card { width: 240px; border: 1px solid #e4e4e7; border-radius: 8px; overflow: hidden; background: #fff; font: 14px/1 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .card { width: 240px; border: 1px solid #f2f2eb; border-radius: 8px; overflow: hidden; background: #fff; font: 14px/1 Inter, ui-sans-serif, system-ui, sans-serif; }
   .menu-item {
     display: flex; align-items: center; width: 100%; height: 40px; padding: 0 14px;
-    border: 0; background: #fff; color: #18181b; font: inherit; text-align: left; cursor: pointer;
+    border: 0; background: #fff; color: #2f3937; font: inherit; text-align: left; cursor: pointer;
   }
-  .menu-item + .menu-item { border-top: 1px solid #f4f4f5; }
-  .menu-item:hover { background: #f4f4f5; }
+  .menu-item + .menu-item { border-top: 1px solid #fafaf8; }
+  .menu-item:hover { background: #fafaf8; }
 </style>
 <div class="card">
   <button class="menu-item">Profile</button>

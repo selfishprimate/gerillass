@@ -30,9 +30,9 @@ The **Before** Sass mixin helps you generate content or a style element before t
 ```
 ```html
 <style>
-  body { background: #f8fafc; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; }
-  .row { display: flex; justify-content: space-between; width: 260px; padding: 16px 18px; border-radius: 14px; background: #fff; box-shadow: 0 6px 20px rgb(15 23 42 / 0.08); font-weight: 700; }
-  .total::before { color: #64748b; font-weight: 600; }
+  body { background: #fafaf8; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #668f80; }
+  .row { display: flex; justify-content: space-between; width: 260px; padding: 16px 18px; border-radius: 14px; background: #fff; box-shadow: 0 6px 20px rgb(34 44 37 / 0.08); font-weight: 700; }
+  .total::before { color: #657167; font-weight: 600; }
 </style>
 <div class="row"><span class="total"></span><span>$228.00</span></div>
 ```
@@ -45,14 +45,14 @@ The **Before** Sass mixin helps you generate content or a style element before t
     content: "Note ";
     font-weight: 700;
     font-style: normal;
-    color: #b45309;
+    color: #69995d;
   }
 }
 ```
 ```html
 <style>
-  body { background: #f8fafc; font: 15px/1.6 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; }
-  .note { display: block; max-width: 420px; padding: 14px 16px; border-radius: 12px; background: #fffbeb; color: #78350f; font-style: italic; }
+  body { background: #fafaf8; font: 15px/1.6 Inter, ui-sans-serif, system-ui, sans-serif; color: #668f80; }
+  .note { display: block; max-width: 420px; padding: 14px 16px; border-radius: 12px; background: #fafaf8; color: #69995d; font-style: italic; }
 </style>
 <em class="note">the trial ends on the first of the month, and nothing is charged before then.</em>
 ```
@@ -66,7 +66,7 @@ The **Before** Sass mixin helps you generate content or a style element before t
 ```
 ```html
 <style>
-  .element { font: 600 20px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+  .element { font: 600 20px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
 </style>
 <div class="element" data-currency="&#36;">200</div>
 ```
@@ -85,7 +85,7 @@ The **Before** Sass mixin helps you generate content or a style element before t
 ```
 ```html
 <style>
-  .element { font: 600 20px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+  .element { font: 600 20px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
 </style>
 <div class="element" data-currency="&#36;">200</div>
 ```
@@ -99,13 +99,13 @@ The **Before** Sass mixin helps you generate content or a style element before t
   @include before("✓") {
     margin-right: 8px;
     font-weight: 700;
-    color: #16a34a;
+    color: #69995d;
   }
 }
 ```
 ```html
 <style>
-  .checklist { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; font: 14px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+  .checklist { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; font: 14px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
 </style>
 <ul class="checklist">
   <li>Compiles with Dart Sass</li>
@@ -135,8 +135,8 @@ The **Before** Sass mixin helps you generate content or a style element before t
     height: 24px;
     margin-right: 10px;
     border-radius: 50%;
-    background: #18181b;
-    color: #fafafa;
+    background: #222c25;
+    color: #fafaf8;
     font-size: 12px;
     font-weight: 600;
   }
@@ -144,7 +144,7 @@ The **Before** Sass mixin helps you generate content or a style element before t
 ```
 ```html
 <style>
-  .steps { display: grid; gap: 10px; font: 14px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+  .steps { display: grid; gap: 10px; font: 14px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
   .step { display: flex; align-items: center; }
 </style>
 <div class="steps">
@@ -177,9 +177,9 @@ The Counter mixin does all three for you: it resets a counter on the element you
 <style>
   .badges { display: flex; flex-wrap: wrap; gap: 8px; font: 500 13px/1 Inter, ui-sans-serif, system-ui, sans-serif; }
   .badge { display: inline-flex; align-items: center; padding: 6px 10px; border-radius: 999px; }
-  .badge.ok { background: #dcfce7; color: #166534; }
-  .badge.warn { background: #fef9c3; color: #854d0e; }
-  .badge.fail { background: #fee2e2; color: #991b1b; }
+  .badge.ok { background: #f2f2eb; color: #69995d; }
+  .badge.warn { background: #eefa92; color: #69995d; }
+  .badge.fail { background: #f2f2eb; color: #db504a; }
 </style>
 <div class="badges">
   <span class="badge ok" style="--icon: '✓'">Passed</span>
@@ -200,14 +200,14 @@ The Counter mixin does all three for you: it resets a counter on the element you
     font-weight: 600;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: #2563eb;
+    color: #668f80;
   }
 }
 ```
 ```html
 <style>
   .posts { display: grid; gap: 16px; }
-  .post-title { margin: 0; font: 600 17px/1.3 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+  .post-title { margin: 0; font: 600 17px/1.3 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
 </style>
 <div class="posts">
   <h3 class="post-title" data-category="Release">Gerillass 4.0.0 is out</h3>
@@ -227,13 +227,13 @@ The Counter mixin does all three for you: it resets a counter on the element you
     height: 8px;
     margin-right: 8px;
     border-radius: 50%;
-    background: #22c55e;
+    background: #69995d;
   }
 }
 ```
 ```html
 <style>
-  .status { display: inline-flex; align-items: center; font: 500 14px/1 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+  .status { display: inline-flex; align-items: center; font: 500 14px/1 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
 </style>
 <span class="status">All systems operational</span>
 ```
@@ -244,13 +244,13 @@ The Counter mixin does all three for you: it resets a counter on the element you
 q {
   @include before {
     content: open-quote;
-    color: #2563eb;
+    color: #668f80;
   }
 }
 ```
 ```html
 <style>
-  p { font: 16px/1.5 Georgia, serif; color: #18181b; }
+  p { font: 16px/1.5 Georgia, serif; color: #2f3937; }
 </style>
 <p>She wrote back: <q>It works in all three browsers.</q></p>
 ```

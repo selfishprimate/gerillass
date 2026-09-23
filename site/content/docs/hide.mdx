@@ -51,18 +51,18 @@ Measured in Chrome 152, Firefox 156 and Safari 26.6.2, with the same result in e
 ```
 ```html
 <style>
-  .toolbar { display: inline-flex; gap: 4px; padding: 4px; border: 1px solid #e4e4e7; border-radius: 8px; background: #fff; }
+  .toolbar { display: inline-flex; gap: 4px; padding: 4px; border: 1px solid #f2f2eb; border-radius: 8px; background: #fff; }
   .toolbar-button {
     display: inline-flex; align-items: center; justify-content: center;
     width: 36px; height: 36px; border: 0; border-radius: 6px;
-    background: transparent; color: #18181b; font: 600 16px/1 Georgia, serif; cursor: pointer;
+    background: transparent; color: #2f3937; font: 600 16px/1 Georgia, serif; cursor: pointer;
   }
-  .toolbar-button:hover { background: #f4f4f5; }
+  .toolbar-button:hover { background: #fafaf8; }
 </style>
 <div class="toolbar">
   <button class="toolbar-button"><b aria-hidden="true">B</b><span class="toolbar-label">Bold</span></button>
   <button class="toolbar-button"><i aria-hidden="true">I</i><span class="toolbar-label">Italic</span></button>
-  <button class="toolbar-button"><span aria-hidden="true">&#128279;</span><span class="toolbar-label">Link</span></button>
+  <button class="toolbar-button"><span aria-hidden="true">&#2f3937;</span><span class="toolbar-label">Link</span></button>
 </div>
 ```
 </Example>
@@ -75,17 +75,17 @@ Measured in Chrome 152, Firefox 156 and Safari 26.6.2, with the same result in e
   left: 12px;
   padding: 10px 16px;
   border-radius: 6px;
-  background: #18181b;
-  color: #fafafa;
+  background: #222c25;
+  color: #fafaf8;
   @include hide(focusable);
 }
 ```
 ```html
 <style>
-  .page { position: relative; min-height: 160px; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+  .page { position: relative; min-height: 160px; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
   .skip-link { font-weight: 500; text-decoration: none; }
-  .site-header { display: flex; gap: 16px; align-items: center; height: 52px; padding: 0 16px; border-bottom: 1px solid #e4e4e7; }
-  .site-header a { color: #18181b; text-decoration: none; }
+  .site-header { display: flex; gap: 16px; align-items: center; height: 52px; padding: 0 16px; border-bottom: 1px solid #f2f2eb; }
+  .site-header a { color: #2f3937; text-decoration: none; }
   .content { padding: 16px; }
 </style>
 <div class="page">
@@ -109,10 +109,10 @@ Measured in Chrome 152, Firefox 156 and Safari 26.6.2, with the same result in e
 ```
 ```html
 <style>
-  .page { position: relative; min-height: 160px; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
-  .skip-links a { padding: 10px 16px; border-radius: 6px; background: #18181b; color: #fafafa; font-weight: 500; text-decoration: none; }
-  .site-header { display: flex; gap: 16px; align-items: center; height: 52px; padding: 0 16px; border-bottom: 1px solid #e4e4e7; }
-  .site-header a { color: #18181b; text-decoration: none; }
+  .page { position: relative; min-height: 160px; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
+  .skip-links a { padding: 10px 16px; border-radius: 6px; background: #222c25; color: #fafaf8; font-weight: 500; text-decoration: none; }
+  .site-header { display: flex; gap: 16px; align-items: center; height: 52px; padding: 0 16px; border-bottom: 1px solid #f2f2eb; }
+  .site-header a { color: #2f3937; text-decoration: none; }
   .content { padding: 16px; }
 </style>
 <div class="page">
@@ -134,8 +134,8 @@ Measured in Chrome 152, Firefox 156 and Safari 26.6.2, with the same result in e
 ```html
 <style>
   .tabs { display: flex; gap: 4px; font: 500 14px/1 Inter, ui-sans-serif, system-ui, sans-serif; }
-  .tab { display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 6px; color: #18181b; text-decoration: none; }
-  .tab:hover { background: #f4f4f5; }
+  .tab { display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 6px; color: #2f3937; text-decoration: none; }
+  .tab:hover { background: #fafaf8; }
   .tab-icon { font-size: 18px; }
 </style>
 <nav class="tabs">

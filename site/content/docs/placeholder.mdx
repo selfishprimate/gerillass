@@ -20,14 +20,14 @@ The **Placeholder Sass mixin** helps you style the **placeholder text** in an `<
 ```scss
 .element {
   @include placeholder {
-    color: #94a3b8;
+    color: #657167;
   }
 }
 ```
 ```html
 <style>
-  body { background: #f8fafc; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; }
-  .element { width: 100%; max-width: 340px; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 12px; font: inherit; color: inherit; }
+  body { background: #fafaf8; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #668f80; }
+  .element { width: 100%; max-width: 340px; padding: 12px 14px; border: 1px solid #dee0cd; border-radius: 12px; font: inherit; color: inherit; }
 </style>
 <input class="element" type="email" placeholder="you@example.com" />
 ```
@@ -36,14 +36,14 @@ The **Placeholder Sass mixin** helps you style the **placeholder text** in an `<
 <Example caption="When you call the mixin at the root of your stylesheet, it targets all the `<input>` and `<textarea>` elements.">
 ```scss
 @include placeholder {
-  color: #a8a29e;
+  color: #657167;
   font-style: italic;
 }
 ```
 ```html
 <style>
-  body { background: #f8fafc; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; display: grid; gap: 10px; max-width: 340px; }
-  input, textarea { width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 12px; font: inherit; color: inherit; }
+  body { background: #fafaf8; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #668f80; display: grid; gap: 10px; max-width: 340px; }
+  input, textarea { width: 100%; padding: 12px 14px; border: 1px solid #dee0cd; border-radius: 12px; font: inherit; color: inherit; }
 </style>
 <input type="text" placeholder="Every field on the page" />
 <textarea placeholder="This one as well" rows="2"></textarea>

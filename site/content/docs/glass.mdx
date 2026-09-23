@@ -35,13 +35,13 @@ The **Glass** Sass mixin writes a frosted glass panel: a tint, a blur of whateve
 <Example caption="A card. The tint is white at 12% over a photograph, and `$fallback` is dark on purpose: without it the fallback would be white at 88%, which the white lettering would vanish into. Pass the fallback whenever the text is chosen for the glass rather than for the panel.">
 ```scss
 .card {
-  @include glass(20px, rgb(255 255 255 / 0.12), 160%, rgb(255 255 255 / 0.3), rgb(30 41 59 / 0.92));
+  @include glass(20px, rgb(255 255 255 / 0.12), 160%, rgb(255 255 255 / 0.3), rgb(47 57 55 / 0.92));
 }
 ```
 ```html
 <style>
-  body { min-height: 270px; display: grid; place-items: center; background: radial-gradient(circle at 15% 20%, #f472b6 0 22%, transparent 23%), radial-gradient(circle at 80% 15%, #22d3ee 0 26%, transparent 27%), radial-gradient(circle at 70% 85%, #a3e635 0 24%, transparent 25%), linear-gradient(135deg, #1e1b4b, #4c1d95 45%, #831843); }
-  .card { width: 320px; aspect-ratio: 1.586; border-radius: 18px; padding: 22px; display: grid; align-content: space-between; color: #f8fafc; font: 600 14px Inter, ui-sans-serif, system-ui, sans-serif; }
+  body { min-height: 270px; display: grid; place-items: center; background: radial-gradient(circle at 15% 20%, #5bc0bb 0 22%, transparent 23%), radial-gradient(circle at 80% 15%, #668f80 0 26%, transparent 27%), radial-gradient(circle at 70% 85%, #69995d 0 24%, transparent 25%), linear-gradient(135deg, #2f3937, #668f80 45%, #2f3937); }
+  .card { width: 320px; aspect-ratio: 1.586; border-radius: 18px; padding: 22px; display: grid; align-content: space-between; color: #fafaf8; font: 600 14px Inter, ui-sans-serif, system-ui, sans-serif; }
   .card__brand { display: flex; justify-content: space-between; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; opacity: 0.8; }
   .card__number { font: 700 21px ui-monospace, SFMono-Regular, monospace; letter-spacing: 0.08em; }
   .card__row { display: flex; justify-content: space-between; font-size: 13px; }
@@ -58,19 +58,19 @@ The **Glass** Sass mixin writes a frosted glass panel: a tint, a blur of whateve
 <Example caption="A player over its own cover art, which is the other place this pattern earns its keep: the panel is dark, the edge is a colour of its own, and `$saturate` is left at `1` because the art underneath is already bright.">
 ```scss
 .player {
-  @include glass(18px, rgb(15 23 42 / 0.55), 1, rgb(148 163 184 / 0.45));
+  @include glass(18px, rgb(34 44 37 / 0.55), 1, rgb(191 193 164 / 0.45));
 }
 ```
 ```html
 <style>
-  body { min-height: 260px; display: grid; place-items: center; background: conic-gradient(from 210deg at 35% 40%, #f97316, #db2777, #6366f1, #0ea5e9, #f97316); }
-  .player { width: 340px; border-radius: 16px; padding: 16px; display: flex; gap: 14px; align-items: center; color: #e2e8f0; font: 14px Inter, ui-sans-serif, system-ui, sans-serif; }
-  .player__art { width: 56px; height: 56px; border-radius: 10px; background: linear-gradient(140deg, #fbbf24, #db2777); flex: none; }
+  body { min-height: 260px; display: grid; place-items: center; background: conic-gradient(from 210deg at 35% 40%, #69995d, #bdc488, #5bc0bb, #668f80, #69995d); }
+  .player { width: 340px; border-radius: 16px; padding: 16px; display: flex; gap: 14px; align-items: center; color: #f2f2eb; font: 14px Inter, ui-sans-serif, system-ui, sans-serif; }
+  .player__art { width: 56px; height: 56px; border-radius: 10px; background: linear-gradient(140deg, #69995d, #bdc488); flex: none; }
   .player__meta { display: grid; gap: 2px; }
   .player__title { font-weight: 700; }
   .player__artist { font-size: 13px; opacity: 0.75; }
   .player__bar { margin-top: 8px; height: 4px; border-radius: 999px; background: rgb(255 255 255 / 0.25); }
-  .player__bar span { display: block; width: 62%; height: 100%; border-radius: 999px; background: #e2e8f0; }
+  .player__bar span { display: block; width: 62%; height: 100%; border-radius: 999px; background: #f2f2eb; }
 </style>
 <div class="player">
   <div class="player__art"></div>
@@ -91,15 +91,15 @@ The **Glass** Sass mixin writes a frosted glass panel: a tint, a blur of whateve
 ```
 ```html
 <style>
-  body { min-height: 280px; margin: 0; padding: 18px 18px 0; background: #eef2ff; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #1e1b4b; }
+  body { min-height: 280px; margin: 0; padding: 18px 18px 0; background: #fafaf8; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #668f80; }
   .feed { display: grid; gap: 10px; }
-  .feed div { height: 54px; border-radius: 12px; background: linear-gradient(120deg, #a5b4fc, #f0abfc); }
-  .feed div:nth-child(2) { background: linear-gradient(120deg, #fca5a5, #fdba74); }
-  .feed div:nth-child(3) { background: linear-gradient(120deg, #6ee7b7, #93c5fd); }
-  .feed div:nth-child(4) { background: linear-gradient(120deg, #fcd34d, #fca5a5); }
+  .feed div { height: 54px; border-radius: 12px; background: linear-gradient(120deg, #5bc0bb, #dee0cd); }
+  .feed div:nth-child(2) { background: linear-gradient(120deg, #eefa92, #bdc488); }
+  .feed div:nth-child(3) { background: linear-gradient(120deg, #bdc488, #5bc0bb); }
+  .feed div:nth-child(4) { background: linear-gradient(120deg, #bdc488, #eefa92); }
   .tabs { position: fixed; inset: auto 24px 18px; display: flex; justify-content: space-around; padding: 10px; border-radius: 999px; }
-  .tabs a { display: grid; justify-items: center; gap: 3px; padding: 6px 14px; border-radius: 999px; color: #312e81; font-size: 11px; font-weight: 700; text-decoration: none; }
-  .tabs a[aria-current] { background: rgb(49 46 129 / 0.12); }
+  .tabs a { display: grid; justify-items: center; gap: 3px; padding: 6px 14px; border-radius: 999px; color: #668f80; font-size: 11px; font-weight: 700; text-decoration: none; }
+  .tabs a[aria-current] { background: rgb(47 57 55 / 0.12); }
   .tabs svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 </style>
 <div class="feed"><div></div><div></div><div></div><div></div></div>
@@ -115,20 +115,20 @@ The **Glass** Sass mixin writes a frosted glass panel: a tint, a blur of whateve
 <Example caption="A menu over a feed, which is where dark glass belongs: the list has to stay readable while the page keeps showing through it. `$saturate` is nearly off, because lifting the colour of a photograph behind small text is what makes it hard to read.">
 ```scss
 .menu {
-  @include glass(22px, rgb(15 23 42 / 0.62), 1.1, rgb(148 163 184 / 0.32));
+  @include glass(22px, rgb(34 44 37 / 0.62), 1.1, rgb(191 193 164 / 0.32));
 }
 ```
 ```html
 <style>
-  body { min-height: 300px; margin: 0; padding: 16px; background: #f1f5f9; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; }
+  body { min-height: 300px; margin: 0; padding: 16px; background: #fafaf8; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #668f80; }
   .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .cards div { height: 132px; border-radius: 14px; background: linear-gradient(150deg, #fb7185, #f59e0b); }
-  .cards div:nth-child(2) { background: linear-gradient(150deg, #34d399, #06b6d4); }
-  .cards div:nth-child(3) { background: linear-gradient(150deg, #818cf8, #c084fc); }
-  .cards div:nth-child(4) { background: linear-gradient(150deg, #facc15, #fb923c); }
-  .menu { position: absolute; top: 44px; right: 30px; width: 210px; padding: 8px; border-radius: 16px; color: #e2e8f0; }
+  .cards div { height: 132px; border-radius: 14px; background: linear-gradient(150deg, #5bc0bb, #69995d); }
+  .cards div:nth-child(2) { background: linear-gradient(150deg, #69995d, #668f80); }
+  .cards div:nth-child(3) { background: linear-gradient(150deg, #5bc0bb, #dee0cd); }
+  .cards div:nth-child(4) { background: linear-gradient(150deg, #69995d, #bdc488); }
+  .menu { position: absolute; top: 44px; right: 30px; width: 210px; padding: 8px; border-radius: 16px; color: #f2f2eb; }
   .menu a { display: flex; justify-content: space-between; padding: 9px 12px; border-radius: 10px; color: inherit; font-size: 13px; font-weight: 600; text-decoration: none; }
-  .menu a[aria-current] { background: rgb(226 232 240 / 0.14); }
+  .menu a[aria-current] { background: rgb(242 242 235 / 0.14); }
 </style>
 <div class="cards"><div></div><div></div><div></div><div></div></div>
 <nav class="menu">
@@ -143,13 +143,13 @@ The **Glass** Sass mixin writes a frosted glass panel: a tint, a blur of whateve
 <Example caption="A widget on a wallpaper, the smallest useful piece of glass and the one most likely to be over a photograph. The blur is heavier than the panel is tall, which is what keeps a wallpaper from showing its edges through the tile.">
 ```scss
 .widget {
-  @include glass(28px, rgb(255 255 255 / 0.16), 150%, rgb(255 255 255 / 0.28), rgb(51 65 85 / 0.92));
+  @include glass(28px, rgb(255 255 255 / 0.16), 150%, rgb(255 255 255 / 0.28), rgb(47 57 55 / 0.92));
 }
 ```
 ```html
 <style>
-  body { min-height: 260px; display: grid; place-items: center; background: linear-gradient(200deg, #f97316, #db2777 40%, #4c1d95 75%, #0f172a); }
-  .widget { width: 200px; padding: 18px 20px; border-radius: 22px; color: #f8fafc; font: 14px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; display: grid; gap: 10px; }
+  body { min-height: 260px; display: grid; place-items: center; background: linear-gradient(200deg, #69995d, #668f80 40%, #2f3937 75%, #222c25); }
+  .widget { width: 200px; padding: 18px 20px; border-radius: 22px; color: #fafaf8; font: 14px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; display: grid; gap: 10px; }
   .widget__top { display: flex; justify-content: space-between; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.75; }
   .widget__temp { font-size: 44px; font-weight: 300; letter-spacing: -0.03em; }
   .widget__row { display: flex; justify-content: space-between; font-size: 12px; opacity: 0.85; }

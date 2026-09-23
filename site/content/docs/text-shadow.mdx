@@ -36,12 +36,12 @@ The **Text Shadow Sass mixin** writes one or more text shadows. Each one is a di
 <Example caption="A soft shadow under a heading. The three values are the direction, the colour and the distance, in that order.">
 ```scss
 .title {
-  @include text-shadow(bottom-right rgb(0 0 0 / 0.35) 6px);
+  @include text-shadow(bottom-right rgb(34 44 37 / 0.35) 6px);
 }
 ```
 ```html
 <style>
-  .title { margin: 0; font: 700 34px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+  .title { margin: 0; font: 700 34px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
 </style>
 <h2 class="title">Shadows, in one line</h2>
 ```
@@ -50,12 +50,12 @@ The **Text Shadow Sass mixin** writes one or more text shadows. Each one is a di
 <Example caption="A blur after the distance softens the edge. This is the everyday drop shadow for text over a busy background.">
 ```scss
 .title {
-  @include text-shadow(bottom rgb(0 0 0 / 0.55) 4px 8px);
+  @include text-shadow(bottom rgb(34 44 37 / 0.55) 4px 8px);
 }
 ```
 ```html
 <style>
-  .card { padding: 24px; border-radius: 10px; background: linear-gradient(135deg, #38bdf8, #a78bfa, #f472b6); }
+  .card { padding: 24px; border-radius: 10px; background: linear-gradient(135deg, #668f80, #5bc0bb, #668f80); }
   .title { margin: 0; font: 700 34px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; color: #fff; }
 </style>
 <div class="card"><h2 class="title">Readable over anything</h2></div>
@@ -64,14 +64,14 @@ The **Text Shadow Sass mixin** writes one or more text shadows. Each one is a di
 
 <Example caption="An angle reaches the directions the keywords do not. `0deg` is straight up and the angle turns clockwise, so `120deg` points down and to the right.">
 ```scss
-.a { @include text-shadow(0deg #f97316 8px); }
-.b { @include text-shadow(120deg #0ea5e9 8px); }
-.c { @include text-shadow(240deg #22c55e 8px); }
+.a { @include text-shadow(0deg #69995d 8px); }
+.b { @include text-shadow(120deg #668f80 8px); }
+.c { @include text-shadow(240deg #69995d 8px); }
 ```
 ```html
 <style>
   .angles { display: flex; flex-wrap: wrap; gap: 16px; }
-  .angles p { margin: 0; padding: 14px 22px; border-radius: 10px; background: #f4f4f5; font: 700 30px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+  .angles p { margin: 0; padding: 14px 22px; border-radius: 10px; background: #fafaf8; font: 700 30px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
 </style>
 <div class="angles">
   <p class="a">0deg</p>
@@ -84,12 +84,12 @@ The **Text Shadow Sass mixin** writes one or more text shadows. Each one is a di
 <Example caption="`true` at the end of a group fills the gap between the text and the shadow, one layer per step. That is a long shadow, and it takes one argument rather than a loop.">
 ```scss
 .title {
-  @include text-shadow(bottom-right #fbbf24 28px true);
+  @include text-shadow(bottom-right #69995d 28px true);
 }
 ```
 ```html
 <style>
-  .sheet { padding: 20px 24px 36px; border-radius: 10px; background: #1f2937; }
+  .sheet { padding: 20px 24px 36px; border-radius: 10px; background: #2f3937; }
   .title { margin: 0; font: 800 44px/1.1 Inter, ui-sans-serif, system-ui, sans-serif; color: #fff; }
 </style>
 <div class="sheet"><h2 class="title">Long shadow</h2></div>
@@ -99,12 +99,12 @@ The **Text Shadow Sass mixin** writes one or more text shadows. Each one is a di
 <Example caption="The same long shadow written in `rem`, with `$step` setting how fine the layers are. Without `$step` a filled shadow takes one step per unit, which in `rem` would be three coarse layers.">
 ```scss
 .title {
-  @include text-shadow(bottom-right rgb(37 99 235 / 0.65) 3rem true, $step: 0.125rem);
+  @include text-shadow(bottom-right rgb(102 143 128 / 0.65) 3rem true, $step: 0.125rem);
 }
 ```
 ```html
 <style>
-  .title { margin: 0; font: 800 44px/1.1 Inter, ui-sans-serif, system-ui, sans-serif; color: #1d4ed8; }
+  .title { margin: 0; font: 800 44px/1.1 Inter, ui-sans-serif, system-ui, sans-serif; color: #668f80; }
 </style>
 <h2 class="title">Fine steps</h2>
 ```
@@ -114,16 +114,16 @@ The **Text Shadow Sass mixin** writes one or more text shadows. Each one is a di
 ```scss
 .title {
   @include text-shadow(
-    top #18181b 1px,
-    right #18181b 1px,
-    bottom #18181b 1px,
-    left #18181b 1px
+    top #222c25 1px,
+    right #222c25 1px,
+    bottom #222c25 1px,
+    left #222c25 1px
   );
 }
 ```
 ```html
 <style>
-  .photo { padding: 26px 24px; border-radius: 10px; background: linear-gradient(120deg, #fde68a, #fca5a5, #c7d2fe); }
+  .photo { padding: 26px 24px; border-radius: 10px; background: linear-gradient(120deg, #eefa92, #f7ec59, #5bc0bb); }
   .title { margin: 0; font: 700 34px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; color: #fff; }
 </style>
 <div class="photo"><h2 class="title">Outlined, not stroked</h2></div>
@@ -134,16 +134,16 @@ The **Text Shadow Sass mixin** writes one or more text shadows. Each one is a di
 ```scss
 .title {
   @include text-shadow(
-    top #f0abfc 0px 6px,
-    top #e879f9 0px 18px,
-    top #a21caf 0px 36px
+    top #5bc0bb 0px 6px,
+    top #5bc0bb 0px 18px,
+    top #2f3937 0px 36px
   );
 }
 ```
 ```html
 <style>
-  .night { padding: 28px 24px; border-radius: 10px; background: #0b0713; }
-  .title { margin: 0; font: 700 34px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; color: #fdf4ff; }
+  .night { padding: 28px 24px; border-radius: 10px; background: #222c25; }
+  .title { margin: 0; font: 700 34px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; color: #fafaf8; }
 </style>
 <div class="night"><h2 class="title">Open all night</h2></div>
 ```
@@ -154,23 +154,23 @@ The **Text Shadow Sass mixin** writes one or more text shadows. Each one is a di
 .title {
   @include text-shadow(
     top rgb(255 255 255 / 0.7) 1px,
-    bottom rgb(0 0 0 / 0.5) 1px
+    bottom rgb(34 44 37 / 0.5) 1px
   );
 }
 ```
 ```html
 <style>
-  .panel { padding: 26px 24px; border-radius: 10px; background: #cbd5e1; }
-  .title { margin: 0; font: 700 34px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; color: #64748b; }
+  .panel { padding: 26px 24px; border-radius: 10px; background: #dee0cd; }
+  .title { margin: 0; font: 700 34px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; color: #657167; }
 </style>
 <div class="panel"><h2 class="title">Letterpress</h2></div>
 ```
 </Example>
 
 <Example caption="The distance and the colour read from custom properties, so one rule serves every card and the markup sets the depth. The mixin writes the offsets as a `calc()` the browser resolves, which all three engines do." listing="<div class=&quot;cards&quot;>
-&#32;&#32;<div style=&quot;--shadow-color: #fca5a5; --shadow-size: 3px&quot;><p class=&quot;card-title&quot;>Near</p></div>
-&#32;&#32;<div style=&quot;--shadow-color: #93c5fd; --shadow-size: 6px&quot;><p class=&quot;card-title&quot;>Mid</p></div>
-&#32;&#32;<div style=&quot;--shadow-color: #86efac; --shadow-size: 10px&quot;><p class=&quot;card-title&quot;>Far</p></div>
+&#32;&#32;<div style=&quot;--shadow-color: #f7ec59; --shadow-size: 3px&quot;><p class=&quot;card-title&quot;>Near</p></div>
+&#32;&#32;<div style=&quot;--shadow-color: #5bc0bb; --shadow-size: 6px&quot;><p class=&quot;card-title&quot;>Mid</p></div>
+&#32;&#32;<div style=&quot;--shadow-color: #bdc488; --shadow-size: 10px&quot;><p class=&quot;card-title&quot;>Far</p></div>
 </div>">
 ```scss
 .card-title {
@@ -180,29 +180,29 @@ The **Text Shadow Sass mixin** writes one or more text shadows. Each one is a di
 ```html
 <style>
   .cards { display: flex; flex-wrap: wrap; gap: 20px; }
-  .cards div { padding: 16px 20px; border-radius: 10px; background: #f4f4f5; }
-  .card-title { margin: 0; font: 800 28px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+  .cards div { padding: 16px 20px; border-radius: 10px; background: #fafaf8; }
+  .card-title { margin: 0; font: 800 28px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
 </style>
 <div class="cards">
-  <div style="--shadow-color: #fca5a5; --shadow-size: 3px"><p class="card-title">Near</p></div>
-  <div style="--shadow-color: #93c5fd; --shadow-size: 6px"><p class="card-title">Mid</p></div>
-  <div style="--shadow-color: #86efac; --shadow-size: 10px"><p class="card-title">Far</p></div>
+  <div style="--shadow-color: #f7ec59; --shadow-size: 3px"><p class="card-title">Near</p></div>
+  <div style="--shadow-color: #5bc0bb; --shadow-size: 6px"><p class="card-title">Mid</p></div>
+  <div style="--shadow-color: #bdc488; --shadow-size: 10px"><p class="card-title">Far</p></div>
 </div>
 ```
 </Example>
 
-<Example caption="A chromatic split, the look borrowed from 3D glasses: one cyan layer to the left and one magenta to the right, both at a small distance. The text stays black, so it reads at any size.">
+<Example caption="A chromatic split, the look borrowed from 3D glasses: one cool layer to the left and one warm one to the right, both at a small distance. The text stays black, so it reads at any size.">
 ```scss
 .title {
   @include text-shadow(
-    left rgb(34 211 238 / 0.9) 3px,
-    right rgb(244 63 94 / 0.9) 3px
+    left rgb(102 143 128 / 0.9) 3px,
+    right rgb(237 106 90 / 0.9) 3px
   );
 }
 ```
 ```html
 <style>
-  .title { margin: 0; font: 700 34px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; letter-spacing: -0.01em; }
+  .title { margin: 0; font: 700 34px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; letter-spacing: -0.01em; }
 </style>
 <h2 class="title">Chromatic</h2>
 ```
@@ -214,14 +214,14 @@ The **Text Shadow Sass mixin** writes one or more text shadows. Each one is a di
   @include text-shadow(
     top #fff 2px, top-right #fff 2px, right #fff 2px, bottom-right #fff 2px,
     bottom #fff 2px, bottom-left #fff 2px, left #fff 2px, top-left #fff 2px,
-    bottom rgb(15 23 42 / 0.35) 4px 6px
+    bottom rgb(34 44 37 / 0.35) 4px 6px
   );
 }
 ```
 ```html
 <style>
-  .board { padding: 26px 24px; border-radius: 10px; background: repeating-linear-gradient(45deg, #fde68a 0 12px, #fcd34d 12px 24px); }
-  .sticker { margin: 0; font: 800 40px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; color: #db2777; }
+  .board { padding: 26px 24px; border-radius: 10px; background: repeating-linear-gradient(45deg, #eefa92 0 12px, #bdc488 12px 24px); }
+  .sticker { margin: 0; font: 800 40px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; color: #db504a; }
 </style>
 <div class="board"><h2 class="sticker">Sticker</h2></div>
 ```
@@ -231,15 +231,15 @@ The **Text Shadow Sass mixin** writes one or more text shadows. Each one is a di
 ```scss
 .title {
   @include text-shadow(
-    bottom-right #1e3a8a 14px true,
-    bottom rgb(15 23 42 / 0.45) 18px 12px
+    bottom-right #2f3937 14px true,
+    bottom rgb(34 44 37 / 0.45) 18px 12px
   );
 }
 ```
 ```html
 <style>
-  .stage { padding: 24px 24px 40px; border-radius: 10px; background: #dbeafe; }
-  .title { margin: 0; font: 800 46px/1.1 Inter, ui-sans-serif, system-ui, sans-serif; color: #3b82f6; }
+  .stage { padding: 24px 24px 40px; border-radius: 10px; background: #f2f2eb; }
+  .title { margin: 0; font: 800 46px/1.1 Inter, ui-sans-serif, system-ui, sans-serif; color: #668f80; }
 </style>
 <div class="stage"><h2 class="title">Extruded</h2></div>
 ```
@@ -251,19 +251,19 @@ The **Text Shadow Sass mixin** writes one or more text shadows. Each one is a di
   @include text-shadow(top currentColor 0px 14px);
 }
 
-.glow--pink { color: #f0abfc; }
-.glow--cyan { color: #67e8f9; }
-.glow--lime { color: #bef264; }
+.glow--teal { color: #5bc0bb; }
+.glow--lime { color: #eefa92; }
+.glow--corn { color: #f7ec59; }
 ```
 ```html
 <style>
-  .neon-row { display: flex; flex-wrap: wrap; gap: 24px; padding: 24px; border-radius: 10px; background: #09090b; }
+  .neon-row { display: flex; flex-wrap: wrap; gap: 24px; padding: 24px; border-radius: 10px; background: #222c25; }
   .glow { margin: 0; font: 700 30px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; }
 </style>
 <div class="neon-row">
-  <p class="glow glow--pink">Pink</p>
-  <p class="glow glow--cyan">Cyan</p>
+  <p class="glow glow--teal">Teal</p>
   <p class="glow glow--lime">Lime</p>
+  <p class="glow glow--corn">Corn</p>
 </div>
 ```
 </Example>
@@ -272,7 +272,7 @@ The **Text Shadow Sass mixin** writes one or more text shadows. Each one is a di
 ```scss
 .title {
   @include text-shadow(
-    bottom-right light-dark(rgb(15 23 42 / 0.3), rgb(56 189 248 / 0.55)) 5px
+    bottom-right light-dark(rgb(34 44 37 / 0.3), rgb(102 143 128 / 0.55)) 5px
   );
 }
 ```
@@ -280,9 +280,9 @@ The **Text Shadow Sass mixin** writes one or more text shadows. Each one is a di
 <style>
   .schemes { display: flex; flex-wrap: wrap; gap: 16px; }
   .schemes div { flex: 1 1 220px; padding: 20px; border-radius: 10px; }
-  .schemes .light { color-scheme: light; background: #f8fafc; }
-  .schemes .dark { color-scheme: dark; background: #0f172a; }
-  .title { margin: 0; font: 700 28px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; color: light-dark(#0f172a, #e2e8f0); }
+  .schemes .light { color-scheme: light; background: #fafaf8; }
+  .schemes .dark { color-scheme: dark; background: #222c25; }
+  .title { margin: 0; font: 700 28px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; color: light-dark(#222c25, #f2f2eb); }
 </style>
 <div class="schemes">
   <div class="light"><h2 class="title">Light</h2></div>
@@ -294,13 +294,13 @@ The **Text Shadow Sass mixin** writes one or more text shadows. Each one is a di
 <Example caption="A pop art headline: a hard offset in a mixed colour, with no blur at all. `color-mix()` reaches the colour slot untouched, so the shadow can be derived from the brand colour rather than typed again.">
 ```scss
 .title {
-  @include text-shadow(135deg color-mix(in oklab, #7c3aed 70%, black) 8px);
+  @include text-shadow(135deg color-mix(in oklab, #668f80 70%, black) 8px);
 }
 ```
 ```html
 <style>
-  .pop { padding: 24px; border-radius: 10px; background: #fde68a; }
-  .title { margin: 0; font: 800 44px/1.1 Inter, ui-sans-serif, system-ui, sans-serif; color: #7c3aed; text-transform: uppercase; letter-spacing: -0.02em; }
+  .pop { padding: 24px; border-radius: 10px; background: #eefa92; }
+  .title { margin: 0; font: 800 44px/1.1 Inter, ui-sans-serif, system-ui, sans-serif; color: #668f80; text-transform: uppercase; letter-spacing: -0.02em; }
 </style>
 <div class="pop"><h2 class="title">Pop</h2></div>
 ```
@@ -313,7 +313,7 @@ A `text-shadow` transitions from one layer to another when both states have the 
 <Example caption="A navigation link whose shadow drops and softens on hover. One layer in both states, so the shadow travels.">
 ```scss
 .nav a {
-  @include text-shadow(bottom rgb(15 23 42 / 0.25) 2px 2px);
+  @include text-shadow(bottom rgb(34 44 37 / 0.25) 2px 2px);
 
   @include motion-safe {
     transition: text-shadow 0.25s ease;
@@ -321,14 +321,14 @@ A `text-shadow` transitions from one layer to another when both states have the 
 
   &:hover,
   &:focus-visible {
-    @include text-shadow(bottom rgb(37 99 235 / 0.45) 8px 10px);
+    @include text-shadow(bottom rgb(102 143 128 / 0.45) 8px 10px);
   }
 }
 ```
 ```html
 <style>
-  .nav { display: flex; flex-wrap: wrap; gap: 28px; padding: 18px 20px; border-radius: 10px; background: #f8fafc; }
-  .nav a { color: #0f172a; font: 700 22px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; text-decoration: none; }
+  .nav { display: flex; flex-wrap: wrap; gap: 28px; padding: 18px 20px; border-radius: 10px; background: #fafaf8; }
+  .nav a { color: #668f80; font: 700 22px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; text-decoration: none; }
 </style>
 <nav class="nav">
   <a href="#work">Work</a>
@@ -343,9 +343,9 @@ A `text-shadow` transitions from one layer to another when both states have the 
 ```scss
 .sign {
   @include text-shadow(
-    top #f0abfc 0px 4px,
-    top #e879f9 0px 10px,
-    top #a21caf 0px 20px
+    top #5bc0bb 0px 4px,
+    top #5bc0bb 0px 10px,
+    top #2f3937 0px 20px
   );
 
   @include motion-safe {
@@ -354,17 +354,17 @@ A `text-shadow` transitions from one layer to another when both states have the 
 
   &:hover {
     @include text-shadow(
-      top #f0abfc 0px 10px,
-      top #e879f9 0px 26px,
-      top #a21caf 0px 52px
+      top #5bc0bb 0px 10px,
+      top #5bc0bb 0px 26px,
+      top #2f3937 0px 52px
     );
   }
 }
 ```
 ```html
 <style>
-  .night { padding: 28px 24px; border-radius: 10px; background: #09090b; }
-  .sign { margin: 0; font: 800 40px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; color: #fdf4ff; cursor: pointer; }
+  .night { padding: 28px 24px; border-radius: 10px; background: #222c25; }
+  .sign { margin: 0; font: 800 40px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; color: #fafaf8; cursor: pointer; }
 </style>
 <div class="night"><h2 class="sign">Hover me</h2></div>
 ```
@@ -374,8 +374,8 @@ A `text-shadow` transitions from one layer to another when both states have the 
 ```scss
 .glitch {
   @include text-shadow(
-    left rgb(34 211 238 / 0.9) 0px,
-    right rgb(244 63 94 / 0.9) 0px
+    left rgb(102 143 128 / 0.9) 0px,
+    right rgb(237 106 90 / 0.9) 0px
   );
 
   @include motion-safe {
@@ -384,15 +384,15 @@ A `text-shadow` transitions from one layer to another when both states have the 
 
   &:hover {
     @include text-shadow(
-      left rgb(34 211 238 / 0.9) 6px,
-      right rgb(244 63 94 / 0.9) 6px
+      left rgb(102 143 128 / 0.9) 6px,
+      right rgb(237 106 90 / 0.9) 6px
     );
   }
 }
 ```
 ```html
 <style>
-  .glitch { margin: 0; font: 800 40px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; cursor: pointer; }
+  .glitch { margin: 0; font: 800 40px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; color: #668f80; cursor: pointer; }
 </style>
 <h2 class="glitch">Hover me</h2>
 ```
@@ -401,20 +401,20 @@ A `text-shadow` transitions from one layer to another when both states have the 
 <Example caption="A long shadow that grows when the card is hovered, at the same `$step` so both states hold the same number of layers. Change the distance without the step and the layer counts differ, which switches rather than grows.">
 ```scss
 .promo {
-  @include text-shadow(bottom-right #fbbf24 12px true, $step: 3px);
+  @include text-shadow(bottom-right #69995d 12px true, $step: 3px);
 
   @include motion-safe {
     transition: text-shadow 0.3s ease;
   }
 
   &:hover {
-    @include text-shadow(bottom-right #fbbf24 24px true, $step: 6px);
+    @include text-shadow(bottom-right #69995d 24px true, $step: 6px);
   }
 }
 ```
 ```html
 <style>
-  .stage { padding: 24px 24px 40px; border-radius: 10px; background: #1f2937; cursor: pointer; }
+  .stage { padding: 24px 24px 40px; border-radius: 10px; background: #2f3937; cursor: pointer; }
   .promo { margin: 0; font: 800 42px/1.1 Inter, ui-sans-serif, system-ui, sans-serif; color: #fff; }
 </style>
 <div class="stage"><h2 class="promo">Hover me</h2></div>

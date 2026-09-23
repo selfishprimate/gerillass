@@ -37,15 +37,15 @@ The **Escape to Parent** Sass mixin writes the rule again with another selector 
 ```scss
 .panel {
   @include escape-to-parent(".theme-dark") {
-    background: #0f172a;
-    border-color: #1e293b;
+    background: #222c25;
+    border-color: #2f3937;
   }
 
   .price {
-    color: #0f172a;
+    color: #668f80;
 
     @include escape-to-parent(".theme-dark") {
-      color: #f8fafc;
+      color: #fafaf8;
     }
   }
 }
@@ -53,7 +53,7 @@ The **Escape to Parent** Sass mixin writes the rule again with another selector 
 ```html
 <style>
   .demo-row { display: flex; gap: 16px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
-  .panel { flex: 1; padding: 24px; border: 1px solid #e2e8f0; border-radius: 10px; background: #ffffff; text-align: center; }
+  .panel { flex: 1; padding: 24px; border: 1px solid #f2f2eb; border-radius: 10px; background: #ffffff; text-align: center; }
   .price { font-size: 24px; font-weight: 700; }
 </style>
 <div class="demo-row">
@@ -82,7 +82,7 @@ The **Escape to Parent** Sass mixin writes the rule again with another selector 
 ```html
 <style>
   .demo-row { display: flex; gap: 16px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
-  .menu { flex: 1; padding: 20px; border-radius: 10px; background: #f1f5f9; text-align: center; }
+  .menu { flex: 1; padding: 20px; border-radius: 10px; background: #fafaf8; text-align: center; }
 </style>
 <div class="demo-row">
   <nav class="menu"><span class="item">Settings</span></nav>
@@ -95,19 +95,19 @@ The **Escape to Parent** Sass mixin writes the rule again with another selector 
 <div class=&quot;card theme-dim&quot;>Dim</div>">
 ```scss
 .card {
-  color: #0f172a;
+  color: #668f80;
 
   @include escape-to-parent(".theme-dark, .theme-dim") {
-    color: #f8fafc;
+    color: #fafaf8;
   }
 }
 ```
 ```html
 <style>
   .demo-row { display: flex; gap: 16px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; font-weight: 600; }
-  .card { flex: 1; padding: 24px; border-radius: 10px; text-align: center; background: #e2e8f0; }
-  .theme-dark { background: #0f172a; }
-  .theme-dim { background: #475569; }
+  .card { flex: 1; padding: 24px; border-radius: 10px; text-align: center; background: #f2f2eb; }
+  .theme-dark { background: #222c25; }
+  .theme-dim { background: #657167; }
 </style>
 <div class="demo-row">
   <div class="card theme-dark">Dark</div>

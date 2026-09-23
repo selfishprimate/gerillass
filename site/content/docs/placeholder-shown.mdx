@@ -21,14 +21,14 @@ The **Placeholder Shown Sass mixin** helps you style an `<input>` or `<textarea>
 input {
   @include placeholder-shown {
     border-style: dashed;
-    background-color: #f8fafc;
+    background-color: #fafaf8;
   }
 }
 ```
 ```html
 <style>
-  body { background: #fff; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; display: grid; gap: 10px; max-width: 340px; }
-  input { width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 12px; font: inherit; color: inherit; }
+  body { background: #fff; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #668f80; display: grid; gap: 10px; max-width: 340px; }
+  input { width: 100%; padding: 12px 14px; border: 1px solid #dee0cd; border-radius: 12px; font: inherit; color: inherit; }
 </style>
 <input type="text" placeholder="Empty, so the outline is dashed" />
 <input type="text" value="Filled in, so it is not" />
@@ -39,13 +39,13 @@ input {
 ```scss
 @include placeholder-shown {
   border-style: dashed;
-  background-color: #f8fafc;
+  background-color: #fafaf8;
 }
 ```
 ```html
 <style>
-  body { background: #fff; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #0f172a; display: grid; gap: 10px; max-width: 340px; }
-  input, textarea { width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 12px; font: inherit; color: inherit; }
+  body { background: #fff; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #668f80; display: grid; gap: 10px; max-width: 340px; }
+  input, textarea { width: 100%; padding: 12px 14px; border: 1px solid #dee0cd; border-radius: 12px; font: inherit; color: inherit; }
 </style>
 <input type="text" placeholder="Empty" />
 <textarea placeholder="Also empty" rows="2"></textarea>

@@ -347,8 +347,8 @@ to count:
 ```html
 <style>
   .grid { display: flex; gap: 10px; font: 14px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; }
-  .note { padding: 12px; border-radius: 8px; background: #fef3c7; color: #92400e; }
-  .card { flex: 1; padding: 12px; border-radius: 8px; background: #0f766e; color: #ecfeff; text-align: center; font-weight: 700; }
+  .note { padding: 12px; border-radius: 8px; background: #eefa92; color: #69995d; }
+  .card { flex: 1; padding: 12px; border-radius: 8px; background: #2f3937; color: #fafaf8; text-align: center; font-weight: 700; }
 </style>
 <div class="grid">
   <div class="note">On sale this week</div>
@@ -371,7 +371,7 @@ to count:
     &::after {
       content: "/";
       padding: 0 8px;
-      color: #94a3b8;
+      color: #657167;
     }
   }
 }
@@ -379,8 +379,8 @@ to count:
 ```html
 <style>
   .crumbs { display: flex; align-items: center; font: 14px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; }
-  .home { padding-right: 8px; color: #94a3b8; }
-  .crumb { color: #0f172a; text-decoration: none; }
+  .home { padding-right: 8px; color: #657167; }
+  .crumb { color: #668f80; text-decoration: none; }
 </style>
 <nav class="crumbs">
   <span class="home">⌂</span>
@@ -400,7 +400,7 @@ to count:
 ```scss
 .row {
   @include except(1, -1, $of: ".row") {
-    background: #f8fafc;
+    background: #fafaf8;
   }
 }
 ```
@@ -408,8 +408,8 @@ to count:
 <style>
   .sheet { width: 100%; border-collapse: collapse; font: 14px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; }
   .sheet td { padding: 10px 12px; }
-  .head { font-weight: 700; color: #475569; }
-  .total { font-weight: 700; border-top: 2px solid #0f172a; }
+  .head { font-weight: 700; color: #657167; }
+  .total { font-weight: 700; border-top: 2px solid #222c25; }
 </style>
 <table class="sheet">
   <tr class="row head"><td>Item</td><td>Amount</td></tr>

@@ -47,7 +47,7 @@ A browser draws an `input` whose `type` it does not recognise as a text field, a
   width: 100%;
   height: 38px;
   padding: 0 12px;
-  border: 1px solid #d4d4d8;
+  border: 1px solid #dee0cd;
   border-radius: 6px;
   background: #fff;
   font: inherit;
@@ -58,7 +58,7 @@ select {
   width: 100%;
   height: 38px;
   padding: 0 8px;
-  border: 1px solid #d4d4d8;
+  border: 1px solid #dee0cd;
   border-radius: 6px;
   background: #fff;
   font: inherit;
@@ -66,7 +66,7 @@ select {
 ```
 ```html
 <style>
-  .form { display: grid; gap: 12px; max-width: 360px; font: 14px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+  .form { display: grid; gap: 12px; max-width: 360px; font: 14px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
   .field { display: grid; gap: 6px; }
   .field > span { font-weight: 500; }
   textarea { height: 76px; padding-top: 8px; resize: vertical; }
@@ -79,7 +79,7 @@ select {
   <label class="field"><span>Start date</span><input type="date" value="2026-09-17"></label>
   <label class="field"><span>Plan</span><select><option>Pro</option><option>Team</option></select></label>
   <label class="field"><span>Message</span><textarea placeholder="Anything we should know?"></textarea></label>
-  <label class="inline"><input type="color" value="#2563eb"> Accent colour</label>
+  <label class="inline"><input type="color" value="#668f80"> Accent colour</label>
   <label class="inline"><input type="checkbox" checked> Send me product news</label>
 </form>
 ```
@@ -91,15 +91,15 @@ select {
   width: 100%;
   height: 38px;
   padding: 0 12px;
-  border: 1px solid #d4d4d8;
+  border: 1px solid #dee0cd;
   border-radius: 6px;
   font: inherit;
-  @include focus-ring(2px, 2px, #2563eb);
+  @include focus-ring(2px, 2px, #668f80);
 }
 ```
 ```html
 <style>
-  .form { display: grid; gap: 12px; max-width: 360px; font: 14px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+  .form { display: grid; gap: 12px; max-width: 360px; font: 14px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
   .field { display: grid; gap: 6px; }
   .field > span { font-weight: 500; }
 </style>
@@ -116,19 +116,19 @@ select {
   width: 100%;
   height: 38px;
   padding: 0 12px;
-  border: 1px solid #d4d4d8;
+  border: 1px solid #dee0cd;
   border-radius: 6px;
   font: inherit;
 }
 
 @include all-text-inputs(user-invalid) {
-  border-color: #dc2626;
-  background: #fef2f2;
+  border-color: #db504a;
+  background: #fafaf8;
 }
 ```
 ```html
 <style>
-  .form { display: grid; gap: 12px; max-width: 360px; font: 14px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+  .form { display: grid; gap: 12px; max-width: 360px; font: 14px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
   .field { display: grid; gap: 6px; }
   .field > span { font-weight: 500; }
 </style>
@@ -147,17 +147,17 @@ select {
 <Example caption="Disabled fields, dimmed so they read as unavailable, with a cursor that says so.">
 ```scss
 @include all-text-inputs(disabled) {
-  background: #f4f4f5;
-  color: #a1a1aa;
+  background: #fafaf8;
+  color: #657167;
   cursor: not-allowed;
 }
 ```
 ```html
 <style>
-  .form { display: grid; gap: 12px; max-width: 360px; font: 14px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+  .form { display: grid; gap: 12px; max-width: 360px; font: 14px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
   .field { display: grid; gap: 6px; }
   .field > span { font-weight: 500; }
-  .field input { width: 100%; height: 38px; padding: 0 12px; border: 1px solid #d4d4d8; border-radius: 6px; font: inherit; }
+  .field input { width: 100%; height: 38px; padding: 0 12px; border: 1px solid #dee0cd; border-radius: 6px; font: inherit; }
 </style>
 <form class="form" onsubmit="return false">
   <label class="field"><span>Account ID</span><input value="acc_48213" disabled></label>
@@ -181,10 +181,10 @@ select {
 ```
 ```html
 <style>
-  .search-bar { display: flex; align-items: center; gap: 8px; max-width: 360px; height: 40px; padding: 0 14px; border-radius: 999px; background: #f4f4f5; font: 14px/1 Inter, ui-sans-serif, system-ui, sans-serif; color: #18181b; }
+  .search-bar { display: flex; align-items: center; gap: 8px; max-width: 360px; height: 40px; padding: 0 14px; border-radius: 999px; background: #fafaf8; font: 14px/1 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
   .below { margin-top: 12px; }
 </style>
-<div class="search-bar"><span aria-hidden="true">&#128269;</span><input type="search" placeholder="Search"></div>
+<div class="search-bar"><span aria-hidden="true">&#2f3937;</span><input type="search" placeholder="Search"></div>
 <input class="below" type="text" placeholder="Outside the bar, so untouched">
 ```
 </Example>

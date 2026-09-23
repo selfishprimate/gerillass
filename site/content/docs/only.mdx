@@ -319,15 +319,15 @@ Firefox 156 and Safari 26.6.2, all three the same.
 ```scss
 .card {
   @include only(1, $of: ".card") {
-    outline: 2px solid #0f766e;
+    outline: 2px solid #2f3937;
   }
 }
 ```
 ```html
 <style>
   .grid { display: flex; gap: 10px; font: 14px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; }
-  .note { padding: 12px; border-radius: 8px; background: #fef3c7; color: #92400e; }
-  .card { flex: 1; padding: 12px; border-radius: 8px; background: #e2e8f0; text-align: center; font-weight: 700; }
+  .note { padding: 12px; border-radius: 8px; background: #eefa92; color: #69995d; }
+  .card { flex: 1; padding: 12px; border-radius: 8px; background: #f2f2eb; text-align: center; font-weight: 700; }
 </style>
 <div class="grid">
   <div class="note">On sale this week</div>
@@ -347,8 +347,8 @@ Firefox 156 and Safari 26.6.2, all three the same.
 ```scss
 .plan {
   @include only(2, $of: ".plan") {
-    background: #0f172a;
-    color: #f8fafc;
+    background: #222c25;
+    color: #fafaf8;
     transform: scale(1.06);
   }
 }
@@ -356,8 +356,8 @@ Firefox 156 and Safari 26.6.2, all three the same.
 ```html
 <style>
   .plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; font: 14px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; }
-  .plans h4 { grid-column: 1 / -1; margin: 0; font-size: 15px; color: #475569; }
-  .plan { padding: 18px 12px; border-radius: 10px; background: #e2e8f0; text-align: center; font-weight: 700; color: #0f172a; }
+  .plans h4 { grid-column: 1 / -1; margin: 0; font-size: 15px; color: #657167; }
+  .plan { padding: 18px 12px; border-radius: 10px; background: #f2f2eb; text-align: center; font-weight: 700; color: #668f80; }
 </style>
 <div class="plans">
   <h4>Choose a plan</h4>
@@ -377,18 +377,18 @@ Firefox 156 and Safari 26.6.2, all three the same.
 ```scss
 .task {
   @include only(odd, $of: "li.done") {
-    background: #dcfce7;
+    background: #f2f2eb;
   }
 
   @include only(last, $of: "li.done") {
-    border-left: 3px solid #16a34a;
+    border-left: 3px solid #69995d;
   }
 }
 ```
 ```html
 <style>
   .tasks { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; font: 14px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; }
-  .task { padding: 10px 12px; border-radius: 8px; background: #f1f5f9; color: #0f172a; }
+  .task { padding: 10px 12px; border-radius: 8px; background: #fafaf8; color: #668f80; }
 </style>
 <ul class="tasks" role="list">
   <li class="task done">Write the brief</li>
