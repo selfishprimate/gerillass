@@ -57,7 +57,7 @@ The **Adaptive Sass mixin** gives you the fastest and most consistent way to app
 ```
 </Example>
 
-<Example resizable caption="A gutter in any length unit. `px`, `em`, `rem` and percentages all work, and the gutter is what keeps the text off the edge of a phone: drag the box narrow to see how little room that leaves." >
+<Example resizable caption="A gutter in any length unit. `px`, `em`, `rem` and percentages all work. It is subtracted from the maximum width rather than added as padding, so it is what keeps the container off the edge of the screen at a breakpoint: at exactly 768 this one is 768 minus two gutters wide, and below `small` there is no maximum, so the container fills the screen whatever the gutter says." >
 ```scss
 .main-container{
   @include adaptive(2em);
@@ -73,6 +73,33 @@ The **Adaptive Sass mixin** gives you the fastest and most consistent way to app
 <div class="main-container">
   <h3>A gutter of 2em</h3>
   <p>On a narrow screen the container keeps this much room from each edge, which is what stops text touching the glass.</p>
+</div>
+```
+</Example>
+
+<Example resizable caption="A gutter of `0` is a gutter: nothing is set aside at the sides, so the container is exactly the breakpoint wide and a band inside it reaches both of its edges. Below `small` there is no maximum at all and it fills the screen, which is what a full width header wants. It is written as `0px`, because a bare zero inside the `calc()` is dropped and the `max-width` with it." >
+```scss
+.main-container{
+  @include adaptive(0);
+}
+```
+```html
+<style>
+  body { margin: 0; padding: 0; background: #dee0cd; font: 14px/1.6 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
+  .main-container { background: #fafaf8; }
+  .band { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 20px; background: #2f3937; color: #fafaf8; }
+  .band b { font: 700 16px Inter, ui-sans-serif, system-ui, sans-serif; }
+  .band span { font-size: 13px; color: #dee0cd; }
+  .text { padding: 18px 20px; }
+  .text h3 { margin: 0 0 6px; font: 700 18px Inter, ui-sans-serif, system-ui, sans-serif; }
+  .text p { margin: 0; color: #657167; }
+</style>
+<div class="main-container">
+  <div class="band"><b>Sold out</b><span>Next show on Friday</span></div>
+  <div class="text">
+    <h3>Edge to edge</h3>
+    <p>The band above reaches both sides of the container, and the container is the breakpoint's own width: with a gutter it would stop 30px short of each.</p>
+  </div>
 </div>
 ```
 </Example>
