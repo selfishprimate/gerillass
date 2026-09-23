@@ -19,10 +19,15 @@ export const SETTLE = {
 export const LEAVE = { duration: 0.18, ease: "easeIn" };
 
 /*
-  A page used to rise a little as it arrived, on these same curves. It is gone:
-  starting the content at nothing and springing it in reads as a blink on a
-  page somebody opened to read. See components/PageContent.
+  A page arriving. Opacity only, from most of the way there, over less than a
+  fifth of a second: a page rising from nothing on the site's own spring was
+  measured as a blink rather than as an arrival, which is what components/
+  PageContent has the long version of.
 */
+export const PAGE_MOTION = {
+  arriving: { opacity: 0.6 },
+  here: { opacity: 1, transition: { duration: 0.18, ease: "easeOut" } },
+};
 
 /*
   The dimmed page behind a dialog. Opacity only: it covers the whole viewport,

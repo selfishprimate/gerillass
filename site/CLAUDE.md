@@ -623,18 +623,25 @@ one reported "An internal error occurred" and nothing else:
 
 It currently holds at 77 member pages for 77 members, one to one, with four guides beside them. `clearfix` was removed in 4.0.0 and its page went with it, with `/docs/clearfix` redirected in `public/_redirects`.
 
-### A page does not animate as it arrives
+### A page fades in, and never from nothing
 
-It used to: `components/PageContent` started each new page at `opacity: 0`, ten
-pixels down, and sprang it into place, so that the part of the window which had
-changed was the part that moved. On the site that reads as a blink -- the page
-you asked for is not there for a moment and then arrives -- and it went on
-23 September 2026. `PageContent` is a plain `<main>` now, with no `key`, so
-React updates the element in place: measured with a MutationObserver over a
-navigation, the element is never removed and added, and `main` stays at
-`opacity: 1` throughout. The movement language in `animation.js` is still there
-for the playground window, the palette and the scrim, which are objects
-arriving over the site rather than the site itself.
+`components/PageContent` is the `<main>` element itself, keyed on the path, and
+framer fades it from `opacity: 0.6` to 1 over 0.18s with no movement at all.
+The number is the whole point. It started at `opacity: 0`, ten pixels down, on
+the site's own spring, and that reads as a blink rather than as an arrival:
+the content of the page somebody asked for is missing for a moment. Measured
+30ms after a click on a sidebar link, `main` computed to `opacity: 0`.
+
+**The first page of a document is not faded**, guarded by a module variable in
+that file. `initial` is written into the markup by the prerender, so without
+the guard all 88 built files carried `style="opacity:0.6"` and anybody without
+JavaScript read a dimmed page. It was caught in the built output and is worth
+checking there after any change to this: `grep -o '<main[^>]*>' site/dist/docs/counter.html`.
+
+What could not be measured here is the fade finishing: framer drives it with
+`requestAnimationFrame`, and the browser pane this repository is worked in
+reports itself hidden, where a frame callback never runs. The initial state and
+the built markup were measured; the curve was not.
 
 ### A new page opens at the top
 
