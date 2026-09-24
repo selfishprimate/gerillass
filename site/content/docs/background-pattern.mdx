@@ -550,17 +550,17 @@ Each pattern below is its own section, with the colours and the tile changed fro
 
 ### Waves
 
-<Example caption="Scallops where two blocks of colour meet. Which way the edge reads is the colours' doing: `$background` is the header's own green, so the strip carries on from it, and the domes take the colour of the block below, which makes a scalloped edge rather than a band of its own.">
+<Example caption="Scallops hanging from a header. The domes rise from the bottom of the tile, so the strip is turned over with `transform: scaleY(-1)` and they hang from the top of it instead, in the header's own colour and against the colour of the block below.">
 ```scss
 .divider {
-  @include background-pattern(waves, $color: #dee0cd, $background: #668f80, $size: 34px);
+  @include background-pattern(waves, $color: #668f80, $background: #dee0cd, $size: 34px);
 }
 ```
 ```html
 <style>
   .stack { border-radius: 10px; overflow: hidden; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
   .stack .top { padding: 16px 18px; background: #668f80; color: #fff; }
-  .divider { height: 34px; }
+  .divider { height: 34px; transform: scaleY(-1); }
   .stack .bottom { padding: 16px 18px; background: #dee0cd; color: #2f3937; }
 </style>
 <div class="stack">
