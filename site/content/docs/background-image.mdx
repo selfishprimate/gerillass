@@ -131,14 +131,22 @@ direct children above that layer, so a heading stays readable.
 ```
 </Example>
 
-<Example caption="The direction also takes the eight names. `top-right` puts the last colour in that corner, and two saturated colours across a black and white photograph make a duotone, which is a whole design trick in one line.">
+<Example caption="The image does not have to fill anything. A size, a four-value position with negative offsets and `no-repeat` stamp a mark into a corner and let it hang off the edge, which is the whole of a decorative flourish in one include.">
 ```scss
-.duotone {
-  @include background-image("/images/backgrounds/06.jpg", rgb(67 56 202 / 0.88) rgb(244 114 182 / 0.88), top-right);
+.notice {
+  @include background-image("/images/mascot/faces/cool.png", null, null, 124px, right -14px bottom -20px, no-repeat);
 }
 ```
 ```html
-<div class="duotone sandbox large"></div>
+<style>
+  .notice { max-width: 440px; padding: 22px 132px 26px 22px; border-radius: 14px; background-color: #dee0cd; font-family: Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
+  .notice h3 { margin: 0 0 6px; font-size: 18px; font-weight: 700; }
+  .notice p { margin: 0; font-size: 14px; line-height: 1.55; color: #4c564f; }
+</style>
+<div class="notice">
+  <h3>Shipped in 4.0.0</h3>
+  <p>The sizes are arguments now, so the same mixin that crops a photograph also places a mark.</p>
+</div>
 ```
 </Example>
 
