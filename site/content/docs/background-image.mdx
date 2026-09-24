@@ -131,6 +131,20 @@ direct children above that layer, so a heading stays readable.
 ```
 </Example>
 
+<Example caption="A logo tile. `contain` fits the whole mark inside the box where the default `cover` would crop it, and the tile's own padding and `background-origin` are what keep it off the edges. For a header logo with a link over it, reach for [Brand Logo](/docs/brand-logo) instead.">
+```scss
+.logo {
+  @include background-image("/images/logo/logo.svg", null, null, contain, center, no-repeat);
+}
+```
+```html
+<style>
+  .logo { max-width: 280px; height: 120px; padding: 22px 26px; border-radius: 14px; background-color: #f2f2eb; background-origin: content-box; }
+</style>
+<div class="logo"></div>
+```
+</Example>
+
 <Example caption="The image does not have to fill anything. A size, a four-value position with negative offsets and `no-repeat` stamp a mark into a corner and let it hang off the edge, which is the whole of a decorative flourish in one include.">
 ```scss
 .notice {
