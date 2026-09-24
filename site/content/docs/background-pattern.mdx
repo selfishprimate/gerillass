@@ -491,7 +491,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="A community panel, where the three colours give the cells their depth.">
 ```scss
 .community {
-  @include background-pattern(honeycomb, $color: #f2f2eb #dee0cd #bdc488, $size: 26px);
+  @include background-pattern(honeycomb, $color: #f2f2eb #dee0cd #bfc1a4, $size: 38px);
 }
 ```
 ```html
@@ -503,10 +503,10 @@ Each pattern below is its own section, with the colours and the tile changed fro
 ```
 </Example>
 
-<Example caption="A larger tile in three close tones, which reads as tiling rather than as a texture.">
+<Example caption="A larger tile and three colours far apart, which reads as tiling rather than as a texture. They are the same three the cubes above are lit with, since the two patterns are the same idea at a different angle.">
 ```scss
 .hive {
-  @include background-pattern(honeycomb, $color: #dee0cd #bfc1a4 #5bc0bb, $size: 44px);
+  @include background-pattern(honeycomb, $color: #dee0cd #5bc0bb #2f3937, $size: 60px);
 }
 ```
 ```html
