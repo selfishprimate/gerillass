@@ -1,6 +1,7 @@
 import React from "react";
 
 import inline from "./inline";
+import CodeBlock from "components/CodeBlock";
 
 import manifest from "../../../gerillass.json";
 import "./arguments.scss";
@@ -79,8 +80,8 @@ function Arguments({ of: name, footnote, children }) {
 }
 
 /*
-  The signature, above the table. It is the one thing a reader cannot work out
-  from the rows: `background-image` takes six arguments and the page never said
+  The signature, above the table, in the same block the rest of the page writes
+  its code in. It is the one thing a reader cannot work out from the rows: `background-image` takes six arguments and the page never said
   in what order, so an example passing `null, null` was the only clue. It comes
   from the manifest, which is built from the source, so it cannot drift.
 
@@ -106,7 +107,11 @@ function render(children, footnote, member) {
     <div className="arguments">
       {member ? (
         <div className="arguments__signature">
-          <code>{member.signature}</code>
+          <CodeBlock language="scss" label="Signature" wrap>
+            {/* How it is written at a call site: a mixin needs `@include`, a
+                function is a value and does not. */}
+            {member.kind === "mixin" ? `@include ${member.signature}` : member.signature}
+          </CodeBlock>
         </div>
       ) : null}
       {many ? (

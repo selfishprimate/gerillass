@@ -4,21 +4,12 @@
   margin: 0 0 2.5rem;
 
   /*
-    The signature reads as code, not as a heading: the same block colour the
-    page uses for a value, wrapping on its own since six arguments run well
-    past the column.
+    The signature is a code block like every other one on the page, wrapping
+    rather than scrolling: six arguments run well past the column and a
+    signature is read, not copied line by line.
   */
   &__signature {
-    margin: 0 0 remify(10px);
-    code {
-      display: block;
-      padding: remify(10px) remify(14px);
-      border-radius: remify(10px);
-      background-color: $alabaster;
-      font-size: remify(13px);
-      line-height: 1.6;
-      overflow-wrap: anywhere;
-    }
+    margin: 0 0 remify(14px);
   }
 
   &__order {

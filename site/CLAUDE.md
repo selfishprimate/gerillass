@@ -319,8 +319,10 @@ table renders as a paragraph of pipes, silently. `src/docs/content.scss` is
 what styles them: nothing on this site had a table in its prose before the
 port.
 
-**The signature is printed above the argument table, and the order sentence
-under it.** Twelve members take four arguments or more and `background-image`
+**The signature is printed above the argument table, in a `CodeBlock` like
+every other piece of code on the page, and the order sentence under it.** A
+mixin's carries `@include`, since that is how it is written at a call site; a
+function's does not. Twelve members take four arguments or more and `background-image`
 takes six, and a reader had no way to learn what order they are in: the rows
 name them, the call in the header is `@include background-image();`, and the
 only clue left was an example passing `null, null`. The signature comes from
