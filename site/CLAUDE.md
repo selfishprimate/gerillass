@@ -327,8 +327,10 @@ only clue left was an example passing `null, null`. The signature comes from
 `gerillass.json`, which is built from the source, so it cannot drift, and the
 line under it says the two things that matter once a list is long: `null` skips
 an argument, and any of them can be given by name. Both are left out for a
-member with one argument. The examples pass the sizes by name for the same
-reason.
+member with one argument, and the order sentence for a variadic one:
+`background-pattern($kind: dots, $params...)` has no order past the kind and
+nothing `null` can skip, so those pages say how they are called in their own
+footnote. The examples pass the sizes by name for the same reason.
 
 **A table goes in the prose, not inside a `<Hint>`.** The hint's own padding
 and the table's columns fight each other, and the result on antialias was a

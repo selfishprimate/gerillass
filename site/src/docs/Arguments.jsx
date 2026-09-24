@@ -90,7 +90,14 @@ function Arguments({ of: name, footnote, children }) {
   needs neither.
 */
 function render(children, footnote, member) {
-  const many = member && member.arguments.length > 1;
+  /*
+    Not for a variadic member. `background-pattern($kind: dots, $params...)`
+    has no order past the kind and nothing `null` can skip, so the sentence
+    would teach a call that does not exist; those pages say how they are called
+    in their own footnote.
+  */
+  const variadic = member && member.arguments.some((a) => a.variadic);
+  const many = member && member.arguments.length > 1 && !variadic;
   // The last one, since naming is what saves a reader counting commas to reach
   // the far end of a long signature.
   const named = member && [...member.arguments].reverse().find((a) => !a.variadic);

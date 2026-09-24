@@ -25,7 +25,7 @@ The **Background Pattern Sass mixin** draws twenty patterns with CSS gradients a
 
 ## Arguments
 
-<Arguments of="background-pattern" footnote="Each pattern reads only the arguments it needs, and passing one it ignores raises rather than doing nothing quietly.">
+<Arguments of="background-pattern" footnote="The kind is the only positional argument and everything after it is named, as in `background-pattern(grid, $size: 2rem)`. Each pattern reads only the arguments it needs, and passing one it ignores raises rather than doing nothing quietly.">
   <Argument name="$kind" type="string">Which pattern: <code>dots</code>, <code>stripes</code>, <code>grid</code>, <code>checkerboard</code>, <code>crosshatch</code>, <code>zigzag</code>, <code>chevron</code>, <code>triangles</code>, <code>isometric</code>, <code>honeycomb</code>, <code>brick</code>, <code>waves</code>, <code>houndstooth</code>, <code>gingham</code>, <code>harlequin</code>, <code>sunburst</code>, <code>concentric</code>, <code>glow</code>, <code>vignette</code> or <code>mesh</code>.</Argument>
   <Argument name="$color" type="color, list">One colour, or two or three for the patterns that layer them. The default is <code>currentColor</code> mixed with transparency, so a pattern follows the text colour.</Argument>
   <Argument name="$background" type="color">The colour under the pattern, written as <code>background-color</code>.</Argument>
@@ -71,7 +71,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 ```
 ```html
 <style>
-  .confetti { height: 150px; border-radius: 10px;  }
+  .confetti { height: 150px; border-radius: 10px; }
 </style>
 <div class="confetti"></div>
 ```
@@ -148,7 +148,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 ```
 ```html
 <style>
-  .pole { height: 120px; border-radius: 10px;  }
+  .pole { height: 120px; border-radius: 10px; }
 </style>
 <div class="pole"></div>
 ```
@@ -280,7 +280,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 ```
 ```html
 <style>
-  .cloth { height: 150px; border-radius: 10px;  }
+  .cloth { height: 150px; border-radius: 10px; }
 </style>
 <div class="cloth"></div>
 ```
@@ -310,7 +310,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 ```
 ```html
 <style>
-  .weave { height: 150px; border-radius: 10px;  }
+  .weave { height: 150px; border-radius: 10px; }
 </style>
 <div class="weave"></div>
 ```
@@ -326,7 +326,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 ```
 ```html
 <style>
-  .knit { height: 150px; border-radius: 10px;  }
+  .knit { height: 150px; border-radius: 10px; }
 </style>
 <div class="knit"></div>
 ```
@@ -397,7 +397,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 ```
 ```html
 <style>
-  .cloth { height: 160px; border-radius: 10px;  }
+  .cloth { height: 160px; border-radius: 10px; }
 </style>
 <div class="cloth"></div>
 ```
@@ -432,7 +432,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 ```
 ```html
 <style>
-  .flags { height: 150px; border-radius: 10px;  }
+  .flags { height: 150px; border-radius: 10px; }
 </style>
 <div class="flags"></div>
 ```
@@ -478,7 +478,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 ```
 ```html
 <style>
-  .stone { height: 150px; border-radius: 10px;  }
+  .stone { height: 150px; border-radius: 10px; }
 </style>
 <div class="stone"></div>
 ```
@@ -509,7 +509,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 ```
 ```html
 <style>
-  .hive { height: 160px; border-radius: 10px;  }
+  .hive { height: 160px; border-radius: 10px; }
 </style>
 <div class="hive"></div>
 ```
@@ -540,7 +540,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 ```
 ```html
 <style>
-  .pavement { height: 150px; border-radius: 10px;  }
+  .pavement { height: 150px; border-radius: 10px; }
 </style>
 <div class="pavement"></div>
 ```
@@ -577,7 +577,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 ```
 ```html
 <style>
-  .scales { height: 150px; border-radius: 10px;  }
+  .scales { height: 150px; border-radius: 10px; }
 </style>
 <div class="scales"></div>
 ```
@@ -612,7 +612,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 ```
 ```html
 <style>
-  .tweed { height: 150px; border-radius: 10px;  }
+  .tweed { height: 150px; border-radius: 10px; }
 </style>
 <div class="tweed"></div>
 ```
@@ -926,6 +926,70 @@ Each pattern below is its own section, with the colours and the tile changed fro
 **What was measured.** Every pattern was drawn in Chrome 152, Firefox 156 and Safari 26.6.2, and all three lay the tiles out the same. One difference: Firefox draws a hard diagonal edge with visible stair steps, where Chrome and Safari smooth it, which shows in `zigzag`, `chevron` and `triangles`. Feathering the colour stop by half a pixel was tried and changed nothing.
 
 </Hint>
+
+## What it refuses
+
+The kind is the only positional argument, and everything after it is named. A
+second value in the wrong place stops the build rather than being read as a
+colour.
+
+```scss
+.element {
+  @include background-pattern(dots, 2rem);
+}
+```
+```text
+Error: `background-pattern` takes the kind, then named arguments, such as `background-pattern(grid, $size: 2rem)`.
+```
+
+A kind it does not draw lists the twenty it does, so the name is never a
+guess.
+
+```scss
+.element {
+  @include background-pattern(spiral);
+}
+```
+```text
+Error: `spiral` is not a pattern `background-pattern` draws. Pass one of: `dots`, `stripes`, `grid`, `checkerboard`, `crosshatch`, `zigzag`, `chevron`, `triangles`, `isometric`, `honeycomb`, `brick`, `waves`, `houndstooth`, `gingham`, `harlequin`, `sunburst`, `concentric`, `glow`, `vignette`, `mesh`.
+```
+
+An argument a pattern does not read raises rather than doing nothing quietly,
+and names what that pattern does read. A misspelt argument name is refused the
+same way, with the full list.
+
+```scss
+.element {
+  @include background-pattern(checkerboard, $thickness: 2px);
+}
+```
+```text
+Error: `$thickness` does nothing for the `checkerboard` pattern in `background-pattern`. It reads `color`, `size`.
+```
+
+An `$image` under a pattern that paints every pixel would never be seen, so it
+is refused with the reason rather than drawn into a layer nobody looks at.
+
+```scss
+.element {
+  @include background-pattern(isometric, $image: "/img/a.png");
+}
+```
+```text
+Error: `$image` cannot be seen under the `isometric` pattern in `background-pattern`: the faces are solid, so the image would never show. Use a pattern that leaves gaps, or pass one colour.
+```
+
+And a stripe as wide as its own period leaves no gap at all, which a browser
+paints as a solid colour rather than as stripes.
+
+```scss
+.element {
+  @include background-pattern(stripes, $size: 4px, $thickness: 10px);
+}
+```
+```text
+Error: `10px` is not a valid $thickness for the `stripes` pattern in `background-pattern`: a line as wide as the `4px` period leaves no gap, and a browser paints a solid colour instead of stripes. Pass a $thickness under $size.
+```
 
 ## Related Links
 
