@@ -310,7 +310,7 @@ drift:
 |---|---|
 | `<Member name>` | throws if the name is not in `gerillass.json` |
 
-| `<Arguments of>` | throws if the documented argument names differ from the signature. Variadic members are exempt: `border-radius($args...)` says nothing to check against |
+| `<Arguments of>` | prints the signature from the manifest, then the rows. It throws if the documented argument names differ from the signature, or are in a different order. Variadic members are exempt from both: `border-radius($args...)` says nothing to check against |
 | `<Example>` | **compiles** the Sass. A page cannot state an output the library does not produce |
 | `<Hint kind>` | info, warning or danger |
 
@@ -318,6 +318,17 @@ Markdown tables need `remark-gfm`, which is in the plugin list. Without it a
 table renders as a paragraph of pipes, silently. `src/docs/content.scss` is
 what styles them: nothing on this site had a table in its prose before the
 port.
+
+**The signature is printed above the argument table, and the order sentence
+under it.** Twelve members take four arguments or more and `background-image`
+takes six, and a reader had no way to learn what order they are in: the rows
+name them, the call in the header is `@include background-image();`, and the
+only clue left was an example passing `null, null`. The signature comes from
+`gerillass.json`, which is built from the source, so it cannot drift, and the
+line under it says the two things that matter once a list is long: `null` skips
+an argument, and any of them can be given by name. Both are left out for a
+member with one argument. The examples pass the sizes by name for the same
+reason.
 
 **A table goes in the prose, not inside a `<Hint>`.** The hint's own padding
 and the table's columns fight each other, and the result on antialias was a

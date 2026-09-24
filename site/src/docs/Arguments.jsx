@@ -44,7 +44,7 @@ function Arguments({ of: name, footnote, children }) {
     what is allowed, and the page is prose beside it.
   */
   if (member.arguments.some((a) => a.variadic)) {
-    return render(children, footnote);
+    return render(children, footnote, member);
   }
 
   const expected = member.arguments.map((a) => a.name);
@@ -61,12 +61,57 @@ function Arguments({ of: name, footnote, children }) {
     );
   }
 
-  return render(children, footnote);
+  /*
+    And in the same order. The table is the only place a reader learns what
+    position an argument is in, so a row out of order teaches the wrong call.
+    The set matching is not enough to catch that.
+  */
+  const wrong = documented.findIndex((a, i) => a !== expected[i]);
+  if (wrong !== -1) {
+    throw new Error(
+      `The arguments documented for "${name}" are in a different order from the signature.` +
+        `\n  The table has: ${documented.join(", ")}` +
+        `\n  The signature is: ${member.signature}`
+    );
+  }
+
+  return render(children, footnote, member);
 }
 
-function render(children, footnote) {
+/*
+  The signature, above the table. It is the one thing a reader cannot work out
+  from the rows: `background-image` takes six arguments and the page never said
+  in what order, so an example passing `null, null` was the only clue. It comes
+  from the manifest, which is built from the source, so it cannot drift.
+
+  The line under it is there for the same reason, and says the two things a
+  reader needs once the list is longer than a couple: `null` skips an argument,
+  and any of them can be given by name in any order. A member with one argument
+  needs neither.
+*/
+function render(children, footnote, member) {
+  const many = member && member.arguments.length > 1;
+  // The last one, since naming is what saves a reader counting commas to reach
+  // the far end of a long signature.
+  const named = member && [...member.arguments].reverse().find((a) => !a.variadic);
+
   return (
     <div className="arguments">
+      {member ? (
+        <div className="arguments__signature">
+          <code>{member.signature}</code>
+        </div>
+      ) : null}
+      {many ? (
+        <p className="arguments__order">
+          In that order. Pass <code>null</code> to skip one, or give it by name,
+          such as{" "}
+          <code>
+            @include {member.name}({named ? `${named.name}: …` : "…"})
+          </code>
+          , and pass only the arguments you need.
+        </p>
+      ) : null}
       <table className="arguments__table">
         <thead>
           <tr>

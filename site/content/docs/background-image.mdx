@@ -134,7 +134,7 @@ direct children above that layer, so a heading stays readable.
 <Example caption="A logo tile. `contain` fits the whole mark inside the box where the default `cover` would crop it, and the tile's own padding and `background-origin` are what keep it off the edges. For a header logo with a link over it, reach for [Brand Logo](/docs/brand-logo) instead.">
 ```scss
 .logo {
-  @include background-image("/images/logo/logo.svg", null, null, contain, center, no-repeat);
+  @include background-image("/images/logo/logo.svg", $size: contain, $position: center, $repeat: no-repeat);
 }
 ```
 ```html
@@ -148,7 +148,7 @@ direct children above that layer, so a heading stays readable.
 <Example caption="The image does not have to fill anything. A size, a four-value position with negative offsets and `no-repeat` stamp a mark into a corner and let it hang off the edge, which is the whole of a decorative flourish in one include.">
 ```scss
 .notice {
-  @include background-image("/images/mascot/faces/cool.png", null, null, 124px, right -14px bottom -20px, no-repeat);
+  @include background-image("/images/mascot/faces/cool.png", $size: 124px, $position: right -14px bottom -20px, $repeat: no-repeat);
 }
 ```
 ```html
@@ -181,11 +181,11 @@ direct children above that layer, so a heading stays readable.
 <Example caption="`$size`, `$position` and `$repeat` are the other three declarations, so the same mixin tiles a watermark. With a filter over it the wash still covers the box while the tile repeats underneath: look at the two values in the compiled CSS.">
 ```scss
 .marks {
-  @include background-image("/images/general/sass-logo-black.svg", null, null, 56px, left top, repeat);
+  @include background-image("/images/general/sass-logo-black.svg", $size: 56px, $position: left top, $repeat: repeat);
 }
 
 .marks-washed {
-  @include background-image("/images/general/sass-logo-black.svg", rgb(102 143 128 / 0.75), null, 56px, left top, repeat);
+  @include background-image("/images/general/sass-logo-black.svg", rgb(102 143 128 / 0.75), $size: 56px, $position: left top, $repeat: repeat);
 }
 ```
 ```html
@@ -228,7 +228,7 @@ not one of the three keywords.
 
 ```scss
 .element {
-  @include background-image("/img/a.png", null, null, -10px);
+  @include background-image("/img/a.png", $size: -10px);
 }
 ```
 ```text

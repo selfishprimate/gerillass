@@ -3,6 +3,30 @@
 .arguments {
   margin: 0 0 2.5rem;
 
+  /*
+    The signature reads as code, not as a heading: the same block colour the
+    page uses for a value, wrapping on its own since six arguments run well
+    past the column.
+  */
+  &__signature {
+    margin: 0 0 remify(10px);
+    code {
+      display: block;
+      padding: remify(10px) remify(14px);
+      border-radius: remify(10px);
+      background-color: $alabaster;
+      font-size: remify(13px);
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+  }
+
+  &__order {
+    margin: 0 0 remify(18px);
+    font-size: remify(14px);
+    opacity: 0.75;
+  }
+
   /* The table scrolls on its own so a long description never widens the page. */
   &__table {
     width: 100%;
