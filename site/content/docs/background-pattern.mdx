@@ -550,10 +550,10 @@ Each pattern below is its own section, with the colours and the tile changed fro
 
 ### Waves
 
-<Example caption="Scallops as a section divider, between two blocks of colour.">
+<Example caption="Scallops where two blocks of colour meet. Which way the edge reads is the colours' doing: `$background` is the header's own green, so the strip carries on from it, and the domes take the colour of the block below, which makes a scalloped edge rather than a band of its own.">
 ```scss
 .divider {
-  @include background-pattern(waves, $color: #668f80, $background: #dee0cd, $size: 34px);
+  @include background-pattern(waves, $color: #dee0cd, $background: #668f80, $size: 34px);
 }
 ```
 ```html
