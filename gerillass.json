@@ -368,6 +368,7 @@
       "caveats": [
         "The filter goes over the image as a second background layer, so a $size, $position or $repeat meant for the photograph would shrink or tile the wash with it. The mixin writes one value per layer instead: measured in Chrome 152, Firefox 156 and Safari 26.6.2, `background-size: cover, 40px` sizes the gradient cover and the image 40px auto, and repeat and position layer the same way.",
         "With $image-url null the filter is an ::after layer over the element, and it carries `pointer-events: none`. Without it the caret could not be put on the element's own text: measured with caretPositionFromPoint, Chrome 152 and Firefox 156 answered with another node and Safari 26.6.2 was unaffected.",
+        "The filter layer carries `border-radius: inherit`, so it follows the element's corners. An absolutely positioned box does not inherit a radius and the element does not clip it, so on a rounded card the filter used to paint square corners over it; measured in Chrome 152 and Firefox 156, and not captured in Safari.",
         "The element's direct children are lifted above that layer inside `:where()`, so a rule of the page's own on one of them wins.",
         "With no $image-url and no $filter-color there is nothing to lay over anything: only background-position, background-repeat and background-size are written. Until 4.0.0 an empty ::after covered the element.",
         "$filter-direction turns a gradient, so it is only read when $filter-color has more than one colour; passed with one it warns and is left out."

@@ -176,6 +176,12 @@
       // selected; Safari 26.6.2 was unaffected, and `pointer-events: none`
       // made all three answer with the text.
       pointer-events: none;
+      // The layer follows the element's corners. An absolutely positioned box
+      // does not inherit a radius and the element does not clip it, so on a
+      // rounded card the filter painted square corners over it: measured in
+      // Chrome 152 and Firefox 156 on an 18px radius, with the corners cut
+      // before and following after. Not captured in Safari.
+      border-radius: inherit;
       @if list.length($filter-color) == 1 {
         background: $filter-color;
       } @else if list.length($filter-color) > 1 {

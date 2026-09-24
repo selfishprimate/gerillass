@@ -71,6 +71,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `background-image` takes `$size`, `$position` and `$repeat` | not breaking |
 | `background-image` writes no overlay when there is no filter | fixes a pointless layer; silent |
 | `background-image`'s filter layer takes `pointer-events: none` | fixes text selection; silent |
+| `background-image`'s filter layer follows the element's `border-radius` | fixes square corners; silent |
 | `background-image` lifts the children inside `:where()` | fixes a cascade defect; silent |
 | `background-image(none)` writes `none`, not `url(none)` | fixes a 404 request; silent |
 | `background-image` warns on a direction with one colour | not breaking |
@@ -1978,6 +1979,11 @@ the declaration all three answer with the text.
 The children's rule moved inside `:where()` in the same pass, as `border-box`
 and `antialias` did in this release, so a rule of your own on a child wins
 where the mixin's used to tie with it and win on order.
+
+The layer also carries `border-radius: inherit` now. An absolutely positioned
+box does not inherit a radius and the element does not clip it, so on a rounded
+card the filter painted square corners over it; measured in Chrome 152 and
+Firefox 156 on an 18px radius, and not captured in Safari.
 
 ---
 

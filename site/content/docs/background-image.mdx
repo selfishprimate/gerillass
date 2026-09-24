@@ -89,57 +89,56 @@ direct children above that layer, so a heading stays readable.
 ```
 </Example>
 
-<Example caption="One colour is a flat wash instead, and its alpha decides how much of the photograph is left. Three lines of Sass, and three photographs that never picked a palette become a set.">
+<Example
+  caption="One rule, and every card in the grid gets the same scrim. `null` for the image, so each card brings its own from the markup: the filter is then an `::after` layer over it rather than a second `background-image`, so the two cannot override each other. The chip, the title and the arrow need no `z-index` of their own, since the mixin lifts the element's children above that layer."
+  listing="<a class=&quot;card&quot; style=&quot;background-image: url(/images/backgrounds/01.jpg)&quot;>
+&#32;&#32;<span class=&quot;card__tag&quot;>Travel</span>
+&#32;&#32;<span class=&quot;card__title&quot;>Four days of sand</span>
+&#32;&#32;<span class=&quot;card__go&quot; aria-hidden=&quot;true&quot;>&#8594;</span>
+</a>"
+>
 ```scss
-.tile--desert { @include background-image("/images/backgrounds/01.jpg", rgb(102 143 128 / 0.78)); }
-.tile--desk   { @include background-image("/images/backgrounds/03.jpg", rgb(102 143 128 / 0.78)); }
-.tile--piano  { @include background-image("/images/backgrounds/06.jpg", rgb(102 143 128 / 0.78)); }
+.card {
+  @include background-image(null, rgb(17 24 21 / 0) rgb(17 24 21 / 0.88), bottom);
+}
 ```
 ```html
 <style>
-  .tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-  .tiles > * { display: flex; align-items: flex-end; height: 150px; padding: 14px; border-radius: 10px; font: 600 14px/1.3 Inter, ui-sans-serif, system-ui, sans-serif; color: #fafaf8; }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .card { display: grid; grid-template-rows: auto 1fr auto; aspect-ratio: 3 / 4; padding: 14px; border-radius: 14px; font-family: Inter, ui-sans-serif, system-ui, sans-serif; color: #fafaf8; text-decoration: none; }
+  .card__tag { justify-self: start; padding: 5px 10px; border-radius: 999px; background: rgb(250 250 248 / 0.22); font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
+  .card__foot { display: flex; align-items: flex-end; justify-content: space-between; gap: 10px; }
+  .card__title { font-size: 17px; font-weight: 600; line-height: 1.25; }
+  .card__go { display: grid; place-items: center; flex: none; width: 28px; height: 28px; border-radius: 999px; background: #fafaf8; color: #2f3937; font-size: 15px; }
 </style>
-<div class="tiles">
-  <div class="tile--desert">Four days of sand</div>
-  <div class="tile--desk">Notes from the desk</div>
-  <div class="tile--piano">Hands, eighty years apart</div>
+<div class="grid">
+  <a class="card" style="background-image: url(/images/backgrounds/01.jpg)">
+    <span class="card__tag">Travel</span>
+    <span></span>
+    <span class="card__foot"><span class="card__title">Four days of sand</span><span class="card__go" aria-hidden="true">&#8594;</span></span>
+  </a>
+  <a class="card" style="background-image: url(/images/backgrounds/03.jpg)">
+    <span class="card__tag">Making</span>
+    <span></span>
+    <span class="card__foot"><span class="card__title">Notes from the desk</span><span class="card__go" aria-hidden="true">&#8594;</span></span>
+  </a>
+  <a class="card" style="background-image: url(/images/backgrounds/06.jpg)">
+    <span class="card__tag">Music</span>
+    <span></span>
+    <span class="card__foot"><span class="card__title">Hands, eighty years apart</span><span class="card__go" aria-hidden="true">&#8594;</span></span>
+  </a>
 </div>
 ```
 </Example>
 
-<Example caption="The direction also takes the eight names. `top-right` puts the last colour in that corner, and two brand colours across a black and white photograph make a duotone.">
+<Example caption="The direction also takes the eight names. `top-right` puts the last colour in that corner, and two saturated colours across a black and white photograph make a duotone, which is a whole design trick in one line.">
 ```scss
 .duotone {
-  @include background-image("/images/backgrounds/06.jpg", rgb(91 192 187 / 0.85) rgb(189 196 136 / 0.85), top-right);
+  @include background-image("/images/backgrounds/06.jpg", rgb(67 56 202 / 0.88) rgb(244 114 182 / 0.88), top-right);
 }
 ```
 ```html
 <div class="duotone sandbox large"></div>
-```
-</Example>
-
-<Example
-  caption="When the image is on the element in the markup, pass `null` for `$image-url`. The filter becomes an `::after` layer over it rather than a second `background-image`, so the two cannot override each other, and the element's direct children are lifted above that layer."
-  listing="<div class=&quot;element&quot; style=&quot;background-image: url(/images/backgrounds/02.jpg)&quot;>
-&#32;&#32;<h2>A heading over the filter</h2>
-</div>"
->
-```scss
-.element {
-  @include background-image(null, rgb(34 44 37 / 0.85) rgb(34 44 37 / 0.15));
-}
-```
-```html
-<style>
-  .element { padding: 20px; border-radius: 12px; }
-  .element h2 { margin: 0; font: 700 22px/1.3 Inter, ui-sans-serif, system-ui, sans-serif; color: #fafaf8; }
-  .element p { margin: 6px 0 0; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #dee0cd; }
-</style>
-<div class="element sandbox large" style="background-image: url(/images/backgrounds/02.jpg)">
-  <h2>A heading over the filter</h2>
-  <p>No rule of your own: the mixin lifts the children above the layer itself.</p>
-</div>
 ```
 </Example>
 
