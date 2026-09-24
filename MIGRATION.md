@@ -760,7 +760,7 @@ such as `inside` names the three that exist.
 
 Both are removed, as `linear-gradient` and `radial-gradient` were in 3.0.0, and
 a call to either stops the build with Sass's `Undefined mixin`. One mixin now
-draws eighteen patterns, and its arguments are named rather than positional.
+draws seventeen patterns, and its arguments are named rather than positional.
 
 | 3.x | 4.0.0 |
 |---|---|
@@ -804,9 +804,9 @@ stripe it drew.
   a tile apart rather than at a half and a double offset, so the arrangement is
   even. `$stagger: false` is the old `$diagonal: false`.
 
-### The sixteen new patterns
+### The fifteen new patterns
 
-Thirteen that tile: `grid`, `checkerboard`, `crosshatch`, `zigzag`, `chevron`,
+Twelve that tile: `grid`, `checkerboard`, `crosshatch`, `zigzag`,
 `triangles`, `brick`, `waves`, `houndstooth`, `gingham`, `harlequin`,
 `sunburst` and `concentric`, each one include. And
 three that light the whole box rather than tiling, which is what the premium
@@ -818,9 +818,9 @@ comes from, and their `$size` is how far it reaches rather than a tile.
 point as well: from the top edge a sunburst is beams fanning down, and an
 off-centre `concentric` reads as a contour map.
 
-All sixteen were drawn in Chrome 152, Firefox 156 and Safari 26.6.2, and the
+All fifteen were drawn in Chrome 152, Firefox 156 and Safari 26.6.2, and the
 three lay them out identically; Firefox draws a hard diagonal edge with visible
-stair steps where the other two smooth it, which shows in `zigzag`, `chevron`
+stair steps where the other two smooth it, which shows in `zigzag`
 and `triangles`.
 
 In forced colours mode a browser replaces `background-image` with `none` for

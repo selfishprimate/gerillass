@@ -429,15 +429,6 @@ exports[`Manifest examples background-pattern: .a { @include background-pattern(
 }"
 `;
 
-exports[`Manifest examples background-pattern: .a { @include background-pattern(chevron, $color: #0ea5e9, $background 1`] = `
-".a {
-  background-image: conic-gradient(from -45deg at 50% 25%, #0ea5e9 90deg, #0000 0), conic-gradient(from -45deg at 50% 75%, #0ea5e9 90deg, #0000 0);
-  background-size: 2rem 2rem, 2rem 2rem;
-  background-repeat: repeat;
-  background-color: #e0f2fe;
-}"
-`;
-
 exports[`Manifest examples background-pattern: .a { @include background-pattern(concentric, $color: #0f766e, $size: 3 1`] = `
 ".a {
   background-image: repeating-radial-gradient(circle at 15% 110%, #0f766e 0 1px, #0000 1px 30px);
@@ -612,6 +603,14 @@ exports[`Manifest examples background-pattern: .a { @include background-pattern(
 ".a {
   background-image: conic-gradient(from -135deg, #16a34a 90deg, #0000 0);
   background-size: 28px 28px;
+  background-repeat: repeat;
+}"
+`;
+
+exports[`Manifest examples background-pattern: .a { @include background-pattern(triangles, $size: 30px, $direction: u 1`] = `
+".a {
+  background-image: conic-gradient(from -225deg, rgb(from currentColor r g b / 0.12) 90deg, #0000 0);
+  background-size: 30px 30px;
   background-repeat: repeat;
 }"
 `;

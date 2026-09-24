@@ -41,7 +41,7 @@
   },
   "background-pattern": {
     "title": "Background Pattern",
-    "description": "Eighteen background patterns from one line of Sass: dots, stripes, grid, checkerboard, crosshatch, zigzag, chevron, triangles, brick, waves, houndstooth, gingham, harlequin, sunburst, concentric, glow, vignette and mesh, all drawn with CSS gradients.",
+    "description": "Seventeen background patterns from one line of Sass: dots, stripes, grid, checkerboard, crosshatch, zigzag, triangles, brick, waves, houndstooth, gingham, harlequin, sunburst, concentric, glow, vignette and mesh, all drawn with CSS gradients.",
     "scss": "@use \"gerillass\" as *;\n\n.plan {\n  @include background-pattern(grid, $color: rgb(47 57 55 / 0.3), $background: #fafaf8, $size: 22px, $thickness: 1px);\n}\n\n.plan__fade {\n  @include background-pattern(vignette, $color: #fafaf8, $size: 60% 55%);\n}\n"
   },
   "before": {

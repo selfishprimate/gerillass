@@ -1,7 +1,7 @@
 ---
 title: "Background Pattern"
 page_title: "Background Pattern Sass Mixin"
-page_description: "Eighteen background patterns from one line of Sass: dots, stripes, grid, checkerboard, crosshatch, zigzag, chevron, triangles, brick, waves, houndstooth, gingham, harlequin, sunburst, concentric, glow, vignette and mesh, all drawn with CSS gradients."
+page_description: "Seventeen background patterns from one line of Sass: dots, stripes, grid, checkerboard, crosshatch, zigzag, triangles, brick, waves, houndstooth, gingham, harlequin, sunburst, concentric, glow, vignette and mesh, all drawn with CSS gradients."
 page_keywords: "CSS Background Pattern, CSS Pattern Generator, Sass Background Pattern, CSS Polka Dots, CSS Stripes, CSS Grid Background, CSS Checkerboard, CSS Houndstooth, CSS Gradient Patterns, CSS Mesh Gradient, CSS Glow Background, CSS Vignette"
 page_image: "gerillass-background-pattern.jpg"
 aliases:
@@ -13,7 +13,7 @@ aliases:
 
 <Member name="background-pattern">
 
-The **Background Pattern Sass mixin** draws eighteen patterns with CSS gradients alone: no image file, no SVG, and nothing to download. Fifteen of them tile, from dots and stripes to houndstooth and harlequin, and three light the whole box, which is what the expensive looking marketing pages put behind a hero. Pass the pattern's name, and optionally its colours, its tile and the line inside it.
+The **Background Pattern Sass mixin** draws seventeen patterns with CSS gradients alone: no image file, no SVG, and nothing to download. Fourteen of them tile, from dots and stripes to houndstooth and harlequin, and three light the whole box, which is what the expensive looking marketing pages put behind a hero. Pass the pattern's name, and optionally its colours, its tile and the line inside it.
 
 </Member>
 
@@ -26,12 +26,13 @@ The **Background Pattern Sass mixin** draws eighteen patterns with CSS gradients
 ## Arguments
 
 <Arguments of="background-pattern" footnote="The kind is the only positional argument and everything after it is named, as in `background-pattern(grid, $size: 2rem)`. Each pattern reads only the arguments it needs, and passing one it ignores raises rather than doing nothing quietly.">
-  <Argument name="$kind" type="string">Which pattern: <code>dots</code>, <code>stripes</code>, <code>grid</code>, <code>checkerboard</code>, <code>crosshatch</code>, <code>zigzag</code>, <code>chevron</code>, <code>triangles</code>, <code>brick</code>, <code>waves</code>, <code>houndstooth</code>, <code>gingham</code>, <code>harlequin</code>, <code>sunburst</code>, <code>concentric</code>, <code>glow</code>, <code>vignette</code> or <code>mesh</code>.</Argument>
+  <Argument name="$kind" type="string">Which pattern: <code>dots</code>, <code>stripes</code>, <code>grid</code>, <code>checkerboard</code>, <code>crosshatch</code>, <code>zigzag</code>, <code>triangles</code>, <code>brick</code>, <code>waves</code>, <code>houndstooth</code>, <code>gingham</code>, <code>harlequin</code>, <code>sunburst</code>, <code>concentric</code>, <code>glow</code>, <code>vignette</code> or <code>mesh</code>.</Argument>
   <Argument name="$color" type="color, list">One colour, or two or three for the patterns that layer them. The default is <code>currentColor</code> mixed with transparency, so a pattern follows the text colour.</Argument>
   <Argument name="$background" type="color">The colour under the pattern, written as <code>background-color</code>.</Argument>
   <Argument name="$size" type="number">The tile. The default is <code>2rem</code>. A <code>var()</code> or <code>calc()</code> works, and every offset is derived from it. For <code>stripes</code> it is the period, one line plus its gap. For <code>glow</code> and <code>vignette</code> there is no tile: it is how far the light reaches, one value or two, and the default is <code>90% 80%</code>.</Argument>
   <Argument name="$thickness" type="number">The line, dot or mortar inside the tile. The default is a tenth of the tile for <code>dots</code> and an eighth for the rest. For <code>stripes</code> it is the width of each coloured line, and with no <code>$size</code> the period stays twice it.</Argument>
-  <Argument name="$angle" type="number">For <code>stripes</code>, <code>crosshatch</code>, <code>zigzag</code> and <code>triangles</code>: an angle such as <code>-45deg</code>, or a unitless number read as degrees. For <code>sunburst</code>: how wide one ray is.</Argument>
+  <Argument name="$angle" type="number">For <code>stripes</code>, <code>crosshatch</code> and <code>zigzag</code>: an angle such as <code>-45deg</code>, or a unitless number read as degrees. For <code>sunburst</code>: how wide one ray is.</Argument>
+  <Argument name="$direction" type="string">For <code>triangles</code>: which way they point, <code>up</code>, <code>right</code>, <code>down</code> or <code>left</code>. The default is <code>down</code>. It takes names rather than an angle because only four rotations cut the tile as a triangle at all.</Argument>
   <Argument name="$axis" type="string">For <code>grid</code>: <code>both</code>, <code>block</code> for horizontal lines only, or <code>inline</code> for vertical lines only.</Argument>
   <Argument name="$stagger" type="boolean">For <code>dots</code>, <code>false</code> lines them up in a grid instead of offsetting every other row.</Argument>
   <Argument name="$origin" type="string">Where a pattern drawn from a point starts: the light for <code>glow</code> and <code>vignette</code>, the rays for <code>sunburst</code>, the rings for <code>concentric</code>. A background position, such as <code>50% 100%</code> or <code>top left</code>. The default is the middle, and the bottom edge for <code>glow</code>.</Argument>
@@ -348,69 +349,12 @@ Each pattern below is its own section, with the colours and the tile changed fro
 ```
 </Example>
 
-### Chevron
-
-<Example caption="A ticket, cut along the top and the bottom. The tile sets how wide each tooth is, and the lower strip is the same include flipped, so the teeth meet the body from the other side.">
-```scss
-.ticket-edge {
-  @include background-pattern(chevron, $color: #fff, $background: #668f80, $size: 18px);
-}
-```
-```html
-<style>
-  .ticket { max-width: 320px; border-radius: 10px; overflow: hidden; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
-  .ticket-edge { height: 14px; }
-  .ticket-edge.bottom { transform: scaleY(-1); }
-  .ticket-body { padding: 16px 18px; background: #668f80; color: #fff; }
-  .ticket-body b { display: block; font-size: 20px; }
-</style>
-<div class="ticket">
-  <div class="ticket-edge"></div>
-  <div class="ticket-body"><b>Admit one</b>Row F, seat 12</div>
-  <div class="ticket-edge bottom"></div>
-</div>
-```
-</Example>
-
-<Example caption="A band of arrows under a step heading, pointing the way through a flow.">
-```scss
-.flow-band {
-  @include background-pattern(chevron, $color: #668f80, $background: #dee0cd, $size: 22px);
-}
-```
-```html
-<style>
-  .flow { border-radius: 10px; overflow: hidden; border: 1px solid #bfc1a4; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
-  .flow p { margin: 0; padding: 14px 18px; color: #2f3937; }
-  .flow-band { height: 44px; }
-</style>
-<div class="flow">
-  <p><b>Step 2</b> Connect your repository</p>
-  <div class="flow-band"></div>
-</div>
-```
-</Example>
-
-<Example caption="A large tile in two close colours turns the arrows into a woven chevron cloth.">
-```scss
-.cloth {
-  @include background-pattern(chevron, $color: #bdc488, $background: #f2f2eb, $size: 44px);
-}
-```
-```html
-<style>
-  .cloth { height: 160px; border-radius: 10px; }
-</style>
-<div class="cloth"></div>
-```
-</Example>
-
 ### Triangles
 
-<Example caption="A festival poster header. The angle rotates the triangle, so a quarter turn points it at another edge.">
+<Example caption="A festival poster header. `$direction` is which way the triangles point: `right` here, and `up`, `down` or `left` otherwise. It takes the four names rather than an angle because only those four rotations cut the tile as a triangle.">
 ```scss
 .poster-top {
-  @include background-pattern(triangles, $color: #bdc488, $background: #f2f2eb, $size: 26px, $angle: 135deg);
+  @include background-pattern(triangles, $color: #bdc488, $background: #f2f2eb, $size: 26px, $direction: right);
 }
 ```
 ```html
@@ -426,10 +370,10 @@ Each pattern below is its own section, with the colours and the tile changed fro
 ```
 </Example>
 
-<Example caption="Pointed the other way, at a smaller tile, in two strong colours.">
+<Example caption="Pointed the other way, at a smaller tile.">
 ```scss
 .flags {
-  @include background-pattern(triangles, $color: #bfc1a4, $background: #fafaf8, $size: 16px, $angle: 315deg);
+  @include background-pattern(triangles, $color: #bfc1a4, $background: #fafaf8, $size: 16px, $direction: left);
 }
 ```
 ```html
@@ -848,7 +792,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 
 <Hint kind="info">
 
-**What was measured.** Every pattern was drawn in Chrome 152, Firefox 156 and Safari 26.6.2, and all three lay the tiles out the same. One difference: Firefox draws a hard diagonal edge with visible stair steps, where Chrome and Safari smooth it, which shows in `zigzag`, `chevron` and `triangles`. Feathering the colour stop by half a pixel was tried and changed nothing.
+**What was measured.** Every pattern was drawn in Chrome 152, Firefox 156 and Safari 26.6.2, and all three lay the tiles out the same. One difference: Firefox draws a hard diagonal edge with visible stair steps, where Chrome and Safari smooth it, which shows in `zigzag` and `triangles`. Feathering the colour stop by half a pixel was tried and changed nothing.
 
 </Hint>
 
@@ -867,7 +811,7 @@ colour.
 Error: `background-pattern` takes the kind, then named arguments, such as `background-pattern(grid, $size: 2rem)`.
 ```
 
-A kind it does not draw lists the eighteen it does, so the name is never a
+A kind it does not draw lists the seventeen it does, so the name is never a
 guess.
 
 ```scss
@@ -876,7 +820,7 @@ guess.
 }
 ```
 ```text
-Error: `spiral` is not a pattern `background-pattern` draws. Pass one of: `dots`, `stripes`, `grid`, `checkerboard`, `crosshatch`, `zigzag`, `chevron`, `triangles`, `brick`, `waves`, `houndstooth`, `gingham`, `harlequin`, `sunburst`, `concentric`, `glow`, `vignette`, `mesh`.
+Error: `spiral` is not a pattern `background-pattern` draws. Pass one of: `dots`, `stripes`, `grid`, `checkerboard`, `crosshatch`, `zigzag`, `triangles`, `brick`, `waves`, `houndstooth`, `gingham`, `harlequin`, `sunburst`, `concentric`, `glow`, `vignette`, `mesh`.
 ```
 
 An argument a pattern does not read raises rather than doing nothing quietly,

@@ -10,8 +10,8 @@
 @use "../internal/color-problem" as *;
 @use "../internal/length-problem" as *;
 
-// Eighteen patterns drawn with gradients alone, no image and no SVG: fifteen
-// that tile, and three that light the whole box rather than repeat.
+// Seventeen patterns drawn with gradients alone, no image and no SVG:
+// fourteen that tile, and three that light the whole box rather than repeat.
 // It replaces `background-dots` and `background-stripes`, which were the same
 // job written twice and disagreed on how an image underneath was layered.
 //
@@ -25,7 +25,7 @@
 //
 // The colours default to `currentColor` mixed with transparency, so a pattern
 // follows the text colour and needs nothing to work in dark mode.
-$-kinds: "dots" "stripes" "grid" "checkerboard" "crosshatch" "zigzag" "chevron" "triangles" "brick" "waves" "houndstooth" "gingham" "harlequin" "sunburst" "concentric" "glow" "vignette" "mesh";
+$-kinds: "dots" "stripes" "grid" "checkerboard" "crosshatch" "zigzag" "triangles" "brick" "waves" "houndstooth" "gingham" "harlequin" "sunburst" "concentric" "glow" "vignette" "mesh";
 $-angle-units: "deg" "grad" "rad" "turn";
 
 // What each kind reads, so an argument it ignores can be refused rather than
@@ -37,8 +37,7 @@ $-takes: (
   "checkerboard": "color" "size",
   "crosshatch": "color" "size" "thickness" "angle",
   "zigzag": "color" "size" "thickness" "angle",
-  "chevron": "color" "size",
-  "triangles": "color" "size" "angle",
+  "triangles": "color" "size" "direction",
   "brick": "color" "size" "thickness",
   "waves": "color" "size" "thickness",
   "houndstooth": "color" "size",
@@ -125,10 +124,10 @@ $-defaults: (1: 0.12, 2: 0.06, 3: 0.18);
 
 @mixin background-pattern($kind: dots, $params...) {
   $keywords: meta.keywords($params);
-  $known: "color" "background" "size" "thickness" "angle" "axis" "stagger" "origin" "image";
+  $known: "color" "background" "size" "thickness" "angle" "axis" "stagger" "origin" "direction" "image";
   @each $key, $value in $keywords {
     @if not list.index($known, $key) {
-      @error "`$#{$key}` is not an argument of `background-pattern`. It takes a kind, then `$color`, `$background`, `$size`, `$thickness`, `$angle`, `$axis`, `$stagger`, `$origin` and `$image`.";
+      @error "`$#{$key}` is not an argument of `background-pattern`. It takes a kind, then `$color`, `$background`, `$size`, `$thickness`, `$angle`, `$axis`, `$stagger`, `$origin`, `$direction` and `$image`.";
     }
   }
   @if list.length($params) > 0 and list.length($keywords) != list.length($params) {
@@ -148,6 +147,7 @@ $-defaults: (1: 0.12, 2: 0.06, 3: 0.18);
   $axis: map.get($keywords, "axis");
   $stagger: map.get($keywords, "stagger");
   $origin: map.get($keywords, "origin");
+  $direction: map.get($keywords, "direction");
   $image: map.get($keywords, "image");
 
 
@@ -254,6 +254,16 @@ $-defaults: (1: 0.12, 2: 0.06, 3: 0.18);
     @error "`#{meta.inspect($angle)}` is not a valid $angle for `background-pattern`. Pass an angle such as `-45deg`, a unitless number read as degrees, or var().";
   }
 
+  // Which way a triangle points. Four names rather than an angle: the shape is
+  // a quarter of the tile cut by a conic gradient, and only the odd multiples
+  // of 45 degrees cut it as a triangle. Measured at twelve angles, 0, 90, 180
+  // and 270 give a square, and 15, 30, 60, 75 and 120 a lopsided quadrilateral,
+  // none of which anybody asked a pattern called `triangles` for.
+  @if $direction != null and not list.index("up" "right" "down" "left", -name($direction)) {
+    @error "`#{meta.inspect($direction)}` is not a valid $direction for `background-pattern`. Pass `up`, `right`, `down` or `left`.";
+  }
+  $direction: -name($direction or down);
+
   @if $axis != null and not list.index("both" "block" "inline", -name($axis)) {
     @error "`#{meta.inspect($axis)}` is not a valid $axis for `background-pattern`. Pass `both`, `block` for horizontal lines only, or `inline` for vertical lines only.";
   }
@@ -291,11 +301,11 @@ $-defaults: (1: 0.12, 2: 0.06, 3: 0.18);
     @error "`#{meta.inspect($image)}` is not a valid $image for `background-pattern`. Pass an image path as a string.";
   }
 
-  // Four patterns paint every pixel, so an image under them is never seen.
+  // Two patterns paint every pixel, so an image under them is never seen.
   // Rendered in Chrome 152, Firefox 156 and Safari 26.6.2: with an image
-  // underneath, dots, grid, crosshatch, zigzag, chevron, triangles, waves,
+  // underneath, dots, grid, crosshatch, zigzag, triangles, waves,
   // brick, houndstooth, gingham, harlequin and one-colour
-  // stripes show it through their gaps, and these four do not.
+  // stripes show it through their gaps, and these two do not.
   @if $image != null {
     $covers: null;
     @if $name == "checkerboard" {
@@ -401,14 +411,18 @@ $-defaults: (1: 0.12, 2: 0.06, 3: 0.18);
     );
     $sizes: -repeat("#{$s} #{$s}", 4);
     $positions: ("#{-times($s, -0.5)} 0", "#{-times($s, -0.5)} 0", "0 0", "0 0");
-  } @else if $name == "chevron" {
-    $images: (
-      "conic-gradient(from -45deg at 50% 25%, #{$c1} 90deg, #{$none} 0)",
-      "conic-gradient(from -45deg at 50% 75%, #{$c1} 90deg, #{$none} 0)"
-    );
-    $sizes: -repeat("#{$s} #{$s}", 2);
   } @else if $name == "triangles" {
-    $images: ("conic-gradient(from #{-negate($angle)}, #{$c1} 90deg, #{$none} 0)");
+    // The four rotations that cut a triangle, measured rather than derived:
+    // 45 points down, 135 right, 225 up and 315 left.
+    $turn: 45deg;
+    @if $direction == "right" {
+      $turn: 135deg;
+    } @else if $direction == "up" {
+      $turn: 225deg;
+    } @else if $direction == "left" {
+      $turn: 315deg;
+    }
+    $images: ("conic-gradient(from #{-negate($turn)}, #{$c1} 90deg, #{$none} 0)");
     $sizes: ("#{$s} #{$s}");
   } @else if $name == "brick" {
     // The proportions of the 58px tile the pattern was drawn at, kept as

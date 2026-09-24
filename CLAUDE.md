@@ -900,7 +900,7 @@ Two pieces of work are open:
   `aspect-ratio-height`; and `text-shadow` measuring its directions as angles,
   on `text-shadow`, branched from `counter`; and `text-stroke` with a `$style`
   that keeps the letterform, on `text-stroke`, branched from `text-shadow`; and
-  `background-dots` and `background-stripes` merged into an eighteen-pattern
+  `background-dots` and `background-stripes` merged into a seventeen-pattern
   `background-pattern`, on `background-pattern`, branched from `text-stroke`;
   and `escape-to-parent` attaching its argument with `sass:selector` rather
   than pasting it on as text, on `escape-to-parent`, branched from
