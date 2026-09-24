@@ -70,22 +70,45 @@ direct children above that layer, so a heading stays readable.
 ```
 </Example>
 
-<Example caption="One colour is a flat wash instead, and its alpha decides how much of the photograph is left. This is the quickest way to put a photograph behind a brand colour.">
+<Example caption="An angle, and the photograph turns into a card you can put text on. The gradient runs from the brand colour on the left to nothing on the right, so the left half is a panel and the right half is still the photograph.">
 ```scss
-.card {
-  @include background-image("/images/backgrounds/03.jpg", rgb(102 143 128 / 0.55));
+.split {
+  @include background-image("/images/backgrounds/02.jpg", rgb(34 44 37 / 0.96) rgb(34 44 37 / 0), 90deg);
 }
 ```
 ```html
 <style>
-  .card { display: grid; place-items: center; height: 180px; border-radius: 12px; }
-  .card span { padding: 10px 16px; border-radius: 999px; background: #fafaf8; color: #2f3937; font: 600 14px Inter, ui-sans-serif, system-ui, sans-serif; }
+  .split { display: flex; flex-direction: column; justify-content: center; min-height: 220px; padding: 28px; border-radius: 12px; }
+  .split h2 { margin: 0 0 10px; max-width: 18ch; font: 700 24px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; color: #fafaf8; }
+  .split p { margin: 0; max-width: 22ch; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #dee0cd; }
 </style>
-<div class="card"><span>Notes from the desk</span></div>
+<div class="split">
+  <h2>Built by hand</h2>
+  <p>Every tool on the bench has a story, and most of them are dull.</p>
+</div>
 ```
 </Example>
 
-<Example caption="`$filter-direction` says where the last colour ends up, so two brand colours across a black and white photograph make a duotone. It also takes an angle, such as `45deg`.">
+<Example caption="One colour is a flat wash instead, and its alpha decides how much of the photograph is left. Three lines of Sass, and three photographs that never picked a palette become a set.">
+```scss
+.tile--desert { @include background-image("/images/backgrounds/01.jpg", rgb(102 143 128 / 0.78)); }
+.tile--desk   { @include background-image("/images/backgrounds/03.jpg", rgb(102 143 128 / 0.78)); }
+.tile--piano  { @include background-image("/images/backgrounds/06.jpg", rgb(102 143 128 / 0.78)); }
+```
+```html
+<style>
+  .tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .tiles > * { display: flex; align-items: flex-end; height: 150px; padding: 14px; border-radius: 10px; font: 600 14px/1.3 Inter, ui-sans-serif, system-ui, sans-serif; color: #fafaf8; }
+</style>
+<div class="tiles">
+  <div class="tile--desert">Four days of sand</div>
+  <div class="tile--desk">Notes from the desk</div>
+  <div class="tile--piano">Hands, eighty years apart</div>
+</div>
+```
+</Example>
+
+<Example caption="The direction also takes the eight names. `top-right` puts the last colour in that corner, and two brand colours across a black and white photograph make a duotone.">
 ```scss
 .duotone {
   @include background-image("/images/backgrounds/06.jpg", rgb(91 192 187 / 0.85) rgb(189 196 136 / 0.85), top-right);
