@@ -34,6 +34,7 @@ The **Background Pattern Sass mixin** draws twenty patterns with CSS gradients a
   <Argument name="$angle" type="number">For <code>stripes</code>, <code>crosshatch</code>, <code>zigzag</code> and <code>triangles</code>: an angle such as <code>-45deg</code>, or a unitless number read as degrees. For <code>sunburst</code>: how wide one ray is.</Argument>
   <Argument name="$axis" type="string">For <code>grid</code>: <code>both</code>, <code>block</code> for horizontal lines only, or <code>inline</code> for vertical lines only.</Argument>
   <Argument name="$stagger" type="boolean">For <code>dots</code>, <code>false</code> lines them up in a grid instead of offsetting every other row.</Argument>
+  <Argument name="$style" type="string">For <code>isometric</code>: <code>line</code> draws the grid the cubes sit on rather than the filled faces, and <code>$thickness</code> is that line. The default is <code>fill</code>. No other pattern has one, and the section below says why.</Argument>
   <Argument name="$origin" type="string">Where a pattern drawn from a point starts: the light for <code>glow</code> and <code>vignette</code>, the rays for <code>sunburst</code>, the rings for <code>concentric</code>. A background position, such as <code>50% 100%</code> or <code>top left</code>. The default is the middle, and the bottom edge for <code>glow</code>.</Argument>
   <Argument name="$image" type="string">An image path, laid under the pattern as the last layer. Refused by the patterns that paint every pixel, since it would never be seen.</Argument>
 </Arguments>
@@ -483,6 +484,35 @@ Each pattern below is its own section, with the colours and the tile changed fro
   .stone { height: 150px; border-radius: 10px; }
 </style>
 <div class="stone"></div>
+```
+</Example>
+
+<Example caption="`$style: line` draws the grid the cubes sit on instead of the cubes: one upright family of lines and two at 30 degrees, which is isometric graph paper. `$thickness` is the line, a twentieth of the tile by default.">
+```scss
+.sheet {
+  @include background-pattern(isometric, $style: line, $color: rgb(47 57 55 / 0.4), $background: #fafaf8, $size: 44px);
+}
+```
+```html
+<style>
+  .sheet { display: grid; place-items: center; height: 180px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .sheet span { padding: 10px 16px; border-radius: 8px; background: rgb(255 255 255 / 0.92); font-weight: 600; color: #2f3937; }
+</style>
+<div class="sheet"><span>Sheet 3 of 9</span></div>
+```
+</Example>
+
+<Example caption="Lines leave gaps, so a lined pattern takes an `$image` under it where the filled one refuses the argument. A thin grid over a photograph is the drawing on the thing it was drawn from.">
+```scss
+.plan {
+  @include background-pattern(isometric, $style: line, $color: rgb(91 192 187 / 0.55), $size: 30px, $thickness: 1px, $image: "/images/backgrounds/02.jpg");
+}
+```
+```html
+<style>
+  .plan { aspect-ratio: 16 / 9; border-radius: 10px; }
+</style>
+<div class="plan"></div>
 ```
 </Example>
 

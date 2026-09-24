@@ -75,6 +75,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `background-image` lifts the children inside `:where()` | fixes a cascade defect; silent |
 | `background-image(none)` writes `none`, not `url(none)` | fixes a 404 request; silent |
 | `background-image` warns on a direction with one colour | not breaking |
+| `background-pattern` takes `$style: line` for the isometric grid | not breaking |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -1917,6 +1918,32 @@ photograph disappears into a white fallback; that call passes its own dark
 `$fallback`.
 
 It writes no `box-shadow`, so a drop shadow is still yours to add.
+
+---
+
+## Added: `$style: line` on `background-pattern`
+
+`isometric` drew filled cubes and nothing else. `$style: line` draws the grid
+they sit on instead, one upright family of lines and two at 30 degrees, which
+is isometric graph paper, and `$thickness` is that line: a twentieth of the
+tile by default rather than the eighth a filled pattern uses.
+
+```scss
+.sheet {
+  @include background-pattern(isometric, $style: line, $color: #94a3b8, $size: 44px);
+}
+```
+
+Lines leave gaps, so a lined pattern also takes an `$image` under it, which the
+filled one refuses because the faces would hide it.
+
+No other pattern has a `$style`, and the reason is worth writing down rather
+than rediscovering: a hexagon's or a brick's outline needs its lines broken
+along their own direction, and a gradient cannot break a line that way.
+Stacking the filled pattern over an offset copy hides the lower one, since the
+faces tile the plane with no gap, and thin conic spokes give lines that thicken
+as they leave the centre of each tile. The outlines that were drawn with an
+inline SVG tile went out in the same release that made every pattern gradients.
 
 ---
 

@@ -573,6 +573,30 @@ exports[`Manifest examples background-pattern: .a { @include background-pattern(
 }"
 `;
 
+exports[`Manifest examples background-pattern: .a { @include background-pattern(isometric, $style: line, $color: #5bc 1`] = `
+".a {
+  background-image: repeating-linear-gradient(90deg, #5bc0bb 0 1px, #0000 0 24.2487112px), repeating-linear-gradient(30deg, #5bc0bb 0 1px, #0000 0 28px), repeating-linear-gradient(-30deg, #5bc0bb 0 1px, #0000 0 28px);
+  background-repeat: repeat;
+  background-color: #2f3937;
+}"
+`;
+
+exports[`Manifest examples background-pattern: .a { @include background-pattern(isometric, $style: line, $color: #94a 1`] = `
+".a {
+  background-image: repeating-linear-gradient(90deg, #94a3b8 0 2px, #0000 0 34.641016px), repeating-linear-gradient(30deg, #94a3b8 0 2px, #0000 0 40px), repeating-linear-gradient(-30deg, #94a3b8 0 2px, #0000 0 40px);
+  background-repeat: repeat;
+}"
+`;
+
+exports[`Manifest examples background-pattern: .a { @include background-pattern(isometric, $style: line, $size: 40px, 1`] = `
+".a {
+  background-image: repeating-linear-gradient(90deg, color-mix(in oklab, currentColor 12%, transparent) 0 2px, #0000 0 34.641016px), repeating-linear-gradient(30deg, color-mix(in oklab, currentColor 12%, transparent) 0 2px, #0000 0 40px), repeating-linear-gradient(-30deg, color-mix(in oklab, currentColor 12%, transparent) 0 2px, #0000 0 40px), url(/img/a.png);
+  background-size: auto, auto, auto, cover;
+  background-position: 0 0, 0 0, 0 0, center;
+  background-repeat: repeat;
+}"
+`;
+
 exports[`Manifest examples background-pattern: .a { @include background-pattern(mesh, $color: #7c3aed #0ea5e9 #f43f5e 1`] = `
 ".a {
   background-image: radial-gradient(at 18% 22%, #7c3aed 0px, #0000 55%), radial-gradient(at 82% 18%, #0ea5e9 0px, #0000 55%), radial-gradient(at 70% 82%, #f43f5e 0px, #0000 55%), radial-gradient(at 25% 85%, #22c55e 0px, #0000 55%);
