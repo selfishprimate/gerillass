@@ -63,7 +63,18 @@ $-lights: "glow" "vignette" "mesh";
 
 // The colour at $index, or the default for that layer: currentColor at three
 // strengths, which keeps a pattern legible on either colour scheme.
-$-defaults: (1: 12%, 2: 6%, 3: 18%);
+//
+// Written with relative colour syntax rather than `color-mix()`, and the
+// difference is not cosmetic. Measured in Firefox 156: a `color-mix()` inside
+// a repeating gradient is rasterised once near the origin and not tiled, so a
+// band of one or two pixels disappears over most of the box. `stripes` with no
+// colour drew two faint lines there and a full field in Chrome 152. The same
+// geometry with `rgb(from currentColor r g b / 0.12)`, with `rgb(47 57 55 /
+// 0.12)` and with a plain `currentColor` all draw the full field in Chrome
+// 152, Firefox 156 and Safari 26.6.2, which is what says it is the function
+// and not the geometry. Relative colour syntax parses in all three
+// (`CSS.supports`), and Safari has had it since 16.4.
+$-defaults: (1: 0.12, 2: 0.06, 3: 0.18);
 
 @function -color($colors, $index) {
   @if $colors != null and list.length($colors) >= $index {
@@ -72,7 +83,7 @@ $-defaults: (1: 12%, 2: 6%, 3: 18%);
   @if $colors != null and list.length($colors) == 1 and $index == 2 {
     @return list.nth($colors, 1);
   }
-  @return string.unquote("color-mix(in oklab, currentColor #{map.get($-defaults, $index)}, transparent)");
+  @return string.unquote("rgb(from currentColor r g b / #{map.get($-defaults, $index)})");
 }
 
 // A length as CSS, with the arithmetic left in calc() when the browser is the
@@ -419,20 +430,54 @@ $-defaults: (1: 12%, 2: 6%, 3: 18%);
     $images: ("conic-gradient(from #{-negate($angle)}, #{$c1} 90deg, #{$none} 0)");
     $sizes: ("#{$s} #{$s}");
   } @else if $name == "isometric" and $lined {
-    // The isometric grid the cubes sit on: one upright family of lines and two
-    // at 30 degrees. The upright family repeats at the tile's own half-width,
-    // since that is where the cubes' vertical edges fall.
+    // Drawn rather than filled: the grid the cubes sit on, one upright family
+    // of lines and two at 30 degrees, over the same cubes shaded in the line's
+    // own colour. The upright family repeats at the tile's half-width, where
+    // the cubes' vertical edges fall.
     //
-    // A cube outlined with an even line, each rhombus edged and nothing
-    // filled, is not reachable this way and was tried twice: stacking the
-    // filled pattern over an offset copy hides the lower one, since the faces
-    // tile the plane with no gap, and thin conic spokes give lines that
-    // thicken as they leave the centre of each tile.
+    // The shading is what makes it read as cubes. The lines on their own are
+    // isometric graph paper, flat as a sheet of it, because the grid holds
+    // every edge of the tiling and a cube is only the two thirds of them that
+    // bound a rhombus. A wireframe of the cubes alone would have its lines
+    // broken along their own direction, and a gradient cannot break a line
+    // that way: it was tried by stacking the filled pattern over an offset
+    // copy, which hides the lower one since the faces tile the plane with no
+    // gap, by narrowing each conic wedge, which opens the spokes inside a
+    // hexagon and leaves its outline shut, and by thin conic spokes, which
+    // thicken as they leave the centre of the tile.
+    // The faces are taken from the colour as it was passed rather than from
+    // the line, which is already faded when nothing was: shading a 12%
+    // currentColor line down another 5% leaves half a percent, and the pattern
+    // disappears. The line's own default is stronger here than the 12% a
+    // filled pattern takes, since a line carries a tenth of the ink a face
+    // does.
+    $base: currentColor;
+    @if $color != null {
+      $base: list.nth($color, 1);
+    }
+    $line: $c1;
+    @if $color == null {
+      $line: string.unquote("rgb(from currentColor r g b / 0.45)");
+    }
+    $f1: string.unquote("rgb(from #{$base} r g b / 0.05)");
+    $f2: string.unquote("rgb(from #{$base} r g b / 0.11)");
+    $f3: string.unquote("rgb(from #{$base} r g b / 0.17)");
+    $g: "0 120deg, #{$none} 0";
     $images: (
-      "repeating-linear-gradient(90deg, #{$c1} 0 #{$t}, #{$none} 0 #{-times($s, 0.8660254)})",
-      "repeating-linear-gradient(30deg, #{$c1} 0 #{$t}, #{$none} 0 #{$s})",
-      "repeating-linear-gradient(-30deg, #{$c1} 0 #{$t}, #{$none} 0 #{$s})"
+      "repeating-linear-gradient(90deg, #{$line} 0 #{$t}, #{$none} 0 #{-times($s, 0.8660254)})",
+      "repeating-linear-gradient(30deg, #{$line} 0 #{$t}, #{$none} 0 #{$s})",
+      "repeating-linear-gradient(-30deg, #{$line} 0 #{$t}, #{$none} 0 #{$s})",
+      "conic-gradient(from 0deg at calc(500% / 6) calc(100% / 3), #{$f3} #{$g})",
+      "conic-gradient(from -120deg at calc(100% / 6) calc(100% / 3), #{$f2} #{$g})",
+      "conic-gradient(from 120deg at calc(100% / 3) calc(500% / 6), #{$f1} #{$g})",
+      "conic-gradient(from 120deg at calc(200% / 3) calc(500% / 6), #{$f1} #{$g})",
+      "conic-gradient(from -180deg at calc(100% / 3) 50%, #{$f2} 60deg, #{$f1} #{$g})",
+      "conic-gradient(from 60deg at calc(200% / 3) 50%, #{$f1} 60deg, #{$f3} #{$g})",
+      "conic-gradient(from -60deg at 50% calc(100% / 3), #{$f1} 120deg, #{$f2} 0 240deg, #{$f3} 0)"
     );
+    // The three line families repeat by themselves; the faces take the tile.
+    $tile: "#{-times($s, 1.7320508)} #{$s}";
+    $sizes: ("auto", "auto", "auto", $tile, $tile, $tile, $tile, $tile, $tile, $tile);
   } @else if $name == "isometric" {
     $g: "0 120deg, #{$none} 0";
     $images: (

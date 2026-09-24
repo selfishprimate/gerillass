@@ -487,7 +487,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 ```
 </Example>
 
-<Example caption="`$style: line` draws the grid the cubes sit on instead of the cubes: one upright family of lines and two at 30 degrees, which is isometric graph paper. `$thickness` is the line, a twentieth of the tile by default.">
+<Example caption="`$style: line` draws the cubes rather than filling them: the grid they sit on, one upright family of lines and two at 30 degrees, over the same cubes shaded in the line's own colour. The shading is what keeps them solid; the lines alone are graph paper, flat as a sheet of it. `$thickness` is the line, a twentieth of the tile by default.">
 ```scss
 .sheet {
   @include background-pattern(isometric, $style: line, $color: rgb(47 57 55 / 0.4), $background: #fafaf8, $size: 44px);
@@ -502,7 +502,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 ```
 </Example>
 
-<Example caption="Lines leave gaps, so a lined pattern takes an `$image` under it where the filled one refuses the argument. A thin grid over a photograph is the drawing on the thing it was drawn from.">
+<Example caption="A lined pattern leaves gaps, so it takes an `$image` under it where the filled one refuses the argument, since its faces would hide the picture.">
 ```scss
 .plan {
   @include background-pattern(isometric, $style: line, $color: rgb(91 192 187 / 0.55), $size: 30px, $thickness: 1px, $image: "/images/backgrounds/02.jpg");
