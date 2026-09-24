@@ -17,5 +17,4 @@
 .stripes { @include background-pattern(stripes, $color: #5bc0bb, $size: 24px); }
 .grid { @include background-pattern(grid, $color: #dee0cd, $size: 20px, $thickness: 1px); }
 .checkerboard { @include background-pattern(checkerboard, $color: #5bc0bb #2f3937, $size: 12px); }
-.isometric { @include background-pattern(isometric, $color: #dee0cd #5bc0bb #2f3937, $size: 26px); }
 .houndstooth { @include background-pattern(houndstooth, $color: #2f3937 #dee0cd, $size: 14px); }

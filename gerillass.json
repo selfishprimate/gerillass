@@ -414,7 +414,7 @@
           "name": "$kind",
           "default": "dots",
           "accepts": [
-            "dots, stripes, grid, checkerboard, crosshatch, zigzag, chevron, triangles, isometric, honeycomb, brick, waves, houndstooth, gingham, harlequin, sunburst, concentric, glow, vignette, mesh",
+            "dots, stripes, grid, checkerboard, crosshatch, zigzag, chevron, triangles, brick, waves, houndstooth, gingham, harlequin, sunburst, concentric, glow, vignette, mesh",
             "the name in any case; anything else is refused with the list"
           ]
         },
@@ -425,7 +425,7 @@
       ],
       "file": "scss/library/_background-pattern.scss",
       "signature": "background-pattern($kind: dots, $params...)",
-      "summary": "Twenty background patterns drawn with gradients alone: seventeen that tile, from dots and stripes to houndstooth and harlequin, and glow, vignette and mesh, which light the whole box.",
+      "summary": "Eighteen background patterns drawn with gradients alone: fifteen that tile, from dots and stripes to houndstooth and harlequin, and glow, vignette and mesh, which light the whole box.",
       "caveats": [
         "It replaces `background-dots` and `background-stripes`, which are removed in 4.0.0. `background-pattern(dots, ...)` and `background-pattern(stripes, ...)` take their place, with the arguments named rather than positional.",
         "A pattern is decorative. In forced colours mode a browser sets `background-image` to `none` for anything that is not a `url()`, so every pattern here disappears: never carry meaning in one.",
@@ -437,8 +437,6 @@
         "`glow`, `vignette` and `mesh` are drawn once at the size of the box rather than tiled, so `$size` is how far the light reaches, one value or two, and `$origin` is where it comes from. `sunburst` and `concentric` read `$origin` too, since they are drawn from a point rather than tiled: from the top edge a sunburst becomes beams fanning down, and an off-centre `concentric` reads as a contour map rather than as a target. They are what premium marketing pages use behind a hero, measured from what attio.com, retool.com and raycast.com actually serve; none of them blurs anything, since a radial gradient is already soft.",
         "A mixin call writes `background-image`, so two calls on the same element replace one another rather than stacking. To fade a tiled pattern into the page, put the pattern on one element and a `vignette` in the page's colour on an element over it.",
         "`stripes` reads its line and its period apart, which no other pattern needs: `$thickness` is the line and `$size` is one line plus its gap, so the hairline hatch marketing pages use, a 1px line on a 10px tile, is `$size: 10px, $thickness: 1px`. With no `$size` the period stays twice the line, which is the even stripe `background-stripes` drew. A line as wide as the period is refused: Chrome 152, Firefox 156 and Safari 26.6.2 all clamp the last stop and paint a solid colour with no stripes at all.",
-        "`$style: line` draws `isometric` as the grid the cubes sit on, three families of straight lines, over the same cubes shaded from the line's own colour: the shading is what makes them read as solid, since the grid holds every edge of the tiling and a cube is only the two thirds of them that bound a rhombus. No other pattern has one. A wireframe of the cubes alone, or a hexagon's or a brick's outline, needs its lines broken along their own direction, which a gradient cannot do: stacking the filled pattern over an offset copy hides the lower one, since the faces tile the plane with no gap, narrowing each conic wedge opens the spokes inside a hexagon and leaves its outline shut, and thin conic spokes give lines that thicken as they leave the centre of the tile.",
-        "A lined `isometric` leaves gaps, so it takes an `$image` under it; the filled one refuses the argument, since the faces would hide it.",
         "The default colours are `rgb(from currentColor r g b / …)` rather than `color-mix()`. Measured in Firefox 156, a `color-mix()` inside a repeating gradient is rasterised near the origin and not tiled, so a band of one or two pixels disappears over most of the box and `stripes` with no colour drew two faint lines; the same geometry with the relative form, with an rgba literal and with a plain `currentColor` drew the full field in Chrome 152, Firefox 156 and Safari 26.6.2."
       ],
       "examples": [
@@ -450,8 +448,6 @@
         ".a { @include background-pattern(zigzag, $color: #f97316, $background: #fff7ed, $size: 28px); }",
         ".a { @include background-pattern(chevron, $color: #0ea5e9, $background: #e0f2fe); }",
         ".a { @include background-pattern(triangles, $color: #16a34a, $size: 28px, $angle: 135deg); }",
-        ".a { @include background-pattern(isometric, $color: #a78bfa #7c3aed #4c1d95, $size: 32px); }",
-        ".a { @include background-pattern(honeycomb, $color: #fbbf24 #f59e0b #b45309, $size: 30px); }",
         ".a { @include background-pattern(brick, $color: #b91c1c #7f1d1d, $background: #fee2e2, $size: 48px); }",
         ".a { @include background-pattern(waves, $color: #0ea5e9, $background: #e0f2fe, $size: 32px); }",
         ".a { @include background-pattern(houndstooth, $color: #111 #fff, $size: 18px); }",
@@ -471,10 +467,7 @@
         ".a { @include background-pattern(mesh, $color: #7c3aed #0ea5e9 #f43f5e #22c55e, $background: #0b1220); }",
         ".a { @include background-pattern(sunburst, $color: #f59e0b, $angle: 4deg, $origin: 50% 0%); }",
         ".a { @include background-pattern(concentric, $color: #0f766e, $size: 30px, $thickness: 1px, $origin: 15% 110%); }",
-        ".a { @include background-pattern(stripes, $color: rgb(15 23 42 / 0.5), $size: 10px, $thickness: 1px, $angle: 315deg); }",
-        ".a { @include background-pattern(isometric, $style: line, $color: #94a3b8, $size: 40px); }",
-        ".a { @include background-pattern(isometric, $style: line, $color: #5bc0bb, $background: #2f3937, $size: 28px, $thickness: 1px); }",
-        ".a { @include background-pattern(isometric, $style: line, $size: 40px, $image: \"/img/a.png\"); }"
+        ".a { @include background-pattern(stripes, $color: rgb(15 23 42 / 0.5), $size: 10px, $thickness: 1px, $angle: 315deg); }"
       ],
       "rejects": [
         ".a { @include background-pattern(spiral); }",
@@ -491,16 +484,13 @@
         ".a { @include background-pattern(dots, $thickness: -2px); }",
         ".a { @include background-pattern(stripes, $stagger: false); }",
         ".a { @include background-pattern(checkerboard, $image: \"/img/a.png\"); }",
-        ".a { @include background-pattern(isometric, $image: \"/img/a.png\"); }",
         ".a { @include background-pattern(stripes, $color: red blue, $image: \"/img/a.png\"); }",
         ".a { @include background-pattern(sunburst, $size: 20px); }",
         ".a { @include background-pattern(concentric, $angle: 30deg); }",
         ".a { @include background-pattern(glow, $thickness: 2px); }",
         ".a { @include background-pattern(mesh, $size: 40px); }",
         ".a { @include background-pattern(glow, $origin: sideways); }",
-        ".a { @include background-pattern(stripes, $size: 4px, $thickness: 10px); }",
-        ".a { @include background-pattern(isometric, $style: dashed); }",
-        ".a { @include background-pattern(honeycomb, $style: line); }"
+        ".a { @include background-pattern(stripes, $size: 4px, $thickness: 10px); }"
       ]
     },
     {

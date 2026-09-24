@@ -546,15 +546,6 @@ exports[`Manifest examples background-pattern: .a { @include background-pattern(
 }"
 `;
 
-exports[`Manifest examples background-pattern: .a { @include background-pattern(honeycomb, $color: #fbbf24 #f59e0b #b 1`] = `
-".a {
-  background-image: repeating-conic-gradient(from 30deg, #0000 0 120deg, #b45309 0 180deg), repeating-conic-gradient(from 30deg, #fbbf24 0 60deg, #f59e0b 0 120deg, #b45309 0 180deg);
-  background-size: 30px 17.320509px, 30px 17.320509px;
-  background-position: 15px 8.660253px, 0 0;
-  background-repeat: repeat;
-}"
-`;
-
 exports[`Manifest examples background-pattern: .a { @include background-pattern(houndstooth, $color: #111 #fff, $size 1`] = `
 ".a {
   background-image: linear-gradient(-45deg, #fff 25%, #0000 25% 75%, #111 75%), linear-gradient(-45deg, #111 25%, #0000 25% 75%, #fff 75%), linear-gradient(45deg, #111 17%, #0000 17% 25%, #111 25% 36%, #0000 36% 64%, #111 64% 75%, #0000 75% 83%, #111 83%);
@@ -562,40 +553,6 @@ exports[`Manifest examples background-pattern: .a { @include background-pattern(
   background-position: 0 0, 18px 18px, 18px 18px;
   background-repeat: repeat;
   background-color: #fff;
-}"
-`;
-
-exports[`Manifest examples background-pattern: .a { @include background-pattern(isometric, $color: #a78bfa #7c3aed #4 1`] = `
-".a {
-  background-image: conic-gradient(from 0deg at calc(500% / 6) calc(100% / 3), #4c1d95 0 120deg, #0000 0), conic-gradient(from -120deg at calc(100% / 6) calc(100% / 3), #7c3aed 0 120deg, #0000 0), conic-gradient(from 120deg at calc(100% / 3) calc(500% / 6), #a78bfa 0 120deg, #0000 0), conic-gradient(from 120deg at calc(200% / 3) calc(500% / 6), #a78bfa 0 120deg, #0000 0), conic-gradient(from -180deg at calc(100% / 3) 50%, #7c3aed 60deg, #a78bfa 0 120deg, #0000 0), conic-gradient(from 60deg at calc(200% / 3) 50%, #a78bfa 60deg, #4c1d95 0 120deg, #0000 0), conic-gradient(from -60deg at 50% calc(100% / 3), #a78bfa 120deg, #7c3aed 0 240deg, #4c1d95 0);
-  background-size: 55.4256256px 32px;
-  background-repeat: repeat;
-}"
-`;
-
-exports[`Manifest examples background-pattern: .a { @include background-pattern(isometric, $style: line, $color: #5bc 1`] = `
-".a {
-  background-image: repeating-linear-gradient(90deg, #5bc0bb 0 1px, #0000 0 24.2487112px), repeating-linear-gradient(30deg, #5bc0bb 0 1px, #0000 0 28px), repeating-linear-gradient(-30deg, #5bc0bb 0 1px, #0000 0 28px), conic-gradient(from 0deg at calc(500% / 6) calc(100% / 3), rgb(from #5bc0bb r g b / 0.17) 0 120deg, #0000 0), conic-gradient(from -120deg at calc(100% / 6) calc(100% / 3), rgb(from #5bc0bb r g b / 0.11) 0 120deg, #0000 0), conic-gradient(from 120deg at calc(100% / 3) calc(500% / 6), rgb(from #5bc0bb r g b / 0.05) 0 120deg, #0000 0), conic-gradient(from 120deg at calc(200% / 3) calc(500% / 6), rgb(from #5bc0bb r g b / 0.05) 0 120deg, #0000 0), conic-gradient(from -180deg at calc(100% / 3) 50%, rgb(from #5bc0bb r g b / 0.11) 60deg, rgb(from #5bc0bb r g b / 0.05) 0 120deg, #0000 0), conic-gradient(from 60deg at calc(200% / 3) 50%, rgb(from #5bc0bb r g b / 0.05) 60deg, rgb(from #5bc0bb r g b / 0.17) 0 120deg, #0000 0), conic-gradient(from -60deg at 50% calc(100% / 3), rgb(from #5bc0bb r g b / 0.05) 120deg, rgb(from #5bc0bb r g b / 0.11) 0 240deg, rgb(from #5bc0bb r g b / 0.17) 0);
-  background-size: auto, auto, auto, 48.4974224px 28px, 48.4974224px 28px, 48.4974224px 28px, 48.4974224px 28px, 48.4974224px 28px, 48.4974224px 28px, 48.4974224px 28px;
-  background-repeat: repeat;
-  background-color: #2f3937;
-}"
-`;
-
-exports[`Manifest examples background-pattern: .a { @include background-pattern(isometric, $style: line, $color: #94a 1`] = `
-".a {
-  background-image: repeating-linear-gradient(90deg, #94a3b8 0 2px, #0000 0 34.641016px), repeating-linear-gradient(30deg, #94a3b8 0 2px, #0000 0 40px), repeating-linear-gradient(-30deg, #94a3b8 0 2px, #0000 0 40px), conic-gradient(from 0deg at calc(500% / 6) calc(100% / 3), rgb(from #94a3b8 r g b / 0.17) 0 120deg, #0000 0), conic-gradient(from -120deg at calc(100% / 6) calc(100% / 3), rgb(from #94a3b8 r g b / 0.11) 0 120deg, #0000 0), conic-gradient(from 120deg at calc(100% / 3) calc(500% / 6), rgb(from #94a3b8 r g b / 0.05) 0 120deg, #0000 0), conic-gradient(from 120deg at calc(200% / 3) calc(500% / 6), rgb(from #94a3b8 r g b / 0.05) 0 120deg, #0000 0), conic-gradient(from -180deg at calc(100% / 3) 50%, rgb(from #94a3b8 r g b / 0.11) 60deg, rgb(from #94a3b8 r g b / 0.05) 0 120deg, #0000 0), conic-gradient(from 60deg at calc(200% / 3) 50%, rgb(from #94a3b8 r g b / 0.05) 60deg, rgb(from #94a3b8 r g b / 0.17) 0 120deg, #0000 0), conic-gradient(from -60deg at 50% calc(100% / 3), rgb(from #94a3b8 r g b / 0.05) 120deg, rgb(from #94a3b8 r g b / 0.11) 0 240deg, rgb(from #94a3b8 r g b / 0.17) 0);
-  background-size: auto, auto, auto, 69.282032px 40px, 69.282032px 40px, 69.282032px 40px, 69.282032px 40px, 69.282032px 40px, 69.282032px 40px, 69.282032px 40px;
-  background-repeat: repeat;
-}"
-`;
-
-exports[`Manifest examples background-pattern: .a { @include background-pattern(isometric, $style: line, $size: 40px, 1`] = `
-".a {
-  background-image: repeating-linear-gradient(90deg, rgb(from currentColor r g b / 0.45) 0 2px, #0000 0 34.641016px), repeating-linear-gradient(30deg, rgb(from currentColor r g b / 0.45) 0 2px, #0000 0 40px), repeating-linear-gradient(-30deg, rgb(from currentColor r g b / 0.45) 0 2px, #0000 0 40px), conic-gradient(from 0deg at calc(500% / 6) calc(100% / 3), rgb(from currentColor r g b / 0.17) 0 120deg, #0000 0), conic-gradient(from -120deg at calc(100% / 6) calc(100% / 3), rgb(from currentColor r g b / 0.11) 0 120deg, #0000 0), conic-gradient(from 120deg at calc(100% / 3) calc(500% / 6), rgb(from currentColor r g b / 0.05) 0 120deg, #0000 0), conic-gradient(from 120deg at calc(200% / 3) calc(500% / 6), rgb(from currentColor r g b / 0.05) 0 120deg, #0000 0), conic-gradient(from -180deg at calc(100% / 3) 50%, rgb(from currentColor r g b / 0.11) 60deg, rgb(from currentColor r g b / 0.05) 0 120deg, #0000 0), conic-gradient(from 60deg at calc(200% / 3) 50%, rgb(from currentColor r g b / 0.05) 60deg, rgb(from currentColor r g b / 0.17) 0 120deg, #0000 0), conic-gradient(from -60deg at 50% calc(100% / 3), rgb(from currentColor r g b / 0.05) 120deg, rgb(from currentColor r g b / 0.11) 0 240deg, rgb(from currentColor r g b / 0.17) 0), url(/img/a.png);
-  background-size: auto, auto, auto, 69.282032px 40px, 69.282032px 40px, 69.282032px 40px, 69.282032px 40px, 69.282032px 40px, 69.282032px 40px, 69.282032px 40px, cover;
-  background-position: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, center;
-  background-repeat: repeat;
 }"
 `;
 

@@ -7,21 +7,21 @@
   "after": {
     "title": "After",
     "description": "The After Sass mixin is an easy way to use the ::after CSS pseudo-element. You can insert text or design elements after the content of each selected element.",
-    "scss": "@use \"gerillass\" as *;\n\n.element{\n  @include after{\n    content: \"Easy to use!\";\n    font-style: italic;\n    color: red;\n  };\n}\n"
+    "scss": "@use \"gerillass\" as *;\n\n.bell {\n  @include after {\n    position: absolute;\n    top: 6px;\n    right: 6px;\n    width: 8px;\n    height: 8px;\n    border-radius: 50%;\n    background: #ed6a5a;\n  }\n}\n"
   },
   "all-buttons": {
     "title": "All Buttons",
     "description": "The All Buttons Sass mixin helps you target all the HTML button elements in the DOM, so you can easily apply your style rules.",
-    "scss": "@use \"gerillass\" as *;\n\n@include all-buttons {\n  background-color: teal;\n  color: white;\n}\n@include all-buttons(hover) {\n  background-color: teal;\n  color: white;\n}\n@include all-buttons(focus) {\n  background-color: purple;\n  color: white;\n}\n@include all-buttons(active) {\n  background-color: blue;\n  color: white;\n}\n@include all-buttons(disabled) {\n  background-color: gray;\n  color: black;\n}\n"
+    "scss": "@use \"gerillass\" as *;\n\n@include all-buttons {\n  padding: 11px 20px;\n  border: 0;\n  border-radius: 10px;\n  background-color: #668f80;\n  color: #fff;\n  font: 600 14px Inter, ui-sans-serif, system-ui, sans-serif;\n}\n\n@include all-buttons(hover) {\n  background-color: #2f3937;\n}\n\n@include all-buttons(focus) {\n  background-color: #2f3937;\n}\n\n@include all-buttons(active) {\n  background-color: #2f3937;\n}\n\n@include all-buttons(disabled) {\n  background-color: #f2f2eb;\n  color: #657167;\n}\n"
   },
   "all-text-inputs": {
     "title": "All Text Inputs",
     "description": "The All Text Inputs Sass mixin helps you target all the text-based HTML input elements in the DOM, so you can easily apply your style rules.",
-    "scss": "@use \"gerillass\" as *;\n\n.element {\n  @include all-text-inputs(user-invalid) {\n    border-color: crimson;\n    background-color: #fff5f5;\n  };\n}\n"
+    "scss": "@use \"gerillass\" as *;\n\n@include all-text-inputs {\n  width: 100%;\n  height: 38px;\n  padding: 0 12px;\n  border: 1px solid #dee0cd;\n  border-radius: 6px;\n  background: #fff;\n  font: inherit;\n  color: inherit;\n}\n\nselect {\n  width: 100%;\n  height: 38px;\n  padding: 0 8px;\n  border: 1px solid #dee0cd;\n  border-radius: 6px;\n  background: #fff;\n  font: inherit;\n}\n"
   },
   "antialias": {
     "title": "Antialias",
-    "description": "The Antialias Sass mixin provides smooth font rendering. It smooths fonts at the pixel level and prevents subpixel rendering.",
+    "description": "The Antialias Sass mixin draws text with greyscale antialiasing instead of subpixel antialiasing on macOS, which makes it look thinner. Measured in all three browsers.",
     "scss": "@use \"gerillass\" as *;\n\n.element{\n  @include antialias(only);\n}\n"
   },
   "aspect-ratio": {
@@ -29,15 +29,25 @@
     "description": "The Aspect Ratio Sass mixin holds an element to a ratio and adds what the CSS aspect-ratio property leaves out. It replaces Ratio Box and Responsive Video.",
     "scss": "@use \"gerillass\" as *;\n\n.video iframe {\n  @include aspect-ratio(\"16/9\");\n}\n\n.avatar {\n  @include aspect-ratio(\"1:1\", contain);\n}\n\n.panel {\n  @include aspect-ratio(1.5, null);\n}\n"
   },
+  "auto-grid": {
+    "title": "Auto Grid",
+    "description": "The Auto Grid Sass mixin lays out as many columns as the container holds, with a minimum that never overflows a narrow screen, and an optional ceiling on the column count.",
+    "scss": "@use \"gerillass\" as *;\n\n.feed {\n  --card-min: 14rem;\n  --grid-gap: 1rem;\n\n  @include auto-grid(var(--card-min), var(--grid-gap));\n}\n"
+  },
   "background-image": {
     "title": "Background Image",
-    "description": "The Background Image Sass mixin allows you to apply the background-image CSS property to the selected elements.",
-    "scss": "@use \"gerillass\" as *;\n\n.element{\n  @include background-image(\"/images/backgrounds/07.jpg\", rgba(0, 128, 128, 0.7) rgba(255, 192, 203, 0.8), right);\n}\n"
+    "description": "The Background Image Sass mixin puts an image behind an element with cover, center and no-repeat, and a colour or a gradient over it as a filter.",
+    "scss": "@use \"gerillass\" as *;\n\n.marks {\n  @include background-image(\"/images/general/sass-logo-black.svg\", $size: 56px, $position: left top, $repeat: repeat);\n}\n\n.marks-washed {\n  @include background-image(\"/images/general/sass-logo-black.svg\", rgb(102 143 128 / 0.75), $size: 56px, $position: left top, $repeat: repeat);\n}\n"
+  },
+  "background-pattern": {
+    "title": "Background Pattern",
+    "description": "Eighteen background patterns from one line of Sass: dots, stripes, grid, checkerboard, crosshatch, zigzag, chevron, triangles, brick, waves, houndstooth, gingham, harlequin, sunburst, concentric, glow, vignette and mesh, all drawn with CSS gradients.",
+    "scss": "@use \"gerillass\" as *;\n\n.plan {\n  @include background-pattern(grid, $color: rgb(47 57 55 / 0.3), $background: #fafaf8, $size: 22px, $thickness: 1px);\n}\n\n.plan__fade {\n  @include background-pattern(vignette, $color: #fafaf8, $size: 60% 55%);\n}\n"
   },
   "before": {
     "title": "Before",
     "description": "The Before Sass mixin is an easy way to use the ::before CSS pseudo-element. You can insert text or design elements before the content of each selected element.",
-    "scss": "@use \"gerillass\" as *;\n\n.element{\n  @include before{\n    content: \"Easy to use!\";\n    font-style: italic;\n    color: red;\n  };\n}\n"
+    "scss": "@use \"gerillass\" as *;\n\n.steps {\n  counter-reset: step;\n}\n\n.step {\n  counter-increment: step;\n  @include before(counter(step)) {\n    display: inline-flex;\n    align-items: center;\n    justify-content: center;\n    width: 24px;\n    height: 24px;\n    margin-right: 10px;\n    border-radius: 50%;\n    background: #222c25;\n    color: #fafaf8;\n    font-size: 12px;\n    font-weight: 600;\n  }\n}\n"
   },
   "border-box": {
     "title": "Border Box",
@@ -52,7 +62,7 @@
   "brand-logo": {
     "title": "Brand Logo",
     "description": "The Brand Logo Sass mixin helps you create an SEO-friendly logo component for your brand's website using CSS best practices.",
-    "scss": "@use \"gerillass\" as *;\n\n.brand-logo{\n  @include brand-logo(\n    $width: 100px,\n    $height: 30px,\n    $image-url: \"https://coolors.co/assets/img/logo.svg\"\n  );\n}\n"
+    "scss": "@use \"gerillass\" as *;\n\n.brand-logo {\n  @include brand-logo(\n    $width: 196px,\n    $height: 42px,\n    $image-url: \"/images/logo/logo.svg\"\n  );\n}\n"
   },
   "breakpoint": {
     "title": "Breakpoint",
@@ -74,11 +84,6 @@
     "description": "The Circle Sass mixin helps you create a perfect circle shape in CSS and Sass.",
     "scss": "@use \"gerillass\" as *;\n\n.element{\n  @include circle(150px);\n}\n"
   },
-  "clearfix": {
-    "title": "Clearfix",
-    "description": "The Clearfix Sass mixin helps you fix broken layouts caused by using the float CSS property.",
-    "scss": "@use \"gerillass\" as *;\n\n.element{\n  @include clearfix;\n}\n"
-  },
   "columnizer": {
     "title": "Columnizer",
     "description": "The Columnizer Sass mixin helps you create beautiful, responsive, card-based design layouts in CSS and Sass.",
@@ -96,53 +101,53 @@
   },
   "counter": {
     "title": "Counter",
-    "description": "Number your content automatically with the Counter Sass mixin, which wraps the CSS counter properties for listicles and step by step layouts.",
-    "scss": "@use \"gerillass\" as *;\n\n.listicle-wrapper {\n  @include counter {\n    position: absolute;\n    top: 0;\n    left: 0;\n    font-size: 7em;\n    font-weight: bold;\n    font-style: italic;\n    font-family: \"Jumble\", sans-serif;\n    transform: translateY(-20%);\n    color: rgb(230,230,230);\n    line-height: 1;\n    z-index: -1;\n  };\n  .item {\n    position: relative;\n    padding-left: 50px;\n    &:not(:last-child) {\n        margin-bottom: 3rem;\n    }\n  }\n}\n"
-  },
-  "ellipsis": {
-    "title": "Ellipsis",
-    "description": "The Ellipsis Sass mixin helps you trim text and add an ellipsis at the end of it using the CSS text-overflow property.",
-    "scss": "@use \"gerillass\" as *;\n\n.element{\n  @include ellipsis(\n    $width: 200px,\n    $display: block\n  );\n}\n"
+    "description": "Number the children of any element with the Counter Sass mixin: steps, rankings, chapters and search results, continued across content or started at any number, with no classes in the markup.",
+    "scss": "@use \"gerillass\" as *;\n\n.ingredients {\n  @include counter(\"(\", lower-alpha, \")\", $name: ingredients) {\n    margin-right: 6px;\n    color: #69995d;\n  }\n}\n\n.ingredients-more {\n  @include counter(\"(\", lower-alpha, \")\", $continue: ingredients) {\n    margin-right: 6px;\n    color: #69995d;\n  }\n}\n\n.method {\n  @include counter(decimal, \".\", $name: method) {\n    margin-right: 6px;\n    font-weight: 700;\n  }\n}\n\n.method-more {\n  @include counter(decimal, \".\", $continue: method) {\n    margin-right: 6px;\n    font-weight: 700;\n  }\n}\n"
   },
   "escape-to-parent": {
     "title": "Escape to Parent",
-    "description": "The Escape to Parent Sass mixin allows you to escape to the parent element and use multiple class or id selectors with it.",
-    "scss": "@use \"gerillass\" as *;\n\n.parent-element{\n  .element{\n    @include escape-to-parent(\".smartphone\"){\n      background-color: red;\n    }\n    @include escape-to-parent(\".desktop\"){\n      background-color: green;\n    }\n  }\n}\n"
+    "description": "The Escape to Parent Sass mixin writes a nested rule again with a theme or state class attached to its outermost element, so a class higher up the page can switch what the rule does.",
+    "scss": "@use \"gerillass\" as *;\n\n.panel {\n  @include escape-to-parent(\".theme-dark\") {\n    background: #222c25;\n    border-color: #2f3937;\n  }\n\n  .price {\n    color: #668f80;\n\n    @include escape-to-parent(\".theme-dark\") {\n      color: #fafaf8;\n    }\n  }\n}\n"
   },
   "except": {
     "title": "Except",
     "description": "The Except Sass mixin helps you apply style changes to every element in a list except the ones you choose. It uses the :not() CSS pseudo-class.",
-    "scss": "@use \"gerillass\" as *;\n\n.list-wrapper {\n  .list-item {\n    @include except(1, -1, -2) {\n      background-color: #5bc0bb;\n      color: white;\n    }\n  }\n}\n"
+    "scss": "@use \"gerillass\" as *;\n\n.crumb {\n  @include except(last, $of: \".crumb\") {\n    &::after {\n      content: \"/\";\n      padding: 0 8px;\n      color: #657167;\n    }\n  }\n}\n"
   },
   "focus-ring": {
     "title": "Focus Ring",
     "description": "Draw a keyboard focus ring with the Focus Ring Sass mixin: an outline on :focus-visible, which stays out of the way of mouse users and survives forced-colors mode.",
-    "scss": "@use \"gerillass\" as *;\n\n.btn-outline {\n  @include focus-ring;\n}\n\n.btn-primary {\n  @include focus-ring($color: #18181b);\n}\n"
+    "scss": "@use \"gerillass\" as *;\n\n.btn-outline {\n  @include focus-ring;\n}\n\n.btn-primary {\n  @include focus-ring($color: #222c25);\n}\n"
   },
   "font-face": {
     "title": "Font Face",
     "description": "The Font Face Sass mixin helps you generate a cross-browser compatible @font-face CSS at-rule in CSS and SCSS.",
-    "scss": "@use \"gerillass\" as *;\n\n@include font-face (\n  $font-weight: 700,\n  $font-style: italic,\n  $file-formats: eot woff2 woff, \n  $font-family: \"Fanwood Text\",\n  $file-path: \"fonts/fanwood-text/fanwood-text-bold-italic\",\n);\n"
+    "scss": "@use \"gerillass\" as *;\n\n@include font-face(\"Roboto\", \"/fonts/roboto/roboto-v20-latin-ext_latin-regular\");\n@include font-face(\"Roboto\", \"/fonts/roboto/roboto-v20-latin-ext_latin-italic\", italic);\n@include font-face(\"Roboto\", \"/fonts/roboto/roboto-v20-latin-ext_latin-700\", 700);\n@include font-face(\"Roboto\", \"/fonts/roboto/roboto-v20-latin-ext_latin-700italic\", italic, 700);\n"
+  },
+  "glass": {
+    "title": "Glass",
+    "description": "The Glass Sass mixin writes a frosted glass panel with backdrop-filter, the prefixed property older Safari needs and the opaque fallback a browser without support has to fall back to.",
+    "scss": "@use \"gerillass\" as *;\n\n.widget {\n  @include glass(28px, rgb(255 255 255 / 0.16), 150%, rgb(255 255 255 / 0.28), rgb(47 57 55 / 0.92));\n}\n"
   },
   "gradient": {
     "title": "Gradient",
     "description": "Write linear, radial and conic CSS gradients with one Sass mixin, repeating or not, and choose the colour space they blend in.",
-    "scss": "@use \"gerillass\" as *;\n\n.ring{\n  display: grid;\n  place-items: center;\n  width: 160px;\n  height: 160px;\n  border-radius: 50%;\n  @include gradient((#6366f1 0 72%) (#e0e7ff 72% 100%), conic);\n\n  &::before{\n    content: \"72%\";\n    display: grid;\n    place-items: center;\n    width: 124px;\n    height: 124px;\n    border-radius: 50%;\n    background: #fff;\n    font: 600 28px/1 system-ui, sans-serif;\n    color: #312e81;\n  }\n}\n"
+    "scss": "@use \"gerillass\" as *;\n\n.ring{\n  display: grid;\n  place-items: center;\n  width: 160px;\n  height: 160px;\n  border-radius: 50%;\n  @include gradient((#5bc0bb 0 72%) (#f2f2eb 72% 100%), conic);\n\n  &::before{\n    content: \"72%\";\n    display: grid;\n    place-items: center;\n    width: 124px;\n    height: 124px;\n    border-radius: 50%;\n    background: #fff;\n    font: 600 28px/1 system-ui, sans-serif;\n    color: #668f80;\n  }\n}\n"
   },
   "hide": {
     "title": "Hide",
-    "description": "Hide an element visually while keeping it available to screen readers, with the Hide Sass mixin. The accessible way to take something out of view.",
-    "scss": "@use \"gerillass\" as *;\n\n.element {\n  @include hide(unhide);\n}\n"
-  },
-  "line-clamp": {
-    "title": "Line Clamp",
-    "description": "Truncate text after a number of lines with the Line Clamp Sass mixin. It writes all five declarations the effect needs, which -webkit-line-clamp does not.",
-    "scss": "@use \"gerillass\" as *;\n\n.excerpt {\n  @include line-clamp(3);\n}\n"
+    "description": "Hide an element visually while keeping it available to screen readers, with the Hide Sass mixin, or keep it hidden until it has keyboard focus, for skip links.",
+    "scss": "@use \"gerillass\" as *;\n\n.skip-link {\n  position: absolute;\n  top: 12px;\n  left: 12px;\n  padding: 10px 16px;\n  border-radius: 6px;\n  background: #222c25;\n  color: #fafaf8;\n  @include hide(focusable);\n}\n"
   },
   "loadify": {
     "title": "Loadify",
     "description": "Fade a page element in as the page loads with the Loadify Sass mixin, which also gives images a smooth loading effect of their own.",
     "scss": "@use \"gerillass\" as *;\n\n@include loadify(init);\n\n.parent-element {\n  .item {\n    @include only(1) {\n      @include loadify(0.2s, 0.6s);\n    }\n    @include only(2) {\n      @include loadify(0.4s, 0.6s);\n    }\n    @include only(3) {\n      @include loadify(0.6s, 0.6s);\n    }\n  }\n}\n"
+  },
+  "long-shadow": {
+    "title": "Long Shadow",
+    "description": "The Long Shadow Sass mixin draws the long shadow of flat design with box-shadow, stacking a copy of the element for every step of the length, in any direction and with an optional fade.",
+    "scss": "@use \"gerillass\" as *;\n\n$ink: oklch(0.21 0.04 265);\n\n.button {\n  @include long-shadow($ink, 10px, bottom-right, $step: 2px);\n\n  &:hover {\n    @include long-shadow($ink, 16px, bottom-right, $step: 2px);\n    translate: -4px -4px;\n  }\n\n  &:active {\n    @include long-shadow($ink, 4px, bottom-right, $step: 2px);\n    translate: 4px 4px;\n  }\n}\n"
   },
   "motion-safe": {
     "title": "Motion Safe",
@@ -157,12 +162,12 @@
   "placeholder": {
     "title": "Placeholder",
     "description": "The Placeholder Sass mixin helps you style the placeholder text in an input or textarea element and generate cross-browser compatible CSS code.",
-    "scss": "@use \"gerillass\" as *;\n\n.element{\n  @include placeholder{\n    color: red;\n  }\n}\n"
+    "scss": "@use \"gerillass\" as *;\n\n@include placeholder {\n  color: #657167;\n  font-style: italic;\n}\n"
   },
   "placeholder-shown": {
     "title": "Placeholder Shown",
     "description": "Style an input or textarea while it is showing placeholder text, with the Placeholder Shown Sass mixin and the :placeholder-shown pseudo-class.",
-    "scss": "@use \"gerillass\" as *;\n\ninput{\n  @include placeholder-shown{\n    background-color: yellow;\n  }\n}\n"
+    "scss": "@use \"gerillass\" as *;\n\ninput {\n  @include placeholder-shown {\n    border-style: dashed;\n    background-color: #fafaf8;\n  }\n}\n"
   },
   "position": {
     "title": "Position",
@@ -176,7 +181,7 @@
   },
   "reset-css": {
     "title": "Reset CSS",
-    "description": "The Reset CSS Sass mixin (also known as CSS Reset) helps you reset the browser default styles of all HTML elements to a consistent baseline.",
+    "description": "The Reset CSS Sass mixin writes a modern baseline: border-box, sane line heights, media that does not overflow, form controls that inherit the page's font, and no specificity of its own.",
     "scss": "@use \"gerillass\" as *;\n\n@include reset-css;\n"
   },
   "reset-figure": {
@@ -187,17 +192,22 @@
   "resizable": {
     "title": "Resizable",
     "description": "The Resizable Sass mixin helps you make an element resizable in both the horizontal and vertical directions.",
-    "scss": "@use \"gerillass\" as *;\n\n.element{\n  @include resizable;\n}\n"
+    "scss": "@use \"gerillass\" as *;\n\ntextarea {\n  @include resizable;\n}\n"
   },
   "responsive-image": {
     "title": "Responsive Image",
-    "description": "Make an image responsive with the Responsive Image Sass mixin, which also switches display from inline to block and removes the gap underneath.",
+    "description": "The Responsive Image Sass mixin fits an image to its container without upscaling it, and keeps its proportions against a height attribute.",
     "scss": "@use \"gerillass\" as *;\n\nimg {\n  @include responsive-image;\n}\n"
+  },
+  "reveal": {
+    "title": "Reveal",
+    "description": "The Reveal Sass mixin animates something in and out of the page: a popover, a dialog, or an element a class toggles, with the starting-style and allow-discrete pieces that each fail silently on their own.",
+    "scss": "@use \"gerillass\" as *;\n\n.menu {\n  display: none;\n\n  @include reveal(\".is-open\", 200ms, right 1rem, null, false);\n}\n\n.menu.is-open {\n  display: block;\n}\n"
   },
   "scissors": {
     "title": "Scissors",
     "description": "Cut the corners off an element with the Scissors Sass mixin. One line sets the size of the cut and picks which corners it applies to.",
-    "scss": "@use \"gerillass\" as *;\n\n.element{\n  height: 200px;\n  display: flex;\n  justify-content: center;\n  background-color: #5bc0bb;\n  @include scissors(0 0 50% 50%);\n  h2 {\n    color: white;\n    font-size: 2.5em; \n    text-align: center;\n  }\n}\n"
+    "scss": "@use \"gerillass\" as *;\n\n.element{\n  height: 200px;\n  display: flex;\n  justify-content: center;\n  background-color: #668f80;\n  @include scissors(0 0 50% 50%);\n  h2 {\n    color: white;\n    font-size: 2.5em; \n    text-align: center;\n  }\n}\n"
   },
   "screen-agent": {
     "title": "Screen Agent",
@@ -232,41 +242,41 @@
   "text-gradient": {
     "title": "Text Gradient",
     "description": "Add a gradient overlay to text with the Text Gradient Sass mixin. One line sets the direction of the gradient, the colours and the colour stops.",
-    "scss": "@use \"gerillass\" as *;\n\n.premium{\n  font: 900 48px/1 system-ui, sans-serif;\n  @include text-gradient(\n    (#8b6508 0%) (#ffd700 45%) (#fff8dc 50%) (#daa520 55%) (#8b6508 100%),\n    $direction: top\n  );\n}\n"
+    "scss": "@use \"gerillass\" as *;\n\n.premium{\n  font: 900 48px/1 system-ui, sans-serif;\n  @include text-gradient(\n    (#2f3937 0%) (#69995d 45%) (#f2f2eb 50%) (#bdc488 55%) (#2f3937 100%),\n    $direction: top\n  );\n}\n"
   },
   "text-image": {
     "title": "Text Image",
     "description": "The Text Image Sass mixin helps you clip the background image of a selected element to the shape of its foreground text.",
-    "scss": "@use \"gerillass\" as *;\n\n.element{\n  @include text-image(\"/images/backgrounds/05.jpg\");\n}\n"
+    "scss": "@use \"gerillass\" as *;\n\n.title {\n  @include text-image(\"/images/landscape.webp\", $fallback: #2f3937);\n}\n"
   },
   "text-selection": {
     "title": "Text Selection",
     "description": "The Text Selection Sass mixin helps you style the portion of text (or an element) that a user has selected.",
-    "scss": "@use \"gerillass\" as *;\n\n.element{\n  @include text-selection(only){\n    color: pink;\n    background-color: red;\n  }\n}\n"
+    "scss": "@use \"gerillass\" as *;\n\n.element{\n  @include text-selection(only){\n    color: #2f3937;\n    background-color: #eefa92;\n  }\n}\n"
   },
   "text-shadow": {
     "title": "Text Shadow",
-    "description": "Add shadows to text with the Text Shadow Sass mixin. It takes a comma separated list of shadows, or a single shadow that can be multiplied.",
-    "scss": "@use \"gerillass\" as *;\n\n.element{\n  transition: .3s;\n  @include text-shadow(left gold 3px true);\n  &:hover{\n    @include text-shadow(right gold 8px true);\n  }\n  &:active{\n    @include text-shadow(right deepskyblue 8px true);\n  }\n}\n"
+    "description": "Add shadows to text with the Text Shadow Sass mixin. Each shadow is a direction or an angle, a colour and a distance, and it can be filled into a long shadow.",
+    "scss": "@use \"gerillass\" as *;\n\n.sign {\n  @include text-shadow(\n    top #5bc0bb 0px 4px,\n    top #5bc0bb 0px 10px,\n    top #2f3937 0px 20px\n  );\n\n  @include motion-safe {\n    transition: text-shadow 0.35s ease;\n  }\n\n  &:hover {\n    @include text-shadow(\n      top #5bc0bb 0px 10px,\n      top #5bc0bb 0px 26px,\n      top #2f3937 0px 52px\n    );\n  }\n}\n"
   },
   "text-stroke": {
     "title": "Text Stroke",
-    "description": "The Text Stroke Sass mixin helps you add a stroke to a text element and style it very easily.",
-    "scss": "@use \"gerillass\" as *;\n\n.element {\n  @include text-stroke(\n    $color: azure,\n    $stroke-color: cadetblue,\n    $fallback-color: cadetblue,\n    $stroke-width: 1px\n  );\n}\n"
+    "description": "Outline text with the Text Stroke Sass mixin: around the letter, straddling it, or with the letter left unfilled, in one line of Sass.",
+    "scss": "@use \"gerillass\" as *;\n\n.menu a {\n  @include text-stroke(2px, #222c25, hollow);\n\n  @include motion-safe {\n    transition: -webkit-text-fill-color 0.25s ease;\n  }\n\n  &:hover,\n  &:focus-visible {\n    @include text-stroke(2px, #222c25, hollow, #222c25);\n    -webkit-text-fill-color: #69995d;\n  }\n}\n"
   },
   "tokens": {
     "title": "Tokens",
     "description": "Write a Sass map out as CSS custom properties with the Tokens Sass mixin: a prefix, null values left out, quoted strings kept, and names a browser would drop refused.",
-    "scss": "@use \"gerillass\" as *;\n\n:root {\n  @include tokens((1: 0.25rem, 2: 0.5rem, 3: 0.75rem, 4: 1rem), space);\n  @include tokens((md: 8px, lg: 12px, full: 9999px), radius);\n  @include tokens((sans: (\"Inter\", system-ui, sans-serif)), font);\n  @include tokens((sm: 0.875rem, lg: 1.125rem), text);\n  @include tokens((md: 0 4px 12px rgba(24, 24, 27, 0.08)), shadow);\n}\n\n.card {\n  display: grid;\n  gap: var(--space-2);\n  padding: var(--space-4);\n  border-radius: var(--radius-lg);\n  font-family: var(--font-sans);\n  font-size: var(--text-sm);\n  box-shadow: var(--shadow-md);\n}\n\n.card .title {\n  font-size: var(--text-lg);\n}\n\n.card .pill {\n  justify-self: start;\n  padding: var(--space-1) var(--space-3);\n  border-radius: var(--radius-full);\n}\n"
+    "scss": "@use \"gerillass\" as *;\n\n:root {\n  @include tokens((1: 0.25rem, 2: 0.5rem, 3: 0.75rem, 4: 1rem), space);\n  @include tokens((md: 8px, lg: 12px, full: 9999px), radius);\n  @include tokens((sans: (\"Inter\", system-ui, sans-serif)), font);\n  @include tokens((sm: 0.875rem, lg: 1.125rem), text);\n  @include tokens((md: 0 4px 12px rgb(34 44 37 / 0.08)), shadow);\n}\n\n.card {\n  display: grid;\n  gap: var(--space-2);\n  padding: var(--space-4);\n  border-radius: var(--radius-lg);\n  font-family: var(--font-sans);\n  font-size: var(--text-sm);\n  box-shadow: var(--shadow-md);\n}\n\n.card .title {\n  font-size: var(--text-lg);\n}\n\n.card .pill {\n  justify-self: start;\n  padding: var(--space-1) var(--space-3);\n  border-radius: var(--radius-full);\n}\n"
   },
   "triangle": {
     "title": "Triangle",
     "description": "The Triangle Sass mixin helps you generate triangles using the ::before or ::after CSS pseudo-elements.",
-    "scss": "@use \"gerillass\" as *;\n\n.element{\n  &::after {\n    @include triangle(\n      $direction: \"bottom\",\n      $color: crimson,\n      $size: 10px 6px\n    ) {\n      position: relative;\n      margin-left: 6px;\n      top: -2px;\n    };\n  }\n}\n"
+    "scss": "@use \"gerillass\" as *;\n\n.element{\n  &::after {\n    @include triangle(\n      $direction: \"bottom\",\n      $color: #db504a,\n      $size: 10px 6px\n    ) {\n      position: relative;\n      margin-left: 6px;\n      top: -2px;\n    };\n  }\n}\n"
   },
-  "background-pattern": {
-    "title": "Background Pattern",
-    "description": "Thirteen geometric patterns drawn with gradients alone.",
-    "scss": "@use \"gerillass\" as *;\n\n.element{\n  @include background-pattern(\n    isometric,\n    $color: #c4b5fd #a78bfa #7c3aed,\n    $size: 26px\n  );\n}\n"
+  "truncate": {
+    "title": "Truncate",
+    "description": "Truncate text with the Truncate Sass mixin: one line with an ellipsis, or several with a clamp. The line count picks the technique and writes every declaration it needs.",
+    "scss": "@use \"gerillass\" as *;\n\n.teaser {\n  @include truncate(2);\n\n  @include breakpoint(large) {\n    @include truncate(none);\n  }\n}\n"
   }
 }

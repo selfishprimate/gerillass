@@ -1,8 +1,8 @@
 ---
 title: "Background Pattern"
 page_title: "Background Pattern Sass Mixin"
-page_description: "Twenty background patterns from one line of Sass: dots, stripes, grid, checkerboard, crosshatch, zigzag, chevron, triangles, isometric, honeycomb, brick, waves, houndstooth, gingham, harlequin, sunburst, concentric, glow, vignette and mesh, all drawn with CSS gradients."
-page_keywords: "CSS Background Pattern, CSS Pattern Generator, Sass Background Pattern, CSS Polka Dots, CSS Stripes, CSS Grid Background, CSS Checkerboard, CSS Isometric Pattern, CSS Honeycomb, CSS Houndstooth, CSS Gradient Patterns, CSS Mesh Gradient, CSS Glow Background, CSS Vignette"
+page_description: "Eighteen background patterns from one line of Sass: dots, stripes, grid, checkerboard, crosshatch, zigzag, chevron, triangles, brick, waves, houndstooth, gingham, harlequin, sunburst, concentric, glow, vignette and mesh, all drawn with CSS gradients."
+page_keywords: "CSS Background Pattern, CSS Pattern Generator, Sass Background Pattern, CSS Polka Dots, CSS Stripes, CSS Grid Background, CSS Checkerboard, CSS Houndstooth, CSS Gradient Patterns, CSS Mesh Gradient, CSS Glow Background, CSS Vignette"
 page_image: "gerillass-background-pattern.jpg"
 aliases:
   - /docs/background-dots/
@@ -13,7 +13,7 @@ aliases:
 
 <Member name="background-pattern">
 
-The **Background Pattern Sass mixin** draws twenty patterns with CSS gradients alone: no image file, no SVG, and nothing to download. Seventeen of them tile, from dots and stripes to houndstooth and harlequin, and three light the whole box, which is what the expensive looking marketing pages put behind a hero. Pass the pattern's name, and optionally its colours, its tile and the line inside it.
+The **Background Pattern Sass mixin** draws eighteen patterns with CSS gradients alone: no image file, no SVG, and nothing to download. Fifteen of them tile, from dots and stripes to houndstooth and harlequin, and three light the whole box, which is what the expensive looking marketing pages put behind a hero. Pass the pattern's name, and optionally its colours, its tile and the line inside it.
 
 </Member>
 
@@ -26,7 +26,7 @@ The **Background Pattern Sass mixin** draws twenty patterns with CSS gradients a
 ## Arguments
 
 <Arguments of="background-pattern" footnote="The kind is the only positional argument and everything after it is named, as in `background-pattern(grid, $size: 2rem)`. Each pattern reads only the arguments it needs, and passing one it ignores raises rather than doing nothing quietly.">
-  <Argument name="$kind" type="string">Which pattern: <code>dots</code>, <code>stripes</code>, <code>grid</code>, <code>checkerboard</code>, <code>crosshatch</code>, <code>zigzag</code>, <code>chevron</code>, <code>triangles</code>, <code>isometric</code>, <code>honeycomb</code>, <code>brick</code>, <code>waves</code>, <code>houndstooth</code>, <code>gingham</code>, <code>harlequin</code>, <code>sunburst</code>, <code>concentric</code>, <code>glow</code>, <code>vignette</code> or <code>mesh</code>.</Argument>
+  <Argument name="$kind" type="string">Which pattern: <code>dots</code>, <code>stripes</code>, <code>grid</code>, <code>checkerboard</code>, <code>crosshatch</code>, <code>zigzag</code>, <code>chevron</code>, <code>triangles</code>, <code>brick</code>, <code>waves</code>, <code>houndstooth</code>, <code>gingham</code>, <code>harlequin</code>, <code>sunburst</code>, <code>concentric</code>, <code>glow</code>, <code>vignette</code> or <code>mesh</code>.</Argument>
   <Argument name="$color" type="color, list">One colour, or two or three for the patterns that layer them. The default is <code>currentColor</code> mixed with transparency, so a pattern follows the text colour.</Argument>
   <Argument name="$background" type="color">The colour under the pattern, written as <code>background-color</code>.</Argument>
   <Argument name="$size" type="number">The tile. The default is <code>2rem</code>. A <code>var()</code> or <code>calc()</code> works, and every offset is derived from it. For <code>stripes</code> it is the period, one line plus its gap. For <code>glow</code> and <code>vignette</code> there is no tile: it is how far the light reaches, one value or two, and the default is <code>90% 80%</code>.</Argument>
@@ -34,7 +34,6 @@ The **Background Pattern Sass mixin** draws twenty patterns with CSS gradients a
   <Argument name="$angle" type="number">For <code>stripes</code>, <code>crosshatch</code>, <code>zigzag</code> and <code>triangles</code>: an angle such as <code>-45deg</code>, or a unitless number read as degrees. For <code>sunburst</code>: how wide one ray is.</Argument>
   <Argument name="$axis" type="string">For <code>grid</code>: <code>both</code>, <code>block</code> for horizontal lines only, or <code>inline</code> for vertical lines only.</Argument>
   <Argument name="$stagger" type="boolean">For <code>dots</code>, <code>false</code> lines them up in a grid instead of offsetting every other row.</Argument>
-  <Argument name="$style" type="string">For <code>isometric</code>: <code>line</code> draws the grid the cubes sit on rather than the filled faces, and <code>$thickness</code> is that line. The default is <code>fill</code>. No other pattern has one, and the section below says why.</Argument>
   <Argument name="$origin" type="string">Where a pattern drawn from a point starts: the light for <code>glow</code> and <code>vignette</code>, the rays for <code>sunburst</code>, the rings for <code>concentric</code>. A background position, such as <code>50% 100%</code> or <code>top left</code>. The default is the middle, and the bottom edge for <code>glow</code>.</Argument>
   <Argument name="$image" type="string">An image path, laid under the pattern as the last layer. Refused by the patterns that paint every pixel, since it would never be seen.</Argument>
 </Arguments>
@@ -455,98 +454,6 @@ Each pattern below is its own section, with the colours and the tile changed fro
 ```
 </Example>
 
-### Isometric
-
-<Example caption="A pricing card on a field of cubes. Three colours, seven gradient layers, one include.">
-```scss
-.plan {
-  @include background-pattern(isometric, $color: #f2f2eb #dee0cd #bfc1a4, $size: 26px);
-}
-```
-```html
-<style>
-  .plan { padding: 24px; border-radius: 12px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
-  .plan div { padding: 18px; border-radius: 10px; background: rgb(255 255 255 / 0.92); }
-  .plan b { display: block; font-size: 26px; color: #2f3937; }
-</style>
-<div class="plan"><div><b>$19</b>per editor, per month</div></div>
-```
-</Example>
-
-<Example caption="Three tones at a small tile give the same cubes as a quiet texture. The order of the colours is the order the faces are lit.">
-```scss
-.stone {
-  @include background-pattern(isometric, $color: #dee0cd #5bc0bb #2f3937, $size: 16px);
-}
-```
-```html
-<style>
-  .stone { height: 150px; border-radius: 10px; }
-</style>
-<div class="stone"></div>
-```
-</Example>
-
-<Example caption="`$style: line` draws the cubes rather than filling them: the grid they sit on, one upright family of lines and two at 30 degrees, over the same cubes shaded in the line's own colour. The shading is what keeps them solid; the lines alone are graph paper, flat as a sheet of it. `$thickness` is the line, a twentieth of the tile by default.">
-```scss
-.sheet {
-  @include background-pattern(isometric, $style: line, $color: rgb(47 57 55 / 0.4), $background: #fafaf8, $size: 44px);
-}
-```
-```html
-<style>
-  .sheet { display: grid; place-items: center; height: 180px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
-  .sheet span { padding: 10px 16px; border-radius: 8px; background: rgb(255 255 255 / 0.92); font-weight: 600; color: #2f3937; }
-</style>
-<div class="sheet"><span>Sheet 3 of 9</span></div>
-```
-</Example>
-
-<Example caption="A lined pattern leaves gaps, so it takes an `$image` under it where the filled one refuses the argument, since its faces would hide the picture.">
-```scss
-.plan {
-  @include background-pattern(isometric, $style: line, $color: rgb(91 192 187 / 0.55), $size: 30px, $thickness: 1px, $image: "/images/backgrounds/02.jpg");
-}
-```
-```html
-<style>
-  .plan { aspect-ratio: 16 / 9; border-radius: 10px; }
-</style>
-<div class="plan"></div>
-```
-</Example>
-
-### Honeycomb
-
-<Example caption="A community panel, where the three colours give the cells their depth.">
-```scss
-.community {
-  @include background-pattern(honeycomb, $color: #f2f2eb #dee0cd #bfc1a4, $size: 38px);
-}
-```
-```html
-<style>
-  .community { display: grid; place-items: center; height: 150px; border-radius: 10px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
-  .community span { padding: 10px 16px; border-radius: 999px; background: rgb(255 255 255 / 0.92); font-weight: 600; color: #2f3937; }
-</style>
-<div class="community"><span>1,248 contributors</span></div>
-```
-</Example>
-
-<Example caption="A larger tile and three colours far apart, which reads as tiling rather than as a texture. They are the same three the cubes above are lit with, since the two patterns are the same idea at a different angle.">
-```scss
-.hive {
-  @include background-pattern(honeycomb, $color: #dee0cd #5bc0bb #2f3937, $size: 60px);
-}
-```
-```html
-<style>
-  .hive { height: 160px; border-radius: 10px; }
-</style>
-<div class="hive"></div>
-```
-</Example>
-
 ### Brick
 
 <Example caption="A wall behind a quotation. `$size` is the brick and the ground shows through as the mortar.">
@@ -929,7 +836,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 
 <Hint kind="info">
 
-**Which patterns let an image through.** The image is the last background layer, so it shows wherever the pattern leaves a gap. Four cover every pixel of it and refuse `$image` rather than hiding it: `checkerboard`, `isometric`, `honeycomb`, and `stripes` with more than one colour. The other sixteen let it through.
+**Which patterns let an image through.** The image is the last background layer, so it shows wherever the pattern leaves a gap. Two cover every pixel of it and refuse `$image` rather than hiding it: `checkerboard`, and `stripes` with more than one colour. The other sixteen let it through.
 
 </Hint>
 
@@ -960,7 +867,7 @@ colour.
 Error: `background-pattern` takes the kind, then named arguments, such as `background-pattern(grid, $size: 2rem)`.
 ```
 
-A kind it does not draw lists the twenty it does, so the name is never a
+A kind it does not draw lists the eighteen it does, so the name is never a
 guess.
 
 ```scss
@@ -969,7 +876,7 @@ guess.
 }
 ```
 ```text
-Error: `spiral` is not a pattern `background-pattern` draws. Pass one of: `dots`, `stripes`, `grid`, `checkerboard`, `crosshatch`, `zigzag`, `chevron`, `triangles`, `isometric`, `honeycomb`, `brick`, `waves`, `houndstooth`, `gingham`, `harlequin`, `sunburst`, `concentric`, `glow`, `vignette`, `mesh`.
+Error: `spiral` is not a pattern `background-pattern` draws. Pass one of: `dots`, `stripes`, `grid`, `checkerboard`, `crosshatch`, `zigzag`, `chevron`, `triangles`, `brick`, `waves`, `houndstooth`, `gingham`, `harlequin`, `sunburst`, `concentric`, `glow`, `vignette`, `mesh`.
 ```
 
 An argument a pattern does not read raises rather than doing nothing quietly,
@@ -990,11 +897,11 @@ is refused with the reason rather than drawn into a layer nobody looks at.
 
 ```scss
 .element {
-  @include background-pattern(isometric, $image: "/img/a.png");
+  @include background-pattern(checkerboard, $image: "/img/a.png");
 }
 ```
 ```text
-Error: `$image` cannot be seen under the `isometric` pattern in `background-pattern`: the faces are solid, so the image would never show. Use a pattern that leaves gaps, or pass one colour.
+Error: `$image` cannot be seen under the `checkerboard` pattern in `background-pattern`: the two colours meet with no gap, so the image would never show. Use a pattern that leaves gaps, or pass one colour.
 ```
 
 And a stripe as wide as its own period leaves no gap at all, which a browser

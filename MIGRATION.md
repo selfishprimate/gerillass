@@ -75,7 +75,6 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `background-image` lifts the children inside `:where()` | fixes a cascade defect; silent |
 | `background-image(none)` writes `none`, not `url(none)` | fixes a 404 request; silent |
 | `background-image` warns on a direction with one colour | not breaking |
-| `background-pattern` takes `$style: line` for the isometric grid | not breaking |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -761,7 +760,7 @@ such as `inside` names the three that exist.
 
 Both are removed, as `linear-gradient` and `radial-gradient` were in 3.0.0, and
 a call to either stops the build with Sass's `Undefined mixin`. One mixin now
-draws twenty patterns, and its arguments are named rather than positional.
+draws eighteen patterns, and its arguments are named rather than positional.
 
 | 3.x | 4.0.0 |
 |---|---|
@@ -805,11 +804,11 @@ stripe it drew.
   a tile apart rather than at a half and a double offset, so the arrangement is
   even. `$stagger: false` is the old `$diagonal: false`.
 
-### The eighteen new patterns
+### The sixteen new patterns
 
-Fifteen that tile: `grid`, `checkerboard`, `crosshatch`, `zigzag`, `chevron`,
-`triangles`, `isometric`, `honeycomb`, `brick`, `waves`, `houndstooth`,
-`gingham`, `harlequin`, `sunburst` and `concentric`, each one include. And
+Thirteen that tile: `grid`, `checkerboard`, `crosshatch`, `zigzag`, `chevron`,
+`triangles`, `brick`, `waves`, `houndstooth`, `gingham`, `harlequin`,
+`sunburst` and `concentric`, each one include. And
 three that light the whole box rather than tiling, which is what the premium
 marketing pages put behind a hero: `glow`, one ellipse of light, `vignette`,
 the same gradient turned round so the colour sits at the edges, and `mesh`,
@@ -819,7 +818,7 @@ comes from, and their `$size` is how far it reaches rather than a tile.
 point as well: from the top edge a sunburst is beams fanning down, and an
 off-centre `concentric` reads as a contour map.
 
-All twenty were drawn in Chrome 152, Firefox 156 and Safari 26.6.2, and the
+All sixteen were drawn in Chrome 152, Firefox 156 and Safari 26.6.2, and the
 three lay them out identically; Firefox draws a hard diagonal edge with visible
 stair steps where the other two smooth it, which shows in `zigzag`, `chevron`
 and `triangles`.
@@ -1918,32 +1917,6 @@ photograph disappears into a white fallback; that call passes its own dark
 `$fallback`.
 
 It writes no `box-shadow`, so a drop shadow is still yours to add.
-
----
-
-## Added: `$style: line` on `background-pattern`
-
-`isometric` drew filled cubes and nothing else. `$style: line` draws the grid
-they sit on instead, one upright family of lines and two at 30 degrees, which
-is isometric graph paper, and `$thickness` is that line: a twentieth of the
-tile by default rather than the eighth a filled pattern uses.
-
-```scss
-.sheet {
-  @include background-pattern(isometric, $style: line, $color: #94a3b8, $size: 44px);
-}
-```
-
-Lines leave gaps, so a lined pattern also takes an `$image` under it, which the
-filled one refuses because the faces would hide it.
-
-No other pattern has a `$style`, and the reason is worth writing down rather
-than rediscovering: a hexagon's or a brick's outline needs its lines broken
-along their own direction, and a gradient cannot break a line that way.
-Stacking the filled pattern over an offset copy hides the lower one, since the
-faces tile the plane with no gap, and thin conic spokes give lines that thicken
-as they leave the centre of each tile. The outlines that were drawn with an
-inline SVG tile went out in the same release that made every pattern gradients.
 
 ---
 
