@@ -339,9 +339,62 @@ exports[`Manifest examples background-image: .a { @include background-image("/im
 }"
 `;
 
+exports[`Manifest examples background-image: .a { @include background-image("/img/a.png", rgba(0,0,0,0.5), null, 40 1`] = `
+".a {
+  background-image: linear-gradient(to top, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("/img/a.png");
+  background-position: center center, left top;
+  background-repeat: no-repeat, repeat;
+  background-size: cover, 40px;
+}"
+`;
+
+exports[`Manifest examples background-image: .a { @include background-image("/img/tile.png", null, null, 40px, left 1`] = `
+".a {
+  background-image: url("/img/tile.png");
+  background-position: left top;
+  background-repeat: repeat;
+  background-size: 40px;
+}"
+`;
+
 exports[`Manifest examples background-image: .a { @include background-image(image-set("/img/a.png" 1x, "/img/a@2x.p 1`] = `
 ".a {
   background-image: image-set("/img/a.png" 1x, "/img/a@2x.png" 2x);
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}"
+`;
+
+exports[`Manifest examples background-image: .a { @include background-image(none); } 1`] = `
+".a {
+  background-image: none;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}"
+`;
+
+exports[`Manifest examples background-image: .a { @include background-image(null, rgba(0,0,0,0.5)); } 1`] = `
+".a {
+  position: relative;
+}
+.a::after {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: rgba(0, 0, 0, 0.5);
+}
+:where(.a > *) {
+  position: relative;
+  z-index: 1;
+}
+.a {
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -2898,6 +2951,23 @@ exports[`Manifest examples validateRatio: .a { aspect-ratio: validateRatio(var(-
 exports[`Manifest examples validateScissors: .a { content: "#{validateScissors(12px)}"; } 1`] = `
 ".a {
   content: "12px";
+}"
+`;
+
+exports[`Manifest warnings background-image warns: .a { @include background-image("/img/a.png", rgba(0,0,0,0.5) 1`] = `
+".a {
+  background-image: linear-gradient(to top, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("/img/a.png");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}"
+`;
+
+exports[`Manifest warnings background-image warns: .a { @include background-image(null, null, right); } 1`] = `
+".a {
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }"
 `;
 

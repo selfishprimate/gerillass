@@ -1,6 +1,14 @@
 // background-image refuses a filter colour the browser drops or reads as
 // something other than a colour. These must keep compiling to the same filter:
 // a system colour and a list of stops with positions, both kept in Chrome 152.
+//
+// Since 4.0.0 the overlay carries `pointer-events: none` and the children sit
+// inside `:where()`, the sizes are arguments, and an overlay is written only
+// when there is a filter to put in it.
+//
+// The children's rule is written at the root of its own, as `aspect-ratio`'s
+// is: sass-true wraps the output in `.test-output`, which the mixin's
+// `:where(& > *)` takes inside the parentheses.
 @use 'true' as *;
 @use '../../scss/gerillass' as *;
 
@@ -25,9 +33,10 @@
           top: 0;
           width: 100%;
           height: 100%;
+          pointer-events: none;
           background: linear-gradient(to top, rgba(0, 0, 0, 0.85), transparent);
         }
-        .a > * { position: relative; z-index: 1; }
+        @at-root :where(.test-output .a > *) { position: relative; z-index: 1; }
         .a { background-position: center center; background-repeat: no-repeat; background-size: cover; }
       }
     }
@@ -39,8 +48,8 @@
       @include output { .a { @include background-image(null, paint(grain)); } }
       @include expect {
         .a { position: relative; }
-        .a::after { content: ""; display: block; position: absolute; left: 0; top: 0; width: 100%; height: 100%; background: paint(grain); }
-        .a > * { position: relative; z-index: 1; }
+        .a::after { content: ""; display: block; position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; background: paint(grain); }
+        @at-root :where(.test-output .a > *) { position: relative; z-index: 1; }
         .a { background-position: center center; background-repeat: no-repeat; background-size: cover; }
       }
     }
@@ -54,12 +63,12 @@
       }
       @include expect {
         .a { position: relative; }
-        .a::after { content: ""; display: block; position: absolute; left: 0; top: 0; width: 100%; height: 100%; background: url("/img/dots.svg"); }
-        .a > * { position: relative; z-index: 1; }
+        .a::after { content: ""; display: block; position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; background: url("/img/dots.svg"); }
+        @at-root :where(.test-output .a > *) { position: relative; z-index: 1; }
         .a { background-position: center center; background-repeat: no-repeat; background-size: cover; }
         .b { position: relative; }
-        .b::after { content: ""; display: block; position: absolute; left: 0; top: 0; width: 100%; height: 100%; background: radial-gradient(circle, transparent 40%, rgba(0, 0, 0, 0.8)); }
-        .b > * { position: relative; z-index: 1; }
+        .b::after { content: ""; display: block; position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; background: radial-gradient(circle, transparent 40%, rgba(0, 0, 0, 0.8)); }
+        @at-root :where(.test-output .b > *) { position: relative; z-index: 1; }
         .b { background-position: center center; background-repeat: no-repeat; background-size: cover; }
       }
     }
@@ -80,6 +89,91 @@
         }
         .b {
           background-image: linear-gradient(to top, red 0, transparent 50%), url("/img/a.png");
+          background-position: center center;
+          background-repeat: no-repeat;
+          background-size: cover;
+        }
+      }
+    }
+  }
+
+  // The sizes are arguments since 4.0.0, and with a filter over an image there
+  // are two layers: the gradient covers the box while the photograph takes the
+  // value given. Measured in Chrome 152, Firefox 156 and Safari 26.6.2,
+  // `background-size: cover, 40px` computes to `cover, 40px auto` in all
+  // three, and `background-repeat` and `background-position` layer the same
+  // way.
+  @include it('Writes a size, a position and a repeat for each layer.') {
+    @include assert {
+      @include output {
+        .a { @include background-image("/img/t.png", null, null, 40px, left top, repeat); }
+        .b { @include background-image("/img/t.png", rgba(0, 0, 0, 0.5), null, 40px, left top, repeat); }
+      }
+      @include expect {
+        .a {
+          background-image: url("/img/t.png");
+          background-position: left top;
+          background-repeat: repeat;
+          background-size: 40px;
+        }
+        .b {
+          background-image: linear-gradient(to top, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("/img/t.png");
+          background-position: center center, left top;
+          background-repeat: no-repeat, repeat;
+          background-size: cover, 40px;
+        }
+      }
+    }
+  }
+
+  // null leaves a declaration out, as it does everywhere else in the library.
+  @include it('Leaves a size out when it is null.') {
+    @include assert {
+      @include output {
+        .a { @include background-image("/img/a.png", null, null, null, null, null); }
+      }
+      @include expect {
+        .a { background-image: url("/img/a.png"); }
+      }
+    }
+  }
+
+  // With no image and no filter there is nothing to put in a layer. It used to
+  // write an ::after covering the element with no background in it, plus
+  // `position: relative` here and on every child.
+  @include it('Writes no overlay when there is no filter.') {
+    @include assert {
+      @include output {
+        .a { @include background-image(null); }
+      }
+      @include expect {
+        .a {
+          background-position: center center;
+          background-repeat: no-repeat;
+          background-size: cover;
+        }
+      }
+    }
+  }
+
+  // `none` is the CSS keyword for no image. It used to compile to `url(none)`,
+  // which asks for a file called `none`: measured on a local server, Chrome
+  // 152, Firefox 156 and Safari 26.6.2 each requested it.
+  @include it('Writes none as the keyword rather than a path.') {
+    @include assert {
+      @include output {
+        .a { @include background-image(none); }
+        .b { @include background-image("none"); }
+      }
+      @include expect {
+        .a {
+          background-image: none;
+          background-position: center center;
+          background-repeat: no-repeat;
+          background-size: cover;
+        }
+        .b {
+          background-image: url("none");
           background-position: center center;
           background-repeat: no-repeat;
           background-size: cover;

@@ -308,7 +308,8 @@
           "accepts": [
             "an image path, as a string; a list, a number, a colour or a boolean is refused",
             "null to filter the element itself instead",
-            "var(), url(), image-set() or a gradient, written as they are rather than wrapped in url()"
+            "var(), url(), image-set() or a gradient, written as they are rather than wrapped in url()",
+            "none, the CSS keyword, written as it is rather than as url(none)"
           ]
         },
         {
@@ -329,17 +330,58 @@
             "\"to top\" or \"to left top\" as a string",
             "var() or calc()"
           ]
+        },
+        {
+          "name": "$size",
+          "default": "cover",
+          "accepts": [
+            "cover, the default, contain or auto",
+            "a length or a percentage, one or two of them",
+            "var(), calc() and the other maths functions",
+            "null to leave background-size out"
+          ]
+        },
+        {
+          "name": "$position",
+          "default": "center center",
+          "accepts": [
+            "center center, the default, or any of left, center, right, top and bottom",
+            "lengths and percentages, up to the four-value form such as right 10px bottom 20px",
+            "var(), calc() and the other maths functions",
+            "null to leave background-position out"
+          ]
+        },
+        {
+          "name": "$repeat",
+          "default": "no-repeat",
+          "accepts": [
+            "no-repeat, the default, repeat, repeat-x, repeat-y, space or round",
+            "two of them, one per axis, such as repeat space",
+            "var()",
+            "null to leave background-repeat out"
+          ]
         }
       ],
       "file": "scss/library/_background-image.scss",
-      "signature": "background-image($image-url: null, $filter-color: null, $filter-direction: null)",
+      "signature": "background-image($image-url: null, $filter-color: null, $filter-direction: null, $size: cover, $position: center center, $repeat: no-repeat)",
       "summary": "Background image with an optional colour or gradient filter laid over it.",
+      "caveats": [
+        "The filter goes over the image as a second background layer, so a $size, $position or $repeat meant for the photograph would shrink or tile the wash with it. The mixin writes one value per layer instead: measured in Chrome 152, Firefox 156 and Safari 26.6.2, `background-size: cover, 40px` sizes the gradient cover and the image 40px auto, and repeat and position layer the same way.",
+        "With $image-url null the filter is an ::after layer over the element, and it carries `pointer-events: none`. Without it the caret could not be put on the element's own text: measured with caretPositionFromPoint, Chrome 152 and Firefox 156 answered with another node and Safari 26.6.2 was unaffected.",
+        "The element's direct children are lifted above that layer inside `:where()`, so a rule of the page's own on one of them wins.",
+        "With no $image-url and no $filter-color there is nothing to lay over anything: only background-position, background-repeat and background-size are written. Until 4.0.0 an empty ::after covered the element.",
+        "$filter-direction turns a gradient, so it is only read when $filter-color has more than one colour; passed with one it warns and is left out."
+      ],
       "examples": [
         ".a { @include background-image(\"/img/a.png\"); }",
         ".a { @include background-image(\"/img/a.png\", rgba(0,0,0,0.5)); }",
         ".a { @include background-image(\"/img/a.png\", (red, blue), \"top\"); }",
         ".a { @include background-image(var(--hero), rgba(0,0,0,0.5)); }",
-        ".a { @include background-image(image-set(\"/img/a.png\" 1x, \"/img/a@2x.png\" 2x)); }"
+        ".a { @include background-image(image-set(\"/img/a.png\" 1x, \"/img/a@2x.png\" 2x)); }",
+        ".a { @include background-image(\"/img/tile.png\", null, null, 40px, left top, repeat); }",
+        ".a { @include background-image(\"/img/a.png\", rgba(0,0,0,0.5), null, 40px, left top, repeat); }",
+        ".a { @include background-image(none); }",
+        ".a { @include background-image(null, rgba(0,0,0,0.5)); }"
       ],
       "rejects": [
         ".a { @include background-image(\"/img/a.png\", (red, blue), sideways); }",
@@ -351,7 +393,16 @@
         ".a { @include background-image(\"/img/a.png\", (red, 10%)); }",
         ".a { @include background-image(null, 10px); }",
         ".a { @include background-image(null, inherit); }",
-        ".a { @include background-image(\"/img/a.png\", linear-gradient(to top, black, transparent)); }"
+        ".a { @include background-image(\"/img/a.png\", linear-gradient(to top, black, transparent)); }",
+        ".a { @include background-image(\"/img/a.png\", null, null, huge); }",
+        ".a { @include background-image(\"/img/a.png\", null, null, 10deg); }",
+        ".a { @include background-image(\"/img/a.png\", null, null, cover, cover); }",
+        ".a { @include background-image(\"/img/a.png\", null, null, cover, center center, huge); }",
+        ".a { @include background-image(\"/img/a.png\", null, null, -10px); }"
+      ],
+      "warns": [
+        ".a { @include background-image(\"/img/a.png\", rgba(0,0,0,0.5), right); }",
+        ".a { @include background-image(null, null, right); }"
       ]
     },
     {

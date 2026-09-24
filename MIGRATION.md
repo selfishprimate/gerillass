@@ -68,6 +68,12 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | a range that runs backwards or is empty stops the build | breaking, loud |
 | `auto-grid` is new | not breaking |
 | `reveal` is new | not breaking |
+| `background-image` takes `$size`, `$position` and `$repeat` | not breaking |
+| `background-image` writes no overlay when there is no filter | fixes a pointless layer; silent |
+| `background-image`'s filter layer takes `pointer-events: none` | fixes text selection; silent |
+| `background-image` lifts the children inside `:where()` | fixes a cascade defect; silent |
+| `background-image(none)` writes `none`, not `url(none)` | fixes a 404 request; silent |
+| `background-image` warns on a direction with one colour | not breaking |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -1910,6 +1916,87 @@ photograph disappears into a white fallback; that call passes its own dark
 `$fallback`.
 
 It writes no `box-shadow`, so a drop shadow is still yours to add.
+
+---
+
+## Added: `$size`, `$position` and `$repeat` on `background-image`
+
+The mixin always wrote `cover`, `center center` and `no-repeat`, which is right
+for a photograph and wrong for everything else: a tiled watermark or a logo
+held at `contain` had to be written by hand. They are arguments now, after the
+three that were already there, and `null` leaves a declaration out.
+
+```scss
+.marks {
+  @include background-image("/img/logo.svg", null, null, 56px, left top, repeat);
+}
+```
+
+With a filter over the image there are two background layers, and one value for
+both would shrink or tile the wash along with the photograph. The mixin writes
+one value per layer instead, the gradient first:
+
+```css
+.marks-washed {
+  background-image: linear-gradient(to top, rgba(102, 143, 128, 0.75), rgba(102, 143, 128, 0.75)), url("/img/logo.svg");
+  background-position: center center, left top;
+  background-repeat: no-repeat, repeat;
+  background-size: cover, 56px;
+}
+```
+
+Measured in Chrome 152, Firefox 156 and Safari 26.6.2: `background-size: cover,
+40px` computes to `cover, 40px auto` in all three, and the other two layer the
+same way. A call that leaves the three at their defaults compiles exactly as it
+did.
+
+A negative `background-size` is refused, since all three drop the declaration;
+a negative position is kept, since it moves the image off the edge, which is
+what it is for.
+
+---
+
+## Change: `background-image` writes an overlay only when there is a filter
+
+`background-image(null)` with no filter colour used to write an `::after`
+covering the element with nothing in it, `position: relative` on the element,
+and `position: relative; z-index: 1` on every direct child. Nothing was
+painted and the element's children were repositioned for no reason. It now
+writes the three `background-*` declarations and nothing else, which is what a
+call with an image in the markup and no filter was asking for.
+
+---
+
+## Change: the filter layer stops swallowing the caret
+
+The `::after` that carries the filter takes `pointer-events: none`. Without it
+the element's own text could not be selected: measured with
+`caretPositionFromPoint` over that text, Chrome 152 answered with a different
+node and Firefox 156 with the element, while Safari 26.6.2 was unaffected. With
+the declaration all three answer with the text.
+
+The children's rule moved inside `:where()` in the same pass, as `border-box`
+and `antialias` did in this release, so a rule of your own on a child wins
+where the mixin's used to tie with it and win on order.
+
+---
+
+## Change: `background-image(none)` writes `none`
+
+`none` is the CSS keyword for no background image. It used to compile to
+`url(none)`, which asks the server for a file called `none` beside the
+stylesheet: measured on a local server, Chrome 152, Firefox 156 and Safari
+26.6.2 each requested it and painted nothing. A quoted `"none"` is still a
+path, as every quoted string is.
+
+---
+
+## Not breaking: a direction with one colour warns
+
+`$filter-direction` turns a gradient, and one colour is a flat wash with
+nothing to turn. The value used to be dropped without a word; now the build
+says it was left out. The CSS is unchanged.
+
 
 ---
 

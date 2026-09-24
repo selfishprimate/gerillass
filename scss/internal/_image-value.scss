@@ -39,6 +39,15 @@
   @if meta.type-of($value) != "string" {
     @error "`#{meta.inspect($value)}` is not a valid #{$argument} for `#{$mixin}`: an image path is a string, and `url(#{meta.inspect($value)})` asks for a file of that name, which is never the image. Pass a path as a string, such as `\"/img/hero.png\"`, or var() or a gradient.";
   }
+
+  // `none` is the CSS keyword for no image at all, and it used to go into
+  // `url(none)`: measured in Chrome 152, Firefox 156 and Safari 26.6.2, all
+  // three requested a file called `none` beside the stylesheet and painted
+  // nothing. Written as the keyword it says what it means and asks for
+  // nothing. A quoted `"none"` is still a path, as every quoted string is.
+  @if string.slice(meta.inspect($value), 1, 1) != "\"" and string.to-lower-case($value) == "none" {
+    @return string.unquote("none");
+  }
   @if not $unquote {
     @return url($value);
   }

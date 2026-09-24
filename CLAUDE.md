@@ -948,9 +948,13 @@ Two pieces of work are open:
   `long-shadow`, branched from `reveal`, which also moved the shadow directions
   `text-shadow` had to itself into `scss/internal/_shadow-direction.scss`; and
   `glass`, a `backdrop-filter` panel with the fallback and the prefix around it,
-  on `glass`, branched from `long-shadow`; and the demos and prose of every
-  documentation page, swept and rewritten on `examples-polish`, branched from
-  `glass`; and a filled `text-shadow` stepping in pixels rather than in one of
+  on `glass`, branched from `long-shadow`; and `background-image` taking
+  `$size`, `$position` and `$repeat`, one value per layer when a filter sits
+  over the image, with no overlay written when there is no filter, that overlay
+  given `pointer-events: none` and its children `:where()`, and `none` written
+  rather than `url(none)`, on `docs-examples-review`; and the demos and prose
+  of every documentation page, swept and rewritten on `examples-polish`,
+  branched from `glass`; and a filled `text-shadow` stepping in pixels rather than in one of
   the distance's own unit, on `text-shadow-step`, branched from
   `examples-polish`.
   The last three come from `todos/library-review.md`, and the last three

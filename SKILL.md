@@ -171,6 +171,14 @@ a dropped declaration rather than an error.
 - `$fill: true` writes `auto-fill`, which keeps an empty column, and the default `auto-fit` collapses it. Measured with two items in a 1000px container: `auto-fill` gave three 323px columns and `auto-fit` two 492px ones.
 - It writes nothing on the children. `min-inline-size: 0`, which `columnizer` needs, was measured as unnecessary here: with a long unbroken token in a 250px container the track stayed 250px with and without it, since the track's minimum is given rather than left at `auto`.
 
+**`background-image`**
+
+- The filter goes over the image as a second background layer, so a $size, $position or $repeat meant for the photograph would shrink or tile the wash with it. The mixin writes one value per layer instead: measured in Chrome 152, Firefox 156 and Safari 26.6.2, `background-size: cover, 40px` sizes the gradient cover and the image 40px auto, and repeat and position layer the same way.
+- With $image-url null the filter is an ::after layer over the element, and it carries `pointer-events: none`. Without it the caret could not be put on the element's own text: measured with caretPositionFromPoint, Chrome 152 and Firefox 156 answered with another node and Safari 26.6.2 was unaffected.
+- The element's direct children are lifted above that layer inside `:where()`, so a rule of the page's own on one of them wins.
+- With no $image-url and no $filter-color there is nothing to lay over anything: only background-position, background-repeat and background-size are written. Until 4.0.0 an empty ::after covered the element.
+- $filter-direction turns a gradient, so it is only read when $filter-color has more than one colour; passed with one it warns and is left out.
+
 **`background-pattern`**
 
 - It replaces `background-dots` and `background-stripes`, which are removed in 4.0.0. `background-pattern(dots, ...)` and `background-pattern(stripes, ...)` take their place, with the arguments named rather than positional.
@@ -430,7 +438,7 @@ a dropped declaration rather than an error.
 | `antialias($value: null)` | Draws text with greyscale antialiasing instead of subpixel, which makes it look thinner. |
 | `aspect-ratio($ratio: null, $fit: cover)` | Holds an element to a ratio and adds what CSS aspect-ratio alone leaves out: object-fit so an image is cropped rather than stretched, and border: 0 so an iframe does not overflow its container by 4px. Apply it to the element itself, not to a wrapper. |
 | `auto-grid($min: 16rem, $gap: 1rem, $limit: null, $fill: false)` | A grid that fits as many columns of $min as the container holds, without overflowing a narrow one. |
-| `background-image($image-url: null, $filter-color: null, $filter-direction: null)` | Background image with an optional colour or gradient filter laid over it. |
+| `background-image($image-url: null, $filter-color: null, $filter-direction: null, $size: cover, $position: center center, $repeat: no-repeat)` | Background image with an optional colour or gradient filter laid over it. |
 | `background-pattern($kind: dots, $params...)` | Twenty background patterns drawn with gradients alone: seventeen that tile, from dots and stripes to houndstooth and harlequin, and glow, vignette and mesh, which light the whole box. |
 | `before($content: null)` | Styles the ::before pseudo-element. A `data-` argument becomes an attr() content value. |
 | `border-box($value: null)` | Applies box-sizing: border-box. |

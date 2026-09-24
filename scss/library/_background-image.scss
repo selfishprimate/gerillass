@@ -4,17 +4,88 @@
 @use "sass:map";
 @use "sass:math";
 @use "sass:meta";
+@use "sass:string";
 @use "../maps/map-for-directions" as *;
 @use "../internal/image-value" as *;
 @use "../internal/color-problem" as *;
 @use "../internal/color-stops-problem" as *;
 @use "../internal/gradient" as *;
 @use "../internal/is-css-function" as *;
+@use "../internal/is-condition-value" as *;
+@use "../internal/keyword-value" as *;
+@use "../internal/words" as *;
+
+// The words `background-size` and `background-position` take: a keyword of
+// their own, a length or a percentage, or a function the browser resolves.
+// Measured in Chrome 152, Firefox 156 and Safari 26.6.2 with CSS.supports, and
+// all three agree: `cover`, `contain`, `auto`, `100px 50px`, `50%`, `var()`,
+// `calc()`, `min()` and a CSS-wide keyword are kept for a size, the position
+// keywords and the four-value form for a position, and `huge`, `10deg`,
+// `none` as a size and `cover` as a position are dropped.
+//
+// A comma is a second layer, and the layers here are the mixin's own, so it is
+// refused rather than passed on. $negative is false for a size: measured in all
+// three, `background-size: -10px`, `-50%` and `100px -50px` are dropped while a
+// negative position is kept, since it moves the image off the edge.
+@function -words-problem($value, $keywords, $max, $negative: true) {
+  @if $value == null {
+    @return null;
+  }
+  @if meta.type-of($value) == "list" and list.separator($value) == "comma" {
+    @return "a comma is a second background layer, and this mixin writes the layers itself; pass one layer's value";
+  }
+  $words: wordsOf($value);
+  @if list.length($words) == 0 {
+    @return "it is empty";
+  }
+  @if list.length($words) > $max {
+    @return "it takes at most #{$max} values, and got #{list.length($words)}";
+  }
+  $expected: list.join($keywords, (), $separator: comma);
+  @each $word in $words {
+    $problem: null;
+    @if meta.type-of($word) == "string" and string.index($word, "(") {
+      // var(), calc(), min() and the rest are the browser's to resolve.
+    } @else if isConditionValue($word, "length-percentage") {
+      @if not $negative and meta.type-of($word) == "number" and $word < 0 {
+        @return "`#{$word}` is below zero";
+      }
+    } @else if meta.type-of($word) == "string" {
+      $lower: string.to-lower-case(string.unquote($word));
+      @if list.index("inherit" "initial" "unset" "revert" "revert-layer", $lower) {
+        @if list.length($words) > 1 {
+          @return "`#{$lower}` only works as the whole value";
+        }
+      } @else if not list.index($keywords, $lower) {
+        @return "`#{$word}` is neither a length nor one of: #{$expected}";
+      }
+    } @else {
+      @return "`#{meta.inspect($word)}` is neither a length nor one of: #{$expected}";
+    }
+  }
+  @return null;
+}
+
+// One value for one layer, or two comma separated when the filter puts a
+// gradient over the image: the gradient is the first layer and always covers
+// the box, so a size, a position or a repeat meant for the photograph does not
+// shrink or tile the wash over it. Measured in all three browsers,
+// `background-size: cover, 40px` sizes the gradient `cover` and the image
+// `40px auto`, and the same holds for the other two.
+@function -per-layer($value, $gradient-value, $two-layers) {
+  @if $value == null or not $two-layers or "#{$value}" == "#{$gradient-value}" {
+    @return $value;
+  }
+  @return string.unquote("#{$gradient-value}, #{$value}");
+}
 
 @mixin background-image(
   $image-url: null,
   $filter-color: null,
-  $filter-direction: null
+  $filter-direction: null,
+  $size: cover,
+  $position: center center,
+  $repeat: no-repeat
 ) {
   // The direction used to be read only when there were two or more colours,
   // so with one colour any value was dropped without a word, a typo included.
@@ -50,6 +121,31 @@
       @error "`#{meta.inspect($filter-color)}` is not a valid $filter-color for `background-image`: #{$problem}. Pass a colour, such as `rgba(0, 0, 0, 0.5)`, or several for a gradient.";
     }
   }
+
+  // A direction turns a gradient, and one colour is a flat wash with nothing to
+  // turn. It used to be written into the output as `to top` whatever was asked
+  // for, which is a value the caller passed and the browser never saw.
+  @if $filter-direction and (not $filter-color or list.length($filter-color) < 2) {
+    @warn "`$filter-direction` is only read when `$filter-color` has more than one colour, so `#{meta.inspect($filter-direction)}` was left out of `background-image`.";
+  }
+
+  $problem: -words-problem($size, ("cover", "contain", "auto"), 2, $negative: false);
+  @if $problem {
+    @error "`#{meta.inspect($size)}` is not a valid $size for `background-image`: #{$problem}. A browser drops the declaration and the image falls back to its own size.";
+  }
+  $problem: -words-problem($position, ("left", "center", "right", "top", "bottom"), 4);
+  @if $problem {
+    @error "`#{meta.inspect($position)}` is not a valid $position for `background-image`: #{$problem}. A browser drops the declaration and the image sits at the top left.";
+  }
+  $problem: keywordProblem($repeat, ("repeat", "no-repeat", "repeat-x", "repeat-y", "space", "round"), $max-words: 2);
+  @if $problem {
+    @error "`#{meta.inspect($repeat)}` is not a valid $repeat for `background-image`: #{$problem}. A browser drops the declaration and the image repeats.";
+  }
+
+  // Two layers, the filter's gradient over the image, so a size, a position or
+  // a repeat is written for each of them.
+  $two-layers: $image-url and $filter-color and not $overlay-image;
+
   @if $image-url {
     @if $filter-color {
       @if list.length($filter-color) == 1 {
@@ -62,7 +158,9 @@
     } @else {
       background-image: imageValue($image-url, "background-image", "$image-url");
     }
-  } @else {
+  } @else if $filter-color {
+    // No image here: it is on the element in the markup, and the filter is a
+    // layer over it.
     position: relative;
     &::after {
       content: "";
@@ -72,18 +170,28 @@
       top: 0;
       width: 100%;
       height: 100%;
+      // A layer over the element swallows the caret on the element's own text.
+      // Measured in Chrome 152 and Firefox 156, `caretPositionFromPoint` over
+      // that text answered with another node, so the text could not be
+      // selected; Safari 26.6.2 was unaffected, and `pointer-events: none`
+      // made all three answer with the text.
+      pointer-events: none;
       @if list.length($filter-color) == 1 {
         background: $filter-color;
       } @else if list.length($filter-color) > 1 {
         background: gradientOf($filter-color, linear, $filter-direction or "top", $member: "background-image", $colors-name: "$filter-color", $direction-name: "$filter-direction");
       }
     }
-    & > * {
+    // The children sit above that layer. Inside `:where()` since 4.0.0, so a
+    // rule of the page's own on one of them wins, as `border-box` and
+    // `antialias` were changed to do in the same release.
+    :where(& > *) {
       position: relative;
       z-index: 1;
     }
   }
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: cover;
+
+  background-position: -per-layer($position, center center, $two-layers);
+  background-repeat: -per-layer($repeat, no-repeat, $two-layers);
+  background-size: -per-layer($size, cover, $two-layers);
 }

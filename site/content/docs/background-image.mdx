@@ -24,14 +24,21 @@ direct children above that layer, so a heading stays readable.
 ## Arguments
 
 <Arguments of="background-image" footnote="Use `null` if you want to skip an argument. See [the examples](#examples) for more.">
-  <Argument name="$image-url" type="string, function">The URL of the background image, as a string. A value that already is an image, <code>var()</code>, <code>url()</code>, <code>image-set()</code> or a gradient, is written as it is rather than wrapped in <code>url()</code>. A list, a number, a colour or a boolean is refused.</Argument>
+  <Argument name="$image-url" type="string, function">The URL of the background image, as a string. A value that already is an image, <code>var()</code>, <code>url()</code>, <code>image-set()</code> or a gradient, is written as it is rather than wrapped in <code>url()</code>, and so is <code>none</code>, the CSS keyword for no image at all. A list, a number, a colour or a boolean is refused. Pass <code>null</code> when the image is on the element in the markup.</Argument>
   <Argument name="$filter-color" type="color | list">The color or list of colors you want to apply as a filter over the background image. <strong>Multiple color values must be separated by a space.</strong> Several colours are the stops of a gradient and take the forms <a href="/docs/gradient">Gradient</a> takes. When <code>$image-url</code> is <code>null</code> and the image is set in the markup, the filter is a layer over it, so it can also be an image: a <code>linear-gradient()</code> for a scrim, a <code>radial-gradient()</code> for a vignette, or a <code>url()</code> for a pattern.</Argument>
-  <Argument name="$filter-direction" type="string, number">The direction of the gradient, read when <code>$filter-color</code> has more than one colour. An angle such as <code>45deg</code> or <code>0.25turn</code>, a string such as <code>"to top right"</code>, or one of <code>top</code>, <code>top-right</code>, <code>right</code>, <code>bottom-right</code>, <code>bottom</code>, <code>bottom-left</code>, <code>left</code> and <code>top-left</code>. The default is <code>top</code>, and the value names where the last colour stop ends up. A value it does not accept is refused whatever the number of colours.</Argument>
+  <Argument name="$filter-direction" type="string, number">The direction of the gradient, read when <code>$filter-color</code> has more than one colour. An angle such as <code>45deg</code> or <code>0.25turn</code>, a string such as <code>"to top right"</code>, or one of <code>top</code>, <code>top-right</code>, <code>right</code>, <code>bottom-right</code>, <code>bottom</code>, <code>bottom-left</code>, <code>left</code> and <code>top-left</code>. The default is <code>top</code>, and the value names where the last colour stop ends up. A value it does not accept is refused whatever the number of colours, and a value passed with one colour warns, since there is no gradient to turn.</Argument>
+  <Argument name="$size" type="string, number">The <code>background-size</code>. <code>cover</code>, the default, <code>contain</code>, <code>auto</code>, one or two lengths or percentages, or a <code>var()</code> or <code>calc()</code>. A negative length is refused, since a browser drops the declaration. <code>null</code> leaves the declaration out.</Argument>
+  <Argument name="$position" type="string, number">The <code>background-position</code>. <code>center center</code> by default, and it takes what the property takes: <code>left</code>, <code>center</code>, <code>right</code>, <code>top</code>, <code>bottom</code>, lengths and percentages, up to the four-value form such as <code>right 10px bottom 20px</code>. <code>null</code> leaves the declaration out.</Argument>
+  <Argument name="$repeat" type="string">The <code>background-repeat</code>. <code>no-repeat</code> by default, or <code>repeat</code>, <code>repeat-x</code>, <code>repeat-y</code>, <code>space</code>, <code>round</code>, or two of them, one per axis. <code>null</code> leaves the declaration out.</Argument>
 </Arguments>
 
 ## Examples
 
-<Example caption="The image alone, as a `background` that covers the element.">
+<Example
+  caption="The image alone. It is written as a `background-image` with `cover`, `center center` and `no-repeat`, so the photograph fills the box whatever shape the box is."
+  resizable
+  hint="Drag the right edge. `cover` crops the photograph to the box rather than squashing it."
+>
 ```scss
 .element {
   @include background-image("/images/backgrounds/07.jpg");
@@ -42,66 +49,108 @@ direct children above that layer, so a heading stays readable.
 ```
 </Example>
 
-<Example caption="A colour over the image. One colour is a flat wash, and the alpha decides how much of the photograph is left.">
+<Example caption="A hero. Two colours are the stops of a gradient over the photograph, and a scrim like this one is what makes text on top of it readable at any crop.">
 ```scss
-.element {
-  @include background-image("/images/backgrounds/07.jpg", rgb(102 143 128 / 0.5));
-}
-```
-```html
-<div class="element sandbox xlarge"></div>
-```
-</Example>
-
-<Example caption="Several colours become a gradient over the image, which is what makes a photograph safe to put text on.">
-```scss
-.element {
-  @include background-image("/images/backgrounds/07.jpg", rgb(34 44 37 / 0.5) rgb(47 57 55 / 0.8));
-}
-```
-```html
-<div class="element sandbox xlarge"></div>
-```
-</Example>
-
-<Example caption="`$filter-direction` turns that gradient. With `right` the last colour ends up on the right, so the teal is on that side and the dark end is on the left.">
-```scss
-.element {
-  @include background-image("/images/backgrounds/07.jpg", rgb(47 57 55 / 0.7) rgb(91 192 187 / 0.8), right);
-}
-```
-```html
-<div class="element sandbox xlarge"></div>
-```
-</Example>
-
-<Example caption="When the image is on the element in the markup, pass `null` for `$image-url`. The output is a different shape: the filter becomes an `::after` layer rather than a second `background-image`, so the two declarations cannot override each other." listing="<div class=&quot;element&quot; style=&quot;background-image: url(/images/backgrounds/07.jpg)&quot;></div>">
-```scss
-.element {
-  @include background-image(null, rgba(#5bc0bb, 0.7) rgba(#bdc488, 0.8), right);
-}
-```
-```html
-<div class="element sandbox xxlarge" style="background-image: url(/images/backgrounds/07.jpg)"></div>
-```
-</Example>
-
-<Example caption="A heading over that filter needs no rule of your own: the mixin writes `position: relative` and `z-index: 1` on the element's direct children, which is what keeps them above the `::after` layer." listing="<div class=&quot;element&quot; style=&quot;background-image: url(/images/backgrounds/07.jpg)&quot;>
-&#32;&#32;<h2>A beautiful title text standing over the color filter.</h2>
-</div>">
-```scss
-.element {
-  @include background-image(null, rgba(#5bc0bb, 0.7) rgba(#bdc488, 0.8), right);
+.hero {
+  @include background-image("/images/backgrounds/01.jpg", rgb(34 44 37 / 0.95) rgb(34 44 37 / 0.05));
 }
 ```
 ```html
 <style>
-  .element { padding: 20px; }
-  .element h2 { margin: 0; font: 700 22px/1.3 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
+  .hero { display: flex; flex-direction: column; justify-content: flex-end; min-height: 300px; padding: 28px; border-radius: 12px; font-family: Inter, ui-sans-serif, system-ui, sans-serif; }
+  .hero h2 { margin: 0 0 8px; font: 700 26px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; color: #fafaf8; }
+  .hero p { margin: 0 0 18px; max-width: 36ch; font-size: 15px; line-height: 1.5; color: #dee0cd; }
+  .hero a { align-self: start; padding: 10px 18px; border-radius: 999px; background: #f7ec59; color: #2f3937; font-weight: 600; font-size: 14px; text-decoration: none; }
 </style>
-<div class="element sandbox large" style="background-image: url(/images/backgrounds/07.jpg)">
-  <h2>A beautiful title text standing over the color filter.</h2>
+<div class="hero">
+  <h2>Sand, and more sand</h2>
+  <p>Four days across the dunes, starting before the light and stopping when it goes.</p>
+  <a href="#">See the route</a>
 </div>
+```
+</Example>
+
+<Example caption="One colour is a flat wash instead, and its alpha decides how much of the photograph is left. This is the quickest way to put a photograph behind a brand colour.">
+```scss
+.card {
+  @include background-image("/images/backgrounds/03.jpg", rgb(102 143 128 / 0.55));
+}
+```
+```html
+<style>
+  .card { display: grid; place-items: center; height: 180px; border-radius: 12px; }
+  .card span { padding: 10px 16px; border-radius: 999px; background: #fafaf8; color: #2f3937; font: 600 14px Inter, ui-sans-serif, system-ui, sans-serif; }
+</style>
+<div class="card"><span>Notes from the desk</span></div>
+```
+</Example>
+
+<Example caption="`$filter-direction` says where the last colour ends up, so two brand colours across a black and white photograph make a duotone. It also takes an angle, such as `45deg`.">
+```scss
+.duotone {
+  @include background-image("/images/backgrounds/06.jpg", rgb(91 192 187 / 0.85) rgb(189 196 136 / 0.85), top-right);
+}
+```
+```html
+<div class="duotone sandbox large"></div>
+```
+</Example>
+
+<Example
+  caption="When the image is on the element in the markup, pass `null` for `$image-url`. The filter becomes an `::after` layer over it rather than a second `background-image`, so the two cannot override each other, and the element's direct children are lifted above that layer."
+  listing="<div class=&quot;element&quot; style=&quot;background-image: url(/images/backgrounds/02.jpg)&quot;>
+&#32;&#32;<h2>A heading over the filter</h2>
+</div>"
+>
+```scss
+.element {
+  @include background-image(null, rgb(34 44 37 / 0.85) rgb(34 44 37 / 0.15));
+}
+```
+```html
+<style>
+  .element { padding: 20px; border-radius: 12px; }
+  .element h2 { margin: 0; font: 700 22px/1.3 Inter, ui-sans-serif, system-ui, sans-serif; color: #fafaf8; }
+  .element p { margin: 6px 0 0; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #dee0cd; }
+</style>
+<div class="element sandbox large" style="background-image: url(/images/backgrounds/02.jpg)">
+  <h2>A heading over the filter</h2>
+  <p>No rule of your own: the mixin lifts the children above the layer itself.</p>
+</div>
+```
+</Example>
+
+<Example
+  caption="With the image in the markup the filter is a layer, so it can be an image as well as a colour. A radial gradient is a vignette; a `linear-gradient()` is a scrim and a `url()` a pattern."
+  listing="<div class=&quot;frame&quot; style=&quot;background-image: url(/images/backgrounds/05.jpg)&quot;></div>"
+>
+```scss
+.frame {
+  @include background-image(null, radial-gradient(farthest-side at center, rgb(34 44 37 / 0) 25%, rgb(34 44 37 / 0.95)));
+}
+```
+```html
+<div class="frame sandbox large" style="background-image: url(/images/backgrounds/05.jpg)"></div>
+```
+</Example>
+
+<Example caption="`$size`, `$position` and `$repeat` are the other three declarations, so the same mixin tiles a watermark. With a filter over it the wash still covers the box while the tile repeats underneath: look at the two values in the compiled CSS.">
+```scss
+.marks {
+  @include background-image("/images/general/sass-logo-black.svg", null, null, 56px, left top, repeat);
+}
+
+.marks-washed {
+  @include background-image("/images/general/sass-logo-black.svg", rgb(102 143 128 / 0.75), null, 56px, left top, repeat);
+}
+```
+```html
+<style>
+  .marks, .marks-washed { height: 120px; border-radius: 12px; background-color: #dee0cd; }
+  .marks-washed { margin-top: 12px; }
+</style>
+<div class="marks"></div>
+<div class="marks-washed"></div>
 ```
 </Example>
 
@@ -129,6 +178,19 @@ A filter colour that is not a colour is refused too, since 2.3.1. Measured in Ch
 Error: `huge` is not a valid $filter-color for `background-image`: it is not a colour. Pass a colour, such as `rgba(0, 0, 0, 0.5)`, or several for a gradient.
 ```
 
+A size the browser drops is refused as well. A negative `background-size` is
+dropped in Chrome 152, Firefox 156 and Safari 26.6.2, and so is a word that is
+not one of the three keywords.
+
+```scss
+.element {
+  @include background-image("/img/a.png", null, null, -10px);
+}
+```
+```text
+Error: `-10px` is not a valid $size for `background-image`: `-10px` is below zero. A browser drops the declaration and the image falls back to its own size.
+```
+
 A direction is checked whether or not there is a gradient to turn. It used to be
 read only when there were two or more colours, so with one colour a typo was
 dropped without a word.
@@ -140,6 +202,21 @@ dropped without a word.
 ```
 ```text
 Error: `sideways` is not a valid $filter-direction for `background-image`. Pass an angle such as `45deg` or `0.25turn`, `"to top right"`, or one of: top, top-right, right, bottom-right, bottom, bottom-left, left, top-left.
+```
+
+## What it warns about
+
+A direction turns a gradient, and one colour is a flat wash with nothing to
+turn. The value is left out of the output rather than written as `to top`,
+and the build says so.
+
+```scss
+.element {
+  @include background-image("/img/a.png", rgba(0, 0, 0, 0.5), right);
+}
+```
+```text
+WARNING: `$filter-direction` is only read when `$filter-color` has more than one colour, so `right` was left out of `background-image`.
 ```
 
 ## Related Links
