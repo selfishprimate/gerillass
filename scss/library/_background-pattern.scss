@@ -305,6 +305,13 @@ $-defaults: (1: 12%, 2: 6%, 3: 18%);
   $c3: -color($color, 3);
   $s: $size;
   $t: $thickness;
+  // Transparent, as a four-digit hex: #rgba, so all zero is black at zero
+  // alpha. It is written into a stop as `#0000 0`, and that `0` is a position
+  // rather than a second colour: a stop that comes before the one in front of
+  // it is clamped up to it, which turns what would be a fade into a hard edge.
+  // `transparent 0` and `#0000 6px` draw the same thing; measured in Chrome
+  // 152 and Firefox 156 on a dot pattern, all three identical, and it is the
+  // shortest of them.
   $none: string.unquote("#0000");
 
   $images: ();

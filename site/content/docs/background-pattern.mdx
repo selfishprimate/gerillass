@@ -42,6 +42,8 @@ The **Background Pattern Sass mixin** draws twenty patterns with CSS gradients a
 
 Each pattern below is its own section, with the colours and the tile changed from one example to the next. The last three, `glow`, `vignette` and `mesh`, are drawn once at the size of the box rather than tiled.
 
+`#0000 0` runs through the compiled CSS and both halves of it are deliberate. `#0000` is transparent written as a four-digit hex, `#rgba` with every channel at zero, and the `0` after it is the stop's position, not a second colour: a stop that comes before the one in front of it is clamped up to it, which is what turns a fade into a hard edge.
+
 ### Dots
 
 <Example caption="With no colours the dots are drawn in `currentColor` at low opacity, so they follow the text colour of whatever they sit behind.">
