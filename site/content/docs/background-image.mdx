@@ -1,7 +1,7 @@
 ---
 title: "Background Image"
 page_title: "Background Image Sass Mixin"
-page_description: "The Background Image Sass mixin allows you to apply the background-image CSS property to the selected elements."
+page_description: "The Background Image Sass mixin puts an image behind an element with cover, center and no-repeat, and a colour or a gradient over it as a filter."
 page_keywords: "Gerillass background-image, Background Image Sass mixin, Sass background-image, SCSS background-image, CSS background-image, CSS background-size, CSS background-position"
 page_image: "gerillass-background-image.jpg"
 ---
@@ -10,7 +10,14 @@ page_image: "gerillass-background-image.jpg"
 
 <Member name="background-image">
 
-The **Background Image** Sass mixin allows you to apply background images to the selected elements. It gives you an easy, one-line method.
+The **Background Image** Sass mixin puts an image behind an element and, when
+you pass colours, a filter over it. The image is written as a `background-image`
+with `cover`, `center center` and `no-repeat`, so a photograph fills the box at
+any size; one colour is a flat wash over it and several are a gradient.
+
+Pass `null` for the image when it is already on the element in the markup. The
+filter is then an `::after` layer over it, and the mixin lifts the element's
+direct children above that layer, so a heading stays readable.
 
 </Member>
 
@@ -18,15 +25,15 @@ The **Background Image** Sass mixin allows you to apply background images to the
 
 <Arguments of="background-image" footnote="Use `null` if you want to skip an argument. See [the examples](#examples) for more.">
   <Argument name="$image-url" type="string, function">The URL of the background image, as a string. A value that already is an image, <code>var()</code>, <code>url()</code>, <code>image-set()</code> or a gradient, is written as it is rather than wrapped in <code>url()</code>. A list, a number, a colour or a boolean is refused.</Argument>
-  <Argument name="$filter-color" type="color | list">The color or list of colors you want to apply as a filter over the background image. <strong>Multiple color values must be separated by a space.</strong> Several colours are the stops of a gradient and take the forms <a href="/docs/linear-gradient">Linear Gradient</a> takes. When <code>$image-url</code> is <code>null</code> and the image is set in the markup, the filter is a layer over it, so it can also be an image: a <code>linear-gradient()</code> for a scrim, a <code>radial-gradient()</code> for a vignette, or a <code>url()</code> for a pattern.</Argument>
-  <Argument name="$filter-direction" type="string">The direction of the gradient. <strong>It only works when you pass multiple color values for the <code>$filter-color</code> argument</strong>, but a value it does not accept is refused with an error whatever the number of colors. Accepts the values <code>top</code>, <code>top-right</code>, <code>right</code>, <code>bottom-right</code>, <code>bottom</code>, <code>bottom-left</code>, <code>left</code>, and <code>top-left</code>. The default value is <code>top</code>.</Argument>
+  <Argument name="$filter-color" type="color | list">The color or list of colors you want to apply as a filter over the background image. <strong>Multiple color values must be separated by a space.</strong> Several colours are the stops of a gradient and take the forms <a href="/docs/gradient">Gradient</a> takes. When <code>$image-url</code> is <code>null</code> and the image is set in the markup, the filter is a layer over it, so it can also be an image: a <code>linear-gradient()</code> for a scrim, a <code>radial-gradient()</code> for a vignette, or a <code>url()</code> for a pattern.</Argument>
+  <Argument name="$filter-direction" type="string, number">The direction of the gradient, read when <code>$filter-color</code> has more than one colour. An angle such as <code>45deg</code> or <code>0.25turn</code>, a string such as <code>"to top right"</code>, or one of <code>top</code>, <code>top-right</code>, <code>right</code>, <code>bottom-right</code>, <code>bottom</code>, <code>bottom-left</code>, <code>left</code> and <code>top-left</code>. The default is <code>top</code>, and the value names where the last colour stop ends up. A value it does not accept is refused whatever the number of colours.</Argument>
 </Arguments>
 
 ## Examples
 
 <Example caption="The image alone, as a `background` that covers the element.">
 ```scss
-.element{
+.element {
   @include background-image("/images/backgrounds/07.jpg");
 }
 ```
@@ -37,7 +44,7 @@ The **Background Image** Sass mixin allows you to apply background images to the
 
 <Example caption="A colour over the image. One colour is a flat wash, and the alpha decides how much of the photograph is left.">
 ```scss
-.element{
+.element {
   @include background-image("/images/backgrounds/07.jpg", rgb(102 143 128 / 0.5));
 }
 ```
@@ -46,15 +53,9 @@ The **Background Image** Sass mixin allows you to apply background images to the
 ```
 </Example>
 
-<Hint kind="info">
-
-**Important:** Multiple color values must be separated by a space.
-
-</Hint>
-
 <Example caption="Several colours become a gradient over the image, which is what makes a photograph safe to put text on.">
 ```scss
-.element{
+.element {
   @include background-image("/images/backgrounds/07.jpg", rgb(34 44 37 / 0.5) rgb(47 57 55 / 0.8));
 }
 ```
@@ -63,15 +64,9 @@ The **Background Image** Sass mixin allows you to apply background images to the
 ```
 </Example>
 
-<Hint kind="info">
-
-**Tip:** The value you pass for `$filter-direction` indicates the position of the final color stop.
-
-</Hint>
-
-<Example caption="`$filter-direction` turns that gradient. The stops here are sharp on purpose, so the angle is easy to read.">
+<Example caption="`$filter-direction` turns that gradient. With `right` the last colour ends up on the right, so the teal is on that side and the dark end is on the left.">
 ```scss
-.element{
+.element {
   @include background-image("/images/backgrounds/07.jpg", rgb(47 57 55 / 0.7) rgb(91 192 187 / 0.8), right);
 }
 ```
@@ -80,34 +75,32 @@ The **Background Image** Sass mixin allows you to apply background images to the
 ```
 </Example>
 
-<Hint kind="info">
-
-**Important:** Please examine the CSS output. When you add a background image to an element using the style attribute, the CSS output is different from the others. This prevents the `background-image` declarations on both sides from overriding each other.
-
-</Hint>
-
-<Example caption="There will be times when you want to **add a background image to an element using the style attribute**, like in the example below. **In those cases, just use `null` to skip the `$image-url` argument.**" listing="<div class=&quot;element&quot; style=&quot;background-image: url(/images/backgrounds/07.jpg)&quot;></div>">
+<Example caption="When the image is on the element in the markup, pass `null` for `$image-url`. The output is a different shape: the filter becomes an `::after` layer rather than a second `background-image`, so the two declarations cannot override each other." listing="<div class=&quot;element&quot; style=&quot;background-image: url(/images/backgrounds/07.jpg)&quot;></div>">
 ```scss
-.element{
+.element {
   @include background-image(null, rgba(#5bc0bb, 0.7) rgba(#bdc488, 0.8), right);
 }
 ```
 ```html
-<div class="element sandbox xxlarge example05" style="background-image: url(/images/backgrounds/07.jpg)"></div>
+<div class="element sandbox xxlarge" style="background-image: url(/images/backgrounds/07.jpg)"></div>
 ```
 </Example>
 
-<Example caption="The rule that catches people out: the filter is an `::after` layer over the element, so the element's own children need `position: relative` and a `z-index` to sit above it." listing="<div class=&quot;element&quot; style=&quot;background-image: url(/images/backgrounds/07.jpg)&quot;>
+<Example caption="A heading over that filter needs no rule of your own: the mixin writes `position: relative` and `z-index: 1` on the element's direct children, which is what keeps them above the `::after` layer." listing="<div class=&quot;element&quot; style=&quot;background-image: url(/images/backgrounds/07.jpg)&quot;>
 &#32;&#32;<h2>A beautiful title text standing over the color filter.</h2>
 </div>">
 ```scss
-.element{
+.element {
   @include background-image(null, rgba(#5bc0bb, 0.7) rgba(#bdc488, 0.8), right);
 }
 ```
 ```html
-<div class="element sandbox large example06" style="background-image: url(/images/backgrounds/07.jpg)">
-  <h2 class="title">A beautiful title text standing over the color filter.</h2>
+<style>
+  .element { padding: 20px; }
+  .element h2 { margin: 0; font: 700 22px/1.3 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
+</style>
+<div class="element sandbox large" style="background-image: url(/images/backgrounds/07.jpg)">
+  <h2>A beautiful title text standing over the color filter.</h2>
 </div>
 ```
 </Example>
@@ -136,9 +129,23 @@ A filter colour that is not a colour is refused too, since 2.3.1. Measured in Ch
 Error: `huge` is not a valid $filter-color for `background-image`: it is not a colour. Pass a colour, such as `rgba(0, 0, 0, 0.5)`, or several for a gradient.
 ```
 
+A direction is checked whether or not there is a gradient to turn. It used to be
+read only when there were two or more colours, so with one colour a typo was
+dropped without a word.
+
+```scss
+.element {
+  @include background-image("/img/a.png", red blue, sideways);
+}
+```
+```text
+Error: `sideways` is not a valid $filter-direction for `background-image`. Pass an angle such as `45deg` or `0.25turn`, `"to top right"`, or one of: top, top-right, right, bottom-right, bottom, bottom-left, left, top-left.
+```
+
 ## Related Links
 
-- [Background Dots](/docs/background-dots)
+- [Background Pattern](/docs/background-pattern)
+- [Gradient](/docs/gradient)
 - [CSS background-image](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/background-image)
 - [CSS background-size](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/background-size)
 - [CSS background-position](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/background-position)
