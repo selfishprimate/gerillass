@@ -10,7 +10,14 @@ page_image: "gerillass-before.jpg"
 
 <Member name="before">
 
-The **Before** Sass mixin helps you generate content or a style element before the actual content of the selected element or elements.
+The **Before** Sass mixin writes the element's `::before` rule. A string
+becomes its `content`, the name of a `data-` attribute becomes `attr()`, and a
+CSS function such as `var()` or `counter()` is passed through as it is rather
+than quoted into text.
+
+With no argument it writes `content: ""` in a rule of its own, inside
+`:where()`, so a block of styles alone draws something and any `content` you
+set elsewhere still wins.
 
 </Member>
 
@@ -58,29 +65,15 @@ The **Before** Sass mixin helps you generate content or a style element before t
 ```
 </Example>
 
-<Example caption="A `data-` attribute name is read from the markup instead of a string, so each element carries its own text." listing="<div class=&quot;element&quot; data-currency=&quot;&#36;&quot;>200</div>">
+<Example caption="A `data-` attribute name is read from the markup instead of a string, so each element carries its own text, and a block says how it looks." listing="<div class=&quot;element&quot; data-currency=&quot;&#36;&quot;>200</div>">
 ```scss
-.element{
-  @include before("data-currency");
-}
-```
-```html
-<style>
-  .element { font: 600 20px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
-</style>
-<div class="element" data-currency="&#36;">200</div>
-```
-</Example>
-
-<Example caption="The two forms together: the attribute for the text, and a block for how it looks." listing="<div class=&quot;element&quot; data-currency=&quot;&#36;&quot;>200</div>">
-```scss
-.element{
-  @include before("data-currency"){
+.element {
+  @include before("data-currency") {
     margin-right: 2px;
     font-size: .6em;
     vertical-align: top;
     color: #db504a;
-  };
+  }
 }
 ```
 ```html
@@ -92,28 +85,6 @@ The **Before** Sass mixin helps you generate content or a style element before t
 </Example>
 
 ## Interface examples
-
-<Example caption="Custom list markers. The list keeps its semantics, and the marker is whatever string you pass.">
-```scss
-.checklist li {
-  @include before("✓") {
-    margin-right: 8px;
-    font-weight: 700;
-    color: #69995d;
-  }
-}
-```
-```html
-<style>
-  .checklist { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; font: 14px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
-</style>
-<ul class="checklist">
-  <li>Compiles with Dart Sass</li>
-  <li>Zero runtime dependencies</li>
-  <li>Tested in three browsers</li>
-</ul>
-```
-</Example>
 
 <Example caption="Numbered steps with CSS's own `counter()` function, which the mixin writes as it is rather than quoting it into text. `counter-reset` on the list creates the counter, and `counter-increment` on each step advances it; both are plain CSS." listing="<div class=&quot;steps&quot;>
   <div class=&quot;step&quot;>Install the package</div>
@@ -189,33 +160,6 @@ Reach for the Counter mixin when numbering a list is the whole job: it does all 
 ```
 </Example>
 
-<Example caption="A category label read from a data attribute, in front of each title." listing="<h3 class=&quot;post-title&quot; data-category=&quot;Release&quot;>Gerillass 4.0.0 is out</h3>
-<h3 class=&quot;post-title&quot; data-category=&quot;Guide&quot;>Moving a grid to columnizer</h3>">
-```scss
-.post-title {
-  @include before("data-category") {
-    display: block;
-    margin-bottom: 4px;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: #668f80;
-  }
-}
-```
-```html
-<style>
-  .posts { display: grid; gap: 16px; }
-  .post-title { margin: 0; font: 600 17px/1.3 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
-</style>
-<div class="posts">
-  <h3 class="post-title" data-category="Release">Gerillass 4.0.0 is out</h3>
-  <h3 class="post-title" data-category="Guide">Moving a grid to columnizer</h3>
-</div>
-```
-</Example>
-
 ## Drawing with no content
 
 <Example caption="A status dot before a label. With no argument the mixin writes `content: &quot;&quot;` for you, so a block of styles alone draws the dot. Until 4.0.0 this drew nothing, because a pseudo-element with no `content` is not rendered.">
@@ -261,6 +205,21 @@ q {
 **The default is easy to override, with two exceptions.** If the content only comes from another state, such as `:hover`, write `content: none` in the block and let the state put it back, or the empty box is drawn the rest of the time. On a `q` element it replaces the browser's quotation marks, which the example above keeps with `open-quote`.
 
 </Hint>
+
+## What it refuses
+
+Content that is not a string stops the build. A number, a colour or a boolean
+would be written into `content` as text, which is never what was meant, and the
+message names the three forms the argument takes.
+
+```scss
+.element {
+  @include before(42);
+}
+```
+```text
+Error: `42` is not a valid $content for `before`. Pass a string to use as the content value, a data- attribute name such as `"data-label"` to render it with attr(), or no argument at all and write the content yourself.
+```
 
 ## Related Links
 
