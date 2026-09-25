@@ -695,7 +695,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 
 ### Vignette
 
-<Example caption="The other way round: clear in the middle, the colour at the edges. Over a photograph it is the oldest trick there is for keeping the eye off the corners.">
+<Example caption="The other way round: clear in the middle, the colour at the edges, which over a photograph is the oldest trick there is for keeping the eye off the corners. `$color` is what the edges darken to, so it has to be darker than what it sits on.">
 ```scss
 .photo {
   @include background-pattern(vignette, $color: rgb(17 24 21 / 0.45), $image: "/images/backgrounds/04.jpg");
@@ -706,20 +706,6 @@ Each pattern below is its own section, with the colours and the tile changed fro
   .photo { aspect-ratio: 4 / 3; border-radius: 10px; }
 </style>
 <div class="photo"></div>
-```
-</Example>
-
-<Example caption="With no image it shades a flat panel, which is enough to put a quote in the middle of. `$color` is what the edges darken to, so it has to be darker than `$background`: the two within a shade of each other is a panel with nothing on it.">
-```scss
-.quote {
-  @include background-pattern(vignette, $color: rgb(17 24 21 / 0.45), $background: #668f80);
-}
-```
-```html
-<style>
-  .quote { display: grid; place-items: center; height: 200px; padding: 32px; border-radius: 10px; font: 17px/1.6 Inter, ui-sans-serif, system-ui, sans-serif; text-align: center; color: #fafaf8; }
-</style>
-<div class="quote">“We replaced four spreadsheets with one page.”</div>
 ```
 </Example>
 
