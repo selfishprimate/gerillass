@@ -32,7 +32,7 @@ The **Border Radius** Sass mixin helps you round the corners of a selected eleme
 ```html
 <style>
   body { background: #fafaf8; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #657167; }
-  .element { overflow: hidden; background: #fff; box-shadow: 0 6px 20px rgb(34 44 37 / 0.08); }
+  .element { margin: 0; max-width: 340px; overflow: hidden; background: #fff; box-shadow: 0 6px 20px rgb(34 44 37 / 0.08); }
   .element img { display: block; width: 100%; height: 150px; object-fit: cover; }
   .element p { margin: 0; padding: 14px 16px; font-weight: 600; }
 </style>
@@ -68,94 +68,132 @@ The **Border Radius** Sass mixin helps you round the corners of a selected eleme
 ```
 </Example>
 
-<Example caption="The same form on the right edge, so the notice keeps its square side against the edge of the page.">
+<Example caption="`left` and `right` round the two corners along one side, and a segmented control is where both are needed at once: the first button rounds the left, the last rounds the right, and everything between stays square.">
 ```scss
-.element {
-  @include border-radius(right, 40px);
+.segment:first-child {
+  @include border-radius(left, 10px);
 }
-```
-```html
-<style>
-  body { background: #fafaf8; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #657167; padding: 26px 0; }
-  .element { display: flex; align-items: center; gap: 12px; width: 82%; padding: 16px 26px 16px 20px; background: #fafaf8; color: #668f80; font-weight: 600; }
-  .element span { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 999px; background: #668f80; color: #fff; }
-</style>
-<div class="element"><span>i</span>Your export is ready to download.</div>
-```
-</Example>
 
-<Example caption="`cross-left` and `cross-right` take the corners diagonally, which is how an avatar tile gets its leaf shape.">
-```scss
-.element {
-  @include border-radius(cross-left, 40px);
+.segment:last-child {
+  @include border-radius(right, 10px);
 }
 ```
 ```html
 <style>
   body { background: #fafaf8; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #657167; }
-  .element { display: grid; place-items: center; width: 150px; height: 150px; background: linear-gradient(140deg, #69995d, #668f80); color: #fff; font: 700 42px Inter, ui-sans-serif, system-ui, sans-serif; }
+  .segments { display: inline-flex; }
+  .segment { padding: 10px 18px; background: #fff; border: 1px solid #dee0cd; font: inherit; font-weight: 600; color: #657167; cursor: pointer; }
+  .segment + .segment { margin-left: -1px; }
+  .segment[aria-pressed="true"] { position: relative; background: #222c25; border-color: #222c25; color: #fafaf8; }
 </style>
-<div class="element">AM</div>
-```
-</Example>
-
-<Example caption="Four values in CSS's own shorthand order, one radius per corner, and the same four separated by commas, which reads better once the values get long. Both compile to the same declaration.">
-```scss
-.element {
-  @include border-radius(25px 50px 100px 150px);
-}
-
-.element--commas {
-  @include border-radius(25px, 50px, 100px, 150px);
-}
-```
-```html
-<style>
-  body { background: #fafaf8; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #657167; }
-  .element { display: grid; align-content: center; gap: 6px; height: 200px; padding: 0 34px; background: linear-gradient(135deg, #5bc0bb, #668f80 55%, #ed6a5a); color: #fff; }
-  .element b { font: 700 24px Inter, ui-sans-serif, system-ui, sans-serif; }
-  .element span { opacity: 0.85; }
-</style>
-<div class="element">
-  <b>Four corners, four radii</b>
-  <span>The shorthand order is the one CSS uses.</span>
+<div class="segments">
+  <button class="segment" type="button" aria-pressed="false">Day</button>
+  <button class="segment" type="button" aria-pressed="true">Week</button>
+  <button class="segment" type="button" aria-pressed="false">Month</button>
 </div>
 ```
 </Example>
 
-<Example caption="A second value after each radius bends the curve into an ellipse, and a photograph is where that shows.">
+<Example caption="`cross-left` and `cross-right` round two corners diagonally, which is the leaf shape a photograph is cut to on every page selling something grown or made by hand. `cross-right` is the same shape mirrored.">
 ```scss
-.element {
-  @include border-radius(100px 40px, 50px 20%, 100px 30%, 150px 2rem);
+.leaf {
+  @include border-radius(cross-left, 60px);
 }
 ```
 ```html
 <style>
   body { background: #fafaf8; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #657167; }
-  .element { overflow: hidden; height: 200px; background: #fff; }
-  .element img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .card { display: grid; gap: 12px; width: 230px; }
+  .leaf { margin: 0; overflow: hidden; height: 190px; }
+  .leaf img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .card b { font-size: 15px; color: #2f3937; }
+  .card span { color: #657167; }
 </style>
-<figure class="element"><img src="/images/landscape.webp" alt="A fjord, cut to an elliptical frame"></figure>
+<div class="card">
+  <figure class="leaf"><img src="/images/landscape.webp" alt="A fjord seen from a clifftop"></figure>
+  <div><b>Lysefjord</b><br><span>Four days on foot</span></div>
+</div>
 ```
 </Example>
 
-<Example caption="`null` skips a corner, so a dropdown can keep the two corners that meet the button square.">
+<Example caption="Four values are one radius per corner, in CSS's own order: top-left, top-right, bottom-right, bottom-left. A message bubble is what the shorthand is for, since the one corner nearest whoever is speaking is the one that stays sharp. The two forms round the same corners: with spaces the mixin writes the `border-radius` shorthand, with commas it writes the four corner properties instead, which reads better once the values get long.">
 ```scss
-.element {
-  @include border-radius(null, null, 100px 30%, 150px 2rem);
+.bubble--them {
+  @include border-radius(18px 18px 18px 4px);
+}
+
+.bubble--me {
+  @include border-radius(18px, 18px, 4px, 18px);
+}
+```
+```html
+<style>
+  body { background: #fafaf8; font: 14px/1.45 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .thread { display: grid; gap: 8px; max-width: 340px; }
+  .bubble { margin: 0; }
+  .bubble { max-width: 80%; padding: 10px 14px; }
+  .bubble--them { justify-self: start; background: #f2f2eb; color: #2f3937; }
+  .bubble--me { justify-self: end; background: #222c25; color: #f2f2eb; }
+  .thread time { justify-self: end; font-size: 11px; color: #8b9381; }
+</style>
+<div class="thread">
+  <p class="bubble bubble--them">Did the build go out?</p>
+  <p class="bubble bubble--me">Tagged and published, both registries.</p>
+  <p class="bubble bubble--them">Perfect, thank you.</p>
+  <time>11:05</time>
+</div>
+```
+</Example>
+
+<Example caption="A second value after a radius makes the corner elliptical: the first says how far the curve reaches along the top, the second how far it reaches down the side. One radius can only draw a quarter of a circle, so an arch, which an editorial page has cut its portraits to for a century, needs two.">
+```scss
+.arch {
+  @include border-radius(50% 28%, 50% 28%, 0, 0);
 }
 ```
 ```html
 <style>
   body { background: #fafaf8; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #657167; }
-  .element { width: 280px; padding: 16px 18px; background: #fff; box-shadow: 0 10px 30px rgb(34 44 37 / 0.12); }
-  .element a { display: block; padding: 9px 10px; border-radius: 8px; color: #668f80; text-decoration: none; font-weight: 600; }
-  .element a:hover { background: #fafaf8; }
+  .plate { display: grid; gap: 12px; margin: 0; width: 220px; text-align: center; }
+  .arch { overflow: hidden; height: 260px; }
+  .arch img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .plate b { font-size: 15px; color: #2f3937; }
+  .plate span { display: block; font-size: 13px; }
 </style>
-<div class="element">
-  <a href="#">Duplicate</a>
-  <a href="#">Move to folder</a>
-  <a href="#">Archive</a>
+<figure class="plate">
+  <div class="arch"><img src="/images/landscape.webp" alt="A fjord seen from a clifftop"></div>
+  <figcaption><b>Preikestolen</b><span>Photograph, 1974</span></figcaption>
+</figure>
+```
+</Example>
+
+<Example caption="`null` skips a corner. A menu hanging off a button shares an edge with it, so the two corners that meet stay square and the pair reads as one shape: `top` rounds the button's outer two, and `null, null` leaves the menu's.">
+```scss
+.trigger {
+  @include border-radius(top, 12px);
+}
+
+.menu {
+  @include border-radius(null, null, 12px, 12px);
+}
+```
+```html
+<style>
+  body { background: #fafaf8; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #657167; }
+  .picker { width: 250px; }
+  .trigger { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 12px 16px; border: 0; background: #222c25; color: #fafaf8; font: inherit; font-weight: 600; cursor: pointer; }
+  .trigger em { font-style: normal; opacity: 0.6; }
+  .menu { padding: 6px; background: #fff; box-shadow: 0 10px 24px rgb(34 44 37 / 0.12); }
+  .menu a { display: block; padding: 9px 10px; border-radius: 8px; color: #668f80; text-decoration: none; font-weight: 600; }
+  .menu a:hover { background: #f2f2eb; }
+</style>
+<div class="picker">
+  <button class="trigger" type="button">Move to folder<em>&#9662;</em></button>
+  <div class="menu">
+    <a href="#">Drafts</a>
+    <a href="#">Archive</a>
+    <a href="#">Trash</a>
+  </div>
 </div>
 ```
 </Example>
