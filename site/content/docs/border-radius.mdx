@@ -198,21 +198,39 @@ The **Border Radius** Sass mixin helps you round the corners of a selected eleme
 ```
 </Example>
 
-<Example caption="**Logical corners and edges** follow the writing direction. `inline-start` rounds the corners a line begins at: the left in a left-to-right tab and the right in a right-to-left one, from the same rule.">
+<Example caption="**Logical corners and edges** follow the writing direction, and the segmented control above is what they are for. Written with `left` and `right` that control is correct in English and wrong in Arabic, where the first button is drawn on the right and its rounded corners end up in the middle of the group. `inline-start` and `inline-end` mean the side a line begins and ends at, so one rule rounds the outside of the group in both.">
 ```scss
-.tab {
-  @include border-radius("inline-start", 16px);
+.segment:first-child {
+  @include border-radius("inline-start", 10px);
+}
+
+.segment:last-child {
+  @include border-radius("inline-end", 10px);
 }
 ```
 ```html
 <style>
   body { background: #fafaf8; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #657167; }
-  .row { display: flex; gap: 4px; margin-bottom: 14px; }
-  .tab { padding: 12px 22px; background: #f2f2eb; color: #657167; font-weight: 600; }
-  .tab[aria-current] { background: #222c25; color: #fff; }
+  .row + .row { margin-top: 14px; }
+  .segments { display: inline-flex; }
+  .segment { padding: 10px 18px; background: #fff; border: 1px solid #dee0cd; font: inherit; font-weight: 600; color: #657167; cursor: pointer; }
+  .segment + .segment { margin-inline-start: -1px; }
+  .segment[aria-pressed="true"] { position: relative; background: #222c25; border-color: #222c25; color: #fafaf8; }
 </style>
-<div class="row" dir="ltr"><span class="tab" aria-current="page">Overview</span><span class="tab">Activity</span></div>
-<div class="row" dir="rtl" lang="ar"><span class="tab" aria-current="page">نظرة عامة</span><span class="tab">النشاط</span></div>
+<div class="row" dir="ltr">
+  <div class="segments">
+    <button class="segment" type="button" aria-pressed="false">Day</button>
+    <button class="segment" type="button" aria-pressed="true">Week</button>
+    <button class="segment" type="button" aria-pressed="false">Month</button>
+  </div>
+</div>
+<div class="row" dir="rtl" lang="ar">
+  <div class="segments">
+    <button class="segment" type="button" aria-pressed="false">&#1610;&#1608;&#1605;</button>
+    <button class="segment" type="button" aria-pressed="true">&#1571;&#1587;&#1576;&#1608;&#1593;</button>
+    <button class="segment" type="button" aria-pressed="false">&#1588;&#1607;&#1585;</button>
+  </div>
+</div>
 ```
 </Example>
 
