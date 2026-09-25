@@ -698,7 +698,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="The other way round: clear in the middle, the colour at the edges. Over a photograph it is the oldest trick there is for keeping the eye off the corners.">
 ```scss
 .photo {
-  @include background-pattern(vignette, $color: rgb(17 24 21 / 0.9), $image: "/images/backgrounds/04.jpg");
+  @include background-pattern(vignette, $color: rgb(17 24 21 / 0.45), $image: "/images/backgrounds/04.jpg");
 }
 ```
 ```html
@@ -712,7 +712,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="With no image it shades a flat panel, which is enough to put a quote in the middle of. `$color` is what the edges darken to, so it has to be darker than `$background`: the two within a shade of each other is a panel with nothing on it.">
 ```scss
 .quote {
-  @include background-pattern(vignette, $color: rgb(17 24 21 / 0.85), $background: #668f80, $size: 72% 70%);
+  @include background-pattern(vignette, $color: rgb(17 24 21 / 0.45), $background: #668f80);
 }
 ```
 ```html
