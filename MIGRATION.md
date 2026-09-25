@@ -75,6 +75,8 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `background-image` lifts the children inside `:where()` | fixes a cascade defect; silent |
 | `background-image(none)` writes `none`, not `url(none)` | fixes a 404 request; silent |
 | `background-image` warns on a direction with one colour | not breaking |
+| `brand-logo`'s link fills the box, so the focus ring does | fixes an accessibility defect; silent |
+| `brand-logo` writes `background-size: contain` | fixes a cropped logo; silent |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -2003,6 +2005,56 @@ path, as every quoted string is.
 nothing to turn. The value used to be dropped without a word; now the build
 says it was left out. The CSS is unchanged.
 
+---
+
+## Change: `brand-logo`'s link is the size of the logo
+
+The link was 1px square in the top-left corner of the logo box, with a
+stretched `::after` taking the clicks. A focus ring is drawn around the link's
+own box and not around that pseudo-element, so tabbing to a site's logo drew a
+speck a few pixels across:
+
+```css
+/* 3.x */
+.logo a { display: block; width: 1px; height: 1px; overflow: hidden; text-indent: 100%; }
+
+/* 4.0.0 */
+.logo a { display: block; width: 100%; height: 100%; overflow: hidden; white-space: nowrap; text-indent: 100%; }
+```
+
+Measured in Chrome 152, Firefox 156 and Safari 26.6.2, on a 196x42 logo, a box
+wider than the image's ratio, a box shorter than it, a right-to-left heading and
+a name of several words: the link is the box in all three, the ring is drawn
+around the whole logo, the link's own text is still outside the visible box, and
+a click in the far corner still answers the link. The `::after` stays, so
+nothing about the click target changes.
+
+`white-space: nowrap` is the line that keeps the text hidden at that size, and
+it is not decoration. `text-indent` indents the first line only, so a name of
+more than one word wrapped to a second line that started at the left edge. At
+1px tall that line was clipped away; at the logo's real height it is not.
+Measured in all three browsers on a 180x60 box with 14px text, the second line
+was drawn over the logo without it.
+
+Nothing to do, unless a stylesheet of yours sized `.logo a` itself.
+
+---
+
+## Change: `brand-logo` fits the logo instead of filling the width
+
+`background-size` was `100%`, which is `100% auto`: the image was always the
+box's full width, whatever height that came to. A box wider than the image's own
+ratio scaled it past the height it was given and the bottom of the logo was cut
+off. It is `contain` now, so the logo fits and is centred.
+
+```css
+/* 3.x */  background-size: 100%;
+/* 4.0.0 */ background-size: contain;
+```
+
+The two agree whenever the box is the image's ratio or narrower for its height,
+which is the usual case, so most logos render identically. Measured in all three
+browsers at 196x42, 300x42 and 196x20.
 
 ---
 

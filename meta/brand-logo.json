@@ -32,5 +32,10 @@
     ".logo { @include brand-logo(huge, 40px); }",
     ".logo { @include brand-logo(120px, 10deg); }",
     ".logo { @include brand-logo(\"120px\", 40px); }"
+  ],
+  "caveats": [
+    "The logo goes on the element and the link's text is hidden behind it, so the name stays in the markup. The link fills the box, which is what the focus ring is drawn around: until 4.0.0 the link was 1px square in the top-left corner, and tabbing to a site's logo drew a speck there, measured in Chrome 152, Firefox 156 and Safari 26.6.2.",
+    "`white-space: nowrap` is what keeps the text hidden now that the link is the logo's size. Measured in all three browsers on a 180x60 box with 14px text, a name of more than one word wrapped to a second line, which `text-indent` does not indent, and it was drawn over the logo.",
+    "`background-size` is `contain`, so a box wider than the image's own ratio centres the logo rather than scaling it past the height it was given. Until 4.0.0 it was `100%`, which is `100% auto`, and the bottom of the logo was cut off."
   ]
 }

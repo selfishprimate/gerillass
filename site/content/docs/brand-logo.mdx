@@ -1,8 +1,8 @@
 ---
 title: "Brand Logo"
 page_title: "Brand Logo Sass Mixin"
-page_description: "The Brand Logo Sass mixin helps you create an SEO-friendly logo component for your brand's website using CSS best practices."
-page_keywords: "Gerillass brand-logo, Brand Logo Sass mixin, Sass brand-logo, SCSS brand-logo, CSS background-image, CSS text-indent, CSS background-size"
+page_description: "The Brand Logo Sass mixin turns a heading and a link into a logo: the image is the element's background and the brand name stays in the markup for search engines and screen readers."
+page_keywords: "Gerillass brand-logo, Brand Logo Sass mixin, Sass brand-logo, SCSS brand-logo, CSS image replacement, CSS background-image, CSS text-indent"
 page_image: "gerillass-brand-logo.jpg"
 ---
 
@@ -10,27 +10,34 @@ page_image: "gerillass-brand-logo.jpg"
 
 <Member name="brand-logo">
 
-The **Brand Logo** Sass mixin helps you create an SEO-friendly logo component for your brand's website using CSS best practices.
-<Hint kind="info">
+The **Brand Logo** Sass mixin builds the logo every site header opens with: the
+image is the element's background, and the link inside it keeps the brand name
+as real text, out of sight behind it. A search engine and a screen reader read
+the name, and everybody else sees the logo.
 
-This is a **Gerillass** technique for **image replacement**. There are other methods too. Check out the links at the end of this article to find out more.
-
-</Hint>
+The link fills the box, so tabbing to it draws a focus ring around the whole
+logo, and clicking anywhere on it follows the link.
 
 </Member>
+
+<Hint kind="info">
+
+This is one technique for **image replacement**, not the only one. The links at the end of the page compare it with the others.
+
+</Hint>
 
 ## Arguments
 
 <Arguments of="brand-logo">
-  <Argument name="$width" type="number (with unit)">Sets the width value of the logo image. Accepts what <a href="/docs/sizer">Sizer</a> accepts: a length or a percentage, a sizing keyword, a CSS-wide keyword, <code>var()</code> or a maths function.</Argument>
-  <Argument name="$height" type="number (with unit)">Sets the height value of the logo image. Accepts the same values as <code>$width</code>.</Argument>
-  <Argument name="$image-url" type="string, function">Sets the URL of the logo image. Works best with absolute URLs. This argument is optional, so you can also specify the image with the style attribute. A value that already is an image, <code>var()</code>, <code>url()</code>, <code>image-set()</code> or a gradient, is written as it is rather than wrapped in <code>url()</code>. A list, a number, a colour or a boolean is refused.</Argument>
+  <Argument name="$width" type="number (with unit)">The width of the logo box. Accepts what <a href="/docs/sizer">Sizer</a> accepts: a length or a percentage, a sizing keyword, a CSS-wide keyword, <code>var()</code> or a maths function.</Argument>
+  <Argument name="$height" type="number (with unit)">The height of the logo box. Accepts the same values as <code>$width</code>. The image is fitted inside the box and centred, so it keeps its own proportions whatever the two come to.</Argument>
+  <Argument name="$image-url" type="string, function">The logo image, as a path. Optional: leave it out and set the image in the markup instead, which is what a template does when the logo is a variable. A value that already is an image, <code>var()</code>, <code>url()</code>, <code>image-set()</code> or a gradient, is written as it is rather than wrapped in <code>url()</code>. A list, a number, a colour or a boolean is refused.</Argument>
 </Arguments>
 
 ## Examples
 
-<Example caption="The markup matters more than the call: a heading that holds a link, with the logo as the element's background and the text hidden behind it, so a screen reader still reads the name." listing="<h1 class=&quot;brand-logo&quot;>
-&#32;&#32;<a href=&quot;#&quot;>Gerillass</a>
+<Example caption="The markup matters as much as the call: a heading holding a link, with the brand name written out inside it. That name is what a search engine indexes and what a screen reader announces; the logo is the background behind it." listing="<h1 class=&quot;brand-logo&quot;>
+&#32;&#32;<a href=&quot;/&quot;>Gerillass</a>
 </h1>">
 ```scss
 .brand-logo {
@@ -43,36 +50,88 @@ This is a **Gerillass** technique for **image replacement**. There are other met
 ```
 ```html
 <style>
-  body { background: #fafaf8; }
+  body { margin: 0; background: #fafaf8; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 18px 22px; background: #fff; box-shadow: 0 1px 0 #dee0cd; }
+  .bar nav { display: flex; gap: 20px; }
+  .bar nav a { color: #657167; text-decoration: none; font-weight: 600; }
+  .bar nav a:hover { color: #222c25; }
 </style>
-<h1 class="brand-logo"><a href="#">Gerillass</a></h1>
+<header class="bar">
+  <h1 class="brand-logo"><a href="/">Gerillass</a></h1>
+  <nav><a href="#">Docs</a><a href="#">Playground</a><a href="#">GitHub</a></nav>
+</header>
 ```
 </Example>
 
-<Hint kind="info">
-
-Note that the `background-image` declaration has disappeared from the generated CSS.
-
-</Hint>
-
-<Example caption="`$image-url` is optional, and the image can come from the markup instead, which is what a template does when the logo is a variable." listing="<h1 class=&quot;brand-logo&quot; style=&quot;background-image: url(/images/logo/logo.svg);&quot;>
-&#32;&#32;<a href=&quot;#&quot;>Gerillass</a>
-</h1>">
+<Example resizable hint="Drag the box: the logo shrinks with the header and keeps its proportions, because the image is fitted inside the box rather than stretched across it." caption="`$width` and `$height` take everything [Sizer](/docs/sizer) takes, so a `clamp()` gives the header a logo that scales with it and stops at its natural size.">
 ```scss
 .brand-logo {
   @include brand-logo(
-    $width: 196px,
-    $height: 42px
+    $width: clamp(110px, 26vw, 196px),
+    $height: clamp(24px, 5.6vw, 42px),
+    $image-url: "/images/logo/logo.svg"
   );
 }
 ```
 ```html
 <style>
-  body { background: #fafaf8; }
+  body { margin: 0; background: #fafaf8; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 20px; background: #fff; box-shadow: 0 1px 0 #dee0cd; }
+  .bar a.cta { flex: none; padding: 8px 14px; border-radius: 8px; background: #222c25; color: #fafaf8; text-decoration: none; font-weight: 600; }
 </style>
-<h1 class="brand-logo" style="background-image: url(/images/logo/logo.svg)"><a href="#">Gerillass</a></h1>
+<header class="bar">
+  <h1 class="brand-logo"><a href="/">Gerillass</a></h1>
+  <a class="cta" href="#">Install</a>
+</header>
 ```
 </Example>
+
+<Example caption="With no `$image-url` the rule is written once and the image comes from the markup, which is what a template does when the logo is a field somebody edits." listing="<h1 class=&quot;brand-logo&quot; style=&quot;background-image: url(/images/logo/logo-with-face.svg)&quot;>
+&#32;&#32;<a href=&quot;/&quot;>Gerillass</a>
+</h1>">
+```scss
+.brand-logo {
+  @include brand-logo(
+    $width: 210px,
+    $height: 75px
+  );
+}
+```
+```html
+<style>
+  body { margin: 0; background: #fafaf8; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .bar { display: flex; align-items: center; gap: 24px; padding: 16px 22px; background: #fff; box-shadow: 0 1px 0 #dee0cd; }
+</style>
+<header class="bar">
+  <h1 class="brand-logo" style="background-image: url(/images/logo/logo-with-face.svg)"><a href="/">Gerillass</a></h1>
+</header>
+```
+</Example>
+
+<Example caption="An image the browser chooses is passed through rather than wrapped in `url()`, so a raster logo can ship a version per screen. `var()` works the same way, which is how a theme swaps the file without a second rule.">
+```scss
+.brand-logo {
+  @include brand-logo(
+    $width: 196px,
+    $height: 42px,
+    $image-url: image-set(
+      "/images/logo/logo.png" 1x,
+      "/images/logo/logo@2x.png" 2x
+    )
+  );
+}
+
+.brand-logo--themed {
+  @include brand-logo(196px, 42px, var(--logo));
+}
+```
+</Example>
+
+<Hint kind="warning">
+
+**Changed in Gerillass 4.0.0.** The link fills the logo box instead of being 1px square in its corner, so the focus ring is drawn around the logo rather than as a speck beside it, and `background-size` is `contain` rather than `100%`, so a box wider than the image's own proportions no longer cuts the bottom off the logo. Nothing to do, unless a stylesheet of yours sized the link itself.
+
+</Hint>
 
 ## What it refuses
 
@@ -99,7 +158,11 @@ Error: `10deg` is not a valid $height for `brand-logo`: `deg` is not a length un
 ```
 
 ## Related Links
-* [Nine Techniques for CSS Image Replacement](https://css-tricks.com/css-image-replacement/)
-* [A History of CSS Image Replacement](https://www.sitepoint.com/css-image-replacement-text-indent-negative-margins-and-more/)
 
-
+- [Stretched Link](/docs/stretched-link)
+- [Sizer](/docs/sizer)
+- [Hide](/docs/hide)
+- [CSS background-size](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/background-size)
+- [CSS text-indent](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/text-indent)
+- [Nine Techniques for CSS Image Replacement](https://css-tricks.com/css-image-replacement/)
+- [A History of CSS Image Replacement](https://www.sitepoint.com/css-image-replacement-text-indent-negative-margins-and-more/)

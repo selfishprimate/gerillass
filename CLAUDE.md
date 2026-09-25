@@ -952,7 +952,10 @@ Two pieces of work are open:
   `$size`, `$position` and `$repeat`, one value per layer when a filter sits
   over the image, with no overlay written when there is no filter, that overlay
   given `pointer-events: none` and its children `:where()`, and `none` written
-  rather than `url(none)`, on `docs-examples-review`; and the demos and prose
+  rather than `url(none)`, and `brand-logo`'s link filling the logo box so the
+  focus ring does, with `white-space: nowrap` holding the text out of sight at
+  that size and `background-size: contain` fitting the logo rather than
+  cropping it, both on `docs-examples-review`; and the demos and prose
   of every documentation page, swept and rewritten on `examples-polish`,
   branched from `glass`; and a filled `text-shadow` stepping in pixels rather than in one of
   the distance's own unit, on `text-shadow-step`, branched from

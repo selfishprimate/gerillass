@@ -207,6 +207,12 @@ a dropped declaration rather than an error.
 - Called inside a selector with no argument, the descendants are written inside `:where()` since 4.0.0, so a rule the page has for one of them wins. Until then the rule was `.a *`, which is (0,1,0) and overrode a component's own `input` or `.inner` rule: measured in Chrome 152, Firefox 156 and Safari 26.6.2, a `.page-rule { box-sizing: content-box }` written before the include lost in all three and now wins in all three.
 - At the root of a stylesheet the rule is `*, *::before, *::after`, which has no specificity of its own and is unchanged.
 
+**`brand-logo`**
+
+- The logo goes on the element and the link's text is hidden behind it, so the name stays in the markup. The link fills the box, which is what the focus ring is drawn around: until 4.0.0 the link was 1px square in the top-left corner, and tabbing to a site's logo drew a speck there, measured in Chrome 152, Firefox 156 and Safari 26.6.2.
+- `white-space: nowrap` is what keeps the text hidden now that the link is the logo's size. Measured in all three browsers on a 180x60 box with 14px text, a name of more than one word wrapped to a second line, which `text-indent` does not indent, and it was drawn over the logo.
+- `background-size` is `contain`, so a box wider than the image's own ratio centres the logo rather than scaling it past the height it was given. Until 4.0.0 it was `100%`, which is `100% auto`, and the bottom of the logo was cut off.
+
 **`breakpoint`**
 
 - With one argument the query matches exactly that width, `(width: 768px)`, which is a single pixel, and the mixin prints a warning. Write `only` for that width, or `min`, `max` or a range for anything wider.

@@ -744,13 +744,14 @@ exports[`Manifest examples brand-logo: .logo { @include brand-logo(120px, 40px, 
   background-image: url("/img/logo.svg");
   background-position: center;
   background-repeat: no-repeat;
-  background-size: 100%;
+  background-size: contain;
 }
 .logo a {
   display: block;
-  width: 1px;
-  height: 1px;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
+  white-space: nowrap;
   text-indent: 100%;
 }
 .logo a::after {
@@ -771,13 +772,14 @@ exports[`Manifest examples brand-logo: .logo { @include brand-logo(120px, 40px, 
   background-image: var(--logo);
   background-position: center;
   background-repeat: no-repeat;
-  background-size: 100%;
+  background-size: contain;
 }
 .logo a {
   display: block;
-  width: 1px;
-  height: 1px;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
+  white-space: nowrap;
   text-indent: 100%;
 }
 .logo a::after {
