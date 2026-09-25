@@ -21,7 +21,7 @@
     // the trap `columnizer` closed the same way for 4.0.0. Measured in Chrome
     // 152, Firefox 156 and Safari 26.6.2.
     & {
-  box-sizing: border-box;
+      box-sizing: border-box;
     }
     :where(&)::before,
     :where(&)::after,

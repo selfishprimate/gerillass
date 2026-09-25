@@ -10,14 +10,22 @@ page_image: "gerillass-border-box.jpg"
 
 <Member name="border-box">
 
-The **Border Box** Sass mixin sets the [box-sizing CSS property](https://developer.mozilla.org/en-US/docs/Web/CSS/box-sizing) to `border-box` for the selected HTML elements. This keeps the padding and the border inside the element.
+The **Border Box** Sass mixin writes `box-sizing: border-box`, which keeps the
+padding and the border inside the width you gave an element rather than adding
+them on.
+
+What it writes depends on where it is called. At the root of a stylesheet it is
+`*, *::before, *::after`, the reset every project starts with. Inside a
+selector it is that element and everything under it, with the descendants in
+`:where()` so a `box-sizing` of your own for one of them wins. With `only` it
+is that element and its two pseudo-elements, and nothing else.
 
 </Member>
 
 ## Arguments
 
-<Arguments of="border-box" footnote="Please check out the links at the end of the page to learn more about box sizing.">
-  <Argument name="$value" type="string">Accepts the <code>only</code> value. Use it when you want to apply the styles to one specific HTML element.</Argument>
+<Arguments of="border-box" footnote="Called at the root with no argument, this is the reset a project writes once and forgets.">
+  <Argument name="$value" type="string">Only <code>only</code>, and only inside a selector: it keeps the rule to that element and its <code>::before</code> and <code>::after</code>, where the mixin would otherwise carry on to every descendant. Leave it out for that wider form. Anything else, and <code>only</code> at the root of a stylesheet, is refused.</Argument>
 </Arguments>
 
 ## Examples
@@ -43,7 +51,7 @@ The **Border Box** Sass mixin sets the [box-sizing CSS property](https://develop
 ```
 </Example>
 
-<Example caption="Pass the `only` value as an argument to apply the style rules only to the selected element.">
+<Example caption="`only` keeps it to the element itself and its two pseudo-elements, which is what a component wants when its children have box sizing of their own.">
 ```scss
 .element {
   @include border-box("only");
@@ -51,7 +59,7 @@ The **Border Box** Sass mixin sets the [box-sizing CSS property](https://develop
 ```
 </Example>
 
-<Example caption="Call the mixin at the root of your stylesheet to target all the HTML elements.">
+<Example caption="At the root of a stylesheet it is the universal reset, on every element and every pseudo-element.">
 ```scss
 @include border-box;
 ```
@@ -63,7 +71,33 @@ The **Border Box** Sass mixin sets the [box-sizing CSS property](https://develop
 
 </Hint>
 
+## What it refuses
+
+`only` limits the rule to the selector it is called in, so at the root of a
+stylesheet there is nothing for it to limit.
+
+```scss
+@include border-box("only");
+```
+```text
+Error: `only` has no meaning at the root of a stylesheet, because there is no selector to limit the effect to. Call `border-box("only")` inside a selector, or pass no argument at all.
+```
+
+And it is the only argument there is, so anything else names both forms.
+
+```scss
+.element {
+  @include border-box(all);
+}
+```
+```text
+Error: `all` is not a valid argument for `border-box`. Pass `"only"` inside a selector to affect just that element, or pass no argument at all.
+```
+
 ## Related Links
-* [CSS Box Sizing](https://www.w3schools.com/css/css3_box-sizing.asp)
-* [Box Sizing](https://css-tricks.com/box-sizing/)
+
+- [Antialias](/docs/antialias)
+- [Reset CSS](/docs/reset-css)
+- [CSS box-sizing](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/box-sizing)
+- [CSS :where](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:where)
 
