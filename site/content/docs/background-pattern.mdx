@@ -29,7 +29,7 @@ The **Background Pattern Sass mixin** draws seventeen patterns with CSS gradient
   <Argument name="$kind" type="string">Which pattern: <code>dots</code>, <code>stripes</code>, <code>grid</code>, <code>checkerboard</code>, <code>crosshatch</code>, <code>zigzag</code>, <code>triangles</code>, <code>brick</code>, <code>waves</code>, <code>houndstooth</code>, <code>gingham</code>, <code>harlequin</code>, <code>sunburst</code>, <code>concentric</code>, <code>glow</code>, <code>vignette</code> or <code>mesh</code>.</Argument>
   <Argument name="$color" type="color, list">One colour, or two or three for the patterns that layer them. The default is <code>currentColor</code> mixed with transparency, so a pattern follows the text colour.</Argument>
   <Argument name="$background" type="color">The colour under the pattern, written as <code>background-color</code>.</Argument>
-  <Argument name="$size" type="number">The tile. The default is <code>2rem</code>. A <code>var()</code> or <code>calc()</code> works, and every offset is derived from it. For <code>stripes</code> it is the period, one line plus its gap. For <code>glow</code> and <code>vignette</code> there is no tile: it is how far the light reaches, one value or two, and the default is <code>90% 80%</code>.</Argument>
+  <Argument name="$size" type="number">The tile. The default is <code>2rem</code>. A <code>var()</code> or <code>calc()</code> works, and every offset is derived from it. For <code>stripes</code> it is the period, one line plus its gap. For <code>glow</code> and <code>vignette</code> there is no tile: it is how far the light reaches, one value or two. A glow reaches <code>90% 80%</code> by default; a vignette reaches the corners, since an ellipse that stops inside the box draws its own edge.</Argument>
   <Argument name="$thickness" type="number">The line, dot or mortar inside the tile. The default is a tenth of the tile for <code>dots</code> and an eighth for the rest. For <code>stripes</code> it is the width of each coloured line, and with no <code>$size</code> the period stays twice it.</Argument>
   <Argument name="$angle" type="number">For <code>stripes</code>, <code>crosshatch</code> and <code>zigzag</code>: an angle such as <code>-45deg</code>, or a unitless number read as degrees. For <code>sunburst</code>: how wide one ray is.</Argument>
   <Argument name="$direction" type="string">For <code>triangles</code>: which way they point, <code>up</code>, <code>right</code>, <code>down</code> or <code>left</code>. The default is <code>down</code>. It takes names rather than an angle because only four rotations cut the tile as a triangle at all.</Argument>
@@ -698,7 +698,7 @@ Each pattern below is its own section, with the colours and the tile changed fro
 <Example caption="The other way round: clear in the middle, the colour at the edges. Over a photograph it is the oldest trick there is for keeping the eye off the corners.">
 ```scss
 .photo {
-  @include background-pattern(vignette, $color: rgb(34 44 37 / 0.8), $size: 78% 72%, $image: "/images/backgrounds/04.jpg");
+  @include background-pattern(vignette, $color: rgb(17 24 21 / 0.9), $image: "/images/backgrounds/04.jpg");
 }
 ```
 ```html

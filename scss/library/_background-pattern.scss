@@ -183,14 +183,25 @@ $-defaults: (1: 0.12, 2: 0.06, 3: 0.18);
   // the size is how far the light reaches, one value or two, and a percentage
   // of the box is the usual way to write it.
   @if list.index($-lights, $name) {
-    $size: $size or (90% 80%);
-    @if list.length($size) > 2 {
-      @error "`#{meta.inspect($size)}` is not a valid $size for the `#{$name}` pattern in `background-pattern`. Pass how far the light reaches, one value or two, such as `90% 80%`.";
+    // A vignette reaches the corners unless it is told otherwise: an ellipse
+    // that stops inside the box draws its own edge, which is the oval halo the
+    // first version had. `farthest-corner` is the keyword for that, and it is
+    // not a length, so it is only ever the default: a size the caller writes
+    // is checked as before.
+    $given: $size != null;
+    @if $size == null and $name == "vignette" {
+      $size: string.unquote("farthest-corner");
     }
-    @each $part in $size {
-      $problem: lengthProblem($part, $negative: false);
-      @if $problem {
-        @error "`#{meta.inspect($part)}` is not a valid $size for `background-pattern`: #{$problem}. A browser drops the gradient.";
+    $size: $size or (90% 80%);
+    @if $given {
+      @if list.length($size) > 2 {
+        @error "`#{meta.inspect($size)}` is not a valid $size for the `#{$name}` pattern in `background-pattern`. Pass how far the light reaches, one value or two, such as `90% 80%`.";
+      }
+      @each $part in $size {
+        $problem: lengthProblem($part, $negative: false);
+        @if $problem {
+          @error "`#{meta.inspect($part)}` is not a valid $size for `background-pattern`: #{$problem}. A browser drops the gradient.";
+        }
       }
     }
   } @else {
@@ -477,7 +488,15 @@ $-defaults: (1: 0.12, 2: 0.06, 3: 0.18);
   } @else if $name == "vignette" {
     // The other way round: clear in the middle and the colour at the edges,
     // which is how a pattern is faded into the page without a mask.
-    $images: ("radial-gradient(#{$size} at #{$origin}, #{$none} 40%, #{$c1} 100%)");
+    //
+    // Four stops rather than two, and the reason is what it looks like. A
+    // clear middle that ends at 40% and then ramps draws a visible oval halo:
+    // the eye finds the place where the darkening starts. Easing it from the
+    // centre, at a twelfth of the colour halfway out and under half of it at
+    // three quarters, leaves nothing for the eye to catch. Rendered beside the
+    // two-stop version in Chrome 152, Firefox 156 and Safari 26.6.2.
+    $stops: "#{$none} 0%, color-mix(in srgb, #{$c1} 12%, transparent) 55%, color-mix(in srgb, #{$c1} 45%, transparent) 78%, #{$c1} 100%";
+    $images: ("radial-gradient(#{$size} at #{$origin}, #{$stops})");
   } @else if $name == "mesh" {
     // Blobs of colour in the corners and the middle, the static half of the
     // aurora look. The blur everyone reaches for is not needed: a radial

@@ -617,7 +617,7 @@ exports[`Manifest examples background-pattern: .a { @include background-pattern(
 
 exports[`Manifest examples background-pattern: .a { @include background-pattern(vignette, $color: rgb(2 6 23 / 0.75), 1`] = `
 ".a {
-  background-image: radial-gradient(90% 80% at 50% 50%, #0000 40%, rgba(2, 6, 23, 0.75) 100%);
+  background-image: radial-gradient(farthest-corner at 50% 50%, #0000 0%, color-mix(in srgb, rgba(2, 6, 23, 0.75) 12%, transparent) 55%, color-mix(in srgb, rgba(2, 6, 23, 0.75) 45%, transparent) 78%, rgba(2, 6, 23, 0.75) 100%);
   background-repeat: repeat;
   background-color: #1e293b;
 }"

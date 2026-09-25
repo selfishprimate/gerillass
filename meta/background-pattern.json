@@ -13,7 +13,8 @@
     "A mixin call writes `background-image`, so two calls on the same element replace one another rather than stacking. To fade a tiled pattern into the page, put the pattern on one element and a `vignette` in the page's colour on an element over it.",
     "`stripes` reads its line and its period apart, which no other pattern needs: `$thickness` is the line and `$size` is one line plus its gap, so the hairline hatch marketing pages use, a 1px line on a 10px tile, is `$size: 10px, $thickness: 1px`. With no `$size` the period stays twice the line, which is the even stripe `background-stripes` drew. A line as wide as the period is refused: Chrome 152, Firefox 156 and Safari 26.6.2 all clamp the last stop and paint a solid colour with no stripes at all.",
     "The default colours are `rgb(from currentColor r g b / …)` rather than `color-mix()`. Measured in Firefox 156, a `color-mix()` inside a repeating gradient is rasterised near the origin and not tiled, so a band of one or two pixels disappears over most of the box and `stripes` with no colour drew two faint lines; the same geometry with the relative form, with an rgba literal and with a plain `currentColor` drew the full field in Chrome 152, Firefox 156 and Safari 26.6.2.",
-    "`triangles` takes a $direction rather than an angle. The shape is a quarter of the tile cut by a conic gradient, and only the odd multiples of 45 degrees cut it as a triangle: measured at twelve angles, 0, 90, 180 and 270 draw a square and 15, 30, 60, 75 and 120 a lopsided quadrilateral. The four names are the four rotations that work."
+    "`triangles` takes a $direction rather than an angle. The shape is a quarter of the tile cut by a conic gradient, and only the odd multiples of 45 degrees cut it as a triangle: measured at twelve angles, 0, 90, 180 and 270 draw a square and 15, 30, 60, 75 and 120 a lopsided quadrilateral. The four names are the four rotations that work.",
+    "A vignette eases from the middle out in four stops and reaches the corners by default. Two stops with a clear centre draw a visible oval halo where the darkening starts, which is what the first version did, and an ellipse that stops inside the box draws its own edge; both were rendered beside the eased version in Chrome 152, Firefox 156 and Safari 26.6.2."
   ],
   "arguments": [
     {
@@ -42,7 +43,7 @@
       "accepts": [
         "the tile, a length such as 2rem, or var(), env() or a calculation",
         "a percentage, a negative length and a unitless number are refused",
-        "glow and vignette: how far the light reaches, one value or two, such as `90% 80%`",
+        "glow: how far the light reaches, one value or two, such as `90% 80%`; vignette reaches the corners unless it is given one",
         "stripes: the period, one line plus its gap, so a 1px line on a 10px tile is `$size: 10px, $thickness: 1px`"
       ]
     },
@@ -84,7 +85,7 @@
       "name": "$origin",
       "accepts": [
         "where the pattern is drawn from, such as `50% 100%` or `top left`",
-        "glow and vignette: where the light comes from; sunburst and concentric: the point the rays or rings spread from",
+        "glow: how far the light reaches, one value or two, such as `90% 80%`; vignette reaches the corners unless it is given one",
         "a length, a percentage, or one of top, right, bottom, left and center"
       ]
     },
