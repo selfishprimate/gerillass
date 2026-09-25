@@ -144,7 +144,7 @@
         border-end-end-radius: $value;
       }
     } @else {
-      @error "Corner value must be one of the followings: #{$list}.";
+      @error "`#{meta.inspect($corner)}` is not a valid corner for `border-radius`. Pass one of: #{$list}.";
     }
   } @else if list.length($args) == 4 {
     @each $value in $args {

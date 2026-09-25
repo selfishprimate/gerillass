@@ -25,7 +25,7 @@ The **Border Radius** Sass mixin helps you round the corners of a selected eleme
 
 <Example caption="One value rounds all four corners, which is the card every layout starts with.">
 ```scss
-.element{
+.element {
   @include border-radius(20px);
 }
 ```
@@ -45,7 +45,7 @@ The **Border Radius** Sass mixin helps you round the corners of a selected eleme
 
 <Example caption="Two values: an edge and a radius. `top` rounds the two corners along the top, which is the shape a sheet arrives in.">
 ```scss
-.element{
+.element {
   @include border-radius(top, 40px);
 }
 ```
@@ -68,15 +68,9 @@ The **Border Radius** Sass mixin helps you round the corners of a selected eleme
 ```
 </Example>
 
-<Hint kind="info">
-
-Just to remind you once more, these are the predefined values you can use to target the corners: `top`, `top-right`, `right`, `bottom-right`, `bottom`, `bottom-left`, `left`, `top-left`, `cross-left`, `cross-right`, `all`.
-
-</Hint>
-
 <Example caption="The same form on the right edge, so the notice keeps its square side against the edge of the page.">
 ```scss
-.element{
+.element {
   @include border-radius(right, 40px);
 }
 ```
@@ -92,7 +86,7 @@ Just to remind you once more, these are the predefined values you can use to tar
 
 <Example caption="`cross-left` and `cross-right` take the corners diagonally, which is how an avatar tile gets its leaf shape.">
 ```scss
-.element{
+.element {
   @include border-radius(cross-left, 40px);
 }
 ```
@@ -105,10 +99,14 @@ Just to remind you once more, these are the predefined values you can use to tar
 ```
 </Example>
 
-<Example caption="Four values in CSS's own shorthand order, one radius per corner.">
+<Example caption="Four values in CSS's own shorthand order, one radius per corner, and the same four separated by commas, which reads better once the values get long. Both compile to the same declaration.">
 ```scss
-.element{
+.element {
   @include border-radius(25px 50px 100px 150px);
+}
+
+.element--commas {
+  @include border-radius(25px, 50px, 100px, 150px);
 }
 ```
 ```html
@@ -125,29 +123,9 @@ Just to remind you once more, these are the predefined values you can use to tar
 ```
 </Example>
 
-<Example caption="The same four values separated by commas, which reads better once the values get long.">
-```scss
-.element{
-  @include border-radius(25px, 50px, 100px, 150px);
-}
-```
-```html
-<style>
-  body { background: #fafaf8; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #657167; }
-  .element { display: grid; align-content: center; gap: 6px; height: 200px; padding: 0 34px; background: linear-gradient(135deg, #2f3937, #668f80 60%, #eefa92); color: #222c25; }
-  .element b { font: 700 24px Inter, ui-sans-serif, system-ui, sans-serif; }
-  .element span { opacity: 0.8; }
-</style>
-<div class="element">
-  <b>The same shape, one comma apart</b>
-  <span>Commas read better when the values get long.</span>
-</div>
-```
-</Example>
-
 <Example caption="A second value after each radius bends the curve into an ellipse, and a photograph is where that shows.">
 ```scss
-.element{
+.element {
   @include border-radius(100px 40px, 50px 20%, 100px 30%, 150px 2rem);
 }
 ```
@@ -163,7 +141,7 @@ Just to remind you once more, these are the predefined values you can use to tar
 
 <Example caption="`null` skips a corner, so a dropdown can keep the two corners that meet the button square.">
 ```scss
-.element{
+.element {
   @include border-radius(null, null, 100px 30%, 150px 2rem);
 }
 ```
@@ -211,6 +189,29 @@ A radius the browser drops stops the build. Measured in Chrome 152, `border-radi
 ```
 ```text
 Error: `auto` is not a valid radius for `border-radius`: it is not a length. A browser drops the declaration.
+```
+
+More radii than the property takes are refused with the count, since a fifth
+value drops the whole declaration rather than being ignored.
+
+```scss
+.element {
+  @include border-radius(10px 20px 30px 40px 50px);
+}
+```
+```text
+Error: `10px 20px 30px 40px 50px` is not a valid radius for `border-radius`: it is 5 radii where at most 4 are meant. A browser drops the declaration.
+```
+
+And a corner it does not know names every corner and edge it does.
+
+```scss
+.element {
+  @include border-radius(sideways, 10px);
+}
+```
+```text
+Error: `sideways` is not a valid corner for `border-radius`. Pass one of: top, top-right, right, bottom-right, bottom, bottom-left, left, top-left, cross-left, cross-right, all, start-start, start-end, end-start, end-end, inline-start, inline-end, block-start, block-end.
 ```
 
 ## Related Links
