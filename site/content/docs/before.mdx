@@ -29,39 +29,47 @@ set elsewhere still wins.
 
 ## Examples
 
-<Example caption="A string argument is written straight into `content`, in front of the element's own text.">
+<Example caption="The asterisk on a required field, which is the shortest real use there is: the mark belongs to the styling, not to the sentence, so it has no business in the markup.">
 ```scss
-.total {
-  @include before("Total: ");
+.field--required label {
+  @include before("* ");
 }
 ```
 ```html
 <style>
-  body { background: #fafaf8; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #657167; }
-  .row { display: flex; justify-content: space-between; width: 260px; padding: 16px 18px; border-radius: 14px; background: #fff; box-shadow: 0 6px 20px rgb(34 44 37 / 0.08); font-weight: 700; }
-  .total::before { color: #657167; font-weight: 600; }
+  .form { display: grid; gap: 14px; max-width: 320px; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
+  .field { display: grid; gap: 6px; }
+  .field label { font-weight: 600; }
+  .field input { height: 38px; padding: 0 12px; border: 1px solid #dee0cd; border-radius: 8px; font: inherit; }
+  .field--required label::before { color: #db504a; }
 </style>
-<div class="row"><span class="total"></span><span>$228.00</span></div>
+<form class="form" onsubmit="return false">
+  <div class="field field--required"><label for="bf-email">Email</label><input id="bf-email" type="email" placeholder="ada@example.com"></div>
+  <div class="field"><label for="bf-company">Company</label><input id="bf-company" type="text" placeholder="Optional"></div>
+</form>
 ```
 </Example>
 
-<Example caption="A declaration block styles the pseudo-element, so the label in front of the note is one rule rather than a second element.">
+<Example caption="A separator between breadcrumbs, drawn by the trail rather than typed into it. The block styles the pseudo-element, so one rule puts a slash between every pair and none before the first.">
 ```scss
-.note {
-  @include before {
-    content: "Note ";
-    font-weight: 700;
-    font-style: normal;
-    color: #69995d;
+.crumbs a + a {
+  @include before("/") {
+    margin: 0 8px;
+    color: #8b9381;
   }
 }
 ```
 ```html
 <style>
-  body { background: #fafaf8; font: 15px/1.6 Inter, ui-sans-serif, system-ui, sans-serif; color: #657167; }
-  .note { display: block; max-width: 420px; padding: 14px 16px; border-radius: 12px; background: #fafaf8; color: #69995d; font-style: italic; }
+  .crumbs { display: flex; align-items: center; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .crumbs a { color: #668f80; text-decoration: none; }
+  .crumbs a:last-child { color: #2f3937; font-weight: 600; }
 </style>
-<em class="note">the trial ends on the first of the month, and nothing is charged before then.</em>
+<nav class="crumbs">
+  <a href="#">Docs</a>
+  <a href="#">Mixins</a>
+  <a href="#">Before</a>
+</nav>
 ```
 </Example>
 
