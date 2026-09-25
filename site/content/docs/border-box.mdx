@@ -30,7 +30,7 @@ is that element and its two pseudo-elements, and nothing else.
 
 ## Examples
 
-<Example caption="Both boxes are 200px wide with 20px of padding and a 4px border. The mixin is on the lower one, so its 200px is the whole box; the upper one is the default `content-box` and ends up 248px wide.">
+<Example caption="Both boxes ask for `width: 200px`, with 20px of padding and a 4px border, and the dashed line marks where 200px ends. The first is `content-box`, the default: the padding and the border are added outside the width, so 200 + 40 + 8 lands it 48px past the line. The second is the mixin's: the 200px is the whole box, and the content keeps what is left of it, 144px.">
 ```scss
 .element {
   @include border-box;
@@ -38,16 +38,21 @@ is that element and its two pseudo-elements, and nothing else.
 ```
 ```html
 <style>
-  body { margin: 0; padding: 18px; background: #f2f2eb; font: 13px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
-  .box { width: 200px; padding: 20px; border: 4px solid #668f80; border-radius: 10px; background: #fff; }
+  body { margin: 0; padding: 20px 20px 20px 0; background: #fafaf8; font: 13px/1.45 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
+  .field { position: relative; padding-left: 20px; }
+  .guide { position: absolute; top: 0; bottom: 0; left: 220px; width: 1px; background: repeating-linear-gradient(#db504a 0 6px, #0000 6px 12px); }
+  .guide span { position: absolute; top: 0; left: 6px; font-size: 11px; font-weight: 600; color: #db504a; white-space: nowrap; }
+  .box { width: 200px; padding: 20px; border: 4px solid #668f80; background: #fff; }
+  .box + .box { margin-top: 14px; }
+  .box b { display: block; margin-bottom: 2px; }
+  .box small { color: #657167; }
   .control { box-sizing: content-box; }
-  .box + .box { margin-top: 12px; }
-  .box small { display: block; font-weight: 600; color: #657167; }
-  .ruler { width: 200px; margin-bottom: 8px; border-top: 2px solid #db504a; font-size: 11px; font-weight: 600; color: #db504a; }
 </style>
-<div class="ruler">200px</div>
-<div class="box control"><small>content-box</small>The padding and the border are added on.</div>
-<div class="box element"><small>border-box</small>The padding and the border are inside the 200px.</div>
+<div class="field">
+  <div class="guide"><span>200px</span></div>
+  <div class="box control"><b>content-box</b><small>248px on screen</small></div>
+  <div class="box element"><b>border-box</b><small>200px on screen</small></div>
+</div>
 ```
 </Example>
 
