@@ -87,13 +87,6 @@ The names live in `_map-for-breakpoints.scss` and follow Bootstrap's: `xsmall` a
     color: #222c25;
   }
 }
-
-.band--4 {
-  @include breakpoint(between, large xlarge) {
-    background: #bdc488;
-    color: #222c25;
-  }
-}
 ```
 ```html
 <style>
@@ -107,7 +100,6 @@ The names live in `_map-for-breakpoints.scss` and follow Bootstrap's: `xsmall` a
   <div class="band band--1"><span>xsmall &rarr; small</span><code>0 &ndash; 575.98</code></div>
   <div class="band band--2"><span>small &rarr; medium</span><code>576 &ndash; 767.98</code></div>
   <div class="band band--3"><span>medium &rarr; large</span><code>768 &ndash; 991.98</code></div>
-  <div class="band band--4"><span>large &rarr; xlarge</span><code>992 &ndash; 1199.98</code></div>
 </div>
 ```
 </Example>
@@ -120,33 +112,43 @@ The names live in `_map-for-breakpoints.scss` and follow Bootstrap's: `xsmall` a
 
 </Hint>
 
-<Example resizable hint="Drag the box below 992px: the labels go and the icons stay." caption="`max` applies its styles up to a width, for a stylesheet written desktop-first. Named sizes and lengths of your own can be mixed in the same stylesheet, and here both rules end at the same place.">
+<Example resizable hint="Drag the box in: under 576px the fields stack, and under 420px the hint under the card goes too." caption="`max` works the other way, for a stylesheet written desktop-first: the rules describe the wide layout and the query takes back what does not fit. [Columnizer](/docs/columnizer) takes its count as a custom property, so the query changes one number rather than restating the layout. The two calls end at different widths, one at a name from the map and one at a length of its own, which is how the two are mixed in practice.">
 ```scss
-.toolbar__label {
-  @include breakpoint(max, large) {
-    display: none;
+.form {
+  --cols: 2;
+  @include columnizer(var(--cols), 14px);
+
+  @include breakpoint(max, small) {
+    --cols: 1;
   }
 }
 
-.toolbar {
-  @include breakpoint(max, 991.98px) {
-    gap: 4px;
+.form__note {
+  @include breakpoint(max, 420px) {
+    display: none;
   }
 }
 ```
 ```html
 <style>
-  body { margin: 0; padding: 18px; background: #fafaf8; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
-  .toolbar { display: flex; gap: 10px; padding: 8px; border-radius: 12px; background: #f2f2eb; }
-  .toolbar button { display: inline-flex; align-items: center; gap: 8px; padding: 9px 12px; border: 0; border-radius: 8px; background: #fff; color: #2f3937; font: inherit; font-weight: 600; cursor: pointer; }
-  .toolbar button[aria-pressed="true"] { background: #222c25; color: #fafaf8; }
-  .toolbar i { font-style: normal; }
+  body { margin: 0; padding: 18px; background: #f2f2eb; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
+  .card { padding: 20px; border-radius: 14px; background: #fafaf8; }
+  .card h3 { margin: 0 0 14px; font: 700 17px Inter, ui-sans-serif, system-ui, sans-serif; }
+  .field { display: block; }
+  .field span { display: block; margin-bottom: 5px; }
+  .field span { font-size: 12px; font-weight: 600; color: #657167; }
+  .field i { display: block; height: 34px; border: 1px solid #dee0cd; border-radius: 8px; background: #fff; }
+  .form__note { margin: 14px 0 0; font-size: 13px; color: #8b9381; }
 </style>
-<div class="toolbar">
-  <button type="button" aria-pressed="true"><i>&#9632;</i><span class="toolbar__label">Bold</span></button>
-  <button type="button"><i>&#9633;</i><span class="toolbar__label">Italic</span></button>
-  <button type="button"><i>&#9679;</i><span class="toolbar__label">Link</span></button>
-  <button type="button"><i>&#9650;</i><span class="toolbar__label">Quote</span></button>
+<div class="card">
+  <h3>Billing address</h3>
+  <div class="form">
+    <label class="field"><span>First name</span><i></i></label>
+    <label class="field"><span>Last name</span><i></i></label>
+    <label class="field"><span>City</span><i></i></label>
+    <label class="field"><span>Postcode</span><i></i></label>
+  </div>
+  <p class="form__note">We only use this for the invoice.</p>
 </div>
 ```
 </Example>
