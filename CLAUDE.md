@@ -955,7 +955,10 @@ Two pieces of work are open:
   rather than `url(none)`, and `brand-logo`'s link filling the logo box so the
   focus ring does, with `white-space: nowrap` holding the text out of sight at
   that size and `background-size: contain` fitting the logo rather than
-  cropping it, both on `docs-examples-review`; and the demos and prose
+  cropping it, and `breakpoint`, `remove` and `container-query` checking
+  that a `between` range is a pair, which used to fail with Sass's own
+  index message for one size and drop a third, all on
+  `docs-examples-review`; and the demos and prose
   of every documentation page, swept and rewritten on `examples-polish`,
   branched from `glass`; and a filled `text-shadow` stepping in pixels rather than in one of
   the distance's own unit, on `text-shadow-step`, branched from

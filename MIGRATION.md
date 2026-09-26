@@ -77,6 +77,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `background-image` warns on a direction with one colour | not breaking |
 | `brand-logo`'s link fills the box, so the focus ring does | fixes an accessibility defect; silent |
 | `brand-logo` writes `background-size: contain` | fixes a cropped logo; silent |
+| `between` takes two sizes and says so | breaking, loud, for three sizes; a better message for one |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -2004,6 +2005,40 @@ path, as every quoted string is.
 `$filter-direction` turns a gradient, and one colour is a flat wash with
 nothing to turn. The value used to be dropped without a word; now the build
 says it was left out. The CSS is unchanged.
+
+---
+
+## Break: `between` takes two sizes, and says so when it does not
+
+`breakpoint`, `remove` and `container-query` read a `between` range as the
+first two values of whatever they were handed, and checked neither end of that.
+One size reached `list.nth($value, 2)` and stopped the build with Sass's own
+message about an index, which names a line of the library rather than the call:
+
+```text
+Error: $n: Invalid index 2 for a list with 1 elements.
+```
+
+```text
+Error: `between` takes two sizes separated by a space, and `768px` is 1. Write a start and an end, `breakpoint(between, small large)`, or use `only`, `min` or `max` for a single width.
+```
+
+Three sizes is the half of this that changes behaviour. It compiled, using the
+first two and dropping the third without a word:
+
+```scss
+@include breakpoint(between, 100px 200px 300px) { color: red; }
+/* 3.x */  @media (min-width: 100px) and (max-width: 200px) { … }
+/* 4.0.0 */ stops the build with the message above
+```
+
+The old CSS worked; it just did not contain the size the call's third value
+asked for, which never reached the query at all. Sweeping 376 calls of the
+three mixins before and after, across every size kind either end takes, those
+two are the only ones whose behaviour changes and nothing stopped raising.
+
+A comma-separated pair, `between, (small, large)`, is still two values and
+still compiles.
 
 ---
 

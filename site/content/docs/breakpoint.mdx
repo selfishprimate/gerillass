@@ -1,8 +1,8 @@
 ---
 title: "Breakpoint"
 page_title: "Breakpoint Sass Mixin for Media Queries"
-page_description: "The Breakpoint Sass mixin helps you create scalable media queries and breakpoints using the @media CSS at-rule in SCSS."
-page_keywords: "CSS Breakpoints, CSS Breakpoints 2021, CSS Breakpoints Bootstrap, CSS Breakpoints for Mobile Devices, CSS Breakpoints List, Sass Breakpoints, CSS Breakpoints 2022, CSS Media Queries, Sass Media Queries, CSS Breakpoints for Responsive Design, Sass Include Breakpoint, Sass Breakpoint Mixin"
+page_description: "The Breakpoint Sass mixin writes media queries from named breakpoints or lengths of your own, with ranges that meet exactly rather than overlapping or leaving a gap."
+page_keywords: "CSS Breakpoints, Sass Breakpoints, CSS Media Queries, Sass Media Queries, CSS Breakpoints for Responsive Design, Sass Include Breakpoint, Sass Breakpoint Mixin, CSS Breakpoints List"
 page_image: "gerillass-breakpoint.jpg"
 ---
 
@@ -10,72 +10,41 @@ page_image: "gerillass-breakpoint.jpg"
 
 <Member name="breakpoint">
 
-The **Breakpoint** Sass mixin helps you create scalable media queries and breakpoints using the [@media CSS at-rule](https://developer.mozilla.org/en-US/docs/Web/CSS/@media) in SCSS.
+The **Breakpoint** Sass mixin writes a `@media` query around whatever you put
+inside it. Sizes come from the breakpoint map by name or are written out as
+lengths, and the two mix freely in the same stylesheet.
 
-<Hint kind="info">
-
-**Tip:** The breakpoints live in `_map-for-breakpoints.scss` and follow Bootstrap's: `xsmall` at 0, `small` at 576px, `medium` at 768px, `large` at 992px, `xlarge` at 1200px and `xxl` at 1400px, which is new in 4.0.0. **Add your own or replace them there.**
-
-</Hint>
+Ranges are the part worth knowing: a range that ends at a named breakpoint ends
+*just under* it, so the range below a name and the range above it meet exactly,
+with nothing applying twice and no width falling between them.
 
 </Member>
 
+<Hint kind="info">
+
+The names live in `_map-for-breakpoints.scss` and follow Bootstrap's: `xsmall` at 0, `small` at 576px, `medium` at 768px, `large` at 992px, `xlarge` at 1200px and `xxl` at 1400px, which is new in 4.0.0. **Add your own or replace them there.**
+
+</Hint>
+
 ## Arguments
 
-<Arguments of="breakpoint" footnote="When you use the `between` option you must pass two values for `width`, and they must be separated by a space. See the [examples](#examples) for more.">
-  <Argument name="$mode" type="string">Sets the <code>width</code> media feature. Accepts the values <code>only</code>, <code>min</code>, <code>max</code>, and <code>between</code>.</Argument>
-  <Argument name="$value" type="number (with unit)">The width value at which your styles will be applied: a key from the breakpoint map, or a length in any unit a width condition takes, such as <code>px</code>, <code>em</code>, <code>vw</code> or <code>cqi</code>, including <code>0</code> and <code>calc()</code>. A percentage, a bare number, another unit and a word that is not a key are refused, because the query they produce never matches. It cannot be a custom property either: <code>var()</code> is not evaluated in a <code>@media</code> condition, so the rule would never apply, and the mixin refuses it.</Argument>
+<Arguments of="breakpoint" footnote="`between` takes its two sizes as one space-separated pair: `breakpoint(between, small large)`. Two sizes with no mode mean the same thing.">
+  <Argument name="$mode" type="string">Which <code>width</code> condition to write: <code>min</code> from a width upwards, <code>max</code> up to a width, <code>only</code> at exactly that width, and <code>between</code> for a range. It can be left out when you pass two sizes, since a pair can only mean a range.</Argument>
+  <Argument name="$value" type="number (with unit)">The width, as a name from the breakpoint map or a length in any unit a width condition takes: <code>px</code>, <code>em</code>, <code>vw</code>, <code>cqi</code>, <code>0</code>, <code>calc()</code>. A percentage, a bare number, another unit and a word that is not a key are refused, because the query they would write never matches. So is <code>var()</code>: a custom property is not evaluated in a <code>@media</code> condition, so the rule would never apply.</Argument>
 </Arguments>
 
 ## Examples
 
-<Hint kind="warning">
-
-**One width on its own is a single pixel.** `breakpoint(320px)` compiles to `@media (width: 320px)`, so the styles apply only when the viewport is exactly 320px wide, and at every other width they do nothing. Since 2.2.0 the mixin prints a warning for that form. To style from a width upwards pass `min`, and for that exact width pass `only`.
-
-</Hint>
-
-<Example caption="Set the `$mode` option to `only` to apply styles at exactly one width. The code below will apply styles only if your browser's viewport is equal to `1200px`.">
+<Example resizable hint="Drag the box across 768px: below it the picture sits above the text, from it upwards beside it." caption="`min` applies its styles from a width upwards, which is the mobile-first direction: the stylesheet describes the narrow layout and the query adds what a wider one needs. A name stands in for the length.">
 ```scss
-.element{
-  @include breakpoint(only, 1200px) {
-    background-color: teal;
-  };
-}
-```
-</Example>
-
-<Example caption="`min` applies the styles from a width upwards, which is the mobile-first direction, and a predefined name can stand in for the length.">
-```scss
-.element{
-  @include breakpoint(min, medium) {
-    background-color: green;
-  };
-}
-```
-</Example>
-
-<Example caption="`max` applies them up to a width, for a desktop-first stylesheet. A custom length is used exactly as it is written.">
-```scss
-.element{
-  @include breakpoint(max, 1024px) {
-    background-color: green;
-  };
-}
-```
-</Example>
-
-<Example resizable caption="With a predefined value, `max` ends **just under** it, at `767.98px` for `medium`, so it hands over to `min, medium` without both applying at 768px. The result box below is a viewport of its own: drag its corner past 768 and the card turns the corner with it." >
-```scss
-.element{
+.element {
   display: flex;
+  flex-direction: column;
   gap: 16px;
-  @include breakpoint(max, medium) {
-    flex-direction: column;
-  };
+
   @include breakpoint(min, medium) {
     flex-direction: row;
-  };
+  }
 }
 ```
 ```html
@@ -90,94 +59,121 @@ The **Breakpoint** Sass mixin helps you create scalable media queries and breakp
   <img src="/images/landscape.webp" alt="">
   <div>
     <h3>Lysefjord</h3>
-    <p>Below 768 the picture sits above the text, and from 768 upwards beside it. One rule each way, and nothing in the markup changes.</p>
+    <p>One rule each way, and nothing in the markup changes.</p>
   </div>
 </div>
 ```
 </Example>
 
-<Hint kind="info">
-
-**Tip:** You can use **predefined** and **custom** values together if you like.
-
-</Hint>
-
-<Example caption="Two values with `between` make a range, so the styles apply inside it and nowhere else.">
+<Example resizable hint="Drag the box: exactly one band is lit at any width, and the handover happens on the pixel." caption="`between` takes a range, and three of them laid end to end are where the boundaries show. Each band names a pair from the map, and because a range ends just under the name it ends at, `small medium` stops at 767.98px and `medium large` starts at 768px. No width lights two bands, and none lights nothing.">
 ```scss
-.element{
-  @include breakpoint(between, small 1200px) {
-    background-color: green;
-  };
+.band--1 {
+  @include breakpoint(between, xsmall small) {
+    background: #69995d;
+    color: #fafaf8;
+  }
 }
-```
-</Example>
 
-<Hint kind="info">
-
-**Important:** Please examine how the predefined breakpoint values line up against each other in the code below.
-
-</Hint>
-
-<Example caption="**Note that** a range ending at a predefined value ends **just under** it: 0.02px under in `px`, and 0.01 of a unit under in `rem` or `em`. **So neighbouring ranges neither overlap nor leave a gap between them.**">
-```scss
-.element{
+.band--2 {
   @include breakpoint(between, small medium) {
-    background-color: green;
-  };
-  @include breakpoint(between, medium large) {
-    background-color: blue;
-  };
-  @include breakpoint(between, large xlarge) {
-    background-color: purple;
-  };
+    background: #668f80;
+    color: #fafaf8;
+  }
 }
+
+.band--3 {
+  @include breakpoint(between, medium large) {
+    background: #5bc0bb;
+    color: #222c25;
+  }
+}
+
+.band--4 {
+  @include breakpoint(between, large xlarge) {
+    background: #bdc488;
+    color: #222c25;
+  }
+}
+```
+```html
+<style>
+  body { margin: 0; padding: 16px; background: #fafaf8; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #657167; }
+  .bands { display: grid; gap: 8px; }
+  .band { display: flex; justify-content: space-between; padding: 14px 16px; border-radius: 10px; font-weight: 600; }
+  :where(.band) { background: #f2f2eb; }
+  .band code { font: inherit; font-family: ui-monospace, monospace; opacity: 0.75; }
+</style>
+<div class="bands">
+  <div class="band band--1"><span>xsmall &rarr; small</span><code>0 &ndash; 575.98</code></div>
+  <div class="band band--2"><span>small &rarr; medium</span><code>576 &ndash; 767.98</code></div>
+  <div class="band band--3"><span>medium &rarr; large</span><code>768 &ndash; 991.98</code></div>
+  <div class="band band--4"><span>large &rarr; xlarge</span><code>992 &ndash; 1199.98</code></div>
+</div>
 ```
 </Example>
 
-<Example caption="**Ending just under** only happens with **predefined** values. A custom value is used exactly as you write it, so end a range at the value you mean.">
+<Hint kind="warning">
+
+**Why 0.02px under, and not one pixel?** A range used to end at `767px`, which left every fractional width a scaled display produces falling into the gap, and 16px of gap with a map written in `rem`. It ends 0.02px under a pixel key now, and 0.01 of a unit under one in `rem` or `em`. CSS's own range syntax would say the same thing, but Safari drops the whole rule before 16.4.
+
+**This only happens with a name.** A length you write out is used exactly as you wrote it, so `breakpoint(between, small 1199.98px)` ends where it says.
+
+</Hint>
+
+<Example resizable hint="Drag the box below 992px: the labels go and the icons stay." caption="`max` applies its styles up to a width, for a stylesheet written desktop-first. Named sizes and lengths of your own can be mixed in the same stylesheet, and here both rules end at the same place.">
 ```scss
-.element{
-  @include breakpoint(between, small 1199.98px) {
-    background-color: green;
-  };
-  @include breakpoint(between, 1200px 1400px) {
-    background-color: blue;
-  };
+.toolbar__label {
+  @include breakpoint(max, large) {
+    display: none;
+  }
+}
+
+.toolbar {
+  @include breakpoint(max, 991.98px) {
+    gap: 4px;
+  }
+}
+```
+```html
+<style>
+  body { margin: 0; padding: 18px; background: #fafaf8; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .toolbar { display: flex; gap: 10px; padding: 8px; border-radius: 12px; background: #f2f2eb; }
+  .toolbar button { display: inline-flex; align-items: center; gap: 8px; padding: 9px 12px; border: 0; border-radius: 8px; background: #fff; color: #2f3937; font: inherit; font-weight: 600; cursor: pointer; }
+  .toolbar button[aria-pressed="true"] { background: #222c25; color: #fafaf8; }
+  .toolbar i { font-style: normal; }
+</style>
+<div class="toolbar">
+  <button type="button" aria-pressed="true"><i>&#9632;</i><span class="toolbar__label">Bold</span></button>
+  <button type="button"><i>&#9633;</i><span class="toolbar__label">Italic</span></button>
+  <button type="button"><i>&#9679;</i><span class="toolbar__label">Link</span></button>
+  <button type="button"><i>&#9650;</i><span class="toolbar__label">Quote</span></button>
+</div>
+```
+</Example>
+
+<Example caption="Two sizes with no mode are the same range, since a pair can only mean one thing, and `only` writes a query for a single width.">
+```scss
+.element {
+  @include breakpoint(small, large) {
+    background: #5bc0bb;
+  }
+
+  @include breakpoint(320px, 768px) {
+    background: #69995d;
+  }
+
+  @include breakpoint(only, 1200px) {
+    background: #ed6a5a;
+  }
 }
 ```
 </Example>
 
 <Hint kind="warning">
 
-**Why not one pixel under?** A range used to end 1 below the key, `767px`, which left a gap at every fractional width a scaled display produces, and 16px of one with a map in `rem`. It ends 0.02px under a pixel key now, and 0.01 of a unit under one in `rem` or `em`, so the ranges meet exactly. The CSS range syntax would do the same, but Safari drops the whole rule before 16.4.
+**One width on its own is a single pixel.** `breakpoint(320px)` compiles to `@media (width: 320px)`, so the styles apply when the viewport is exactly 320px wide and nowhere else. Since 2.2.0 the mixin warns about that form. Pass `min` to style from a width upwards, or `only` to say you meant the one width.
 
 </Hint>
-
-<Hint kind="info">
-
-The values can be either custom numbers (with a unit) or predefined values.
-
-</Hint>
-
-<Example caption="Two values with no mode are the same range, since a pair can only mean one thing.">
-```scss
-.element{
-  @include breakpoint(320px, 768px) {
-    background-color: teal;
-  };
-}
-```
-</Example>
-
-<Example caption="The same pair as predefined names.">
-```scss
-.element{
-  @include breakpoint(small, large) {
-    background-color: teal;
-  };
-}
-```
-</Example>
 
 ## What it refuses
 
@@ -209,8 +205,23 @@ Error: `50%` cannot be used as a size in `breakpoint`: a width condition takes a
 
 A length written as a string, `breakpoint(min, "600px")`, still works, as it always has.
 
-A range has to be able to match, and two shapes cannot. Both compiled until
-4.0.0, into valid CSS a browser keeps and no width ever satisfies, so the
+`between` takes two sizes. One used to stop the build with Sass's own message
+about a list index, and a third was used for nothing and never mentioned; both
+are named now.
+
+```scss
+.element {
+  @include breakpoint(between, 768px) { color: red; }
+  @include breakpoint(between, 100px 200px 300px) { color: red; }
+}
+```
+```text
+Error: `between` takes two sizes separated by a space, and `768px` is 1. Write a start and an end, `breakpoint(between, small large)`, or use `only`, `min` or `max` for a single width.
+Error: `between` takes two sizes separated by a space, and `100px 200px 300px` is 3. Write a start and an end, `breakpoint(between, small large)`, or use `only`, `min` or `max` for a single width.
+```
+
+A range also has to be able to match, and two shapes cannot. Both compiled
+until 4.0.0, into valid CSS a browser keeps and no width ever satisfies, so the
 styles inside simply never applied.
 
 ```scss
@@ -228,8 +239,10 @@ A range of one width written by hand is a different thing and still works,
 since a length ends at itself: `breakpoint(768px, 768px)` applies at exactly
 768px, which is `only` written another way.
 
-
 ## Related Links
 
+- [Container Query](/docs/container-query)
+- [Remove](/docs/remove)
+- [Adaptive](/docs/adaptive)
 - [CSS @media](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@media)
 - [Using Media Queries](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Media_queries/Using)

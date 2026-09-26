@@ -92,6 +92,12 @@
           }
         }
       } @else if $mode == "between" {
+        // `between` wants a pair. One size reached `list.nth($value, 2)` and
+        // failed with Sass's own message about an index, and a third was
+        // dropped without a word.
+        @if list.length($value) != 2 {
+          @error "`between` takes two sizes separated by a space, and `#{meta.inspect($value)}` is #{list.length($value)}. Write a start and an end, `breakpoint(between, small large)`, or use `only`, `min` or `max` for a single width.";
+        }
         $start: list.nth($value, 1);
         $end: list.nth($value, 2);
         $checked: conditionWidth($start, "breakpoint") conditionWidth($end, "breakpoint");

@@ -124,6 +124,11 @@ $-forbidden-in-name: "." "," "/" "#" ":" ";" "(" ")" "[" "]" "{" "}" "!" "@" "$"
       } @else if $mode == "max" {
         $condition: "(#{-range-end($value)})";
       } @else {
+        // `between` wants a pair, as in `breakpoint`: one size failed with
+        // Sass's own message about an index, and a third was dropped.
+        @if list.length($value) != 2 {
+          @error "`between` takes two sizes separated by a space, and `#{meta.inspect($value)}` is #{list.length($value)}. Write a start and an end, `container-query(between, small large)`, or use `only`, `min` or `max` for a single width.";
+        }
         $start: list.nth($value, 1);
         $end: list.nth($value, 2);
         $problem: rangeProblem($start, $end);

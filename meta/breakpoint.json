@@ -40,7 +40,9 @@
     ".a { @include breakpoint(\"max\", 50%) { color: red; } }",
     ".a { @include breakpoint(\"only\", 768) { color: red; } }",
     "@include breakpoint(large, small) { color: red; }",
-    "@include breakpoint(medium, medium) { color: red; }"
+    "@include breakpoint(medium, medium) { color: red; }",
+    ".a { @include breakpoint(between, 768px) { color: red; } }",
+    ".a { @include breakpoint(between, 100px 200px 300px) { color: red; } }"
   ],
   "warns": [
     ".a { @include breakpoint(\"medium\") { color: red; } }"
