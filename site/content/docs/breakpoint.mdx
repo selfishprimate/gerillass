@@ -112,14 +112,13 @@ The names live in `_map-for-breakpoints.scss` and follow Bootstrap's: `xsmall` a
 
 </Hint>
 
-<Example resizable hint="Drag the box in: under 576px the fields stack, and under 420px the hint under the card goes too." caption="`max` works the other way, for a stylesheet written desktop-first: the rules describe the wide layout and the query takes back what does not fit. [Columnizer](/docs/columnizer) takes its count as a custom property, so the query changes one number rather than restating the layout. The two calls end at different widths, one at a name from the map and one at a length of its own, which is how the two are mixed in practice.">
+<Example resizable hint="Drag the box in: under 576px the fields stack, and under 420px the hint under the card goes too." caption="`max` works the other way, for a stylesheet written desktop-first: the rules describe the wide layout and the query takes back what does not fit. What goes inside a query is ordinary Sass, another mixin included, so [Columnizer](/docs/columnizer) is called twice here with a different count. The two queries also end at different widths, one at a name from the map and one at a length of its own, which is how the two are mixed in practice.">
 ```scss
 .form {
-  --cols: 2;
-  @include columnizer(var(--cols), 14px);
+  @include columnizer(2, 14px);
 
   @include breakpoint(max, small) {
-    --cols: 1;
+    @include columnizer(1, 14px);
   }
 }
 
