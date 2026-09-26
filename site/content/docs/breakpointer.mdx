@@ -1,8 +1,8 @@
 ---
 title: "Breakpointer"
 page_title: "Breakpointer Sass Mixin"
-page_description: "The Breakpointer Sass mixin is a handy little tool that shows which breakpoint you are at, so you can write your styles for that specific device."
-page_keywords: "Gerillass breakpointer, Breakpointer Sass mixin, Sass breakpointer, SCSS breakpointer, CSS @media, CSS content"
+page_description: "The Breakpointer Sass mixin pins a badge to the corner of the page naming the breakpoint you are at, so the width you are writing styles for is on screen rather than in your head."
+page_keywords: "Gerillass breakpointer, Breakpointer Sass mixin, Sass breakpointer, SCSS breakpointer, CSS @media, CSS content, responsive debugging"
 page_image: "gerillass-breakpointer.jpg"
 ---
 
@@ -10,79 +10,142 @@ page_image: "gerillass-breakpointer.jpg"
 
 <Member name="breakpointer">
 
-The **Breakpointer** Sass mixin writes the name of the breakpoint the page is at into a corner of it, so the width you are writing styles for is on screen rather than in your head. 
+The **Breakpointer** Sass mixin pins a small badge to the corner of the page
+naming the breakpoint you are at, so the width you are writing styles for is on
+screen rather than in your head. The names come from the same map
+[Breakpoint](/docs/breakpoint) reads, so the two always agree.
 
-<Hint kind="info">
-
-This mixin has been applied to this page only, to show you how the **Breakpointer Sass mixin** works. You can see the result in the top right corner of your screen. **Please, resize the width of your browser to see which breakpoint you're at.**
-
-</Hint>
-
-<Hint kind="info">
-
-**Tip:** This mixin works best with the predefined breakpoint values in the `_map-for-breakpoints.scss` file. OK, let me put it this way. **If the breakpoint mixin is the knight, the breakpointer is its squire.**
-
-</Hint>
+One line gets you a badge that is already legible and out of the way: fixed to
+the top right, dark, above the page, and transparent to the pointer so it never
+takes a click meant for what is under it. A block of your own overrides any of
+that.
 
 </Member>
 
+<Hint kind="warning">
+
+**This is for development only.** Take the call out before you ship, or the badge goes to production with you.
+
+</Hint>
+
 ## Arguments
 
-<Arguments of="breakpointer" footnote="You can pass a declaration block to change its appearance cosmetically.">
-  <Argument name="$selector" type="string">Helps you target one specific selector. By default it targets the <code>::before</code> pseudo-element of the <code>&lt;body&gt;</code> tag.</Argument>
+<Arguments of="breakpointer" footnote="A declaration block changes how the badge looks; it is written after the defaults, so anything in it wins.">
+  <Argument name="$selector" type="string">A selector to hang the badge on instead of <code>body</code>, as a string. A selector list such as <code>".a, .b"</code> gets a badge on each. It is read only at the root of a stylesheet: called inside a selector the badge goes on that element, so an argument there is refused rather than ignored.</Argument>
 </Arguments>
 
 ## Examples
 
-<Example caption="Called at the root with no arguments, it writes the current breakpoint's name into the corner of the page.">
+<Example resizable hint="Drag the box: the badge names the frame's width rather than the window's, so it changes as you go." caption="One line, at the root of a stylesheet. The badge is pinned to the top right of the page and carries its own look, and it is `pointer-events: none`, so the close button it is sitting over still takes the click.">
 ```scss
 @include breakpointer;
 ```
 ```html
 <style>
-  body { background: #fafaf8; font: 14px/1.6 Inter, ui-sans-serif, system-ui, sans-serif; color: #657167; }
-  p { margin: 0; max-width: 32em; color: #657167; }
+  body { margin: 0; padding: 0; background: #fafaf8; font: 15px/1.6 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
+  .bar { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; background: #fff; box-shadow: 0 1px 0 #dee0cd; }
+  .bar b { font-size: 15px; }
+  .bar a { color: #657167; text-decoration: none; font-weight: 600; }
+  p { margin: 0; padding: 18px; max-width: 34em; color: #657167; }
 </style>
-<p>The label in the corner of this frame is the mixin's own output, and it is naming the frame's width rather than the window's. Drag the divider, or open the page on a phone, and it changes.</p>
+<div class="bar"><b>Settings</b><a href="#">Close</a></div>
+<p>The badge is over the Close link in the corner, and the link still works: the badge takes no pointer events.</p>
 ```
 </Example>
 
-<Example caption="A declaration block dresses the label: the corner it sits in, its colours, its type.">
+<Example resizable hint="Drag the box: same badge, different corner and colour." caption="A declaration block dresses it. The defaults are written first, so a block only has to name what it wants changed, and anything it leaves alone stays as it was.">
 ```scss
 @include breakpointer {
-  position: fixed;
-  top: 0;
-  right: 0;
-  color: white;
-  padding: 5px 10px;
-  z-index: 10;
+  top: auto;
+  right: auto;
+  bottom: 0;
+  left: 0;
+  border-radius: 0 4px 0 0;
+  background: #ed6a5a;
+  font-size: 14px;
 }
 ```
 ```html
 <style>
-  body { background: #222c25; font: 14px/1.6 Inter, ui-sans-serif, system-ui, sans-serif; color: #f2f2eb; }
-  p { margin: 0; max-width: 32em; color: #657167; }
+  body { margin: 0; padding: 18px; background: #222c25; font: 15px/1.6 Inter, ui-sans-serif, system-ui, sans-serif; color: #f2f2eb; }
+  p { margin: 0; max-width: 34em; color: #8b9381; }
 </style>
-<p>The same label, dressed: pinned to the top right, on a dark pill, in the corner of whatever it is watching.</p>
+<p>Moved to the bottom left and recoloured. Only the five declarations that differ are written; the padding, the weight and the pointer behaviour come from the mixin.</p>
 ```
 </Example>
 
-<Example caption="Called inside a selector, the label lands on that element instead of the page.">
+<Example resizable hint="Drag the box: each badge names the same width, but each sits in its own panel." caption="Inside a selector the badge goes on that element and stays in its flow rather than being pinned, which is what you want when the question is how one component is behaving rather than how the page is.">
 ```scss
-.element {
+.panel__title {
   @include breakpointer();
 }
 ```
+```html
+<style>
+  body { margin: 0; padding: 18px; background: #fafaf8; font: 15px/1.6 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
+  .panels { display: grid; gap: 10px; }
+  .panel { padding: 14px 16px; border-radius: 12px; background: #f2f2eb; }
+  .panel__title { display: flex; align-items: center; gap: 10px; margin: 0 0 4px; font: 700 15px Inter, ui-sans-serif, system-ui, sans-serif; }
+  .panel p { margin: 0; color: #657167; font-size: 14px; }
+</style>
+<div class="panels">
+  <div class="panel"><h3 class="panel__title">Filters</h3><p>Collapses below medium.</p></div>
+  <div class="panel"><h3 class="panel__title">Results</h3><p>Two columns from medium.</p></div>
+</div>
+```
 </Example>
 
-<Hint kind="info">
+<Example caption="At the root, a selector of your own takes the badge instead of `body`, which is how it goes on a debug bar you already have. A selector list gets one badge each.">
+```scss
+@include breakpointer(".debug");
 
-**Important:** This mixin is for development only, so don't forget to comment out or remove the code before you go to production.
+@include breakpointer(".header, .footer");
+```
+</Example>
+
+<Hint kind="warning">
+
+**Changed in Gerillass 4.0.0.** The badge carries its own look. Until now the mixin wrote `content` and nothing else, so a bare call put the breakpoint's name in the page's own text flow at the top of `body` and pushed the page down by a line, and every project wrote the same block of positioning to get the badge described here. A block of your own still overrides every default.
 
 </Hint>
+
+## What it refuses
+
+A selector is read only at the root, where there is no selector to attach the
+badge to. Inside one the badge goes on that element, so an argument there used
+to be dropped without a word.
+
+```scss
+.element {
+  @include breakpointer(".debug");
+}
+```
+```text
+Error: `breakpointer` reads $selector only at the root of a stylesheet, where there is no selector to attach the label to. Called inside one the label goes on that element, so drop the argument, or move the call to the root.
+```
+
+An empty selector used to compile to a bare `::before`, which is `*::before`,
+so the badge was drawn on every element on the page.
+
+```scss
+@include breakpointer("");
+```
+```text
+Error: `breakpointer` was given an empty $selector, which would put the label on every element on the page. Pass a selector such as `".debug"`, or no argument at all to attach it to body.
+```
+
+And a selector has to be a string, since that is what goes into the stylesheet.
+
+```scss
+@include breakpointer(42);
+```
+```text
+Error: `42` is not a valid $selector for `breakpointer`. Pass a selector as a string, such as `".debug"`, or no argument at all to attach it to body.
+```
 
 ## Related Links
 
 - [Breakpoint](/docs/breakpoint)
+- [Container Query](/docs/container-query)
 - [CSS @media](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@media)
 - [CSS content](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/content)

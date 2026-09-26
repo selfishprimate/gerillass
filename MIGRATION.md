@@ -78,6 +78,8 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `brand-logo`'s link fills the box, so the focus ring does | fixes an accessibility defect; silent |
 | `brand-logo` writes `background-size: contain` | fixes a cropped logo; silent |
 | `between` takes two sizes and says so | breaking, loud, for three sizes; a better message for one |
+| `breakpointer` writes a badge, not bare `content` | fixes an unusable default; silent |
+| `breakpointer` refuses an empty selector and one passed inside a selector | breaking, loud |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -2005,6 +2007,69 @@ path, as every quoted string is.
 `$filter-direction` turns a gradient, and one colour is a flat wash with
 nothing to turn. The value used to be dropped without a word; now the build
 says it was left out. The CSS is unchanged.
+
+---
+
+## Change: `breakpointer` writes a badge you can read
+
+The mixin wrote `content` and nothing else, so a bare call put the breakpoint's
+name in the page's own text flow at the top of `body`:
+
+```css
+/* 3.x */
+@media (min-width: 576px) { body::before { content: "small"; } }
+
+/* 4.0.0 */
+body::before {
+  position: fixed; top: 0; right: 0; z-index: 99999;
+  border-bottom-left-radius: 4px; padding: 3px 8px;
+  background: #222c25; color: #f2f2eb;
+  font: 700 12px/1.45 ui-monospace, SFMono-Regular, Menlo, monospace;
+  pointer-events: none;
+}
+@media (min-width: 576px) { body::before { content: "small"; } }
+```
+
+The names in the media queries are untouched. What is new is the rule before
+them, and it is what the documentation has always described: a badge pinned to
+a corner rather than a word shoved into the page. Measured in Chrome 152,
+Firefox 156 and Safari 26.6.2, the badge is over the top right corner and a
+link underneath it still takes the click, which is what `pointer-events: none`
+is there for.
+
+Called inside a selector it is an inline pill in that element instead, since
+there the point is to label one component and a fixed `::before` would leave
+it.
+
+**If you already wrote a block**, nothing changes for the declarations in it:
+the defaults are written before `@content`, so yours still win. You can delete
+the ones that now agree with the mixin.
+
+---
+
+## Break: `breakpointer` refuses an empty selector, and one inside a selector
+
+Two calls that did something other than what they said.
+
+An empty string compiled to a bare `::before`, which is `*::before`, so the
+badge was drawn on **every element on the page** rather than on none. And
+`$selector` was read only at the root, so one passed inside a selector was
+dropped without a word and the badge went on the element the call was already
+in.
+
+```scss
+@include breakpointer("");            // stops the build
+.sidebar { @include breakpointer(".debug"); }   // stops the build
+```
+
+Both messages name what to do instead. Sweeping 26 calls before and after,
+those two are the only ones that change from compiling to raising and nothing
+stopped raising.
+
+A third fix changes output rather than raising: a selector list was pasted onto
+the pseudo-element as text, so `breakpointer(".a, .b")` wrote `.a, .b::before`
+and only `.b` got a badge. It is attached with `sass:selector` now and writes
+`.a::before, .b::before`.
 
 ---
 

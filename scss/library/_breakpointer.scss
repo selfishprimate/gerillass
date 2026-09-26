@@ -1,39 +1,75 @@
 @charset "UTF-8";
 
 @use "sass:meta";
+@use "sass:selector";
+@use "sass:string";
 @use "../maps/map-for-breakpoints" as *;
 
+// The label ships looking like a development overlay, because that is the only
+// thing it is for. Until 4.0.0 the mixin wrote `content` and nothing else, so
+// `@include breakpointer;` put the breakpoint's name in the page's own text
+// flow at the top of <body> and pushed the page down by a line, and everybody
+// wrote the same block of positioning to get the badge the documentation
+// already described. The defaults are written before @content, so a block of
+// your own still overrides any of them.
+//
+// Called inside a selector the badge stays in that element's flow rather than
+// being pinned to the viewport: there the point is to label one component, and
+// a fixed ::before would leave it behind.
 @mixin breakpointer($selector: null) {
   @if $selector != null and meta.type-of($selector) != "string" {
-    @error "`#{$selector}` is not a valid $selector for `breakpointer`. Pass a selector as a string, such as `\".debug\"`, or no argument at all to attach it to body.";
+    @error "`#{meta.inspect($selector)}` is not a valid $selector for `breakpointer`. Pass a selector as a string, such as `\".debug\"`, or no argument at all to attach it to body.";
   }
+  // An empty string used to write a bare `::before`, which is `*::before`, so
+  // the badge was drawn on every element on the page rather than on none.
+  @if $selector != null and string.length($selector) == 0 {
+    @error "`breakpointer` was given an empty $selector, which would put the label on every element on the page. Pass a selector such as `\".debug\"`, or no argument at all to attach it to body.";
+  }
+
+  $pinned: true;
+  $target: "body";
   @if & {
-    &::before {
-      @content;
-      @each $key, $value in $map-for-breakpoints {
-        @media (min-width: #{$value}) {
-          content: "#{$key}";
-        }
-      }
-    }
-  } @else {
+    // The argument used to be read only at the root, so a selector passed
+    // inside one was dropped without a word and the label went on the element
+    // the call was already in.
     @if $selector {
-      #{$selector}::before {
-        @content;
-        @each $key, $value in $map-for-breakpoints {
-          @media (min-width: #{$value}) {
-            content: "#{$key}";
-          }
-        }
-      }
+      @error "`breakpointer` reads $selector only at the root of a stylesheet, where there is no selector to attach the label to. Called inside one the label goes on that element, so drop the argument, or move the call to the root.";
+    }
+    $pinned: false;
+    $target: &;
+  } @else if $selector {
+    $target: $selector;
+  }
+
+  // selector.append rather than `#{$target}::before`, which pasted the
+  // pseudo-element onto the end of the text: `".a, .b"` wrote `.a, .b::before`,
+  // so only the second selector got a label.
+  // @at-root, because the selector is interpolated: written inside the
+  // nesting it was called from, `.element` would have been prepended a second
+  // time and the rule would have read `.element .element::before`.
+  @at-root #{selector.append($target, "::before")} {
+    @if $pinned {
+      position: fixed;
+      top: 0;
+      right: 0;
+      z-index: 99999;
+      border-bottom-left-radius: 4px;
     } @else {
-      body::before {
-        @content;
-        @each $key, $value in $map-for-breakpoints {
-          @media (min-width: #{$value}) {
-            content: "#{$key}";
-          }
-        }
+      display: inline-block;
+      vertical-align: middle;
+      border-radius: 4px;
+    }
+    padding: 3px 8px;
+    background: #222c25;
+    color: #f2f2eb;
+    font: 700 12px/1.45 ui-monospace, SFMono-Regular, Menlo, monospace;
+    // The badge sits over the top right corner of the page, where a close
+    // button or a menu often is, and it is not part of what is being built.
+    pointer-events: none;
+    @content;
+    @each $key, $value in $map-for-breakpoints {
+      @media (min-width: #{$value}) {
+        content: "#{$key}";
       }
     }
   }

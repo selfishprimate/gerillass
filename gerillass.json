@@ -705,20 +705,32 @@
           "name": "$selector",
           "default": "null",
           "accepts": [
-            "a selector to attach to when called at root",
-            "null for body"
+            "a selector as a string, to attach the badge to instead of body; only at the root of a stylesheet",
+            "a selector list such as \".a, .b\", which gets a badge on each",
+            "null, or no argument, for body",
+            "a non-string, an empty string, and any selector at all inside a selector are refused"
           ]
         }
       ],
       "file": "scss/library/_breakpointer.scss",
       "signature": "breakpointer($selector: null)",
-      "summary": "Debug helper that prints the active breakpoint name into a pseudo-element.",
+      "summary": "Development badge naming the active breakpoint, pinned to a corner of the page.",
+      "caveats": [
+        "The badge carries its own look since 4.0.0: fixed to the top right, a dark pill, above the page and `pointer-events: none`. Until then the mixin wrote `content` alone, so a bare call put the breakpoint's name in the page's own text flow at the top of body. A block still overrides every default, because they are written before it.",
+        "Called inside a selector the badge stays in that element's flow rather than being pinned, since there the point is to label one component. Measured in Chrome 152, Firefox 156 and Safari 26.6.2: pinned it is over the top right corner and a link underneath still takes the click, and nested it is an inline pill inside its element.",
+        "The names come from $map-for-breakpoints, one `@media (min-width:)` per key in the map's own order, so a key added out of order is overridden by the ones after it."
+      ],
       "examples": [
         "@include breakpointer;",
+        "@include breakpointer(\".debug\");",
+        "@include breakpointer { background: #b91c1c; }",
         ".a { @include breakpointer; }"
       ],
       "rejects": [
-        ".a { @include breakpointer(42); }"
+        ".a { @include breakpointer(42); }",
+        "@include breakpointer(42);",
+        "@include breakpointer(\"\");",
+        ".a { @include breakpointer(\".debug\"); }"
       ]
     },
     {

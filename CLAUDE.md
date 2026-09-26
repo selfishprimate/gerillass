@@ -957,7 +957,9 @@ Two pieces of work are open:
   that size and `background-size: contain` fitting the logo rather than
   cropping it, and `breakpoint`, `remove` and `container-query` checking
   that a `between` range is a pair, which used to fail with Sass's own
-  index message for one size and drop a third, all on
+  index message for one size and drop a third, and `breakpointer` writing a
+  badge rather than bare `content`, refusing an empty selector and one passed
+  inside a selector, and attaching its selector with `sass:selector`, all on
   `docs-examples-review`; and the demos and prose
   of every documentation page, swept and rewritten on `examples-polish`,
   branched from `glass`; and a filled `text-shadow` stepping in pixels rather than in one of

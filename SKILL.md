@@ -219,6 +219,12 @@ a dropped declaration rather than an error.
 - A range that ends at a key from $map-for-breakpoints, and `max` with a key, end just under the key: `breakpoint(max, medium)` is `(max-width: 767.98px)` and `breakpoint(small, medium)` ends at `767.98px`, or `47.99rem` with a rem map. So `max` and `min` at the same key, and neighbouring ranges, neither overlap nor leave a gap, including at fractional viewport widths. A length written by hand is used as written, and a zero key is left alone. Until 4.0.0 `max` included the key and a range ended 1 below it, which overlapped at the key and left gaps.
 - Declarations written after the include, in the same rule, are emitted after the `@media` block and win over it. Write them before the include.
 
+**`breakpointer`**
+
+- The badge carries its own look since 4.0.0: fixed to the top right, a dark pill, above the page and `pointer-events: none`. Until then the mixin wrote `content` alone, so a bare call put the breakpoint's name in the page's own text flow at the top of body. A block still overrides every default, because they are written before it.
+- Called inside a selector the badge stays in that element's flow rather than being pinned, since there the point is to label one component. Measured in Chrome 152, Firefox 156 and Safari 26.6.2: pinned it is over the top right corner and a link underneath still takes the click, and nested it is an inline pill inside its element.
+- The names come from $map-for-breakpoints, one `@media (min-width:)` per key in the map's own order, so a key added out of order is overridden by the ones after it.
+
 **`center`**
 
 - The element has to be positioned, and its parent too: the mixin writes the offsets and the translation, not `position`.
@@ -455,7 +461,7 @@ a dropped declaration rather than an error.
 | `border-radius($args...)` | Rounds corners, either all of them, one named corner, or all four individually. |
 | `brand-logo($width, $height, $image-url: null)` | Logo box with an image and an accessible stretched link over it. |
 | `breakpoint($params...)` | Media query built from the breakpoint map, or from raw lengths. |
-| `breakpointer($selector: null)` | Debug helper that prints the active breakpoint name into a pseudo-element. |
+| `breakpointer($selector: null)` | Development badge naming the active breakpoint, pinned to a corner of the page. |
 | `center($axis: "both")` | Centres an absolutely positioned element in its positioned parent, leaving transform free. |
 | `circle($size)` | Square element with a fully rounded border, i.e. a circle. |
 | `columnizer($params...)` | Flexbox grid of equal columns, with an optional gutter written as gap and an optional fill for the last row. |

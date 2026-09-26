@@ -824,7 +824,17 @@ exports[`Manifest examples breakpoint: .a { @include breakpoint("only", "medium"
 `;
 
 exports[`Manifest examples breakpointer: .a { @include breakpointer; } 1`] = `
-"@media (min-width: 0) {
+".a::before {
+  display: inline-block;
+  vertical-align: middle;
+  border-radius: 4px;
+  padding: 3px 8px;
+  background: #222c25;
+  color: #f2f2eb;
+  font: 700 12px/1.45 ui-monospace, SFMono-Regular, Menlo, monospace;
+  pointer-events: none;
+}
+@media (min-width: 0) {
   .a::before {
     content: "xsmall";
   }
@@ -856,8 +866,111 @@ exports[`Manifest examples breakpointer: .a { @include breakpointer; } 1`] = `
 }"
 `;
 
+exports[`Manifest examples breakpointer: @include breakpointer { background: #b91c1c; } 1`] = `
+"body::before {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 99999;
+  border-bottom-left-radius: 4px;
+  padding: 3px 8px;
+  background: #222c25;
+  color: #f2f2eb;
+  font: 700 12px/1.45 ui-monospace, SFMono-Regular, Menlo, monospace;
+  pointer-events: none;
+  background: #b91c1c;
+}
+@media (min-width: 0) {
+  body::before {
+    content: "xsmall";
+  }
+}
+@media (min-width: 576px) {
+  body::before {
+    content: "small";
+  }
+}
+@media (min-width: 768px) {
+  body::before {
+    content: "medium";
+  }
+}
+@media (min-width: 992px) {
+  body::before {
+    content: "large";
+  }
+}
+@media (min-width: 1200px) {
+  body::before {
+    content: "xlarge";
+  }
+}
+@media (min-width: 1400px) {
+  body::before {
+    content: "xxl";
+  }
+}"
+`;
+
+exports[`Manifest examples breakpointer: @include breakpointer(".debug"); 1`] = `
+".debug::before {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 99999;
+  border-bottom-left-radius: 4px;
+  padding: 3px 8px;
+  background: #222c25;
+  color: #f2f2eb;
+  font: 700 12px/1.45 ui-monospace, SFMono-Regular, Menlo, monospace;
+  pointer-events: none;
+}
+@media (min-width: 0) {
+  .debug::before {
+    content: "xsmall";
+  }
+}
+@media (min-width: 576px) {
+  .debug::before {
+    content: "small";
+  }
+}
+@media (min-width: 768px) {
+  .debug::before {
+    content: "medium";
+  }
+}
+@media (min-width: 992px) {
+  .debug::before {
+    content: "large";
+  }
+}
+@media (min-width: 1200px) {
+  .debug::before {
+    content: "xlarge";
+  }
+}
+@media (min-width: 1400px) {
+  .debug::before {
+    content: "xxl";
+  }
+}"
+`;
+
 exports[`Manifest examples breakpointer: @include breakpointer; 1`] = `
-"@media (min-width: 0) {
+"body::before {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 99999;
+  border-bottom-left-radius: 4px;
+  padding: 3px 8px;
+  background: #222c25;
+  color: #f2f2eb;
+  font: 700 12px/1.45 ui-monospace, SFMono-Regular, Menlo, monospace;
+  pointer-events: none;
+}
+@media (min-width: 0) {
   body::before {
     content: "xsmall";
   }
