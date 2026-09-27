@@ -89,6 +89,8 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `focus-ring` refuses a width of zero | breaking, loud |
 | `font-face` names an empty `$file-formats` | a better message; not breaking |
 | `hide` names a call with no selector to hang on | a better message; not breaking |
+| `loadify` refuses a negative duration | breaking, loud |
+| `loadify` names `init` inside a selector, and a time at the root | a better message; not breaking |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -2341,6 +2343,51 @@ Nothing that compiled before compiles differently. The calls that now carry this
 message are the ones that already stopped the build. `hide(unhide)` is checked
 first, so a call to the removed value is still told it was removed, wherever it
 is written.
+
+---
+
+## Break: `loadify` refuses a negative duration
+
+The duration is the second argument, and a negative one compiled into CSS that
+never faded. It was not dropped, which would at least have left the element
+alone: only a delay may be negative in the `animation` shorthand, so the browser
+reads the pair the other way round.
+
+```scss
+.card { @include loadify(0.4s, -1s); }
+// 3.x: animation: loadify -1s 0.4s backwards;
+```
+
+Measured in Chrome 152, Firefox 156 and Safari 26.6.2, that computes in all
+three to `animation-duration: 0.4s` and `animation-delay: -1s`, so the fade is
+finished before the page paints and the element simply appears. With both times
+negative, `loadify(-1s, -1s)`, all three drop the declaration and
+`animation-name` comes back as `none`. Either way there was no fade, so nothing
+that worked stops working.
+
+**A negative delay is kept**, because it is the one that is meant:
+`loadify(-0.25s)` starts a 0.5s fade a quarter of the way in, at an opacity of
+0.80. Only the duration is checked.
+
+---
+
+## Change: `loadify` says which of its two modes you wanted
+
+`loadify(init)` writes the keyframes and goes at the root; a delay and a
+duration go on the element. Written the wrong way round, both failed with a
+message that named neither mode:
+
+```scss
+.card { @include loadify(init); }
+// 3.x: Error: `init` is not a valid time: it is not a number.
+
+@include loadify(0.4s);
+// 3.x: Error: 0.4s is not a valid argument. Please pass `init` ...
+```
+
+Each now names the mode it is in and where the other one goes. The root
+messages also gained the backticks the rest of the library's use. Nothing that
+compiled before compiles differently.
 
 ---
 

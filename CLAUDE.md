@@ -975,7 +975,9 @@ Two pieces of work are open:
   and `focus-ring` refusing a width of zero, and `font-face` naming an empty
   `$file-formats` rather than failing with Sass's index message, and `hide`
   refusing a call with no selector to hang on, where Sass's own message named
-  neither the mixin nor the fix, all on
+  neither the mixin nor the fix, and `loadify` refusing a negative duration,
+  which swapped its two arguments rather than being dropped, and naming its two
+  modes when `init` is written inside a selector or a time at the root, all on
   `docs-examples-review`;
   and the demos and prose
   of every documentation page, swept and rewritten on `examples-polish`,

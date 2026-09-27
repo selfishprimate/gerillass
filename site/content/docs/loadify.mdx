@@ -30,10 +30,10 @@ The **Loadify** Sass mixin fades an element in as the page arrives, and gives a 
 
 ## Arguments
 
-<Arguments of="loadify" footnote="The time value must be given in either seconds (s) or milliseconds (ms). The value must be zero or positive, and the unit is always required.">
+<Arguments of="loadify" footnote="A time is given in seconds (s) or milliseconds (ms) and the unit is always required. The duration must be zero or positive; the delay may be negative, which starts the fade part of the way in.">
   <Argument name="$mode" type="string">Accepts <code>init</code> at the root of your stylesheet, which writes the keyframes once. Since 4.0.0 a stylesheet that forgets it still builds: the elements simply do not fade.</Argument>
-  <Argument name="$delay" type="time">Specifies the amount of time a design element must wait before it starts appearing on the page. The default value is set to <code>0.2s</code>. One time, with its unit, or a <code>var()</code>.</Argument>
-  <Argument name="$duration" type="time">Sets the length of time a page element takes to load. <strong>This is the second argument. It must always come last and cannot be used on its own.</strong> The default value is <code>0.5s</code>.</Argument>
+  <Argument name="$delay" type="time">Specifies the amount of time a design element must wait before it starts appearing on the page. The default value is set to <code>0.2s</code>. One time, with its unit, or a <code>var()</code>. A negative delay starts the fade part of the way in rather than waiting: <code>loadify(-0.25s)</code> begins a <code>0.5s</code> fade halfway, at an opacity of 0.80.</Argument>
+  <Argument name="$duration" type="time">Sets the length of time a page element takes to load. <strong>This is the second argument. It must always come last and cannot be used on its own.</strong> The default value is <code>0.5s</code>. It cannot be negative: only a delay may be, so a browser reads the pair the other way round and the fade is over before the page paints.</Argument>
 </Arguments>
 
 ## Examples
@@ -378,6 +378,43 @@ third time, which took the whole fade with it.
 ```
 ```text
 Error: `0.2s 0.4s` is not a valid delay for `loadify`, which takes one time. A second one in the `animation` shorthand makes a browser drop the declaration, so nothing fades.
+```
+
+A negative duration is refused for the same reason, and it was the quieter of
+the two: nothing was dropped, the two arguments simply swapped. Only a delay
+may be negative, so `animation: loadify -1s 0.4s backwards` computes to a
+duration of `0.4s` and a delay of `-1s` in Chrome 152, Firefox 156 and Safari
+26.6.2 alike, which puts the fade behind the page rather than in front of it.
+With both times negative all three drop the declaration outright.
+
+```scss
+.a {
+  @include loadify(0.4s, -1s);
+}
+```
+```text
+Error: `-1s` is not a valid duration for `loadify`, which cannot be negative. Only a delay may be, so a browser reads the two the other way round: the duration becomes the delay and the fade is over before the page paints. Pass a positive duration, and a negative first argument if you want the fade to start part of the way in.
+```
+
+The two places the mixin is called are not interchangeable, and each now says
+so. `init` writes the keyframes and belongs at the root; a delay and a duration
+belong on the element. Written the wrong way round they used to fail with a
+message about times, which named neither mode.
+
+```scss
+.a {
+  @include loadify(init);
+}
+```
+```text
+Error: `init` goes at the root of the stylesheet, not inside a selector: it writes the keyframes once, and the call on an element takes a delay and a duration. Write `@include loadify(init);` outside any rule, and `@include loadify;` here.
+```
+
+```scss
+@include loadify(0.4s);
+```
+```text
+Error: `0.4s` is not a valid argument at the root of a stylesheet, where `loadify` writes the keyframes: pass `init`, or nothing. A delay and a duration belong on the call inside a selector, such as `.card { @include loadify(0.2s, 0.5s); }`.
 ```
 
 ## Related Links

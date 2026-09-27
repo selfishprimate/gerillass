@@ -315,6 +315,8 @@ a dropped declaration rather than an error.
 - `init` and the calls no longer have to see each other. The mixin used to define a `%loadify` placeholder that every call `@extend`ed, which fails with Sass's "The target selector was not found" whenever the call is in another module, an entry file's `init` being no help to a partial it loads. Each call writes its own declarations now, and a stylesheet that forgets `init` builds with no fade rather than not building.
 - The mixin writes the `animation` shorthand, so an animation of your own on the same element replaces it.
 - A time needs its unit and there is one per argument. `loadify(0)` wrote `animation: loadify 0.5s 0 backwards`, which Chrome 152, Firefox 156 and Safari 26.6.2 read as an iteration count of 0, so the fade never ran; `loadify(0.2s 0.4s)` wrote two delays, and all three dropped the declaration. Both are refused since 4.0.0.
+- A duration cannot be negative, and until 4.0.0 one compiled into CSS that never faded. Measured in Chrome 152, Firefox 156 and Safari 26.6.2: `animation: loadify -1s 0.4s backwards` computes to a duration of 0.4s and a delay of -1s in all three, because only a delay may be negative, so the two arguments swap and the fade is over before the page paints; with both negative the declaration is dropped and `animation-name` is `none`. A negative **delay** is kept: `loadify(-0.25s)` starts a 0.5s fade a quarter of the way in, at an opacity of 0.80.
+- `init` belongs at the root and a delay belongs inside a selector, and each now says so when it is written in the other place. `.a { @include loadify(init); }` used to fail with "`init` is not a valid time", which named neither mode.
 
 **`long-shadow`**
 

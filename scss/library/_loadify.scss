@@ -31,11 +31,29 @@
 // that place: a second time here writes `animation: loadify 0.5s 0.2s 0.4s
 // backwards`, which Chrome 152, Firefox 156 and Safari 26.6.2 all drop, the
 // computed `animation-name` coming back as `none` with no fade at all.
+//
+// A negative duration swaps the two arguments rather than being dropped, which
+// is worse: measured in Chrome 152, Firefox 156 and Safari 26.6.2,
+// `animation: loadify -1s 0.4s backwards` computes to a duration of 0.4s and a
+// delay of -1s in all three, since only a delay can be negative, so the fade is
+// already over when the page paints and the element simply appears. With both
+// times negative there is no duration left to take and all three drop the
+// declaration, `animation-name` coming back as `none`. Either way nothing
+// fades. A negative delay is the one that is meant: `loadify(-0.25s)` starts a
+// 0.5s fade a quarter of the way in, at an opacity of 0.80 in Chrome, so it
+// stays.
 @function -one-time($value, $what) {
+  @if $value == "init" {
+    @error "`init` goes at the root of the stylesheet, not inside a selector: it writes the keyframes once, and the call on an element takes a delay and a duration. Write `@include loadify(init);` outside any rule, and `@include loadify;` here.";
+  }
   @if list.length($value) > 1 {
     @error "`#{meta.inspect($value)}` is not a valid #{$what} for `loadify`, which takes one time. A second one in the `animation` shorthand makes a browser drop the declaration, so nothing fades.";
   }
-  @return isTime($value);
+  $time: isTime($value);
+  @if $what == "duration" and meta.type-of($time) == "number" and $time < 0s {
+    @error "`#{meta.inspect($value)}` is not a valid duration for `loadify`, which cannot be negative. Only a delay may be, so a browser reads the two the other way round: the duration becomes the delay and the fade is over before the page paints. Pass a positive duration, and a negative first argument if you want the fade to start part of the way in.";
+  }
+  @return $time;
 }
 
 @mixin loadify($params...) {
@@ -47,9 +65,9 @@
         }
       }
     } @else if list.length($params) == 1 {
-      @error "#{list.nth($params, 1)} is not a valid argument. Please pass `init` as an argument to initialize the effect or do not pass any argument at all.";
+      @error "`#{meta.inspect(list.nth($params, 1))}` is not a valid argument at the root of a stylesheet, where `loadify` writes the keyframes: pass `init`, or nothing. A delay and a duration belong on the call inside a selector, such as `.card { @include loadify(0.2s, 0.5s); }`.";
     } @else {
-      @error "Only one argument is allowed when you call this mixin at the root of your stylesheet! Please pass `init` as an argument to initialize the effect or do not pass any argument at all.";
+      @error "`loadify` takes one argument at the root of a stylesheet, where it writes the keyframes, and it was given #{list.length($params)}. Pass `init`, or nothing. A delay and a duration belong on the call inside a selector, such as `.card { @include loadify(0.2s, 0.5s); }`.";
     }
   } @else {
     $delay: 0.2s;
