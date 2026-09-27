@@ -84,6 +84,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `columnizer` refuses a column count of zero or less, and a `$fill` that is not a boolean | breaking, loud |
 | `container` writes `$type` unquoted | fixes an element that was not a container; silent |
 | `container` refuses a name of nothing but spaces | breaking, loud |
+| `counter` refuses three values it cannot read, and a `$items` with a comma | breaking, loud |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -2011,6 +2012,28 @@ path, as every quoted string is.
 `$filter-direction` turns a gradient, and one colour is a flat wash with
 nothing to turn. The value used to be dropped without a word; now the build
 says it was left out. The CSS is unchanged.
+
+---
+
+## Break: `counter` refuses the shapes it used to drop in silence
+
+Three positional values only read as text, style, text. Anything else with
+three matched no branch and left all three null, and so did four or more, so
+the call compiled to a bare number with every argument gone:
+
+```scss
+@include counter("Step ", "of", ".");   /* 3.x: content: counter(glsCounter) */
+```
+
+`$items` is one selector, because it is written into `& > $items` and again
+into `& > $items::before`. A comma splits both. Measured in Chrome 152,
+Firefox 156 and Safari 26.6.2, `$items: "li, p"` wrote
+`.a > li, .a p::before`, so the `li` children got **no number at all** and
+every descendant `p` got one. Pass `":is(li, p)"`, which the message
+recommends and which numbers all of them.
+
+Sweeping 60 calls, six go from compiling to raising, nothing stopped raising,
+and no call that worked emits different CSS.
 
 ---
 

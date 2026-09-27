@@ -139,7 +139,7 @@ The **Counter** Sass mixin numbers the children of the element you include it in
 <ol class=&quot;habits-more&quot;>
 &#32;&#32;<li>Prefer gap to margins</li>
 </ol>
-<div class=&quot;photo&quot;></div>
+<img class=&quot;photo&quot; src=&quot;/photo.jpg&quot; alt=&quot;&quot;>
 <ol class=&quot;habits-more&quot;>
 &#32;&#32;<li>Use logical properties</li>
 &#32;&#32;<li>Keep specificity flat</li>
@@ -170,7 +170,7 @@ The **Counter** Sass mixin numbers the children of the element you include it in
   .post { font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
   .post ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
   .post blockquote { margin: 12px 0; padding-left: 12px; border-left: 3px solid #69995d; font-style: italic; color: #657167; }
-  .post .photo { margin: 12px 0; height: 56px; border-radius: 6px; background: linear-gradient(135deg, #dee0cd, #bfc1a4); }
+  .post .photo { display: block; margin: 12px 0; width: 100%; height: 90px; border-radius: 8px; object-fit: cover; }
   .post .newsletter { margin: 12px 0; padding: 10px 12px; border-radius: 6px; background: #fafaf8; font-size: 13px; color: #657167; }
 </style>
 <div class="post">
@@ -182,7 +182,7 @@ The **Counter** Sass mixin numbers the children of the element you include it in
   <ol class="habits-more">
     <li>Prefer gap to margins</li>
   </ol>
-  <div class="photo"></div>
+  <img class="photo" src="/images/backgrounds/03.jpg" alt="">
   <ol class="habits-more">
     <li>Use logical properties</li>
     <li>Keep specificity flat</li>
@@ -289,22 +289,22 @@ The **Counter** Sass mixin numbers the children of the element you include it in
   .book section + section { margin-top: 16px; }
   .gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
   .gallery figure { margin: 0; }
-  .gallery figure div { height: 48px; border-radius: 6px; background: linear-gradient(135deg, #dee0cd, #5bc0bb); }
+  .gallery figure img { display: block; width: 100%; height: 72px; border-radius: 6px; object-fit: cover; }
 </style>
 <article class="book">
   <section>
     <h4>1. The first frost</h4>
     <div class="gallery">
-      <figure><div></div></figure>
-      <figure><div></div></figure>
+      <figure><img src="/images/backgrounds/06.jpg" alt=""></figure>
+      <figure><img src="/images/backgrounds/07.jpg" alt=""></figure>
     </div>
   </section>
   <section>
     <h4>2. The long winter</h4>
     <div class="gallery">
-      <figure><div></div></figure>
-      <figure><div></div></figure>
-      <figure><div></div></figure>
+      <figure><img src="/images/backgrounds/04.jpg" alt=""></figure>
+      <figure><img src="/images/backgrounds/05.jpg" alt=""></figure>
+      <figure><img src="/images/backgrounds/02.jpg" alt=""></figure>
     </div>
   </section>
 </article>
@@ -511,6 +511,50 @@ The **Counter** Sass mixin numbers the children of the element you include it in
 **This mixin and CSS's `counter()`.** The mixin writes `counter-reset`, `counter-increment` and `content: counter(...)` for you. To show the same count somewhere else, such as a total in a heading, give it a `$name` and read it with `counter()` in your own CSS or through the [Before](/docs/before) mixin.
 
 </Hint>
+
+## What it refuses
+
+Three values before the named arguments read as text, style, text, and nothing
+else. Until 4.0.0 anything else with three, and four or more, matched no shape
+and left all of them null, so the call compiled to a bare number with every
+argument gone.
+
+```scss
+.element {
+  @include counter("Step ", "of", ".");
+}
+```
+```text
+Error: `counter` was given three values with `"of"` in the middle, which is not a counter style. Three values are the text before the number, the style, and the text after it, such as `counter("Article ", upper-roman, ".")`. For two texts and no style, pass two values.
+```
+
+`$items` is one selector, because it is written into the rule that increments
+the counter and again into the rule that draws it. A comma splits both, and
+measured in Chrome 152, Firefox 156 and Safari 26.6.2 the result was
+`.element > li, .element p::before`: the `li` children got no number at all and
+every descendant `p` got one. Pass a selector that matches them all.
+
+```scss
+.element {
+  @include counter($items: "li, p");
+}
+```
+```text
+Error: `"li, p"` is not a valid $items for `counter`: it is a list of selectors, and each one is written into two rules, so the comma breaks both. Pass one selector that matches them all, such as `":is(li, p)"`.
+```
+
+`$continue` takes the name of the list to carry on from, not `true`. Every list
+shares one counter unless it is named, so `true` could not say which list was
+meant.
+
+```scss
+.element {
+  @include counter($continue: true);
+}
+```
+```text
+Error: `$continue: true` is not valid for `counter`. Pass the $name of the list to carry on from, such as `$continue: steps`, and give that list `$name: steps`.
+```
 
 ## Related Links
 

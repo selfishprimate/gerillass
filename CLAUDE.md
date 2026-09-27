@@ -969,8 +969,9 @@ Two pieces of work are open:
   `circle` writing `aspect-ratio: 1` for a size that cannot be square as a
   height, and `columnizer` refusing a column count of zero or less and a
   `$fill` that is not a boolean, and `container` writing its `$type` unquoted
-  and refusing a name of nothing but spaces, all on `docs-examples-review`; and
-  the demos and prose
+  and refusing a name of nothing but spaces, and `counter` refusing three
+  positional values it cannot read, more than three, and an `$items` holding a
+  comma, all on `docs-examples-review`; and the demos and prose
   of every documentation page, swept and rewritten on `examples-polish`,
   branched from `glass`; and a filled `text-shadow` stepping in pixels rather than in one of
   the distance's own unit, on `text-shadow-step`, branched from

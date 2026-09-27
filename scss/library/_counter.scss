@@ -55,6 +55,24 @@ $-reserved-names: "none" "inherit" "initial" "unset" "revert" "revert-layer" "de
   @return true;
 }
 
+// Whether $items holds a comma outside brackets. A comma inside them, as in
+// `:is(li, p)`, is part of one compound selector and is what the message above
+// recommends, so only the top level counts.
+@function -has-top-level-comma($selector) {
+  $depth: 0;
+  @for $i from 1 through string.length($selector) {
+    $character: string.slice($selector, $i, $i);
+    @if $character == "(" or $character == "[" {
+      $depth: $depth + 1;
+    } @else if $character == ")" or $character == "]" {
+      $depth: $depth - 1;
+    } @else if $character == "," and $depth == 0 {
+      @return true;
+    }
+  }
+  @return false;
+}
+
 // Why a counter name is not usable, or null. A name is one CSS identifier.
 @function -name-problem($name) {
   @if meta.type-of($name) != "string" or list.length($name) != 1 {
@@ -104,7 +122,14 @@ $-reserved-names: "none" "inherit" "initial" "unset" "revert" "revert-layer" "de
   }
   $name: string.unquote("#{$continue or $name or glsCounter}");
   @if meta.type-of($items) != "string" or string.length($items) == 0 {
-    @error "`#{$items}` is not a valid $items for `counter`. Pass a selector for the numbered children, such as `\"li\"` or `\".step\"`.";
+    @error "`#{meta.inspect($items)}` is not a valid $items for `counter`. Pass a selector for the numbered children, such as `\"li\"` or `\".step\"`.";
+  }
+  // One selector, because the mixin writes it into `& > #{$items}` and into
+  // `& > #{$items}::before`. A comma splits both: `"li, p"` wrote
+  // `.a > li, .a p`, which increments on any descendant p rather than a child,
+  // and `.a > li, .a p::before`, where the li gets no ::before at all.
+  @if -has-top-level-comma($items) {
+    @error "`#{meta.inspect($items)}` is not a valid $items for `counter`: it is a list of selectors, and each one is written into two rules, so the comma breaks both. Pass one selector that matches them all, such as `\":is(li, p)\"`.";
   }
 
   $counter: null;
@@ -129,11 +154,17 @@ $-reserved-names: "none" "inherit" "initial" "unset" "revert" "revert-layer" "de
       $counter-after: list.nth($params, 2);
     }
   } @else if list.length($params) == 3 {
-    @if list.index($list-of-counter-styles, list.nth($params, 2)) {
-      $counter-before: list.nth($params, 1);
-      $counter: list.nth($params, 2);
-      $counter-after: list.nth($params, 3);
+    // Three positional values only read as text, style, text. Anything else
+    // used to match no branch and leave all three null, so the call compiled
+    // to a bare number with every argument silently dropped.
+    @if not list.index($list-of-counter-styles, list.nth($params, 2)) {
+      @error "`counter` was given three values with `#{meta.inspect(list.nth($params, 2))}` in the middle, which is not a counter style. Three values are the text before the number, the style, and the text after it, such as `counter(\"Article \", upper-roman, \".\")`. For two texts and no style, pass two values.";
     }
+    $counter-before: list.nth($params, 1);
+    $counter: list.nth($params, 2);
+    $counter-after: list.nth($params, 3);
+  } @else if list.length($params) > 3 {
+    @error "`counter` takes at most three values before its named arguments; you passed #{list.length($params)}. They are the text before the number, the counter style, and the text after it.";
   }
 
   // A prefix or suffix is quoted into text, except a call CSS resolves, which

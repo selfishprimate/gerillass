@@ -265,6 +265,8 @@ a dropped declaration rather than an error.
 - A continued list must come after the named list, as a later sibling of it or of an element around it. Parts in separate `section`s restart at 1; reset the counter on an element around all of them, such as `.article { counter-reset: tips; }`, and pass `$continue: tips` to every part. Nothing carries a count into or out of a list that is a container (`container-type`); pass `$start` with the first number instead.
 - In Safari the number reads 0 when a numbered child is itself a container, since the `::before` inside it cannot see the list's counter. Chrome and Firefox show the right number. Put `container-type` on an element inside the child instead.
 - A child hidden with `content: none` on its `::before` still takes a number. Write `counter-increment: none` on it as well to skip it.
+- Three positional values only read as text, style, text. Until 4.0.0 anything else with three matched no branch and left all three null, so `counter("Step ", "of", ".")` compiled to a bare number with every argument silently dropped; so did four or more. Both raise now.
+- $items is one selector, because it is written into `& > $items` and into `& > $items::before`. A comma splits both: measured in Chrome 152, Firefox 156 and Safari 26.6.2, `"li, p"` wrote `.a > li, .a p::before`, so the li children got no number at all and every descendant p did. Pass `":is(li, p)"` instead, which numbers all of them.
 
 **`escape-to-parent`**
 
