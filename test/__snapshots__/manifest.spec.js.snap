@@ -1042,6 +1042,12 @@ exports[`Manifest examples circle: .dot { @include circle(24px); } 1`] = `
 }"
 `;
 
+exports[`Manifest examples clearUnit: .a { font-size: clearUnit(1.5rem) * 16px; } 1`] = `
+".a {
+  font-size: 24px;
+}"
+`;
+
 exports[`Manifest examples clearUnit: .a { line-height: clearUnit(24px); } 1`] = `
 ".a {
   line-height: 24;

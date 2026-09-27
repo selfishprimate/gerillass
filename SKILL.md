@@ -420,6 +420,10 @@ a dropped declaration rather than an error.
 - The standard `line-clamp` property is written beside the prefixed one for the future. `CSS.supports("line-clamp: 3")` still answers false in all three browsers, so the prefixed trio is what does the work.
 - All five declarations of the clamp are needed: measured on a paragraph of five lines with a clamp of three, dropping `-webkit-box-orient`, `display: -webkit-box` or using the standard property alone left all five lines showing, and dropping `overflow: hidden` left the box three lines tall with the rest spilling out below it.
 
+**`clearUnit`**
+
+- Dividing two values of the same unit already gives a plain number, so `math.div(36px, 24px)` is `1.5` and this function adds nothing there. What Sass will not do on its own is compare a length against zero (`0px == 0` is false), convert between units it cannot relate such as rem and px, and round to a number of decimal places, since `math.round` keeps the unit and goes to the nearest whole one.
+
 **`convertToEm`**
 
 - Until 4.0.0 the unit was added as text, so the function returned the string `1.5em` rather than a number: it printed the same, and `convertToEm(24px) * 2` stopped the build with Sass's "Undefined operation". It now returns a number, as `remify` always has.

@@ -1,38 +1,97 @@
 ---
 title: "Clear Unit"
 page_title: "Clear Unit Sass Function"
-page_description: "The clearUnit Sass function strips the unit off a number and returns it unitless, which is what arithmetic on a length usually needs first."
-page_keywords: "Gerillass clearUnit, Sass clearUnit, Sass Functions, SCSS Functions, Sass Utility Functions, Gerillass Utilities"
+page_description: "The clearUnit Sass function strips the unit off a number and returns it unitless, for comparing a length against zero, changing its unit, or rounding it to a number of decimal places."
+page_keywords: "Gerillass clearUnit, Sass clearUnit, Sass strip unit, Sass Functions, SCSS Functions, Sass Utility Functions, Gerillass Utilities"
 ---
 
 # Clear Unit
 
 <Member name="clearUnit">
 
-Strips the unit off a number, returning it unitless.
+Strips the unit off a number and returns it unitless. `clearUnit(24px)` is
+`24`.
+
+It is worth knowing when you do **not** need it: dividing two values of the
+same unit already gives a plain number, so `math.div(36px, 24px)` is `1.5` and
+`clearUnit` adds nothing. The three examples below are the cases where Sass
+will not do it for you, and all three are taken from this library's own
+source.
 
 </Member>
 
 ## Arguments
 
 <Arguments of="clearUnit">
-  <Argument name="$value" type="number">Accepts a number, and returns it without its unit. Anything that is not a number is refused with an error.</Argument>
+  <Argument name="$value" type="number">A number, with a unit or without. A percentage, an angle and a time are numbers too, so all of them are accepted. Anything that is not a number is refused, which includes <code>var()</code> and a calculation Sass could not reduce, such as <code>calc(100% - 1px)</code>.</Argument>
 </Arguments>
 
 ## Examples
 
-<Example caption="A unitless line-height computed from two pixel sizes.">
+<Example caption="**Asking whether a length is zero.** `0px == 0` is `false` in Sass, and so is `0rem == 0`: a number carries its unit into the comparison. Stripping it is how you ask the question you meant, and it is what [Adaptive](/docs/adaptive) does to tell a zero gutter from a real one, whatever unit it arrived in.">
 ```scss
-@use "sass:math";
-.title {
-  font-size: 24px;
-  line-height: math.div(clearUnit(36px), clearUnit(24px));
+@use "sass:meta";
+@use "gerillass" as *;
+
+@mixin gutter($value) {
+  $zero: meta.type-of($value) == "number" and clearUnit($value) == 0;
+
+  @if not $zero {
+    padding-inline: $value;
+  }
+}
+
+.a { @include gutter(0rem); }
+.b { @include gutter(24px); }
+```
+</Example>
+
+<Example caption="**Changing a value's unit.** There is no conversion from `rem` to `px` in Sass, because it cannot know the root size. Strip the unit, multiply by the size you are working to, and you have the length in the other unit. [Fluid](/docs/fluid) does exactly this before it can compare a minimum against a viewport width.">
+```scss
+$root-size: 16px;
+$min: 1.5rem;
+
+.element {
+  // 1.5 * 16px
+  font-size: clearUnit($min) * $root-size;
 }
 ```
 </Example>
 
+<Example caption="**Rounding to a number of decimal places.** `math.round` takes a number to the nearest whole one and keeps its unit, so `math.round(1.23456rem)` is `1rem`. Rounding to three places means doing the arithmetic on the bare number and putting the unit back afterwards.">
+```scss
+@use "sass:math";
+@use "gerillass" as *;
+
+$value: 1.23456rem;
+
+.element {
+  // 1.235rem
+  margin-block: math.div(math.round(clearUnit($value) * 1000), 1000) * 1rem;
+}
+```
+</Example>
+
+## What it refuses
+
+The argument has to be a number, since a unit is the only thing there is to
+take off. A string, a colour, a list and `null` are refused, and so is anything
+whose value only the browser knows: `var()` and a calculation Sass could not
+reduce carry no unit for Sass to read.
+
+```scss
+.element {
+  z-index: clearUnit(var(--depth));
+}
+```
+```text
+Error: `var(--depth)` is not a valid $value for `clearUnit`. Pass a number, such as `24px`.
+```
+
 ## Related Links
 
 - [Remify](/docs/remify)
-- [CSS number](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/number)
+- [Pixelify](/docs/pixelify)
+- [Fluid](/docs/fluid)
+- [Sass math.div](https://sass-lang.com/documentation/modules/math/#div)
 - [CSS Values and Units](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Values_and_units)

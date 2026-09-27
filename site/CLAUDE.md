@@ -354,6 +354,13 @@ member with one argument, and the order sentence for a variadic one:
 nothing `null` can skip, so those pages say how they are called in their own
 footnote. The examples pass the sizes by name for the same reason.
 
+**A fence that loads a Sass module has to load the library too.** `<Example>`
+prepends `@use "gerillass" as *;` only when the fence loads nothing itself, so
+`@use "sass:math";` on the first line silently takes the library away. A mixin
+then fails to compile and says so, but a **function** does not: an unknown
+function name is passed through as literal CSS, so the example compiles and
+quietly states the wrong output. Write both, as `tokens` and `clearUnit` do.
+
 **An `Error:` a page states is checked against the real one.**
 `tools/check-doc-errors.js` at the repository root compiles the `scss` fence
 above every `text` fence beginning with `Error:` and compares. It runs in the

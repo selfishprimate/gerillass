@@ -5,14 +5,22 @@
     {
       "name": "$value",
       "accepts": [
-        "any number with a unit"
+        "a number, with a unit or without",
+        "a percentage, an angle and a time, which are numbers too",
+        "a string, a colour, a list, null, var() and a calculation Sass could not reduce are refused"
       ]
     }
   ],
   "examples": [
-    ".a { line-height: clearUnit(24px); }"
+    ".a { line-height: clearUnit(24px); }",
+    ".a { font-size: clearUnit(1.5rem) * 16px; }"
   ],
   "rejects": [
-    ".a { line-height: clearUnit(nonsense); }"
+    ".a { line-height: clearUnit(nonsense); }",
+    ".a { z-index: clearUnit(var(--depth)); }",
+    ".a { line-height: clearUnit(\"24px\"); }"
+  ],
+  "caveats": [
+    "Dividing two values of the same unit already gives a plain number, so `math.div(36px, 24px)` is `1.5` and this function adds nothing there. What Sass will not do on its own is compare a length against zero (`0px == 0` is false), convert between units it cannot relate such as rem and px, and round to a number of decimal places, since `math.round` keeps the unit and goes to the nearest whole one."
   ]
 }
