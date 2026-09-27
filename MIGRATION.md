@@ -86,6 +86,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `container` refuses a name of nothing but spaces | breaking, loud |
 | `counter` refuses three values it cannot read, and a `$items` with a comma | breaking, loud |
 | `escape-to-parent` refuses a pseudo-element on a nested rule | breaking, loud |
+| `focus-ring` refuses a width of zero | breaking, loud |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -2013,6 +2014,22 @@ path, as every quoted string is.
 `$filter-direction` turns a gradient, and one colour is a flat wash with
 nothing to turn. The value used to be dropped without a word; now the build
 says it was left out. The CSS is unchanged.
+
+---
+
+## Break: `focus-ring` refuses a width of zero
+
+`focus-ring(0)` compiled to `outline: 0 solid currentColor`, which is valid CSS
+a browser keeps and which draws nothing. Measured in Chrome 152, Firefox 156
+and Safari 26.6.2, it computes to an `outline-width` of `0px` and no ring
+appears — the failure the mixin exists to prevent, arrived at through the mixin
+itself.
+
+Pass `null` for the width to leave it to the browser, which draws its `medium`.
+
+Sweeping 45 calls, four go from compiling to raising and all four are a zero
+width. Nothing stopped raising and no call that worked emits different CSS. An
+interpolated `#{0}px` reaches the check as a string and is still accepted.
 
 ---
 

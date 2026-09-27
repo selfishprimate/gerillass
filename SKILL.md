@@ -282,6 +282,10 @@ a dropped declaration rather than an error.
 - `:nth-child(… of S)` is in Chrome 111, Firefox 113 and Safari 9, and `CSS.supports("selector(:nth-child(2 of .card))")` answers true in all three.
 - `$of` counts, it does not narrow: a call that passes a selector as the position, such as `only(".featured")`, is not counting anything, so passing both raises.
 
+**`focus-ring`**
+
+- A $width of zero is refused since 4.0.0. It is valid CSS a browser keeps and it draws nothing, which is the failure the mixin exists to prevent: measured in Chrome 152, Firefox 156 and Safari 26.6.2, `outline: 0 solid` computes to an outline-width of 0px and no ring appears. An interpolated `#{0}px` reaches the check as a string and is not caught.
+
 **`font-face`**
 
 - `$file-formats` defaults to `woff2`. A project that ships only `.woff` or `.ttf` and passes no formats gets no font, silently, in Chrome, Firefox and Safari. Pass the formats you have files for. Until 4.0.0 the default was `eot woff2 woff ttf svg`, which made webpack, esbuild and Parcel fail on a missing `.eot`.

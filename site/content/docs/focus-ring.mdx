@@ -168,6 +168,21 @@ A width or offset the browser drops stops the build too. Measured in Chrome 152,
 Error: `5%` is not a valid $width for `focus-ring`: a percentage does not work here. A browser drops the outline, so no ring is drawn.
 ```
 
+A width of zero is refused as well, and it is the one the browser is happy
+with: `outline: 0 solid` is valid CSS that draws nothing. Measured in Chrome
+152, Firefox 156 and Safari 26.6.2, it computes to an `outline-width` of `0px`
+and no ring appears, which is the failure this mixin exists to prevent. Pass
+`null` to leave the width to the browser, which draws its `medium`.
+
+```scss
+.element {
+  @include focus-ring(0);
+}
+```
+```text
+Error: `0` is not a valid $width for `focus-ring`: a ring of no width is not drawn, which is what this mixin is for. Pass a width such as `2px`, or `null` to leave it to the browser.
+```
+
 ## Related Links
 
 - [CSS :focus-visible](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:focus-visible)

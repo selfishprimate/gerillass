@@ -1,6 +1,7 @@
 @charset "UTF-8";
 
 @use "sass:meta";
+@use "../utilities/clear-unit" as *;
 @use "../internal/color-problem" as *;
 @use "../internal/length-problem" as *;
 
@@ -47,6 +48,14 @@
     $problem: lengthProblem($width, $percent: false, $negative: false, $keywords: "thin" "medium" "thick");
     @if $problem {
       @error "`#{meta.inspect($width)}` is not a valid $width for `focus-ring`: #{$problem}. A browser drops the outline, so no ring is drawn.";
+    }
+    // A zero width is valid CSS the browser keeps, and it draws nothing, which
+    // is the failure this mixin exists to prevent. Measured in Chrome 152,
+    // Firefox 156 and Safari 26.6.2: `outline: 0 solid` computes to an
+    // outline-width of 0px and no ring appears. An interpolated `#{0}px`
+    // reaches here as a string and is not caught.
+    @if meta.type-of($width) == "number" and clearUnit($width) == 0 {
+      @error "`#{meta.inspect($width)}` is not a valid $width for `focus-ring`: a ring of no width is not drawn, which is what this mixin is for. Pass a width such as `2px`, or `null` to leave it to the browser.";
     }
   }
   @if $offset != null {

@@ -36,6 +36,10 @@
     ".button { @include focus-ring(5%); }",
     ".button { @include focus-ring(-2px); }",
     ".button { @include focus-ring(2px, 5%); }",
-    ".button { @include focus-ring(2px, thin); }"
+    ".button { @include focus-ring(2px, thin); }",
+    ".element { @include focus-ring(0); }"
+  ],
+  "caveats": [
+    "A $width of zero is refused since 4.0.0. It is valid CSS a browser keeps and it draws nothing, which is the failure the mixin exists to prevent: measured in Chrome 152, Firefox 156 and Safari 26.6.2, `outline: 0 solid` computes to an outline-width of 0px and no ring appears. An interpolated `#{0}px` reaches the check as a string and is not caught."
   ]
 }

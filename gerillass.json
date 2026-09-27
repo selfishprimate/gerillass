@@ -1135,6 +1135,9 @@
       "file": "scss/library/_focus-ring.scss",
       "signature": "focus-ring($width: 2px, $offset: 2px, $color: currentColor)",
       "summary": "Draws a keyboard focus ring with outline on :focus-visible, which survives forced-colors mode where a box-shadow ring disappears.",
+      "caveats": [
+        "A $width of zero is refused since 4.0.0. It is valid CSS a browser keeps and it draws nothing, which is the failure the mixin exists to prevent: measured in Chrome 152, Firefox 156 and Safari 26.6.2, `outline: 0 solid` computes to an outline-width of 0px and no ring appears. An interpolated `#{0}px` reaches the check as a string and is not caught."
+      ],
       "examples": [
         ".button { @include focus-ring; }",
         ".card-link { @include focus-ring(3px, 4px, var(--focus)); }"
@@ -1149,7 +1152,8 @@
         ".button { @include focus-ring(5%); }",
         ".button { @include focus-ring(-2px); }",
         ".button { @include focus-ring(2px, 5%); }",
-        ".button { @include focus-ring(2px, thin); }"
+        ".button { @include focus-ring(2px, thin); }",
+        ".element { @include focus-ring(0); }"
       ]
     },
     {
