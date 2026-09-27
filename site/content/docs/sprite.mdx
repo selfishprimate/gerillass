@@ -98,7 +98,7 @@ With two arguments the first has to be one path. Until 2.3.1 it was not checked,
 }
 ```
 ```text
-Error: `"/img/a.png" "/img/b.png"` is not a valid image path for `sprite`: with two arguments the first is one path as a string, and a browser drops a list in `url()`. Pass a path such as `"/img/sprite.png"`, then the position.
+Error: `"/img/a.png" "/img/b.png"` is not a valid image path for `sprite`: it is a list where one image is meant, and a browser drops `url()` with a list in it. Pass one path as a string, such as `"/img/hero.png"`.
 ```
 
 <Hint kind="warning">

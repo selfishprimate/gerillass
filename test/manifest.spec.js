@@ -59,6 +59,17 @@ describe("Manifest", () => {
     });
   });
 
+  it("states the error messages the library actually raises", () => {
+    // Every `text` fence on a documentation page beginning with "Error:" is
+    // prose: an <Example> compiles its `scss` fence, but nothing compiles a
+    // refusal, so a message could drift from the one the mixin prints. Four
+    // had, across is-time, loadify, sprite and tokens.
+    execFileSync("node", [path.join(ROOT, "tools", "check-doc-errors.js")], {
+      cwd: ROOT,
+      stdio: "pipe",
+    });
+  });
+
   it("has an llms.txt generated from the current manifest", () => {
     execFileSync("node", [path.join(ROOT, "tools", "build-llms-txt.js"), "--check"], {
       cwd: ROOT,

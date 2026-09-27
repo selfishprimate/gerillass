@@ -354,6 +354,19 @@ member with one argument, and the order sentence for a variadic one:
 nothing `null` can skip, so those pages say how they are called in their own
 footnote. The examples pass the sizes by name for the same reason.
 
+**An `Error:` a page states is checked against the real one.**
+`tools/check-doc-errors.js` at the repository root compiles the `scss` fence
+above every `text` fence beginning with `Error:` and compares. It runs in the
+library's suite. Where a page lists several messages under one snippet, only
+the first is checked and the rest are counted as unchecked, which the run
+prints.
+
+**A code block goes in the prose, not inside a `<Hint>`**, for the same reason
+as the table below it: a `CodeBlock` carries the nine piece mask and its own
+padding, and nesting one drawn edge inside another reads as a box that has
+come apart. A hint is a sentence or two of aside; anything that needs a fence
+needs a heading and its own paragraph.
+
 **A table goes in the prose, not inside a `<Hint>`.** The hint's own padding
 and the table's columns fight each other, and the result on antialias was a
 header with an empty first cell and three rows of floating text. Two columns

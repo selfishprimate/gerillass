@@ -131,7 +131,13 @@ element is `position: absolute` or `fixed`, and its parent is positioned too.
 
 **`translate` is the one property still the mixin's.** `transform`, `rotate` and `scale` compose with the centring, but a rule of your own that sets `translate` replaces the offset and the element jumps by half its own size. Nothing in CSS moves an element by half its own size except a transform, so there is no way round it from inside the mixin.
 
-**If you control the parent, you may not need the mixin.** Make it `display: grid` and give the absolutely positioned child `place-self: center`: it centres an element of any size, writes no transform at all, and leaves `translate` free for an animation. The catch is the one the mixin cannot take on for you — turning the parent into a grid changes the layout of everything else inside it.
+</Hint>
+
+## When you do not need it
+
+If you control the parent, centring by layout does the same job with no
+transform at all, which leaves `translate` free for an animation. Make the
+parent a grid and give the absolutely positioned child `place-self: center`.
 
 ```scss
 .parent-element {
@@ -144,9 +150,15 @@ element is `position: absolute` or `fixed`, and its parent is positioned too.
 }
 ```
 
-Two things that look like alternatives and are not, both measured in Chrome 152, Firefox 156 and Safari 26.6.2: `inset: 0; margin: auto` stretches an element with no size of its own to fill the parent instead of centring it, and anchor positioning's `position-area: center` centres an element on a *sibling* anchor but not on its own containing block, so it does not answer this at all.
+It centres an element of any size, and the catch is the one the mixin cannot
+take on for you: turning the parent into a grid changes the layout of
+everything else inside it.
 
-</Hint>
+Two things that look like alternatives and are not, both measured in Chrome
+152, Firefox 156 and Safari 26.6.2. `inset: 0; margin: auto` stretches an
+element with no size of its own to fill the parent instead of centring it. And
+anchor positioning's `position-area: center` centres an element on a *sibling*
+anchor, but not on its own containing block, so it does not answer this at all.
 
 ## What it refuses
 

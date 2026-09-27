@@ -118,16 +118,7 @@ The **Loadify** Sass mixin fades an element in as the page arrives, and gives a 
 
 <Hint kind="danger">
 
-**A time needs its unit, and there is one time per argument.** Both were accepted until 4.0.0 and both wrote CSS that does nothing: a bare `0` is read as the iteration count in the `animation` shorthand, so the fade never runs, and a second time makes the browser drop the whole declaration. Write `loadify(0s)` and `loadify(0.2s, 0.4s)`.
-
-```scss
-.a {
-  @include loadify(0);
-}
-```
-```text
-Error: `0` is not a valid time: a time needs its unit, and a bare `0` is read as the iteration count in the `animation` shorthand, where it stops the animation from running at all. Write `0s`.
-```
+**A time needs its unit, and there is one time per argument.** Both were accepted until 4.0.0 and both wrote CSS that does nothing: a bare `0` is read as the iteration count in the `animation` shorthand, so the fade never runs, and a second time makes the browser drop the whole declaration. Write `loadify(0s)` and `loadify(0.2s, 0.4s)`, where the first time is the delay and the second the duration. See [what it refuses](#what-it-refuses) below.
 
 </Hint>
 
@@ -360,6 +351,34 @@ Error: `0` is not a valid time: a time needs its unit, and a bare `0` is read as
 </div>
 ```
 </Example>
+
+## What it refuses
+
+A bare number is not a time, and the CSS it used to write did nothing at all:
+in the `animation` shorthand a unitless value is read as the iteration count,
+so `0` stopped the fade from running rather than making it instant.
+
+```scss
+.a {
+  @include loadify(0);
+}
+```
+```text
+Error: `0` is not a valid time: a time needs its unit, and a bare `0` is read as the iteration count in the `animation` shorthand, where it stops the animation from running at all. Write `0s`. Pass a duration in seconds or milliseconds, such as `0.2s`, `300ms` or `0s`, or a CSS function such as `var(--duration)`.
+```
+
+The delay and the duration are separate arguments, so two times written into
+one of them stop the build as well. A browser drops an `animation` carrying a
+third time, which took the whole fade with it.
+
+```scss
+.a {
+  @include loadify(0.2s 0.4s);
+}
+```
+```text
+Error: `0.2s 0.4s` is not a valid delay for `loadify`, which takes one time. A second one in the `animation` shorthand makes a browser drop the declaration, so nothing fades.
+```
 
 ## Related Links
 

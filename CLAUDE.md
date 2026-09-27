@@ -274,6 +274,12 @@ point of the design:
   not print a `@warn`
 - every `rejects` entry must actually `@error`, and must fail with the library's
   own message rather than a Sass internal error
+- every `Error:` a documentation page states is compiled and compared with the
+  message the library raises, by `tools/check-doc-errors.js`. An `<Example>`
+  compiles its `scss` fence, but a refusal is written as prose and nothing
+  compiled it, so four had drifted: `is-time` and `loadify` quoted a message cut
+  short, `sprite` quoted one the mixin no longer prints, and `tokens` showed a
+  snippet Sass cannot parse, so the message it claimed could never appear
 - every `warns` entry must compile, print a `@warn` and match its snapshot,
   with the same CSS and warnings under its `gls-` name. It holds a form on its
   way out, such as one-argument `breakpoint`, until a major version refuses it
