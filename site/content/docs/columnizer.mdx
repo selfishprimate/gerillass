@@ -81,12 +81,16 @@ The **Columnizer** Sass mixin lays the children of an element out in **equal col
 ```
 </Example>
 
-<Example resizable hint="Drag the box across 992px: two columns below it, four above." caption="A second call inside a query replaces the first, so one element can be a different grid at every width. This is the whole of a responsive card grid.">
+<Example resizable hint="Drag the box across 576px and 768px: one column, then two, then four." caption="**`columnizer` inside `breakpoint` is the pair worth knowing.** A later call replaces the earlier one outright, so a grid that changes at two widths is three lines and no override of anything: the count and the gutter both move, and the middle step passes `$fill`, so the odd card left over stretches across the row instead of sitting half of one.">
 ```scss
 .cards {
-  @include columnizer(2, 12px, true);
+  @include columnizer(1, 10px);
 
-  @include breakpoint(min, large) {
+  @include breakpoint(min, small) {
+    @include columnizer(2, 14px, true);
+  }
+
+  @include breakpoint(min, medium) {
     @include columnizer(4, 20px);
   }
 }
@@ -104,6 +108,7 @@ The **Columnizer** Sass mixin lays the children of an element out in **equal col
   <div class="card"><i>2</i><b>Reviews</b><span>2 waiting</span></div>
   <div class="card"><i>3</i><b>Shipped</b><span>18 this month</span></div>
   <div class="card"><i>4</i><b>Archive</b><span>310 items</span></div>
+  <div class="card"><i>5</i><b>Team</b><span>7 people</span></div>
 </div>
 ```
 </Example>
