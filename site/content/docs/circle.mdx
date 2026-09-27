@@ -76,6 +76,48 @@ same value measures a different edge and would give you an ellipse.
 ```
 </Example>
 
+<Example caption="Both forms in one component, which is how the story rings on a phone are built: the outer circle is a length and carries the gradient, and the picture inside it is a circle at `100%`, so it fits whatever the ring turns out to be. The padding between them is the ring's thickness, and the white border is the gap.">
+```scss
+.story {
+  @include circle(74px);
+  padding: 3px;
+  background: conic-gradient(
+    from 200deg,
+    #f9ce34,
+    #ee2a7b,
+    #6228d7,
+    #f9ce34
+  );
+}
+
+.story--seen {
+  background: #dee0cd;
+}
+
+.story img {
+  @include circle(100%);
+  border: 3px solid #fafaf8;
+  object-fit: cover;
+}
+```
+```html
+<style>
+  body { margin: 0; padding: 18px 0 18px 18px; background: #fafaf8; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #657167; }
+  .stories { display: flex; gap: 16px; overflow-x: auto; padding-bottom: 6px; }
+  .stories figure { margin: 0; flex: none; width: 74px; text-align: center; }
+  .stories figcaption { margin-top: 6px; font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .stories figure:last-child figcaption { color: #8b9381; }
+</style>
+<div class="stories">
+  <figure><span class="story"><img src="/images/backgrounds/01.jpg" alt=""></span><figcaption>dune</figcaption></figure>
+  <figure><span class="story"><img src="/images/backgrounds/02.jpg" alt=""></span><figcaption>longroom</figcaption></figure>
+  <figure><span class="story"><img src="/images/backgrounds/04.jpg" alt=""></span><figcaption>ninetofive</figcaption></figure>
+  <figure><span class="story"><img src="/images/backgrounds/05.jpg" alt=""></span><figcaption>atelier</figcaption></figure>
+  <figure><span class="story story--seen"><img src="/images/backgrounds/03.jpg" alt=""></span><figcaption>lysefjord</figcaption></figure>
+</div>
+```
+</Example>
+
 <Hint kind="warning">
 
 **Changed in Gerillass 4.0.0.** A size that is not a length is written as the width with `aspect-ratio: 1` rather than as a height that cannot match it. Measured in a 300&times;100 box, `circle(100%)` used to be 300&times;100 and `circle(auto)` 48&times;14; both are circles now. A length compiles exactly as before.
