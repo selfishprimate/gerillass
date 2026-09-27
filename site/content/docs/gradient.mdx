@@ -416,52 +416,81 @@ Set `$repeating: true` and the stops repeat until they fill the box, which is ho
 
 Shapes and scenes drawn with nothing but a gradient.
 
-<Example caption="A retro sun for a synthwave poster. Hard stops cut it into bands, and a second colour stop in each band leaves a gap of the page behind.">
+<Example caption="A sun with banded rays, the shape a summer poster puts behind its title. Hard stops cut the disc into bands, and the bands between them are `transparent`, so what shows through is the page rather than a colour that has to be kept in step with it.">
 ```scss
-.sun{
+.sun {
   width: 200px;
   height: 200px;
   border-radius: 50%;
   @include gradient(
-    (#bdc488 0 42%) (#69995d 42% 56%) (#fff 56% 59%)
-    (#5bc0bb 59% 70%) (#fff 70% 73%) (#668f80 73% 84%)
-    (#fff 84% 88%) (#668f80 88% 100%)
+    (#f7ec59 0 42%) (#ed6a5a 42% 56%) (transparent 56% 59%)
+    (#ed6a5a 59% 70%) (transparent 70% 73%) (#db504a 73% 84%)
+    (transparent 84% 88%) (#db504a 88% 100%)
   );
 }
 ```
 ```html
+<style>
+  body { display: grid; place-items: center; min-height: 240px; background: #222c25; }
+</style>
 <div class="sun"></div>
 ```
 </Example>
 
-<Example caption="A gauge for a dashboard. The conic gradient starts at -90deg, fills the top half up to the value, and leaves the bottom half the colour of the page.">
+<Example caption="A gauge for a dashboard. The conic gradient starts at -90deg and fills the top half up to the value; the bottom half is `transparent`, so the page shows through and the dial is a half circle without a second element to make one.">
 ```scss
-.gauge{
+.gauge {
   width: 220px;
   height: 220px;
   border-radius: 50%;
   @include gradient(
-    (#69995d 0 32%) (#f2f2eb 32% 50%) (#fff 50% 100%),
+    (#69995d 0 32%) (#f2f2eb 32% 50%) (transparent 50% 100%),
     conic,
     $from: -90deg
   );
 }
 ```
 ```html
+<style>
+  body { display: grid; place-items: center; min-height: 240px; background: #fafaf8; }
+</style>
 <div class="gauge"></div>
 ```
 </Example>
 
-<Example caption="A radar screen. The sweep is a conic gradient that stays dark for most of the turn and brightens towards its leading edge.">
+<Example caption="A radar screen. One conic gradient is the sweep: it is the screen's own dark green for most of the turn, then brightens over the last quarter to a hard leading edge, which is the trail a sweep leaves behind it.">
 ```scss
-.radar{
+.radar {
   width: 200px;
   height: 200px;
   border-radius: 50%;
-  @include gradient((#222c25 0 70%) (#69995d 97%) (#bdc488 100%), conic, $from: 20deg);
+  position: relative;
+  @include gradient(
+    (#222c25 0 72%) (#2f3937 72%) (#69995d 96%) (#eefa92 100%),
+    conic,
+    $from: -20deg
+  );
+
+  // The range rings, which are a second gradient rather than a second image.
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    @include gradient(
+      (transparent 0 32px) (rgb(238 250 146 / 0.22) 32px 33px),
+      radial,
+      $shape: circle,
+      $position: center,
+      $repeating: true
+    );
+  }
 }
 ```
 ```html
+<style>
+  body { display: grid; place-items: center; min-height: 240px; background: #222c25; }
+</style>
 <div class="radar"></div>
 ```
 </Example>
