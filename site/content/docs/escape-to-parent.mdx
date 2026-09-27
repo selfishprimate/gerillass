@@ -122,11 +122,55 @@ The **Escape to Parent** Sass mixin writes the rule again with another selector 
 
 </Hint>
 
-<Hint kind="danger">
+## What it refuses
 
-**What it refuses.** Two element selectors cannot match the same element, so `ul li` with `"html"` or `"body.theme"` raises rather than writing the `htmlul li` that matches nothing. A call with no `$selector`, a call outside any rule, an `&` in the argument, an empty string and a selector ending in a combinator all raise as well.
+Two element selectors cannot match the same element, so a selector that cannot
+be joined to the outermost one stops the build rather than writing a rule
+nothing matches.
 
-</Hint>
+```scss
+ul li {
+  @include escape-to-parent("html") {
+    color: red;
+  }
+}
+```
+```text
+Error: `"html"` cannot be attached to `ul` in `escape-to-parent`: no element can match both. Pass a class or an id, such as `".theme-dark"`.
+```
+
+A pseudo-element cannot have descendants, so attaching one to a rule that is
+nested writes a selector nothing can ever match. Measured in Chrome 152,
+Firefox 156 and Safari 26.6.2, nothing matched `.card::before .price`. On a
+rule that is not nested there is no descendant, so `.card { @include
+escape-to-parent("::before") }` still compiles and still draws.
+
+```scss
+.card .price {
+  @include escape-to-parent("::before") {
+    color: red;
+  }
+}
+```
+```text
+Error: `"::before"` is not a valid $selector for `escape-to-parent` here: a pseudo-element cannot have descendants, so attaching it to `.card` writes a selector nothing matches. Pass a class or an id, such as `".theme-dark"`.
+```
+
+The parent is attached for you, so an `&` in the argument would write it twice.
+
+```scss
+.card {
+  @include escape-to-parent("&.theme") {
+    color: red;
+  }
+}
+```
+```text
+Error: `"&.theme"` is not a valid $selector for `escape-to-parent`: the parent is attached for you, so an `&` would write it twice. Pass `".theme-dark"` rather than `"&.theme-dark"`.
+```
+
+A call with no `$selector`, a call outside any rule, an empty string and a
+selector ending in a combinator all raise as well.
 
 ## Related Links
 

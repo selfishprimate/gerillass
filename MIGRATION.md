@@ -85,6 +85,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `container` writes `$type` unquoted | fixes an element that was not a container; silent |
 | `container` refuses a name of nothing but spaces | breaking, loud |
 | `counter` refuses three values it cannot read, and a `$items` with a comma | breaking, loud |
+| `escape-to-parent` refuses a pseudo-element on a nested rule | breaking, loud |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -2012,6 +2013,27 @@ path, as every quoted string is.
 `$filter-direction` turns a gradient, and one colour is a flat wash with
 nothing to turn. The value used to be dropped without a word; now the build
 says it was left out. The CSS is unchanged.
+
+---
+
+## Break: `escape-to-parent` refuses a pseudo-element on a nested rule
+
+A pseudo-element cannot have descendants, so attaching one to the outermost
+element of a nested rule wrote a selector nothing can ever match:
+
+```scss
+.card .price { @include escape-to-parent("::before") { … } }
+/* 3.x: .card::before .price { … } */
+```
+
+Measured in Chrome 152, Firefox 156 and Safari 26.6.2, nothing matched it. On
+a rule that is not nested there is no descendant, so
+`.card { @include escape-to-parent("::before") { … } }` still compiles and
+still draws.
+
+Sweeping 225 calls across eight parent selectors, twenty go from compiling to
+raising and all twenty are that shape. Nothing stopped raising and no call
+that worked emits different CSS.
 
 ---
 

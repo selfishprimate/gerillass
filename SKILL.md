@@ -273,6 +273,7 @@ a dropped declaration rather than an error.
 - The selector lands on the **outermost element** of the rule, as one compound: `.a .b` gives `.theme.a .b`, not `.theme .a .b`. For a class on an ancestor of that element, pass the ancestor with it, `"body.theme .inner"`, or nest the rule under it.
 - Two element selectors cannot match the same element, so `ul li` with `"html"` or `"body.theme"` is refused rather than written as the `htmlul li` that matches nothing. Pass a class or an id.
 - Before 4.0.0 the mixin pasted the argument onto the front of the parent as text. That prefixed only the first selector of a list, leaving the rest of the rule applying with no theme at all, glued the class to a leading element as `.themeul li`, and split a list argument so a bare `.theme` painted every element carrying that class. All three are fixed, and the CSS a call writes can change.
+- A pseudo-element is refused when the rule is nested, since `.card::before .price` can never match: measured in Chrome 152, Firefox 156 and Safari 26.6.2, nothing matched it, while the unnested `.card::before` still draws and still compiles.
 
 **`except`**
 

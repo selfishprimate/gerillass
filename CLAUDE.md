@@ -971,7 +971,8 @@ Two pieces of work are open:
   `$fill` that is not a boolean, and `container` writing its `$type` unquoted
   and refusing a name of nothing but spaces, and `counter` refusing three
   positional values it cannot read, more than three, and an `$items` holding a
-  comma, all on `docs-examples-review`; and the demos and prose
+  comma, and `escape-to-parent` refusing a pseudo-element on a nested rule,
+  all on `docs-examples-review`; and the demos and prose
   of every documentation page, swept and rewritten on `examples-polish`,
   branched from `glass`; and a filled `text-shadow` stepping in pixels rather than in one of
   the distance's own unit, on `text-shadow-step`, branched from

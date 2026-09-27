@@ -36,6 +36,25 @@
   @return true;
 }
 
+// Whether a compound holds a pseudo-element, in either spelling: `::before`
+// and the four CSS 2 wrote with one colon.
+@function -has-pseudo-element($compound) {
+  @each $branch in $compound {
+    @each $part in $branch {
+      $text: string.to-lower-case("#{$part}");
+      @if string.index($text, "::") {
+        @return true;
+      }
+      @each $legacy in ":before" ":after" ":first-line" ":first-letter" {
+        @if string.index($text, $legacy) {
+          @return true;
+        }
+      }
+    }
+  }
+  @return false;
+}
+
 @function -write($complex, $from: 1) {
   $out: "";
   @for $i from $from through list.length($complex) {
@@ -95,6 +114,14 @@
       $head: selector.unify($prefix, $first);
       @if $head == null {
         @error "`#{meta.inspect($selector)}` cannot be attached to `#{$first}` in `escape-to-parent`: no element can match both. Pass a class or an id, such as `\".theme-dark\"`.";
+      }
+      // A pseudo-element cannot have descendants, so attaching one to the
+      // outermost element of a nested rule writes a selector nothing can ever
+      // match: `.card::before .price`. On a rule that is not nested there is
+      // no descendant and `.card::before` is a real selector, so only the
+      // nested case is refused.
+      @if $rest != "" and -has-pseudo-element($head) {
+        @error "`#{meta.inspect($selector)}` is not a valid $selector for `escape-to-parent` here: a pseudo-element cannot have descendants, so attaching it to `#{$first}` writes a selector nothing matches. Pass a class or an id, such as `\".theme-dark\"`.";
       }
       @each $branch in $head {
         $result: list.append($result, string.unquote(-write($branch) + $rest), comma);
