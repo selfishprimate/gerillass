@@ -549,6 +549,20 @@ An `<Example>` is not a card. The caption is prose, the Sass and the CSS are
 ordinary `CodeBlock`s carrying their own labels, and the only framed thing is
 the demo, which needs a surface to be a demo.
 
+**Indentation in a `listing` is written as `&#32;`.** The attribute reaches the
+component as a JSX string and its leading whitespace is stripped per line, so
+real spaces render flush left and the markup reads as a wall. Every space of
+every indent is an entity. This is why `before` and `brand-logo` are written
+that way, and it was rediscovered on `columnizer` by writing the spaces and
+looking at the page.
+
+**A listing is the whole markup, not a sketch.** An abbreviated one with `…`
+or a comment standing in for the rest is the shape of the thing rather than
+something a reader can copy, so a listing that would be long is a reason to
+simplify the demo's markup, not to cut the listing. `columnizer`'s gallery lost
+its captions for exactly that reason, and the images became the columns, which
+is what the example is about anyway.
+
 **A listing and a demo are two different things.** Fourteen examples across ten
 pages carry both: an ```html fence showing the markup to write, and a separate
 `{{< sandbox >}}` rendering the result. The fence always holds what gets
