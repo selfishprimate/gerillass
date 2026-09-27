@@ -16,7 +16,7 @@ The **Reveal** Sass mixin animates something in and out of the page: a popover, 
 
 <Hint kind="warning">
 
-**New in Gerillass 4.0.0.**
+**New in Gerillass 4.0.0.** An entry and exit animation is three pieces, and two of them fail silently on their own: without `@starting-style` the element appears at its final state with nothing to animate from, and without `transition-behavior: allow-discrete` the exit is skipped because `display` and `overlay` are discrete properties. The mixin writes all three, for a popover, a dialog and a class-toggled element alike.
 
 </Hint>
 

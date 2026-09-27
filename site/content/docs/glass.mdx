@@ -16,7 +16,7 @@ The **Glass** Sass mixin writes a frosted glass panel: a tint, a blur of whateve
 
 <Hint kind="warning">
 
-**New in Gerillass 4.0.0.**
+**New in Gerillass 4.0.0.** The blur is one declaration and would not earn a mixin on its own. What does is everything around it: the tint has to sit inside `@supports`, because a browser without `backdrop-filter` shows it as the whole panel and a translucent tint is unreadable over a photograph; Safari before 18 needs the prefixed property; and an opaque tint covers the very backdrop it just blurred. The mixin writes all four, and refuses the tint that would defeat it.
 
 </Hint>
 
@@ -178,19 +178,63 @@ The **Glass** Sass mixin writes a frosted glass panel: a tint, a blur of whateve
 
 ## What it refuses
 
+The tint is the panel's own colour and it has to let the blurred backdrop
+through, so an opaque one is refused: it would cover the very thing the blur
+was for, with the CSS still perfectly valid.
+
+```scss
+.a {
+  @include glass(12px, #fff);
+}
+```
+```text
+Error: `#fff` is opaque, so `glass` would blur the backdrop and then cover it. Pass a colour with an alpha, such as `rgb(255 255 255 / 0.18)`.
+```
+
+The fallback is the tint with its alpha raised, so a tint only the browser can
+resolve leaves nothing to raise. Pass the fallback yourself there.
+
+```scss
+.a {
+  @include glass(12px, var(--tint));
+}
+```
+```text
+Error: `glass` cannot work out a fallback from `var(--tint)`, because only the browser knows that colour. Pass `$fallback` as well: the panel a browser without `backdrop-filter` shows, opaque enough to read on, such as `rgb(255 255 255 / 0.88)`.
+```
+
+`$blur` is written into `blur()`, which takes a length, and all three browsers
+refuse `blur(4%)`.
+
 ```scss
 .a {
   @include glass(4%);
-  @include glass(12px, #fff);
-  @include glass(12px, var(--tint));
-  @include glass(12px, rgb(255 255 255 / 0.2), 10px);
 }
 ```
 ```text
 Error: `4%` is not a valid $blur for `glass`: a percentage does not work here. It is written into `blur()`, which takes a length.
-Error: `#fff` is opaque, so `glass` would blur the backdrop and then cover it. Pass a colour with an alpha, such as `rgb(255 255 255 / 0.18)`.
-Error: `glass` cannot work out a fallback from `var(--tint)`, because only the browser knows that colour. Pass `$fallback` as well: the panel a browser without `backdrop-filter` shows, opaque enough to read on, such as `rgb(255 255 255 / 0.88)`.
+```
+
+`$saturate` is a multiplier or a percentage, not a length.
+
+```scss
+.a {
+  @include glass(12px, rgb(255 255 255 / 0.2), 10px);
+}
+```
+```text
 Error: `10px` is not a valid $saturate for `glass`. Pass a number such as `1.6`, a percentage such as `160%`, or `1` to leave the colours alone.
+```
+
+And `$edge` is a boolean or the colour the edge should be.
+
+```scss
+.a {
+  @include glass(12px, rgb(255 255 255 / 0.2), 1.6, 42);
+}
+```
+```text
+Error: `42` is not a valid $edge for `glass`: it is not a colour. Pass `true` for a light hairline, `false` for none, or the colour the edge should be.
 ```
 
 ## Related Links

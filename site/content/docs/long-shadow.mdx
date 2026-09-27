@@ -16,7 +16,7 @@ The **Long Shadow** Sass mixin draws the long shadow of flat design: a solid blo
 
 <Hint kind="warning">
 
-**New in Gerillass 4.0.0.**
+**New in Gerillass 4.0.0.** The long shadow of flat design is one `box-shadow` per pixel of its length, and nobody types forty of them. The mixin works the count out from the length over the step, so `long-shadow(bottom-right, #fbbf24, 40px)` writes forty layers from one line, and the direction is measured as an angle rather than picked from a list of eight.
 
 </Hint>
 
