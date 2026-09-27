@@ -178,6 +178,17 @@ Any other value stops the build.
 Error: `visible` is not a valid value for the `$toggle` argument of `hide`. The value must be `hide` or `focusable`.
 ```
 
+The mixin hides the element it is called in, so it needs a selector to hang on. At the root of a stylesheet, or directly inside a media query, Sass used to fail with a message of its own that named neither the mixin nor the fix: `Declarations may only be used within style rules` for `hide`, and `Top-level selectors may not contain the parent selector "&"` for `hide(focusable)`. Put the media query inside the rule, or the rule inside the media query.
+
+```scss
+@media (max-width: 599.98px) {
+  @include hide;
+}
+```
+```text
+Error: `hide` hides the element it is called in, so call it inside a selector, such as `.visually-hidden { @include hide; }`.
+```
+
 ## Related Links
 
 - [Remove](/docs/remove)

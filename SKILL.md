@@ -306,6 +306,7 @@ a dropped declaration rather than an error.
 - The hidden element is absolutely positioned. With no positioned ancestor it escapes a container that clips it, such as a horizontal carousel or a collapsed `height: 0; overflow: hidden` panel, and widens or lengthens the page in Chrome and Safari. Put `position: relative` on that container.
 - `focusable` hides the element only while neither it nor anything inside it has focus, so the element's own styles, such as `position: fixed` and padding for a skip link, apply as they are once it is focused. Write them in the same rule.
 - To hide an element only at some widths, put `@include hide` inside that media query. Hiding it everywhere and undoing it elsewhere cannot give back the position, padding and border `hide` overwrites, which is why `unhide` was removed in 4.0.0.
+- The mixin hides the element it is called in, so it needs a selector. Called at the root of a stylesheet, or directly inside a media query rather than inside a rule, it raises: Sass's own messages there, `Declarations may only be used within style rules` and `Top-level selectors may not contain the parent selector "&"`, named neither the mixin nor the fix.
 - An element with `display: contents` has no box to hide, so its children stay visible.
 
 **`loadify`**

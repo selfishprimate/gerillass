@@ -88,6 +88,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `escape-to-parent` refuses a pseudo-element on a nested rule | breaking, loud |
 | `focus-ring` refuses a width of zero | breaking, loud |
 | `font-face` names an empty `$file-formats` | a better message; not breaking |
+| `hide` names a call with no selector to hang on | a better message; not breaking |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -2308,6 +2309,38 @@ off. It is `contain` now, so the logo fits and is centred.
 The two agree whenever the box is the image's ratio or narrower for its height,
 which is the usual case, so most logos render identically. Measured in all three
 browsers at 196x42, 300x42 and 196x20.
+
+---
+
+## Change: `hide` says it needs a selector
+
+Both forms hide the element the mixin is called in, so both need a selector.
+Called at the root of a stylesheet, or directly inside a media query rather
+than inside a rule, they used to fail with a message from Sass that named
+neither the mixin nor the fix:
+
+```scss
+@include hide;
+// 3.x: Error: Declarations may only be used within style rules.
+//      pointing at `position: absolute` inside the library
+
+@media (max-width: 599.98px) {
+  @include hide(focusable);
+}
+// 3.x: Error: Top-level selectors may not contain the parent selector "&".
+//      pointing at the `&:not(:focus-within)` inside the library
+```
+
+Both now say what to do:
+
+```text
+Error: `hide` hides the element it is called in, so call it inside a selector, such as `.visually-hidden { @include hide; }`.
+```
+
+Nothing that compiled before compiles differently. The calls that now carry this
+message are the ones that already stopped the build. `hide(unhide)` is checked
+first, so a call to the removed value is still told it was removed, wherever it
+is written.
 
 ---
 

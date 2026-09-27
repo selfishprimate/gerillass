@@ -973,7 +973,9 @@ Two pieces of work are open:
   positional values it cannot read, more than three, and an `$items` holding a
   comma, and `escape-to-parent` refusing a pseudo-element on a nested rule,
   and `focus-ring` refusing a width of zero, and `font-face` naming an empty
-  `$file-formats` rather than failing with Sass's index message, all on
+  `$file-formats` rather than failing with Sass's index message, and `hide`
+  refusing a call with no selector to hang on, where Sass's own message named
+  neither the mixin nor the fix, all on
   `docs-examples-review`;
   and the demos and prose
   of every documentation page, swept and rewritten on `examples-polish`,

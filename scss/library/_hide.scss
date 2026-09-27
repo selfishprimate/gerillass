@@ -25,6 +25,21 @@
 // without it the link hides again on mouse-down and the click is lost.
 
 @mixin hide($toggle: "hide") {
+  // The value is checked before the selector, so a call to the removed
+  // `unhide` is told that wherever it is written.
+  @if $toggle == "unhide" {
+    @error "`hide(unhide)` was removed in 4.0.0: it could not give back the position, padding or border `hide` had overwritten. To show the element on keyboard focus, write `@include hide(focusable)`. To hide it only at some widths, put `@include hide` inside that media query instead of undoing it outside.";
+  }
+  @if $toggle != "hide" and $toggle != "focusable" {
+    @error "`#{meta.inspect($toggle)}` is not a valid value for the `$toggle` argument of `hide`. The value must be `hide` or `focusable`.";
+  }
+  // Both branches need a selector to hang on, and Sass's own message for
+  // either says nothing about the mixin: `hide` at the root failed with
+  // "Declarations may only be used within style rules" and `hide(focusable)`
+  // with "Top-level selectors may not contain the parent selector &".
+  @if not & {
+    @error "`hide` hides the element it is called in, so call it inside a selector, such as `.visually-hidden { @include hide; }`.";
+  }
   @if $toggle == "hide" {
     position: absolute;
     width: 1px;
@@ -39,9 +54,5 @@
     &:not(:focus-within):not(:active) {
       @include hide;
     }
-  } @else if $toggle == "unhide" {
-    @error "`hide(unhide)` was removed in 4.0.0: it could not give back the position, padding or border `hide` had overwritten. To show the element on keyboard focus, write `@include hide(focusable)`. To hide it only at some widths, put `@include hide` inside that media query instead of undoing it outside.";
-  } @else {
-    @error "`#{meta.inspect($toggle)}` is not a valid value for the `$toggle` argument of `hide`. The value must be `hide` or `focusable`.";
   }
 }
