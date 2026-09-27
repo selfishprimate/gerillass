@@ -74,23 +74,30 @@ that.
 ```
 </Example>
 
-<Example resizable hint="Drag the box: each badge names the same width, but each sits in its own panel." caption="Inside a selector the badge goes on that element and stays in its flow rather than being pinned, which is what you want when the question is how one component is behaving rather than how the page is.">
+<Example resizable hint="Drag the box: both badges change together, but one stays in the page's corner and the other stays with the panel." caption="Inside a selector the badge goes on that element and stays in its flow rather than being pinned. Both calls are in this demo, so the difference is the whole point of it: the pinned one is always in the corner wherever you have scrolled to, and the inline one is beside the component you are working on. Reach for the second when the corner is taken, or when the thing you are measuring is a long way down the page.">
 ```scss
+@include breakpointer;
+
 .panel__title {
   @include breakpointer();
 }
 ```
 ```html
 <style>
-  body { margin: 0; padding: 18px; background: #fafaf8; font: 15px/1.6 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
-  .panels { display: grid; gap: 10px; }
+  body { margin: 0; padding: 0; background: #fafaf8; font: 15px/1.6 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
+  .bar { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; background: #fff; box-shadow: 0 1px 0 #dee0cd; font-weight: 700; }
+  .bar span { font-weight: 600; color: #657167; }
+  .wrap { padding: 18px; }
   .panel { padding: 14px 16px; border-radius: 12px; background: #f2f2eb; }
   .panel__title { display: flex; align-items: center; gap: 10px; margin: 0 0 4px; font: 700 15px Inter, ui-sans-serif, system-ui, sans-serif; }
   .panel p { margin: 0; color: #657167; font-size: 14px; }
 </style>
-<div class="panels">
-  <div class="panel"><h3 class="panel__title">Filters</h3><p>Collapses below medium.</p></div>
-  <div class="panel"><h3 class="panel__title">Results</h3><p>Two columns from medium.</p></div>
+<div class="bar">Dashboard<span>Account</span></div>
+<div class="wrap">
+  <div class="panel">
+    <h3 class="panel__title">Filters</h3>
+    <p>The badge in the page's corner is the first call. This one is the second, and it belongs to the panel.</p>
+  </div>
 </div>
 ```
 </Example>
