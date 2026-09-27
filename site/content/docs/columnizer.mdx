@@ -31,138 +31,79 @@ The **Columnizer** Sass mixin lays the children of an element out in **equal col
 
 ## Examples
 
-```html
-<div class="parent-element">
-  <div class="item">01</div>
-  <div class="item">02</div>
-  <div class="item">03</div>
-  <div class="item">04</div>
-  <div class="item">05</div>
-  <div class="item">06</div>
-  <div class="item">07</div>
-  <div class="item">08</div>
-</div>
-```
-
-<Example caption="Three columns, five cards. The last row holds what is left over, each still a third of the row wide, which is the part `$fill` changes.">
+<Example caption="The children are the columns: there is no wrapper around each one, and the count is the only number you give. Six pictures in three, with a gutter that separates the rows as well as the columns, because it is written as the container's `gap`.">
 ```scss
-.parent-element{
-  @include columnizer(3);
-}
-```
-```html
-<style>
-  body { background: #fafaf8; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #657167; }
-  .item { padding: 16px; border-radius: 14px; background: #fff; box-shadow: 0 4px 14px rgb(34 44 37 / 0.07); }
-  .item b { display: block; font-size: 15px; }
-  .item span { color: #657167; font-size: 13px; }
-  .item i { display: block; width: 28px; height: 28px; margin-bottom: 10px; border-radius: 9px; background: #f2f2eb; color: #668f80; font: 700 13px/28px Inter, ui-sans-serif, system-ui, sans-serif; font-style: normal; text-align: center; }
-</style>
-<div class="parent-element">
-  <div class="item"><i>1</i><b>Drafts</b><span>4 waiting</span></div>
-  <div class="item"><i>2</i><b>Reviews</b><span>2 waiting</span></div>
-  <div class="item"><i>3</i><b>Shipped</b><span>18 this month</span></div>
-  <div class="item"><i>4</i><b>Archive</b><span>310 items</span></div>
-  <div class="item"><i>5</i><b>Team</b><span>7 people</span></div>
-</div>
-```
-</Example>
-
-<Example caption="The same five cards with a gutter. It is written as `gap`, so it separates the rows as well as the columns.">
-```scss
-.parent-element{
+.gallery {
   @include columnizer(3, 20px);
 }
 ```
 ```html
 <style>
-  body { background: #fafaf8; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #657167; }
-  .item { padding: 16px; border-radius: 14px; background: #fff; box-shadow: 0 4px 14px rgb(34 44 37 / 0.07); }
-  .item b { display: block; font-size: 15px; }
-  .item span { color: #657167; font-size: 13px; }
-  .item i { display: block; width: 28px; height: 28px; margin-bottom: 10px; border-radius: 9px; background: #f2f2eb; color: #668f80; font: 700 13px/28px Inter, ui-sans-serif, system-ui, sans-serif; font-style: normal; text-align: center; }
+  body { margin: 0; padding: 18px; background: #fafaf8; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #657167; }
+  .gallery figure { margin: 0; }
+  .gallery img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 12px; }
+  .gallery figcaption { margin-top: 8px; font-size: 13px; font-weight: 600; color: #2f3937; }
+  .gallery small { display: block; font-weight: 400; color: #8b9381; }
 </style>
-<div class="parent-element">
-  <div class="item"><i>1</i><b>Drafts</b><span>4 waiting</span></div>
-  <div class="item"><i>2</i><b>Reviews</b><span>2 waiting</span></div>
-  <div class="item"><i>3</i><b>Shipped</b><span>18 this month</span></div>
-  <div class="item"><i>4</i><b>Archive</b><span>310 items</span></div>
-  <div class="item"><i>5</i><b>Team</b><span>7 people</span></div>
+<div class="gallery">
+  <figure><img src="/images/backgrounds/01.jpg" alt=""><figcaption>Dune<small>Merzouga</small></figcaption></figure>
+  <figure><img src="/images/backgrounds/02.jpg" alt=""><figcaption>The long room<small>Dublin</small></figcaption></figure>
+  <figure><img src="/images/backgrounds/03.jpg" alt=""><figcaption>Nine to five<small>Zurich</small></figcaption></figure>
+  <figure><img src="/images/backgrounds/04.jpg" alt=""><figcaption>Drift<small>Monterey</small></figcaption></figure>
+  <figure><img src="/images/backgrounds/05.jpg" alt=""><figcaption>Atelier<small>Lisbon</small></figcaption></figure>
+  <figure><img src="/images/backgrounds/06.jpg" alt=""><figcaption>Low tide<small>Sylt</small></figcaption></figure>
 </div>
 ```
 </Example>
 
-<Example caption="The same call again with `true` at the end: the two cards left on the last row grow to fill it, instead of sitting a third wide with a hole beside them.">
+<Example caption="`$fill` is the last argument and it decides what happens to a row that is not full. Five tiles in three columns, twice: above, the two left over keep a third of the row each and leave a hole; below, with `true`, they grow into it.">
 ```scss
-.parent-element{
-  @include columnizer(3, 20px, true);
+.tiles {
+  @include columnizer(3, 12px);
+}
+
+.tiles--fill {
+  @include columnizer(3, 12px, true);
 }
 ```
 ```html
 <style>
-  body { background: #fafaf8; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #657167; }
-  .item { padding: 16px; border-radius: 14px; background: #fff; box-shadow: 0 4px 14px rgb(34 44 37 / 0.07); }
-  .item b { display: block; font-size: 15px; }
-  .item span { color: #657167; font-size: 13px; }
-  .item i { display: block; width: 28px; height: 28px; margin-bottom: 10px; border-radius: 9px; background: #f2f2eb; color: #668f80; font: 700 13px/28px Inter, ui-sans-serif, system-ui, sans-serif; font-style: normal; text-align: center; }
+  body { margin: 0; padding: 18px; background: #fafaf8; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .label { margin: 0 0 8px; font: 600 12px Inter, ui-sans-serif, system-ui, sans-serif; color: #8b9381; }
+  .tiles { margin-bottom: 20px; }
+  .tiles div { padding: 18px 16px; border-radius: 12px; background: #668f80; color: #fafaf8; font-weight: 700; }
+  .tiles--fill div { background: #222c25; }
 </style>
-<div class="parent-element">
-  <div class="item"><i>1</i><b>Drafts</b><span>4 waiting</span></div>
-  <div class="item"><i>2</i><b>Reviews</b><span>2 waiting</span></div>
-  <div class="item"><i>3</i><b>Shipped</b><span>18 this month</span></div>
-  <div class="item"><i>4</i><b>Archive</b><span>310 items</span></div>
-  <div class="item"><i>5</i><b>Team</b><span>7 people</span></div>
-</div>
+<p class="label">columnizer(3, 12px)</p>
+<div class="tiles"><div>01</div><div>02</div><div>03</div><div>04</div><div>05</div></div>
+<p class="label">columnizer(3, 12px, true)</p>
+<div class="tiles tiles--fill"><div>01</div><div>02</div><div>03</div><div>04</div><div>05</div></div>
 ```
 </Example>
 
-<Example caption="`$gutter` and `$fill` are both optional, and `$fill` always comes last. Three columns, no gutter, and the last row filled.">
+<Example resizable hint="Drag the box across 992px: two columns below it, four above." caption="A second call inside a query replaces the first, so one element can be a different grid at every width. This is the whole of a responsive card grid.">
 ```scss
-.parent-element{
-  @include columnizer(3, true);
-}
-```
-```html
-<style>
-  body { background: #fafaf8; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #657167; }
-  .item { padding: 16px; border-radius: 14px; background: #fff; box-shadow: 0 4px 14px rgb(34 44 37 / 0.07); }
-  .item b { display: block; font-size: 15px; }
-  .item span { color: #657167; font-size: 13px; }
-  .item i { display: block; width: 28px; height: 28px; margin-bottom: 10px; border-radius: 9px; background: #f2f2eb; color: #668f80; font: 700 13px/28px Inter, ui-sans-serif, system-ui, sans-serif; font-style: normal; text-align: center; }
-</style>
-<div class="parent-element">
-  <div class="item"><i>1</i><b>Drafts</b><span>4 waiting</span></div>
-  <div class="item"><i>2</i><b>Reviews</b><span>2 waiting</span></div>
-  <div class="item"><i>3</i><b>Shipped</b><span>18 this month</span></div>
-  <div class="item"><i>4</i><b>Archive</b><span>310 items</span></div>
-  <div class="item"><i>5</i><b>Team</b><span>7 people</span></div>
-</div>
-```
-</Example>
+.cards {
+  @include columnizer(2, 12px, true);
 
-<Example caption="Two columns below large and four above it, with the last row filled at both sizes. `breakpoint` and `columnizer` compose, which is the point of this one.">
-```scss
-.parent-element{
-  @include columnizer(2, 10px, true);
   @include breakpoint(min, large) {
-    @include columnizer(4, 20px, false);
+    @include columnizer(4, 20px);
   }
 }
 ```
 ```html
 <style>
-  body { background: #fafaf8; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #657167; }
-  .item { padding: 16px; border-radius: 14px; background: #fff; box-shadow: 0 4px 14px rgb(34 44 37 / 0.07); }
-  .item b { display: block; font-size: 15px; }
-  .item span { color: #657167; font-size: 13px; }
-  .item i { display: block; width: 28px; height: 28px; margin-bottom: 10px; border-radius: 9px; background: #f2f2eb; color: #668f80; font: 700 13px/28px Inter, ui-sans-serif, system-ui, sans-serif; font-style: normal; text-align: center; }
+  body { margin: 0; padding: 18px; background: #fafaf8; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #657167; }
+  .card { padding: 16px; border-radius: 14px; background: #fff; box-shadow: 0 4px 14px rgb(34 44 37 / 0.07); }
+  .card b { display: block; font-size: 15px; color: #2f3937; }
+  .card span { font-size: 13px; }
+  .card i { display: block; width: 30px; height: 30px; margin-bottom: 10px; border-radius: 10px; background: #f2f2eb; color: #668f80; font: 700 13px/30px Inter, ui-sans-serif, system-ui, sans-serif; font-style: normal; text-align: center; }
 </style>
-<div class="parent-element">
-  <div class="item"><i>1</i><b>Drafts</b><span>4 waiting</span></div>
-  <div class="item"><i>2</i><b>Reviews</b><span>2 waiting</span></div>
-  <div class="item"><i>3</i><b>Shipped</b><span>18 this month</span></div>
-  <div class="item"><i>4</i><b>Archive</b><span>310 items</span></div>
-  <div class="item"><i>5</i><b>Team</b><span>7 people</span></div>
+<div class="cards">
+  <div class="card"><i>1</i><b>Drafts</b><span>4 waiting</span></div>
+  <div class="card"><i>2</i><b>Reviews</b><span>2 waiting</span></div>
+  <div class="card"><i>3</i><b>Shipped</b><span>18 this month</span></div>
+  <div class="card"><i>4</i><b>Archive</b><span>310 items</span></div>
 </div>
 ```
 </Example>
@@ -292,7 +233,7 @@ The **Columnizer** Sass mixin lays the children of an element out in **equal col
 
 ## What it refuses
 
-A column count or gutter the browser drops stops the build. Measured in Chrome 152, `calc(100% / 3px)` drops the column width, and so does a gutter that is unitless, a word, or a unit that is not a length. Until 2.3.1 these compiled. A gutter of `0` used to be one of them, `(3 - 1) * 0` being a number rather than a length, and is now written as `0px`.
+A column count or gutter the browser drops stops the build. Measured in Chrome 152, `calc(100% / 3px)` drops the column width, and so does a gutter that is unitless, a word, or a unit that is not a length. Until 2.3.1 these compiled. A gutter of `0` used to be one of them, `(3 - 1) * 0` being a number rather than a length, and is now written as `0px`. A fraction is not refused: `columnizer(2.5)` is the layout where the next card is half in view.
 
 ```scss
 .grid {
@@ -300,7 +241,7 @@ A column count or gutter the browser drops stops the build. Measured in Chrome 1
 }
 ```
 ```text
-Error: `3px` is not a valid column count for `columnizer`: a column count has no unit. A browser drops the column width.
+Error: `3px` is not a valid column count for `columnizer`: a column count has no unit, and a browser drops the column width.
 ```
 
 Since 4.0.0 a percentage gutter stops the build too. A column gap in `%` is a share of the container's width, but a row gap in `%` is a share of its height, which a wrapping row does not have: measured in all three browsers, the rows touched. A negative gutter is refused because `gap` cannot be negative, and the browser dropped it. Until 4.0.0 both worked through the margins. Use a length, or `vw` for a gutter that follows the viewport.
@@ -312,6 +253,36 @@ Since 4.0.0 a percentage gutter stops the build too. A column gap in `%` is a sh
 ```
 ```text
 Error: `5%` is not a valid gutter for `columnizer`: a row gap in % is a share of the container's height, which a wrapping row does not have, so the rows would touch. Pass a length, such as `2rem` or `3vw`.
+```
+
+Since 4.0.0 a count of zero or less stops the build as well, and this one a
+browser does not drop: it works the `calc()` out. Measured in Chrome 152,
+Firefox 156 and Safari 26.6.2, `calc(100% / 0)` is an infinite percentage and
+left every column 33554432px wide in Chrome and Safari and 17895684px in
+Firefox, while `calc(100% / -3)` clamps to a `0%` basis, so the columns shrink
+to their text and there is no grid left.
+
+```scss
+.grid {
+  @include columnizer(0);
+}
+```
+```text
+Error: `0` is not a valid column count for `columnizer`: a row has to hold at least one column, and a browser works this calc() out rather than dropping it, so `0` left every column millions of pixels wide and a negative count left them no wider than their text.
+```
+
+`$fill` takes `true` or `false`, and since 4.0.0 nothing else. A gutter and a
+fill are told apart by their type when only one of them is passed, so a third
+argument that was not a boolean came out `false` and quietly gave the last row
+no fill, which is the opposite of what `columnizer(3, 20px, 1)` was asking for.
+
+```scss
+.grid {
+  @include columnizer(3, 20px, 1);
+}
+```
+```text
+Error: `1` is not a valid $fill for `columnizer`: it takes `true` or `false`, and anything else is read as `false`, so the last row would not fill. Pass `true` to stretch the last row, or leave the argument out.
 ```
 
 ## Related Links

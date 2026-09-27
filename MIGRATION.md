@@ -81,6 +81,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `breakpointer` writes a badge, not bare `content` | fixes an unusable default; silent |
 | `breakpointer` refuses an empty selector and one passed inside a selector | breaking, loud |
 | `circle` writes `aspect-ratio` for a size that is not a length | fixes an ellipse; silent |
+| `columnizer` refuses a column count of zero or less, and a `$fill` that is not a boolean | breaking, loud |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -2008,6 +2009,34 @@ path, as every quoted string is.
 `$filter-direction` turns a gradient, and one colour is a flat wash with
 nothing to turn. The value used to be dropped without a word; now the build
 says it was left out. The CSS is unchanged.
+
+---
+
+## Break: `columnizer` refuses a count of zero, and a `$fill` that is not a boolean
+
+Two calls that compiled and did something other than what they asked for.
+
+**A count of zero or less** is the one bad count a browser does not drop: it
+works the `calc()` out. Measured in Chrome 152, Firefox 156 and Safari 26.6.2,
+`calc(100% / 0)` is an infinite percentage and left every column 33554432px
+wide in Chrome and Safari and 17895684px in Firefox, while `calc(100% / -3)`
+clamps to a `0%` basis, so the columns shrink to their text and there is no
+grid left. A fraction is still accepted: `columnizer(2.5)` is the layout where
+the next card is half in view, and it measured as 40% columns in all three.
+
+**A `$fill` that is not a boolean** came out `false`. A gutter and a fill are
+told apart by their type when only one of them is passed, so the third argument
+was never type-checked, and `columnizer(3, 20px, 1)` read as a request to fill
+and quietly did not.
+
+```scss
+@include columnizer(0);              // stops the build
+@include columnizer(3, 20px, 1);     // stops the build; write `true`
+```
+
+Sweeping 55 calls before and after, those two shapes are the only change: nine
+calls go from compiling to raising, nothing stopped raising, and **no call that
+worked emits different CSS**.
 
 ---
 

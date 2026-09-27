@@ -13,10 +13,19 @@
 // length.
 @function -count-problem($columns) {
   @if meta.type-of($columns) == "number" {
-    @if math.is-unitless($columns) {
-      @return null;
+    @if not math.is-unitless($columns) {
+      @return "a column count has no unit, and a browser drops the column width";
     }
-    @return "a column count has no unit";
+    // Zero and below compile into a calc() a browser evaluates rather than
+    // drops, which is why neither showed up as broken output. Measured in
+    // Chrome 152, Firefox 156 and Safari 26.6.2, `calc(100% / 0)` is an
+    // infinite percentage and every column came out 33554432px wide in Chrome
+    // and Safari and 17895684px in Firefox; `calc(100% / -3)` clamps to a 0%
+    // basis, so the columns shrink to their content and there is no grid left.
+    @if $columns <= 0 {
+      @return "a row has to hold at least one column, and a browser works this calc() out rather than dropping it, so `0` left every column millions of pixels wide and a negative count left them no wider than their text";
+    }
+    @return null;
   }
   // Interpolation, as in `#{$cols}`, gives the number as an unquoted string,
   // which is written into calc() as it reads.
@@ -27,7 +36,7 @@
       @if string.index("0123456789", $character) {
         $digits: $digits + 1;
       } @else if not string.index(".+-", $character) {
-        @return "it is not a column count";
+        @return "it is not a column count, and a browser drops the column width";
       }
     }
     @if $digits > 0 {
@@ -39,9 +48,9 @@
     @if string.index($text, "var(") or string.index($text, "env(") or string.index($text, "attr(") {
       @return null;
     }
-    @return "maths on lengths does not give a count; pass a number, or var(), env() or attr()";
+    @return "maths on lengths does not give a count, and a browser drops the column width; pass a number, or var(), env() or attr()";
   }
-  @return "it is not a column count";
+  @return "it is not a column count, and a browser drops the column width";
 }
 
 // The gutter is written as `gap` and multiplied in calc(). A length, var() and
@@ -96,7 +105,7 @@
   $columns: list.nth($params, 1);
   $count-problem: -count-problem($columns);
   @if $count-problem {
-    @error "`#{meta.inspect($columns)}` is not a valid column count for `columnizer`: #{$count-problem}. A browser drops the column width.";
+    @error "`#{meta.inspect($columns)}` is not a valid column count for `columnizer`: #{$count-problem}.";
   }
   $gutter: null;
   $fill: false;
@@ -112,6 +121,13 @@
   } @else if list.length($params) == 3 {
     $gutter: -gutter(list.nth($params, 2));
     $fill: list.nth($params, 3);
+    // The two-argument branch above tells a gutter from a fill by its type, so
+    // a third argument that is not a boolean reached `$fill == true`, came out
+    // false and quietly gave the last row no fill: `columnizer(3, 20px, 1)`
+    // and `columnizer(3, 20px, "yes")` both looked like a request to fill.
+    @if meta.type-of($fill) != "bool" {
+      @error "`#{meta.inspect($fill)}` is not a valid $fill for `columnizer`: it takes `true` or `false`, and anything else is read as `false`, so the last row would not fill. Pass `true` to stretch the last row, or leave the argument out.";
+    }
   }
 
   display: flex;
