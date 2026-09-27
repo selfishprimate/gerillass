@@ -10,13 +10,22 @@
 // block, nothing moves for a user who asked for less, without a list to keep.
 //
 // Two agent trials wrote this same wrapper by hand, as `motion-safe` and
-// `motion-ok`. Both media queries were checked to parse in Chrome 152; the
-// reduced-motion setting itself could not be emulated in the browser used.
+// `motion-ok`.
 //
-// The trap is the resting state. An element hidden in its base rule and
-// revealed by an animation inside the block stays hidden when the block does
-// not apply, which is what `loadify` avoids by applying the end state. Keep the
-// visible state in the base rule and the start of the motion in the keyframes.
+// Measured with the setting switched on and off, in Chrome 152 through
+// `--force-prefers-reduced-motion` and in Firefox 156 through a profile
+// setting `ui.prefersReducedMotion`. Both agree: with no preference a
+// `transition: transform 0.2s` written inside the block computes to
+// `transform` over `0.2s`, and with reduce on it computes to `all` over `0s`,
+// so nothing moves. Safari's setting follows the system's and was not switched
+// on.
+//
+// The trap is the resting state, and the same measurement shows it. An element
+// hidden in its base rule and revealed by an animation inside the block
+// computed to `animation-name: none` and stayed at `opacity: 0` in both, with
+// nothing left to reveal it. `loadify` avoids this by applying the end state.
+// Keep the visible state in the base rule and the start of the motion in the
+// keyframes.
 @mixin motion-safe {
   @if not meta.content-exists() {
     @error "`motion-safe` wraps the motion you pass it, so call it with a block, such as `.card { @include motion-safe { transition: transform 0.2s; } }`.";

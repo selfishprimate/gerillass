@@ -2,7 +2,8 @@
   "name": "motion-safe",
   "summary": "Wraps its content in @media (prefers-reduced-motion: no-preference), so motion is opt-in: a user who asked their system for less motion gets none of it.",
   "caveats": [
-    "Keep the resting state outside the block. An element hidden in its base rule and revealed by an animation inside the block stays hidden for a user who asked for less motion; put the start state in the keyframes instead."
+    "Keep the resting state outside the block. An element hidden in its base rule and revealed by an animation inside the block stays hidden for a user who asked for less motion; put the start state in the keyframes instead. Measured with the setting on, in Chrome 152 and Firefox 156: `animation-name` computes to `none` and the element stays at `opacity: 0`, with nothing left to reveal it.",
+    "The mixin writes one branch, `no-preference`, so the base rule is what a reader gets when the block does not apply: a system asking for less motion, and a browser that does not know the query. Measured with the setting switched on and off in Chrome 152 and Firefox 156, a `transition: transform 0.2s` inside the block computes to `transform` over `0.2s` with no preference and to `all` over `0s` with reduce on. Safari's setting follows the system's and was not switched on."
   ],
   "arguments": [],
   "examples": [

@@ -37,11 +37,36 @@ That override has to name every animation and every transition on the page, incl
 
 <Hint kind="info">
 
-The media queries were checked to parse in Chrome 152. The reduced-motion setting itself could not be emulated in the browser used for this page, so turn it on in your own system settings to see the examples below stand still.
+Measured with the setting on and off, in Chrome 152 and Firefox 156: with no preference the card's `transition` computes to `transform, box-shadow` over `0.2s`, and with reduce on it computes to `all` over `0s`, so nothing moves. The trap above was measured the same way, and an element left at `opacity: 0` in its base rule stays at `0` with no animation to reveal it. Safari's own setting follows the system, and was not switched on here.
 
 </Hint>
 
 ## Examples
+
+The first demo below says which of the two applies to you as you read it, so the two after it are worth reading in that light.
+
+<Example caption="The mixin writes one branch, so the base rule is what is left when it does not apply. Here that difference is the whole demo: the line changes for a reader whose system asks for less motion, and for one whose browser does not know the question.">
+```scss
+.state {
+  &::after {
+    content: "Your system asks for less motion, so the blocks below are skipped.";
+  }
+
+  @include motion-safe {
+    &::after {
+      content: "Your system has no preference, so the blocks below apply.";
+    }
+  }
+}
+```
+```html
+<style>
+  body { display: grid; place-items: center; min-height: 92px; padding: 16px; }
+  :where(.state) { max-width: 40ch; padding: 14px 18px; border-radius: 10px; background: #dee0cd; color: #2f3937; font: 500 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; text-align: center; }
+</style>
+<p class="state"></p>
+```
+</Example>
 
 <Example caption="A transition that only runs for people who have not asked for less motion. **Hover over the card.** With reduce motion turned on, the card still lifts, but at once rather than gliding.">
 ```scss

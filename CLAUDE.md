@@ -166,6 +166,14 @@ added, do all of this and report it:
    in each. An error is justified only when the old CSS was dropped, never
    matched, or demonstrably did nothing, and a browser that disagrees with the
    others is reported rather than averaged away.
+   **A user preference can be switched on for two of the three.** Chrome takes
+   `--force-prefers-reduced-motion`, and Firefox reads
+   `ui.prefersReducedMotion` from a `user.js` in a throwaway profile passed
+   with `--profile`; `--setpref` on the command line does not take. Safari
+   follows the system setting, which is the maintainer's to change, so it is
+   reported as not covered rather than guessed at. The `motion-safe` page said
+   the setting "could not be emulated" until 28 September 2026, when it turned
+   out it could.
 3. **When the browser kept it, build the case.** Look at where the value lands
    in the emitted CSS, write the markup a user would have, and look at the
    result. Decide by what the mixin does with the value, not by whether the
