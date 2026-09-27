@@ -17,7 +17,9 @@
     ".stripe { @include center(\"vertical\"); }"
   ],
   "rejects": [
-    ".modal { @include center(diagonal); }"
+    ".modal { @include center(diagonal); }",
+    ".modal { @include center(null); }",
+    ".modal { @include center((both,)); }"
   ],
   "caveats": [
     "The element has to be positioned, and its parent too: the mixin writes the offsets and the translation, not `position`.",

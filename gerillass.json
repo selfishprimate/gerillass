@@ -760,7 +760,9 @@
         ".stripe { @include center(\"vertical\"); }"
       ],
       "rejects": [
-        ".modal { @include center(diagonal); }"
+        ".modal { @include center(diagonal); }",
+        ".modal { @include center(null); }",
+        ".modal { @include center((both,)); }"
       ]
     },
     {
