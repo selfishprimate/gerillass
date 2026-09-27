@@ -10,12 +10,14 @@ page_image: "gerillass-except.jpg"
 
 <Member name="except">
 
-The **Except** Sass mixin helps you apply style changes to every element in a list except the ones you choose.
-<Hint kind="info">
+The **Except** Sass mixin styles every element among its siblings but the ones
+you name. Name them by position, counted from either end and as many as you
+like, by one of the four words `first`, `last`, `odd` and `even`, or by a
+selector they carry.
 
-You can pass a **string** value to target elements by their `id`, `class`, or `pseudo-class` selector. Or you can pass a **number** (or **multiple numbers** separated by commas) to target items by their index position in the list.
-
-</Hint>
+Positions are counted with `:nth-of-type`, which counts siblings of the same
+tag rather than the things you are counting, so `$of` is there for when those
+are not the same; see [below](#counting-by-something-other-than-the-tag).
 
 </Member>
 
@@ -29,147 +31,152 @@ You can pass a **string** value to target elements by their `id`, `class`, or `p
 
 ## Examples
 
-The demos below are a row of positions. Each call names the ones it leaves out, and the chips it matched, which is everything else, are the dark ones.
-
-```html
-<div class="list-wrapper">
-  <div class="list-item">01</div>
-  <div class="list-item">02</div>
-  <div class="list-item">03</div>
-  <div class="list-item">04</div>
-  <div class="list-item">05</div>
-  <div class="list-item">06</div>
-</div>
-```
-
-<Example caption="`first` leaves the first item alone and takes the rest.">
+<Example caption="The four words, each on its own row. `first` and `last` leave one end alone, which is how a separator stops before the end of a trail; `odd` and `even` leave every other one. The dark chips are the ones the rule matched." listing="<div class=&quot;list-wrapper&quot;>
+&#32;&#32;<div class=&quot;list-item&quot;>01</div>
+&#32;&#32;<div class=&quot;list-item&quot;>02</div>
+&#32;&#32;<div class=&quot;list-item&quot;>03</div>
+&#32;&#32;<div class=&quot;list-item&quot;>04</div>
+&#32;&#32;<div class=&quot;list-item&quot;>05</div>
+&#32;&#32;<div class=&quot;list-item&quot;>06</div>
+</div>">
 ```scss
-.list-wrapper{
-  .list-item{
-    @include except(first){
-      background-color: #2f3937;
-      color: #fafaf8;
-    }
-  }
+// The styles the matched chips take, written once.
+%taken {
+  background-color: #2f3937;
+  color: #fafaf8;
+}
+
+.row--first .list-item {
+  @include except(first) { @extend %taken; }
+}
+
+.row--last .list-item {
+  @include except(last) { @extend %taken; }
+}
+
+.row--odd .list-item {
+  @include except(odd) { @extend %taken; }
+}
+
+.row--even .list-item {
+  @include except(even) { @extend %taken; }
 }
 ```
 ```html
-<div class="list-wrapper example01">
-  <div class="list-item">01</div>
-  <div class="list-item">02</div>
-  <div class="list-item">03</div>
-  <div class="list-item">04</div>
-  <div class="list-item">05</div>
-  <div class="list-item">06</div>
-</div>
-```
-</Example>
-
-<Example caption="`last` leaves the last one out, which is how a separator stops before the end of a trail.">
-```scss
-.list-wrapper{
-  .list-item{
-    @include except(last){
-      background-color: #2f3937;
-      color: #fafaf8;
-    }
-  }
-}
-```
-```html
-<div class="list-wrapper example02">
-  <div class="list-item">01</div>
-  <div class="list-item">02</div>
-  <div class="list-item">03</div>
-  <div class="list-item">04</div>
-  <div class="list-item">05</div>
-  <div class="list-item">06</div>
-</div>
-```
-</Example>
-
-<Example caption="A number leaves that position out.">
-```scss
-.list-wrapper{
-  .list-item{
-    @include except(3){
-      background-color: #2f3937;
-      color: #fafaf8;
-    }
-  }
-}
-```
-```html
-<div class="list-wrapper example03">
-  <div class="list-item">01</div>
-  <div class="list-item">02</div>
-  <div class="list-item">03</div>
-  <div class="list-item">04</div>
-  <div class="list-item">05</div>
-  <div class="list-item">06</div>
-</div>
-```
-</Example>
-
-<Example caption="`even` and `odd` leave every other one out.">
-```scss
-.list-wrapper{
-  .list-item{
-    @include except(even){
-      background-color: #2f3937;
-      color: #fafaf8;
-    }
-  }
-}
-```
-```html
-<div class="list-wrapper example04">
-  <div class="list-item">01</div>
-  <div class="list-item">02</div>
-  <div class="list-item">03</div>
-  <div class="list-item">04</div>
-  <div class="list-item">05</div>
-  <div class="list-item">06</div>
-</div>
-```
-</Example>
-
-<Hint kind="info">
-
-Remember that when you target multiple items in the list, the arguments you pass must be numbers separated by commas.
-
-</Hint>
-
-<Example caption="Several positions in one call, separated by commas.">
-```scss
-.list-wrapper{
-  .list-item{
-    @include except(1, 4, 5){
-      background-color: #2f3937;
-      color: #fafaf8;
-    }
-  }
-}
-```
-```html
-<div class="list-wrapper example05">
+<style>
+  body { margin: 0; padding: 16px; background: #fafaf8; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .label { margin: 0 0 6px; font: 600 12px ui-monospace, monospace; color: #8b9381; }
+  .label + .list-wrapper { margin-bottom: 16px; }
+</style>
+  <p class="label">except(first)</p>
+  <div class="list-wrapper row--first">
     <div class="list-item">01</div>
     <div class="list-item">02</div>
     <div class="list-item">03</div>
     <div class="list-item">04</div>
     <div class="list-item">05</div>
     <div class="list-item">06</div>
-</div>
+  </div>
+  <p class="label">except(last)</p>
+  <div class="list-wrapper row--last">
+    <div class="list-item">01</div>
+    <div class="list-item">02</div>
+    <div class="list-item">03</div>
+    <div class="list-item">04</div>
+    <div class="list-item">05</div>
+    <div class="list-item">06</div>
+  </div>
+  <p class="label">except(odd)</p>
+  <div class="list-wrapper row--odd">
+    <div class="list-item">01</div>
+    <div class="list-item">02</div>
+    <div class="list-item">03</div>
+    <div class="list-item">04</div>
+    <div class="list-item">05</div>
+    <div class="list-item">06</div>
+  </div>
+  <p class="label">except(even)</p>
+  <div class="list-wrapper row--even">
+    <div class="list-item">01</div>
+    <div class="list-item">02</div>
+    <div class="list-item">03</div>
+    <div class="list-item">04</div>
+    <div class="list-item">05</div>
+    <div class="list-item">06</div>
+  </div>
 ```
 </Example>
 
-<Hint kind="info">
+<Example caption="Positions, counted from 1. A negative counts from the end, so `-2` is the second from last, and several in one call are separated by commas. The last row mixes the two: the first item and the last two are left out.">
+```scss
+// The styles the matched chips take, written once.
+%taken {
+  background-color: #2f3937;
+  color: #fafaf8;
+}
 
-When you pass arguments for the `id` or `class` attributes of the items, don't forget to wrap your arguments in quotes.
+.row--one .list-item {
+  @include except(3) { @extend %taken; }
+}
 
-</Hint>
+.row--neg .list-item {
+  @include except(-2) { @extend %taken; }
+}
 
-<Example caption="A selector rather than a position: everything except the items carrying that class." listing="<div class=&quot;list-wrapper&quot;>
+.row--many .list-item {
+  @include except(1, 4, 5) { @extend %taken; }
+}
+
+.row--mixed .list-item {
+  @include except(1, -1, -2) { @extend %taken; }
+}
+```
+```html
+<style>
+  body { margin: 0; padding: 16px; background: #fafaf8; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .label { margin: 0 0 6px; font: 600 12px ui-monospace, monospace; color: #8b9381; }
+  .label + .list-wrapper { margin-bottom: 16px; }
+</style>
+  <p class="label">except(3)</p>
+  <div class="list-wrapper row--one">
+    <div class="list-item">01</div>
+    <div class="list-item">02</div>
+    <div class="list-item">03</div>
+    <div class="list-item">04</div>
+    <div class="list-item">05</div>
+    <div class="list-item">06</div>
+  </div>
+  <p class="label">except(-2)</p>
+  <div class="list-wrapper row--neg">
+    <div class="list-item">01</div>
+    <div class="list-item">02</div>
+    <div class="list-item">03</div>
+    <div class="list-item">04</div>
+    <div class="list-item">05</div>
+    <div class="list-item">06</div>
+  </div>
+  <p class="label">except(1, 4, 5)</p>
+  <div class="list-wrapper row--many">
+    <div class="list-item">01</div>
+    <div class="list-item">02</div>
+    <div class="list-item">03</div>
+    <div class="list-item">04</div>
+    <div class="list-item">05</div>
+    <div class="list-item">06</div>
+  </div>
+  <p class="label">except(1, -1, -2)</p>
+  <div class="list-wrapper row--mixed">
+    <div class="list-item">01</div>
+    <div class="list-item">02</div>
+    <div class="list-item">03</div>
+    <div class="list-item">04</div>
+    <div class="list-item">05</div>
+    <div class="list-item">06</div>
+  </div>
+```
+</Example>
+
+<Example caption="A selector rather than a position, which excludes the elements carrying it and counts nothing. The two chips with `exclude` on them are the ones left alone." listing="<div class=&quot;list-wrapper&quot;>
 &#32;&#32;<div class=&quot;list-item exclude&quot;>01</div>
 &#32;&#32;<div class=&quot;list-item&quot;>02</div>
 &#32;&#32;<div class=&quot;list-item&quot;>03</div>
@@ -178,98 +185,25 @@ When you pass arguments for the `id` or `class` attributes of the items, don't f
 &#32;&#32;<div class=&quot;list-item exclude&quot;>06</div>
 </div>">
 ```scss
-.list-wrapper{
-  .list-item{
-    @include except(".exclude"){
-      background-color: #2f3937;
-      color: #fafaf8;
-    }
+.list-item {
+  @include except(".exclude") {
+    background-color: #2f3937;
+    color: #fafaf8;
   }
 }
 ```
 ```html
-<div class="list-wrapper example06">
-  <div class="list-item">01</div>
+<style>
+  body { margin: 0; padding: 16px; background: #fafaf8; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .exclude { outline: 2px dashed #db504a; outline-offset: 2px; }
+</style>
+<div class="list-wrapper">
+  <div class="list-item exclude">01</div>
   <div class="list-item">02</div>
   <div class="list-item">03</div>
   <div class="list-item">04</div>
   <div class="list-item">05</div>
-  <div class="list-item">06</div>
-</div>
-```
-</Example>
-
-<Hint kind="info">
-
-**Information:** You can pass negative values to exclude elements based on their position among a group of siblings, counting from the end.
-
-</Hint>
-
-<Example caption="A negative position counts from the end, so `-2` is the second from the last.">
-```scss
-.list-wrapper{
-  .list-item{
-    @include except(-2){
-      background-color: #2f3937;
-      color: #fafaf8;
-    }
-  }
-}
-```
-```html
-<div class="list-wrapper example07">
-    <div class="list-item">01</div>
-    <div class="list-item">02</div>
-    <div class="list-item">03</div>
-    <div class="list-item">04</div>
-    <div class="list-item">05</div>
-    <div class="list-item">06</div>
-</div>
-```
-</Example>
-
-<Example caption="Several negative positions in one call.">
-```scss
-.list-wrapper {
-  .list-item {
-    @include except(-2, -4) {
-      background-color: #2f3937;
-      color: #fafaf8;
-    }
-  }
-}
-```
-```html
-<div class="list-wrapper example08">
-  <div class="list-item">01</div>
-  <div class="list-item">02</div>
-  <div class="list-item">03</div>
-  <div class="list-item">04</div>
-  <div class="list-item">05</div>
-  <div class="list-item">06</div>
-</div>
-```
-</Example>
-
-<Example caption="The two kinds mixed: the first item and the last two left out.">
-```scss
-.list-wrapper {
-  .list-item {
-    @include except(1, -1, -2) {
-      background-color: #2f3937;
-      color: #fafaf8;
-    }
-  }
-}
-```
-```html
-<div class="list-wrapper example09">
-  <div class="list-item">01</div>
-  <div class="list-item">02</div>
-  <div class="list-item">03</div>
-  <div class="list-item">04</div>
-  <div class="list-item">05</div>
-  <div class="list-item">06</div>
+  <div class="list-item exclude">06</div>
 </div>
 ```
 </Example>
