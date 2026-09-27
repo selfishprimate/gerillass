@@ -17,6 +17,17 @@
 // cards and nothing else. Measured in Chrome 152, Firefox 156 and Safari
 // 26.6.2, where all three agree and all three support the `of` form.
 @mixin only($params...) {
+  // Both a position and a selector are attached to `&`, so the mixin needs one
+  // to attach to and a block to put inside it. Sass's own messages named
+  // neither: at the root it failed with "Top-level selectors may not contain
+  // the parent selector &", and with no block it wrote an empty rule that Sass
+  // then removed, so the call did nothing and said nothing.
+  @if not & {
+    @error "`only` narrows the selector it is called in, so call it inside one, such as `li { @include only(1) { color: red; } }`.";
+  }
+  @if not meta.content-exists() {
+    @error "`only` wraps the styles you pass it, so call it with a block, such as `@include only(1) { color: red; }`.";
+  }
   $keywords: meta.keywords($params);
   @each $key, $value in $keywords {
     @if $key != "of" {
@@ -32,7 +43,7 @@
   }
 
   @if list.length($params) == 0 {
-    @error "Please pass an argument. The argument must be either a negative or positive number or list of numbers. Or pass one of the following predefined string values: 'first', 'last', 'odd', 'even'.";
+    @error "`only` was given no position. Pass a whole number such as `1` or `-2`, a list of them, one of `first`, `last`, `odd`, `even`, or a selector such as `.card`.";
   } @else if list.length($params) == 1 {
     $value: list.nth($params, 1);
     @if meta.type-of($value) == "number" {
@@ -70,6 +81,13 @@
         @if $of != null {
           @error "`only(#{meta.inspect($value)}, $of: #{meta.inspect($of)})` asks for two different things: `#{$value}` narrows the element itself, while `$of` says what to count. Pass a position, such as `only(2, $of: #{meta.inspect($of)})`.";
         }
+        // A bare word is **not** refused here, and this was tried. Appended to
+        // `li` it makes `linonsense`, a type selector for an element nobody
+        // has, which Chrome 152, Firefox 156 and Safari 26.6.2 all keep and
+        // none of them ever matches, so a misspelt `first` styles nothing. But
+        // appended to `.c` the same word makes `.c-active`, which is the
+        // documented suffix form and has a spec of its own: the mixin cannot
+        // tell the two apart without knowing what `&` ends in. The suffix wins.
         &#{$value} {
           @content;
         }

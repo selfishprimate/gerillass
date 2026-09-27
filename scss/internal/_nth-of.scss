@@ -32,6 +32,19 @@
       @return "a selector to count by cannot hold `#{$character}`. Pass something like `\".card\"` or `\"li.done\"`";
     }
   }
+  // The `of` argument is a list of complex selectors, which cannot hold a
+  // pseudo-element: the thing being counted is a child, and a pseudo-element
+  // is not one. Measured in all three, `:nth-child(2 of ::before)` was dropped
+  // by Firefox 156 and Safari 26.6.2 and kept by Chrome 152, where it matched
+  // nothing, so the rule was dead in every one of them.
+  @if string.index("#{$text}", "::") {
+    @return "a selector to count by cannot hold a pseudo-element. Firefox and Safari drop the rule and Chrome keeps one that matches nothing";
+  }
+  @each $legacy in ":before" ":after" ":first-line" ":first-letter" {
+    @if string.index("#{$text}", $legacy) == 1 {
+      @return "`#{$legacy}` is a pseudo-element, and a selector to count by cannot hold one. Firefox and Safari drop the rule and Chrome keeps one that matches nothing";
+    }
+  }
   @return null;
 }
 

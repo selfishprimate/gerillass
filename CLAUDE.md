@@ -988,6 +988,8 @@ Two pieces of work are open:
   modes when `init` is written inside a selector or a time at the root, and
   `long-shadow` naming a zero length or step, which Sass answers `false` to on
   `0px == 0` so both divided by zero and stopped the build with its own message,
+  and `only` and `except` refusing a call with no selector or no block and a
+  pseudo-element in `$of`,
   all on
   `docs-examples-review`;
   and the demos and prose

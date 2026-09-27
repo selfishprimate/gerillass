@@ -14,6 +14,17 @@
 // than the things being counted. See scss/internal/_nth-of.scss for what was
 // measured.
 @mixin except($params...) {
+  // Both a position and a selector are attached to `&`, so the mixin needs one
+  // to attach to and a block to put inside it. Sass's own messages named
+  // neither: at the root it failed with "Top-level selectors may not contain
+  // the parent selector &", and with no block it wrote an empty rule that Sass
+  // then removed, so the call did nothing and said nothing.
+  @if not & {
+    @error "`except` narrows the selector it is called in, so call it inside one, such as `li { @include except(1) { color: red; } }`.";
+  }
+  @if not meta.content-exists() {
+    @error "`except` wraps the styles you pass it, so call it with a block, such as `@include except(1) { color: red; }`.";
+  }
   $keywords: meta.keywords($params);
   @each $key, $value in $keywords {
     @if $key != "of" {
@@ -29,7 +40,7 @@
   }
 
   @if list.length($params) == 0 {
-    @error "Please pass an argument. The argument must be either a negative or positive number or list of numbers. Or pass one of the following predefined string values: 'first', 'last', 'odd', 'even'.";
+    @error "`except` was given no position. Pass a whole number such as `1` or `-2`, a list of them, one of `first`, `last`, `odd`, `even`, or a selector such as `.card`.";
   } @else if list.length($params) == 1 {
     $value: list.nth($params, 1);
     @if meta.type-of($value) == "number" {

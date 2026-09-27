@@ -91,6 +91,8 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `hide` names a call with no selector to hang on | a better message; not breaking |
 | `loadify` refuses a negative duration | breaking, loud |
 | `loadify` names `init` inside a selector, and a time at the root | a better message; not breaking |
+| `only` and `except` refuse a call with no selector or no block | breaking, loud |
+| `only` and `except` refuse a pseudo-element in `$of` | breaking, loud |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -2388,6 +2390,36 @@ message that named neither mode:
 Each now names the mode it is in and where the other one goes. The root
 messages also gained the backticks the rest of the library's use. Nothing that
 compiled before compiles differently.
+
+---
+
+## Break: `only` and `except` refuse three dead selectors
+
+All three were valid Sass that compiled into CSS which could not work, and all
+three were measured in Chrome 152, Firefox 156 and Safari 26.6.2.
+
+**No selector, or no block.** Both mixins attach to `&` and wrap what they are
+given. At the root Sass failed with its own "Top-level selectors may not contain
+the parent selector &", which pointed inside the library; with no block they
+wrote an empty rule that Sass then removed, so the call did nothing and said
+nothing. Each now says which is missing.
+
+```scss
+.list-item { @include only(1); }        // 3.x: nothing at all
+@include only(1) { color: red; }        // 3.x: Sass's own message
+```
+
+**A pseudo-element in `$of`.** The `of` argument counts children, and a
+pseudo-element is not one. `:nth-child(2 of ::before)` was dropped outright by
+Firefox and Safari; Chrome kept it and it matched nothing. `:before`, `:after`,
+`:first-line` and `:first-letter` go the same way.
+
+**A bare word is still accepted**, and it was tried. Inside `li`, `only(fist)`
+writes `lifist`, which all three keep as a perfectly good selector for an
+element nobody has, so a misspelt `first` styles nothing. But inside `.c` the
+same word writes `.c-active`, the documented suffix form, and the mixin cannot
+tell the two apart without knowing what `&` ends in. The suffix wins; the page
+says so instead.
 
 ---
 

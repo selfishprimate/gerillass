@@ -281,6 +281,8 @@ a dropped declaration rather than an error.
 - Without `$of` the selector is `:nth-of-type`, which counts siblings **of the same tag** rather than the things being picked. Measured in Chrome 152, Firefox 156 and Safari 26.6.2 on a grid holding a `<div class="note">` and three `<div class="card">`: `.card:nth-of-type(1)` matched nothing, because the first div is the note, and every other number was one out. With `$of: ".card"` the same call matched the first card in all three.
 - `:nth-child(… of S)` is in Chrome 111, Firefox 113 and Safari 9, and `CSS.supports("selector(:nth-child(2 of .card))")` answers true in all three.
 - `$of` counts, it does not narrow: a call that passes a selector as the position, such as `only(".featured")`, is not counting anything, so passing both raises.
+- The mixin narrows the selector it is called in and wraps the styles it is given, so it needs both a selector and a block. At the root Sass failed with "Top-level selectors may not contain the parent selector &", which named neither the mixin nor the fix, and with no block it wrote an empty rule that Sass then removed, so the call did nothing and said nothing. Both raise since 4.0.0.
+- `$of` counts children, so it cannot hold a pseudo-element. Measured in all three, `:nth-child(2 of ::before)` was dropped by Firefox 156 and Safari 26.6.2 and kept by Chrome 152, where it matched nothing, so the rule was dead in every one of them.
 
 **`focus-ring`**
 
@@ -339,6 +341,9 @@ a dropped declaration rather than an error.
 - Without `$of` the selector is `:nth-of-type`, which counts siblings **of the same tag** rather than the things being picked. Measured in Chrome 152, Firefox 156 and Safari 26.6.2 on a grid holding a `<div class="note">` and three `<div class="card">`: `.card:nth-of-type(1)` matched nothing, because the first div is the note, and every other number was one out. With `$of: ".card"` the same call matched the first card in all three.
 - `:nth-child(… of S)` is in Chrome 111, Firefox 113 and Safari 9, and `CSS.supports("selector(:nth-child(2 of .card))")` answers true in all three.
 - `$of` counts, it does not narrow: a call that passes a selector as the position, such as `only(".featured")`, is not counting anything, so passing both raises.
+- The mixin narrows the selector it is called in and wraps the styles it is given, so it needs both a selector and a block. At the root Sass failed with "Top-level selectors may not contain the parent selector &", which named neither the mixin nor the fix, and with no block it wrote an empty rule that Sass then removed, so the call did nothing and said nothing. Both raise since 4.0.0.
+- `$of` counts children, so it cannot hold a pseudo-element. Measured in all three, `:nth-child(2 of ::before)` was dropped by Firefox 156 and Safari 26.6.2 and kept by Chrome 152, where it matched nothing, so the rule was dead in every one of them.
+- A bare word passed as the selector is not checked, because the mixin cannot tell a typo from a suffix. Attached to a class it continues the name, so `only("-active")` inside `.c` writes `.c-active`, which is the documented suffix form; attached to a tag the same word makes a type selector for an element nobody has, so `only(fist)` inside `li` writes `lifist`, which Chrome 152, Firefox 156 and Safari 26.6.2 all keep and none of them ever matches.
 
 **`placeholder-shown`**
 
