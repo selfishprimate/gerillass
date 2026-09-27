@@ -14,6 +14,28 @@
 // 25px below the middle in all three. With `translate` the same element stays
 // in the middle, since `translate`, `rotate`, `scale` and `transform` are
 // separate properties that compose.
+//
+// `translate` is still the mixin's, and that is the collision that is left: a
+// rule of the element's own such as `translate: 0 12px` replaces the offset,
+// and the element jumps by half its own size. Measured in the same three
+// browsers, a 132x60 element centred and then given that rule sat 66.1px right
+// and 30px below the middle.
+//
+// There is no property-level way round it. Nothing in CSS offsets an element
+// by half its own size except a transform, so the only alternative is to
+// centre by layout instead: a grid parent and `place-self: center` on the
+// absolutely positioned child, which was measured centring an auto-sized
+// element in all three and leaves `translate` free (the same element with
+// `translate: 0 12px` sat 12px below the middle, as asked). That needs the
+// parent to be a grid, which this mixin cannot write without changing the
+// layout of every other child, so it is documented on the page rather than
+// done here.
+//
+// Two things that look like replacements and are not, measured in all three:
+// `inset: 0; margin: auto` stretches an auto-sized element to fill its parent
+// rather than centring it, and anchor positioning's `position-area: center`
+// centres an element on a *sibling* anchor but not on its own containing-block
+// parent, so it does not answer this at all.
 @mixin center($axis: "both") {
   @if not list.index("both" "horizontal" "vertical", $axis) {
     // meta.inspect, so `center(null)` names null rather than printing an
