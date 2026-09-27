@@ -28,6 +28,26 @@ npm run build --prefix site    # production build into site/dist
 npm run preview --prefix site  # serve that build
 ```
 
+**The dev server runs as a LaunchAgent on the maintainer's machine**, so it is
+already up: `com.selfishprimate.gerillass-dev`, which runs
+`~/.local/bin/gerillass-dev.sh` at login and restarts it if it exits. It was
+set up on 27 September 2026 because a server started from inside Claude Code is
+a child of the app and went away with it, most visibly after the Mac slept.
+
+Two things follow. **Do not call `preview_start` for it** — it refuses a port
+held by a process it did not start, and says so; navigate to
+`http://localhost:7001` instead. And `preview_logs` shows nothing for it: the
+output is in `~/Library/Logs/gerillass-dev.log` and `.err.log`.
+
+```bash
+launchctl kickstart -k gui/$(id -u)/com.selfishprimate.gerillass-dev   # restart
+launchctl bootout gui/$(id -u)/com.selfishprimate.gerillass-dev        # stop until next login
+launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.selfishprimate.gerillass-dev.plist
+```
+
+Vite's own watcher picks up every edit, so the agent only needs restarting when
+`vite.config.js` or a plugin under `site/plugins/` changes.
+
 There is no lint step and there are no tests. The library's suite at the
 repository root does not cover this directory.
 
