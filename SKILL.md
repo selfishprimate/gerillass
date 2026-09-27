@@ -232,6 +232,12 @@ a dropped declaration rather than an error.
 - `translate` is the mixin's, so a rule of the element's own that sets it replaces the offset and the element jumps by half its own size: measured in Chrome 152, Firefox 156 and Safari 26.6.2, a 132x60 element centred and then given `translate: 0 12px` sat 66.1px right and 30px below the middle in all three. `transform`, `rotate` and `scale` are free; only `translate` collides.
 - Centring by layout instead needs no mixin and leaves `translate` free: a grid parent and `place-self: center` on the absolutely positioned child, measured centring an auto-sized element in all three browsers. It is not what the mixin writes because it needs the parent to be a grid. `inset: 0; margin: auto` is not an alternative, measured: it stretches an auto-sized element to fill the parent.
 
+**`circle`**
+
+- A length is written as the width and the height, and a percentage or a sizing keyword as the width with `aspect-ratio: 1`, because a height of the same value does not match the width on the other axis. Until 4.0.0 every value was written as both and the ones that cannot match drew an ellipse without a word: measured in Chrome 152, Firefox 156 and Safari 26.6.2 in a 300x100 box, `circle(100%)` was 300x100, `circle(50%)` 150x50 and `circle(auto)` 48x14, and all nine are circles now.
+- The height is kept for a length rather than replaced by the ratio, and that is deliberate: measured in all three browsers, a circle in a flex row at `align-items: stretch` is 80x80 with a height and 80x140 with `aspect-ratio` alone, since the height is what defeats the stretch. `align-self: start` defeats it too, but it also overrides an `align-items: center` the row asked for and moves the circle to the top.
+- `display: inline-block` is written after the size, so a circle that should lay its content out needs its own `display` after the include.
+
 **`columnizer`**
 
 - The gutter is the container's `gap`. Since 4.0.0 a margin on the columns adds to it instead of being overridden by the mixin's own margins, so remove a column margin that was only there for spacing.
@@ -465,7 +471,7 @@ a dropped declaration rather than an error.
 | `breakpoint($params...)` | Media query built from the breakpoint map, or from raw lengths. |
 | `breakpointer($selector: null)` | Development badge naming the active breakpoint, pinned to a corner of the page. |
 | `center($axis: "both")` | Centres an absolutely positioned element in its positioned parent, leaving transform free. |
-| `circle($size)` | Square element with a fully rounded border, i.e. a circle. |
+| `circle($size)` | Circle of a given size, which follows its container when the size is not a length. |
 | `columnizer($params...)` | Flexbox grid of equal columns, with an optional gutter written as gap and an optional fill for the last row. |
 | `container-query($params...)` | A @container rule, taking the same argument shapes as breakpoint so the two read alike. Sizes may be a key from $map-for-breakpoints or a raw length, and a length is the common case because a container is usually narrower than the viewport. Nothing matches at all unless an ancestor was declared with the container mixin. |
 | `container($name: null, $type: inline-size)` | Marks an element as a query container, so container-query can ask about its width instead of the viewport's. The rule that asks has to sit on a descendant: an element is never matched by a @container rule reading its own container, and nothing warns you when it is not. |

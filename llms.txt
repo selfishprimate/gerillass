@@ -30,7 +30,7 @@ Arguments are validated and refused with a message naming what is accepted, so a
 - [breakpoint($params...)](https://docs.gerillass.com/docs/breakpoint/): Media query built from the breakpoint map, or from raw lengths.
 - [breakpointer($selector: null)](https://docs.gerillass.com/docs/breakpointer/): Development badge naming the active breakpoint, pinned to a corner of the page.
 - [center($axis: "both")](https://docs.gerillass.com/docs/center/): Centres an absolutely positioned element in its positioned parent, leaving transform free.
-- [circle($size)](https://docs.gerillass.com/docs/circle/): Square element with a fully rounded border, i.e.
+- [circle($size)](https://docs.gerillass.com/docs/circle/): Circle of a given size, which follows its container when the size is not a length.
 - [columnizer($params...)](https://docs.gerillass.com/docs/columnizer/): Flexbox grid of equal columns, with an optional gutter written as gap and an optional fill for the last row.
 - [container-query($params...)](https://docs.gerillass.com/docs/container-query/): A @container rule, taking the same argument shapes as breakpoint so the two read alike.
 - [container($name: null, $type: inline-size)](https://docs.gerillass.com/docs/container/): Marks an element as a query container, so container-query can ask about its width instead of the viewport's.

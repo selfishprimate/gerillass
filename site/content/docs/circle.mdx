@@ -10,21 +10,27 @@ page_image: "gerillass-circle.jpg"
 
 <Member name="circle">
 
-The **Circle** Sass mixin helps you easily create perfect circle shapes.
+The **Circle** Sass mixin writes the three declarations a circle needs: the
+size on both axes and a radius that rounds it away.
+
+Pass a length and it is that size. Pass a percentage or a sizing keyword and
+the circle follows its container instead, which is the part worth knowing: the
+mixin writes `aspect-ratio` there rather than a height, because a height of the
+same value measures a different edge and would give you an ellipse.
 
 </Member>
 
 ## Arguments
 
 <Arguments of="circle">
-  <Argument name="$size" type="number (with unit)">The size of the circle, used for both the width and the height. Accepts what <a href="/docs/sizer">Sizer</a> accepts: a length or a percentage, a sizing keyword, a CSS-wide keyword, <code>var()</code> or a maths function.</Argument>
+  <Argument name="$size" type="number (with unit)">The size of the circle. Accepts what <a href="/docs/sizer">Sizer</a> accepts: a length or a percentage, a sizing keyword, a CSS-wide keyword, <code>var()</code> or a maths function. A length is written as the width and the height; a percentage or a keyword is written as the width with <code>aspect-ratio: 1</code>, since a height of the same value would not match it.</Argument>
 </Arguments>
 
 ## Examples
 
-<Example caption="Call the mixin inside a selector and pass a number value (with a unit) for the `$size` argument.">
+<Example caption="A length is the circle's size, on both axes. This one is an avatar beside its name, which is where most circles on a page are.">
 ```scss
-.element{
+.element {
   @include circle(150px);
 }
 ```
@@ -46,6 +52,35 @@ The **Circle** Sass mixin helps you easily create perfect circle shapes.
 </div>
 ```
 </Example>
+
+<Example resizable hint="Drag the box: the circles keep their shape and follow the column they are in." caption="A percentage follows the container instead, and stays a circle while it does. Three columns of a grid, each holding a circle at `100%`: the width comes from the column and the height from the ratio. Until 4.0.0 this was an ellipse as wide as the column and as tall as whatever was inside it.">
+```scss
+.element {
+  @include circle(100%);
+}
+```
+```html
+<style>
+  body { margin: 0; padding: 18px; background: #fafaf8; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #657167; }
+  .team { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; text-align: center; }
+  .team figure { margin: 0; }
+  .element { overflow: hidden; }
+  .element img { width: 100%; height: 100%; object-fit: cover; }
+  .team figcaption { padding-top: 8px; font-weight: 600; color: #2f3937; }
+</style>
+<div class="team">
+  <figure><div class="element"><img src="/images/backgrounds/01.jpg" alt=""></div><figcaption>Dune</figcaption></figure>
+  <figure><div class="element"><img src="/images/backgrounds/02.jpg" alt=""></div><figcaption>The long room</figcaption></figure>
+  <figure><div class="element"><img src="/images/backgrounds/03.jpg" alt=""></div><figcaption>Nine to five</figcaption></figure>
+</div>
+```
+</Example>
+
+<Hint kind="warning">
+
+**Changed in Gerillass 4.0.0.** A size that is not a length is written as the width with `aspect-ratio: 1` rather than as a height that cannot match it. Measured in a 300&times;100 box, `circle(100%)` used to be 300&times;100 and `circle(auto)` 48&times;14; both are circles now. A length compiles exactly as before.
+
+</Hint>
 
 ## What it refuses
 

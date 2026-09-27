@@ -1024,6 +1024,15 @@ exports[`Manifest examples center: .stripe { @include center("vertical"); } 1`] 
 }"
 `;
 
+exports[`Manifest examples circle: .avatar { @include circle(100%); } 1`] = `
+".avatar {
+  width: 100%;
+  aspect-ratio: 1;
+  display: inline-block;
+  border-radius: 100%;
+}"
+`;
+
 exports[`Manifest examples circle: .dot { @include circle(24px); } 1`] = `
 ".dot {
   width: 24px;

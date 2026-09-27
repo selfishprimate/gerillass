@@ -1,15 +1,51 @@
 @charset "UTF-8";
 
+@use "sass:list";
+@use "sass:math";
 @use "sass:meta";
+@use "sass:string";
 @use "../internal/length-problem" as *;
 
+// The sizes that cannot be written as a height and still equal the width: a
+// percentage is a share of a different edge on each axis, and each keyword
+// measures a different thing across than it does down. `$size` accepts all of
+// them, and until 4.0.0 the mixin wrote `height: $size` for them too and drew
+// an ellipse without a word. Measured in Chrome 152, Firefox 156 and Safari
+// 26.6.2, in a 300x100 box: `circle(100%)` was 300x100, `circle(auto)` 52x15
+// and `circle(fit-content)` 38x15.
+$-not-square: "auto" "min-content" "max-content" "fit-content" "stretch"
+  "-webkit-fill-available" "-moz-available";
+
+@function -follows-the-width($size) {
+  @if meta.type-of($size) == "number" {
+    @return math.unit($size) != "%";
+  }
+  @if meta.type-of($size) == "string" {
+    @return not list.index($-not-square, string.to-lower-case($size));
+  }
+  // A calculation, as everywhere else in the library, is taken on trust.
+  @return true;
+}
+
+// A length keeps `height`, and that is deliberate rather than tidy: the two
+// declarations are not interchangeable in a flex row. Measured in all three
+// browsers, a circle in a row at `align-items: stretch` is 80x80 with a height
+// and 80x140 with `aspect-ratio` alone, because the height is what defeats the
+// stretch. `align-self: start` defeats it too and was tried, but it also
+// overrides an `align-items: center` the row asked for, moving the circle from
+// the middle to the top. So the height stays wherever it works, and the ratio
+// is written only for the values where it never did.
 @mixin circle($size) {
   $problem: sizeProblem($size);
   @if $problem {
     @error "`#{meta.inspect($size)}` is not a valid $size for `circle`: #{$problem}. A browser drops the width and height.";
   }
   width: $size;
-  height: $size;
+  @if -follows-the-width($size) {
+    height: $size;
+  } @else {
+    aspect-ratio: 1;
+  }
   display: inline-block;
   border-radius: 100%;
 }

@@ -80,6 +80,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `between` takes two sizes and says so | breaking, loud, for three sizes; a better message for one |
 | `breakpointer` writes a badge, not bare `content` | fixes an unusable default; silent |
 | `breakpointer` refuses an empty selector and one passed inside a selector | breaking, loud |
+| `circle` writes `aspect-ratio` for a size that is not a length | fixes an ellipse; silent |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -2007,6 +2008,35 @@ path, as every quoted string is.
 `$filter-direction` turns a gradient, and one colour is a flat wash with
 nothing to turn. The value used to be dropped without a word; now the build
 says it was left out. The CSS is unchanged.
+
+---
+
+## Change: `circle` draws a circle for every size it accepts
+
+`$size` has always accepted a percentage and the sizing keywords, and for those
+the mixin drew an ellipse. It wrote the value as the width *and* the height,
+and neither a percentage nor a keyword measures the same thing across as it
+does down:
+
+```scss
+.avatar { @include circle(100%); }
+/* 3.x */   width: 100%; height: 100%;     /* 300x100 in a 300x100 box */
+/* 4.0.0 */ width: 100%; aspect-ratio: 1;  /* 300x300 */
+```
+
+Measured in Chrome 152, Firefox 156 and Safari 26.6.2, in a 300x100 box: `100%`
+was 300x100, `50%` 150x50, and `auto`, `min-content`, `max-content`,
+`fit-content` and the vendor keywords 48x14. All nine are circles now.
+
+**A length is untouched.** Sweeping 44 size kinds, the CSS changes for exactly
+the twelve that could never be square; every length, `var()`, maths function
+and interpolated length compiles byte for byte as before, and nothing started
+or stopped raising.
+
+The height is kept for a length rather than replaced by the ratio everywhere,
+and that is worth knowing if you were thinking of doing the same by hand: in a
+flex row at `align-items: stretch`, a circle is 80x80 with a height and 80x140
+with `aspect-ratio` alone, because the height is what defeats the stretch.
 
 ---
 

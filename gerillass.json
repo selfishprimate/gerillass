@@ -775,15 +775,24 @@
           "name": "$size",
           "required": true,
           "accepts": [
-            "a length used for both width and height"
+            "a length, written as the width and the height",
+            "a percentage or a sizing keyword, written as the width with aspect-ratio: 1, since a height of the same value would not match it",
+            "var() and the maths functions, written as both",
+            "a word that is not a sizing keyword, a unitless number other than 0, a unit that is not a length, a negative length and a quoted length are refused"
           ]
         }
       ],
       "file": "scss/library/_circle.scss",
       "signature": "circle($size)",
-      "summary": "Square element with a fully rounded border, i.e. a circle.",
+      "summary": "Circle of a given size, which follows its container when the size is not a length.",
+      "caveats": [
+        "A length is written as the width and the height, and a percentage or a sizing keyword as the width with `aspect-ratio: 1`, because a height of the same value does not match the width on the other axis. Until 4.0.0 every value was written as both and the ones that cannot match drew an ellipse without a word: measured in Chrome 152, Firefox 156 and Safari 26.6.2 in a 300x100 box, `circle(100%)` was 300x100, `circle(50%)` 150x50 and `circle(auto)` 48x14, and all nine are circles now.",
+        "The height is kept for a length rather than replaced by the ratio, and that is deliberate: measured in all three browsers, a circle in a flex row at `align-items: stretch` is 80x80 with a height and 80x140 with `aspect-ratio` alone, since the height is what defeats the stretch. `align-self: start` defeats it too, but it also overrides an `align-items: center` the row asked for and moves the circle to the top.",
+        "`display: inline-block` is written after the size, so a circle that should lay its content out needs its own `display` after the include."
+      ],
       "examples": [
-        ".dot { @include circle(24px); }"
+        ".dot { @include circle(24px); }",
+        ".avatar { @include circle(100%); }"
       ],
       "rejects": [
         ".dot { @include circle(huge); }",
