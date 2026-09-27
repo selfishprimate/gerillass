@@ -470,6 +470,14 @@ stylesheet reached none of them: background-dots lost the photograph under its
 dots, since that comes from the mixin's `::before` and the hand copy had left it
 out. Those divs get the target class and the same filtering.
 
+**A demo's own `<style>` is written after the compiled CSS, so it wins a tie.**
+The example's stylesheet goes into the frame first and the fence's `<style>`
+second, so a demo rule of equal specificity overrides what the mixin wrote.
+It bit `columnizer`, where a plain `.band` background beat the `.band--1` the
+example set, and `container-query`, where `.media img` beat the width the query
+wrote inside `@container`. Wrap the demo's own base rule in `:where()` and the
+mixin's output wins, whatever the order.
+
 **A `sandbox` demo keeps the declarations the mixin does not emit.** The
 scissors demo carried `background-color: #5bc0bb` beside the `clip-path`, and
 the mixin emits only the clip, so dropping the lot left a correctly clipped box
@@ -963,7 +971,10 @@ Nine mixins show none, and the reason differs:
   differently at one viewport width, which is the thing a media query cannot
   do.
 - **It needs something the frame has not got.** `font-face` wants font files
-  and `reset-css` a page to reset. `escape-to-parent` was on this list until
+  and `reset-css` a page to reset. `container-query` was on this list with
+  `container` and came off with it: its page now carries a media object that
+  changes twice as the container narrows, and three `between` ranges reading
+  one container, exactly one lit at any width. `escape-to-parent` was on this list until
   4.0.0, when its page gained three demos that carry the theme or state class
   on a wrapper inside the frame itself.
 

@@ -32,18 +32,99 @@ A size on its own matches that exact width and no other, `(width: 400px)`, which
 
 ## Examples
 
-The markup all of these assume: the container on the parent, the query on the child.
-
-```html
-<div class="card">
-  <h2 class="title">A title that grows once its card is wide enough</h2>
-</div>
-```
+<Example resizable hint="Drag the box: the panel is the container, and the component inside it changes twice on the way in." caption="**`container` marks the box, `container-query` asks about it.** The panel carries the container and the media object inside it reads it, at 20rem and again at 30rem. Nothing here knows the window's width; every rule is answering the panel.">
 ```scss
-.card {
-  @include container("card");
+.panel {
+  @include container("panel");
+}
+
+.media {
+  @include container-query(min, 20rem, $name: "panel") {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+}
+
+.media img {
+  @include container-query(min, 20rem, $name: "panel") {
+    flex: none;
+    width: 110px;
+    aspect-ratio: 1;
+  }
+}
+
+.media__note {
+  display: none;
+
+  @include container-query(min, 30rem, $name: "panel") {
+    display: block;
+  }
 }
 ```
+```html
+<style>
+  body { margin: 0; padding: 18px; background: #fafaf8; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #657167; }
+  .panel { padding: 14px; border-radius: 14px; background: #fff; box-shadow: 0 4px 14px rgb(34 44 37 / 0.07); }
+  :where(.media img) { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 10px; }
+  .media h3 { margin: 10px 0 0; font: 700 16px Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
+  .media > div h3 { margin-top: 0; }
+  .media__note { margin: 4px 0 0; font-size: 13px; }
+</style>
+<div class="panel">
+  <div class="media">
+    <img src="/images/backgrounds/02.jpg" alt="">
+    <div>
+      <h3>The long room</h3>
+      <p class="media__note">Two hundred thousand books, and a ladder on a rail for the top shelf.</p>
+    </div>
+  </div>
+</div>
+```
+</Example>
+
+<Example resizable hint="Drag the box: exactly one band is lit at any width, and the handover happens on the pixel." caption="Three `between` ranges reading the same container, laid end to end. A range that ends at a name from the map ends *before* it, written as `width <`, so `small medium` stops where `medium large` starts: no width lights two bands, and none lights nothing. This is what the note below is about.">
+```scss
+.bands {
+  @include container("bands");
+}
+
+.band--1 {
+  @include container-query(between, xsmall small, $name: "bands") {
+    background: #69995d;
+    color: #fafaf8;
+  }
+}
+
+.band--2 {
+  @include container-query(between, small medium, $name: "bands") {
+    background: #668f80;
+    color: #fafaf8;
+  }
+}
+
+.band--3 {
+  @include container-query(between, medium large, $name: "bands") {
+    background: #5bc0bb;
+    color: #222c25;
+  }
+}
+```
+```html
+<style>
+  body { margin: 0; padding: 16px; background: #fafaf8; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #657167; }
+  .bands { display: grid; gap: 8px; }
+  .band { display: flex; justify-content: space-between; padding: 14px 16px; border-radius: 10px; font-weight: 600; }
+  :where(.band) { background: #f2f2eb; }
+  .band code { font: inherit; font-family: ui-monospace, monospace; opacity: 0.75; }
+</style>
+<div class="bands">
+  <div class="band band--1"><span>xsmall &rarr; small</span><code>&lt; 576</code></div>
+  <div class="band band--2"><span>small &rarr; medium</span><code>576 &ndash; &lt; 768</code></div>
+  <div class="band band--3"><span>medium &rarr; large</span><code>768 &ndash; &lt; 992</code></div>
+</div>
+```
+</Example>
 
 <Example caption="From a width upwards, which is the one you will reach for most.">
 ```scss
