@@ -31,7 +31,11 @@ The **Columnizer** Sass mixin lays the children of an element out in **equal col
 
 ## Examples
 
-<Example caption="The children are the columns: there is no wrapper around each one, and the count is the only number you give. Six pictures in three, with a gutter that separates the rows as well as the columns, because it is written as the container's `gap`.">
+<Example listing="&lt;div class=&quot;gallery&quot;&gt;
+&#32;&#32;&lt;figure&gt;&lt;img src=&quot;/dune.jpg&quot; alt=&quot;&quot;&gt;&lt;figcaption&gt;Dune&lt;/figcaption&gt;&lt;/figure&gt;
+&#32;&#32;&lt;figure&gt;&lt;img src=&quot;/library.jpg&quot; alt=&quot;&quot;&gt;&lt;figcaption&gt;The long room&lt;/figcaption&gt;&lt;/figure&gt;
+&#32;&#32;&lt;!-- and so on --&gt;
+&lt;/div&gt;" caption="The children are the columns: there is no wrapper around each one, and the count is the only number you give. Six pictures in three, with a gutter that separates the rows as well as the columns, because it is written as the container's `gap`.">
 ```scss
 .gallery {
   @include columnizer(3, 20px);
@@ -163,7 +167,8 @@ The **Columnizer** Sass mixin lays the children of an element out in **equal col
 ```
 </Example>
 
-<Example caption="The column count from a custom property, with a gutter, so one rule serves grids of different widths. Each list sets `--cols` in its own markup.">
+<Example listing="&lt;div class=&quot;stats&quot; style=&quot;--cols: 2&quot;&gt;…&lt;/div&gt;
+&lt;div class=&quot;stats&quot; style=&quot;--cols: 4&quot;&gt;…&lt;/div&gt;" caption="The column count from a custom property, so one rule serves grids of different widths: each list sets `--cols` on itself. This is the call the old margin-based gutter could not compile at all, since `:nth-child(var(--cols)n)` cannot be written.">
 ```scss
 .stats {
   @include columnizer(var(--cols), 12px);
