@@ -954,10 +954,14 @@ Nine mixins show none, and the reason differs:
   screen and not to the frame, so resizing the box proves nothing. `breakpoint`
   and `remove` were on this list until 4.0.0 and now carry a `resizable` demo,
   as does `adaptive`.
-- **Nothing is meant to be visible.** `container` sets `container-type`,
-  which shows nothing until a `@container` rule reads it. `hide` was on this
+- **Nothing is meant to be visible.** `hide` was on this
   list until 4.0.0, when its page gained an icon toolbar, skip links revealed
-  with the Tab key, and labels hidden on narrow screens.
+  with the Tab key, and labels hidden on narrow screens. `container` was on it
+  too, on the argument that `container-type` shows nothing until a `@container`
+  rule reads it, which is true of the mixin alone and not of the page: it now
+  shows the same card in a wide column and a narrow one, laying itself out
+  differently at one viewport width, which is the thing a media query cannot
+  do.
 - **It needs something the frame has not got.** `font-face` wants font files
   and `reset-css` a page to reset. `escape-to-parent` was on this list until
   4.0.0, when its page gained three demos that carry the theme or state class

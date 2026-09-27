@@ -82,6 +82,8 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `breakpointer` refuses an empty selector and one passed inside a selector | breaking, loud |
 | `circle` writes `aspect-ratio` for a size that is not a length | fixes an ellipse; silent |
 | `columnizer` refuses a column count of zero or less, and a `$fill` that is not a boolean | breaking, loud |
+| `container` writes `$type` unquoted | fixes an element that was not a container; silent |
+| `container` refuses a name of nothing but spaces | breaking, loud |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -2009,6 +2011,35 @@ path, as every quoted string is.
 `$filter-direction` turns a gradient, and one colour is a flat wash with
 nothing to turn. The value used to be dropped without a word; now the build
 says it was left out. The CSS is unchanged.
+
+---
+
+## Change: `container` writes its type unquoted, and refuses an empty name
+
+`container("card", "size")` wrote `container-type: "size"`, quotes and all:
+
+```css
+/* 3.x */   container-type: "size";
+/* 4.0.0 */ container-type: size;
+```
+
+Measured in Chrome 152, Firefox 156 and Safari 26.6.2, the quoted form computes
+to `normal`, so the element was **not a container at all** and no `@container`
+rule reading it ever matched. The mixin already unquoted `$name`; it unquotes
+`$type` now as well. An unquoted type compiles byte for byte as before.
+
+A `$name` of nothing but spaces is refused rather than written. It compiled to
+`container-name: ;`, which all three browsers drop, so the element became an
+unnamed container and every `@container card` rule in the stylesheet quietly
+stopped matching.
+
+```scss
+@include container("  ");   // stops the build
+```
+
+Sweeping 44 calls, six change their CSS — the quoted types, each from a value
+the browser drops to one it keeps — and two go from compiling to raising.
+Nothing stopped raising.
 
 ---
 

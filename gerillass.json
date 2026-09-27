@@ -916,7 +916,10 @@
           "default": "null",
           "accepts": [
             "a container name as a string, such as \"card\"",
-            "null for an unnamed container"
+            "several names separated by spaces",
+            "null for an unnamed container",
+            "none, a CSS-wide keyword and var() are written as they are",
+            "and, or, not, default, a name starting with a digit, a name holding a character such as . or #, a name of nothing but spaces, and none or a CSS-wide keyword beside another name are refused"
           ]
         },
         {
@@ -925,7 +928,8 @@
           "accepts": [
             "inline-size",
             "size",
-            "normal"
+            "normal",
+            "quoted or not; the mixin writes it unquoted"
           ]
         }
       ],
@@ -933,7 +937,9 @@
       "signature": "container($name: null, $type: inline-size)",
       "summary": "Marks an element as a query container, so container-query can ask about its width instead of the viewport's. The rule that asks has to sit on a descendant: an element is never matched by a @container rule reading its own container, and nothing warns you when it is not.",
       "caveats": [
-        "An element does not match a `@container` query that reads its own container, and nothing warns. Put the `container-query` on a descendant."
+        "An element does not match a `@container` query that reads its own container, and nothing warns. Put the `container-query` on a descendant.",
+        "$type is written unquoted since 4.0.0. `container(\"card\", \"size\")` wrote `container-type: \"size\"`, which computes to `normal` in Chrome 152, Firefox 156 and Safari 26.6.2, so the element was not a container at all and no query on it ever matched.",
+        "A name of nothing but spaces is refused since 4.0.0. It wrote `container-name: ;`, which all three browsers drop, so the element became an unnamed container and every `@container <that name>` rule silently stopped matching."
       ],
       "examples": [
         ".card { @include container(\"card\"); }",
@@ -944,7 +950,9 @@
         ".card { @include container(\"card\", sideways); }",
         ".card { @include container(42); }",
         ".card { @include container(\"and\"); }",
-        ".card { @include container(\"1card\"); }"
+        ".card { @include container(\"1card\"); }",
+        ".card { @include container(\"  \"); }",
+        ".card { @include container(\"card\", null); }"
       ]
     },
     {

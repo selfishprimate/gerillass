@@ -28,23 +28,84 @@ A media query asks how wide the **viewport** is. That is the wrong question for 
 
 ## Examples
 
-<Example caption="A named container. The name is what `container-query` targets when several containers are nested.">
+<Example caption="**The card is the container, and it reads its own width.** One card, written once, dropped into three slots on the same page; the number beside each is how wide that copy is. The first is under 17rem, so it stacks. The second is over it and becomes a row. The third is over 26rem as well, so the description appears too. The window is one width for all three, which is exactly what a media query would have to go on.">
 ```scss
 .card {
   @include container("card");
 }
+
+.card__body {
+  @include container-query(min, 17rem, $name: "card") {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+  }
+}
+
+.card__note {
+  display: none;
+
+  @include container-query(min, 26rem, $name: "card") {
+    display: block;
+  }
+}
+```
+```html
+<style>
+  body { margin: 0; padding: 18px; background: #fafaf8; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #657167; }
+  .slots { display: grid; gap: 14px; justify-items: start; }
+  .slot { display: grid; grid-template-columns: 56px 1fr; gap: 10px; align-items: center; max-width: 100%; }
+  .slot--s { width: 260px; }
+  .slot--m { width: 380px; }
+  .slot--l { width: 520px; }
+  .slot > span { font: 600 11px ui-monospace, monospace; color: #8b9381; text-align: right; }
+  .card { border-radius: 14px; background: #fff; box-shadow: 0 4px 14px rgb(34 44 37 / 0.07); }
+  .card__body { padding: 12px; }
+  .card img { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 10px; }
+  .card__body img { flex: none; width: 96px; aspect-ratio: 1; }
+  .card h3 { margin: 10px 0 0; font: 700 15px Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
+  .card__body > div h3 { margin-top: 0; }
+  .card__note { margin: 4px 0 0; font-size: 13px; }
+</style>
+<div class="slots">
+  <div class="slot slot--s">
+    <span>194px</span>
+    <div class="card"><div class="card__body">
+      <img src="/images/backgrounds/01.jpg" alt="">
+      <div><h3>Merzouga</h3><p class="card__note">Four days on foot, and a night where the dunes go quiet.</p></div>
+    </div></div>
+  </div>
+  <div class="slot slot--m">
+    <span>314px</span>
+    <div class="card"><div class="card__body">
+      <img src="/images/backgrounds/01.jpg" alt="">
+      <div><h3>Merzouga</h3><p class="card__note">Four days on foot, and a night where the dunes go quiet.</p></div>
+    </div></div>
+  </div>
+  <div class="slot slot--l">
+    <span>454px</span>
+    <div class="card"><div class="card__body">
+      <img src="/images/backgrounds/01.jpg" alt="">
+      <div><h3>Merzouga</h3><p class="card__note">Four days on foot, and a night where the dunes go quiet.</p></div>
+    </div></div>
+  </div>
+</div>
 ```
 </Example>
 
-<Example caption="Without a name. Queries with no `$name` resolve to the nearest container ancestor.">
+<Example caption="A named container. The name is what `container-query` targets when several containers are nested, and without one a query resolves to the nearest container ancestor, whichever that turns out to be.">
 ```scss
+.card {
+  @include container("card");
+}
+
 .panel {
   @include container;
 }
 ```
 </Example>
 
-<Example caption="Querying height as well as width costs more, because the element then has to be sized independently of its content. Reach for it only when you need it.">
+<Example caption="Querying height as well as width costs more, because the element then has to be sized independently of its content, which is what `size` asks for. Reach for it only when a query really needs the height.">
 ```scss
 .panel {
   @include container(null, size);
@@ -72,6 +133,22 @@ Error: `sideways` is not a valid $type for `container`. Pass one of: inline-size
 ```
 ```text
 Error: `42` is not a valid $name for `container`. Pass a name as a string, such as `"card"`, or no name at all.
+```
+
+Since 4.0.0 a `$type` in quotes is written without them. `container-type: "size"` computes to `normal` in
+Chrome 152, Firefox 156 and Safari 26.6.2, so the element was not a container
+at all and no query on it ever matched. A name of nothing but spaces is
+refused, because it wrote `container-name: ;`, which all three drop, leaving an
+unnamed container and every `@container card` rule in the stylesheet quietly
+matching nothing.
+
+```scss
+.card {
+  @include container("  ");
+}
+```
+```text
+Error: `"  "` is not a valid $name for `container`: a name of nothing but spaces writes an empty `container-name`, which a browser drops, so the container ends up unnamed. Pass a name such as `"card"`, or no name at all.
 ```
 
 ## Related Links

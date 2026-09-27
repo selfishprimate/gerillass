@@ -255,6 +255,8 @@ a dropped declaration rather than an error.
 **`container`**
 
 - An element does not match a `@container` query that reads its own container, and nothing warns. Put the `container-query` on a descendant.
+- $type is written unquoted since 4.0.0. `container("card", "size")` wrote `container-type: "size"`, which computes to `normal` in Chrome 152, Firefox 156 and Safari 26.6.2, so the element was not a container at all and no query on it ever matched.
+- A name of nothing but spaces is refused since 4.0.0. It wrote `container-name: ;`, which all three browsers drop, so the element became an unnamed container and every `@container <that name>` rule silently stopped matching.
 
 **`counter`**
 

@@ -54,18 +54,31 @@ $-forbidden-in-name: "." "," "/" "#" ":" ";" "(" ")" "[" "]" "{" "}" "!" "@" "$"
 // 400px)`, while the same query did match a child of it.
 @mixin container($name: null, $type: inline-size) {
   @if not list.index("inline-size" "size" "normal", $type) {
-    @error "`#{$type}` is not a valid $type for `container`. Pass one of: inline-size, size, normal.";
+    // meta.inspect, so `container("card", null)` names null rather than
+    // printing an empty pair of backticks.
+    @error "`#{meta.inspect($type)}` is not a valid $type for `container`. Pass one of: inline-size, size, normal.";
   }
   @if $name != null and meta.type-of($name) != "string" {
-    @error "`#{$name}` is not a valid $name for `container`. Pass a name as a string, such as `\"card\"`, or no name at all.";
+    @error "`#{meta.inspect($name)}` is not a valid $name for `container`. Pass a name as a string, such as `\"card\"`, or no name at all.";
   }
   @if $name != null {
+    // A name of nothing but spaces reached `container-name: ;`, which a browser
+    // drops, so the element ended up an unnamed container and every
+    // `@container <that name>` rule in the stylesheet silently never matched.
+    // Measured in Chrome 152, Firefox 156 and Safari 26.6.2: container-name
+    // computed to `none`.
+    @if wordsOf("#{$name}") == () {
+      @error "`#{meta.inspect($name)}` is not a valid $name for `container`: a name of nothing but spaces writes an empty `container-name`, which a browser drops, so the container ends up unnamed. Pass a name such as `\"card\"`, or no name at all.";
+    }
     $problem: -name-problem($name);
     @if $problem {
       @error "`#{$name}` is not a valid $name for `container`: #{$problem}, and a browser drops the whole declaration. Pass a name such as `\"card\"`.";
     }
   }
-  container-type: $type;
+  // Unquoted, as the name is. `container("card", "size")` wrote
+  // `container-type: "size"`, which computes to `normal` in all three browsers,
+  // so the element was not a container at all and no query on it ever matched.
+  container-type: string.unquote($type);
   @if $name {
     container-name: string.unquote($name);
   }
