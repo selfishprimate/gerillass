@@ -16,7 +16,7 @@ The **Long Shadow** Sass mixin draws the long shadow of flat design: a solid blo
 
 <Hint kind="warning">
 
-**New in Gerillass 4.0.0.** The long shadow of flat design is one `box-shadow` per pixel of its length, and nobody types forty of them. The mixin works the count out from the length over the step, so `long-shadow(bottom-right, #fbbf24, 40px)` writes forty layers from one line, and the direction is measured as an angle rather than picked from a list of eight.
+**New in Gerillass 4.0.0.** The long shadow of flat design is one `box-shadow` per pixel of its length, and nobody types forty of them. The mixin works the count out from the length over the step, so `long-shadow(#fbbf24, 40px)` writes forty layers from one line, and the direction is measured as an angle rather than picked from a list of eight.
 
 </Hint>
 
@@ -56,6 +56,87 @@ $ink: oklch(0.21 0.04 265);
   .button { padding: 14px 24px; border: 3px solid oklch(0.21 0.04 265); border-radius: 4px; background: #bdc488; color: oklch(0.21 0.04 265); font: 800 15px Inter, ui-sans-serif, system-ui, sans-serif; letter-spacing: 0.04em; text-transform: uppercase; }
 </style>
 <button class="button">Get started</button>
+```
+</Example>
+
+<Example caption="The direction is an angle measured from the top and clockwise, so the eight names are shorthand for `0deg`, `45deg` and the rest. A diagonal sits the same distance from the tile as a straight one, which is what keeps the four here looking like one set.">
+```scss
+.tile {
+  &--one {
+    @include long-shadow(#2f3937, 44px, bottom-right);
+  }
+
+  &--two {
+    @include long-shadow(#2f3937, 44px, bottom-left);
+  }
+
+  &--three {
+    @include long-shadow(#2f3937, 44px, bottom);
+  }
+
+  &--four {
+    @include long-shadow(#2f3937, 44px, 160deg);
+  }
+}
+```
+```html
+<style>
+  body { padding: 28px 70px 70px; }
+  .tiles { display: grid; grid-template-columns: repeat(2, 108px); justify-content: start; gap: 70px 108px; font: 700 13px/1 Inter, ui-sans-serif, system-ui, sans-serif; }
+  :where(.tile) { display: grid; place-items: center; height: 108px; border-radius: 12px; background: #5bc0bb; color: #fafaf8; }
+</style>
+<div class="tiles">
+  <div class="tile tile--one">45&deg;</div>
+  <div class="tile tile--two">315&deg;</div>
+  <div class="tile tile--three">180&deg;</div>
+  <div class="tile tile--four">160&deg;</div>
+</div>
+```
+</Example>
+
+<Example caption="`$fade` is the colour the shadow runs out into, one `color-mix()` per copy. Written by hand that is forty mixes rather than forty offsets, which is the argument that pays for itself." listing="<div class=&quot;pair&quot;>
+&#32;&#32;<div class=&quot;chip chip--solid&quot;>Solid</div>
+&#32;&#32;<div class=&quot;chip chip--fade&quot;>Fading</div>
+</div>">
+```scss
+.chip {
+  &--solid {
+    @include long-shadow(#ed6a5a, 56px, bottom-right);
+  }
+
+  &--fade {
+    @include long-shadow(#ed6a5a, 56px, bottom-right, transparent);
+  }
+}
+```
+```html
+<style>
+  body { padding: 20px 76px 76px; }
+  .pair { display: grid; grid-template-columns: repeat(2, 1fr); gap: 76px; font: 700 14px/1 Inter, ui-sans-serif, system-ui, sans-serif; }
+  :where(.chip) { display: grid; place-items: center; height: 96px; border-radius: 12px; background: #f7ec59; color: #2f3937; }
+</style>
+<div class="pair">
+  <div class="chip chip--solid">Solid</div>
+  <div class="chip chip--fade">Fading</div>
+</div>
+```
+</Example>
+
+<Example caption="What the mixin is for: a flat badge whose shadow runs the width of the panel. The call is one line and the CSS below it is 88 layers, each a copy of the circle a pixel further along, which is why the edge is a clean diagonal rather than a stair.">
+```scss
+.badge {
+  @include long-shadow(#69995d, 88px, bottom-right, $step: 1px);
+}
+```
+```html
+<style>
+  body { padding: 0; }
+  .panel { display: grid; place-items: center; padding: 34px 34px 120px; border-radius: 14px; background: #dee0cd; }
+  :where(.badge) { display: grid; place-items: center; width: 108px; height: 108px; border-radius: 50%; background: #eefa92; color: #2f3937; font: 800 34px/1 Inter, ui-sans-serif, system-ui, sans-serif; }
+</style>
+<div class="panel">
+  <div class="badge">01</div>
+</div>
 ```
 </Example>
 

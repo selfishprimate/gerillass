@@ -326,6 +326,7 @@ a dropped declaration rather than an error.
 - `box-shadow` draws behind the element, so an element with a transparent or translucent background shows every layer through itself, and the effect reads as a stack rather than a shadow. Give it a solid background.
 - A shadow is clipped by an ancestor that clips, which is what `overflow: hidden` on a card does. Measured in Chrome 152: the layers stop at the container's padding box rather than running off it.
 - Measured in Chrome 152, Firefox 156 and Safari 26.6.2, `box-shadow` keeps every colour kind this takes, a keyword, a hex, `rgb()`, `hsl()`, `currentColor`, `var()`, `color-mix()`, `oklch()`, `light-dark()` and a system colour, and drops only a percentage and a unitless number among lengths. Those two are what `$length` and `$step` refuse.
+- A zero is checked with its unit taken off, because Sass answers `false` to `0px == 0`. Until that was fixed, `long-shadow(red, 0px)` and a `$step: 0px` divided by zero and stopped the build with Sass's own "Unsupported operation: Infinity or NaN toInt", which named neither the mixin nor the argument.
 
 **`motion-safe`**
 

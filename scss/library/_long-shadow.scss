@@ -4,6 +4,7 @@
 @use "sass:math";
 @use "sass:meta";
 @use "sass:string";
+@use "../utilities/clear-unit" as *;
 @use "../internal/color-problem" as *;
 @use "../internal/shadow-direction" as *;
 @use "../internal/length-problem" as *;
@@ -74,8 +75,11 @@ $-max-layers: 500;
     @error "`#{meta.inspect($length)}` is not a valid $length for `long-shadow`: #{$problem}.#{$hint}";
   }
   // The count comes out of the length, so a length only the browser resolves
-  // cannot be used: there is nothing here to divide.
-  @if meta.type-of($length) != "number" or $length == 0 {
+  // cannot be used: there is nothing here to divide. A zero is tested with the
+  // unit taken off, because Sass answers `false` to `0px == 0`: without that,
+  // `long-shadow(red, 0px)` divided zero by zero and stopped the build with
+  // Sass's own "Unsupported operation: Infinity or NaN toInt".
+  @if meta.type-of($length) != "number" or clearUnit($length) == 0 {
     @error "`#{meta.inspect($length)}` cannot be drawn by `long-shadow`. A long shadow is a stack of copies, so the length has to be one this stylesheet can count, such as `40px` or `2.5rem`.";
   }
 
@@ -85,7 +89,9 @@ $-max-layers: 500;
     $this-step: math.div($length, 40);
   } @else {
     $problem: lengthProblem($step, $percent: false, $negative: false);
-    @if $problem or meta.type-of($step) != "number" or $step == 0 {
+    // The same zero, on the other side of the division: `$step: 0px` reached
+    // the same Sass error until 4.0.0.
+    @if $problem or meta.type-of($step) != "number" or clearUnit($step) == 0 {
       @error "`#{meta.inspect($step)}` is not a valid $step for `long-shadow`. Pass a length greater than zero, such as `1px`, in the same unit as the length it steps through.";
     }
     @if not math.compatible($step, $length) {

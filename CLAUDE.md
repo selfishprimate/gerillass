@@ -977,7 +977,10 @@ Two pieces of work are open:
   refusing a call with no selector to hang on, where Sass's own message named
   neither the mixin nor the fix, and `loadify` refusing a negative duration,
   which swapped its two arguments rather than being dropped, and naming its two
-  modes when `init` is written inside a selector or a time at the root, all on
+  modes when `init` is written inside a selector or a time at the root, and
+  `long-shadow` naming a zero length or step, which Sass answers `false` to on
+  `0px == 0` so both divided by zero and stopped the build with its own message,
+  all on
   `docs-examples-review`;
   and the demos and prose
   of every documentation page, swept and rewritten on `examples-polish`,
