@@ -290,6 +290,7 @@ a dropped declaration rather than an error.
 
 - `$file-formats` defaults to `woff2`. A project that ships only `.woff` or `.ttf` and passes no formats gets no font, silently, in Chrome, Firefox and Safari. Pass the formats you have files for. Until 4.0.0 the default was `eot woff2 woff ttf svg`, which made webpack, esbuild and Parcel fail on a missing `.eot`.
 - Must be called at the root of a stylesheet, not inside a selector.
+- An empty $file-formats is refused since 4.0.0. It wrote no `src` at all and reached `list.nth` on the way, so the build stopped with Sass's own message about a list index rather than anything naming the mixin.
 
 **`glass`**
 

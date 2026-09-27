@@ -972,7 +972,9 @@ Two pieces of work are open:
   and refusing a name of nothing but spaces, and `counter` refusing three
   positional values it cannot read, more than three, and an `$items` holding a
   comma, and `escape-to-parent` refusing a pseudo-element on a nested rule,
-  and `focus-ring` refusing a width of zero, all on `docs-examples-review`;
+  and `focus-ring` refusing a width of zero, and `font-face` naming an empty
+  `$file-formats` rather than failing with Sass's index message, all on
+  `docs-examples-review`;
   and the demos and prose
   of every documentation page, swept and rewritten on `examples-polish`,
   branched from `glass`; and a filled `text-shadow` stepping in pixels rather than in one of

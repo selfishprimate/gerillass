@@ -87,6 +87,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `counter` refuses three values it cannot read, and a `$items` with a comma | breaking, loud |
 | `escape-to-parent` refuses a pseudo-element on a nested rule | breaking, loud |
 | `focus-ring` refuses a width of zero | breaking, loud |
+| `font-face` names an empty `$file-formats` | a better message; not breaking |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find

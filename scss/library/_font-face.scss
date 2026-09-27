@@ -212,6 +212,12 @@
 
     // fontSource returns nothing for a format it does not know, so a typo
     // dropped that source and a list of nothing but typos dropped `src`.
+    // An empty list wrote no `src` at all, and reached `list.nth` on the way,
+    // so the build stopped with Sass's own message about an index rather than
+    // with anything naming the mixin.
+    @if list.length($file-formats) == 0 {
+      @error "`font-face` was given no file formats. Pass one or more of: #{map.keys($map-for-font-formats)}, such as `$file-formats: woff2`.";
+    }
     @each $format in $file-formats {
       @if not map.has-key($map-for-font-formats, $format) {
         @error "`#{meta.inspect($format)}` is not a valid file format for `font-face`. Pass one or more of: #{map.keys($map-for-font-formats)}.";

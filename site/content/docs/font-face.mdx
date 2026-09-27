@@ -11,11 +11,8 @@ page_image: "gerillass-font-face.jpg"
 <Member name="font-face">
 
 The **Font Face** Sass mixin writes an `@font-face` rule for one font file: the family, the path to the file, its style and weight, and the formats you ship. It checks the style, weight and `font-display` against what a browser keeps, so a typo stops the build instead of leaving a font that never matches.
-<Hint kind="info">
 
-**Important:** The mixin must be called at the root level of your stylesheet.
-
-</Hint>
+Call it at the root of a stylesheet: a `@font-face` rule is not a rule about an element, and one written inside a selector stops the build.
 
 </Member>
 
@@ -144,6 +141,18 @@ Error: `bolder` is not a valid $font-weight for `font-face`: a weight is normal,
 A weight passed in the style's place is read as the weight. That used to work only for the hundreds, so `font-face("Roboto", "...", 450)` wrote `font-style: 450`; it now writes `font-weight: 450`.
 
 A quoted number is checked for its shape and not its range, because Sass cannot turn the text of a number into one: `$font-weight: "1001"` is let through.
+
+A format the mixin does not know stops the build, and so does a list with
+nothing in it: an empty `$file-formats` wrote no `src` at all, and reached
+Sass's own message about a list index on the way, which named neither the
+mixin nor the argument.
+
+```scss
+@include font-face("Roboto", "/fonts/roboto-regular", $file-formats: ());
+```
+```text
+Error: `font-face` was given no file formats. Pass one or more of: eot, woff2, woff, ttf, svg, such as `$file-formats: woff2`.
+```
 
 ## Related Links
 
