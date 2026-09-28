@@ -328,8 +328,8 @@ Firefox 156 and Safari 26.6.2, all three the same.
 ```
 </Example>
 
-<Example caption="A pricing table that marks its middle plan, counted by the plans rather than by the tag, so the heading above them changes nothing." listing="<div class=&quot;plans&quot;>
-&#32;&#32;<h4>Choose a plan</h4>
+<Example caption="A plan picker whose heading sits in the same row. The heading is a `div` like the plans are, so `:nth-of-type(2)` counts it and marks **Starter**; counted by the plans, `2` is Team. Measured in Chrome 152, Firefox 156 and Safari 26.6.2, all three the same." listing="<div class=&quot;plans&quot;>
+&#32;&#32;<div class=&quot;plans__title&quot;>Choose a plan</div>
 &#32;&#32;<div class=&quot;plan&quot;>Starter</div>
 &#32;&#32;<div class=&quot;plan&quot;>Team</div>
 &#32;&#32;<div class=&quot;plan&quot;>Business</div>
@@ -339,18 +339,18 @@ Firefox 156 and Safari 26.6.2, all three the same.
   @include only(2, $of: ".plan") {
     background: #222c25;
     color: #fafaf8;
-    transform: scale(1.06);
   }
 }
 ```
 ```html
 <style>
+  body { padding: 4px; }
   .plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; font: 14px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; }
-  .plans h4 { grid-column: 1 / -1; margin: 0; font-size: 15px; color: #657167; }
-  .plan { padding: 18px 12px; border-radius: 10px; background: #f2f2eb; text-align: center; font-weight: 700; color: #668f80; }
+  .plans__title { grid-column: 1 / -1; font-size: 15px; font-weight: 700; color: #657167; }
+  :where(.plan) { padding: 18px 12px; border-radius: 10px; background: #f2f2eb; text-align: center; font-weight: 700; color: #668f80; }
 </style>
 <div class="plans">
-  <h4>Choose a plan</h4>
+  <div class="plans__title">Choose a plan</div>
   <div class="plan">Starter</div>
   <div class="plan">Team</div>
   <div class="plan">Business</div>
