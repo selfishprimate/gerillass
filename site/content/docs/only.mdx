@@ -29,211 +29,181 @@ You can pass a **string** value to target elements by their `id`, `class`, or `p
 
 ## Examples
 
-The demos below are a row of positions. Each call names the ones it takes, and the chips it matched are the dark ones.
+The demos below are a row of six chips, one call per row. The call is printed above the row it produced, and the chips it matched are the dark ones. [Except](/docs/except) is documented on the same six chips with the same calls, so the two pages can be read side by side: whatever `only` takes here, `except` leaves.
 
+<Example caption="The four words, each on its own row. `first` and `last` take one end, whatever the list turns out to hold; `odd` and `even` take every other one, which is where striping comes from." listing="<div class=&quot;list-wrapper&quot;>
+&#32;&#32;<div class=&quot;list-item&quot;>01</div>
+&#32;&#32;<div class=&quot;list-item&quot;>02</div>
+&#32;&#32;<div class=&quot;list-item&quot;>03</div>
+&#32;&#32;<div class=&quot;list-item&quot;>04</div>
+&#32;&#32;<div class=&quot;list-item&quot;>05</div>
+&#32;&#32;<div class=&quot;list-item&quot;>06</div>
+</div>">
+```scss
+// The styles the matched chips take, written once.
+%taken {
+  background-color: #2f3937;
+  color: #fafaf8;
+}
+
+.row--first .list-item {
+  @include only(first) { @extend %taken; }
+}
+
+.row--last .list-item {
+  @include only(last) { @extend %taken; }
+}
+
+.row--odd .list-item {
+  @include only(odd) { @extend %taken; }
+}
+
+.row--even .list-item {
+  @include only(even) { @extend %taken; }
+}
+```
 ```html
+<style>
+  body { margin: 0; padding: 16px; background: #fafaf8; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .label { margin: 0 0 6px; font: 600 12px ui-monospace, monospace; color: #8b9381; }
+  .label + .list-wrapper { margin-bottom: 16px; }
+</style>
+  <p class="label">only(first)</p>
+  <div class="list-wrapper row--first">
+    <div class="list-item">01</div>
+    <div class="list-item">02</div>
+    <div class="list-item">03</div>
+    <div class="list-item">04</div>
+    <div class="list-item">05</div>
+    <div class="list-item">06</div>
+  </div>
+  <p class="label">only(last)</p>
+  <div class="list-wrapper row--last">
+    <div class="list-item">01</div>
+    <div class="list-item">02</div>
+    <div class="list-item">03</div>
+    <div class="list-item">04</div>
+    <div class="list-item">05</div>
+    <div class="list-item">06</div>
+  </div>
+  <p class="label">only(odd)</p>
+  <div class="list-wrapper row--odd">
+    <div class="list-item">01</div>
+    <div class="list-item">02</div>
+    <div class="list-item">03</div>
+    <div class="list-item">04</div>
+    <div class="list-item">05</div>
+    <div class="list-item">06</div>
+  </div>
+  <p class="label">only(even)</p>
+  <div class="list-wrapper row--even">
+    <div class="list-item">01</div>
+    <div class="list-item">02</div>
+    <div class="list-item">03</div>
+    <div class="list-item">04</div>
+    <div class="list-item">05</div>
+    <div class="list-item">06</div>
+  </div>
+```
+</Example>
+
+<Example caption="Positions, counted from 1. A negative counts from the end, so `-2` is the second from last, and several in one call are separated by commas. The last row mixes the two: the first chip and the last two.">
+```scss
+// The styles the matched chips take, written once.
+%taken {
+  background-color: #2f3937;
+  color: #fafaf8;
+}
+
+.row--one .list-item {
+  @include only(3) { @extend %taken; }
+}
+
+.row--neg .list-item {
+  @include only(-2) { @extend %taken; }
+}
+
+.row--many .list-item {
+  @include only(1, 4, 5) { @extend %taken; }
+}
+
+.row--mixed .list-item {
+  @include only(1, -1, -2) { @extend %taken; }
+}
+```
+```html
+<style>
+  body { margin: 0; padding: 16px; background: #fafaf8; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .label { margin: 0 0 6px; font: 600 12px ui-monospace, monospace; color: #8b9381; }
+  .label + .list-wrapper { margin-bottom: 16px; }
+</style>
+  <p class="label">only(3)</p>
+  <div class="list-wrapper row--one">
+    <div class="list-item">01</div>
+    <div class="list-item">02</div>
+    <div class="list-item">03</div>
+    <div class="list-item">04</div>
+    <div class="list-item">05</div>
+    <div class="list-item">06</div>
+  </div>
+  <p class="label">only(-2)</p>
+  <div class="list-wrapper row--neg">
+    <div class="list-item">01</div>
+    <div class="list-item">02</div>
+    <div class="list-item">03</div>
+    <div class="list-item">04</div>
+    <div class="list-item">05</div>
+    <div class="list-item">06</div>
+  </div>
+  <p class="label">only(1, 4, 5)</p>
+  <div class="list-wrapper row--many">
+    <div class="list-item">01</div>
+    <div class="list-item">02</div>
+    <div class="list-item">03</div>
+    <div class="list-item">04</div>
+    <div class="list-item">05</div>
+    <div class="list-item">06</div>
+  </div>
+  <p class="label">only(1, -1, -2)</p>
+  <div class="list-wrapper row--mixed">
+    <div class="list-item">01</div>
+    <div class="list-item">02</div>
+    <div class="list-item">03</div>
+    <div class="list-item">04</div>
+    <div class="list-item">05</div>
+    <div class="list-item">06</div>
+  </div>
+```
+</Example>
+
+<Example caption="A selector rather than a position, which narrows the element itself and counts nothing. The two chips carrying `take` are the ones the rule reaches." listing="<div class=&quot;list-wrapper&quot;>
+&#32;&#32;<div class=&quot;list-item take&quot;>01</div>
+&#32;&#32;<div class=&quot;list-item&quot;>02</div>
+&#32;&#32;<div class=&quot;list-item&quot;>03</div>
+&#32;&#32;<div class=&quot;list-item&quot;>04</div>
+&#32;&#32;<div class=&quot;list-item&quot;>05</div>
+&#32;&#32;<div class=&quot;list-item take&quot;>06</div>
+</div>">
+```scss
+.list-item {
+  @include only(".take") {
+    background-color: #2f3937;
+    color: #fafaf8;
+  }
+}
+```
+```html
+<style>
+  body { margin: 0; padding: 16px; background: #fafaf8; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .take { outline: 2px dashed #69995d; outline-offset: 2px; }
+</style>
 <div class="list-wrapper">
-  <div class="list-item">01</div>
+  <div class="list-item take">01</div>
   <div class="list-item">02</div>
   <div class="list-item">03</div>
   <div class="list-item">04</div>
   <div class="list-item">05</div>
-  <div class="list-item">06</div>
-</div>
-```
-
-<Example caption="`first` takes the first item, whatever the list turns out to hold.">
-```scss
-.list-wrapper{
-  .list-item{
-    @include only(first) {
-      background-color: #2f3937;
-      color: #fafaf8;
-    }
-  }
-}
-```
-```html
-<div class="list-wrapper example01">
-  <div class="list-item">01</div>
-  <div class="list-item">02</div>
-  <div class="list-item">03</div>
-  <div class="list-item">04</div>
-  <div class="list-item">05</div>
-  <div class="list-item">06</div>
-</div>
-```
-</Example>
-
-<Example caption="`last` takes the last one, counted at render time rather than written into the stylesheet.">
-```scss
-.list-wrapper{
-  .list-item{
-    @include only(last) {
-      background-color: #2f3937;
-      color: #fafaf8;
-    }
-  }
-}
-```
-```html
-<div class="list-wrapper example02">
-  <div class="list-item">01</div>
-  <div class="list-item">02</div>
-  <div class="list-item">03</div>
-  <div class="list-item">04</div>
-  <div class="list-item">05</div>
-  <div class="list-item">06</div>
-</div>
-```
-</Example>
-
-<Example caption="A number takes that position.">
-```scss
-.list-wrapper{
-  .list-item{
-    @include only(2) {
-      background-color: #2f3937;
-      color: #fafaf8;
-    }
-  }
-}
-```
-```html
-<div class="list-wrapper example03">
-  <div class="list-item">01</div>
-  <div class="list-item">02</div>
-  <div class="list-item">03</div>
-  <div class="list-item">04</div>
-  <div class="list-item">05</div>
-  <div class="list-item">06</div>
-</div>
-```
-</Example>
-
-<Example caption="`odd` and `even` take every other one, which is where striping comes from.">
-```scss
-.list-wrapper{
-  .list-item{
-    @include only(odd){
-      background-color: #2f3937;
-      color: #fafaf8;
-    }
-  }
-}
-```
-```html
-<div class="list-wrapper example04">
-  <div class="list-item">01</div>
-  <div class="list-item">02</div>
-  <div class="list-item">03</div>
-  <div class="list-item">04</div>
-  <div class="list-item">05</div>
-  <div class="list-item">06</div>
-</div>
-```
-</Example>
-
-<Hint kind="info">
-
-Remember that when you make a multiple selection, the arguments you pass must be numbers separated by commas.
-
-</Hint>
-
-<Example caption="Several positions in one call, separated by commas.">
-```scss
-.list-wrapper{
-  .list-item{
-    @include only(4, 5, 6) {
-      background-color: #2f3937;
-      color: #fafaf8;
-    }
-  }
-}
-```
-```html
-<div class="list-wrapper example05">
-  <div class="list-item">01</div>
-  <div class="list-item">02</div>
-  <div class="list-item">03</div>
-  <div class="list-item">04</div>
-  <div class="list-item">05</div>
-  <div class="list-item">06</div>
-</div>
-```
-</Example>
-
-<Hint kind="info">
-
-**Information:** You can pass negative values to target elements based on their position among a group of siblings, counting from the end.
-
-</Hint>
-
-<Example caption="A negative position counts from the end, so `-3` is the third from the last however many there are.">
-```scss
-.list-wrapper {
-  .list-item {
-    @include only(-3) {
-      background-color: #2f3937;
-      color: #fafaf8;
-    }
-  }
-}
-```
-```html
-<div class="list-wrapper example06">
-  <div class="list-item">01</div>
-  <div class="list-item">02</div>
-  <div class="list-item">03</div>
-  <div class="list-item">04</div>
-  <div class="list-item">05</div>
-  <div class="list-item">06</div>
-</div>
-```
-</Example>
-
-<Example caption="Several negative positions in one call.">
-```scss
-.list-wrapper {
-  .list-item {
-    @include only(-1, -2, -4) {
-      background-color: #2f3937;
-      color: #fafaf8;
-    }
-  }
-}
-```
-```html
-<div class="list-wrapper example07">
-  <div class="list-item">01</div>
-  <div class="list-item">02</div>
-  <div class="list-item">03</div>
-  <div class="list-item">04</div>
-  <div class="list-item">05</div>
-  <div class="list-item">06</div>
-</div>
-```
-</Example>
-
-<Example caption="The two kinds mixed: the first item and the second from the end.">
-```scss
-.list-wrapper {
-  .list-item {
-    @include only(1, -2) {
-      background-color: #2f3937;
-      color: #fafaf8;
-    }
-  }
-}
-```
-```html
-<div class="list-wrapper example08">
-  <div class="list-item">01</div>
-  <div class="list-item">02</div>
-  <div class="list-item">03</div>
-  <div class="list-item">04</div>
-  <div class="list-item">05</div>
-  <div class="list-item">06</div>
+  <div class="list-item take">06</div>
 </div>
 ```
 </Example>
