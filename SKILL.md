@@ -112,6 +112,7 @@ a dropped declaration rather than an error.
 | `position` | `.badge { @include position(absolute, 0, $logical: yes); }` |
 | `remove` | `.a { @include remove(a, b, c); }` |
 | `reset-css` | `.a { @include reset-css; }` |
+| `reset-figure` | `@include reset-figure;` |
 | `resizable` | `.a { @include resizable(huge); }` |
 | `reveal` | `.a { @include reveal(nonsense); }` |
 | `scissors` | `.a { @include scissors(5px 10px); }` |
@@ -383,6 +384,8 @@ a dropped declaration rather than an error.
 **`reset-figure`**
 
 - It includes `responsive-image` for the image, so the image no longer upscales and keeps its proportions against a `height` attribute. See that member for what was measured.
+- The image rule goes through `:where()`, so a rule the page writes for its own images wins. It compiled to `figure img` until 4.0.0, at (0,0,2), which beat a page's own `img { display: inline; max-inline-size: none }` in Chrome 152, Firefox 156 and Safari 26.6.2 alike. The figure itself keeps the specificity of the selector the mixin was called in, which is the shape `border-box`, `antialias` and `columnizer` settled on for the same release.
+- The mixin writes declarations, so it needs a rule to write them into. A call at the root failed with Sass's own "Declarations may only be used within style rules"; it raises with the mixin's own message since 4.0.0.
 
 **`responsive-image`**
 

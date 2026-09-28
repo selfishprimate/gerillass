@@ -35,6 +35,23 @@ figure{
 
 </Hint>
 
+<Hint kind="warning">
+
+**The image rule is inside `:where()` since 4.0.0, so your own rule wins.** It used to compile to `figure img`, and measured in Chrome 152, Firefox 156 and Safari 26.6.2 that beat a page's own `img { display: inline; max-inline-size: none }` in all three, so one figure's image could not be opted out without reaching for a class. The figure itself keeps the specificity of the selector you called the mixin in, which is what the call asked for; only the image is lowered. This is the shape [Border Box](/docs/border-box) and [Columnizer](/docs/columnizer) settled on.
+
+</Hint>
+
+## What it refuses
+
+The mixin writes declarations, so it needs a rule to write them into.
+
+```scss
+@include reset-figure;
+```
+```text
+Error: `reset-figure` writes its declarations into the rule it is called in, so call it inside a selector, such as `figure { @include reset-figure; }`.
+```
+
 ## Related Links
 
 - [Reset CSS](/docs/reset-css)

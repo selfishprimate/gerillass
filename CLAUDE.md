@@ -1003,7 +1003,9 @@ Two pieces of work are open:
   `position` writing no offsets for `static`, which ignores all four, refusing
   one that is not zero, and refusing a call at the root, and `remove` refusing
   one too, and `reset-css` moving the attribute of its list rule inside the
-  `:where()`, which is what stops that one rule beating a page's own,
+  `:where()`, which is what stops that one rule beating a page's own, and
+  `reset-figure` writing its image rule inside `:where()` for the same reason
+  and refusing a call at the root,
   all on
   `docs-examples-review`;
   and the demos and prose

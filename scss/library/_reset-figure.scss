@@ -2,9 +2,27 @@
 
 @use "../library/responsive-image" as *;
 
+// Takes a figure's default margins off and fits the image inside it.
+//
+// The figure itself keeps the specificity of the selector the mixin was called
+// in, since that is what the call asked for. The image goes through
+// `:where()`, which is the shape `border-box`, `antialias` and `columnizer`
+// settled on for 4.0.0: a rule the page writes for its own images wins.
+// Written `figure img`, at (0,0,2), it beat a page's own
+// `img { display: inline; max-inline-size: none }` in Chrome 152, Firefox 156
+// and Safari 26.6.2 alike, so a project could not opt one figure's image out
+// of the treatment without reaching for a class.
+//
+// `responsive-image` writes its own `height: auto` inside a `:where()` already,
+// so that rule was never the problem; see that member for what it measured.
 @mixin reset-figure {
+  @if not & {
+    @error "`reset-figure` writes its declarations into the rule it is called in, so call it inside a selector, such as `figure { @include reset-figure; }`.";
+  }
+
   margin: 0;
-  img {
+
+  :where(& img) {
     @include responsive-image;
   }
 }

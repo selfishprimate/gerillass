@@ -99,6 +99,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `position` refuses a non-zero offset with `static`, and a call at the root | breaking, loud |
 | `remove` refuses a call at the root | a better message; not breaking |
 | `reset-css`'s list rule can be overridden like the rest of it | fixes a rule that won when it should not |
+| `reset-figure` writes its image rule inside `:where()` | fixes a rule that won when it should not |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -2537,6 +2538,24 @@ page's own `ul { list-style: disc; padding-left: 40px }` and the new one loses
 to it, which is what the rest of the reset does. The two select exactly the same
 elements, and a project that was relying on the reset winning there should write
 the rule it wants instead.
+
+## Change: `reset-figure` lowers its image rule
+
+The figure keeps the specificity of the selector you called the mixin in, since
+that is what the call asked for. The image no longer does.
+
+```css
+/* 3.x */  figure img { display: block; max-inline-size: 100%; }
+/* 4.0.0 */ :where(figure img) { display: block; max-inline-size: 100%; }
+```
+
+Measured in Chrome 152, Firefox 156 and Safari 26.6.2, the old form beat a
+page's own `img { display: inline; max-inline-size: none }` in all three, so one
+figure's image could not be opted out without reaching for a class. This is the
+shape `border-box`, `antialias` and `columnizer` settled on for the same
+release.
+
+A call at the root raises too, with the mixin's own message in place of Sass's.
 
 ---
 

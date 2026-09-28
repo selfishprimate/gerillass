@@ -2221,11 +2221,11 @@ exports[`Manifest examples reset-figure: figure { @include reset-figure; } 1`] =
 "figure {
   margin: 0;
 }
-figure img {
+:where(figure img) {
   display: block;
   max-inline-size: 100%;
 }
-:where(figure img) {
+:where(:where(figure img)) {
   height: auto;
 }"
 `;
