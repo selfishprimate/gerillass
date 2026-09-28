@@ -1005,7 +1005,8 @@ Two pieces of work are open:
   one too, and `reset-css` moving the attribute of its list rule inside the
   `:where()`, which is what stops that one rule beating a page's own, and
   `reset-figure` writing its image rule inside `:where()` for the same reason
-  and refusing a call at the root,
+  and refusing a call at the root, and `resizable` refusing an `$overflow` of
+  `visible`, which leaves `resize` with no grabber to draw,
   all on
   `docs-examples-review`;
   and the demos and prose

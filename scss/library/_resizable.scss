@@ -1,5 +1,6 @@
 @charset "UTF-8";
 
+@use "sass:list";
 @use "sass:meta";
 @use "sass:string";
 @use "../internal/keyword-value" as *;
@@ -11,6 +12,11 @@
 // keyword beside another, such as `overflow: inherit auto`. null leaves the
 // declaration out, as it always has.
 @mixin resizable($direction: both, $overflow: auto) {
+  // It writes declarations, so it needs a rule to write them into. Sass's own
+  // message at the root pointed at the `resize` line inside the library.
+  @if not & {
+    @error "`resizable` writes its declarations into the rule it is called in, so call it inside a selector, such as `.editor { @include resizable; }`.";
+  }
   $problem: keywordProblem($direction, "none" "both" "horizontal" "vertical" "block" "inline" "auto");
   @if $problem {
     @error "`#{meta.inspect($direction)}` is not a valid $direction for `resizable`: #{$problem}. A browser drops the declaration.";
@@ -19,6 +25,35 @@
   @if $problem {
     @error "`#{meta.inspect($overflow)}` is not a valid $overflow for `resizable`: #{$problem}. A browser drops the declaration.";
   }
+  // `resize` only applies to an element whose computed `overflow` is not
+  // `visible`, which is why the mixin defaults the second argument to `auto`
+  // rather than leaving it out. Passing `visible` back in writes a grabber
+  // nobody can use: measured in Chrome 152, a box with `resize: both` and
+  // `overflow: auto` dragged from 204x84 to 274x130, and the same box with
+  // `overflow: visible` did not move at all, with no grabber drawn; Firefox 156
+  // draws the grabber on the first and not on the second. In Chrome and Safari
+  // 26.6.2 both computed to `visible / visible`.
+  //
+  // A pair is only dead when both axes are visible. `overflow: visible hidden`
+  // computes to `auto / hidden` in Chrome and Safari alike, so that one works
+  // and is left alone.
+  //
+  // `null` still leaves the declaration out, for a caller who sets `overflow`
+  // somewhere else. Nothing here can see that, so it is a caveat rather than a
+  // refusal.
+  $resizes: list.index("none" "both" "horizontal" "vertical" "block" "inline" "auto", string.to-lower-case("#{$direction}"));
+  @if $resizes and string.to-lower-case("#{$direction}") != "none" {
+    $all-visible: true;
+    @each $value in $overflow {
+      @if string.to-lower-case("#{$value}") != "visible" {
+        $all-visible: false;
+      }
+    }
+    @if $overflow != null and $all-visible {
+      @error "`#{meta.inspect($overflow)}` leaves `resize: #{$direction}` with nothing to do: a browser only draws the grabber when the computed `overflow` is not `visible`. Measured in Chrome 152, a box with `overflow: auto` dragged from 204x84 to 274x130 and the same box with `overflow: visible` did not move. Pass `auto`, `hidden`, `scroll` or `clip`, or `none` as the direction if the element should not be resizable.";
+    }
+  }
+
   // Written without quotes, since `resize: "both"` was dropped.
   @if meta.type-of($direction) == "string" {
     resize: string.unquote($direction);

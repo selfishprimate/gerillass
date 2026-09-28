@@ -100,6 +100,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `remove` refuses a call at the root | a better message; not breaking |
 | `reset-css`'s list rule can be overridden like the rest of it | fixes a rule that won when it should not |
 | `reset-figure` writes its image rule inside `:where()` | fixes a rule that won when it should not |
+| `resizable` refuses an `$overflow` that leaves `resize` dead | breaking, loud |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -2556,6 +2557,30 @@ shape `border-box`, `antialias` and `columnizer` settled on for the same
 release.
 
 A call at the root raises too, with the mixin's own message in place of Sass's.
+
+## Break: `resizable` refuses `visible`
+
+`resize` only applies to an element whose computed `overflow` is not
+`visible`, which is why the second argument defaults to `auto`. Passing
+`visible` back in wrote a grabber nobody could use.
+
+```scss
+.editor { @include resizable(both, visible); }
+// 3.x: resize: both; overflow: visible; max-width: 100%;
+```
+
+Measured in Chrome 152 by dragging the corner: a box with `overflow: auto` went
+from 204x84 to 274x130, and the same box with `overflow: visible` did not move
+and was drawn with no grabber at all. Firefox 156 draws the grabber on the first
+and not the second, and in Chrome and Safari 26.6.2 alike the second computes to
+`visible / visible`.
+
+A pair with one visible axis is not refused, because it is not dead:
+`visible hidden` computes to `auto / hidden` in Chrome and Safari alike.
+`resizable(none, visible)` passes too, since nothing was going to be resized,
+and `null` still leaves `overflow` out for a caller who sets it elsewhere.
+
+A call at the root raises with the mixin's own message in place of Sass's.
 
 ---
 

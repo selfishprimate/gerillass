@@ -24,7 +24,7 @@ The **Resizable** Sass mixin helps you make an element resizable in both the hor
 
 <Arguments of="resizable">
   <Argument name="$direction" type="string">Sets the direction of the <code>resize</code> property. Accepts the values <code>both</code>, <code>horizontal</code>, <code>vertical</code>, <code>none</code>, and the logical <code>block</code> and <code>inline</code>, or <code>auto</code>. The default value is <code>both</code>.</Argument>
-  <Argument name="$overflow" type="string">Sets the <code>overflow</code> property: one or two of <code>visible</code>, <code>hidden</code>, <code>clip</code>, <code>scroll</code>, <code>auto</code> and <code>overlay</code>, such as <code>hidden auto</code>. The default value is <code>auto</code>. Both arguments take a CSS-wide keyword on its own and <code>var()</code>, and <code>null</code> leaves the declaration out.</Argument>
+  <Argument name="$overflow" type="string">Sets the <code>overflow</code> property: one or two of <code>visible</code>, <code>hidden</code>, <code>clip</code>, <code>scroll</code>, <code>auto</code> and <code>overlay</code>, such as <code>hidden auto</code>. The default value is <code>auto</code>, and it is the default because <code>resize</code> does nothing on an element whose computed <code>overflow</code> is <code>visible</code>. Passing <code>visible</code> back in is refused. A pair is only dead when both axes are visible: <code>visible hidden</code> computes to <code>auto hidden</code> and works. Both arguments take a CSS-wide keyword on its own and <code>var()</code>, and <code>null</code> leaves the declaration out, for a caller who sets <code>overflow</code> elsewhere.</Argument>
 </Arguments>
 
 ## Examples
@@ -64,6 +64,42 @@ A value the browser drops stops the build. Measured in Chrome 152, that is a wor
 ```
 ```text
 Error: `inherit auto` is not a valid $overflow for `resizable`: `inherit` only works as the whole value. A browser drops the declaration.
+```
+
+`visible` is refused for a different reason: it is a value the browser keeps
+and which leaves `resize` with nothing to do. The property only applies to an
+element whose computed `overflow` is not `visible`, which is why the second
+argument defaults to `auto`.
+
+Measured in Chrome 152 by dragging the corner: a box with `resize: both` and
+`overflow: auto` went from 204x84 to 274x130, and the same box with
+`overflow: visible` did not move and was drawn with no grabber at all.
+Firefox 156 draws the grabber on the first and not on the second, and in Chrome
+and Safari 26.6.2 alike the second computes to `visible / visible`.
+
+```scss
+.element {
+  @include resizable(both, visible);
+}
+```
+```text
+Error: `visible` leaves `resize: both` with nothing to do: a browser only draws the grabber when the computed `overflow` is not `visible`. Measured in Chrome 152, a box with `overflow: auto` dragged from 204x84 to 274x130 and the same box with `overflow: visible` did not move. Pass `auto`, `hidden`, `scroll` or `clip`, or `none` as the direction if the element should not be resizable.
+```
+
+A pair with one visible axis is not refused, because it is not dead:
+`overflow: visible hidden` computes to `auto / hidden` in Chrome and Safari
+alike, so the box resizes. `resizable(none, visible)` passes too, since nothing
+was going to be resized.
+
+The mixin writes declarations, so it needs a rule to write them into. A call at
+the root used to fail with Sass's own message, pointing at a line inside the
+library.
+
+```scss
+@include resizable;
+```
+```text
+Error: `resizable` writes its declarations into the rule it is called in, so call it inside a selector, such as `.editor { @include resizable; }`.
 ```
 
 ## Related Links

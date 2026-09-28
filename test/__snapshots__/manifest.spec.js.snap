@@ -2230,6 +2230,14 @@ exports[`Manifest examples reset-figure: figure { @include reset-figure; } 1`] =
 }"
 `;
 
+exports[`Manifest examples resizable: .a { @include resizable(both, visible hidden); } 1`] = `
+".a {
+  resize: both;
+  overflow: visible hidden;
+  max-width: 100%;
+}"
+`;
+
 exports[`Manifest examples resizable: .a { @include resizable(vertical, scroll); } 1`] = `
 ".a {
   resize: vertical;

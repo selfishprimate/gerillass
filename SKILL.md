@@ -387,6 +387,11 @@ a dropped declaration rather than an error.
 - The image rule goes through `:where()`, so a rule the page writes for its own images wins. It compiled to `figure img` until 4.0.0, at (0,0,2), which beat a page's own `img { display: inline; max-inline-size: none }` in Chrome 152, Firefox 156 and Safari 26.6.2 alike. The figure itself keeps the specificity of the selector the mixin was called in, which is the shape `border-box`, `antialias` and `columnizer` settled on for the same release.
 - The mixin writes declarations, so it needs a rule to write them into. A call at the root failed with Sass's own "Declarations may only be used within style rules"; it raises with the mixin's own message since 4.0.0.
 
+**`resizable`**
+
+- `resize` only applies to an element whose computed `overflow` is not `visible`, which is why `$overflow` defaults to `auto`. Passing `visible` back in is refused: measured in Chrome 152 by dragging the corner, a box with `overflow: auto` went from 204x84 to 274x130 and the same box with `overflow: visible` did not move and had no grabber drawn, and Firefox 156 draws the grabber on the first and not the second. A pair with one visible axis is not dead and is not refused: `visible hidden` computes to `auto / hidden` in Chrome and Safari 26.6.2 alike.
+- `null` still leaves `overflow` out, for a caller who sets it elsewhere. Nothing in the mixin can see that, so it is not refused, but `resize` will do nothing if the element's overflow is `visible` where it lands.
+
 **`responsive-image`**
 
 - Until 4.0.0 this wrote `width: 100%`, which upscales: measured in Chrome 152, Firefox 156 and Safari 26.6.2, a 100x50 image in a 600px container was drawn at 600x300 in all three. `max-inline-size: 100%` leaves it at 100x50 and still fits a larger image to the container.
