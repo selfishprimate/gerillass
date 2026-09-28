@@ -101,6 +101,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `reset-css`'s list rule can be overridden like the rest of it | fixes a rule that won when it should not |
 | `reset-figure` writes its image rule inside `:where()` | fixes a rule that won when it should not |
 | `resizable` refuses an `$overflow` that leaves `resize` dead | breaking, loud |
+| `responsive-image` refuses a call at the root | a better message; not breaking |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find

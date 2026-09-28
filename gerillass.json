@@ -1921,13 +1921,17 @@
       "caveats": [
         "Until 4.0.0 this wrote `width: 100%`, which upscales: measured in Chrome 152, Firefox 156 and Safari 26.6.2, a 100x50 image in a 600px container was drawn at 600x300 in all three. `max-inline-size: 100%` leaves it at 100x50 and still fits a larger image to the container.",
         "A `height` attribute is a definite height, so `<img width=\"1200\" height=\"600\">` was drawn 600x600 rather than 600x300, out of shape. `height: auto` inside `:where()` overrides the attribute and loses to any `height` a stylesheet sets, which was measured in all three browsers.",
-        "`max-inline-size` rather than `max-width`, so the image fits the line in a vertical writing mode."
+        "`max-inline-size` rather than `max-width`, so the image fits the line in a vertical writing mode.",
+        "`max-inline-size: 100%` is a ceiling, not a width, so a `width: 100%` written beside the include still upscales. Measured on the built page in Chrome 152 and Safari 26.6.2 and rendered the same in Firefox 156: a 120x80 image in a 152px column came out 120x80 with the mixin alone and 152x101 with `width: 100%` added. That is the escape hatch for a call that was stretching an image on purpose.",
+        "The mixin writes declarations, so it needs a rule to write them into. A call at the root failed with Sass's own \"Declarations may only be used within style rules\", pointing at the `display: block` line; it raises with the mixin's own message since 4.0.0."
       ],
       "examples": [
         "img { @include responsive-image; }",
         ".card img { @include responsive-image; }"
       ],
-      "rejects": []
+      "rejects": [
+        "@include responsive-image;"
+      ]
     },
     {
       "name": "reveal",

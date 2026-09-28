@@ -20,6 +20,12 @@
 // `max-inline-size` rather than `max-width` so a vertical writing mode fits
 // the image to the line, which is what "fits its container" means there.
 @mixin responsive-image {
+  // It writes declarations, so it needs a rule to write them into. Sass's own
+  // message at the root pointed at the `display: block` line inside this file.
+  @if not & {
+    @error "`responsive-image` writes its declarations into the rule it is called in, so call it inside a selector, such as `img { @include responsive-image; }`.";
+  }
+
   display: block;
   max-inline-size: 100%;
   :where(&) {

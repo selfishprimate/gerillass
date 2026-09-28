@@ -27,6 +27,69 @@ img {
 ```
 </Example>
 
+<Example caption="**A small image keeps its own size.** Both of these are the same 120 by 80 photograph in a column four times that wide. The one on the left is what the mixin wrote until 4.0.0, `width: 100%`, which blows it up and the blur with it; the one on the right is the mixin now." listing="<figure>
+&#32;&#32;<img class=&quot;stretched&quot; src=&quot;/images/docs/small-120.jpg&quot; alt=&quot;&quot;>
+&#32;&#32;<figcaption>width: 100%</figcaption>
+</figure>
+<figure>
+&#32;&#32;<img class=&quot;fitted&quot; src=&quot;/images/docs/small-120.jpg&quot; alt=&quot;&quot;>
+&#32;&#32;<figcaption>the mixin</figcaption>
+</figure>">
+```scss
+.fitted {
+  @include responsive-image;
+}
+```
+```html
+<style>
+  body { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 16px; font: 13px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #657167; }
+  figure { margin: 0; }
+  figcaption { padding-top: 6px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  :where(.stretched) { display: block; width: 100%; }
+</style>
+<figure>
+  <img class="stretched" src="/images/docs/small-120.jpg" alt="">
+  <figcaption>width: 100%</figcaption>
+</figure>
+<figure>
+  <img class="fitted" src="/images/docs/small-120.jpg" alt="">
+  <figcaption>the mixin</figcaption>
+</figure>
+```
+</Example>
+
+<Example caption="**A `height` attribute no longer squashes it.** Both carry `width=&quot;1200&quot; height=&quot;600&quot;`, which is a definite height, so at full width the left one is drawn square. The mixin's `height: auto` gives the right one its own proportions back." listing="<figure>
+&#32;&#32;<img class=&quot;stretched&quot; width=&quot;1200&quot; height=&quot;600&quot; src=&quot;/images/docs/01.jpg&quot; alt=&quot;&quot;>
+&#32;&#32;<figcaption>the attribute wins</figcaption>
+</figure>
+<figure>
+&#32;&#32;<img class=&quot;fitted&quot; width=&quot;1200&quot; height=&quot;600&quot; src=&quot;/images/docs/01.jpg&quot; alt=&quot;&quot;>
+&#32;&#32;<figcaption>the mixin</figcaption>
+</figure>">
+```scss
+.fitted {
+  @include responsive-image;
+}
+```
+```html
+<style>
+  body { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 16px; font: 13px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #657167; }
+  figure { margin: 0; }
+  figcaption { padding-top: 6px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  :where(.stretched) { display: block; width: 100%; }
+  :where(.fitted) { width: 100%; }
+</style>
+<figure>
+  <img class="stretched" width="1200" height="600" src="/images/docs/01.jpg" alt="">
+  <figcaption>the attribute wins</figcaption>
+</figure>
+<figure>
+  <img class="fitted" width="1200" height="600" src="/images/docs/01.jpg" alt="">
+  <figcaption>the mixin</figcaption>
+</figure>
+```
+</Example>
+
 <Hint kind="warning">
 
 **Changed in Gerillass 4.0.0.** The mixin used to write `width: 100%`, which upscales: a 100 by 50 image in a 600px container was drawn six times its own size. It is `max-inline-size: 100%` now, so a small image keeps its size and a large one still fits. If a call of yours was stretching a small image on purpose, write `width: 100%` beside the include.
