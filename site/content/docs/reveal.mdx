@@ -41,7 +41,7 @@ The **Reveal** Sass mixin animates something in and out of the page: a popover, 
 
 The frames on this page run no script, so a demo here is driven by HTML alone, and for this mixin that leaves one shape: `popovertarget`, a button the browser wires to a popover by itself. Every one below is a real popover, so press each button twice, once to show and once to hide, and watch both directions. The other two shapes, a `<dialog>` and a class, open with a line of script and are written out under the examples instead.
 
-<Example caption="The default, and the shortest call there is: 0.3s, fading and sliding down from three quarters of a rem above." listing="<button popovertarget=&quot;tip&quot;>Toggle the popover</button>
+<Example caption="The default, and the shortest call there is: 0.3s, fading and sliding down from three quarters of a rem above. **Press the button twice** and watch both directions; there is a page underneath so the movement has something to move against." listing="<button popovertarget=&quot;tip&quot;>What is this?</button>
 <div popover id=&quot;tip&quot; class=&quot;tooltip&quot;>Fades and slides, both ways.</div>">
 ```scss
 .tooltip {
@@ -50,18 +50,31 @@ The frames on this page run no script, so a demo here is driven by HTML alone, a
 ```
 ```html
 <style>
-  /* The popover is in the top layer and adds nothing to the page's height, so the frame is given room for it to open into. */
-  body { min-height: 150px; }
-  button { padding: 8px 14px; border: 0; border-radius: 8px; background: #222c25; color: #fff; font: 600 13px Inter, ui-sans-serif, system-ui, sans-serif; }
-  /* A popover is in the top layer, where its containing block is the viewport: `inset: auto` does not keep it under the button, so the place is given. */
-  .tooltip { position: absolute; inset: auto; top: 60px; left: 16px; border: 0; border-radius: 10px; padding: 12px 14px; background: #222c25; color: #fafaf8; font: 13px Inter, ui-sans-serif, system-ui, sans-serif; }
+  body { margin: 0; font: 13px/1.6 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; background: #fafaf8; }
+  .page { padding: 14px 16px; }
+  .page__bar { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-bottom: 12px; border-bottom: 1px solid #dee0cd; font-weight: 700; color: #668f80; }
+  .page__body { padding-top: 12px; }
+  .page__body h4 { margin: 0 0 6px; font-size: 15px; }
+  .page__body p { margin: 0 0 10px; color: #657167; }
+  .page__rows { display: grid; gap: 6px; }
+  .page__row { padding: 9px 11px; border-radius: 8px; background: #f2f2eb; }
+  button { padding: 7px 12px; border: 0; border-radius: 8px; background: #222c25; color: #fafaf8; font: 600 12px Inter, ui-sans-serif, system-ui, sans-serif; }
+  /* A popover sits in the top layer, where its containing block is the viewport, so `inset: auto` does not keep it under the button and the place is given. */
+  .tooltip { position: absolute; inset: auto; top: 52px; left: 16px; width: 200px; border: 0; border-radius: 10px; padding: 10px 12px; background: #222c25; color: #fafaf8; font: 12px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
 </style>
-<button popovertarget="tip">Toggle the popover</button>
+<div class="page">
+  <div class="page__bar"><span>Invoice 2841</span><button popovertarget="tip">What is this?</button></div>
+  <div class="page__body">
+    <h4>Payment terms</h4>
+    <p>Net 30 from the date above, with a two per cent discount for settlement inside a week.</p>
+    <div class="page__rows"><div class="page__row">Design &middot; 1,200</div><div class="page__row">Build &middot; 3,400</div></div>
+  </div>
+</div>
 <div popover id="tip" class="tooltip">Fades and slides, both ways.</div>
 ```
 </Example>
 
-<Example caption="A longer duration, coming up from below and growing into place. `$move` and `$scale` are what change, and the two run together." listing="<button popovertarget=&quot;card&quot;>Toggle the card</button>
+<Example caption="A longer duration, coming up from below and growing into place. `$move` and `$scale` are what change, and the two run together." listing="<button popovertarget=&quot;card&quot;>Preview</button>
 <div popover id=&quot;card&quot; class=&quot;card&quot;>
 &#32;&#32;<b>Rises and grows</b>
 &#32;&#32;<p>0.45s, up from 1rem below, from 92% of its size.</p>
@@ -73,13 +86,27 @@ The frames on this page run no script, so a demo here is driven by HTML alone, a
 ```
 ```html
 <style>
-  body { min-height: 190px; }
-  button { padding: 8px 14px; border: 0; border-radius: 8px; background: #222c25; color: #fff; font: 600 13px Inter, ui-sans-serif, system-ui, sans-serif; }
-  .card { position: absolute; inset: auto; top: 60px; left: 16px; width: 260px; border: 0; border-radius: 12px; padding: 14px 16px; background: #668f80; color: #222c25; font: 13px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  body { margin: 0; font: 13px/1.6 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; background: #fafaf8; }
+  .page { padding: 14px 16px; }
+  .page__bar { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-bottom: 12px; border-bottom: 1px solid #dee0cd; font-weight: 700; color: #668f80; }
+  .page__body { padding-top: 12px; }
+  .page__body h4 { margin: 0 0 6px; font-size: 15px; }
+  .page__body p { margin: 0 0 10px; color: #657167; }
+  .page__rows { display: grid; gap: 6px; }
+  .page__row { padding: 9px 11px; border-radius: 8px; background: #f2f2eb; }
+  button { padding: 7px 12px; border: 0; border-radius: 8px; background: #222c25; color: #fafaf8; font: 600 12px Inter, ui-sans-serif, system-ui, sans-serif; }
+  .card { position: absolute; inset: auto; top: 48px; left: 16px; width: 248px; border: 0; border-radius: 12px; padding: 14px 16px; background: #668f80; color: #fafaf8; font: 13px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; box-shadow: 0 16px 40px rgb(34 44 37 / 0.28); }
   .card b { display: block; margin-bottom: 4px; font-size: 15px; }
   .card p { margin: 0; }
 </style>
-<button popovertarget="card">Toggle the card</button>
+<div class="page">
+  <div class="page__bar"><span>Invoice 2841</span><button popovertarget="card">Preview</button></div>
+  <div class="page__body">
+    <h4>Payment terms</h4>
+    <p>Net 30 from the date above, with a two per cent discount for settlement inside a week.</p>
+    <div class="page__rows"><div class="page__row">Design &middot; 1,200</div><div class="page__row">Build &middot; 3,400</div></div>
+  </div>
+</div>
 <div popover id="card" class="card">
   <b>Rises and grows</b>
   <p>0.45s, up from 1rem below, from 92% of its size.</p>
@@ -87,39 +114,52 @@ The frames on this page run no script, so a demo here is driven by HTML alone, a
 ```
 </Example>
 
-<Example caption="`$easing` is the last argument and takes anything a transition does. This one overshoots, so the menu comes in from the right, goes a little past its place and settles back." listing="<button popovertarget=&quot;links&quot;>Toggle the menu</button>
-<nav popover id=&quot;links&quot; class=&quot;dropdown&quot;>
-&#32;&#32;<a href=&quot;#&quot;>Documentation</a>
-&#32;&#32;<a href=&quot;#&quot;>Playground</a>
-&#32;&#32;<a href=&quot;#&quot;>Releases</a>
+<Example caption="`$easing` is the last argument and takes anything a transition does. This one overshoots, so the menu comes in from the right, goes a little past its place and settles back. It is the only demo here whose motion you can see without the page moving with it." listing="<button popovertarget=&quot;links&quot;>Actions</button>
+<nav popover id=&quot;links&quot; class=&quot;menu&quot;>
+&#32;&#32;<a href=&quot;#&quot;>Duplicate</a>
+&#32;&#32;<a href=&quot;#&quot;>Send a reminder</a>
+&#32;&#32;<a href=&quot;#&quot;>Mark as paid</a>
 </nav>">
 ```scss
-.dropdown {
+.menu {
   @include reveal(popover, 0.5s, right 1.5rem, null, false, cubic-bezier(0.34, 1.56, 0.64, 1));
 }
 ```
 ```html
 <style>
-  body { min-height: 200px; }
-  button { padding: 8px 14px; border: 0; border-radius: 8px; background: #222c25; color: #fff; font: 600 13px Inter, ui-sans-serif, system-ui, sans-serif; }
-  /* No `display` on a popover: an author's `display` beats the rule a browser hides a closed one with. Written `display: grid` here, as the first draft of this demo was, the menu never left in any of the three browsers. */
-  .dropdown { position: absolute; inset: auto; top: 60px; left: 16px; width: 190px; border: 0; border-radius: 12px; padding: 8px; background: #222c25; font: 600 13px Inter, ui-sans-serif, system-ui, sans-serif; }
-  .dropdown a { display: block; padding: 8px 10px; border-radius: 8px; color: #f2f2eb; text-decoration: none; }
-  .dropdown a:hover { background: #2f3937; }
+  body { margin: 0; font: 13px/1.6 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; background: #fafaf8; }
+  .page { padding: 14px 16px; }
+  .page__bar { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-bottom: 12px; border-bottom: 1px solid #dee0cd; font-weight: 700; color: #668f80; }
+  .page__body { padding-top: 12px; }
+  .page__body h4 { margin: 0 0 6px; font-size: 15px; }
+  .page__body p { margin: 0 0 10px; color: #657167; }
+  .page__rows { display: grid; gap: 6px; }
+  .page__row { padding: 9px 11px; border-radius: 8px; background: #f2f2eb; }
+  button { padding: 7px 12px; border: 0; border-radius: 8px; background: #222c25; color: #fafaf8; font: 600 12px Inter, ui-sans-serif, system-ui, sans-serif; }
+  .menu { position: absolute; inset: auto; top: 58px; right: 16px; display: grid; width: 180px; padding: 6px; border: 0; border-radius: 12px; background: #fafaf8; box-shadow: 0 16px 40px rgb(34 44 37 / 0.22); }
+  .menu a { padding: 8px 10px; border-radius: 8px; color: #2f3937; text-decoration: none; }
+  .menu a:hover { background: #f2f2eb; }
 </style>
-<button popovertarget="links">Toggle the menu</button>
-<nav popover id="links" class="dropdown">
-  <a href="#">Documentation</a>
-  <a href="#">Playground</a>
-  <a href="#">Releases</a>
+<div class="page">
+  <div class="page__bar"><span>Invoice 2841</span><button popovertarget="links">Actions</button></div>
+  <div class="page__body">
+    <h4>Payment terms</h4>
+    <p>Net 30 from the date above, with a two per cent discount for settlement inside a week.</p>
+    <div class="page__rows"><div class="page__row">Design &middot; 1,200</div><div class="page__row">Build &middot; 3,400</div></div>
+  </div>
+</div>
+<nav popover id="links" class="menu">
+  <a href="#">Duplicate</a>
+  <a href="#">Send a reminder</a>
+  <a href="#">Mark as paid</a>
 </nav>
 ```
 </Example>
 
-<Example caption="`$backdrop` is left at its default here, so the layer behind the sheet fades in with it and out with it. The mixin animates that layer; what colour it is stays the demo's own line. Pressing the backdrop closes the sheet, which is the popover's own behaviour." listing="<button popovertarget=&quot;sheet&quot;>Open the sheet</button>
+<Example caption="`$backdrop` is left at its default here, so the layer behind the sheet fades in with it and out with it. That is the one demo on this page where the backdrop has something to darken, which is the whole point of the argument: press the button and the invoice behind it dims." listing="<button popovertarget=&quot;sheet&quot;>Record a payment</button>
 <div popover id=&quot;sheet&quot; class=&quot;sheet&quot;>
-&#32;&#32;<b>A sheet from the bottom</b>
-&#32;&#32;<p>The dark layer behind it is the backdrop, fading on the same clock.</p>
+&#32;&#32;<b>Record a payment</b>
+&#32;&#32;<p>0.4s, up from 2rem below, with the backdrop.</p>
 </div>">
 ```scss
 .sheet {
@@ -128,24 +168,38 @@ The frames on this page run no script, so a demo here is driven by HTML alone, a
 ```
 ```html
 <style>
-  body { min-height: 230px; }
-  button { padding: 8px 14px; border: 0; border-radius: 8px; background: #222c25; color: #fff; font: 600 13px Inter, ui-sans-serif, system-ui, sans-serif; }
-  .sheet { position: fixed; inset: auto 0 0 0; border: 0; border-radius: 14px 14px 0 0; padding: 16px 18px; background: #fafaf8; color: #668f80; font: 13px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  body { margin: 0; font: 13px/1.6 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; background: #fafaf8; }
+  .page { padding: 14px 16px; }
+  .page__bar { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-bottom: 12px; border-bottom: 1px solid #dee0cd; font-weight: 700; color: #668f80; }
+  .page__body { padding-top: 12px; }
+  .page__body h4 { margin: 0 0 6px; font-size: 15px; }
+  .page__body p { margin: 0 0 10px; color: #657167; }
+  .page__rows { display: grid; gap: 6px; }
+  .page__row { padding: 9px 11px; border-radius: 8px; background: #f2f2eb; }
+  button { padding: 7px 12px; border: 0; border-radius: 8px; background: #222c25; color: #fafaf8; font: 600 12px Inter, ui-sans-serif, system-ui, sans-serif; }
+  /* A popover is `width: fit-content` in the user agent's own stylesheet, so `left` and `right` alone do not stretch it. */
+  .sheet { position: absolute; inset: auto; left: 0; right: 0; bottom: 0; width: auto; margin: 0; max-width: none; border: 0; border-radius: 16px 16px 0 0; padding: 16px; background: #fafaf8; font: 13px/1.6 Inter, ui-sans-serif, system-ui, sans-serif; }
   .sheet b { display: block; margin-bottom: 4px; font-size: 15px; }
-  .sheet p { margin: 0; }
-  /* The mixin fades the backdrop in and out; this is what it is made of. */
+  .sheet p { margin: 0; color: #657167; }
   .sheet::backdrop { background: rgb(34 44 37 / 0.55); }
 </style>
-<button popovertarget="sheet">Open the sheet</button>
+<div class="page">
+  <div class="page__bar"><span>Invoice 2841</span><button popovertarget="sheet">Record a payment</button></div>
+  <div class="page__body">
+    <h4>Payment terms</h4>
+    <p>Net 30 from the date above, with a two per cent discount for settlement inside a week.</p>
+    <div class="page__rows"><div class="page__row">Design &middot; 1,200</div><div class="page__row">Build &middot; 3,400</div></div>
+  </div>
+</div>
 <div popover id="sheet" class="sheet">
-  <b>A sheet from the bottom</b>
-  <p>The dark layer behind it is the backdrop, fading on the same clock.</p>
+  <b>Record a payment</b>
+  <p>0.4s, up from 2rem below, with the backdrop.</p>
 </div>
 ```
 </Example>
 
-<Example caption="`none` for `$move` fades without moving, and at 0.15s that reads as a switch rather than a motion. It is the call to reach for when the thing being shown is small and should simply be there." listing="<button popovertarget=&quot;note&quot;>Toggle the note</button>
-<div popover id=&quot;note&quot; class=&quot;note&quot;>Copied to the clipboard</div>">
+<Example caption="`none` for `$move` fades without moving, and at 0.15s that reads as a switch rather than a motion. It is the call to reach for when the thing being shown is small and close to whatever opened it, where a slide reads as fuss." listing="<button popovertarget=&quot;note&quot;>Why net 30?</button>
+<div popover id=&quot;note&quot; class=&quot;note&quot;>Agreed with the client in March.</div>">
 ```scss
 .note {
   @include reveal(popover, 0.15s, none, null, false);
@@ -153,12 +207,26 @@ The frames on this page run no script, so a demo here is driven by HTML alone, a
 ```
 ```html
 <style>
-  body { min-height: 140px; }
-  button { padding: 8px 14px; border: 0; border-radius: 8px; background: #222c25; color: #fff; font: 600 13px Inter, ui-sans-serif, system-ui, sans-serif; }
-  .note { position: absolute; inset: auto; top: 60px; left: 16px; border: 0; border-radius: 999px; padding: 8px 14px; background: #668f80; color: #fafaf8; font: 600 13px Inter, ui-sans-serif, system-ui, sans-serif; }
+  body { margin: 0; font: 13px/1.6 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; background: #fafaf8; }
+  .page { padding: 14px 16px; }
+  .page__bar { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-bottom: 12px; border-bottom: 1px solid #dee0cd; font-weight: 700; color: #668f80; }
+  .page__body { padding-top: 12px; }
+  .page__body h4 { margin: 0 0 6px; font-size: 15px; }
+  .page__body p { margin: 0 0 10px; color: #657167; }
+  .page__rows { display: grid; gap: 6px; }
+  .page__row { padding: 9px 11px; border-radius: 8px; background: #f2f2eb; }
+  button { padding: 7px 12px; border: 0; border-radius: 8px; background: #222c25; color: #fafaf8; font: 600 12px Inter, ui-sans-serif, system-ui, sans-serif; }
+  .note { position: absolute; inset: auto; top: 96px; left: 16px; width: 230px; border: 0; border-radius: 10px; padding: 10px 12px; background: #eefa92; color: #222c25; font: 12px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; box-shadow: 0 10px 26px rgb(34 44 37 / 0.18); }
 </style>
-<button popovertarget="note">Toggle the note</button>
-<div popover id="note" class="note">Copied to the clipboard</div>
+<div class="page">
+  <div class="page__bar"><span>Invoice 2841</span><button popovertarget="note">Why net 30?</button></div>
+  <div class="page__body">
+    <h4>Payment terms</h4>
+    <p>Net 30 from the date above, with a two per cent discount for settlement inside a week.</p>
+    <div class="page__rows"><div class="page__row">Design &middot; 1,200</div><div class="page__row">Build &middot; 3,400</div></div>
+  </div>
+</div>
+<div popover id="note" class="note">Agreed with the client in March.</div>
 ```
 </Example>
 
