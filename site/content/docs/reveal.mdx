@@ -34,7 +34,7 @@ The **Reveal** Sass mixin animates something in and out of the page: a popover, 
   <Argument name="$move" type="list">Where it comes from: a direction, <code>top</code>, <code>bottom</code>, <code>left</code> or <code>right</code>, with an optional distance, as in <code>top 0.75rem</code>. <code>none</code> fades without moving.</Argument>
   <Argument name="$scale" type="number">A unitless number above zero, such as <code>0.95</code>, to grow into place. Left out, the size is not touched.</Argument>
   <Argument name="$backdrop" type="boolean"><code>true</code> by default, which writes the same three pieces again for <code>::backdrop</code>, since a dialog's backdrop is a second element with its own transition. <code>false</code> leaves it alone.</Argument>
-  <Argument name="$easing" type="string">Any easing a transition takes, <code>ease</code> by default.</Argument>
+  <Argument name="$easing" type="string">Any easing a transition takes, <code>ease</code> by default: one of the seven keywords in any case, <code>cubic-bezier()</code>, <code>steps()</code>, <code>linear()</code> or a <code>var()</code>. Anything else is refused, because the easing is one part of a <code>transition</code> and a value that is not a timing function drops the whole declaration. <code>null</code> leaves the slot empty, which all three browsers parse.</Argument>
 </Arguments>
 
 ## Examples
@@ -224,6 +224,34 @@ Error: `0` is not a valid $scale for `reveal`. Pass a unitless number above zero
 ```
 
 A bare word for `$open` is the one worth explaining: the state is attached to the element with no combinator, so `reveal(nonsense)` would have compiled into `.aNonsense`, a selector that matches nothing and says nothing.
+
+An easing the browser cannot read is the quietest of these, because it takes
+more with it than itself. The value is one component of a `transition`, so a
+browser that cannot read it drops the whole declaration, `allow-discrete`
+included, and the element then neither animates nor leaves the top layer.
+Measured in Chrome 152, Firefox 156 and Safari 26.6.2, all three the same: with
+`nonsense`, `10px` or a colour in that slot the computed transition came back as
+`all / 0s / normal`, and so it did for `inherit` and the other CSS-wide
+keywords, which only work as a whole declaration rather than as one part of one.
+
+```scss
+.element {
+  @include reveal(popover, 0.3s, top 1rem, null, true, nonsense);
+}
+```
+```text
+Error: `nonsense` is not a valid $easing for `reveal`: it is not one of: linear, ease, ease-in, ease-out, ease-in-out, step-start, step-end. It is written into a `transition`, where a value that is not a timing function drops the whole declaration, so nothing animates and the element does not leave the top layer. Pass a keyword, `cubic-bezier()`, `steps()`, `linear()` or a `var()`.
+```
+
+The mixin writes the closed state as declarations and the open state as the
+element plus its state selector, so it needs a rule to hang both on.
+
+```scss
+@include reveal;
+```
+```text
+Error: `reveal` animates the element it is called in, so call it inside a selector, such as `.panel { @include reveal; }`.
+```
 
 ## Related Links
 

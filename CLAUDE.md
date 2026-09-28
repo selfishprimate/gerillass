@@ -1007,7 +1007,9 @@ Two pieces of work are open:
   `reset-figure` writing its image rule inside `:where()` for the same reason
   and refusing a call at the root, and `resizable` refusing an `$overflow` of
   `visible`, which leaves `resize` with no grabber to draw, and
-  `responsive-image` refusing a call at the root,
+  `responsive-image` refusing a call at the root, and `reveal` refusing an
+  `$easing` that is not a timing function, which dropped the whole `transition`
+  and `allow-discrete` with it,
   all on
   `docs-examples-review`;
   and the demos and prose

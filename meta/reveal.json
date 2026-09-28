@@ -7,7 +7,8 @@
     "The `overlay` line is Chrome's alone, since Firefox and Safari do not support the property, and it is what keeps a top-layer element above the page while it leaves. Measured in Chrome 152, 100ms into the close: with the line the popover computes `overlay: auto`, without it `overlay: none`, so it has already left the top layer while it is still fading and is painted among the page's own content.",
     "Under `prefers-reduced-motion: reduce` the transition is shortened to 0.01ms rather than removed, because the discrete part still has to run or the element never leaves the page. Measured in Chrome and Firefox with the preference set: the element appears and disappears at once, with no motion and nothing stuck. Safari cannot be put into reduced motion from automation.",
     "Several of them on one page do not touch each other: the mixin writes no shared keyframes and needs no call at the root, unlike `loadify`, so every include is its own scoped rule. Measured in Chrome 152, Firefox 156 and Safari 26.6.2 with five on a page at durations from 0.2s to 0.6s: two opened together were each at their own point of their own animation 100ms in, and opening or closing one left the others' computed styles untouched. What does close another is HTML's own rule, not this: a second `popover` closes the first, and `showModal()` closes any open ones. `popover=\"manual\"` is the way to have two open at once, and it stayed open through all of it.",
-    "Do not set `display` on a popover this is on. An author's `display` beats the rule a browser hides a closed popover with, so the element never leaves: measured in Chrome 152, Firefox 156 and Safari 26.6.2, a popover carrying `display: grid` reported `display: grid` and `opacity: 0` after it was closed, invisible but still on the page and still taking clicks. Lay its contents out on a child instead."
+    "Do not set `display` on a popover this is on. An author's `display` beats the rule a browser hides a closed popover with, so the element never leaves: measured in Chrome 152, Firefox 156 and Safari 26.6.2, a popover carrying `display: grid` reported `display: grid` and `opacity: 0` after it was closed, invisible but still on the page and still taking clicks. Lay its contents out on a child instead.",
+    "The easing is one component of a `transition`, so a value that is not a timing function takes the whole declaration down with it, `allow-discrete` included, and the element then neither animates nor leaves the top layer. Measured in Chrome 152, Firefox 156 and Safari 26.6.2, all three the same: `nonsense`, `10px` and a colour computed to `all / 0s / normal`, and so did `inherit` and the other CSS-wide keywords, which only work as a whole declaration. Keywords in any case, `cubic-bezier()`, `steps()`, `linear()` and `var()` all work and are accepted, and so does `null`, which leaves an empty slot all three parse."
   ],
   "arguments": [
     {
@@ -66,6 +67,8 @@
     ".a { @include reveal(popover, 0.3s, sideways); }",
     ".a { @include reveal(popover, 0.3s, top -1rem); }",
     ".a { @include reveal(popover, 0.3s, top, 0); }",
-    ".a { @include reveal(popover, 0.3s, top 1rem, null, yes); }"
+    ".a { @include reveal(popover, 0.3s, top 1rem, null, yes); }",
+    ".a { @include reveal(popover, 0.3s, top 1rem, null, true, nonsense); }",
+    "@include reveal;"
   ]
 }

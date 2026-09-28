@@ -6,6 +6,7 @@
 @use "sass:meta";
 @use "sass:string";
 @use "../utilities/is-time" as *;
+@use "../internal/keyword-value" as *;
 @use "../internal/length-problem" as *;
 
 // Entry and exit animation for something that is shown and hidden: a popover,
@@ -42,6 +43,13 @@
 $-directions: ("top": (0, -1), "bottom": (0, 1), "left": (-1, 0), "right": (1, 0));
 
 @mixin reveal($open: popover, $duration: 0.3s, $move: top 0.75rem, $scale: null, $backdrop: true, $easing: ease) {
+  // It writes the closed state as declarations and the open state as `&` plus
+  // the state selector, so it needs a rule to hang both on. Sass's own message
+  // at the root, "Declarations may only be used within style rules", pointed at
+  // the `opacity: 0` inside this file.
+  @if not & {
+    @error "`reveal` animates the element it is called in, so call it inside a selector, such as `.panel { @include reveal; }`.";
+  }
   // The selector the open state is written with. Two shapes have one of their
   // own; anything else is the caller's, such as ".is-open".
   $state: null;
@@ -62,6 +70,29 @@ $-directions: ("top": (0, -1), "bottom": (0, 1), "left": (-1, 0), "right": (1, 0
   $time: isTime($duration);
   @if list.length($duration) > 1 {
     @error "`#{meta.inspect($duration)}` is not a valid $duration for `reveal`, which takes one time. A second one in a `transition` would be read as another property's duration.";
+  }
+
+  // The easing goes straight into a `transition`, where a value that is not a
+  // timing function takes the whole declaration down with it, `allow-discrete`
+  // included, so the element neither animates nor leaves the top layer.
+  // Measured in Chrome 152, Firefox 156 and Safari 26.6.2, all three the same:
+  // with `nonsense` or `10px` in that slot the computed transition came back as
+  // `all / 0s / normal`, and with `ease` or `EASE` as the three properties this
+  // mixin writes. `null` is kept: it leaves an empty slot, `opacity 0.3s ,`,
+  // which all three parse and run.
+  // A CSS-wide keyword is refused here although `keywordProblem` allows one on
+  // its own, because this is a component of a shorthand rather than a whole
+  // declaration: `transition: opacity 0.3s inherit` computed to `all / 0s` in
+  // Chrome 152 and Safari 26.6.2 alike, exactly as a bare word does.
+  @if $easing != null and list.index("inherit" "initial" "unset" "revert" "revert-layer", string.to-lower-case("#{$easing}")) {
+    @error "`#{$easing}` is not a valid $easing for `reveal`: a CSS-wide keyword only works as a whole declaration, and here it is one part of a `transition`, which a browser then drops entirely. Pass a keyword such as `ease`, `cubic-bezier()`, `steps()`, `linear()` or a `var()`.";
+  }
+  $problem: keywordProblem(
+    $easing,
+    "linear" "ease" "ease-in" "ease-out" "ease-in-out" "step-start" "step-end"
+  );
+  @if $problem {
+    @error "`#{meta.inspect($easing)}` is not a valid $easing for `reveal`: #{$problem}. It is written into a `transition`, where a value that is not a timing function drops the whole declaration, so nothing animates and the element does not leave the top layer. Pass a keyword, `cubic-bezier()`, `steps()`, `linear()` or a `var()`.";
   }
 
   @if $backdrop != true and $backdrop != false {
