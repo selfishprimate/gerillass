@@ -16,41 +16,88 @@ The **Placeholder Shown Sass mixin** helps you style an `<input>` or `<textarea>
 
 ## Examples
 
-<Example caption="Called in a selector, the block styles the field itself while it is empty, which is where an empty state belongs.">
+**Type in the fields below.** The pseudo-class tracks whether the field is
+empty, not whether it has focus, so the styling stays while you click in and
+goes the moment you type a character.
+
+<Example caption="The floating label, which is the pattern this pseudo-class exists for. While the field is empty the label sits inside it; type and it rises to its place above. The field carries `placeholder=\" \"`, a single space, because `:placeholder-shown` only matches a field that has a placeholder. The movement is the demo's own `transition`; the mixin writes the two states." listing="<div class=&quot;field&quot;>
+&#32;&#32;<input class=&quot;field__input&quot; id=&quot;email&quot; type=&quot;email&quot; placeholder=&quot; &quot;>
+&#32;&#32;<label class=&quot;field__label&quot; for=&quot;email&quot;>Email address</label>
+</div>">
 ```scss
-input {
+.field__input {
   @include placeholder-shown {
-    border-style: dashed;
-    background-color: #fafaf8;
+    & + .field__label {
+      translate: 0 22px;
+      font-size: 15px;
+      color: #8b9381;
+    }
   }
 }
 ```
 ```html
 <style>
-  body { background: #fff; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #657167; display: grid; gap: 10px; max-width: 340px; }
-  input { width: 100%; padding: 12px 14px; border: 1px solid #dee0cd; border-radius: 12px; font: inherit; color: inherit; }
+  body { display: grid; place-items: center; min-height: 120px; padding: 16px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .field { position: relative; width: 300px; padding-top: 20px; }
+  :where(.field__input) { width: 100%; padding: 12px 14px; border: 1px solid #dee0cd; border-radius: 10px; background: #fff; font: inherit; color: #2f3937; }
+  :where(.field__label) { position: absolute; top: 0; left: 15px; font-size: 12px; font-weight: 600; color: #668f80; transition: translate 0.15s ease, font-size 0.15s ease, color 0.15s ease; pointer-events: none; }
 </style>
-<input type="text" placeholder="Empty, so the outline is dashed" />
-<input type="text" value="Filled in, so it is not" />
+<div class="field">
+  <input class="field__input" id="email" type="email" placeholder=" ">
+  <label class="field__label" for="email">Email address</label>
+</div>
 ```
 </Example>
 
-<Example caption="For every field on the page, wrap the call in [All Text Inputs](/docs/all-text-inputs) rather than putting it at the root. The pseudo-class goes on the selector the mixin is called in, so it needs one.">
+<Example caption="The same state read by two siblings: a **Required** chip inside the field and a line of help under it, both there while the field is empty and both gone once it holds anything. Click into the field and neither moves, which is the difference between this pseudo-class and `:focus`." listing="<div class=&quot;row&quot;>
+&#32;&#32;<input class=&quot;row__input&quot; type=&quot;text&quot; placeholder=&quot;Order number&quot;>
+&#32;&#32;<span class=&quot;row__chip&quot;>Required</span>
+&#32;&#32;<p class=&quot;row__help&quot;>You will find it at the top of your receipt.</p>
+</div>">
 ```scss
-@include all-text-inputs {
+.row__input {
   @include placeholder-shown {
-    border-style: dashed;
-    background-color: #fafaf8;
+    & + .row__chip {
+      visibility: visible;
+    }
+
+    & ~ .row__help {
+      display: block;
+    }
   }
 }
 ```
 ```html
 <style>
-  body { background: #fff; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #657167; display: grid; gap: 10px; max-width: 340px; }
-  input, textarea { width: 100%; padding: 12px 14px; border: 1px solid #dee0cd; border-radius: 12px; font: inherit; color: inherit; }
+  body { display: grid; place-items: center; min-height: 120px; padding: 16px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .row { position: relative; width: 320px; }
+  :where(.row__input) { width: 100%; padding: 12px 88px 12px 14px; border: 1px solid #dee0cd; border-radius: 10px; background: #fff; font: inherit; color: #2f3937; }
+  :where(.row__chip) { position: absolute; top: 10px; right: 10px; visibility: hidden; padding: 3px 9px; border-radius: 999px; background: #f7ec59; font-size: 12px; font-weight: 700; color: #222c25; }
+  :where(.row__help) { display: none; margin: 8px 0 0; font-size: 13px; color: #8b9381; }
 </style>
-<input type="text" placeholder="Empty" />
-<textarea placeholder="Also empty" rows="2"></textarea>
+<div class="row">
+  <input class="row__input" type="text" placeholder="Order number">
+  <span class="row__chip">Required</span>
+  <p class="row__help">You will find it at the top of your receipt.</p>
+</div>
+```
+</Example>
+
+<Example caption="For every field on the page, wrap the call in [All Text Inputs](/docs/all-text-inputs) rather than putting it at the root. A tint rather than a border, so the focus ring does not sit on top of the thing the example is about: fill either field and its tint goes.">
+```scss
+@include all-text-inputs {
+  @include placeholder-shown {
+    background-color: #f2f2eb;
+  }
+}
+```
+```html
+<style>
+  body { font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; display: grid; gap: 10px; max-width: 320px; padding: 16px; }
+  :where(input, textarea) { width: 100%; padding: 12px 14px; border: 1px solid #dee0cd; border-radius: 10px; background: #fff; font: inherit; color: inherit; }
+</style>
+<input type="text" placeholder="Empty, so it is tinted">
+<textarea placeholder="This one as well" rows="2"></textarea>
 ```
 </Example>
 

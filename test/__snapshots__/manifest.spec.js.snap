@@ -2006,21 +2006,27 @@ exports[`Manifest examples placeholder: @include all-text-inputs { @include plac
 }"
 `;
 
-exports[`Manifest examples placeholder-shown: .field { @include placeholder-shown { & + label { transform: none; } } 1`] = `
+exports[`Manifest examples placeholder-shown: .field { @include placeholder-shown { & + label { translate: 0 22px; } 1`] = `
 ".field:placeholder-shown + label {
-  transform: none;
+  translate: 0 22px;
 }"
 `;
 
-exports[`Manifest examples placeholder-shown: .field { @include placeholder-shown { border-color: gray; } } 1`] = `
+exports[`Manifest examples placeholder-shown: .field { @include placeholder-shown { & ~ .help { display: block; } }  1`] = `
+".field:placeholder-shown ~ .help {
+  display: block;
+}"
+`;
+
+exports[`Manifest examples placeholder-shown: .field { @include placeholder-shown { background-color: #f2f2eb; } } 1`] = `
 ".field:placeholder-shown {
-  border-color: gray;
+  background-color: #f2f2eb;
 }"
 `;
 
-exports[`Manifest examples placeholder-shown: @include all-text-inputs { @include placeholder-shown { border-style:  1`] = `
+exports[`Manifest examples placeholder-shown: @include all-text-inputs { @include placeholder-shown { background-col 1`] = `
 ":where(input):not([type=button], [type=checkbox], [type=color], [type=file], [type=hidden], [type=image], [type=radio], [type=range], [type=reset], [type=submit]):placeholder-shown, textarea:placeholder-shown {
-  border-style: dashed;
+  background-color: #f2f2eb;
 }"
 `;
 

@@ -1684,12 +1684,14 @@
       "summary": "Styles an input while its placeholder is visible, which is how a floating label knows the field is empty.",
       "caveats": [
         "`:placeholder-shown` only matches a field that **has** a placeholder. For the floating label pattern the field usually shows no placeholder text of its own, and the way round that is `placeholder=\" \"`, a single space, which keeps the pseudo-class working while showing nothing.",
+        "The pseudo-class tracks whether the field is empty, not whether it has focus, which is the thing readers get wrong: clicking into the field changes nothing and typing one character changes everything. A demo that moves a border is hard to read for that reason, because the browser's focus ring lands in the same place; move something a focus ring does not touch, such as a sibling or the background.",
         "The pseudo-class goes on the selector the mixin is called in, so it needs one. Called at the root it wrote `&:placeholder-shown`, which the page described as styling every field and which styles none of them: measured in Chrome 152, Firefox 156 and Safari 26.6.2, all three keep the rule and an empty input holds its own border while `matches(\":placeholder-shown\")` answers true, because a top-level `&` is `:scope` and that is the document. Dart Sass 1.91's command line refuses it outright, so the same call is a build error or dead CSS depending on how the stylesheet is compiled. Both that and a call with no block raise since 4.0.0; `all-text-inputs` is the way to reach every field."
       ],
       "examples": [
-        ".field { @include placeholder-shown { border-color: gray; } }",
-        ".field { @include placeholder-shown { & + label { transform: none; } } }",
-        "@include all-text-inputs { @include placeholder-shown { border-style: dashed; } }"
+        ".field { @include placeholder-shown { background-color: #f2f2eb; } }",
+        ".field { @include placeholder-shown { & + label { translate: 0 22px; } } }",
+        ".field { @include placeholder-shown { & ~ .help { display: block; } } }",
+        "@include all-text-inputs { @include placeholder-shown { background-color: #f2f2eb; } }"
       ],
       "rejects": [
         "@include placeholder-shown { border-color: gray; }",
