@@ -2437,6 +2437,12 @@ exports[`Manifest examples scissors: .a { @include scissors(12px); } 1`] = `
 }"
 `;
 
+exports[`Manifest examples scissors: .a { @include scissors(var(--corner)); } 1`] = `
+".a {
+  clip-path: polygon(0 var(--corner), var(--corner) 0, calc(100% - var(--corner)) 0, 100% var(--corner), 100% calc(100% - var(--corner)), calc(100% - var(--corner)) 100%, var(--corner) 100%, 0 calc(100% - var(--corner)));
+}"
+`;
+
 exports[`Manifest examples screen-agent: .a { @include screen-agent("2x") { background-image: url("/img/a@2x.pn 1`] = `
 "@media (min-resolution: 192dpi) {
   .a {
@@ -3101,6 +3107,12 @@ exports[`Manifest examples validateRatio: .a { aspect-ratio: validateRatio(1.5);
 exports[`Manifest examples validateRatio: .a { aspect-ratio: validateRatio(var(--ratio)); } 1`] = `
 ".a {
   aspect-ratio: var(--ratio);
+}"
+`;
+
+exports[`Manifest examples validateScissors: .a { content: "#{validateScissors(4px 8px 12px 16px)}"; } 1`] = `
+".a {
+  content: "4px, 8px, 12px, 16px";
 }"
 `;
 

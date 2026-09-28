@@ -1009,7 +1009,9 @@ Two pieces of work are open:
   `visible`, which leaves `resize` with no grabber to draw, and
   `responsive-image` refusing a call at the root, and `reveal` refusing an
   `$easing` that is not a timing function, which dropped the whole `transition`
-  and `allow-discrete` with it,
+  and `allow-discrete` with it, and `validateScissors` taking a CSS function,
+  which it refused although `polygon()` resolves one, and refusing a corner
+  below zero, which pointed the cut outwards and took nothing off,
   all on
   `docs-examples-review`;
   and the demos and prose

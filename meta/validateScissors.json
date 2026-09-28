@@ -5,12 +5,21 @@
     {
       "name": "$value",
       "accepts": [
-        "one to four numbers, with or without units"
+        "one to four numbers, with or without units, none below zero",
+        "a CSS function such as var(), calc(), clamp(), min(), max() or env(), passed through untouched"
       ]
     }
   ],
   "examples": [
-    ".a { content: \"#{validateScissors(12px)}\"; }"
+    ".a { content: \"#{validateScissors(12px)}\"; }",
+    ".a { content: \"#{validateScissors(4px 8px 12px 16px)}\"; }"
   ],
-  "rejects": []
+  "rejects": [
+    ".a { content: \"#{validateScissors(-5px)}\"; }",
+    ".a { content: \"#{validateScissors(10deg)}\"; }"
+  ],
+  "caveats": [
+    "Measured in Chrome 152, Firefox 156 and Safari 26.6.2: an octagon written with `var(--c)` set to 20px, and ones written with `calc(10px + 10px)`, `clamp(4px, 20px, 30px)` and `min(20px, 50px)`, each computed to exactly the polygon the literal `20px` gives and rendered the same. They were refused until 4.0.0, which was a false refusal.",
+    "A corner below zero is refused since 4.0.0: it points the cut outwards, so nothing is cut. Measured in Chrome 152 and Firefox 156, a box with `-20px` corners is drawn pixel for pixel as one with no `clip-path` at all, and the declaration is kept, so the call did nothing and said nothing."
+  ]
 }

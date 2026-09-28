@@ -4,30 +4,53 @@
 @use "sass:math";
 @use "sass:meta";
 @use "../utilities/pixelify" as *;
+@use "../internal/is-css-function" as *;
 @use "../internal/is-condition-value" as *;
 
 @function validateScissors($value) {
   $list: ();
   @for $i from 1 through list.length($value) {
     $item: list.nth($value, $i);
-    // math.is-unitless() below throws on anything that is not a number, and its message
-    // names its own parameter rather than the corner that was wrong.
-    @if $item != null and meta.type-of($item) != "number" {
-      @error "`#{$item}` is not a valid corner size. Pass a length such as `12px`, or a unitless number which is treated as pixels.";
-    }
-    // Each size becomes a polygon() coordinate, which in Chrome 152 kept a
-    // length, a percentage and a negative length, and dropped a unit that is not
-    // a length, such as deg or x, so the clip-path was dropped.
-    @if $item != null and not math.is-unitless($item) and not isConditionValue($item, "length-percentage") {
-      @error "`#{$item}` is not a valid corner size: `#{math.unit($item)}` is not a length unit, and a browser drops the clip-path. Pass a length such as `12px`, or a unitless number which is treated as pixels.";
-    }
-    @if list.nth($value, $i) == null {
-      $list: list.append($list, 0px, comma);
-    } @else if math.is-unitless(list.nth($value, $i)) {
-      $pixelified: pixelify(list.nth($value, $i));
-      $list: list.append($list, $pixelified, comma);
+    // A CSS function is passed through untouched: there is nothing to normalise
+    // and the browser resolves it. `polygon()` takes a <length-percentage>,
+    // which `var()` and `calc()` both are. Measured in Chrome 152, Firefox 156
+    // and Safari 26.6.2: an octagon written with `var(--c)` set to 20px, and
+    // one written with `calc(10px + 10px)`, each computed and rendered exactly
+    // as the literal `20px` version did. They were refused here until 4.0.0,
+    // which was a false refusal: the value set this function was written from
+    // held only literals.
+    // `var()` reaches here as a string and `calc()` as Sass's own calculation
+    // type, which is why both are asked for. `min(1px, 2px)` is folded into a
+    // number by Sass before it arrives, so it needs nothing.
+    @if meta.type-of($item) == "calculation" or isCssFunction($item, "var" "env") {
+      $list: list.append($list, $item, comma);
     } @else {
-      $list: list.append($list, list.nth($value, $i), comma);
+      // math.is-unitless() below throws on anything that is not a number, and
+      // its message names its own parameter rather than the corner that was
+      // wrong.
+      @if $item != null and meta.type-of($item) != "number" {
+        @error "`#{$item}` is not a valid corner size. Pass a length such as `12px`, a unitless number which is treated as pixels, or a CSS function such as `var(--corner)`.";
+      }
+      // A corner below zero points the cut outwards, so nothing is cut at all.
+      // Measured in Chrome 152 and Firefox 156: a box clipped with `-20px`
+      // corners is drawn pixel for pixel as one with no clip-path, and the
+      // declaration is kept, so the call did nothing and said nothing.
+      @if $item != null and $item < 0 {
+        @error "`#{$item}` is not a valid corner size: a corner below zero points the cut outwards, so nothing is cut. Measured in Chrome 152 and Firefox 156, a box with negative corners is drawn exactly as one with no clip-path at all. Pass zero or more.";
+      }
+      // Each size becomes a polygon() coordinate, which in Chrome 152 kept a
+      // length and a percentage, and dropped a unit that is not a length, such
+      // as deg or x, so the clip-path was dropped.
+      @if $item != null and not math.is-unitless($item) and not isConditionValue($item, "length-percentage") {
+        @error "`#{$item}` is not a valid corner size: `#{math.unit($item)}` is not a length unit, and a browser drops the clip-path. Pass a length such as `12px`, or a unitless number which is treated as pixels.";
+      }
+      @if $item == null {
+        $list: list.append($list, 0px, comma);
+      } @else if math.is-unitless($item) {
+        $list: list.append($list, pixelify($item), comma);
+      } @else {
+        $list: list.append($list, $item, comma);
+      }
     }
   }
   @return $list;

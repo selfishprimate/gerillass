@@ -411,6 +411,11 @@ a dropped declaration rather than an error.
 - Do not set `display` on a popover this is on. An author's `display` beats the rule a browser hides a closed popover with, so the element never leaves: measured in Chrome 152, Firefox 156 and Safari 26.6.2, a popover carrying `display: grid` reported `display: grid` and `opacity: 0` after it was closed, invisible but still on the page and still taking clicks. Lay its contents out on a child instead.
 - The easing is one component of a `transition`, so a value that is not a timing function takes the whole declaration down with it, `allow-discrete` included, and the element then neither animates nor leaves the top layer. Measured in Chrome 152, Firefox 156 and Safari 26.6.2, all three the same: `nonsense`, `10px` and a colour computed to `all / 0s / normal`, and so did `inherit` and the other CSS-wide keywords, which only work as a whole declaration. Keywords in any case, `cubic-bezier()`, `steps()`, `linear()` and `var()` all work and are accepted, and so does `null`, which leaves an empty slot all three parse.
 
+**`scissors`**
+
+- A corner takes a CSS function as well as a length: `var()`, `calc()`, `clamp()`, `min()`, `max()` and `env()` are passed through for the browser to resolve. Measured in Chrome 152, Firefox 156 and Safari 26.6.2: an octagon written with `var(--c)` set to 20px, and ones written with `calc(10px + 10px)`, `clamp(4px, 20px, 30px)` and `min(20px, 50px)`, each computed to exactly the polygon the literal `20px` gives and rendered the same. They were refused until 4.0.0, which was a false refusal.
+- A corner below zero is refused since 4.0.0: it points the cut outwards, so nothing is cut. Measured in Chrome 152 and Firefox 156, a box with `-20px` corners is drawn pixel for pixel as one with no `clip-path` at all, and the declaration is kept, so the call did nothing and said nothing.
+
 **`smartphone`**
 
 - `device-width` and `device-height` read the **screen**, not the viewport, so a desktop window resized to a phone's width matches nothing. Measured in Chrome 152, Firefox 156 and Safari 26.6.2: a query at the screen's own size matched and the same query one pixel off did not. For a rule that follows the window, use `breakpoint` or `container-query`.
@@ -501,6 +506,11 @@ a dropped declaration rather than an error.
 
 - Until 4.0.0 only a fifth value was checked. An empty list ended the build with Sass's own "Function finished without @return", and a map was read as its keys and values in turn, so `(a: 1, b: 2)` came out as `a 1 b 2 a 1 b 2`. Both raise now.
 - A `null` is passed through on purpose, because a caller can read the four values back and skip the ones that are unset, which is what `position` does: `position(absolute, null)` writes the position and no offsets. In a declaration of your own a `null` simply disappears from the list, so `margin: shorthandProperty(1px null)` is `margin: 1px 1px`.
+
+**`validateScissors`**
+
+- Measured in Chrome 152, Firefox 156 and Safari 26.6.2: an octagon written with `var(--c)` set to 20px, and ones written with `calc(10px + 10px)`, `clamp(4px, 20px, 30px)` and `min(20px, 50px)`, each computed to exactly the polygon the literal `20px` gives and rendered the same. They were refused until 4.0.0, which was a false refusal.
+- A corner below zero is refused since 4.0.0: it points the cut outwards, so nothing is cut. Measured in Chrome 152 and Firefox 156, a box with `-20px` corners is drawn pixel for pixel as one with no `clip-path` at all, and the declaration is kept, so the call did nothing and said nothing.
 
 ## Mixins
 

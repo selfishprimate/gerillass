@@ -131,6 +131,36 @@ A corner size in a unit that is not a length stops the build. Each size becomes 
 Error: `10deg` is not a valid corner size: `deg` is not a length unit, and a browser drops the clip-path. Pass a length such as `12px`, or a unitless number which is treated as pixels.
 ```
 
+A corner below zero is refused since 4.0.0, and this one is the quiet kind: the
+CSS was kept and did nothing. A negative corner points the cut outwards, so the
+polygon ends up larger than the box and no corner is taken off. Measured in
+Chrome 152 and Firefox 156, a box clipped with `-20px` corners is drawn pixel
+for pixel as one with no `clip-path` at all.
+
+```scss
+.element {
+  @include scissors(-5px);
+}
+```
+```text
+Error: `-5px` is not a valid corner size: a corner below zero points the cut outwards, so nothing is cut. Measured in Chrome 152 and Firefox 156, a box with negative corners is drawn exactly as one with no clip-path at all. Pass zero or more.
+```
+
+**A CSS function is accepted since 4.0.0**, and was refused before that by
+mistake. `polygon()` takes a `<length-percentage>` at every coordinate, which
+`var()` and `calc()` both are, so `scissors(var(--corner))` is a working call.
+Measured in Chrome 152, Firefox 156 and Safari 26.6.2: an octagon written with
+`var(--c)` set to 20px, and ones written with `calc(10px + 10px)`,
+`clamp(4px, 20px, 30px)` and `min(20px, 50px)`, each computed to exactly the
+polygon the literal `20px` gives and rendered the same. The four corners can mix
+functions and lengths.
+
+```scss
+.element {
+  @include scissors(var(--corner));
+}
+```
+
 ## Related Links
 
 - [Triangle](/docs/triangle)

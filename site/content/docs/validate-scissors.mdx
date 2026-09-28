@@ -16,7 +16,7 @@ Normalises corner values for the scissors mixin, adding px where missing.
 ## Arguments
 
 <Arguments of="validateScissors">
-  <Argument name="$value" type="number">Accepts one to four numbers, with or without units.</Argument>
+  <Argument name="$value" type="number">Accepts one to four numbers, with or without units, or a CSS function such as <code>var()</code>, <code>calc()</code>, <code>clamp()</code>, <code>min()</code>, <code>max()</code> or <code>env()</code>, which is passed through untouched for the browser to resolve. A number below zero is refused, because a negative corner points the cut outwards and nothing is cut.</Argument>
 </Arguments>
 
 ## Examples
