@@ -59,84 +59,79 @@ $ink: oklch(0.21 0.04 265);
 ```
 </Example>
 
-<Example caption="The direction is an angle measured from the top and clockwise, so the eight names are shorthand for `0deg`, `45deg` and the rest. A diagonal sits the same distance from the tile as a straight one, which is what keeps the four here looking like one set.">
-```scss
-.tile {
-  &--one {
-    @include long-shadow(#2f3937, 44px, bottom-right);
-  }
-
-  &--two {
-    @include long-shadow(#2f3937, 44px, bottom-left);
-  }
-
-  &--three {
-    @include long-shadow(#2f3937, 44px, bottom);
-  }
-
-  &--four {
-    @include long-shadow(#2f3937, 44px, 160deg);
-  }
-}
-```
-```html
-<style>
-  body { padding: 28px 70px 70px; }
-  .tiles { display: grid; grid-template-columns: repeat(2, 108px); justify-content: start; gap: 70px 108px; font: 700 13px/1 Inter, ui-sans-serif, system-ui, sans-serif; }
-  :where(.tile) { display: grid; place-items: center; height: 108px; border-radius: 12px; background: #5bc0bb; color: #fafaf8; }
-</style>
-<div class="tiles">
-  <div class="tile tile--one">45&deg;</div>
-  <div class="tile tile--two">315&deg;</div>
-  <div class="tile tile--three">180&deg;</div>
-  <div class="tile tile--four">160&deg;</div>
-</div>
-```
-</Example>
-
-<Example caption="`$fade` is the colour the shadow runs out into, one `color-mix()` per copy. Written by hand that is forty mixes rather than forty offsets, which is the argument that pays for itself." listing="<div class=&quot;pair&quot;>
-&#32;&#32;<div class=&quot;chip chip--solid&quot;>Solid</div>
-&#32;&#32;<div class=&quot;chip chip--fade&quot;>Fading</div>
+<Example caption="A row of category tiles, which is what the effect was invented for and still the place it sits best. One line covers all three, and because the length and the angle are shared the shadows read as one light source rather than three. Leave the tiles room: a shadow runs its full length past the tile and will cross whatever is next to it." listing="<div class=&quot;tiles&quot;>
+&#32;&#32;<a class=&quot;tile&quot; href=&quot;#&quot;>Design</a>
+&#32;&#32;<a class=&quot;tile&quot; href=&quot;#&quot;>Build</a>
+&#32;&#32;<a class=&quot;tile&quot; href=&quot;#&quot;>Ship</a>
 </div>">
 ```scss
-.chip {
-  &--solid {
-    @include long-shadow(#ed6a5a, 56px, bottom-right);
-  }
-
-  &--fade {
-    @include long-shadow(#ed6a5a, 56px, bottom-right, transparent);
-  }
+.tile {
+  @include long-shadow(#2f3937, 34px, bottom-right);
 }
 ```
 ```html
 <style>
-  body { padding: 20px 76px 76px; }
-  .pair { display: grid; grid-template-columns: repeat(2, 1fr); gap: 76px; font: 700 14px/1 Inter, ui-sans-serif, system-ui, sans-serif; }
-  :where(.chip) { display: grid; place-items: center; height: 96px; border-radius: 12px; background: #f7ec59; color: #2f3937; }
+  body { padding: 24px 48px 48px 24px; background: #f2f2eb; }
+  .tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 42px; font: 800 15px/1 Inter, ui-sans-serif, system-ui, sans-serif; }
+  :where(.tile) { display: grid; place-items: center; height: 96px; border-radius: 14px; text-decoration: none; color: #222c25; }
+  :where(.tile:nth-child(1)) { background: #f7ec59; }
+  :where(.tile:nth-child(2)) { background: #5bc0bb; }
+  :where(.tile:nth-child(3)) { background: #bdc488; }
 </style>
-<div class="pair">
-  <div class="chip chip--solid">Solid</div>
-  <div class="chip chip--fade">Fading</div>
+<div class="tiles">
+  <a class="tile" href="#">Design</a>
+  <a class="tile" href="#">Build</a>
+  <a class="tile" href="#">Ship</a>
 </div>
 ```
 </Example>
 
-<Example caption="What the mixin is for: a flat badge whose shadow runs the width of the panel. The call is one line and the CSS below it is 88 layers, each a copy of the circle a pixel further along, which is why the edge is a clean diagonal rather than a stair.">
+<Example caption="A headline figure on a block of colour. `$fade` is the colour the shadow runs out into, one `color-mix()` per copy, so the block sits on the page rather than being cut out of it. Written by hand that is forty mixes rather than forty offsets.">
 ```scss
-.badge {
-  @include long-shadow(#69995d, 88px, bottom-right, $step: 1px);
+.figure {
+  @include long-shadow(#668f80, 64px, bottom-right, transparent);
 }
 ```
 ```html
 <style>
-  body { padding: 0; }
-  .panel { display: grid; place-items: center; padding: 34px 34px 120px; border-radius: 14px; background: #dee0cd; }
-  :where(.badge) { display: grid; place-items: center; width: 108px; height: 108px; border-radius: 50%; background: #eefa92; color: #2f3937; font: 800 34px/1 Inter, ui-sans-serif, system-ui, sans-serif; }
+  body { padding: 26px 80px 80px 26px; background: #fafaf8; }
+  :where(.stat) { font: 500 13px/1.6 Inter, ui-sans-serif, system-ui, sans-serif; color: #657167; }
+  :where(.stat p) { margin: 0 0 10px; text-transform: uppercase; letter-spacing: 0.08em; }
+  :where(.figure) { display: inline-block; padding: 10px 18px; border-radius: 6px; background: #dee0cd; font: 800 46px/1.1 Inter, ui-sans-serif, system-ui, sans-serif; color: #222c25; letter-spacing: -0.02em; }
 </style>
-<div class="panel">
-  <div class="badge">01</div>
+<div class="stat">
+  <p>Requests served, March 2026</p>
+  <span class="figure">36,925,870</span>
 </div>
+```
+</Example>
+
+<Example caption="The direction is an angle measured from the top and clockwise, so the eight names are shorthand for `0deg`, `45deg` and the rest. A sticker in the top right corner is the case where the default is wrong: `bottom-right` throws the shadow off the card and onto the page, while `bottom-left` throws it back across the card, which is what makes the sticker read as sitting on top of it." listing="<article class=&quot;product&quot;>
+&#32;&#32;<div class=&quot;product__art&quot;></div>
+&#32;&#32;<span class=&quot;sticker&quot;>50%</span>
+&#32;&#32;<h4>Field Notebook</h4>
+&#32;&#32;<p>Ruled, 120 pages</p>
+</article>">
+```scss
+.sticker {
+  @include long-shadow(#db504a, 44px, bottom-left);
+}
+```
+```html
+<style>
+  body { display: grid; place-items: center; padding: 20px; background: #dee0cd; }
+  .product { position: relative; width: 246px; padding: 14px; border-radius: 16px; background: #fafaf8; font: 14px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
+  :where(.product__art) { height: 122px; border-radius: 10px; background: #668f80; }
+  :where(.product h4) { margin: 12px 0 2px; font-size: 16px; }
+  :where(.product p) { margin: 0; color: #657167; }
+  :where(.sticker) { position: absolute; top: 26px; right: 26px; display: grid; place-items: center; width: 54px; height: 54px; border-radius: 50%; background: #f7ec59; font: 800 16px/1 Inter, ui-sans-serif, system-ui, sans-serif; color: #222c25; }
+</style>
+<article class="product">
+  <div class="product__art"></div>
+  <span class="sticker">50%</span>
+  <h4>Field Notebook</h4>
+  <p>Ruled, 120 pages</p>
+</article>
 ```
 </Example>
 
