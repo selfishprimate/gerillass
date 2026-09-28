@@ -11,13 +11,20 @@
     }
   ],
   "examples": [
-    ".a { @include screen-agent(\"2x\") { background-image: url(\"/img/a@2x.png\"); } }"
+    ".a { @include screen-agent(\"2x\") { background-image: url(\"/img/a@2x.png\"); } }",
+    ".a { @include screen-agent(2dppx) { background-image: url(\"/img/a@2x.png\"); } }"
   ],
   "rejects": [
     ".a { @include screen-agent(var(--density)) { color: red; } }",
     ".a { @include screen-agent(\"huge\") { color: red; } }",
     ".a { @include screen-agent(2) { color: red; } }",
     ".a { @include screen-agent(10px) { color: red; } }",
-    ".a { @include screen-agent(-1dppx) { color: red; } }"
+    ".a { @include screen-agent(-1dppx) { color: red; } }",
+    ".a { @include screen-agent(2dppx); }"
+  ],
+  "caveats": [
+    "An unquoted `2x` and a quoted `\"2x\"` write different declarations, `(min-resolution: 2x)` and `(min-resolution: 192dpi)`, because only the quoted keywords are translated. Both are right: measured in Chrome 152, Firefox 156 and Safari 26.6.2, all three parse `x` and answer the same for it as for `dppx` and the matching `dpi`, with Safari at a device pixel ratio of 2 matching every 2x form and the other two at 1 matching none.",
+    "With no block the mixin wrapped nothing, so the call emitted no CSS and said nothing. It raises since 4.0.0.",
+    "A call at the root is legitimate, since a `@media` rule belongs there: `@include screen-agent(2x) { .a { color: red; } }` compiles. Sass's \"Declarations may only be used within style rules\" for a block of bare declarations is about the caller's own block and points at the caller's line, so the mixin adds no message of its own there."
   ]
 }

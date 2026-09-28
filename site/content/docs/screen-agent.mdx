@@ -64,6 +64,31 @@ A resolution no condition can match stops the build. Measured in Chrome 152, `(m
 Error: `2` is not a valid $resolution for `screen-agent`: `(min-resolution: 2)` would never match. Pass `1x`, `2x`, `3x`, or a resolution such as `2dppx`, `192dpi` or `38dpcm`.
 ```
 
+With no block there is nothing to wrap, so the call used to emit no CSS at all
+and say nothing about it.
+
+```scss
+.element {
+  @include screen-agent(2dppx);
+}
+```
+```text
+Error: `screen-agent` wraps the styles you pass it, so call it with a block, such as `@include screen-agent(2x) { background-image: url("logo@2x.png"); }`.
+```
+
+**A quoted `"2x"` and an unquoted `2x` are both right**, and they write different
+declarations: only the quoted keywords are translated, so the first becomes
+`(min-resolution: 192dpi)` and the second goes in as `(min-resolution: 2x)`.
+Measured in Chrome 152, Firefox 156 and Safari 26.6.2, all three parse `x` and
+answer the same for it as for `dppx` and the matching `dpi`, with Safari at a
+device pixel ratio of 2 matching every 2x form and the other two at 1 matching
+none of them.
+
+**A call at the root is fine**, because a `@media` rule belongs there. Sass's
+"Declarations may only be used within style rules" comes up only when the block
+holds bare declarations rather than rules, and that is the block's own problem;
+`@include screen-agent(2x) { .a { color: red; } }` compiles.
+
 ## Related Links
 
 - [Breakpoint](/docs/breakpoint)

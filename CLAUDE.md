@@ -1011,7 +1011,8 @@ Two pieces of work are open:
   `$easing` that is not a timing function, which dropped the whole `transition`
   and `allow-discrete` with it, and `validateScissors` taking a CSS function,
   which it refused although `polygon()` resolves one, and refusing a corner
-  below zero, which pointed the cut outwards and took nothing off,
+  below zero, which pointed the cut outwards and took nothing off, and
+  `screen-agent` refusing a call with no block, which emitted nothing at all,
   all on
   `docs-examples-review`;
   and the demos and prose

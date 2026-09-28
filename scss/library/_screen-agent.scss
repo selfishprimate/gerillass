@@ -4,7 +4,22 @@
 @use "../internal/custom-property-in" as *;
 @use "../internal/is-condition-value" as *;
 
+// Wraps its block in a `min-resolution` condition.
+//
+// `1x`, `2x` and `3x` are translated to dpi, and any other value goes into the
+// condition as it is. That means an unquoted `2x` and a quoted `"2x"` write
+// different declarations, `(min-resolution: 2x)` and `(min-resolution: 192dpi)`,
+// and both are right: measured in Chrome 152, Firefox 156 and Safari 26.6.2,
+// all three parse `x` and answer the same for it as for `dppx` and the matching
+// `dpi`, with Safari at a device pixel ratio of 2 matching every 2x form and
+// the other two at 1 matching none of them.
+//
+// With no block it wrapped nothing, so the call emitted no CSS and said
+// nothing.
 @mixin screen-agent($resolution) {
+  @if not meta.content-exists() {
+    @error "`screen-agent` wraps the styles you pass it, so call it with a block, such as `@include screen-agent(2x) { background-image: url(\"logo@2x.png\"); }`.";
+  }
   $custom-property: customPropertyIn($resolution);
   @if $custom-property {
     @error "`#{$custom-property}` cannot be used as a resolution: custom properties are not evaluated in a @media condition, so the rule would never apply. Pass `1x`, `2x`, `3x` or a resolution such as `2dppx`.";

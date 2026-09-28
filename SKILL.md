@@ -416,6 +416,12 @@ a dropped declaration rather than an error.
 - A corner takes a CSS function as well as a length: `var()`, `calc()`, `clamp()`, `min()`, `max()` and `env()` are passed through for the browser to resolve. Measured in Chrome 152, Firefox 156 and Safari 26.6.2: an octagon written with `var(--c)` set to 20px, and ones written with `calc(10px + 10px)`, `clamp(4px, 20px, 30px)` and `min(20px, 50px)`, each computed to exactly the polygon the literal `20px` gives and rendered the same. They were refused until 4.0.0, which was a false refusal.
 - A corner below zero is refused since 4.0.0: it points the cut outwards, so nothing is cut. Measured in Chrome 152 and Firefox 156, a box with `-20px` corners is drawn pixel for pixel as one with no `clip-path` at all, and the declaration is kept, so the call did nothing and said nothing.
 
+**`screen-agent`**
+
+- An unquoted `2x` and a quoted `"2x"` write different declarations, `(min-resolution: 2x)` and `(min-resolution: 192dpi)`, because only the quoted keywords are translated. Both are right: measured in Chrome 152, Firefox 156 and Safari 26.6.2, all three parse `x` and answer the same for it as for `dppx` and the matching `dpi`, with Safari at a device pixel ratio of 2 matching every 2x form and the other two at 1 matching none.
+- With no block the mixin wrapped nothing, so the call emitted no CSS and said nothing. It raises since 4.0.0.
+- A call at the root is legitimate, since a `@media` rule belongs there: `@include screen-agent(2x) { .a { color: red; } }` compiles. Sass's "Declarations may only be used within style rules" for a block of bare declarations is about the caller's own block and points at the caller's line, so the mixin adds no message of its own there.
+
 **`smartphone`**
 
 - `device-width` and `device-height` read the **screen**, not the viewport, so a desktop window resized to a phone's width matches nothing. Measured in Chrome 152, Firefox 156 and Safari 26.6.2: a query at the screen's own size matched and the same query one pixel off did not. For a rule that follows the window, use `breakpoint` or `container-query`.

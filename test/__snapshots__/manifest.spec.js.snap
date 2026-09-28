@@ -2451,6 +2451,14 @@ exports[`Manifest examples screen-agent: .a { @include screen-agent("2x") { back
 }"
 `;
 
+exports[`Manifest examples screen-agent: .a { @include screen-agent(2dppx) { background-image: url("/img/a@2x.p 1`] = `
+"@media (min-resolution: 2dppx) {
+  .a {
+    background-image: url("/img/a@2x.png");
+  }
+}"
+`;
+
 exports[`Manifest examples shade: .a { color: shade(red, 20%); } 1`] = `
 ".a {
   color: #cc0000;

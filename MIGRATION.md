@@ -105,6 +105,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `reveal` refuses an `$easing` a transition cannot read | breaking, loud |
 | `scissors` accepts `var()` and `calc()` corners | fixes a false refusal; not breaking |
 | `scissors` refuses a corner below zero | breaking, loud |
+| `screen-agent` refuses a call with no block | breaking, loud |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
