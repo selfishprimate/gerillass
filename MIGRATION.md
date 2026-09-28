@@ -98,6 +98,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `position(static)` writes no offsets | not breaking; the offsets did nothing |
 | `position` refuses a non-zero offset with `static`, and a call at the root | breaking, loud |
 | `remove` refuses a call at the root | a better message; not breaking |
+| `reset-css`'s list rule can be overridden like the rest of it | fixes a rule that won when it should not |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -2519,6 +2520,23 @@ It writes `display: none`, and at the root that failed with Sass's own
 "Declarations may only be used within style rules", pointing at the declaration
 inside the library. It now names the mixin and the fix. Nothing that compiled
 before compiles differently.
+
+## Change: `reset-css`'s list rule stops winning
+
+The whole file is written inside `:where()` so that any rule you write beats it,
+whatever the order. One rule was not: the attribute sat outside, as
+`:where(ul, ol)[role="list"]`, so it carried an attribute's specificity.
+
+```css
+/* 3.x */  :where(ul, ol)[role="list"] { list-style: none; padding: 0; }
+/* 4.0.0 */ :where(ul[role="list"], ol[role="list"]) { list-style: none; padding: 0; }
+```
+
+Measured in Chrome 152, Firefox 156 and Safari 26.6.2, the old form beat a
+page's own `ul { list-style: disc; padding-left: 40px }` and the new one loses
+to it, which is what the rest of the reset does. The two select exactly the same
+elements, and a project that was relying on the reset winning there should write
+the rule it wants instead.
 
 ---
 

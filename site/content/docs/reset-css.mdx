@@ -86,7 +86,7 @@ The **Reset CSS** Sass mixin writes the baseline the rest of your stylesheet is 
 
 <Hint kind="info">
 
-**Everything is inside `:where()`, so the reset has no specificity.** Any rule you write wins, whatever order it lands in. The one exception is `box-sizing`, which is a `*` rule and already has none.
+**Everything is inside `:where()`, so the reset has no specificity.** Any rule you write wins, whatever order it lands in. The one exception is `box-sizing`, which is a `*` rule and already has none. The list rule was a second exception until 4.0.0: written `:where(ul, ol)[role="list"]`, the attribute sat outside the `:where()` and carried its own weight, so the reset beat a page's own `ul { list-style: disc }` in Chrome 152, Firefox 156 and Safari 26.6.2 alike. The attribute is inside now, the same elements are matched, and your rule wins.
 
 </Hint>
 

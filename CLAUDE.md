@@ -1002,7 +1002,8 @@ Two pieces of work are open:
   styled every field and that styles none of them, or with no block, and
   `position` writing no offsets for `static`, which ignores all four, refusing
   one that is not zero, and refusing a call at the root, and `remove` refusing
-  one too,
+  one too, and `reset-css` moving the attribute of its list rule inside the
+  `:where()`, which is what stops that one rule beating a page's own,
   all on
   `docs-examples-review`;
   and the demos and prose

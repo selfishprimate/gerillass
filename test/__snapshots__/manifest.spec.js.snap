@@ -2182,7 +2182,7 @@ exports[`Manifest examples reset-css: @include reset-css; 1`] = `
   line-height: 1.1;
 }
 
-:where(ul, ol)[role=list] {
+:where(ul[role=list], ol[role=list]) {
   list-style: none;
   padding: 0;
 }

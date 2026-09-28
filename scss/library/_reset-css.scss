@@ -14,7 +14,7 @@
 // into the stylesheet of everyone who includes it.
 @mixin reset-css {
   @if & {
-    @error "Please call the mixin at the root of your style sheet.";
+    @error "`reset-css` is the baseline for the whole page, so call it at the root of the stylesheet rather than inside `#{&}`.";
   }
 
   // The box model people expect, and the one every layout mixin here assumes.
@@ -50,7 +50,13 @@
   // announces. The old reset took the markers off every list, which is what
   // made VoiceOver stop calling them lists. Ask for it with `role="list"`
   // where the list is a layout rather than prose.
-  :where(ul, ol)[role="list"] {
+  //
+  // The attribute is inside the `:where()` rather than after it, which is the
+  // difference between this rule having no specificity and having an
+  // attribute's worth of it. Written `:where(ul, ol)[role="list"]` it beat a
+  // page's own `ul { list-style: disc }` in Chrome 152, Firefox 156 and Safari
+  // 26.6.2 alike, which is the one thing the whole file is arranged not to do.
+  :where(ul[role="list"], ol[role="list"]) {
     list-style: none;
     padding: 0;
   }
