@@ -283,6 +283,7 @@ a dropped declaration rather than an error.
 - `$of` counts, it does not narrow: a call that passes a selector as the position, such as `only(".featured")`, is not counting anything, so passing both raises.
 - The mixin narrows the selector it is called in and wraps the styles it is given, so it needs both a selector and a block. At the root Sass failed with "Top-level selectors may not contain the parent selector &", which named neither the mixin nor the fix, and with no block it wrote an empty rule that Sass then removed, so the call did nothing and said nothing. Both raise since 4.0.0.
 - `$of` counts children, so it cannot hold a pseudo-element. Measured in all three, `:nth-child(2 of ::before)` was dropped by Firefox 156 and Safari 26.6.2 and kept by Chrome 152, where it matched nothing, so the rule was dead in every one of them.
+- A bare word passed as the selector is not checked and needs no check: the value goes inside `:not()`, where a tag is a working thing to leave out, so `except("h2")` writes `li:not(h2)` and all three browsers apply it. `only` is the one with a trap here, because its value is attached to the element instead. The suffix form has no meaning here: `except("-active")` writes `.c:not(-active)`, which Chrome 152, Firefox 156 and Safari 26.6.2 all keep as a perfectly good selector that excludes nothing.
 
 **`focus-ring`**
 

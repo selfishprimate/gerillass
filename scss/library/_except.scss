@@ -75,6 +75,14 @@
       } @else {
         // For class, id or attribute selectors. Counting by another selector
         // has no meaning here: this form does not count at all.
+        //
+        // The value goes inside `:not()`, which is why `except` has no
+        // counterpart to the note in `_only.scss` about a bare word: a tag is
+        // a working thing to leave out, and `except("h2")` writes
+        // `li:not(h2)`, which all three browsers apply. The suffix form has no
+        // meaning here either: `except("-active")` writes `.c:not(-active)`,
+        // which Chrome 152, Firefox 156 and Safari 26.6.2 all keep as a
+        // perfectly good selector that excludes nothing.
         @if $of != null {
           @error "`except(#{meta.inspect($value)}, $of: #{meta.inspect($of)})` asks for two different things: `#{$value}` narrows the element itself, while `$of` says what to count. Pass a position, such as `except(2, $of: #{meta.inspect($of)})`.";
         }

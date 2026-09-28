@@ -10,12 +10,14 @@ page_image: "gerillass-only.jpg"
 
 <Member name="only">
 
-The **Only** Sass mixin helps you filter elements based on their position among a group of siblings and apply your style rules to **only** those elements. This mixin uses `:first-of-type`, `:last-of-type`, and `:nth-of-type` CSS pseudo-classes.
-<Hint kind="info">
+The **Only** Sass mixin styles the siblings you name and leaves the rest alone.
+Name them by position, counted from either end and as many as you like, by one
+of the four words `first`, `last`, `odd` and `even`, or by a selector they
+carry.
 
-You can pass a **string** value to target elements by their `id`, `class`, or `pseudo-class` selector. Or you can pass a **number** (or **multiple numbers** separated by commas) to target items by their index position in the list.
-
-</Hint>
+Positions are counted with `:nth-of-type`, which counts siblings of the same
+tag rather than the things you are counting, so `$of` is there for when those
+are not the same; see [below](#counting-by-something-other-than-the-tag).
 
 </Member>
 

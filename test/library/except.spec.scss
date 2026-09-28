@@ -32,15 +32,30 @@
     }
   }
 
-  @include it('Keeps keywords and selectors as they were.') {
+  @include it('Accepts a large position.') {
+    @include assert {
+      @include output { .a { @include except(99999) { color: red; } } }
+      @include expect { .a:not(:nth-of-type(99999)) { color: red; } }
+    }
+  }
+
+  // The last two mirror `only`'s case of the same name, and pin the asymmetry
+  // between the two. A tag inside `:not()` is a working thing to leave out, and
+  // a suffix is not: `.c:not(-active)` is a selector all three browsers keep
+  // and it excludes nothing, where `only("-active")` writes `.c-active`.
+  @include it('Keeps keywords, selectors, tags and suffixes as they were.') {
     @include assert {
       @include output {
         .a { @include except(last) { color: red; } }
         .b { @include except(".exclude") { color: red; } }
+        .c { @include except("h2") { color: red; } }
+        .d { @include except("-active") { color: red; } }
       }
       @include expect {
         .a:not(:last-of-type) { color: red; }
         .b:not(.exclude) { color: red; }
+        .c:not(h2) { color: red; }
+        .d:not(-active) { color: red; }
       }
     }
   }

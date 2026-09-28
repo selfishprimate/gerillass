@@ -304,60 +304,62 @@ to count:
 ```
 </Example>
 
-<Example caption="A breadcrumb trail where every crumb but the last gets a separator, counted by the crumbs so the home icon in front of them does not shift the count." listing="<nav class=&quot;crumbs&quot;>
-&#32;&#32;<span class=&quot;home&quot;>&#8962;</span>
-&#32;&#32;<a class=&quot;crumb&quot; href=&quot;#&quot;>Docs</a>
-&#32;&#32;<a class=&quot;crumb&quot; href=&quot;#&quot;>Mixins</a>
-&#32;&#32;<a class=&quot;crumb&quot; href=&quot;#&quot;>Except</a>
+<Example caption="A row of tags with a separator after each one but the last, and an **Add** link on the end that is an `a` like the tags are. Without `$of` the last tag keeps its separator, because `:last-of-type` is the Add link and no tag is ever excluded, so a stray dot sits in front of it. Counted by the tags, the separator stops where it should. Measured in Chrome 152, Firefox 156 and Safari 26.6.2, all three the same." listing="<nav class=&quot;tags&quot;>
+&#32;&#32;<a class=&quot;tag&quot; href=&quot;#&quot;>Sass</a>
+&#32;&#32;<a class=&quot;tag&quot; href=&quot;#&quot;>Mixins</a>
+&#32;&#32;<a class=&quot;tag&quot; href=&quot;#&quot;>CSS</a>
+&#32;&#32;<a class=&quot;add&quot; href=&quot;#&quot;>+ Add</a>
 </nav>">
 ```scss
-.crumb {
-  @include except(last, $of: ".crumb") {
+.tag {
+  @include except(last, $of: ".tag") {
     &::after {
-      content: "/";
-      padding: 0 8px;
-      color: #657167;
+      content: "\00b7";
+      margin: 0 2px 0 8px;
+      color: #8b9381;
     }
   }
 }
 ```
 ```html
 <style>
-  .crumbs { display: flex; align-items: center; font: 14px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; }
-  .home { padding-right: 8px; color: #657167; }
-  .crumb { color: #668f80; text-decoration: none; }
+  body { padding: 4px; }
+  .tags { display: flex; align-items: center; font: 14px/1.6 Inter, ui-sans-serif, system-ui, sans-serif; }
+  :where(.tag) { color: #668f80; text-decoration: none; }
+  :where(.add) { margin-left: 12px; padding: 2px 10px; border-radius: 999px; background: #f2f2eb; color: #657167; text-decoration: none; font-weight: 600; }
 </style>
-<nav class="crumbs">
-  <span class="home">⌂</span>
-  <a class="crumb" href="#">Docs</a>
-  <a class="crumb" href="#">Mixins</a>
-  <a class="crumb" href="#">Except</a>
+<nav class="tags">
+  <a class="tag" href="#">Sass</a>
+  <a class="tag" href="#">Mixins</a>
+  <a class="tag" href="#">CSS</a>
+  <a class="add" href="#">+ Add</a>
 </nav>
 ```
 </Example>
 
-<Example caption="Several positions at once, with `$of`: every row but the header and the total, counted by the rows that carry the class." listing="<table class=&quot;sheet&quot;>
-&#32;&#32;<tr class=&quot;row head&quot;><td>Item</td><td>Amount</td></tr>
+<Example caption="A rule above every figure row but the first, counted by the figure rows. The header is a `tr` like they are but carries no `row` class, so without `$of` it takes position 1 and every figure row gets a rule, including one right under the header. Measured in Chrome 152, Firefox 156 and Safari 26.6.2, all three the same." listing="<table class=&quot;sheet&quot;>
+&#32;&#32;<tr class=&quot;head&quot;><td>Item</td><td>Amount</td></tr>
 &#32;&#32;<tr class=&quot;row&quot;><td>Design</td><td>1,200</td></tr>
 &#32;&#32;<tr class=&quot;row&quot;><td>Build</td><td>3,400</td></tr>
 &#32;&#32;<tr class=&quot;row total&quot;><td>Total</td><td>4,600</td></tr>
 </table>">
 ```scss
 .row {
-  @include except(1, -1, $of: ".row") {
-    background: #fafaf8;
+  @include except(1, $of: ".row") {
+    border-top: 1px solid #dee0cd;
   }
 }
 ```
 ```html
 <style>
-  .sheet { width: 100%; border-collapse: collapse; font: 14px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; }
-  .sheet td { padding: 10px 12px; }
-  .head { font-weight: 700; color: #657167; }
-  .total { font-weight: 700; border-top: 2px solid #222c25; }
+  body { padding: 4px; }
+  .sheet { width: 100%; border-collapse: collapse; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
+  :where(.sheet td) { padding: 10px 12px; }
+  :where(.head) { font-weight: 700; color: #657167; }
+  :where(.total) { font-weight: 700; }
 </style>
 <table class="sheet">
-  <tr class="row head"><td>Item</td><td>Amount</td></tr>
+  <tr class="head"><td>Item</td><td>Amount</td></tr>
   <tr class="row"><td>Design</td><td>1,200</td></tr>
   <tr class="row"><td>Build</td><td>3,400</td></tr>
   <tr class="row total"><td>Total</td><td>4,600</td></tr>

@@ -9,13 +9,10 @@
 
 // Styles one sibling, or several, by position.
 //
-// `$of` says what to count. Without it the selector is `:nth-of-type`, which
-// counts siblings of the same tag: on a grid holding a `<div class="note">`
-// and two `<div class="card">`, `.card:nth-of-type(1)` matches nothing and
-// `:nth-of-type(2)` matches the first card, so every number is one out.
-// `only(1, $of: ".card")` writes `:nth-child(1 of .card)`, which counts the
-// cards and nothing else. Measured in Chrome 152, Firefox 156 and Safari
-// 26.6.2, where all three agree and all three support the `of` form.
+// `$of` says what to count, and is the same argument `except` takes: without it
+// the selector is `:nth-of-type`, which counts siblings of the same tag rather
+// than the things being counted. See scss/internal/_nth-of.scss for what was
+// measured.
 @mixin only($params...) {
   // Both a position and a selector are attached to `&`, so the mixin needs one
   // to attach to and a block to put inside it. Sass's own messages named

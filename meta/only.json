@@ -53,6 +53,7 @@
     ".a { @include only(\".featured\", $of: \".card\") { margin: 0; } }",
     ".a { @include only(2, $count: \".card\") { margin: 0; } }",
     "li { @include only(1); }",
-    "li { @include only(2, $of: \"::before\") { color: red; } }"
+    "li { @include only(2, $of: \"::before\") { color: red; } }",
+    "@include only(1) { color: red; }"
   ]
 }
