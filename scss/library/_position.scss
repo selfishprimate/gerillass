@@ -21,6 +21,13 @@
 // as short; the argument is here so the library behaves the same way
 // everywhere.
 @mixin position($position: absolute, $offsets: 0, $logical: false) {
+  // The mixin writes declarations, so it needs a rule to write them into.
+  // Sass's own message for a call at the root, "Declarations may only be used
+  // within style rules", pointed at a line inside the library and named
+  // neither the mixin nor the fix.
+  @if not & {
+    @error "`position` writes its declarations into the rule it is called in, so call it inside a selector, such as `.overlay { @include position(absolute, 0); }`.";
+  }
   // null is read as false, as a null argument means "not set" across the
   // library, so a caller can pass a variable that may be unset.
   @if $logical != true and $logical != false and $logical != null {
@@ -52,6 +59,25 @@
       }
     }
   }
+  // A static box ignores all four offsets, so writing them is dead CSS, and the
+  // default `0` meant every `position(static)` wrote four of them. Measured in
+  // Chrome 152, Firefox 156 and Safari 26.6.2: a static box with
+  // `top/right/bottom/left: 30px` sits exactly where a static box with no
+  // offsets sits, at the container's own origin, while the same offsets on a
+  // `relative` box move it 30px. So `static` writes no offsets. An offset that
+  // is not zero was asking for something `static` cannot do, and raises rather
+  // than being dropped quietly; all-zero offsets are the default and do nothing
+  // either way, so they pass.
+  $static: $position == static or $position == "static";
+  @if $static {
+    @each $value in $offsets {
+      @if $value != null and $value != 0 {
+        @error "`static` ignores every offset, so `#{meta.inspect($value)}` would do nothing: measured in Chrome 152, Firefox 156 and Safari 26.6.2, a static box sits in the same place with the offsets and without them. Pass `relative` to move the box from where it would otherwise sit, or `absolute` to take it out of the flow.";
+      }
+    }
+    $offsets: null null null null;
+  }
+
   $edges: top right bottom left;
   @if $logical {
     $edges: inset-block-start inset-inline-end inset-block-end inset-inline-start;

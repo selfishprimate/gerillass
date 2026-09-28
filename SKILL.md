@@ -360,6 +360,11 @@ a dropped declaration rather than an error.
 - Firefox used to give the placeholder its own opacity, so a colour can come out paler than you set it. `opacity: 1` beside the colour is the usual answer.
 - The mixin needs a selector to hang the pseudo-element on. Called at the root it wrote `&::placeholder`, which the page described as styling every input and which does nothing of the kind: measured in Chrome 152, Firefox 156 and Safari 26.6.2, all three keep the rule and the placeholder of an `input` and a `textarea` stays its default colour with `font-style: normal`, because a top-level `&` is `:scope` and a document has no placeholder. Dart Sass 1.91's command line refuses it outright, so the same call is a build error or dead CSS depending on how the stylesheet is compiled. Both that and a call with no block raise since 4.0.0; `all-text-inputs` is the way to reach every field.
 
+**`position`**
+
+- `static` writes no offsets, because a static box ignores all four. Measured in Chrome 152, Firefox 156 and Safari 26.6.2, a static box carrying `top/right/bottom/left: 30px` sits exactly where a static box with none sits, while the same offsets move a `relative` box by 30px. Until 4.0.0 the default `0` meant every `position(static)` wrote four dead declarations. An offset that is not zero raises rather than being dropped quietly.
+- The mixin writes declarations, so it needs a rule to write them into. A call at the root failed with Sass's own "Declarations may only be used within style rules", which pointed at a line inside the library; it raises with the mixin's own message since 4.0.0.
+
 **`remove`**
 
 - With one argument the element is hidden at exactly that width, `(width: 768px)`, which is a single pixel, and the mixin prints a warning. Write `only` for that width, or `min`, `max` or a range for anything wider.

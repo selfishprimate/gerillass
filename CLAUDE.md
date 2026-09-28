@@ -999,7 +999,9 @@ Two pieces of work are open:
   and `only` and `except` refusing a call with no selector or no block and a
   pseudo-element in `$of`, and `placeholder` and `placeholder-shown` refusing a
   call at the root, where each wrote a rule on a bare `&` that the page claimed
-  styled every field and that styles none of them, or with no block,
+  styled every field and that styles none of them, or with no block, and
+  `position` writing no offsets for `static`, which ignores all four, refusing
+  one that is not zero, and refusing a call at the root,
   all on
   `docs-examples-review`;
   and the demos and prose

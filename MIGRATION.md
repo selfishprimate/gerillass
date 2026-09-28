@@ -95,6 +95,8 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `only` and `except` refuse a pseudo-element in `$of` | breaking, loud |
 | `placeholder` refuses a call at the root or with no block | breaking, loud |
 | `placeholder-shown` refuses a call at the root or with no block | breaking, loud |
+| `position(static)` writes no offsets | not breaking; the offsets did nothing |
+| `position` refuses a non-zero offset with `static`, and a call at the root | breaking, loud |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -2476,6 +2478,39 @@ does not reach it. Wrap the call for every field at once:
 ```
 
 A call with no block raises too, for the same reason as `placeholder`'s.
+
+---
+
+## Change: `position(static)` writes no offsets
+
+The default offset is `0`, so every `position(static)` wrote four declarations
+a static box ignores:
+
+```scss
+.element { @include position(static); }
+// 3.x: position: static; top: 0; right: 0; bottom: 0; left: 0;
+// 4.0.0: position: static;
+```
+
+Measured in Chrome 152, Firefox 156 and Safari 26.6.2, a static box carrying
+`top`, `right`, `bottom` and `left` at 30px sits exactly where a static box with
+none sits, at its container's own origin, while the same offsets move a
+`relative` box by 30px. Nothing renders differently; there are four fewer
+declarations.
+
+An offset that is not zero now raises, because it was asking for what `static`
+cannot do:
+
+```scss
+.element { @include position(static, 10px); }
+// 3.x: position: static; top: 10px; right: 10px; bottom: 10px; left: 10px;
+//      all four ignored
+```
+
+Pass `relative` to move the box from where it would otherwise sit, or
+`absolute` to take it out of the flow. A call at the root raises too, with the
+mixin's own message in place of Sass's "Declarations may only be used within
+style rules".
 
 ---
 

@@ -2087,6 +2087,12 @@ exports[`Manifest examples position: .a { @include position(fixed, 0 10px); } 1`
 }"
 `;
 
+exports[`Manifest examples position: .a { @include position(static); } 1`] = `
+".a {
+  position: static;
+}"
+`;
+
 exports[`Manifest examples position: .badge { @include position(absolute, 0 auto auto 1rem, $logical: true) 1`] = `
 ".badge {
   position: absolute;

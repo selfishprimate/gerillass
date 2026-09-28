@@ -17,7 +17,7 @@ The **Position Sass mixin** provides a one-line method to quickly set both the p
 ## Arguments
 
 <Arguments of="position" footnote="To learn more about CSS shorthand properties, check out the links at the end of this page.">
-  <Argument name="$position" type="string">Sets the <code>position</code> property of the selected elements. Accepts the CSS values <code>static</code>, <code>relative</code>, <code>fixed</code>, <code>absolute</code>, and <code>sticky</code>, in any case, a vendor keyword such as <code>-webkit-sticky</code>, a CSS-wide keyword, or <code>var()</code>. The default value is <code>absolute</code>, and <code>null</code> leaves <code>position</code> out. A quoted keyword is written without its quotes.</Argument>
+  <Argument name="$position" type="string">Sets the <code>position</code> property of the selected elements. Accepts the CSS values <code>static</code>, <code>relative</code>, <code>fixed</code>, <code>absolute</code>, and <code>sticky</code>, in any case, a vendor keyword such as <code>-webkit-sticky</code>, a CSS-wide keyword, or <code>var()</code>. The default value is <code>absolute</code>, and <code>null</code> leaves <code>position</code> out. A quoted keyword is written without its quotes. <code>static</code> writes no offsets, since a static box ignores all four.</Argument>
   <Argument name="$offsets" type="list">Accepts a list of values to set the offsets of the box edges. It uses the CSS shorthand method. The default value is <code>0</code>. Use <code>null</code> in any position to leave that edge out. Each is a length, a percentage, <code>auto</code>, a CSS-wide keyword, <code>var()</code>, a maths function, <code>anchor()</code> or <code>anchor-size()</code>.</Argument>
   <Argument name="$logical (false)" type="boolean">Pass <code>true</code> for offsets that follow the writing direction. The shorthand order stays the same, and each value goes to the logical twin of its edge: <code>inset-block-start</code>, <code>inset-inline-end</code>, <code>inset-block-end</code> and <code>inset-inline-start</code>. The same choice <code>triangle</code> and <code>border-radius</code> offer with their logical names. <code>null</code> is read as <code>false</code>.</Argument>
 </Arguments>
@@ -156,6 +156,35 @@ An offset the browser drops stops the build too. Measured in Chrome 152, `top`, 
 ```
 ```text
 Error: `10deg` is not a valid offset for `position`: `deg` is not a length unit. A browser drops the declaration.
+```
+
+`static` is the one keyword the offsets do not reach, so the mixin writes none
+for it. Measured in Chrome 152, Firefox 156 and Safari 26.6.2, a static box
+carrying `top`, `right`, `bottom` and `left` at 30px sits exactly where a static
+box with no offsets sits, at its container's own origin, while the same offsets
+move a `relative` box by 30px. Until 4.0.0 the default `0` meant that every
+`position(static)` wrote four declarations a browser ignores; now it writes only
+the one that does something. An offset that is not zero is asking for what
+`static` cannot do, so it stops the build rather than being dropped quietly.
+
+```scss
+.element {
+  @include position(static, 10px);
+}
+```
+```text
+Error: `static` ignores every offset, so `10px` would do nothing: measured in Chrome 152, Firefox 156 and Safari 26.6.2, a static box sits in the same place with the offsets and without them. Pass `relative` to move the box from where it would otherwise sit, or `absolute` to take it out of the flow.
+```
+
+The mixin writes declarations, so it needs a rule to write them into. A call at
+the root used to fail with Sass's own message, which pointed at a line inside
+the library and named neither the mixin nor the fix.
+
+```scss
+@include position(absolute, 0);
+```
+```text
+Error: `position` writes its declarations into the rule it is called in, so call it inside a selector, such as `.overlay { @include position(absolute, 0); }`.
 ```
 
 ## Related Links

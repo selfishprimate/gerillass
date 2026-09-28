@@ -35,7 +35,8 @@
     ".badge { @include position(absolute, 0 auto auto 1rem, $logical: true); }",
     ".a { @include position(absolute, 0, $logical: null); }",
     ".a { @include position(absolute, #{16}px AUTO revert-layer); }",
-    ".tip { @include position(absolute, anchor(bottom) null null anchor(left)); }"
+    ".tip { @include position(absolute, anchor(bottom) null null anchor(left)); }",
+    ".a { @include position(static); }"
   ],
   "rejects": [
     ".badge { @include position(absolute, 0, $logical: yes); }",
@@ -47,6 +48,12 @@
     ".a { @include position(absolute, none); }",
     ".a { @include position(absolute, red); }",
     ".a { @include position(absolute, \"10px\"); }",
-    ".a { @include position(absolute, url(a.png)); }"
+    ".a { @include position(absolute, url(a.png)); }",
+    ".a { @include position(static, 10px); }",
+    "@include position(absolute, 0);"
+  ],
+  "caveats": [
+    "`static` writes no offsets, because a static box ignores all four. Measured in Chrome 152, Firefox 156 and Safari 26.6.2, a static box carrying `top/right/bottom/left: 30px` sits exactly where a static box with none sits, while the same offsets move a `relative` box by 30px. Until 4.0.0 the default `0` meant every `position(static)` wrote four dead declarations. An offset that is not zero raises rather than being dropped quietly.",
+    "The mixin writes declarations, so it needs a rule to write them into. A call at the root failed with Sass's own \"Declarations may only be used within style rules\", which pointed at a line inside the library; it raises with the mixin's own message since 4.0.0."
   ]
 }
