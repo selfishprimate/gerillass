@@ -97,6 +97,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `placeholder-shown` refuses a call at the root or with no block | breaking, loud |
 | `position(static)` writes no offsets | not breaking; the offsets did nothing |
 | `position` refuses a non-zero offset with `static`, and a call at the root | breaking, loud |
+| `remove` refuses a call at the root | a better message; not breaking |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -2511,6 +2512,13 @@ Pass `relative` to move the box from where it would otherwise sit, or
 `absolute` to take it out of the flow. A call at the root raises too, with the
 mixin's own message in place of Sass's "Declarations may only be used within
 style rules".
+
+## Change: `remove` says a call at the root needs a selector
+
+It writes `display: none`, and at the root that failed with Sass's own
+"Declarations may only be used within style rules", pointing at the declaration
+inside the library. It now names the mixin and the fix. Nothing that compiled
+before compiles differently.
 
 ---
 

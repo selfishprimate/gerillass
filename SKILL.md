@@ -370,6 +370,7 @@ a dropped declaration rather than an error.
 - With one argument the element is hidden at exactly that width, `(width: 768px)`, which is a single pixel, and the mixin prints a warning. Write `only` for that width, or `min`, `max` or a range for anything wider.
 - `max` with a key, and a range ending at a key, end just under the key, as in `breakpoint`: `remove(max, medium)` hides below 768px, `(max-width: 767.98px)`, so it does not overlap `remove(min, medium)`.
 - A `display` written after the include, in the same rule, is emitted after the `@media` block and wins over it. Write it before the include.
+- The mixin writes `display: none`, so it needs a rule to write it into. A call at the root failed with Sass's own "Declarations may only be used within style rules", which pointed at the declaration inside the library; it raises with the mixin's own message since 4.0.0.
 
 **`reset-css`**
 

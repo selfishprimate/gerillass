@@ -29,16 +29,16 @@ The **Remove Sass mixin** helps you set the `display` CSS property of an element
 
 ## Examples
 
-<Example resizable caption="Use `min` to remove the element **from a width upwards**, and `max` to remove it **up to a width**. These are the forms you will want most of the time. The bar below is removed from `medium`, 768px, upwards: widen the box past it and it is gone.">
+<Example resizable caption="Use `min` to remove the element **from a width upwards**, and `max` to remove it **up to a width**. These are the forms you will want most of the time. Drag the box: the bar is there below 420px and gone from there up. A name from the breakpoint map works in place of the length, and the examples below use them, but this box only opens to the width of the column, so a demo has to stay under it.">
 ```scss
 .element{
-  @include remove(min, medium);
+  @include remove(min, 420px);
 }
 ```
 ```html
 <style>
   body { margin: 0; background: #fafaf8; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
-  .element { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; background: #2f3937; color: #fafaf8; }
+  :where(.element) { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; background: #2f3937; color: #fafaf8; }
   .element a { padding: 6px 12px; border-radius: 999px; background: #fafaf8; color: #2f3937; font-weight: 600; text-decoration: none; }
   .page { padding: 18px 16px; }
   .page h3 { margin: 0 0 6px; font: 700 18px Inter, ui-sans-serif, system-ui, sans-serif; }
@@ -52,11 +52,25 @@ The **Remove Sass mixin** helps you set the `display` CSS property of an element
 ```
 </Example>
 
-<Example caption="Two values are a range, and the element is gone between them.">
+<Example resizable caption="Two values are a range, and the element is gone between them. Drag the box from one end to the other: the banner is there at the narrow end, goes between 360px and 460px, and comes back at the wide end.">
 ```scss
 .element{
-  @include remove(500px, 1024px);
+  @include remove(360px, 460px);
 }
+```
+```html
+<style>
+  body { margin: 0; background: #fafaf8; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
+  :where(.element) { padding: 12px 16px; background: #eefa92; font-weight: 600; }
+  .page { padding: 18px 16px; }
+  .page h3 { margin: 0 0 6px; font: 700 18px Inter, ui-sans-serif, system-ui, sans-serif; }
+  .page p { margin: 0; color: #657167; }
+</style>
+<div class="element">Free delivery this week</div>
+<div class="page">
+  <h3>Order 2841</h3>
+  <p>The banner above is removed between 360 and 460 pixels, where the layout has no room for it, and is back at either end.</p>
+</div>
 ```
 </Example>
 
@@ -66,7 +80,7 @@ The **Remove Sass mixin** helps you set the `display` CSS property of an element
 
 </Hint>
 
-<Example caption="If you do want that exact width, `only` says so explicitly. It compiles to the same query as a single value, without the warning.">
+<Example caption="If you do want that exact width, `only` says so explicitly. It compiles to the same query as a single value, without the warning. There is no demo for it because there is nothing to see: the query matches one pixel width and no reader is going to land on it by dragging.">
 ```scss
 .element{
   @include remove(only, 500px);
@@ -74,7 +88,7 @@ The **Remove Sass mixin** helps you set the `display` CSS property of an element
 ```
 </Example>
 
-<Example caption="The predefined names work in place of a length: `xsmall`, `small`, `medium`, `large`, `xlarge` and `xxl`.">
+<Example caption="The predefined names work in place of a length: `xsmall`, `small`, `medium`, `large`, `xlarge` and `xxl`. They start at 576px, wider than the box above opens, so these last two are written out rather than demonstrated.">
 ```scss
 .element{
   @include remove(max, medium);
@@ -89,6 +103,24 @@ The **Remove Sass mixin** helps you set the `display` CSS property of an element
 }
 ```
 </Example>
+
+## What it refuses
+
+The mixin writes `display: none`, so it needs a rule to write it into. A call at
+the root used to fail with Sass's own message, which pointed at the declaration
+inside the library and named neither the mixin nor the fix.
+
+```scss
+@include remove(min, medium);
+```
+```text
+Error: `remove` hides the element it is called in, so call it inside a selector, such as `.promo { @include remove(min, medium); }`.
+```
+
+Everything else a width condition refuses, [Breakpoint](/docs/breakpoint)
+refuses, since that is what this mixin writes the query with: a name that is not
+in the map, a percentage, a `var()`, and a range that runs backwards or is
+empty.
 
 ## Related Links
 

@@ -1001,7 +1001,8 @@ Two pieces of work are open:
   call at the root, where each wrote a rule on a bare `&` that the page claimed
   styled every field and that styles none of them, or with no block, and
   `position` writing no offsets for `static`, which ignores all four, refusing
-  one that is not zero, and refusing a call at the root,
+  one that is not zero, and refusing a call at the root, and `remove` refusing
+  one too,
   all on
   `docs-examples-review`;
   and the demos and prose
