@@ -2018,6 +2018,12 @@ exports[`Manifest examples placeholder-shown: .field { @include placeholder-show
 }"
 `;
 
+exports[`Manifest examples placeholder-shown: @include all-text-inputs { @include placeholder-shown { border-style:  1`] = `
+":where(input):not([type=button], [type=checkbox], [type=color], [type=file], [type=hidden], [type=image], [type=radio], [type=range], [type=reset], [type=submit]):placeholder-shown, textarea:placeholder-shown {
+  border-style: dashed;
+}"
+`;
+
 exports[`Manifest examples position: .a { @include position(absolute, #{16}px AUTO revert-layer); } 1`] = `
 ".a {
   position: absolute;

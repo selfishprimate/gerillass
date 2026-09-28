@@ -94,6 +94,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `only` and `except` refuse a call with no selector or no block | breaking, loud |
 | `only` and `except` refuse a pseudo-element in `$of` | breaking, loud |
 | `placeholder` refuses a call at the root or with no block | breaking, loud |
+| `placeholder-shown` refuses a call at the root or with no block | breaking, loud |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -2450,6 +2451,31 @@ For every field at once, wrap the call:
 
 A call with no block raises too. It wrote an empty rule that Sass then removed,
 so it did nothing and said nothing.
+
+---
+
+## Break: `placeholder-shown` refuses a call at the root
+
+The same two holes, in the mixin next door, and the same fix. At the root it
+wrote `&:placeholder-shown` and the documentation said that styled every field.
+
+```scss
+@include placeholder-shown { border-style: dashed; }
+// 3.x: &:placeholder-shown { border-style: dashed; }
+```
+
+Measured in Chrome 152, Firefox 156 and Safari 26.6.2, all three keep the rule
+and an empty input holds its own border, while asking the field itself with
+`matches(":placeholder-shown")` answers true: the field is empty and the rule
+does not reach it. Wrap the call for every field at once:
+
+```scss
+@include all-text-inputs {
+  @include placeholder-shown { border-style: dashed; }
+}
+```
+
+A call with no block raises too, for the same reason as `placeholder`'s.
 
 ---
 
