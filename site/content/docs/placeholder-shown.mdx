@@ -20,7 +20,7 @@ The **Placeholder Shown Sass mixin** helps you style an `<input>` or `<textarea>
 empty, not whether it has focus, so the styling stays while you click in and
 goes the moment you type a character.
 
-<Example caption="The floating label, which is the pattern this pseudo-class exists for. While the field is empty the label sits inside it; type and it rises to its place above. The field carries `placeholder=\" \"`, a single space, because `:placeholder-shown` only matches a field that has a placeholder. The movement is the demo's own `transition`; the mixin writes the two states." listing="<div class=&quot;field&quot;>
+<Example caption="The floating label, which is the pattern this pseudo-class exists for. While the field is empty the label sits on the field's own text line; type and it rises to its place above. The field carries `placeholder=&quot; &quot;`, a single space, because `:placeholder-shown` only matches a field that has a placeholder. The movement is the demo's own `transition`; the mixin writes the two states." listing="<div class=&quot;field&quot;>
 &#32;&#32;<input class=&quot;field__input&quot; id=&quot;email&quot; type=&quot;email&quot; placeholder=&quot; &quot;>
 &#32;&#32;<label class=&quot;field__label&quot; for=&quot;email&quot;>Email address</label>
 </div>">
@@ -28,7 +28,7 @@ goes the moment you type a character.
 .field__input {
   @include placeholder-shown {
     & + .field__label {
-      translate: 0 22px;
+      translate: 0 38px;
       font-size: 15px;
       color: #8b9381;
     }
@@ -37,10 +37,10 @@ goes the moment you type a character.
 ```
 ```html
 <style>
-  body { display: grid; place-items: center; min-height: 120px; padding: 16px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
-  .field { position: relative; width: 300px; padding-top: 20px; }
-  :where(.field__input) { width: 100%; padding: 12px 14px; border: 1px solid #dee0cd; border-radius: 10px; background: #fff; font: inherit; color: #2f3937; }
-  :where(.field__label) { position: absolute; top: 0; left: 15px; font-size: 12px; font-weight: 600; color: #668f80; transition: translate 0.15s ease, font-size 0.15s ease, color 0.15s ease; pointer-events: none; }
+  body { display: grid; place-items: center; min-height: 128px; padding: 16px; font: 15px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; }
+  .field { position: relative; width: 300px; padding-top: 24px; }
+  :where(.field__input) { display: block; width: 100%; padding: 13px 15px; border: 1px solid #dee0cd; border-radius: 10px; background: #fff; font: inherit; color: #2f3937; }
+  :where(.field__label) { position: absolute; top: 0; left: 16px; font-size: 12px; line-height: 1.4; font-weight: 600; color: #668f80; transition: translate 0.15s ease, font-size 0.15s ease, color 0.15s ease; pointer-events: none; }
 </style>
 <div class="field">
   <input class="field__input" id="email" type="email" placeholder=" ">
@@ -49,15 +49,15 @@ goes the moment you type a character.
 ```
 </Example>
 
-<Example caption="The same state read by two siblings: a **Required** chip inside the field and a line of help under it, both there while the field is empty and both gone once it holds anything. Click into the field and neither moves, which is the difference between this pseudo-class and `:focus`." listing="<div class=&quot;row&quot;>
+<Example caption="Two siblings reading the same state: the format the field wants, set inside it, and a line of help under it. Both belong to an empty field and both go on the first character, which a **Required** marker would not: a field stays required after you fill it. Click into the field and neither moves, which is the difference between this pseudo-class and `:focus`." listing="<div class=&quot;row&quot;>
 &#32;&#32;<input class=&quot;row__input&quot; type=&quot;text&quot; placeholder=&quot;Order number&quot;>
-&#32;&#32;<span class=&quot;row__chip&quot;>Required</span>
+&#32;&#32;<span class=&quot;row__format&quot;>1042-7781</span>
 &#32;&#32;<p class=&quot;row__help&quot;>You will find it at the top of your receipt.</p>
 </div>">
 ```scss
 .row__input {
   @include placeholder-shown {
-    & + .row__chip {
+    & + .row__format {
       visibility: visible;
     }
 
@@ -69,15 +69,15 @@ goes the moment you type a character.
 ```
 ```html
 <style>
-  body { display: grid; place-items: center; min-height: 120px; padding: 16px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; place-items: center; min-height: 128px; padding: 16px; font: 15px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; }
   .row { position: relative; width: 320px; }
-  :where(.row__input) { width: 100%; padding: 12px 88px 12px 14px; border: 1px solid #dee0cd; border-radius: 10px; background: #fff; font: inherit; color: #2f3937; }
-  :where(.row__chip) { position: absolute; top: 10px; right: 10px; visibility: hidden; padding: 3px 9px; border-radius: 999px; background: #f7ec59; font-size: 12px; font-weight: 700; color: #222c25; }
+  :where(.row__input) { display: block; width: 100%; padding: 13px 104px 13px 15px; border: 1px solid #dee0cd; border-radius: 10px; background: #fff; font: inherit; color: #2f3937; }
+  :where(.row__format) { position: absolute; top: 14px; right: 15px; visibility: hidden; font-size: 13px; line-height: 21px; color: #a8b0a3; }
   :where(.row__help) { display: none; margin: 8px 0 0; font-size: 13px; color: #8b9381; }
 </style>
 <div class="row">
   <input class="row__input" type="text" placeholder="Order number">
-  <span class="row__chip">Required</span>
+  <span class="row__format">1042-7781</span>
   <p class="row__help">You will find it at the top of your receipt.</p>
 </div>
 ```

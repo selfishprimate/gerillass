@@ -42,7 +42,8 @@
   "scripts": {
     "manifest": "node tools/build-manifest.js && node tools/build-skill.js && node tools/build-llms-txt.js",
     "test": "jest",
-    "check-doc-errors": "node tools/check-doc-errors.js"
+    "check-doc-errors": "node tools/check-doc-errors.js",
+    "check-mdx": "node tools/check-mdx.js"
   },
   "devDependencies": {
     "glob": "^11.0.0",

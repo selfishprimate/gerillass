@@ -499,6 +499,15 @@ about thirty characters and a compiled selector runs to sixty five; measured on
 columnizer, a 365px pane held 694px of CSS. Two readable panes would want a
 content column near 1380px.
 
+**A backslash cannot escape a quote in an attribute.** A `caption` or a
+`listing` is a JSX string, and MDX refuses `\"` inside one: it reads the
+backslash as the start of an attribute name and the whole page stops parsing.
+`placeholder-shown` shipped that on 28 September 2026 and the page was blank,
+with the dev server answering an internal error nothing in the repository was
+looking at. Write `&quot;` instead, which the parser decodes before the string
+reaches the component. `node tools/check-mdx.js` at the repository root now
+parses all 84 pages, in about half a second, and runs in the library's suite.
+
 **Attributes carry Markdown, not markup.** A `caption` or a `footnote` reaches
 its component as a string, and a string rendered by React is text: 47 pages
 were showing a literal `<code>$gutter</code>`, angle brackets and all, because

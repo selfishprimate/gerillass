@@ -70,6 +70,17 @@ describe("Manifest", () => {
     });
   });
 
+  it("has documentation pages that parse as MDX", () => {
+    // Nothing else here reads a page as MDX: the checks around it pull fences
+    // out with regular expressions, so a page can fail to parse with every one
+    // of them green. `placeholder-shown.mdx` did, over a `\"` inside a JSX
+    // attribute, and only a browser said so.
+    execFileSync("node", [path.join(ROOT, "tools", "check-mdx.js")], {
+      cwd: ROOT,
+      stdio: "pipe",
+    });
+  });
+
   it("has an llms.txt generated from the current manifest", () => {
     execFileSync("node", [path.join(ROOT, "tools", "build-llms-txt.js"), "--check"], {
       cwd: ROOT,

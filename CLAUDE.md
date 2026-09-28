@@ -205,6 +205,14 @@ made, plus the workflows that are easy to half-finish:
   stopped being true, and the function count had never been checked at all. It also prints a reminder naming the prose that usually
   needs updating when `tools/`, `test/` or `.claude/` changes, because that part
   is a judgement no script can make.
+- **`tools/check-mdx.js`** — parses every page under `site/content/` with the
+  MDX compiler and fails on one that does not. Everything else that reads the
+  documentation pulls fences out with regular expressions, so a page can fail to
+  parse with the whole suite green: `placeholder-shown.mdx` did on 28 September
+  2026, over a `\"` inside a JSX attribute, and only a browser said so. It runs
+  in `test/manifest.spec.js` and takes about half a second for all 84. The
+  parser lives in `site/node_modules`, so a checkout where `site` has no
+  install skips the check rather than failing it.
 - **`hooks/check-wiki.sh`** — runs `tools/check-wiki.js`, which refuses a
   release whose `wiki/` page is missing or does not mention something that
   changed. It reads the manifest at the previous tag rather than guessing, so
