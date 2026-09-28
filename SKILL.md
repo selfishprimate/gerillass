@@ -107,6 +107,7 @@ a dropped declaration rather than an error.
 | `long-shadow` | `.a { @include long-shadow(nonsense, 40px); }` |
 | `motion-safe` | `.card { @include motion-safe; }` |
 | `only` | `.a { @include only(#ff0000) { margin: 0; } }` |
+| `placeholder` | `@include placeholder { color: gray; }` |
 | `position` | `.badge { @include position(absolute, 0, $logical: yes); }` |
 | `remove` | `.a { @include remove(a, b, c); }` |
 | `reset-css` | `.a { @include reset-css; }` |
@@ -354,6 +355,7 @@ a dropped declaration rather than an error.
 
 - Until 4.0.0 this wrote five rules, the standard one and four prefixed ancestors. Measured in Chrome 152, Firefox 156 and Safari 26.6.2 by giving each selector its own colour and asking what painted: `:-ms-input-placeholder` and the single-colon `:-moz-placeholder` parse in none of the three, and `::-webkit-input-placeholder` and `::-moz-placeholder` are their own engine's alias for `::placeholder`, which was written anyway. One rule is left, and it is understood by everything since Chrome 57, Firefox 51 and Safari 10.1, all 2017.
 - Firefox used to give the placeholder its own opacity, so a colour can come out paler than you set it. `opacity: 1` beside the colour is the usual answer.
+- The mixin needs a selector to hang the pseudo-element on. Called at the root it wrote `&::placeholder`, which the page described as styling every input and which does nothing of the kind: measured in Chrome 152, Firefox 156 and Safari 26.6.2, all three keep the rule and the placeholder of an `input` and a `textarea` stays its default colour with `font-style: normal`, because a top-level `&` is `:scope` and a document has no placeholder. Dart Sass 1.91's command line refuses it outright, so the same call is a build error or dead CSS depending on how the stylesheet is compiled. Both that and a call with no block raise since 4.0.0; `all-text-inputs` is the way to reach every field.
 
 **`remove`**
 

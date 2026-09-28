@@ -1993,10 +1993,16 @@ exports[`Manifest examples placeholder: .field { @include placeholder { color: g
 }"
 `;
 
-exports[`Manifest examples placeholder: @include placeholder { color: gray; opacity: 1; } 1`] = `
-"&::placeholder {
+exports[`Manifest examples placeholder: .field { @include placeholder { color: gray; opacity: 1; } } 1`] = `
+".field::placeholder {
   color: gray;
   opacity: 1;
+}"
+`;
+
+exports[`Manifest examples placeholder: @include all-text-inputs { @include placeholder { color: gray; } } 1`] = `
+":where(input):not([type=button], [type=checkbox], [type=color], [type=file], [type=hidden], [type=image], [type=radio], [type=range], [type=reset], [type=submit])::placeholder, textarea::placeholder {
+  color: gray;
 }"
 `;
 

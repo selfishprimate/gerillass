@@ -93,6 +93,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `loadify` names `init` inside a selector, and a time at the root | a better message; not breaking |
 | `only` and `except` refuse a call with no selector or no block | breaking, loud |
 | `only` and `except` refuse a pseudo-element in `$of` | breaking, loud |
+| `placeholder` refuses a call at the root or with no block | breaking, loud |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -2420,6 +2421,35 @@ element nobody has, so a misspelt `first` styles nothing. But inside `.c` the
 same word writes `.c-active`, the documented suffix form, and the mixin cannot
 tell the two apart without knowing what `&` ends in. The suffix wins; the page
 says so instead.
+
+## Break: `placeholder` refuses a call at the root
+
+The mixin writes `::placeholder` on the selector it is called in, so it needs
+one. Called at the root it wrote `&::placeholder`, and the documentation said
+that styled every input and textarea on the page.
+
+```scss
+@include placeholder { color: #657167; }
+// 3.x: &::placeholder { color: #657167; }
+```
+
+It styled nothing. Measured in Chrome 152, Firefox 156 and Safari 26.6.2, all
+three parse the rule and keep it, and the placeholder of an `input` and a
+`textarea` stays its own default colour with `font-style: normal`: a top-level
+`&` is `:scope`, which is the document, and a document has no placeholder.
+Dart Sass 1.91 on the command line refuses the same call outright, so it was a
+build error or dead CSS depending on how the stylesheet was compiled.
+
+For every field at once, wrap the call:
+
+```scss
+@include all-text-inputs {
+  @include placeholder { color: #657167; }
+}
+```
+
+A call with no block raises too. It wrote an empty rule that Sass then removed,
+so it did nothing and said nothing.
 
 ---
 

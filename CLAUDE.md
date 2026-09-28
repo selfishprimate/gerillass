@@ -989,7 +989,9 @@ Two pieces of work are open:
   `long-shadow` naming a zero length or step, which Sass answers `false` to on
   `0px == 0` so both divided by zero and stopped the build with its own message,
   and `only` and `except` refusing a call with no selector or no block and a
-  pseudo-element in `$of`,
+  pseudo-element in `$of`, and `placeholder` refusing a call at the root, where
+  it wrote `&::placeholder` and the page claimed it styled every field, which
+  it styles none of, or with no block,
   all on
   `docs-examples-review`;
   and the demos and prose
