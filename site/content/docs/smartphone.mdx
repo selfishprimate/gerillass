@@ -108,6 +108,26 @@ and S25 are the one size two other sources state alike.
 
 </Hint>
 
+With no block there is nothing to wrap, so the call used to emit no CSS at all
+and say nothing about it.
+
+```scss
+.element {
+  @include smartphone("iPhone11");
+}
+```
+```text
+Error: `smartphone` wraps the styles you pass it, so call it with a block, such as `@include smartphone("iPhone11") { display: none; }`.
+```
+
+**The orientation is matched in any case**, so `LANDSCAPE` and `Portrait` work
+as well as the lower-case forms. That is what the library does everywhere a CSS
+keyword is an argument: `STICKY` reaches [Position](/docs/position) and `BOTH`
+reaches [Resizable](/docs/resizable). Until 4.0.0 only the lower-case spelling
+was read here.
+
+**A call at the root is fine**, because a `@media` rule belongs there.
+
 ## Related Links
 
 - [Tablet](/docs/tablet)

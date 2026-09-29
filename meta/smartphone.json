@@ -24,17 +24,22 @@
     ".a { @include smartphone(\"iPhone16e\", landscape) { display: none; } }",
     ".a { @include smartphone(\"iPhone-Air\") { display: none; } }",
     ".a { @include smartphone(\"iPhone11\") { display: none; } }",
-    ".a { @include smartphone(\"iPhone11\", landscape) { display: none; } }"
+    ".a { @include smartphone(\"iPhone11\", landscape) { display: none; } }",
+    ".a { @include smartphone(\"iPhone11\", LANDSCAPE) { display: none; } }"
   ],
   "rejects": [
     ".a { @include smartphone(Nokia3310) { display: none; } }",
     ".a { @include smartphone(\"iPhone11\", sideways) { display: none; } }",
-    ".a { @include smartphone(402 874) { display: none; } }"
+    ".a { @include smartphone(402 874) { display: none; } }",
+    ".a { @include smartphone(\"iPhone11\"); }"
   ],
   "caveats": [
     "`device-width` and `device-height` read the **screen**, not the viewport, so a desktop window resized to a phone's width matches nothing. Measured in Chrome 152, Firefox 156 and Safari 26.6.2: a query at the screen's own size matched and the same query one pixel off did not. For a rule that follows the window, use `breakpoint` or `container-query`.",
     "A size is not a model. Seven phones share 390x844 and four share 393x852, so `smartphone(\"iPhone15\")` applies to the 15 Pro and the 16 as well. The names are for looking a size up, not for telling two devices apart.",
     "The landscape form swaps the width and the height, which is right where the platform swaps the screen with the device. Emulated in Chrome 152, the swapped query matched when the screen was reported as 874x402 and did not when it stayed 402x874. It is not measured on iOS; `todos/device-maps.md` records what is open.",
-    "Since 4.0.0 an entry in the map is the screen as two lengths, `iPhone17: 402px 874px`, rather than a map of `width` and `height`. A map that still holds the old shape raises with a message saying so."
+    "Since 4.0.0 an entry in the map is the screen as two lengths, `iPhone17: 402px 874px`, rather than a map of `width` and `height`. A map that still holds the old shape raises with a message saying so.",
+    "With no block the query wrapped nothing, so the call emitted no CSS and said nothing. It raises since 4.0.0.",
+    "The orientation is matched in any case since 4.0.0, as the library does everywhere a CSS keyword is an argument: `STICKY` reaches `position` and `BOTH` reaches `resizable`, so `LANDSCAPE` reaches here.",
+    "A call at the root is legitimate, since a `@media` rule belongs there, and the mixin adds no message of its own for one."
   ]
 }

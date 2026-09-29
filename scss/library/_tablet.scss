@@ -1,6 +1,8 @@
 @charset "UTF-8";
 
 @use "sass:list";
+@use "sass:meta";
+@use "sass:string";
 @use "../internal/device-size" as *;
 @use "../maps/map-for-tablets" as *;
 
@@ -12,15 +14,25 @@
 // not changed. A rule that has to follow the window belongs in `breakpoint` or
 // `container-query`.
 @mixin tablet($device, $orientation: null) {
+  // With no block the query wrapped nothing, so the call emitted no CSS and
+  // said nothing.
+  @if not meta.content-exists() {
+    @error "`tablet` wraps the styles you pass it, so call it with a block, such as `@include tablet(\"iPadMini\") { display: none; }`.";
+  }
   $size: deviceSize($map-for-tablets, $device, "tablet", "tablet");
   $width: list.nth($size, 1);
   $height: list.nth($size, 2);
 
-  @if $orientation == portrait or $orientation == null {
+  // The orientation is matched in any case, as the library does everywhere a
+  // CSS keyword is an argument: `STICKY` reaches `position` and `BOTH` reaches
+  // `resizable`, so `LANDSCAPE` should reach here.
+  $orientation: if($orientation == null, null, string.to-lower-case("#{$orientation}"));
+
+  @if $orientation == "portrait" or $orientation == null {
     @media only screen and (device-width: $width) and (device-height: $height) and (orientation: portrait) {
       @content;
     }
-  } @else if $orientation == landscape {
+  } @else if $orientation == "landscape" {
     @media only screen and (device-width: $height) and (device-height: $width) and (orientation: landscape) {
       @content;
     }

@@ -2525,6 +2525,14 @@ exports[`Manifest examples smartphone: .a { @include smartphone("iPhone11") { di
 }"
 `;
 
+exports[`Manifest examples smartphone: .a { @include smartphone("iPhone11", LANDSCAPE) { display: none; } } 1`] = `
+"@media only screen and (device-width: 896px) and (device-height: 414px) and (orientation: landscape) {
+  .a {
+    display: none;
+  }
+}"
+`;
+
 exports[`Manifest examples smartphone: .a { @include smartphone("iPhone11", landscape) { display: none; } } 1`] = `
 "@media only screen and (device-width: 896px) and (device-height: 414px) and (orientation: landscape) {
   .a {
@@ -2635,6 +2643,14 @@ exports[`Manifest examples stretched-link: .card label { @include stretched-link
 
 exports[`Manifest examples tablet: .a { @include tablet("iPad-A16", landscape) { display: none; } } 1`] = `
 "@media only screen and (device-width: 1180px) and (device-height: 820px) and (orientation: landscape) {
+  .a {
+    display: none;
+  }
+}"
+`;
+
+exports[`Manifest examples tablet: .a { @include tablet("iPadMini", LANDSCAPE) { display: none; } } 1`] = `
+"@media only screen and (device-width: 1024px) and (device-height: 768px) and (orientation: landscape) {
   .a {
     display: none;
   }

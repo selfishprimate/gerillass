@@ -433,6 +433,9 @@ a dropped declaration rather than an error.
 - A size is not a model. Seven phones share 390x844 and four share 393x852, so `smartphone("iPhone15")` applies to the 15 Pro and the 16 as well. The names are for looking a size up, not for telling two devices apart.
 - The landscape form swaps the width and the height, which is right where the platform swaps the screen with the device. Emulated in Chrome 152, the swapped query matched when the screen was reported as 874x402 and did not when it stayed 402x874. It is not measured on iOS; `todos/device-maps.md` records what is open.
 - Since 4.0.0 an entry in the map is the screen as two lengths, `iPhone17: 402px 874px`, rather than a map of `width` and `height`. A map that still holds the old shape raises with a message saying so.
+- With no block the query wrapped nothing, so the call emitted no CSS and said nothing. It raises since 4.0.0.
+- The orientation is matched in any case since 4.0.0, as the library does everywhere a CSS keyword is an argument: `STICKY` reaches `position` and `BOTH` reaches `resizable`, so `LANDSCAPE` reaches here.
+- A call at the root is legitimate, since a `@media` rule belongs there, and the mixin adds no message of its own for one.
 
 **`sprite`**
 
@@ -453,6 +456,9 @@ a dropped declaration rather than an error.
 - A size is not a model: the current iPad, the iPad Air 11-inch and the iPad Air 4 and 5 all measure 820x1180, and the 12.9-inch Pro and the 13-inch Air both measure 1024x1366.
 - `iPad` and `iPadPro` keep the sizes they have always had, the 7th to 9th generation iPad at 810x1080 and the 12.9-inch Pro, so no existing call changes. The current iPad is `iPad-A16` or `iPad10`, and the 11-inch Pro is `iPadPro-11` or `iPadPro-11-M4`.
 - Since 4.0.0 an entry in the map is the screen as two lengths, `iPad10: 820px 1180px`, rather than a map of `width` and `height`. A map that still holds the old shape raises with a message saying so.
+- With no block the query wrapped nothing, so the call emitted no CSS and said nothing. It raises since 4.0.0.
+- The orientation is matched in any case since 4.0.0, as the library does everywhere a CSS keyword is an argument: `STICKY` reaches `position` and `BOTH` reaches `resizable`, so `LANDSCAPE` reaches here.
+- A call at the root is legitimate, since a `@media` rule belongs there, and the mixin adds no message of its own for one.
 
 **`text-gradient`**
 

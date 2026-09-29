@@ -2154,19 +2154,24 @@
         "`device-width` and `device-height` read the **screen**, not the viewport, so a desktop window resized to a phone's width matches nothing. Measured in Chrome 152, Firefox 156 and Safari 26.6.2: a query at the screen's own size matched and the same query one pixel off did not. For a rule that follows the window, use `breakpoint` or `container-query`.",
         "A size is not a model. Seven phones share 390x844 and four share 393x852, so `smartphone(\"iPhone15\")` applies to the 15 Pro and the 16 as well. The names are for looking a size up, not for telling two devices apart.",
         "The landscape form swaps the width and the height, which is right where the platform swaps the screen with the device. Emulated in Chrome 152, the swapped query matched when the screen was reported as 874x402 and did not when it stayed 402x874. It is not measured on iOS; `todos/device-maps.md` records what is open.",
-        "Since 4.0.0 an entry in the map is the screen as two lengths, `iPhone17: 402px 874px`, rather than a map of `width` and `height`. A map that still holds the old shape raises with a message saying so."
+        "Since 4.0.0 an entry in the map is the screen as two lengths, `iPhone17: 402px 874px`, rather than a map of `width` and `height`. A map that still holds the old shape raises with a message saying so.",
+        "With no block the query wrapped nothing, so the call emitted no CSS and said nothing. It raises since 4.0.0.",
+        "The orientation is matched in any case since 4.0.0, as the library does everywhere a CSS keyword is an argument: `STICKY` reaches `position` and `BOTH` reaches `resizable`, so `LANDSCAPE` reaches here.",
+        "A call at the root is legitimate, since a `@media` rule belongs there, and the mixin adds no message of its own for one."
       ],
       "examples": [
         ".a { @include smartphone(\"iPhone17-Pro\") { display: none; } }",
         ".a { @include smartphone(\"iPhone16e\", landscape) { display: none; } }",
         ".a { @include smartphone(\"iPhone-Air\") { display: none; } }",
         ".a { @include smartphone(\"iPhone11\") { display: none; } }",
-        ".a { @include smartphone(\"iPhone11\", landscape) { display: none; } }"
+        ".a { @include smartphone(\"iPhone11\", landscape) { display: none; } }",
+        ".a { @include smartphone(\"iPhone11\", LANDSCAPE) { display: none; } }"
       ],
       "rejects": [
         ".a { @include smartphone(Nokia3310) { display: none; } }",
         ".a { @include smartphone(\"iPhone11\", sideways) { display: none; } }",
-        ".a { @include smartphone(402 874) { display: none; } }"
+        ".a { @include smartphone(402 874) { display: none; } }",
+        ".a { @include smartphone(\"iPhone11\"); }"
       ]
     },
     {
@@ -2272,19 +2277,24 @@
         "`device-width` and `device-height` read the screen, not the viewport, so a tablet running the page in a split view still matches: the window is narrower, the screen is not. A rule that has to follow the window belongs in `breakpoint` or `container-query`.",
         "A size is not a model: the current iPad, the iPad Air 11-inch and the iPad Air 4 and 5 all measure 820x1180, and the 12.9-inch Pro and the 13-inch Air both measure 1024x1366.",
         "`iPad` and `iPadPro` keep the sizes they have always had, the 7th to 9th generation iPad at 810x1080 and the 12.9-inch Pro, so no existing call changes. The current iPad is `iPad-A16` or `iPad10`, and the 11-inch Pro is `iPadPro-11` or `iPadPro-11-M4`.",
-        "Since 4.0.0 an entry in the map is the screen as two lengths, `iPad10: 820px 1180px`, rather than a map of `width` and `height`. A map that still holds the old shape raises with a message saying so."
+        "Since 4.0.0 an entry in the map is the screen as two lengths, `iPad10: 820px 1180px`, rather than a map of `width` and `height`. A map that still holds the old shape raises with a message saying so.",
+        "With no block the query wrapped nothing, so the call emitted no CSS and said nothing. It raises since 4.0.0.",
+        "The orientation is matched in any case since 4.0.0, as the library does everywhere a CSS keyword is an argument: `STICKY` reaches `position` and `BOTH` reaches `resizable`, so `LANDSCAPE` reaches here.",
+        "A call at the root is legitimate, since a `@media` rule belongs there, and the mixin adds no message of its own for one."
       ],
       "examples": [
         ".a { @include tablet(\"iPadPro-13\") { display: none; } }",
         ".a { @include tablet(\"iPad-A16\", landscape) { display: none; } }",
         ".a { @include tablet(\"iPadMini6\") { display: none; } }",
         ".a { @include tablet(\"iPadPro\") { display: none; } }",
-        ".a { @include tablet(\"iPadPro\", landscape) { display: none; } }"
+        ".a { @include tablet(\"iPadPro\", landscape) { display: none; } }",
+        ".a { @include tablet(\"iPadMini\", LANDSCAPE) { display: none; } }"
       ],
       "rejects": [
         ".a { @include tablet(Surface) { display: none; } }",
         ".a { @include tablet(\"iPadPro\", sideways) { display: none; } }",
-        ".a { @include tablet(820 1180) { display: none; } }"
+        ".a { @include tablet(820 1180) { display: none; } }",
+        ".a { @include tablet(\"iPadMini\"); }"
       ]
     },
     {

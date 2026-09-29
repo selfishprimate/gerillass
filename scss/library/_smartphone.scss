@@ -1,6 +1,8 @@
 @charset "UTF-8";
 
 @use "sass:list";
+@use "sass:meta";
+@use "sass:string";
 @use "../internal/device-size" as *;
 @use "../maps/map-for-smartphones" as *;
 
@@ -17,15 +19,25 @@
 // as 874x402 the swapped query matched, and with the screen left at 402x874 it
 // did not. Not measured on iOS; `todos/device-maps.md` has the detail.
 @mixin smartphone($device, $orientation: null) {
+  // With no block the query wrapped nothing, so the call emitted no CSS and
+  // said nothing.
+  @if not meta.content-exists() {
+    @error "`smartphone` wraps the styles you pass it, so call it with a block, such as `@include smartphone(\"iPhone11\") { display: none; }`.";
+  }
   $size: deviceSize($map-for-smartphones, $device, "smartphone", "phone");
   $width: list.nth($size, 1);
   $height: list.nth($size, 2);
 
-  @if $orientation == portrait or $orientation == null {
+  // The orientation is matched in any case, as the library does everywhere a
+  // CSS keyword is an argument: `STICKY` reaches `position` and `BOTH` reaches
+  // `resizable`, so `LANDSCAPE` should reach here.
+  $orientation: if($orientation == null, null, string.to-lower-case("#{$orientation}"));
+
+  @if $orientation == "portrait" or $orientation == null {
     @media only screen and (device-width: $width) and (device-height: $height) and (orientation: portrait) {
       @content;
     }
-  } @else if $orientation == landscape {
+  } @else if $orientation == "landscape" {
     @media only screen and (device-width: $height) and (device-height: $width) and (orientation: landscape) {
       @content;
     }
