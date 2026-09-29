@@ -10,20 +10,28 @@ page_image: "gerillass-smartphone.jpg"
 
 <Member name="smartphone">
 
-There will be times when you need to style elements for one particular smartphone model only. The **Smartphone** Sass mixin helps you do that.
-<Hint kind="info">
+The **Smartphone** Sass mixin wraps its block in a media query for one model's
+screen, named rather than measured.
 
-**Tip:** There are predefined values for commonly used smartphone models in the `_map-for-smartphones.scss` file. **You can add more model specifications here to expand the list if you like.**
-
-</Hint>
+It reads `device-width` and `device-height`, which answer the size of the
+screen and not of the window, so a rule that has to follow the window belongs
+in [breakpoint](/docs/breakpoint) instead, and one that follows a component's
+own width in [container query](/docs/container-query).
 
 </Member>
+
+<Hint kind="info">
+
+**The map is yours to extend.** The models live in `_map-for-smartphones.scss`, and a
+screen the list does not carry is one entry away.
+
+</Hint>
 
 ## Arguments
 
 <Arguments of="smartphone" footnote="String values can be passed with or without quotation marks.">
   <Argument name="$device" type="string">The name of a phone, from <code>$map-for-smartphones</code>. Every iPhone from the 4 to the 17 and the Air is in it, and on the Android side the Pixel line from the 6 to the 10 and seven Galaxy models; the table below lists them by screen. A screen size is refused: pass a name.</Argument>
-  <Argument name="$orientation" type="string">Accepts two values: <code>portrait</code> and <code>landscape</code>. The default value is <code>portrait</code>.</Argument>
+  <Argument name="$orientation" type="string">Accepts <code>portrait</code> and <code>landscape</code>, in any case. Left out, the query is the portrait one.</Argument>
 </Arguments>
 
 ## The phones it knows
@@ -107,6 +115,8 @@ and S25 are the one size two other sources state alike.
 **Landscape swaps the two values.** That is right on a platform that swaps the screen with the device, which is what Android reports: emulated in Chrome 152, the swapped query matched when the screen read 874 x 402 and did not when it stayed 402 x 874. It is not verified on iOS.
 
 </Hint>
+
+## What it refuses
 
 With no block there is nothing to wrap, so the call used to emit no CSS at all
 and say nothing about it.

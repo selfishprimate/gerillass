@@ -10,20 +10,28 @@ page_image: "gerillass-tablet.jpg"
 
 <Member name="tablet">
 
-There will be times when you need to style elements for one particular tablet model only. The **Tablet** Sass mixin helps you do that.
-<Hint kind="info">
+The **Tablet** Sass mixin wraps its block in a media query for one model's
+screen, named rather than measured.
 
-**Tip:** There are predefined values for commonly used tablet models in the `_map-for-tablets.scss` file. **You can add more model specifications here to expand the list if you like.**
-
-</Hint>
+It reads `device-width` and `device-height`, which answer the size of the
+screen and not of the window, so a rule that has to follow the window belongs
+in [breakpoint](/docs/breakpoint) instead, and one that follows a component's
+own width in [container query](/docs/container-query).
 
 </Member>
+
+<Hint kind="info">
+
+**The map is yours to extend.** The models live in `_map-for-tablets.scss`, and a
+screen the list does not carry is one entry away.
+
+</Hint>
 
 ## Arguments
 
 <Arguments of="tablet" footnote="String values can be passed with or without quotation marks.">
   <Argument name="$device" type="string">The name of a tablet, from <code>$map-for-tablets</code>: the iPad, iPad Air, iPad Pro and iPad mini lines, the Galaxy Tab S4, plus the Nexus entries the map has always carried. The table below lists them by screen. A screen size is refused: pass a name.</Argument>
-  <Argument name="$orientation" type="string">Accepts two values: <code>portrait</code> and <code>landscape</code>. The default value is <code>portrait</code>.</Argument>
+  <Argument name="$orientation" type="string">Accepts <code>portrait</code> and <code>landscape</code>, in any case. Left out, the query is the portrait one.</Argument>
 </Arguments>
 
 ## The tablets it knows
@@ -86,6 +94,8 @@ read from Xcode's own device profiles rather than from a specification page.
 **A size is not a model.** The current iPad, the 11-inch Air and the Air 4 and 5 all measure 820 x 1180, and the 12.9-inch Pro and the 13-inch Air both measure 1024 x 1366, so a rule written for one of a group applies to all of it.
 
 </Hint>
+
+## What it refuses
 
 With no block there is nothing to wrap, so the call used to emit no CSS at all
 and say nothing about it.
