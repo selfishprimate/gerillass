@@ -2,6 +2,7 @@
 // to keep working, the old one with a warning, which `meta/fillNulls.json`
 // covers with a `warns` entry.
 @use 'true' as *;
+@use 'sass:list';
 @use '../../scss/utilities/fill-nulls' as *;
 
 @include describe('fillNulls()') {
@@ -16,5 +17,27 @@
   @include it('Takes the separator under either spelling.') {
     @include assert-equal(fillNulls(1px null, $separation: space), 1px 0);
     @include assert-equal(fillNulls(1px null, $seperation: space), 1px 0);
+  }
+
+  // Three things found by probing in 4.0.0, pinned here so a stricter version
+  // later fails the suite rather than a stylesheet.
+  @include it('Reads the separator in any case.') {
+    @include assert-equal(fillNulls(1px null, SPACE), 1px 0);
+    @include assert-equal(fillNulls(1px null, Comma), (1px, 0));
+    @include assert-equal(fillNulls(1px null, "space"), 1px 0);
+  }
+
+  // `@for $i from 1 through 0` counts down rather than running no times, so an
+  // empty list used to fail with Sass's own index message from inside the
+  // library. It comes back empty now, and the caller's own declaration is where
+  // an empty list is refused, which is where the fault is.
+  @include it('Returns an empty list unchanged.') {
+    @include assert-equal(fillNulls((), space), ());
+    @include assert-equal(list.length(fillNulls((), space)), 0);
+  }
+
+  // `null` means the argument was not given, as it does across the library.
+  @include it('Reads a null $skip as the default.') {
+    @include assert-equal(fillNulls(1px null, space, null), 1px 0);
   }
 }

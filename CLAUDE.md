@@ -1053,7 +1053,10 @@ Two pieces of work are open:
   right only at that size, and converting every absolute unit rather than
   refusing the six besides `px` that reduce to the same scale, and
   `convertToNumber` reading a sign and a decimal point, which its name promises
-  and which it refused,
+  and which it refused, and `fillNulls` checking `$skip` as a boolean, which
+  was read by truthiness so a `0` dropped the nulls it was meant to fill,
+  reading its separator in any case, and returning an empty list rather than
+  failing with Sass's index message,
   all on
   `docs-examples-review`;
   and the demos and prose

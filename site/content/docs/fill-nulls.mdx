@@ -22,18 +22,26 @@ Replaces null entries in a list with 0, or drops them.
 ## Arguments
 
 <Arguments of="fillNulls">
-  <Argument name="$value" type="list">Accepts a list that may contain nulls.</Argument>
-  <Argument name="$separation (comma)" type="string">Accepts <code>comma</code>, <code>space</code> or <code>slash</code>, which is the separator the returned list is built with.</Argument>
-  <Argument name="$skip (false)" type="boolean">Accepts true to leave nulls in place instead of using 0. A null is left out of the CSS the list writes.</Argument>
+  <Argument name="$value" type="list">A list that may contain nulls. An empty list comes back empty.</Argument>
+  <Argument name="$separation (comma)" type="string"><code>comma</code>, <code>space</code> or <code>slash</code>, which is the separator the returned list is built with. Read in any case, and quoted or not.</Argument>
+  <Argument name="$skip (false)" type="boolean"><code>true</code> leaves the nulls in place instead of using 0, and a null is left out of the CSS the list writes. It has to be a boolean: in Sass everything but <code>false</code> and <code>null</code> is true, so a <code>0</code> here would have dropped them.</Argument>
   <Argument name="$seperation (null)" type="string">The old, misspelt name of <code>$separation</code>. Passing it still works and warns; it is a fourth argument so that nobody passes it by position.</Argument>
 </Arguments>
 
 ## Examples
 
-<Example caption="Shorthand where only some sides are given.">
+<Example caption="Shorthand where only some sides are given. A `null` in a Sass list writes nothing at all, so the shorthand would come out as one value rather than four; `0` is what keeps the sides in their places.">
 ```scss
 .card {
   margin: fillNulls(24px null null null, space);
+}
+```
+</Example>
+
+<Example caption="`$skip: true` drops the nulls instead, which is what a shorthand wants when the missing values are at the end rather than in the middle.">
+```scss
+.card {
+  padding: fillNulls(12px 24px null null, space, true);
 }
 ```
 </Example>
@@ -49,6 +57,17 @@ Arguments are checked, so a wrong value stops the build with a message instead o
 ```
 ```text
 Error: `spaces` is not a valid $separation for `fillNulls`. Pass `comma`, `space` or `slash`.
+```
+
+`$skip` has to be a boolean, and this is the one worth knowing about. Sass reads everything but `false` and `null` as true, so a `0` there dropped the nulls rather than keeping them, which is the opposite of what writing `0` means, and nothing said so.
+
+```scss
+.card {
+  margin: fillNulls(24px null, space, 0);
+}
+```
+```text
+Error: `0` is not a valid $skip for `fillNulls`. Pass `true` to drop the nulls or `false` to write them as 0; in Sass everything but `false` and `null` is true, so a `0` here would have dropped them.
 ```
 
 ## Related Links

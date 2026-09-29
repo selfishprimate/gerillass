@@ -541,6 +541,8 @@ a dropped declaration rather than an error.
 **`fillNulls`**
 
 - The second argument was spelt `$seperation` until 4.0.0. The old spelling still works as a keyword argument and warns; `$separation` is the one to pass.
+- `$skip` is checked as a boolean since 4.0.0. It used to be read by truthiness, and in Sass everything but `false` and `null` is true, so `fillNulls($list, space, 0)` dropped the nulls: the opposite of what somebody writing `0` means, with nothing to say so.
+- An empty list used to fail with Sass's own `Invalid index 1 for a list with 0 elements`, from inside the library, because `@for $i from 1 through 0` counts down rather than running no times. It comes back empty now, and an empty list is refused where it is written into a declaration, which is where the fault is.
 
 **`isNumber`**
 

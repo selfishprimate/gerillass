@@ -135,6 +135,8 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `convertToEm` takes a `$base`, so em is measured against the right font size | not breaking |
 | `convertToEm` converts every absolute unit, not only px | fixes a false refusal; not breaking |
 | `convertToNumber` reads a sign and a decimal point | not breaking |
+| `fillNulls` refuses a `$skip` that is not a boolean | breaking, loud; a `0` there dropped the nulls |
+| `fillNulls` reads its separator in any case, and returns an empty list unchanged | fixes a refusal and a Sass index error |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -2978,6 +2980,35 @@ refuses them written out, and scientific notation such as `"1e3"` is not read.
 Compiled across 41 calls: nine identical, ten that now work, and 22 where a
 value that was already refused is refused with the reworded message. Nothing is
 newly refused and no returned value changed.
+
+
+## Break: `fillNulls` checks `$skip` as a boolean
+
+It was read by truthiness, and in Sass everything but `false` and `null` is
+true, so a `0` there did the opposite of what writing `0` means.
+
+```scss
+margin: fillNulls(24px null, space, 0);
+// 3.x: 24px — the null was dropped, not filled
+```
+
+`null` is still read as the default, as it is across the library. Anything else
+raises: `0`, `""`, `1`, `"yes"` and a colour were the five the sweep found.
+
+## Fixed: an empty list, and a separator in any case
+
+`fillNulls(())` failed with Sass's own `Invalid index 1 for a list with 0
+elements`, pointing inside the library, because `@for $i from 1 through 0`
+counts down rather than running no times. The loop is an `@each` now, an empty
+list comes back empty, and an empty list is refused where it is written into a
+declaration, which is where the fault is.
+
+`SPACE` and `Comma` were refused as though they were words the function had
+never heard of. Both work, under either spelling of the argument.
+
+Compiled across 36 calls: 26 identical, three separator spellings that now
+work, five `$skip` values newly refused, one message improved and one call that
+now works where the old argument name was passed in capitals.
 
 
 ---

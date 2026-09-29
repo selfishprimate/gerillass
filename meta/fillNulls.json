@@ -5,7 +5,8 @@
     {
       "name": "$value",
       "accepts": [
-        "a list that may contain nulls"
+        "a list that may contain nulls",
+        "an empty list, which comes back empty"
       ]
     },
     {
@@ -13,26 +14,34 @@
       "accepts": [
         "comma",
         "space",
-        "slash"
+        "slash",
+        "read in any case, and quoted or not"
       ]
     },
     {
       "name": "$skip",
       "accepts": [
-        "true to leave nulls in place instead of using 0"
+        "true to drop the nulls, false to write them as 0",
+        "null, read as the default",
+        "anything else is refused: in Sass everything but false and null is true, so a 0 here would have dropped them"
       ]
     }
   ],
   "examples": [
-    ".a { margin: fillNulls(1px null 3px null, space); }"
+    ".a { margin: fillNulls(1px null 3px null, space); }",
+    ".a { margin: fillNulls(1px null 3px null, SPACE); }"
   ],
   "rejects": [
-    ".a { --x: #{fillNulls(1px null, nonsense)}; }"
+    ".a { --x: #{fillNulls(1px null, nonsense)}; }",
+    ".a { --x: #{fillNulls(1px null, space, 0)}; }",
+    ".a { --x: #{fillNulls(1px null, space, \"yes\")}; }"
   ],
   "warns": [
     ".a { margin: fillNulls(1px null 3px null, $seperation: space); }"
   ],
   "caveats": [
-    "The second argument was spelt `$seperation` until 4.0.0. The old spelling still works as a keyword argument and warns; `$separation` is the one to pass."
+    "The second argument was spelt `$seperation` until 4.0.0. The old spelling still works as a keyword argument and warns; `$separation` is the one to pass.",
+    "`$skip` is checked as a boolean since 4.0.0. It used to be read by truthiness, and in Sass everything but `false` and `null` is true, so `fillNulls($list, space, 0)` dropped the nulls: the opposite of what somebody writing `0` means, with nothing to say so.",
+    "An empty list used to fail with Sass's own `Invalid index 1 for a list with 0 elements`, from inside the library, because `@for $i from 1 through 0` counts down rather than running no times. It comes back empty now, and an empty list is refused where it is written into a declaration, which is where the fault is."
   ]
 }

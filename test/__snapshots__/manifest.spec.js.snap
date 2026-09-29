@@ -1499,6 +1499,12 @@ exports[`Manifest examples except: .a { @include except(odd, $of: "li.done") { m
 }"
 `;
 
+exports[`Manifest examples fillNulls: .a { margin: fillNulls(1px null 3px null, SPACE); } 1`] = `
+".a {
+  margin: 1px 0 3px 0;
+}"
+`;
+
 exports[`Manifest examples fillNulls: .a { margin: fillNulls(1px null 3px null, space); } 1`] = `
 ".a {
   margin: 1px 0 3px 0;

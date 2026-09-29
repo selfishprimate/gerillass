@@ -2,6 +2,9 @@
 
 @use "sass:list";
 @use "sass:meta";
+@use "sass:string";
+
+$-separators: "comma" "space" "slash";
 
 // Replaces the nulls in a list with 0, or drops them when $skip is true.
 //
@@ -10,20 +13,45 @@
 // one to pass now and the old one still works, with a warning. Both cannot
 // simply be aliases: Sass has no such thing, so the old name is a fourth
 // argument that nobody passes positionally.
+//
+// Three things it used to get wrong, all found by probing rather than by any
+// call anybody wrote:
+//
+// - an empty list failed with Sass's own `Invalid index 1 for a list with 0
+//   elements`, because `@for $i from 1 through 0` counts down rather than
+//   running no times. The loop is an `@each` now, which has no index to be
+//   wrong about, and an empty list comes back empty;
+// - the separator was compared as written, so `SPACE` and `Comma` were refused
+//   as though they were words the function had never heard of;
+// - `$skip` was read by truthiness, and in Sass everything but `false` and
+//   `null` is true, so `$skip: 0` and `$skip: ""` both dropped the nulls. That
+//   is the opposite of what somebody writing `0` means, and nothing said so.
 @function fillNulls($value, $separation: comma, $skip: false, $seperation: null) {
   @if $seperation != null {
     @warn "`$seperation` is the old, misspelt name of the second argument of `fillNulls`. It still works, and `$separation` is the one to pass.";
     $separation: $seperation;
   }
-  @if not list.index("comma" "space" "slash", $separation) {
+  $name: null;
+  @if meta.type-of($separation) == "string" {
+    $name: string.to-lower-case(string.unquote("#{$separation}"));
+  }
+  @if not list.index($-separators, $name) {
     @error "`#{meta.inspect($separation)}` is not a valid $separation for `fillNulls`. Pass `comma`, `space` or `slash`.";
   }
+  // `null` is the library's way of saying an argument was not given, so it is
+  // read as the default rather than refused.
+  @if $skip == null {
+    $skip: false;
+  }
+  @if meta.type-of($skip) != "bool" {
+    @error "`#{meta.inspect($skip)}` is not a valid $skip for `fillNulls`. Pass `true` to drop the nulls or `false` to write them as 0; in Sass everything but `false` and `null` is true, so a `0` here would have dropped them.";
+  }
   $list: ();
-  @for $i from 1 through list.length($value) {
-    @if list.nth($value, $i) == null {
-      $list: list.append($list, if($skip, null, 0), $separation);
+  @each $item in $value {
+    @if $item == null and not $skip {
+      $list: list.append($list, 0, $name);
     } @else {
-      $list: list.append($list, list.nth($value, $i), $separation);
+      $list: list.append($list, $item, $name);
     }
   }
   @return $list;
