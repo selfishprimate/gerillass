@@ -2503,6 +2503,12 @@ exports[`Manifest examples sizer: .a { @include sizer(120px, 40px); } 1`] = `
 }"
 `;
 
+exports[`Manifest examples sizer: .a { @include sizer(120px, null); } 1`] = `
+".a {
+  width: 120px;
+}"
+`;
+
 exports[`Manifest examples smartphone: .a { @include smartphone("iPhone-Air") { display: none; } } 1`] = `
 "@media only screen and (device-width: 420px) and (device-height: 912px) and (orientation: portrait) {
   .a {

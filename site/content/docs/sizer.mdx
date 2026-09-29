@@ -85,6 +85,21 @@ A width or height the browser drops stops the build. Measured in Chrome 152, tha
 Error: `huge` is not a valid $height for `sizer`: it is not a length or one of: min-content, max-content, fit-content, stretch, -webkit-fill-available, -moz-available, auto. A browser drops the declaration.
 ```
 
+The mixin writes declarations, so it needs a rule to write them into. A call at
+the root used to fail with Sass's own message, which pointed at a line inside
+the library and named neither the mixin nor the fix.
+
+```scss
+@include sizer(40px);
+```
+```text
+Error: `sizer` writes its declarations into the rule it is called in, so call it inside a selector, such as `.tile { @include sizer(40px); }`.
+```
+
+**`null` is not refused**, because across this library it means "not set":
+`sizer(120px, null)` writes the width alone, and `sizer(null)` writes nothing,
+which is what a call passing two variables that may be unset asked for.
+
 ## Related Links
 
 - [Circle](/docs/circle)

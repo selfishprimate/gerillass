@@ -3,7 +3,19 @@
 @use "sass:meta";
 @use "../internal/length-problem" as *;
 
+// Sets a width and a height, the height following the width when only one is
+// given.
+//
+// It writes declarations, so it needs a rule to write them into. Sass's own
+// message at the root pointed at the `width` line inside this file.
+//
+// `null` leaves a declaration out, as it does across the library, so
+// `sizer(120px, null)` writes only the width. Both being null writes nothing,
+// which is what a caller passing two unset variables asked for.
 @mixin sizer($width, $height: $width) {
+  @if not & {
+    @error "`sizer` writes its declarations into the rule it is called in, so call it inside a selector, such as `.tile { @include sizer(40px); }`.";
+  }
   @each $name, $value in ("$width": $width, "$height": $height) {
     $problem: sizeProblem($value);
     @if $problem {

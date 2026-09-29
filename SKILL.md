@@ -422,6 +422,11 @@ a dropped declaration rather than an error.
 - With no block the mixin wrapped nothing, so the call emitted no CSS and said nothing. It raises since 4.0.0.
 - A call at the root is legitimate, since a `@media` rule belongs there: `@include screen-agent(2x) { .a { color: red; } }` compiles. Sass's "Declarations may only be used within style rules" for a block of bare declarations is about the caller's own block and points at the caller's line, so the mixin adds no message of its own there.
 
+**`sizer`**
+
+- The mixin writes declarations, so it needs a rule to write them into. A call at the root failed with Sass's own "Declarations may only be used within style rules", pointing at the `width` line inside the library; it raises with the mixin's own message since 4.0.0.
+- `null` leaves a declaration out, as it does across the library, so `sizer(120px, null)` writes only the width and `sizer(null)` writes nothing at all. That is deliberate: a caller passing variables that may be unset gets what it asked for.
+
 **`smartphone`**
 
 - `device-width` and `device-height` read the **screen**, not the viewport, so a desktop window resized to a phone's width matches nothing. Measured in Chrome 152, Firefox 156 and Safari 26.6.2: a query at the screen's own size matched and the same query one pixel off did not. For a rule that follows the window, use `breakpoint` or `container-query`.
