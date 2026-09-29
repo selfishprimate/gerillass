@@ -87,7 +87,7 @@ $-styles: "outside" "center" "hollow";
     @if meta.type-of($width) == "number" and $width == $width * 0 {
       @error "`#{meta.inspect($width)}` is not a valid $width for `text-stroke` with `$style: hollow`: the outline is all the text has, so a stroke of nothing leaves the element empty. Pass a width such as `2px`, or `$style: center`, where a zero stroke still shows the letters.";
     }
-    @if meta.type-of($color) == "color" and color.alpha($color) == 0 {
+    @if meta.type-of($color) == "color" and color.channel($color, "alpha") == 0 {
       @error "`#{meta.inspect($color)}` is not a valid $color for `text-stroke` with `$style: hollow`: the outline is all the text has, so a colour that paints nothing leaves the element empty, and a `$fill` does not save it. Pass a colour the outline can be seen in, or `$style: center`.";
     }
   }

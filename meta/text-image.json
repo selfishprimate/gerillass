@@ -20,7 +20,8 @@
   "examples": [
     ".a { @include text-image(\"/img/t.png\"); }",
     ".a { @include text-image(\"/img/t.png\", $fallback: #333); }",
-    ".a { @include text-image(var(--texture), $fallback: hsl(220 39% 11%)); }"
+    ".a { @include text-image(var(--texture), $fallback: hsl(220 39% 11%)); }",
+    ".a { @include text-image(\"/img/t.png\", $fallback: oklch(0.5 0.1 200)); }"
   ],
   "rejects": [
     ".a { @include text-image(16 9); }",

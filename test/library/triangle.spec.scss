@@ -223,4 +223,53 @@
       }
     }
   }
+
+  // The alpha check added in 4.0.0 is the reason this is here. Its first
+  // version called `color.alpha`, which raises on anything but a legacy
+  // colour, so `oklch()` stopped compiling: a colour the mixin has taken
+  // since it was written, and one of its own documented examples. The same
+  // line went into `text-image` and `text-stroke`, which have an example
+  // apiece for it now. `color.channel($c, "alpha")` reads every space.
+  @include it('Takes a colour from a modern colour space.') {
+    @include assert {
+      @include output {
+        .caret {
+          @include triangle("bottom", oklch(0.55 0.2 25), 10px);
+        }
+      }
+      @include expect {
+        .caret {
+          content: "";
+          height: 0;
+          width: 0;
+          display: inline-block;
+          border-style: solid;
+          border-color: oklch(0.55 0.2 25) transparent transparent;
+          border-width: 10px 5px 0;
+        }
+      }
+    }
+  }
+
+  // The direction is read in any case since 4.0.0, as CSS reads its own.
+  @include it('Reads the direction in any case.') {
+    @include assert {
+      @include output {
+        .caret {
+          @include triangle(TOP, black, 10px);
+        }
+      }
+      @include expect {
+        .caret {
+          content: "";
+          height: 0;
+          width: 0;
+          display: inline-block;
+          border-style: solid;
+          border-color: transparent transparent black;
+          border-width: 0 5px 10px;
+        }
+      }
+    }
+  }
 }

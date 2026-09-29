@@ -2438,7 +2438,8 @@
       "examples": [
         ".a { @include text-image(\"/img/t.png\"); }",
         ".a { @include text-image(\"/img/t.png\", $fallback: #333); }",
-        ".a { @include text-image(var(--texture), $fallback: hsl(220 39% 11%)); }"
+        ".a { @include text-image(var(--texture), $fallback: hsl(220 39% 11%)); }",
+        ".a { @include text-image(\"/img/t.png\", $fallback: oklch(0.5 0.1 200)); }"
       ],
       "rejects": [
         ".a { @include text-image(16 9); }",
@@ -2590,7 +2591,8 @@
         ".a { @include text-stroke(2px, #1d4ed8); }",
         ".a { @include text-stroke(3px, #1d4ed8, outside, #fde047); }",
         ".a { @include text-stroke(1px, rgb(15 23 42), center); }",
-        ".a { @include text-stroke(var(--stroke-width), var(--stroke-color)); }"
+        ".a { @include text-stroke(var(--stroke-width), var(--stroke-color)); }",
+        ".a { @include text-stroke(2px, oklch(0.55 0.2 25), hollow); }"
       ],
       "rejects": [
         ".a { @include text-stroke(black, transparent, red, 2px); }",
@@ -2677,7 +2679,8 @@
             "bottom-left",
             "left",
             "top-left",
-            "inline-start, inline-end, block-start or block-end, which follow the writing direction"
+            "inline-start, inline-end, block-start or block-end, which follow the writing direction",
+            "read in any case, so TOP and Inline-End work"
           ]
         },
         {
@@ -2688,7 +2691,9 @@
             "currentColor",
             "a system colour such as Canvas",
             "var(), color-mix(), light-dark(), contrast-color() or rgb(from ...), which CSS resolves",
-            "a CSS-wide keyword is refused, because it is invalid inside the border-color shorthand"
+            "a CSS-wide keyword is refused, because it is invalid inside the border-color shorthand",
+            "one colour, not a list: a second would colour a second border and the shape would stop being a triangle",
+            "a colour with no alpha is refused, since the border is the whole of the shape"
           ]
         },
         {
@@ -2696,13 +2701,19 @@
           "default": "10px 8px",
           "accepts": [
             "one length, or two lengths as width then height",
-            "var(), env() or a calculation in place of any length"
+            "var(), env() or a calculation in place of any length",
+            "more than two lengths is refused, since only the first two are read"
           ]
         }
       ],
       "file": "scss/library/_triangle.scss",
       "signature": "triangle($direction: \"bottom\", $color: black, $size: 10px 8px)",
       "summary": "Draws a CSS triangle out of borders, pointing in a given direction.",
+      "caveats": [
+        "The colour goes into the `border-color` shorthand, so a list of two coloured a second side: rendered in Chrome 152, Firefox 156 and Safari 26.6.2, `triangle(\"bottom\", red blue)` drew a red triangle with a teal wedge beside it in all three. One colour only, since 4.0.0.",
+        "The border is the whole of the shape, since the element is 0 by 0, so a colour that paints nothing draws nothing: a transparent triangle was an empty box in all three. A colour with no alpha raises since 4.0.0. A zero size is left alone: it draws nothing too, but it is a coherent resting state for a caret that grows.",
+        "Only the first two lengths of `$size` are read, and a third used to be dropped without a word, so `10px 8px 6px` drew the same triangle as `10px 8px`. It raises since 4.0.0."
+      ],
       "examples": [
         ".caret { @include triangle(\"bottom\", black, 10px 8px); }",
         ".arrow { @include triangle(\"left\", red); }",
@@ -2711,7 +2722,8 @@
         ".arrow { @include triangle(\"top\", color-mix(in srgb, red 50%, blue)); }",
         ".arrow { @include triangle(\"bottom\", hsl(220 39% 11%), var(--caret-w) var(--caret-h)); }",
         ".next { @include triangle(\"inline-end\", crimson, 8px 12px); }",
-        ".sort { @include triangle(\"block-start\", oklch(0.55 0.2 25)); }"
+        ".sort { @include triangle(\"block-start\", oklch(0.55 0.2 25)); }",
+        ".arrow { @include triangle(TOP, oklch(0.55 0.2 25), 10px); }"
       ],
       "rejects": [
         ".caret { @include triangle(sideways); }",
@@ -2723,7 +2735,12 @@
         ".caret { @include triangle(\"top\", red, -10px); }",
         ".caret { @include triangle(\"top\", red, thin); }",
         ".caret { @include triangle(\"top\", red, 10); }",
-        ".caret { @include triangle(\"top\", red, 10px 10deg); }"
+        ".caret { @include triangle(\"top\", red, 10px 10deg); }",
+        ".caret { @include triangle(\"top\", red blue); }",
+        ".caret { @include triangle(\"top\", transparent); }",
+        ".caret { @include triangle(\"top\", red, 10px 8px 6px); }",
+        ".caret { @include triangle(\"top\", red, ()); }",
+        "@include triangle(\"top\", red, 10px);"
       ]
     },
     {

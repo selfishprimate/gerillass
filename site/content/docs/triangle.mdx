@@ -22,9 +22,9 @@ The **Triangle** Sass mixin helps you generate triangles using the `::before` or
 ## Arguments
 
 <Arguments of="triangle" footnote="When you pass `top`, `right`, `bottom`, `left` or one of the four logical directions for the **`$direction`** argument, you can pass two values to resize the triangle. **The first value controls the width of the triangle and the second controls the height.**">
-  <Argument name="$direction" type="string">Sets the direction of the triangle. Accepts the values <code>top</code>, <code>top-right</code>, <code>right</code>, <code>bottom-right</code>, <code>bottom</code>, <code>bottom-left</code>, <code>left</code>, and <code>top-left</code>. The logical directions <code>inline-start</code>, <code>inline-end</code>, <code>block-start</code> and <code>block-end</code> follow the writing direction instead: <code>inline-end</code> points right on a left-to-right page and left on a right-to-left one.</Argument>
-  <Argument name="$color" type="color, keyword, function">The color of the triangle. Accepts a Sass color, <code>currentColor</code>, a system color such as <code>Canvas</code>, or a function the browser resolves to a color, such as <code>var()</code>, <code>color-mix()</code>, <code>light-dark()</code>, <code>contrast-color()</code> or <code>rgb(from ...)</code>. Until 2.3.1 only four functions were accepted, and a system color or <code>contrast-color()</code> was refused, although a border keeps both. <code>inherit</code>, <code>initial</code>, <code>unset</code> and <code>revert</code> are refused, because the color is written into a <code>border-color</code> shorthand beside <code>transparent</code>, where a browser rejects them.</Argument>
-  <Argument name="$size" type="number (with unit), function">The size of the triangle. Multiple values must be separated by a space. Each value can also be <code>var()</code>, <code>env()</code>, or a calculation such as <code>calc()</code> or <code>clamp()</code>. Not a percentage or a negative length, which <code>border-width</code> drops.</Argument>
+  <Argument name="$direction" type="string">Sets the direction of the triangle. Accepts the values <code>top</code>, <code>top-right</code>, <code>right</code>, <code>bottom-right</code>, <code>bottom</code>, <code>bottom-left</code>, <code>left</code>, and <code>top-left</code>. The logical directions <code>inline-start</code>, <code>inline-end</code>, <code>block-start</code> and <code>block-end</code> follow the writing direction instead: <code>inline-end</code> points right on a left-to-right page and left on a right-to-left one. Read in any case, so <code>TOP</code> works.</Argument>
+  <Argument name="$color" type="color, keyword, function">The color of the triangle. Accepts a Sass color, <code>currentColor</code>, a system color such as <code>Canvas</code>, or a function the browser resolves to a color, such as <code>var()</code>, <code>color-mix()</code>, <code>light-dark()</code>, <code>contrast-color()</code> or <code>rgb(from ...)</code>. Until 2.3.1 only four functions were accepted, and a system color or <code>contrast-color()</code> was refused, although a border keeps both. <code>inherit</code>, <code>initial</code>, <code>unset</code> and <code>revert</code> are refused, because the color is written into a <code>border-color</code> shorthand beside <code>transparent</code>, where a browser rejects them. One colour only: a second colours a second border. A colour with no alpha is refused, since the border is the whole of the shape.</Argument>
+  <Argument name="$size" type="number (with unit), function">The size of the triangle. Multiple values must be separated by a space. Each value can also be <code>var()</code>, <code>env()</code>, or a calculation such as <code>calc()</code> or <code>clamp()</code>. Not a percentage or a negative length, which <code>border-width</code> drops, and not more than two lengths, since only the first two are read.</Argument>
 </Arguments>
 
 ## Examples
@@ -129,6 +129,48 @@ A size the browser drops stops the build. The sizes are written into `border-wid
 ```
 ```text
 Error: `5%` is not a valid $size for `triangle`: a percentage does not work here. A browser drops the border widths, so no triangle is drawn.
+```
+
+Only the first two lengths are ever read, so a third used to be dropped without a word and `10px 8px 6px` drew the same triangle as `10px 8px`.
+
+```scss
+.caret {
+  @include triangle("top", red, 10px 8px 6px);
+}
+```
+```text
+Error: `10px 8px 6px` is not a valid $size for `triangle`: it holds 3 lengths and only the first two are read. Pass one length, or two as the width then the length.
+```
+
+The colour goes into the `border-color` shorthand, so a second one colours a second border and the shape stops being a triangle. Rendered in Chrome 152, Firefox 156 and Safari 26.6.2, `triangle("bottom", red blue)` drew a red triangle with a blue wedge beside it in all three.
+
+```scss
+.caret {
+  @include triangle("top", red blue);
+}
+```
+```text
+Error: `red blue` is not a valid $color for `triangle`: it is a list, and the mixin writes the colour into the `border-color` shorthand, so more than one colours a second side and the shape stops being a triangle. Pass one colour.
+```
+
+The element is 0 by 0 and the border is the whole of the shape, so a colour that paints nothing draws nothing. A transparent triangle was an empty box in all three. A size of zero draws nothing either and is left alone, since it is a coherent resting state for a caret that grows.
+
+```scss
+.caret {
+  @include triangle("top", transparent);
+}
+```
+```text
+Error: `transparent` is not a valid $color for `triangle`: the border is the whole of the shape, so a colour that paints nothing draws no triangle. Pass a colour it can be seen in.
+```
+
+The mixin writes declarations, so it needs a rule to write them into. A call at the root used to fail with Sass's own message, which named neither the mixin nor the fix.
+
+```scss
+@include triangle("top", red, 10px);
+```
+```text
+Error: `triangle` writes its declarations into the rule it is called in, so call it inside a selector, such as `.caret::after { @include triangle("bottom", black, 10px 8px); }`.
 ```
 
 ## Related Links

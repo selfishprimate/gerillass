@@ -48,7 +48,8 @@
     ".a { @include text-stroke(2px, #1d4ed8); }",
     ".a { @include text-stroke(3px, #1d4ed8, outside, #fde047); }",
     ".a { @include text-stroke(1px, rgb(15 23 42), center); }",
-    ".a { @include text-stroke(var(--stroke-width), var(--stroke-color)); }"
+    ".a { @include text-stroke(var(--stroke-width), var(--stroke-color)); }",
+    ".a { @include text-stroke(2px, oklch(0.55 0.2 25), hollow); }"
   ],
   "rejects": [
     ".a { @include text-stroke(black, transparent, red, 2px); }",

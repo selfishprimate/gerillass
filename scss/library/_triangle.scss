@@ -1,6 +1,8 @@
 @charset "UTF-8";
 
+@use "sass:color";
 @use "sass:list";
+@use "sass:string";
 @use "sass:meta";
 @use "../lists/list-of-directions" as *;
 @use "../internal/is-size" as *;
@@ -15,9 +17,30 @@
 $-logical-directions: ("inline-start", "inline-end", "block-start", "block-end");
 
 @mixin triangle($direction: "bottom", $color: black, $size: 10px 8px) {
-  @if list.index($list-of-directions, $direction) or list.index($-logical-directions, $direction) {
+  @if not & {
+    @error "`triangle` writes its declarations into the rule it is called in, so call it inside a selector, such as `.caret::after { @include triangle(\"bottom\", black, 10px 8px); }`.";
+  }
+  // Read in any case, as CSS reads its own keywords and as the rest of the
+  // library does. The original spelling is what the error below quotes.
+  $name: null;
+  @if meta.type-of($direction) == "string" {
+    $name: string.to-lower-case("#{$direction}");
+  }
+  @if list.index($list-of-directions, $name) or list.index($-logical-directions, $name) {
+    $direction: $name;
     // Halving a size in calc() rather than math.div() keeps var() and clamp()
     // working instead of emitting `var(--w)/2`, which is not valid CSS.
+    // Two sizes at most. A third used to be dropped without a word: only the
+    // first two are ever read, so `10px 8px 6px` drew the same triangle as
+    // `10px 8px`. An empty list failed with Sass's own index message.
+    @if meta.type-of($size) == "list" or meta.type-of($size) == "arglist" {
+      @if list.length($size) == 0 {
+        @error "`triangle` needs a $size. Pass one length, or two as the width across the triangle and the length it points along, such as `10px 8px`.";
+      }
+      @if list.length($size) > 2 {
+        @error "`#{meta.inspect($size)}` is not a valid $size for `triangle`: it holds #{list.length($size)} lengths and only the first two are read. Pass one length, or two as the width then the length.";
+      }
+    }
     @each $item in $size {
       @if not isSize($item) {
         @error "`#{meta.inspect($size)}` is not a valid $size for `triangle`. Pass one or two lengths, or var(), env() or a calculation in place of either.";
@@ -37,6 +60,21 @@ $-logical-directions: ("inline-start", "inline-end", "block-start", "block-end")
     // `transparent transparent inherit` was rejected in Chrome 152. The check
     // used to name four functions; system colours such as Canvas and
     // contrast-color(), which a border keeps, were refused until it was shared.
+    // One colour, not a list. Each item used to be checked on its own and the
+    // list written straight into the shorthand, so `red blue` gave
+    // `border-color: red blue transparent transparent`, which colours two
+    // sides: rendered in Chrome 152, Firefox 156 and Safari 26.6.2 it is a red
+    // triangle with a teal wedge beside it, in all three, and not a triangle
+    // at all.
+    @if (meta.type-of($color) == "list" or meta.type-of($color) == "arglist") and list.length($color) > 1 {
+      @error "`#{meta.inspect($color)}` is not a valid $color for `triangle`: it is a list, and the mixin writes the colour into the `border-color` shorthand, so more than one colours a second side and the shape stops being a triangle. Pass one colour.";
+    }
+    // A colour that paints nothing draws no triangle: the element is 0 by 0
+    // and the border is the whole of the shape. Rendered in all three, a
+    // transparent triangle was an empty box.
+    @if meta.type-of($color) == "color" and color.channel($color, "alpha") == 0 {
+      @error "`#{meta.inspect($color)}` is not a valid $color for `triangle`: the border is the whole of the shape, so a colour that paints nothing draws no triangle. Pass a colour it can be seen in.";
+    }
     $color-problem: null;
     @each $item in $color {
       @if not $color-problem {
@@ -110,6 +148,6 @@ $-logical-directions: ("inline-start", "inline-end", "block-start", "block-end")
       @content;
     }
   } @else {
-    @error "The argument for direction must be one of the followings: #{list.join($list-of-directions, $-logical-directions)}";
+    @error "`#{meta.inspect($direction)}` is not a valid $direction for `triangle`. Pass one of #{list.join($list-of-directions, $-logical-directions)}.";
   }
 }

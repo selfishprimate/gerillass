@@ -503,6 +503,12 @@ a dropped declaration rather than an error.
 - The mixin writes the `--` and, with a prefix, the hyphen after it, so a name or prefix that brings its own doubles them. `(--bg: #fff)` wrote `----bg` and `$prefix: color-` wrote `--color--bg`: real properties in all three engines, holding the value under a name nothing in the stylesheet asks for. Measured in Chrome 152, Firefox 156 and Safari 26.6.2, `----bg` computed to its value while the `--bg` the author would write in `var()` computed to the empty string. Both raise since 4.0.0.
 - An empty value is not an absence, the same trap as `null`. Measured in all three, `--empty: ;` computed to the empty string and `var(--empty, red)` did not fall back to red. An unquoted empty string and an empty list both raise; a quoted `""` is a real string a `content` can use and is written as it is.
 
+**`triangle`**
+
+- The colour goes into the `border-color` shorthand, so a list of two coloured a second side: rendered in Chrome 152, Firefox 156 and Safari 26.6.2, `triangle("bottom", red blue)` drew a red triangle with a teal wedge beside it in all three. One colour only, since 4.0.0.
+- The border is the whole of the shape, since the element is 0 by 0, so a colour that paints nothing draws nothing: a transparent triangle was an empty box in all three. A colour with no alpha raises since 4.0.0. A zero size is left alone: it draws nothing too, but it is a coherent resting state for a caret that grows.
+- Only the first two lengths of `$size` are read, and a third used to be dropped without a word, so `10px 8px 6px` drew the same triangle as `10px 8px`. It raises since 4.0.0.
+
 **`truncate`**
 
 - One line and several lines are different techniques, and that is why this replaced `ellipsis` and `line-clamp` in 4.0.0. One line is `white-space: nowrap` with `text-overflow`, which leaves the display alone; several is the `-webkit-box` trio, which takes the display over. Measured in Chrome 152, Firefox 156 and Safari 26.6.2 on a 320px box, they look the same at one line and the element differs: `inline-block` against Safari's `-webkit-box`.

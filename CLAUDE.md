@@ -1037,7 +1037,10 @@ Two pieces of work are open:
   the 4.0.0 argument order when a colour lands in `$style`, and `tokens`
   refusing a name or a prefix that doubles the `--` it writes itself, which
   gave a real property under a name nothing in the stylesheet asks for, and an
-  empty value, which `var()` does not fall back for,
+  empty value, which `var()` does not fall back for, and `triangle` refusing a
+  colour list, which coloured a second border and drew a wedge beside the
+  triangle in all three browsers, a transparent colour and a third size, and
+  reading its direction in any case, and refusing a call at the root,
   all on
   `docs-examples-review`;
   and the demos and prose

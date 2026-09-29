@@ -2790,6 +2790,26 @@ exports[`Manifest examples text-image: .a { @include text-image("/img/t.png", $f
 }"
 `;
 
+exports[`Manifest examples text-image: .a { @include text-image("/img/t.png", $fallback: oklch(0.5 0.1 200)); 1`] = `
+".a {
+  background-image: url("/img/t.png");
+  background-color: oklch(50% 0.1 200deg);
+  background-size: cover;
+  background-position: center;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+@media (forced-colors: active) {
+  .a {
+    -webkit-text-fill-color: revert;
+    color: revert;
+    background-image: none;
+  }
+}"
+`;
+
 exports[`Manifest examples text-image: .a { @include text-image(var(--texture), $fallback: hsl(220 39% 11%)); 1`] = `
 ".a {
   background-image: var(--texture);
@@ -2876,6 +2896,15 @@ exports[`Manifest examples text-stroke: .a { @include text-stroke(2px, #1d4ed8);
   color: #1d4ed8;
   -webkit-text-fill-color: transparent;
   -webkit-text-stroke-color: #1d4ed8;
+  -webkit-text-stroke-width: 2px;
+}"
+`;
+
+exports[`Manifest examples text-stroke: .a { @include text-stroke(2px, oklch(0.55 0.2 25), hollow); } 1`] = `
+".a {
+  color: oklch(55% 0.2 25deg);
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke-color: oklch(55% 0.2 25deg);
   -webkit-text-stroke-width: 2px;
 }"
 `;
@@ -3022,6 +3051,18 @@ exports[`Manifest examples triangle: .arrow { @include triangle("top", color-mix
   border-style: solid;
   border-color: transparent transparent color-mix(in srgb, red 50%, blue);
   border-width: 0 5px 8px;
+}"
+`;
+
+exports[`Manifest examples triangle: .arrow { @include triangle(TOP, oklch(0.55 0.2 25), 10px); } 1`] = `
+".arrow {
+  content: "";
+  height: 0;
+  width: 0;
+  display: inline-block;
+  border-style: solid;
+  border-color: transparent transparent oklch(55% 0.2 25deg);
+  border-width: 0 5px 10px;
 }"
 `;
 

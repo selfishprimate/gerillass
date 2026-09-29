@@ -51,7 +51,7 @@
     // `rgba(255, 255, 255, 0)` is just as invisible and is not equal to it, and
     // the keyword is lower-cased first, since `currentcolor` is the spelling in
     // the specification and browsers take either.
-    $invisible: meta.type-of($fallback) == "color" and color.alpha($fallback) == 0;
+    $invisible: meta.type-of($fallback) == "color" and color.channel($fallback, "alpha") == 0;
     @if $invisible or string.to-lower-case("#{$fallback}") == "currentcolor" {
       @error "`#{meta.inspect($fallback)}` is not a valid $fallback for `text-image`: it paints nothing, since the mixin makes the letters transparent, so an image that does not arrive still leaves them invisible. Pass a colour they can be read in, such as `#333`.";
     }

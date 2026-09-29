@@ -124,6 +124,9 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `text-stroke` names the 4.0.0 order change when a colour lands in `$style` | a better message; not breaking |
 | `tokens` refuses a name or prefix that doubles the `--` | breaking, loud; the property was written under a name nothing asked for |
 | `tokens` refuses an empty value | breaking, loud |
+| `triangle` refuses a colour list, a transparent colour and a third size | breaking, loud; none drew a triangle |
+| `triangle` reads its direction in any case | fixes a refusal; not breaking |
+| `triangle` refuses a call at the root | a better message; not breaking |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -2786,6 +2789,46 @@ is written as it is.
 
 Compiled across 56 calls covering the names, values and prefixes this mixin
 takes: 49 identical, five newly refused and one message reworded.
+
+
+## Break: `triangle` refuses what was never a triangle
+
+Three calls compiled into CSS that is not the shape the mixin is for.
+
+```scss
+.caret { @include triangle("bottom", red blue); }
+// 3.x: border-color: red blue transparent transparent;
+```
+
+The colour goes into the `border-color` shorthand, so a second one colours a
+second border. Rendered in Chrome 152, Firefox 156 and Safari 26.6.2, that is a
+red triangle with a blue wedge beside it, in all three.
+
+```scss
+.caret { @include triangle("bottom", transparent); }
+// 3.x: an empty box
+```
+
+The element is 0 by 0 and the border is the whole of the shape, so a colour
+with no alpha draws nothing. A size of zero draws nothing either and is
+deliberately left alone: it is a coherent resting state for a caret that grows,
+the same reason `text-stroke` keeps a zero width outside `hollow`.
+
+```scss
+.caret { @include triangle("bottom", red, 10px 8px 6px); }
+// 3.x: the same triangle as 10px 8px, the third length dropped in silence
+```
+
+An empty `$size` used to fail with Sass's own `Invalid index 1 for a list with
+0 elements`; it says what it needs now.
+
+The direction is read in any case, so `TOP` and `Inline-End` work, and its
+error names the argument the way the rest of the library does. A call at the
+root raises with the mixin's own message in place of Sass's.
+
+Compiled across 87 calls covering the directions, colours and sizes this mixin
+takes: 75 identical, and the 12 that changed are the refusals above, the three
+directions that now work, and the reworded direction message.
 
 
 ---
