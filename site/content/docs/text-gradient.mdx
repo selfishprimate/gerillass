@@ -46,7 +46,7 @@ A color stop position can be defined with `length` or `percentage` units.
 <Example caption="Pass the colours and a direction. As many colours as you like.">
 ```scss
 .element{
-  @include text-gradient(#ed6a5a #f7ec59 #bdc488 #5bc0bb #668f80, $direction: right);
+  @include text-gradient(#ff0f7b #ff6a00 #ffd200 #00e08f #00b2ff, $direction: right);
 }
 ```
 ```html
@@ -71,7 +71,7 @@ A color stop position can be defined with `length` or `percentage` units.
 <Example caption="Colour stop positions make the colours meet at a hard edge.">
 ```scss
 .element{
-  @include text-gradient((#668f80 50%) (#5bc0bb 50%), $direction: bottom);
+  @include text-gradient((#7028e4 50%) (#00d2ff 50%), $direction: bottom);
 }
 ```
 ```html
@@ -79,24 +79,28 @@ A color stop position can be defined with `length` or `percentage` units.
 ```
 </Example>
 
-<Example caption="A colour can take a start and an end position.">
+<Example caption="A colour can take a start and an end position, which turns a blend into bands. Each of the three below holds its own stretch of the line. The gradient is painted across the element rather than across the glyphs, so the box is kept to the width of the words: given a wider one, or a second line, part of the text would sit inside a single band and come out one colour.">
 ```scss
 .element{
   @include text-gradient(
-    (green 0 40%) (blue 40% 60%) (purple 60% 100%),
-    $direction: top
+    (#00e08f 0 40%) (#00b2ff 40% 60%) (#ff0f7b 60% 100%),
+    $direction: right
   );
 }
 ```
 ```html
-<h2 class="element sandbox text">Text Gradient is Awesome!</h2>
+<style>
+  /* The gradient is painted across the element, not the glyphs, so the box is kept to the width of the words. */
+  .element { width: fit-content; white-space: nowrap; font-size: clamp(22px, 7vw, 40px); }
+</style>
+<h2 class="element sandbox text">Three bands</h2>
 ```
 </Example>
 
 <Example caption="The transitions do not have to be sharp.">
 ```scss
 .element{
-  @include text-gradient((#ed6a5a 30%) (#f7ec59 60%) (#bdc488 80%), $direction: bottom);
+  @include text-gradient((#ff0f7b 30%) (#ffd200 60%) (#00e08f 80%), $direction: bottom);
 }
 ```
 ```html
@@ -107,7 +111,7 @@ A color stop position can be defined with `length` or `percentage` units.
 <Example caption="Blend in oklab for an even transition between two colours.">
 ```scss
 .element{
-  @include text-gradient(#668f80 #db504a, $direction: right, $in: oklab);
+  @include text-gradient(#ff0f7b #ffd200, $direction: right, $in: oklab);
 }
 ```
 ```html
@@ -118,7 +122,7 @@ A color stop position can be defined with `length` or `percentage` units.
 <Example caption="A conic gradient sweeps a rainbow round the middle of the words.">
 ```scss
 .element{
-  @include text-gradient(#ed6a5a #69995d #2f3937 #668f80 #5bc0bb #ed6a5a, conic);
+  @include text-gradient(#ff0f7b #ff6a00 #ffd200 #00e08f #00b2ff #7028e4 #ff0f7b, conic);
 }
 ```
 ```html
@@ -130,7 +134,7 @@ A color stop position can be defined with `length` or `percentage` units.
 ```scss
 .element{
   @include text-gradient(
-    (#db504a 0 6px) (#69995d 6px 12px),
+    (#ff0f7b 0 6px) (#00d2ff 6px 12px),
     $direction: 45deg,
     $repeating: true
   );
@@ -151,7 +155,7 @@ Each of these is the mixin alone. The only other declaration is the font, so the
   font: 800 44px/1.1 system-ui, sans-serif;
 
   span{
-    @include text-gradient(#5bc0bb #ed6a5a, $direction: right, $in: oklab);
+    @include text-gradient(#7028e4 #00d2ff, $direction: right, $in: oklab);
   }
 }
 ```
@@ -164,7 +168,7 @@ Each of these is the mixin alone. The only other declaration is the font, so the
 ```scss
 .price{
   font: 800 72px/1 system-ui, sans-serif;
-  @include text-gradient(#668f80 #69995d, $direction: 135deg, $in: oklch);
+  @include text-gradient(#7028e4 #ffd200, $direction: 135deg, $in: oklch);
 }
 ```
 ```html
@@ -177,7 +181,7 @@ Each of these is the mixin alone. The only other declaration is the font, so the
 .premium{
   font: 900 48px/1 system-ui, sans-serif;
   @include text-gradient(
-    (#2f3937 0%) (#69995d 45%) (#f2f2eb 50%) (#bdc488 55%) (#2f3937 100%),
+    (#8a5a00 0%) (#ffd200 45%) (#fff6c9 50%) (#ffd200 55%) (#8a5a00 100%),
     $direction: top
   );
 }
@@ -191,7 +195,7 @@ Each of these is the mixin alone. The only other declaration is the font, so the
 ```scss
 .wordmark{
   font: 900 64px/1 system-ui, sans-serif;
-  @include text-gradient((#222c25 50%) (#69995d 50%), $direction: 135deg);
+  @include text-gradient((#7028e4 50%) (#ff0f7b 50%), $direction: 135deg);
 }
 ```
 ```html
@@ -203,7 +207,7 @@ Each of these is the mixin alone. The only other declaration is the font, so the
 ```scss
 .glow{
   font: 900 56px/1 system-ui, sans-serif;
-  @include text-gradient(#5bc0bb #668f80 #2f3937, radial, $shape: ellipse, $position: center);
+  @include text-gradient(#ffd200 #ff6a00 #ff0f7b, radial, $shape: ellipse, $position: center);
 }
 ```
 ```html
@@ -215,7 +219,7 @@ Each of these is the mixin alone. The only other declaration is the font, so the
 ```scss
 .holo{
   font: 900 64px/1 system-ui, sans-serif;
-  @include text-gradient(#5bc0bb #5bc0bb, conic, $from: 45deg, $in: oklch longer hue);
+  @include text-gradient(#ff0f7b #ff0f7b, conic, $from: 45deg, $in: oklch longer hue);
 }
 ```
 ```html
