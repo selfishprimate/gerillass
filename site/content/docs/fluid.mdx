@@ -48,7 +48,27 @@ Checked against hand arithmetic at a real 900px viewport: the floor came out at 
 
 ## Examples
 
-<Example caption="A heading that scales between the two default viewport widths.">
+<Example resizable hint="Drag the box: the top line grows with it and stops at both ends, while the line under it is a fixed 20px and never moves." caption="A heading that scales with the viewport. The demo box is a viewport of its own, so the range here is `300px` to `520px` rather than the defaults: that is what fits the width you can drag, and it puts the floor, the growth and the ceiling all inside it. In a page you would use the defaults, which is the example below.">
+```scss
+.fluid-title {
+  font-size: fluid(20px, 40px, 300px, 520px);
+}
+```
+```html
+<style>
+  body { margin: 0; padding: 20px; background: #fafaf8; font-family: Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
+  .fluid-title, .fixed-title { margin: 0 0 10px; font-weight: 800; line-height: 1.15; }
+  .fixed-title { font-size: 20px; color: #8b9381; }
+  small { display: block; font: 500 12px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; color: #657167; }
+</style>
+<h2 class="fluid-title">Fluid</h2>
+<small>fluid(20px, 40px, 300px, 520px)</small>
+<h2 class="fixed-title">Fixed</h2>
+<small>font-size: 20px</small>
+```
+</Example>
+
+<Example caption="The same thing with the defaults, which is what a page wants: the value grows between a 320px viewport and a 1280px one, and holds still outside them.">
 ```scss
 .title {
   font-size: fluid(24px, 48px);
@@ -64,11 +84,26 @@ Checked against hand arithmetic at a real 900px viewport: the floor came out at 
 ```
 </Example>
 
-<Example caption="Not only for type. Two calls in one shorthand give a padding that scales on both axes.">
+<Example resizable hint="Drag the box: the padding, the gap and the radius all open up together, and the text is a fixed size so the spacing is the only thing moving." caption="**Not only for type.** The value belongs to any property, which is why this is a function and not a `font-size` mixin. Four calls here, with the range again narrowed to the demo box.">
 ```scss
-.section {
-  padding: fluid(16px, 64px) fluid(8px, 40px);
+.promo {
+  padding: fluid(14px, 40px, 300px, 520px) fluid(16px, 48px, 300px, 520px);
+  border-radius: fluid(6px, 18px, 300px, 520px);
+  display: grid;
+  gap: fluid(6px, 20px, 300px, 520px);
 }
+```
+```html
+<style>
+  body { margin: 0; padding: 20px; background: #fafaf8; font-family: Inter, ui-sans-serif, system-ui, sans-serif; }
+  .promo { background: #2f3937; color: #fafaf8; }
+  .promo b { font: 700 16px Inter, ui-sans-serif, system-ui, sans-serif; }
+  .promo span { font-size: 13px; color: #bfc1a4; }
+</style>
+<div class="promo">
+  <b>Spacing scales too</b>
+  <span>The padding, the gap and the corner radius are all one call each.</span>
+</div>
 ```
 </Example>
 
