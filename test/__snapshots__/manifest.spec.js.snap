@@ -1616,6 +1616,18 @@ exports[`Manifest examples fontSizer: .a { font-size: fontSizer(16px, 1.5); } 1`
 }"
 `;
 
+exports[`Manifest examples fontSizer: .a { font-size: fontSizer(fontSizer(16px, 1.25), 1.25); } 1`] = `
+".a {
+  font-size: 25px;
+}"
+`;
+
+exports[`Manifest examples fontSizer: .a { line-height: fontSizer(1.5, 1.2); } 1`] = `
+".a {
+  line-height: 1.8;
+}"
+`;
+
 exports[`Manifest examples fontSource: .a { content: "#{fontSource("Inter", "/fonts/inter", woff2)}"; } 1`] = `
 ".a {
   content: 'url("/fonts/inter.woff2") format("woff2")';
@@ -3298,6 +3310,12 @@ exports[`Manifest warnings container-query warns: .title { @include container-qu
 exports[`Manifest warnings fillNulls warns: .a { margin: fillNulls(1px null 3px null, $seperation: space 1`] = `
 ".a {
   margin: 1px 0 3px 0;
+}"
+`;
+
+exports[`Manifest warnings fontSizer warns: .a { font-size: fontSizer(16px, $time: 1.5); } 1`] = `
+".a {
+  font-size: 24px;
 }"
 `;
 

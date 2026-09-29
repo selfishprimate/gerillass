@@ -1063,7 +1063,9 @@ Two pieces of work are open:
   was read by truthiness so a `0` dropped the nulls it was meant to fill,
   reading its separator in any case, and returning an empty list rather than
   failing with Sass's index message, and `fluid` taking any absolute length
-  rather than px and rem alone, since Sass converts between all of them,
+  rather than px and rem alone, since Sass converts between all of them, and
+  `fontSizer` naming its second argument `$factor` rather than `$time`, which
+  it never was, with the old name kept as a keyword that warns,
   all on
   `docs-examples-review`;
   and the demos and prose

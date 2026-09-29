@@ -1,7 +1,7 @@
 ---
 title: "Font Sizer"
 page_title: "Font Sizer Sass Function"
-page_description: "The fontSizer Sass function multiplies a size by a factor, which is what a modular type scale needs to step from one heading level to the next."
+page_description: "The fontSizer Sass function multiplies a size by a factor, which is what a modular type scale steps with from one heading level to the next."
 page_keywords: "Gerillass fontSizer, Sass fontSizer, Sass Functions, SCSS Functions, Sass Utility Functions, Gerillass Utilities"
 ---
 
@@ -9,26 +9,90 @@ page_keywords: "Gerillass fontSizer, Sass fontSizer, Sass Functions, SCSS Functi
 
 <Member name="fontSizer">
 
-Multiplies a size by a factor. Handy for a modular scale.
+Multiplies a size by a factor, which is what a modular type scale steps with.
 
 </Member>
+
+<Hint kind="warning">
+
+**The second argument is `$factor` since Gerillass 4.0.0.** It was called `$time`, although it is a multiplier and never was a duration. That spelling still works as a keyword argument, with a warning naming the new one.
+
+</Hint>
 
 ## Arguments
 
 <Arguments of="fontSizer">
-  <Argument name="$size" type="number (with unit)">Accepts a length.</Argument>
-  <Argument name="$time" type="number (unitless)">Accepts a unitless multiplier.</Argument>
+  <Argument name="$size" type="number">A length, whose unit the result keeps, or a unitless number for a ratio such as a <code>line-height</code>.</Argument>
+  <Argument name="$factor" type="number (unitless)">The multiplier. Two units are refused, because they multiply into a unit squared.</Argument>
+  <Argument name="$time (null)" type="number (unitless)">The old name of <code>$factor</code>. Passing it still works and warns; it is a third argument so that nobody passes it by position.</Argument>
 </Arguments>
 
 ## Examples
 
-<Example caption="A size scaled by a factor.">
+<Example caption="A size scaled by a factor. The result keeps the unit the size was given in, so a `rem` in is a `rem` out.">
 ```scss
 .title {
   font-size: fontSizer(16px, 1.5);
 }
 ```
 </Example>
+
+<Example caption="**A modular scale**, which is the use the function is named for. One ratio, applied again at each step, so changing the ratio in one place moves every level and the steps stay in proportion.">
+```scss
+$base: 16px;
+$ratio: 1.25;
+
+.level-1 { font-size: $base; }
+.level-2 { font-size: fontSizer($base, $ratio); }
+.level-3 { font-size: fontSizer(fontSizer($base, $ratio), $ratio); }
+.level-4 { font-size: fontSizer(fontSizer(fontSizer($base, $ratio), $ratio), $ratio); }
+```
+```html
+<style>
+  body { margin: 0; padding: 20px; background: #fafaf8; font-family: Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
+  .scale p { margin: 0 0 10px; font-weight: 700; line-height: 1.2; }
+  .scale span { font: 500 11px/1 Inter, ui-sans-serif, system-ui, sans-serif; color: #8b9381; }
+</style>
+<div class="scale">
+  <p class="level-4">Level four <span>31.25px</span></p>
+  <p class="level-3">Level three <span>25px</span></p>
+  <p class="level-2">Level two <span>20px</span></p>
+  <p class="level-1">Level one <span>16px</span></p>
+</div>
+```
+</Example>
+
+<Example caption="Both numbers can be unitless, and the result is too, which is why a unitless size is not refused: a `line-height` wants a bare ratio rather than a length.">
+```scss
+.lede {
+  line-height: fontSizer(1.5, 1.2);
+}
+```
+</Example>
+
+## What it refuses
+
+Two units multiply into a unit squared, which Sass writes as `calc(16px * 1px)` and which is not a length anywhere in CSS.
+
+```scss
+.title {
+  font-size: fontSizer(16px, 1px);
+}
+```
+```text
+Error: `fontSizer(16px, 1px)` multiplies two units, which is not a length. Pass the multiplier without a unit, such as `1.5`.
+```
+
+A factor has no sensible default, so leaving it out stops the build rather than returning the size unchanged.
+
+```scss
+.title {
+  font-size: fontSizer(16px);
+}
+```
+```text
+Error: `fontSizer` needs a factor to multiply by, such as `fontSizer(16px, 1.5)`.
+```
 
 ## Related Links
 

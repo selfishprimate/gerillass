@@ -1,0 +1,38 @@
+@charset "UTF-8";
+
+// The second argument was called `$time` until 4.0.0, although it is a
+// multiplier and never was a duration. Both spellings have to keep working,
+// the old one with a warning, which `meta/fontSizer.json` covers with a
+// `warns` entry.
+//
+// A unitless `$size` is deliberately not refused: the result keeps whatever
+// unit was given, so `fontSizer(1.5, 1.2)` is the unitless number a
+// `line-height` wants. This pins that as well as the length case.
+@use 'true' as *;
+@use '../../scss/utilities/font-sizer' as *;
+
+@include describe('fontSizer()') {
+  @include it('Multiplies a length by a factor.') {
+    @include assert-equal(fontSizer(16px, 1.5), 24px);
+    @include assert-equal(fontSizer(1rem, 1.25), 1.25rem);
+    @include assert-equal(fontSizer(16pt, 1.5), 24pt);
+  }
+
+  @include it('Keeps the unit it was given, or none at all.') {
+    @include assert-equal(fontSizer(1.5, 1.2), 1.8);
+    @include assert-equal(fontSizer(50%, 1.5), 75%);
+  }
+
+  @include it('Takes the factor under either name.') {
+    @include assert-equal(fontSizer(16px, $factor: 1.5), 24px);
+    @include assert-equal(fontSizer(16px, $time: 1.5), 24px);
+  }
+
+  // A modular scale is the stated use: the ratio applied again at each step.
+  @include it('Steps a modular scale.') {
+    $base: 16px;
+    $ratio: 1.25;
+    @include assert-equal(fontSizer($base, $ratio), 20px);
+    @include assert-equal(fontSizer(fontSizer($base, $ratio), $ratio), 25px);
+  }
+}

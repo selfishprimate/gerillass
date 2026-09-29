@@ -138,6 +138,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `fillNulls` refuses a `$skip` that is not a boolean | breaking, loud; a `0` there dropped the nulls |
 | `fillNulls` reads its separator in any case, and returns an empty list unchanged | fixes a refusal and a Sass index error |
 | `fluid` takes any absolute length, not only px and rem | fixes a false refusal; not breaking |
+| `fontSizer`'s second argument is `$factor`, not `$time` | not breaking; the old name warns |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -3030,6 +3031,26 @@ against a stated 16px root.
 Compiled across 39 calls: 20 identical, seven where one of those six units now
 works, 12 where a value that was already refused is refused with the reworded
 message. Nothing is newly refused and no returned value changed.
+
+
+## Not breaking: `fontSizer`'s second argument is `$factor`
+
+It was called `$time`, although it is a multiplier and never was a duration. An
+argument name nobody can work around is worth correcting, so `$factor` is the
+one to pass and `$time` still works as a keyword argument, with a warning
+naming the new one. That is how `fillNulls` carries its old `$seperation`.
+
+```scss
+font-size: fontSizer(16px, 1.5);              // unchanged
+font-size: fontSizer(16px, $factor: 1.5);     // the name to use
+font-size: fontSizer(16px, $time: 1.5);       // works, and warns
+```
+
+Leaving the factor out now stops the build with the function's own message
+rather than Sass's about a missing argument, which named `$time`.
+
+Compiled across 27 calls: 19 identical, one that now works, none newly refused,
+and seven where the message or the warning changed.
 
 
 ---

@@ -549,6 +549,11 @@ a dropped declaration rather than an error.
 - `pt`, `pc`, `in`, `cm`, `mm` and `q` used to be refused, with a reason that was not true of them: the page said the function has to convert between the units, and Sass converts every absolute unit on its own. `fluid(12pt, 18pt)` is the same clamp as `fluid(16px, 24px)`, which the spec pins. `em`, `vw`, `ch` and `%` stay refused, because their size is not something the stylesheet can work out.
 - `rem` is turned into px against a stated 16px root, since Sass has no way to know the real one. That assumption is in the source rather than hidden.
 
+**`fontSizer`**
+
+- The second argument was called `$time` until 4.0.0, although it is a multiplier and never was a duration. `$factor` is the one to pass now; `$time` still works as a keyword argument and warns, the way `fillNulls` carries its old `$seperation`.
+- The result keeps whatever unit was given, so a unitless `$size` is not refused: `fontSizer(1.5, 1.2)` is the unitless number a `line-height` wants. Two units are refused, because they multiply into a unit squared, which Sass writes as `calc(16px * 1px)` and which is not a length anywhere in CSS.
+
 **`isNumber`**
 
 - Until 4.0.0 a value that was not a number only warned, and the function then ended with nothing to return, so the build stopped with Sass's own "Function finished without @return" instead of a message naming the argument. It now raises, which is what `isColor` and `isTime` do.
@@ -651,7 +656,7 @@ and camelCase is what tells them apart from the kebab-case mixins above.
 | `convertToNumber($value)` | Parses a number written as a string, with an optional sign and decimal point. |
 | `fillNulls($value, $separation: comma, $skip: false, $seperation: null)` | Replaces null entries in a list with 0, or drops them. |
 | `fluid($min, $max, $min-viewport: 320px, $max-viewport: 1280px)` | A clamp() value that grows with the viewport between two widths, then stops. The preferred value keeps a rem term rather than being pure vw, because a vw-only value ignores browser text zoom and fails WCAG 1.4.4. It is a function rather than a mixin because the value is the hard part and belongs to any property, not only font-size. |
-| `fontSizer($size, $time)` | Multiplies a size by a factor. Handy for a modular scale. |
+| `fontSizer($size, $factor: null, $time: null)` | Multiplies a size by a factor, which is what a modular type scale steps with. |
 | `fontSource($font-family, $file-path, $file-formats)` | Builds one src entry for an @font-face rule. |
 | `gradientValue($colors, $type: linear, $direction: null, $shape: null, $position: null, $from: null, $in: null, $repeating: false)` | The gradient mixin's gradient as a value, for layering it with an image in one background-image, or using it as a mask-image or border-image. It takes the same arguments and refuses the same input, but cannot write the fallback the mixin writes before a gradient with $in. |
 | `isColor($value)` | Returns the value if every item in it is a colour, and errors otherwise. |

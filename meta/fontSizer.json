@@ -1,25 +1,43 @@
 {
   "name": "fontSizer",
-  "summary": "Multiplies a size by a factor. Handy for a modular scale.",
+  "summary": "Multiplies a size by a factor, which is what a modular type scale steps with.",
   "arguments": [
     {
       "name": "$size",
       "accepts": [
-        "a length"
+        "a length, whose unit the result keeps",
+        "a unitless number, for a line-height or another ratio"
+      ]
+    },
+    {
+      "name": "$factor",
+      "accepts": [
+        "a unitless multiplier",
+        "two units multiply into a unit squared and are refused"
       ]
     },
     {
       "name": "$time",
       "accepts": [
-        "a unitless multiplier"
+        "the old name of $factor, which still works and warns"
       ]
     }
   ],
   "examples": [
-    ".a { font-size: fontSizer(16px, 1.5); }"
+    ".a { font-size: fontSizer(16px, 1.5); }",
+    ".a { line-height: fontSizer(1.5, 1.2); }",
+    ".a { font-size: fontSizer(fontSizer(16px, 1.25), 1.25); }"
   ],
   "rejects": [
     ".a { font-size: fontSizer(nonsense, 1.5); }",
-    ".a { font-size: fontSizer(16px, 1px); }"
+    ".a { font-size: fontSizer(16px, 1px); }",
+    ".a { font-size: fontSizer(16px); }"
+  ],
+  "warns": [
+    ".a { font-size: fontSizer(16px, $time: 1.5); }"
+  ],
+  "caveats": [
+    "The second argument was called `$time` until 4.0.0, although it is a multiplier and never was a duration. `$factor` is the one to pass now; `$time` still works as a keyword argument and warns, the way `fillNulls` carries its old `$seperation`.",
+    "The result keeps whatever unit was given, so a unitless `$size` is not refused: `fontSizer(1.5, 1.2)` is the unitless number a `line-height` wants. Two units are refused, because they multiply into a unit squared, which Sass writes as `calc(16px * 1px)` and which is not a length anywhere in CSS."
   ]
 }
