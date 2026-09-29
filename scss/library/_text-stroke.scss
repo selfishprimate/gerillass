@@ -1,5 +1,6 @@
 @charset "UTF-8";
 
+@use "sass:color";
 @use "sass:list";
 @use "sass:map";
 @use "sass:meta";
@@ -25,19 +26,39 @@
 // $style says which of the three looks is wanted. `hollow` is the default, as
 // the hollow look is what 3.x wrote with no arguments:
 //
-// - `outside`, the default: the letter keeps its shape and the outline sits
-//   around it;
+// - `outside`: the letter keeps its shape and the outline sits around it;
 // - `center`: the raw property, the outline straddling the outline of the
 //   glyph, which thins the letter;
-// - `hollow`: the letter is not filled at all, leaving the outline on its own.
-//   `color` is written as well, so an engine that drops the two -webkit
-//   properties shows solid text rather than nothing.
+// - `hollow`, the default: the letter is not filled at all, leaving the
+//   outline on its own. `color` is written as well, so an engine that drops
+//   the two -webkit properties shows solid text rather than nothing.
+//
+// `hollow` is the one style where the outline is all there is, so a stroke
+// that paints nothing leaves an empty element. Rendered in Chrome 152,
+// Firefox 156 and Safari 26.6.2, `text-stroke(0px, red, hollow)` and
+// `text-stroke(2px, transparent, hollow)` both drew nothing at all, with and
+// without a `$fill`, since `-webkit-text-fill-color: transparent` beats the
+// `color` underneath it. Both are refused under `hollow` and left alone under
+// the other two, where the same values are harmless: in the same render a zero
+// stroke drew plain text in `center` and a filled letter in `outside`, and a
+// zero width is a resting state somebody animates a growing outline from.
 $-styles: "outside" "center" "hollow";
 
 @mixin text-stroke($width: 1px, $color: currentColor, $style: hollow, $fill: null) {
+  @if not & {
+    @error "`text-stroke` writes its declarations into the rule it is called in, so call it inside a selector, such as `.display { @include text-stroke(2px); }`.";
+  }
   $style-name: string.to-lower-case("#{$style}");
   @if meta.type-of($style) != "string" or not list.index($-styles, $style-name) {
-    @error "`#{meta.inspect($style)}` is not a valid $style for `text-stroke`. Pass `outside`, which keeps the letterform, `center`, which straddles it, or `hollow`, which leaves the letter unfilled.";
+    // A colour in the third slot is what the 3.x order put there, and that is
+    // the one mistake worth naming: the message otherwise says a colour is not
+    // a style and leaves the reader to work out why their call stopped
+    // compiling.
+    $hint: "";
+    @if meta.type-of($style) == "color" {
+      $hint: " If you are upgrading, the order changed in 4.0.0 to `$width, $color, $style, $fill`.";
+    }
+    @error "`#{meta.inspect($style)}` is not a valid $style for `text-stroke`. Pass `outside`, which keeps the letterform, `center`, which straddles it, or `hollow`, which leaves the letter unfilled.#{$hint}";
   }
 
   $colors: ("$color": $color, "$fill": $fill);
@@ -58,6 +79,17 @@ $-styles: "outside" "center" "hollow";
   $problem: lengthProblem($width, $percent: false, $negative: false, $keywords: "thin" "medium" "thick", $css-wide: true);
   @if $problem {
     @error "`#{meta.inspect($width)}` is not a valid $width for `text-stroke`: #{$problem}. A browser drops the declaration.";
+  }
+
+  // See the note above the styles: under `hollow` the outline is the whole of
+  // the text, so a stroke that paints nothing leaves an empty element.
+  @if $style-name == "hollow" {
+    @if meta.type-of($width) == "number" and $width == $width * 0 {
+      @error "`#{meta.inspect($width)}` is not a valid $width for `text-stroke` with `$style: hollow`: the outline is all the text has, so a stroke of nothing leaves the element empty. Pass a width such as `2px`, or `$style: center`, where a zero stroke still shows the letters.";
+    }
+    @if meta.type-of($color) == "color" and color.alpha($color) == 0 {
+      @error "`#{meta.inspect($color)}` is not a valid $color for `text-stroke` with `$style: hollow`: the outline is all the text has, so a colour that paints nothing leaves the element empty, and a `$fill` does not save it. Pass a colour the outline can be seen in, or `$style: center`.";
+    }
   }
 
   $stroke-width: $width;

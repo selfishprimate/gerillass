@@ -119,6 +119,9 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `text-selection` refuses a call with no block | breaking, loud; it used to write nothing |
 | `text-selection` reads `only` in any case | fixes a refusal; not breaking |
 | `text-shadow` refuses a call at the root | a better message; not breaking |
+| `text-stroke` refuses a zero width and a transparent colour with `hollow` | breaking, loud; both drew nothing |
+| `text-stroke` refuses a call at the root | a better message; not breaking |
+| `text-stroke` names the 4.0.0 order change when a colour lands in `$style` | a better message; not breaking |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -2707,6 +2710,39 @@ It writes one declaration, so at the root Sass stopped the build with its own
 message about declarations outside style rules, pointing at the last line of the
 library file and naming neither the mixin nor the fix. The message is the
 mixin's now.
+
+
+## Break: `text-stroke` refuses a stroke that paints nothing
+
+Under `$style: hollow` the letter is unfilled and the outline is the whole of
+the text, so a stroke that paints nothing leaves an empty element.
+
+```scss
+.display { @include text-stroke(0px, #db504a, hollow); }
+.display { @include text-stroke(2px, transparent, hollow); }
+// 3.x: both compiled, and both rendered nothing at all
+```
+
+Rendered in Chrome 152, Firefox 156 and Safari 26.6.2, each of those drew
+nothing, with and without a `$fill`: `-webkit-text-fill-color: transparent`
+beats the `color` underneath it, so the fill cannot save them. A colour with no
+alpha of any spelling is refused, `rgba(255, 0, 0, 0)` as well as
+`transparent`; an alpha of 0.02 still paints and passes.
+
+Both values are kept under `center` and `outside`, where the same render showed
+plain text and a filled letter. A zero width there is a resting state an
+outline can be animated out of, which is why it is not refused everywhere.
+
+Compiled across 414 calls covering every width, colour, style and fill this
+mixin takes: 406 were identical and the 8 that changed are the four cases
+above, in both spellings of the style.
+
+A call at the root raises with the mixin's own message in place of Sass's.
+
+And a colour in the third slot is what the pre-4.0.0 order put there, so the
+message for it now names the change. Upgrading, the call read
+`text-stroke(black, transparent, red, 2px)` and the error said only that `red`
+is not a style, which left the reader to work out why.
 
 
 ---

@@ -1031,7 +1031,10 @@ Two pieces of work are open:
   refusing a call at the root, its page's `$step` example rewritten around what
   the step now does, since the caption still described the pre-4.0.0 default,
   and both it and `text-selection` gaining the "What it refuses" section their
-  neighbours have,
+  neighbours have, and `text-stroke` refusing a zero width and a colour with no
+  alpha under `$style: hollow`, where the outline is all the text has and both
+  drew nothing in all three browsers, refusing a call at the root, and naming
+  the 4.0.0 argument order when a colour lands in `$style`,
   all on
   `docs-examples-review`;
   and the demos and prose

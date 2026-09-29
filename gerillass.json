@@ -2544,7 +2544,8 @@
             "a length, such as 2px",
             "thin, medium or thick, with $style: center or hollow",
             "var(), calc() and the other maths functions",
-            "a percentage, a negative width and a unitless number are refused"
+            "a percentage, a negative width and a unitless number are refused",
+            "a zero width is refused with $style: hollow, where the outline is all the text has, and kept with center and outside"
           ]
         },
         {
@@ -2552,7 +2553,8 @@
           "default": "currentColor",
           "accepts": [
             "the outline's colour",
-            "a colour, currentColor, a system colour, a function such as var() or light-dark(), or a CSS-wide keyword"
+            "a colour, currentColor, a system colour, a function such as var() or light-dark(), or a CSS-wide keyword",
+            "a colour with no alpha is refused with $style: hollow, for the same reason"
           ]
         },
         {
@@ -2580,7 +2582,8 @@
         "Since 4.0.0 the arguments are `$width, $color, $style, $fill`, and the old order, `$fallback-color, $color, $stroke-color, $stroke-width`, raises rather than compiling. `$style: hollow` is the default, which is the look 3.x wrote with no arguments, in `currentColor` rather than black.",
         "A bare `-webkit-text-stroke` is centred on the glyph outline, so half of it is painted over the letter: measured at 200px in Chrome 152, Firefox 156 and Safari 26.6.2, a 20px stroke cut the letter's own ink from 11213 to 3174 pixels and a 40px stroke left none. `$style: outside` writes `paint-order: stroke fill`, which keeps the letterform whole in all three.",
         "`$style: outside` doubles the width it writes, since half of the stroke is then hidden behind the letter: a 40px stroke drawn that way left 17006 pixels of ink against a centred 20px stroke's 15915. A keyword width, `thin`, `medium` or `thick`, cannot be doubled and raises; a `var()` width is doubled by the browser through `calc()`.",
-        "Unprefixed `text-stroke` is supported by no engine, checked with `CSS.supports` in all three, so the mixin writes the `-webkit-` properties only. In an engine that has neither, `hollow` still shows solid text, because it writes `color` as well."
+        "Unprefixed `text-stroke` is supported by no engine, checked with `CSS.supports` in all three, so the mixin writes the `-webkit-` properties only. In an engine that has neither, `hollow` still shows solid text, because it writes `color` as well.",
+        "Under `$style: hollow` the outline is the whole of the text, so a stroke that paints nothing leaves an empty element: rendered in Chrome 152, Firefox 156 and Safari 26.6.2, `text-stroke(0px, red, hollow)` and `text-stroke(2px, transparent, hollow)` both drew nothing at all, and a `$fill` did not save them, since `-webkit-text-fill-color: transparent` beats the `color` under it. Both raise since 4.0.0. The same values are kept under `center` and `outside`, where the same render showed plain text and a filled letter: a zero width there is a resting state an outline can be animated out of."
       ],
       "examples": [
         ".a { @include text-stroke; }",
@@ -2601,7 +2604,10 @@
         ".a { @include text-stroke(thin, red, outside); }",
         ".a { @include text-stroke(2px, red, inside); }",
         ".a { @include text-stroke(null); }",
-        ".a { @include text-stroke(2px, red, hollow, notacolor); }"
+        ".a { @include text-stroke(2px, red, hollow, notacolor); }",
+        ".a { @include text-stroke(0px, red, hollow); }",
+        ".a { @include text-stroke(2px, transparent, hollow); }",
+        "@include text-stroke(2px);"
       ]
     },
     {
