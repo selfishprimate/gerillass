@@ -76,11 +76,24 @@ Checked against hand arithmetic at a real 900px viewport: the floor came out at 
 ```
 </Example>
 
-<Example caption="Your own viewport range, and values given in `rem`.">
+<Example resizable hint="Drag the box: all three sizes move, and the heading moves fastest, so the gap between the levels opens as the box widens and closes as it narrows." caption="**A type scale.** Each level gets its own range, and a wider range makes that level travel further, which is how a scale that is tight on a phone can be dramatic on a desktop. One call per level, and nothing else to keep in step.">
 ```scss
-.title {
-  font-size: fluid(1rem, 3rem, 320px, 1200px);
-}
+.scale h2 { font-size: fluid(22px, 44px, 300px, 520px); }
+.scale h3 { font-size: fluid(16px, 24px, 300px, 520px); }
+.scale p  { font-size: fluid(13px, 16px, 300px, 520px); }
+```
+```html
+<style>
+  body { margin: 0; padding: 20px; background: #fafaf8; font-family: Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
+  .scale h2 { margin: 0 0 4px; font-weight: 800; line-height: 1.1; }
+  .scale h3 { margin: 0 0 8px; font-weight: 600; color: #668f80; line-height: 1.25; }
+  .scale p { margin: 0; color: #657167; line-height: 1.55; }
+</style>
+<div class="scale">
+  <h2>One scale, three ranges</h2>
+  <h3>The heading travels furthest</h3>
+  <p>The body text barely moves, which is what keeps it readable at every width while the headings carry the change.</p>
+</div>
 ```
 </Example>
 
@@ -107,10 +120,42 @@ Checked against hand arithmetic at a real 900px viewport: the floor came out at 
 ```
 </Example>
 
-<Example caption="A grid gap that opens up on wider screens.">
+<Example resizable hint="Drag the box: the rule thickens and the shadow lifts further off the page, both from the same kind of call." caption="**Anywhere a length goes.** A `fluid()` is a value, so it drops into a shorthand like any other: the border's width here and two of the shadow's three lengths are each one call.">
+```scss
+.plate {
+  border-left: fluid(3px, 10px, 300px, 520px) solid #668f80;
+  box-shadow: 0 fluid(2px, 8px, 300px, 520px)
+              fluid(6px, 26px, 300px, 520px)
+              rgb(34 44 37 / 0.22);
+}
+```
+```html
+<style>
+  body { margin: 0; padding: 24px; background: #f2f2eb; font-family: Inter, ui-sans-serif, system-ui, sans-serif; }
+  .plate { padding: 18px 20px; border-radius: 8px; background: #fafaf8; color: #2f3937; }
+  .plate b { display: block; margin-bottom: 4px; font: 700 16px Inter, ui-sans-serif, system-ui, sans-serif; }
+  .plate span { font-size: 13px; color: #657167; }
+</style>
+<div class="plate">
+  <b>A rule and a shadow</b>
+  <span>Both grow with the box, from three calls in two declarations.</span>
+</div>
+```
+</Example>
+
+<Example caption="It composes too, because it is a value rather than a declaration. Inside `calc()` it is one term of a sum, which is how a container gets a margin that opens with the page while keeping the rest of the arithmetic.">
+```scss
+.measure {
+  width: calc(100% - #{fluid(16px, 96px)});
+  transform: translateY(fluid(2px, 12px));
+}
+```
+</Example>
+
+<Example caption="Your own viewport range, and values given in `rem`. A `rem` is turned into pixels against a 16px root, which is the one assumption the function makes and states.">
 ```scss
 .stack {
-  gap: fluid(0.5rem, 2rem);
+  gap: fluid(0.5rem, 2rem, 20rem, 75rem);
 }
 ```
 </Example>
