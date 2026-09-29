@@ -96,17 +96,26 @@ The **Text Shadow Sass mixin** writes one or more text shadows. Each one is a di
 ```
 </Example>
 
-<Example caption="The same long shadow written in `rem`, with `$step` setting how fine the layers are. Without `$step` a filled shadow takes one step per unit, which in `rem` would be three coarse layers.">
+<Example caption="`$step` is how far apart the layers sit. A filled distance in pixels steps one pixel at a time, which is what makes the shadow solid, so a long one is a lot of layers: `90px` is ninety of them. Raise the step and the count falls with it, at the price of a stair on the leading edge, which grows with the distance.">
 ```scss
-.title {
-  @include text-shadow(bottom-right rgb(102 143 128 / 0.65) 3rem true, $step: 0.125rem);
+.solid {
+  @include text-shadow(bottom-right #69995d 90px true);
+}
+
+.stepped {
+  @include text-shadow(bottom-right #69995d 90px true, $step: 12px);
 }
 ```
 ```html
 <style>
-  .title { margin: 0; font: 800 44px/1.1 Inter, ui-sans-serif, system-ui, sans-serif; color: #668f80; }
+  .steps { display: grid; gap: 96px; padding: 4px 0 84px; }
+  .steps h3 { margin: 0; font: 800 38px/1.1 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; }
+  .steps p { margin: 0 0 6px; font: 500 13px/1 Inter, ui-sans-serif, system-ui, sans-serif; color: #657167; }
 </style>
-<h2 class="title">Fine steps</h2>
+<div class="steps">
+  <div><p>default step, 90 layers</p><h3 class="solid">Solid</h3></div>
+  <div><p>$step: 12px, 8 layers</p><h3 class="stepped">Stepped</h3></div>
+</div>
 ```
 </Example>
 
@@ -421,11 +430,62 @@ A `text-shadow` transitions from one layer to another when both states have the 
 ```
 </Example>
 
-<Hint kind="info">
+## What it refuses
 
-**What the mixin refuses, and why.** One broken layer drops the whole `text-shadow` declaration, and a shadow nobody notices is worse than a build that stops, so a direction that is neither a keyword nor an angle, a colour a browser does not know, a negative or unitless distance and a negative blur all raise. A distance written as `var()` or `calc()` cannot be filled with `true`, since the layers are counted while the stylesheet compiles.
+One broken layer drops the whole `text-shadow` declaration, and a shadow nobody notices is worse than a build that stops, so every part of a group is checked.
 
-</Hint>
+A direction is one of the eight keywords, in any case, or an angle.
+
+```scss
+.title {
+  @include text-shadow(sideways red 5px);
+}
+```
+```text
+Error: `sideways` is not a valid direction for `text-shadow`, in `sideways red 5px`. Pass one of `top`, `top-right`, `right`, `bottom-right`, `bottom`, `bottom-left`, `left`, `top-left`, or an angle such as `45deg`, measured from the top and clockwise.
+```
+
+A distance is a positive length. A negative one is a direction written the wrong way round, so the message says so rather than repeating itself.
+
+```scss
+.title {
+  @include text-shadow(top red -5px);
+}
+```
+```text
+Error: `-5px` is not a valid distance for `text-shadow`, in `top red -5px`: a length below zero does not work here. Point the shadow the other way rather than passing a negative distance.
+```
+
+`true` fills the gap one layer at a time, so the distance has to be one this stylesheet can count. A `var()` or a `calc()` is resolved by the browser and reaches the layer count too late.
+
+```scss
+.title {
+  @include text-shadow(top red var(--s) true);
+}
+```
+```text
+Error: `var(--s)` cannot be filled in `text-shadow`, in `top red var(--s) true`. A filled shadow is drawn in steps, which needs a distance this stylesheet can count, such as `5px`.
+```
+
+`$step` only means something when a shadow is filled, and it has to be in the distance's own unit.
+
+```scss
+.title {
+  @include text-shadow(top red 5px, $step: 2px);
+}
+```
+```text
+Error: `$step` does nothing in this `text-shadow` call: no shadow is filled. Add `true` to the group you want filled, such as `bottom-right red 20px true`.
+```
+
+The mixin writes one declaration, so it needs a rule to write it into. A call at the root used to fail with Sass's own message, which pointed at the last line of the library file and named neither the mixin nor the fix.
+
+```scss
+@include text-shadow(bottom red 5px);
+```
+```text
+Error: `text-shadow` writes a declaration, so call it inside a selector, such as `.title { @include text-shadow(bottom-right rgb(0 0 0 / 0.4) 5px); }`.
+```
 
 ## Related Links
 

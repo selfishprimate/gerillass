@@ -118,6 +118,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `text-image` refuses a call at the root | a better message; not breaking |
 | `text-selection` refuses a call with no block | breaking, loud; it used to write nothing |
 | `text-selection` reads `only` in any case | fixes a refusal; not breaking |
+| `text-shadow` refuses a call at the root | a better message; not breaking |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -2698,6 +2699,14 @@ Chrome's inheritance `& *::selection { background-color: revert }` does not
 undo it, and `initial` removes the highlight altogether rather than giving the
 browser's own back. The documentation page says so now; it used to claim only
 the line changes.
+
+
+## Break: `text-shadow` says a call at the root needs a selector
+
+It writes one declaration, so at the root Sass stopped the build with its own
+message about declarations outside style rules, pointing at the last line of the
+library file and naming neither the mixin nor the fix. The message is the
+mixin's now.
 
 
 ---

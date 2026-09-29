@@ -19,7 +19,22 @@
 //
 // A distance a browser resolves, `var()` or `calc()`, is written as a `calc()`
 // with CSS's own `sin()` and `cos()` rather than computed here.
+//
+// It writes one declaration, so it needs a rule to write it into; at the root
+// Sass's own message pointed at the last line of this file and named neither
+// the mixin nor the fix.
+//
+// There is no ceiling on the layer count, unlike `long-shadow`, which stops at
+// 500. The two default differently and that is why: `long-shadow`'s step is a
+// fortieth of the length, so a call is 40 layers however long it is, while a
+// filled distance in pixels steps one pixel at a time, so `1000px` really is
+// 1000 layers. Measured on the compiled output, a layer costs about 30 bytes,
+// the same figure `long-shadow` records. A call that large renders, so it is
+// not refused; `$step` is the control, and the caveat says so.
 @mixin text-shadow($params...) {
+  @if not & {
+    @error "`text-shadow` writes a declaration, so call it inside a selector, such as `.title { @include text-shadow(bottom-right rgb(0 0 0 / 0.4) 5px); }`.";
+  }
   $keywords: meta.keywords($params);
   @each $key, $value in $keywords {
     @if $key != "step" {

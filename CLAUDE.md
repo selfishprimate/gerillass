@@ -1027,7 +1027,11 @@ Two pieces of work are open:
   `text-image` alike, and `text-selection` refusing a call with no block, which
   wrapped nothing and said nothing, and reading `only` in any case, its page
   now saying that `::selection` inherits in Chrome and not in the other two, so
-  `only` narrows the rule in two engines out of three,
+  `only` narrows the rule in two engines out of three, and `text-shadow`
+  refusing a call at the root, its page's `$step` example rewritten around what
+  the step now does, since the caption still described the pre-4.0.0 default,
+  and both it and `text-selection` gaining the "What it refuses" section their
+  neighbours have,
   all on
   `docs-examples-review`;
   and the demos and prose
