@@ -1,6 +1,8 @@
 @charset "UTF-8";
 
+@use "sass:color";
 @use "sass:meta";
+@use "sass:string";
 @use "../internal/color-problem" as *;
 @use "../internal/image-value" as *;
 
@@ -21,14 +23,37 @@
 //   the transparent fill survives and nothing paints the letters. The media
 //   block gives both properties back: measured, the computed fill colour goes
 //   from `rgba(0, 0, 0, 0)` to black.
+//
+// It writes declarations, so it needs a rule to write them into; at the root
+// Sass's own message pointed at the `background-image` line inside this file.
 @mixin text-image($image: null, $fallback: null) {
-  @if $image {
+  @if not & {
+    @error "`text-image` fills the letters of the element it is called in, so call it inside a selector, such as `.headline { @include text-image(\"/img/hero.png\"); }`.";
+  }
+  // `!= null` rather than a plain truth test: `@if $image` is false for `false`
+  // as well, so a boolean was swallowed at one end and refused at the other,
+  // `text-image(true)` raising while `text-image(false)` wrote no image at all.
+  @if $image != null {
     background-image: imageValue($image, "text-image", "$image");
   }
   @if $fallback != null {
     $problem: colorProblem($fallback);
     @if $problem {
       @error "`#{meta.inspect($fallback)}` is not a valid $fallback for `text-image`: #{$problem}. Pass the colour the letters take when the image does not arrive, such as `#333`.";
+    }
+    // A fallback that paints nothing is not a fallback. Any colour with no
+    // alpha is the value this argument exists to replace, and `currentColor`
+    // resolves to the `color` written below, which is transparent: measured in
+    // Chrome 152 and Firefox 156 with an image that 404s, both computed to
+    // `rgba(0, 0, 0, 0)` and the letters were as gone as with no fallback.
+    //
+    // The alpha is read rather than compared against `transparent`, because
+    // `rgba(255, 255, 255, 0)` is just as invisible and is not equal to it, and
+    // the keyword is lower-cased first, since `currentcolor` is the spelling in
+    // the specification and browsers take either.
+    $invisible: meta.type-of($fallback) == "color" and color.alpha($fallback) == 0;
+    @if $invisible or string.to-lower-case("#{$fallback}") == "currentcolor" {
+      @error "`#{meta.inspect($fallback)}` is not a valid $fallback for `text-image`: it paints nothing, since the mixin makes the letters transparent, so an image that does not arrive still leaves them invisible. Pass a colour they can be read in, such as `#333`.";
     }
     background-color: $fallback;
   }

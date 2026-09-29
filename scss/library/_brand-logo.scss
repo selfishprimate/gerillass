@@ -34,7 +34,10 @@
   position: relative;
   width: $width;
   height: $height;
-  @if $image-url {
+  // `!= null` rather than a plain truth test: `@if $image-url` is false for
+  // `false` too, so a boolean was swallowed here and refused a line later,
+  // `brand-logo(200px, 40px, true)` raising while `false` wrote no image.
+  @if $image-url != null {
     background-image: imageValue($image-url, "brand-logo", "$image-url");
   }
   background-position: center;

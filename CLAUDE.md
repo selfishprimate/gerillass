@@ -1017,7 +1017,14 @@ Two pieces of work are open:
   refusing a call with no block and reading the orientation in any case, and
   `sprite` refusing a call at the root, and `stretched-link` reading its
   argument in any case and refusing a call at the root, and `gradient` and
-  `text-gradient` refusing one too,
+  `text-gradient` refusing one too, and `text-image` refusing a call at the
+  root, a `$fallback` of `transparent` or `currentColor`, which paint nothing
+  under letters the mixin has already made transparent, and, with `brand-logo`,
+  a `false` image, which a plain truth test swallowed while `true` raised, and
+  the shared `imageValue` refusing an unquoted CSS-wide keyword, which went
+  into `url(inherit)` and asked for a file of that name in
+  `background-image`, `background-pattern`, `brand-logo`, `sprite` and
+  `text-image` alike,
   all on
   `docs-examples-review`;
   and the demos and prose

@@ -306,7 +306,7 @@
           "name": "$image-url",
           "default": "null",
           "accepts": [
-            "an image path, as a string; a list, a number, a colour or a boolean is refused",
+            "an image path, as a string; a list, a number, a colour, a boolean or a CSS-wide keyword such as `inherit` is refused",
             "null to filter the element itself instead",
             "var(), url(), image-set() or a gradient, written as they are rather than wrapped in url()",
             "none, the CSS keyword, written as it is rather than as url(none)"
@@ -399,7 +399,8 @@
         ".a { @include background-image(\"/img/a.png\", null, null, 10deg); }",
         ".a { @include background-image(\"/img/a.png\", null, null, cover, cover); }",
         ".a { @include background-image(\"/img/a.png\", null, null, cover, center center, huge); }",
-        ".a { @include background-image(\"/img/a.png\", null, null, -10px); }"
+        ".a { @include background-image(\"/img/a.png\", null, null, -10px); }",
+        ".a { @include background-image(inherit); }"
       ],
       "warns": [
         ".a { @include background-image(\"/img/a.png\", rgba(0,0,0,0.5), right); }",
@@ -494,7 +495,8 @@
         ".a { @include background-pattern(glow, $origin: sideways); }",
         ".a { @include background-pattern(stripes, $size: 4px, $thickness: 10px); }",
         ".a { @include background-pattern(triangles, $direction: sideways); }",
-        ".a { @include background-pattern(triangles, $angle: 30deg); }"
+        ".a { @include background-pattern(triangles, $angle: 30deg); }",
+        ".a { @include background-pattern(dots, $image: inherit); }"
       ]
     },
     {
@@ -618,7 +620,7 @@
           "name": "$image-url",
           "default": "null",
           "accepts": [
-            "an image path, as a string; a list, a number, a colour or a boolean is refused",
+            "an image path, as a string; a list, a number, a colour, a boolean or a CSS-wide keyword such as `inherit` is refused",
             "var(), url(), image-set() or a gradient, written as they are rather than wrapped in url()"
           ]
         }
@@ -640,7 +642,9 @@
         ".logo { @include brand-logo(120px, 40px, true); }",
         ".logo { @include brand-logo(huge, 40px); }",
         ".logo { @include brand-logo(120px, 10deg); }",
-        ".logo { @include brand-logo(\"120px\", 40px); }"
+        ".logo { @include brand-logo(\"120px\", 40px); }",
+        ".logo { @include brand-logo(120px, 40px, inherit); }",
+        ".logo { @include brand-logo(120px, 40px, false); }"
       ]
     },
     {
@@ -2219,7 +2223,8 @@
         ".icon { @include sprite(\"/img/sprite.png\", 10px 20px 30px 40px); }",
         ".icon { @include sprite(\"/img/sprite.png\", auto); }",
         ".icon { @include sprite(42); }",
-        "@include sprite(\"/img/sprite.png\");"
+        "@include sprite(\"/img/sprite.png\");",
+        ".a { @include sprite(inherit, 0 0); }"
       ]
     },
     {
@@ -2410,7 +2415,7 @@
           "name": "$image",
           "default": "null",
           "accepts": [
-            "an image path, as a string; a list, a number, a colour or a boolean is refused",
+            "an image path, as a string; a list, a number, a colour, a boolean or a CSS-wide keyword such as `inherit` is refused",
             "var(), url(), image-set() or a gradient, written as they are rather than wrapped in url()"
           ]
         },
@@ -2418,7 +2423,7 @@
           "name": "$fallback",
           "default": "null",
           "accepts": [
-            "a colour the letters take when the image does not arrive",
+            "a colour the letters take when the image does not arrive; a colour with no alpha and `currentColor` are refused, since neither paints anything",
             "null, the default, which leaves them with nothing to fall back to"
           ]
         }
@@ -2438,7 +2443,12 @@
       "rejects": [
         ".a { @include text-image(16 9); }",
         ".a { @include text-image(#ff0000); }",
-        ".a { @include text-image(\"/img/t.png\", $fallback: nonsense); }"
+        ".a { @include text-image(\"/img/t.png\", $fallback: nonsense); }",
+        ".a { @include text-image(inherit); }",
+        ".a { @include text-image(\"/img/t.png\", $fallback: transparent); }",
+        ".a { @include text-image(\"/img/t.png\", $fallback: currentColor); }",
+        "@include text-image(\"/img/t.png\");",
+        ".a { @include text-image(\"/img/t.png\", $fallback: rgba(255, 255, 255, 0)); }"
       ]
     },
     {

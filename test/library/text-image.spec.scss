@@ -1,0 +1,95 @@
+@charset "UTF-8";
+
+// Since 4.0.0 `$image` refuses an unquoted CSS-wide keyword and `$fallback`
+// refuses a colour that paints nothing. Both checks sit next to values that
+// look the same to a careless reading and must keep working, so those are
+// pinned here rather than left to the sweep that found them:
+//
+// - a quoted `"inherit"` is a path, as every quoted string is;
+// - `none` is still written as the keyword, not as `url(none)`;
+// - `var()` is passed through, since a custom property may hold anything;
+// - a colour with an alpha under 1 still paints, so only a fully transparent
+//   one is refused.
+@use 'true' as *;
+@use '../../scss/gerillass' as *;
+
+@include describe('text-image()') {
+  @include it('Reads a quoted CSS-wide keyword as a path.') {
+    @include assert {
+      @include output {
+        .a { @include text-image("inherit"); }
+      }
+      @include expect {
+        .a {
+          background-image: url("inherit");
+          background-size: cover;
+          background-position: center;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          color: transparent;
+        }
+        @media (forced-colors: active) {
+          .a {
+            -webkit-text-fill-color: revert;
+            color: revert;
+            background-image: none;
+          }
+        }
+      }
+    }
+  }
+
+  @include it('Writes none as the keyword, and takes a translucent fallback.') {
+    @include assert {
+      @include output {
+        .a { @include text-image(none, $fallback: rgba(47, 57, 55, 0.4)); }
+      }
+      @include expect {
+        .a {
+          background-image: none;
+          background-color: rgba(47, 57, 55, 0.4);
+          background-size: cover;
+          background-position: center;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          color: transparent;
+        }
+        @media (forced-colors: active) {
+          .a {
+            -webkit-text-fill-color: revert;
+            color: revert;
+            background-image: none;
+          }
+        }
+      }
+    }
+  }
+
+  @include it('Passes a custom property through untouched.') {
+    @include assert {
+      @include output {
+        .a { @include text-image(var(--texture)); }
+      }
+      @include expect {
+        .a {
+          background-image: var(--texture);
+          background-size: cover;
+          background-position: center;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          color: transparent;
+        }
+        @media (forced-colors: active) {
+          .a {
+            -webkit-text-fill-color: revert;
+            color: revert;
+            background-image: none;
+          }
+        }
+      }
+    }
+  }
+}

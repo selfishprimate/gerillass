@@ -1,5 +1,6 @@
 @charset "UTF-8";
 
+@use "sass:list";
 @use "sass:meta";
 @use "sass:string";
 @use "is-css-function" as *;
@@ -20,7 +21,9 @@
 // - a number, a colour or a boolean: `url(42)`, `url(#ff0000)` and `url(true)`
 //   are kept, but ask for a file named 42, a fragment of the page, or a file
 //   named true, which is never the image meant. The pattern mixins refused
-//   these already.
+//   these already;
+// - an unquoted CSS-wide keyword: `url(inherit)` asks for a file called
+//   `inherit`, where the keyword itself means something.
 //
 // And an unquoted path is quoted when it has to be: `url(a b)`, `url(a(1).png)`
 // and `url(a'b.png)` were dropped, while the same paths in quotes were kept and
@@ -47,6 +50,23 @@
   // nothing. A quoted `"none"` is still a path, as every quoted string is.
   @if string.slice(meta.inspect($value), 1, 1) != "\"" and string.to-lower-case($value) == "none" {
     @return string.unquote("none");
+  }
+
+  // A CSS-wide keyword went into `url()` too, and that is worse than `none`,
+  // because the keyword means something here and the url does not: measured in
+  // Chrome 152, Firefox 156 and Safari 26.6.2, `background-image: inherit`
+  // takes the parent's image, while `url(inherit)` asks for a file called
+  // `inherit` beside the stylesheet and paints nothing, which in `text-image`
+  // is a heading with no letters in it.
+  //
+  // It is refused rather than passed through, because where the keyword can go
+  // is not the same in every caller: `background-pattern` appends the image as
+  // one layer of several, and `background-image` does when it has a filter,
+  // and a CSS-wide keyword cannot be one layer of a list. Refusing costs
+  // nothing, since the url form paints nothing anywhere.
+  @if string.slice(meta.inspect($value), 1, 1) != "\"" and
+    list.index("inherit" "initial" "unset" "revert" "revert-layer", string.to-lower-case($value)) {
+    @error "`#{meta.inspect($value)}` is not a valid #{$argument} for `#{$mixin}`: `url(#{$value})` asks for a file of that name, which is never the image. Write the declaration by hand if you want the keyword, or pass a path as a string, such as `\"/img/hero.png\"`.";
   }
   @if not $unquote {
     @return url($value);

@@ -17,8 +17,8 @@ The **Text Image** Sass mixin helps you clip the background image of a selected 
 ## Arguments
 
 <Arguments of="text-image" footnote="**Important:** Pass the URL of the image in quotation marks. A `var()`, `url()`, `image-set()` or gradient is written as it is, without quotes.">
-  <Argument name="$image" type="string (quoted), function">The URL of the clipping image. A value that already is an image, <code>var()</code>, <code>url()</code>, <code>image-set()</code> or a gradient, is written as it is rather than wrapped in <code>url()</code>. A list, a number, a colour or a boolean is refused.</Argument>
-  <Argument name="$fallback" type="color">The colour the letters take when the image does not arrive, written as a <code>background-color</code> under it. Without one, an image that fails to load leaves no visible text at all.</Argument>
+  <Argument name="$image" type="string (quoted), function">The URL of the clipping image. A value that already is an image, <code>var()</code>, <code>url()</code>, <code>image-set()</code> or a gradient, is written as it is rather than wrapped in <code>url()</code>. A list, a number, a colour, a boolean or a CSS-wide keyword such as <code>inherit</code> is refused.</Argument>
+  <Argument name="$fallback" type="color">The colour the letters take when the image does not arrive, written as a <code>background-color</code> under it. Without one, an image that fails to load leaves no visible text at all. A colour with no alpha and <code>currentColor</code> are refused, since neither paints anything.</Argument>
 </Arguments>
 
 ## Examples
@@ -91,6 +91,37 @@ An image that is not one path stops the build. Until 2.3.1 anything went into `u
 ```
 ```text
 Error: `16 9` is not a valid $image for `text-image`: it is a list where one image is meant, and a browser drops `url()` with a list in it. Pass one path as a string, such as `"/img/hero.png"`.
+```
+
+A CSS-wide keyword is refused for the same reason and it used to be the worst of them, because the keyword means something here and the URL does not. Measured in Chrome 152, Firefox 156 and Safari 26.6.2, `background-image: inherit` takes the parent's image, while `url(inherit)` asks for a file of that name and paints nothing, which here is a heading with no letters in it. A quoted `"inherit"` is still a path.
+
+```scss
+.element {
+  @include text-image(inherit);
+}
+```
+```text
+Error: `inherit` is not a valid $image for `text-image`: `url(inherit)` asks for a file of that name, which is never the image. Write the declaration by hand if you want the keyword, or pass a path as a string, such as `"/img/hero.png"`.
+```
+
+A `$fallback` that paints nothing is refused too. A colour with no alpha is the value the argument exists to replace, and `currentColor` resolves to the `color` the mixin writes, which is transparent: with either of them an image that does not arrive still leaves the letters invisible. An alpha of `0.01` still paints and passes, as do `var()`, a system colour and `color-mix()`.
+
+```scss
+.element {
+  @include text-image("/images/landscape.webp", $fallback: currentColor);
+}
+```
+```text
+Error: `currentColor` is not a valid $fallback for `text-image`: it paints nothing, since the mixin makes the letters transparent, so an image that does not arrive still leaves them invisible. Pass a colour they can be read in, such as `#333`.
+```
+
+The mixin fills the letters of the element it is called in, so it needs a rule to write them into. A call at the root used to fail with Sass's own message, which pointed at a line inside the library and named neither the mixin nor the fix.
+
+```scss
+@include text-image("/images/landscape.webp");
+```
+```text
+Error: `text-image` fills the letters of the element it is called in, so call it inside a selector, such as `.headline { @include text-image("/img/hero.png"); }`.
 ```
 
 ## Related Links

@@ -150,6 +150,7 @@
     ".a { @include background-pattern(glow, $origin: sideways); }",
     ".a { @include background-pattern(stripes, $size: 4px, $thickness: 10px); }",
     ".a { @include background-pattern(triangles, $direction: sideways); }",
-    ".a { @include background-pattern(triangles, $angle: 30deg); }"
+    ".a { @include background-pattern(triangles, $angle: 30deg); }",
+    ".a { @include background-pattern(dots, $image: inherit); }"
   ]
 }

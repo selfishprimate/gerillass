@@ -29,7 +29,8 @@
     ".icon { @include sprite(\"/img/sprite.png\", 10px 20px 30px 40px); }",
     ".icon { @include sprite(\"/img/sprite.png\", auto); }",
     ".icon { @include sprite(42); }",
-    "@include sprite(\"/img/sprite.png\");"
+    "@include sprite(\"/img/sprite.png\");",
+    ".a { @include sprite(inherit, 0 0); }"
   ],
   "caveats": [
     "With one argument the mixin has to tell an image from a position, and both can be strings. Until 4.0.0 it read the last four characters and took only `.png`, `.jpg` and `.svg`, so `.webp`, `.avif`, `.gif`, `.jpeg`, an upper case `.PNG`, a path with a query such as `a.png?v=2` and a data URI were all refused. It now asks whether the value is a position, and a string that is not one is the path.",

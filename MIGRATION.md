@@ -112,6 +112,10 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `sprite` refuses a call at the root | a better message; not breaking |
 | `stretched-link` reads its argument in any case | fixes a refusal; not breaking |
 | `gradient` and `text-gradient` refuse a call at the root | a better message; not breaking |
+| an image argument refuses a CSS-wide keyword such as `inherit` | breaking, loud; the old CSS asked for a file of that name |
+| `text-image` and `brand-logo` refuse `false` as an image | breaking, loud; it used to write no image at all |
+| `text-image` refuses a `$fallback` of `transparent` or `currentColor` | breaking, loud |
+| `text-image` refuses a call at the root | a better message; not breaking |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -2592,6 +2596,79 @@ A pair with one visible axis is not refused, because it is not dead:
 and `null` still leaves `overflow` out for a caller who sets it elsewhere.
 
 A call at the root raises with the mixin's own message in place of Sass's.
+
+## Break: an image argument refuses a CSS-wide keyword
+
+`background-image`, `background-pattern`, `brand-logo`, `sprite` and
+`text-image` share one check for the value they put in `url()`, and until 4.0.0
+a CSS-wide keyword went in like any other word.
+
+```scss
+.headline { @include text-image(inherit); }
+// 3.x: background-image: url(inherit);
+```
+
+That asks for a file called `inherit` beside the stylesheet. Measured in
+Chrome 152, Firefox 156 and Safari 26.6.2, the computed value is a url to that
+path in all three, nothing loads, and in `text-image`, where the letters are
+transparent and the image is the only thing painting them, the heading renders
+with nothing in it: pixel for pixel the same as the same element with no
+background at all. `background-image: inherit`, written by hand, takes the
+parent's image in all three.
+
+The keyword is refused rather than passed through, because where it may go is
+not the same in every caller. `background-pattern` appends the image as one
+layer of several, and `background-image` does too once it has a filter, and a
+CSS-wide keyword cannot be one layer of a list. Refusing costs nothing, since
+the `url()` form painted nothing anywhere. Write the declaration by hand if the
+keyword is what you want.
+
+`inherit`, `initial`, `unset`, `revert` and `revert-layer` are refused in any
+case. A quoted `"inherit"` is still a path, as every quoted string is, and
+`none` still writes the keyword, which it has since 4.0.0.
+
+---
+
+## Break: `text-image` and `brand-logo` refuse `false` as an image
+
+Both guarded their image with a plain truth test, so `true` raised with the
+shared message about a file called `true` and `false` was swallowed, writing no
+`background-image` at all.
+
+```scss
+.headline { @include text-image($src); }  // $src: false
+// 3.x: the clip and the transparent fill, and no image: an empty heading
+```
+
+Both now test against `null`, so only `null` leaves the declaration out and a
+boolean raises either way. `background-pattern` already refused `false`.
+
+---
+
+## Break: `text-image` refuses a `$fallback` that paints nothing
+
+`$fallback` exists so the letters have a colour when the image does not arrive.
+`transparent` is the value it replaces, and `currentColor` resolves to the
+`color` the mixin itself writes three lines later, which is transparent.
+
+```scss
+.headline { @include text-image("/img/hero.jpg", $fallback: currentColor); }
+// 3.x: background-color: currentColor;  — computed rgba(0, 0, 0, 0)
+```
+
+Measured in Chrome 152 and Firefox 156 against an image that 404s: both values
+computed to `rgba(0, 0, 0, 0)` and the heading was as empty as with no fallback
+at all, while `#2f3937` in the same place painted the letters. Not captured in
+Safari; the value is the mixin's own `color`, not an engine's choice.
+
+The alpha is read rather than compared against the keyword, so
+`rgba(255, 255, 255, 0)` is refused too, and the keyword is lower-cased first,
+so `currentcolor` is. An alpha of `0.01` still paints and passes, as do
+`var()`, a system colour and `color-mix()`.
+
+A call at the root raises with the mixin's own message in place of Sass's,
+which pointed at the `background-image` line inside the library.
+
 
 ---
 

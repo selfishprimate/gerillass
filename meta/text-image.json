@@ -5,14 +5,14 @@
     {
       "name": "$image",
       "accepts": [
-        "an image path, as a string; a list, a number, a colour or a boolean is refused",
+        "an image path, as a string; a list, a number, a colour, a boolean or a CSS-wide keyword such as `inherit` is refused",
         "var(), url(), image-set() or a gradient, written as they are rather than wrapped in url()"
       ]
     },
     {
       "name": "$fallback",
       "accepts": [
-        "a colour the letters take when the image does not arrive",
+        "a colour the letters take when the image does not arrive; a colour with no alpha and `currentColor` are refused, since neither paints anything",
         "null, the default, which leaves them with nothing to fall back to"
       ]
     }
@@ -25,7 +25,12 @@
   "rejects": [
     ".a { @include text-image(16 9); }",
     ".a { @include text-image(#ff0000); }",
-    ".a { @include text-image(\"/img/t.png\", $fallback: nonsense); }"
+    ".a { @include text-image(\"/img/t.png\", $fallback: nonsense); }",
+    ".a { @include text-image(inherit); }",
+    ".a { @include text-image(\"/img/t.png\", $fallback: transparent); }",
+    ".a { @include text-image(\"/img/t.png\", $fallback: currentColor); }",
+    "@include text-image(\"/img/t.png\");",
+    ".a { @include text-image(\"/img/t.png\", $fallback: rgba(255, 255, 255, 0)); }"
   ],
   "caveats": [
     "The letters have no colour of their own: `color` and `-webkit-text-fill-color` are transparent and the image is the only thing painting them. With a path that 404s the heading is **gone**, not broken: measured in Chrome 152, the box was pixel for pixel one whose text is transparent and which has no background at all. `$fallback` writes a `background-color` under the image, and with it the same box rendered its letters in that colour.",

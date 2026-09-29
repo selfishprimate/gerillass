@@ -5,7 +5,7 @@
     {
       "name": "$image-url",
       "accepts": [
-        "an image path, as a string; a list, a number, a colour or a boolean is refused",
+        "an image path, as a string; a list, a number, a colour, a boolean or a CSS-wide keyword such as `inherit` is refused",
         "null to filter the element itself instead",
         "var(), url(), image-set() or a gradient, written as they are rather than wrapped in url()",
         "none, the CSS keyword, written as it is rather than as url(none)"
@@ -82,7 +82,8 @@
     ".a { @include background-image(\"/img/a.png\", null, null, 10deg); }",
     ".a { @include background-image(\"/img/a.png\", null, null, cover, cover); }",
     ".a { @include background-image(\"/img/a.png\", null, null, cover, center center, huge); }",
-    ".a { @include background-image(\"/img/a.png\", null, null, -10px); }"
+    ".a { @include background-image(\"/img/a.png\", null, null, -10px); }",
+    ".a { @include background-image(inherit); }"
   ],
   "warns": [
     ".a { @include background-image(\"/img/a.png\", rgba(0,0,0,0.5), right); }",
