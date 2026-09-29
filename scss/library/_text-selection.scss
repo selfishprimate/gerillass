@@ -1,20 +1,58 @@
 @charset "UTF-8";
 
+@use "sass:meta";
+@use "sass:string";
+
+// Writes the `::selection` rule, and the descendant one beside it, because in
+// two engines out of three `::selection` does not inherit: styling a paragraph
+// alone leaves the `<strong>` inside it with the browser's own highlight,
+// which is the trap the mixin exists for.
+//
+// The engines disagree, measured on one paragraph styled with `#a::selection`
+// alone and a selection made across it:
+//
+// - Chrome 152 inherits the highlight into the `<strong>`, so `only` and the
+//   default form render the same there;
+// - Firefox 156 leaves it the browser's grey, Safari 26.6.2 the browser's
+//   blue, so the descendant rule is what does the work in both.
+//
+// So `only` means only in Firefox and Safari and means nothing in Chrome, and
+// nothing can be written to change that: with Chrome's inheritance,
+// `& *::selection { background-color: revert }` does not undo it, and
+// `initial` removes the highlight altogether rather than giving the browser's
+// back. The page says so.
+//
+// Two things the mixin used to get wrong:
+//
+// - with no block it wrapped nothing, so the call emitted no CSS and said
+//   nothing. Wrapping a block is the whole of what it does;
+// - the keyword was compared as written, so `ONLY` and `Only` were refused
+//   with the message for a word that means nothing. CSS keywords do not care
+//   about case and neither does the rest of the library.
 @mixin text-selection($value: null) {
-  @if not & and $value == null {
+  @if not meta.content-exists() {
+    @error "`text-selection` wraps the styles you pass it, so call it with a block, such as `@include text-selection { background-color: #eefa92; }`.";
+  }
+  // Written as an `@if` rather than `if()`, which Sass is deprecating; see the
+  // Modernisation note in CLAUDE.md.
+  $keyword: null;
+  @if $value != null {
+    $keyword: string.to-lower-case("#{$value}");
+  }
+  @if not & and $keyword == null {
     ::selection {
       @content;
     }
-  } @else if & and $value == "only" {
+  } @else if & and $keyword == "only" {
     &::selection {
       @content;
     }
-  } @else if & and $value == null {
+  } @else if & and $keyword == null {
     &::selection,
     *::selection {
       @content;
     }
-  } @else if not & and $value == "only" {
+  } @else if not & and $keyword == "only" {
     @error "`only` has no meaning at the root of a stylesheet, because there is no selector to limit the effect to. Call `text-selection(\"only\")` inside a selector, or pass no argument at all.";
   } @else {
     @error "`#{$value}` is not a valid argument for `text-selection`. Pass `\"only\"` inside a selector to affect just that element, or pass no argument at all.";

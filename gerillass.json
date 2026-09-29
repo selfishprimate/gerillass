@@ -2459,7 +2459,7 @@
           "name": "$value",
           "default": "null",
           "accepts": [
-            "\"only\" inside a selector to affect just that element",
+            "\"only\" inside a selector to affect just that element, in any case",
             "null for the element and its descendants"
           ]
         }
@@ -2467,12 +2467,18 @@
       "file": "scss/library/_text-selection.scss",
       "signature": "text-selection($value: null)",
       "summary": "Styles the ::selection pseudo-element.",
+      "caveats": [
+        "`::selection` inherits in Chrome 152 and does not in Firefox 156 or Safari 26.6.2, so `only` means only in two engines out of three. Measured on a paragraph styled with its own rule alone and a selection dragged across it: Chrome painted the `<strong>` inside it with the paragraph's highlight, Firefox left it grey and Safari blue. Nothing can be written to hold Chrome back: `& *::selection { background-color: revert }` does not undo the inheritance, and `initial` removes the highlight rather than giving the browser's back.",
+        "Without `only` the mixin writes `*::selection` beside the element's own rule, which is what makes the default form work in Firefox and Safari. In Chrome that rule is redundant and paints the same value."
+      ],
       "examples": [
         "@include text-selection { background: yellow; }",
         ".a { @include text-selection(\"only\") { background: yellow; } }"
       ],
       "rejects": [
-        ".a { @include text-selection(bogus) { background: yellow; } }"
+        ".a { @include text-selection(bogus) { background: yellow; } }",
+        "@include text-selection(\"only\") { background: yellow; }",
+        ".a { @include text-selection; }"
       ]
     },
     {

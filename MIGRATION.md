@@ -116,6 +116,8 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `text-image` and `brand-logo` refuse `false` as an image | breaking, loud; it used to write no image at all |
 | `text-image` refuses a `$fallback` of `transparent` or `currentColor` | breaking, loud |
 | `text-image` refuses a call at the root | a better message; not breaking |
+| `text-selection` refuses a call with no block | breaking, loud; it used to write nothing |
+| `text-selection` reads `only` in any case | fixes a refusal; not breaking |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -2668,6 +2670,34 @@ so `currentcolor` is. An alpha of `0.01` still paints and passes, as do
 
 A call at the root raises with the mixin's own message in place of Sass's,
 which pointed at the `background-image` line inside the library.
+
+
+## Break: `text-selection` needs a block, and reads `only` in any case
+
+The mixin's whole job is to wrap the block it is passed, and a call without one
+wrapped nothing: no CSS, no warning.
+
+```scss
+.element { @include text-selection; }
+// 3.x: nothing at all
+```
+
+The keyword was also compared as written, so `ONLY` and `Only` were refused
+with the message for a word that means nothing. Both work now, as `only` and
+`"only"` always did.
+
+Nothing else about the mixin changed, but what it can promise is narrower than
+the page used to say, and this is worth knowing rather than fixing.
+`::selection` inherits in Chrome 152 and does not in Firefox 156 or
+Safari 26.6.2. Measured on a paragraph styled with `#a::selection` alone and a
+selection dragged across it: Chrome painted the `<strong>` inside it with the
+paragraph's highlight, Firefox left it the browser's grey and Safari the
+browser's blue. So `only` narrows the rule in two engines and makes no
+difference in the third, and nothing can be written to change that: with
+Chrome's inheritance `& *::selection { background-color: revert }` does not
+undo it, and `initial` removes the highlight altogether rather than giving the
+browser's own back. The documentation page says so now; it used to claim only
+the line changes.
 
 
 ---

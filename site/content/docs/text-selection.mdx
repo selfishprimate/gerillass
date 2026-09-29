@@ -17,7 +17,7 @@ The **Text Selection** Sass mixin helps you style the portion of text (or an ele
 ## Arguments
 
 <Arguments of="text-selection">
-  <Argument name="$value" type="string">Accepts the <code>only</code> value. Use it when you want to apply the styles to one specific HTML element.</Argument>
+  <Argument name="$value" type="string">Accepts <code>only</code>, in any case, when the styles should reach that element and not what is inside it. Read the note under the examples first: one engine of the three ignores the difference.</Argument>
 </Arguments>
 
 ## Examples
@@ -36,7 +36,7 @@ The **Text Selection** Sass mixin helps you style the portion of text (or an ele
 ```
 </Example>
 
-<Example caption="Select the text in the result below and compare it with the example above. Pass the `only` value as an argument to apply the style rules to only one specific HTML element.">
+<Example caption="Pass `only` and the mixin writes the element's rule alone. In Firefox and Safari the bolder part below keeps the browser's own highlight; in Chrome it takes the styled one, because Chrome inherits `::selection` and the other two do not.">
 ```scss
 .element{
   @include text-selection(only){
@@ -46,7 +46,7 @@ The **Text Selection** Sass mixin helps you style the portion of text (or an ele
 }
 ```
 ```html
-<p class="element">Select this line, and the <strong>bolder part inside it</strong>. Only the line changes.</p>
+<p class="element">Select this line, and the <strong>bolder part inside it</strong>.</p>
 ```
 </Example>
 
@@ -62,6 +62,55 @@ The **Text Selection** Sass mixin helps you style the portion of text (or an ele
 <p>and this one, which carries no class at all.</p>
 ```
 </Example>
+
+<Hint kind="warning">
+
+**`only` means only in two engines out of three.** `::selection` inherits in Chrome 152 and does not in Firefox 156 or Safari 26.6.2. Measured on a paragraph styled with its own rule alone: Chrome painted the `<strong>` inside it with the paragraph's highlight, Firefox left it grey and Safari blue. Nothing can be written to hold Chrome back, so treat `only` as a narrowing the two engines honour rather than a guarantee.
+
+</Hint>
+
+<Hint kind="info">
+
+**Without `only` the mixin writes a second rule**, `*::selection`, beside the element's own. That is what carries the styles to the text inside in Firefox and Safari; in Chrome it is redundant and paints the same value.
+
+</Hint>
+
+## What it refuses
+
+The mixin's whole job is to wrap the block you pass it, so a call without one used to write no CSS and say nothing at all.
+
+```scss
+.element {
+  @include text-selection;
+}
+```
+```text
+Error: `text-selection` wraps the styles you pass it, so call it with a block, such as `@include text-selection { background-color: #eefa92; }`.
+```
+
+`only` narrows the rule to one selector, so at the root there is nothing for it to narrow.
+
+```scss
+@include text-selection("only") {
+  background-color: #eefa92;
+}
+```
+```text
+Error: `only` has no meaning at the root of a stylesheet, because there is no selector to limit the effect to. Call `text-selection("only")` inside a selector, or pass no argument at all.
+```
+
+Any other word is refused. `only` is read in any case, so `ONLY` and `Only` work.
+
+```scss
+.element {
+  @include text-selection(bogus) {
+    background-color: #eefa92;
+  }
+}
+```
+```text
+Error: `bogus` is not a valid argument for `text-selection`. Pass `"only"` inside a selector to affect just that element, or pass no argument at all.
+```
 
 ## Related Links
 

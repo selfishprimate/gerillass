@@ -1024,7 +1024,10 @@ Two pieces of work are open:
   the shared `imageValue` refusing an unquoted CSS-wide keyword, which went
   into `url(inherit)` and asked for a file of that name in
   `background-image`, `background-pattern`, `brand-logo`, `sprite` and
-  `text-image` alike,
+  `text-image` alike, and `text-selection` refusing a call with no block, which
+  wrapped nothing and said nothing, and reading `only` in any case, its page
+  now saying that `::selection` inherits in Chrome and not in the other two, so
+  `only` narrows the rule in two engines out of three,
   all on
   `docs-examples-review`;
   and the demos and prose

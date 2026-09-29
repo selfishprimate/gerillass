@@ -477,6 +477,11 @@ a dropped declaration rather than an error.
 - The letters have no colour of their own: `color` and `-webkit-text-fill-color` are transparent and the image is the only thing painting them. With a path that 404s the heading is **gone**, not broken: measured in Chrome 152, the box was pixel for pixel one whose text is transparent and which has no background at all. `$fallback` writes a `background-color` under the image, and with it the same box rendered its letters in that colour.
 - Forced colours used to lose the text as well: the browser forces `background-image: none` and forces `color`, but `-webkit-text-fill-color` is not a forced property, so the transparent fill survived. Since 4.0.0 a `@media (forced-colors: active)` block gives both back. Measured with forced colours on: the computed fill colour was `rgba(0, 0, 0, 0)` before and is black now, in Chrome 152 and Firefox 156. It could not be measured in Safari, which has no way to turn forced colours on from automation.
 
+**`text-selection`**
+
+- `::selection` inherits in Chrome 152 and does not in Firefox 156 or Safari 26.6.2, so `only` means only in two engines out of three. Measured on a paragraph styled with its own rule alone and a selection dragged across it: Chrome painted the `<strong>` inside it with the paragraph's highlight, Firefox left it grey and Safari blue. Nothing can be written to hold Chrome back: `& *::selection { background-color: revert }` does not undo the inheritance, and `initial` removes the highlight rather than giving the browser's back.
+- Without `only` the mixin writes `*::selection` beside the element's own rule, which is what makes the default form work in Firefox and Safari. In Chrome that rule is redundant and paints the same value.
+
 **`text-shadow`**
 
 - Since 4.0.0 every direction is an angle: the eight keywords are the 45 degree steps, measured as `gradient` measures them, 0deg up and clockwise, and the offsets are the sine and cosine of that angle. A diagonal keyword used to write the distance on both axes, which placed it 1.414 times further out than a straight one; multiply an old diagonal distance by 0.7071 to keep the same look.
