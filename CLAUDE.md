@@ -1034,7 +1034,10 @@ Two pieces of work are open:
   neighbours have, and `text-stroke` refusing a zero width and a colour with no
   alpha under `$style: hollow`, where the outline is all the text has and both
   drew nothing in all three browsers, refusing a call at the root, and naming
-  the 4.0.0 argument order when a colour lands in `$style`,
+  the 4.0.0 argument order when a colour lands in `$style`, and `tokens`
+  refusing a name or a prefix that doubles the `--` it writes itself, which
+  gave a real property under a name nothing in the stylesheet asks for, and an
+  empty value, which `var()` does not fall back for,
   all on
   `docs-examples-review`;
   and the demos and prose

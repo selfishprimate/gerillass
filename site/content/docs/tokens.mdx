@@ -70,8 +70,8 @@ The first two only happen when the values come from Sass: written as plain CSS, 
 ## Arguments
 
 <Arguments of="tokens" footnote="The mixin writes into the rule it is called in, so call it inside a selector: `:root` for values the whole page shares, or a theme selector to override some of them.">
-  <Argument name="$map" type="map">The names and values. A name can be a word or a number, such as <code>bg</code> or <code>500</code>, using letters, digits, hyphens and underscores. A value can be anything CSS accepts: a colour, a length, a font stack, a shadow, a duration, <code>calc()</code> or <code>clamp()</code>, and <code>var()</code> pointing at another token. A value of <code>null</code> is left out. A nested map is refused.</Argument>
-  <Argument name="$prefix (null)" type="string">Joined to each name with a hyphen. <code>color</code> turns <code>bg</code> into <code>--color-bg</code>.</Argument>
+  <Argument name="$map" type="map">The names and values. A name can be a word or a number, such as <code>bg</code> or <code>500</code>, using letters, digits, hyphens and underscores, and without the leading <code>--</code>, which the mixin writes itself. A value can be anything CSS accepts: a colour, a length, a font stack, a shadow, a duration, <code>calc()</code> or <code>clamp()</code>, and <code>var()</code> pointing at another token. A value of <code>null</code> is left out; an empty one is refused. A nested map is refused.</Argument>
+  <Argument name="$prefix (null)" type="string">Joined to each name with a hyphen. <code>color</code> turns <code>bg</code> into <code>--color-bg</code>. The mixin writes that hyphen, so a prefix with one at either end is refused.</Argument>
 </Arguments>
 
 ## Examples
@@ -211,6 +211,40 @@ Error: `space-0.5` is not a valid token name for `tokens`: a custom property nam
 ```
 ```text
 Error: `blue` holds a map, which `tokens` does not flatten. Pass each group on its own, such as `@include tokens($blue, blue)` for `$blue: (500: #3b82f6)`.
+```
+
+The mixin writes the `--` itself, and the hyphen after a prefix, so a name or a prefix that brings its own doubles them. `(--bg: #fff)` wrote `----bg` and `$prefix: color-` wrote `--color--bg`: real properties in all three engines, holding the value under a name nothing in the stylesheet asks for. Measured in Chrome 152, Firefox 156 and Safari 26.6.2, `----bg` computed to its value while `--bg`, which is what the author would write in `var()`, computed to the empty string.
+
+```scss
+:root {
+  @include tokens((--bg: #fff));
+}
+```
+```text
+Error: `--bg` is not a valid token name for `tokens`: the mixin writes the `--` itself, so this would become `----bg`. Drop the leading hyphens and pass `bg`.
+```
+
+```scss
+:root {
+  @include tokens((bg: #fff), "color-");
+}
+```
+```text
+Error: `color-` is not a valid $prefix for `tokens`: the mixin writes the `--` and the hyphen before the name, so a prefix that starts or ends with one doubles it. Pass `color`.
+```
+
+An empty value is the same trap as `null`, one line further on: a custom property may hold nothing, and `var()` does not fall back for it. Measured in all three, `--empty: ;` computed to the empty string and `var(--empty, red)` stayed at the initial value. A quoted `""` is a real string a `content` can use and is written as it is.
+
+```scss
+@use "sass:string";
+@use "gerillass" as *;
+
+:root {
+  @include tokens((label: string.unquote("")));
+}
+```
+```text
+Error: `label` has an empty value in `tokens`. A custom property holding nothing is not the same as one that is not set: `var(--label, red)` does not fall back. Pass a value, `""` for an empty string, or null to leave the property out.
 ```
 
 ## Related Links

@@ -122,6 +122,8 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `text-stroke` refuses a zero width and a transparent colour with `hollow` | breaking, loud; both drew nothing |
 | `text-stroke` refuses a call at the root | a better message; not breaking |
 | `text-stroke` names the 4.0.0 order change when a colour lands in `$style` | a better message; not breaking |
+| `tokens` refuses a name or prefix that doubles the `--` | breaking, loud; the property was written under a name nothing asked for |
+| `tokens` refuses an empty value | breaking, loud |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -2743,6 +2745,47 @@ And a colour in the third slot is what the pre-4.0.0 order put there, so the
 message for it now names the change. Upgrading, the call read
 `text-stroke(black, transparent, red, 2px)` and the error said only that `red`
 is not a style, which left the reader to work out why.
+
+
+## Break: `tokens` refuses a name that doubles the `--`
+
+The mixin writes the `--`, and the hyphen after a prefix, so a name or a prefix
+that brings its own doubled them.
+
+```scss
+:root { @include tokens((--bg: #fff)); }
+// 3.x: ----bg: #fff;
+
+:root { @include tokens((bg: #fff), "color-"); }
+// 3.x: --color--bg: #fff;
+```
+
+Both are real custom properties, and that is what made this quiet: the browser
+keeps them. Measured in Chrome 152, Firefox 156 and Safari 26.6.2, `----bg`
+computed to `#fff` while `--bg`, which is what the author writes in `var()`,
+computed to the empty string, in all three. A hyphen inside a prefix is
+untouched, so `brand-color` still works.
+
+A leading hyphen on a name is left alone as well: `(-bg: #fff)` writes
+`---bg`, and only a name starting with `--` is the mistake of writing the
+property name into the map key.
+
+## Break: `tokens` refuses an empty value
+
+An empty value is not an absence, the same trap as `null` one line above it.
+
+```scss
+:root { @include tokens((label: string.unquote(""))); }
+// 3.x: --label: ;
+```
+
+Measured in all three engines, `--empty: ;` computed to the empty string and
+`var(--empty, red)` did not fall back to red. An empty list already raised and
+now says the same thing; a quoted `""` is a real string a `content` can use and
+is written as it is.
+
+Compiled across 56 calls covering the names, values and prefixes this mixin
+takes: 49 identical, five newly refused and one message reworded.
 
 
 ---

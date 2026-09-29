@@ -2620,7 +2620,8 @@
           "accepts": [
             "a map of names to values, where a value is any CSS value: a colour, a length, a font stack, a shadow, a duration, calc() or clamp()",
             "a value of null, which is skipped",
-            "a value that references another token, such as var(--blue-500)"
+            "a value that references another token, such as var(--blue-500)",
+            "a name without the leading `--`, which the mixin writes itself; an empty value is refused, since a property holding nothing is not one that is unset"
           ]
         },
         {
@@ -2628,13 +2629,18 @@
           "default": "null",
           "accepts": [
             "null, the default, for no prefix",
-            "a name, joined to each property name with a hyphen"
+            "a name, joined to each property name with a hyphen",
+            "a name without a hyphen at either end, since the mixin writes the separator"
           ]
         }
       ],
       "file": "scss/library/_tokens.scss",
       "signature": "tokens($map, $prefix: null)",
       "summary": "Writes a Sass map out as CSS custom properties, for any kind of token: colours, spacing, sizes, radii, type, shadows, durations. With the prefix space, (4: 1rem) becomes --space-4: 1rem. A null value is skipped, and a quoted string keeps its quotes.",
+      "caveats": [
+        "The mixin writes the `--` and, with a prefix, the hyphen after it, so a name or prefix that brings its own doubles them. `(--bg: #fff)` wrote `----bg` and `$prefix: color-` wrote `--color--bg`: real properties in all three engines, holding the value under a name nothing in the stylesheet asks for. Measured in Chrome 152, Firefox 156 and Safari 26.6.2, `----bg` computed to its value while the `--bg` the author would write in `var()` computed to the empty string. Both raise since 4.0.0.",
+        "An empty value is not an absence, the same trap as `null`. Measured in all three, `--empty: ;` computed to the empty string and `var(--empty, red)` did not fall back to red. An unquoted empty string and an empty list both raise; a quoted `\"\"` is a real string a `content` can use and is written as it is."
+      ],
       "examples": [
         ":root { @include tokens((1: 0.25rem, 2: 0.5rem, 4: 1rem), space); @include tokens((md: 8px, full: 9999px), radius); }",
         ":root { @include tokens((md: 0 4px 12px rgba(24, 24, 27, 0.08)), shadow); @include tokens((fast: 150ms, ease: cubic-bezier(0.2, 0, 0, 1)), motion); }",
@@ -2649,7 +2655,10 @@
         ":root { @include tokens((brand: (500: #3b82f6)), color); }",
         ":root { @include tokens((bg: #fff), (color, text)); }",
         ":root { @include tokens((\"brand color\": #f00)); }",
-        "@include tokens((bg: #fff));"
+        "@include tokens((bg: #fff));",
+        ":root { @include tokens((--bg: #fff)); }",
+        ":root { @include tokens((bg: #fff), \"color-\"); }",
+        ":root { @include tokens((bg: #fff), \"--color\"); }"
       ]
     },
     {

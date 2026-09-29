@@ -10,6 +10,17 @@
 // hyphens, underscores and non-ASCII letters all survived.
 $-forbidden: " " "." "," "/" "#" ":" ";" "(" ")" "[" "]" "{" "}" "!" "@" "$" "%" "^" "&" "*" "+" "=" "<" ">" "?" "\\" "|" "~" "`" "'" "\"";
 
+// The prefix with its own hyphens taken off, for the message above.
+@function -trimmed($text) {
+  @while string.length($text) > 0 and string.slice($text, 1, 1) == "-" {
+    $text: string.slice($text, 2);
+  }
+  @while string.length($text) > 0 and string.slice($text, -1) == "-" {
+    $text: string.slice($text, 1, -2);
+  }
+  @return $text;
+}
+
 @function -forbidden-in($text) {
   @each $character in $-forbidden {
     @if string.index($text, $character) {
@@ -82,6 +93,16 @@ $-forbidden: " " "." "," "/" "#" ":" ";" "(" ")" "[" "]" "{" "}" "!" "@" "$" "%"
     @if $character {
       @error "`#{$prefix}` is not a valid $prefix for `tokens`: a custom property name cannot contain `#{$character}`. Use letters, digits, hyphens and underscores.";
     }
+    // The mixin writes the `--` and the separating hyphen, so a prefix that
+    // brings its own doubles them: `color-` gave `--color--bg` and `--color`
+    // gave `----color-bg`. Both are real properties, holding the value under a
+    // name nothing in the stylesheet asks for. Measured in Chrome 152,
+    // Firefox 156 and Safari 26.6.2, `--color--text` computed to its value
+    // while `--color-text` was empty. A hyphen inside the prefix is fine.
+    $prefix-text: "#{$prefix}";
+    @if string.slice($prefix-text, 1, 1) == "-" or string.slice($prefix-text, -1) == "-" {
+      @error "`#{$prefix}` is not a valid $prefix for `tokens`: the mixin writes the `--` and the hyphen before the name, so a prefix that starts or ends with one doubles it. Pass `#{-trimmed($prefix-text)}`.";
+    }
   }
 
   @each $name, $value in $map {
@@ -93,11 +114,27 @@ $-forbidden: " " "." "," "/" "#" ":" ";" "(" ")" "[" "]" "{" "}" "!" "@" "$" "%"
     @if $character {
       @error "`#{$text}` is not a valid token name for `tokens`: a custom property name cannot contain `#{$character}`. Use letters, digits, hyphens and underscores, such as `space-0_5`.";
     }
+    // A map key written as the property it is meant to become. The mixin adds
+    // the `--`, so `(--bg: #fff)` wrote `----bg`, which every browser keeps as
+    // a property of that name while the `var(--bg)` the author wrote finds
+    // nothing: measured in all three, `--bg` computed to the empty string.
+    @if string.slice($text, 1, 2) == "--" {
+      @error "`#{$text}` is not a valid token name for `tokens`: the mixin writes the `--` itself, so this would become `--#{$text}`. Drop the leading hyphens and pass `#{string.slice($text, 3)}`.";
+    }
     @if meta.type-of($value) == "map" {
       @error "`#{$text}` holds a map, which `tokens` does not flatten. Pass each group on its own, such as `@include tokens($blue, blue)` for `$blue: (500: #3b82f6)`.";
     }
-    @if meta.type-of($value) == "list" and list.length($value) == 0 {
-      @error "`#{$text}` has an empty value in `tokens`. Pass a value, or null to leave the property out.";
+    // An empty value is not an absence, the same trap as `null` above: a
+    // custom property may hold nothing, and `var(--a, red)` does not fall back
+    // to red for it. Measured in Chrome 152, Firefox 156 and Safari 26.6.2,
+    // `--empty: ;` computed to the empty string and the fallback was ignored
+    // in all three. A quoted `""` is a real string a `content` can use and is
+    // left alone; this is the unquoted one, which a caller reaches through
+    // `string.unquote("")` or an empty list.
+    $empty-list: meta.type-of($value) == "list" and list.length($value) == 0;
+    $empty-text: meta.type-of($value) == "string" and meta.inspect($value) == "";
+    @if $empty-list or $empty-text {
+      @error "`#{$text}` has an empty value in `tokens`. A custom property holding nothing is not the same as one that is not set: `var(--#{$text}, red)` does not fall back. Pass a value, `\"\"` for an empty string, or null to leave the property out.";
     }
 
     @if $value != null {
