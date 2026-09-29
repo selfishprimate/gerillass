@@ -180,7 +180,7 @@
         $font-style-list: list.append($font-style-list, list.nth($font-style, $i), comma);
       }
       @for $i from 1 through list.length($font-style-list) {
-        @if list.index("eot" "woff2" "woff" "ttf" "svg", list.nth($font-style-list, $i)) {
+        @if map.has-key($map-for-font-formats, string.to-lower-case("#{list.nth($font-style-list, $i)}")) {
           $file-formats: $font-style-list;
           $font-style: normal;
         }
@@ -218,11 +218,20 @@
     @if list.length($file-formats) == 0 {
       @error "`font-face` was given no file formats. Pass one or more of: #{map.keys($map-for-font-formats)}, such as `$file-formats: woff2`.";
     }
+    // Read in any case, as CSS reads its own keywords, and lower-cased for the
+    // rest of the mixin so the extension written into url() is too.
+    $lowered: ();
     @each $format in $file-formats {
-      @if not map.has-key($map-for-font-formats, $format) {
+      $name: null;
+      @if meta.type-of($format) == "string" {
+        $name: string.to-lower-case(string.unquote("#{$format}"));
+      }
+      @if not map.has-key($map-for-font-formats, $name) {
         @error "`#{meta.inspect($format)}` is not a valid file format for `font-face`. Pass one or more of: #{map.keys($map-for-font-formats)}.";
       }
+      $lowered: list.append($lowered, $name, comma);
     }
+    $file-formats: $lowered;
 
     @font-face {
       font-family: $font-family;

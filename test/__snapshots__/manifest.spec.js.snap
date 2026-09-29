@@ -1628,9 +1628,27 @@ exports[`Manifest examples fontSizer: .a { line-height: fontSizer(1.5, 1.2); } 1
 }"
 `;
 
+exports[`Manifest examples fontSource: .a { content: "#{fontSource("Fanwood Text", "/fonts/fw", svg)}"; } 1`] = `
+".a {
+  content: 'url("/fonts/fw.svg#FanwoodText") format("svg")';
+}"
+`;
+
+exports[`Manifest examples fontSource: .a { content: "#{fontSource("Inter", "/fonts/inter", otf)}"; } 1`] = `
+".a {
+  content: 'url("/fonts/inter.otf") format("opentype")';
+}"
+`;
+
 exports[`Manifest examples fontSource: .a { content: "#{fontSource("Inter", "/fonts/inter", woff2)}"; } 1`] = `
 ".a {
   content: 'url("/fonts/inter.woff2") format("woff2")';
+}"
+`;
+
+exports[`Manifest examples fontSource: .a { content: "#{fontSource(\\"Inter\\", \\"/fonts/inter\\", otf)}"; } 1`] = `
+".a {
+  content: "url('\\\\\\\\\\"/fonts/inter\\\\\\\\\\".otf') format(\\"opentype\\")";
 }"
 `;
 

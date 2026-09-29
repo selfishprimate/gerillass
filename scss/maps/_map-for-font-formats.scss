@@ -1,9 +1,15 @@
 @charset "UTF-8";
 
+// `otf` was missing until 4.0.0, which left a project shipping OpenType with
+// no way to use `font-face` short of restating this whole map: `@use ... with`
+// replaces a map rather than merging into it. Measured in Chrome 152 and
+// Firefox 156 by inserting the rule and reading `src` back, both keep
+// `format("opentype")` and drop an unknown format word.
 $map-for-font-formats: (
   "eot": format("embedded-opentype"),
   "woff2": format("woff2"),
   "woff": format("woff"),
   "ttf": format("truetype"),
+  "otf": format("opentype"),
   "svg": format("svg"),
 ) !default;

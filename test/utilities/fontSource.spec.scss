@@ -1,0 +1,43 @@
+@charset "UTF-8";
+
+// Until 4.0.0 a format this did not know fell through both branches and the
+// function returned an empty list, so the caller's own declaration failed with
+// Sass's `() isn't a valid CSS value`. The guard lived only in `font-face`,
+// and this is public API with a page of its own. The format is read in any
+// case too, and `otf` joined the map.
+@use 'true' as *;
+@use '../../scss/utilities/font-source' as *;
+
+@include describe('fontSource()') {
+  @include it('Builds one src entry per format.') {
+    @include assert-equal(
+      fontSource('Inter', '/f/i', woff2),
+      (url('/f/i.woff2') format('woff2'),)
+    );
+    @include assert-equal(
+      fontSource('Inter', '/f/i', otf),
+      (url('/f/i.otf') format('opentype'),)
+    );
+  }
+
+  @include it('Keeps the IE fragment for EOT alone.') {
+    @include assert-equal(
+      fontSource('Inter', '/f/i', eot),
+      (url('/f/i.eot?#iefix') format('embedded-opentype'),)
+    );
+  }
+
+  // An SVG font names its glyph set in the URL fragment, so the family's
+  // spaces have to go.
+  @include it('Puts the family in the fragment for SVG, without its spaces.') {
+    @include assert-equal(
+      fontSource('Fanwood Text', '/f/fw', svg),
+      (url('/f/fw.svg#FanwoodText') format('svg'),)
+    );
+  }
+
+  @include it('Reads the format in any case, and quoted or not.') {
+    @include assert-equal(fontSource('Inter', '/f/i', WOFF2), fontSource('Inter', '/f/i', woff2));
+    @include assert-equal(fontSource('Inter', '/f/i', 'woff2'), fontSource('Inter', '/f/i', woff2));
+  }
+}

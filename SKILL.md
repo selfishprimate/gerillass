@@ -554,6 +554,11 @@ a dropped declaration rather than an error.
 - The second argument was called `$time` until 4.0.0, although it is a multiplier and never was a duration. `$factor` is the one to pass now; `$time` still works as a keyword argument and warns, the way `fillNulls` carries its old `$seperation`.
 - The result keeps whatever unit was given, so a unitless `$size` is not refused: `fontSizer(1.5, 1.2)` is the unitless number a `line-height` wants. Two units are refused, because they multiply into a unit squared, which Sass writes as `calc(16px * 1px)` and which is not a length anywhere in CSS.
 
+**`fontSource`**
+
+- Until 4.0.0 a format it did not know fell through both of its branches and the function returned an empty list, so the failure surfaced at the caller's own declaration as Sass's `() isn't a valid CSS value`, naming neither the function nor the format. `font-face` checked its list before calling this and said so in a comment, but a guard that lives only in the caller is not a guard for a public function.
+- `otf` was missing from `$map-for-font-formats` until 4.0.0, which left a project shipping OpenType with no way to use `font-face` short of restating the whole map, since `@use ... with` replaces a map rather than merging into it. Measured in Chrome 152 and Firefox 156, both keep `format("opentype")` and drop an unknown format word.
+
 **`isNumber`**
 
 - Until 4.0.0 a value that was not a number only warned, and the function then ended with nothing to return, so the build stopped with Sass's own "Function finished without @return" instead of a message naming the argument. It now raises, which is what `isColor` and `isTime` do.
@@ -657,7 +662,7 @@ and camelCase is what tells them apart from the kebab-case mixins above.
 | `fillNulls($value, $separation: comma, $skip: false, $seperation: null)` | Replaces null entries in a list with 0, or drops them. |
 | `fluid($min, $max, $min-viewport: 320px, $max-viewport: 1280px)` | A clamp() value that grows with the viewport between two widths, then stops. The preferred value keeps a rem term rather than being pure vw, because a vw-only value ignores browser text zoom and fails WCAG 1.4.4. It is a function rather than a mixin because the value is the hard part and belongs to any property, not only font-size. |
 | `fontSizer($size, $factor: null, $time: null)` | Multiplies a size by a factor, which is what a modular type scale steps with. |
-| `fontSource($font-family, $file-path, $file-formats)` | Builds one src entry for an @font-face rule. |
+| `fontSource($font-family, $file-path, $file-formats)` | Builds one src entry for an @font-face rule, with the right format() beside it. |
 | `gradientValue($colors, $type: linear, $direction: null, $shape: null, $position: null, $from: null, $in: null, $repeating: false)` | The gradient mixin's gradient as a value, for layering it with an image in one background-image, or using it as a mask-image or border-image. It takes the same arguments and refuses the same input, but cannot write the fallback the mixin writes before a gradient with $in. |
 | `isColor($value)` | Returns the value if every item in it is a colour, and errors otherwise. |
 | `isGutter($value)` | True for anything that can sit where a CSS length is expected: a number, a calculation, or a CSS function such as var(). |

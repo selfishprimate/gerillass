@@ -139,6 +139,8 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `fillNulls` reads its separator in any case, and returns an empty list unchanged | fixes a refusal and a Sass index error |
 | `fluid` takes any absolute length, not only px and rem | fixes a false refusal; not breaking |
 | `fontSizer`'s second argument is `$factor`, not `$time` | not breaking; the old name warns |
+| `fontSource` refuses a format it does not know | breaking, loud; it used to return an empty list |
+| `otf` joins `$map-for-font-formats`, and a format is read in any case | not breaking |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -3051,6 +3053,41 @@ rather than Sass's about a missing argument, which named `$time`.
 
 Compiled across 27 calls: 19 identical, one that now works, none newly refused,
 and seven where the message or the warning changed.
+
+
+## Break: `fontSource` refuses a format it does not know
+
+It matched the format against the map and had no `@else`, so an unknown one
+fell through both branches and the function returned an empty list. The failure
+then surfaced at the caller's own declaration, as Sass's `() isn't a valid CSS
+value`, naming neither the function nor the format.
+
+```scss
+src: fontSource("Inter", "/fonts/inter", otf);
+// 3.x: Error: () isn't a valid CSS value.
+```
+
+`font-face` checked its list before calling this and said so in a comment, but
+a guard that lives only in the caller is no guard for a function with a page of
+its own.
+
+## Not breaking: `otf`, and a format in any case
+
+`otf` was missing from `$map-for-font-formats` entirely, which left a project
+shipping OpenType with no way to use `font-face` short of restating the whole
+map: `@use ... with` replaces a map rather than merging into it. Measured in
+Chrome 152 and Firefox 156 by inserting the rule and reading `src` back, both
+keep `format("opentype")` and drop an unknown format word.
+
+The metadata had `font-face` refusing `otf` recorded as a **rejection**, so the
+suite was asserting the gap was correct, and it failed the moment the map
+gained the key. That is the manifest doing its job.
+
+A format is also read in any case now, in the function and the mixin, so
+`WOFF2` works.
+
+Compiled across 48 calls through both: 24 identical, ten that now work, none
+newly refused, 14 where a silent empty list became a named message.
 
 
 ---

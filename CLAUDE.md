@@ -1065,7 +1065,11 @@ Two pieces of work are open:
   failing with Sass's index message, and `fluid` taking any absolute length
   rather than px and rem alone, since Sass converts between all of them, and
   `fontSizer` naming its second argument `$factor` rather than `$time`, which
-  it never was, with the old name kept as a keyword that warns,
+  it never was, with the old name kept as a keyword that warns, and
+  `fontSource` refusing a format it does not know rather than returning an
+  empty list whose failure surfaced at the caller's declaration, reading the
+  format in any case, and `otf` joining `$map-for-font-formats`, which it had
+  never been in,
   all on
   `docs-examples-review`;
   and the demos and prose

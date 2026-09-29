@@ -1,23 +1,46 @@
 @charset "UTF-8";
 
 @use "sass:list";
+@use "sass:meta";
+@use "sass:string";
 @use "sass:map";
 @use "../maps/map-for-font-formats" as *;
 @use "../utilities/clear-whitespace" as *;
 
+// Builds one `src` entry for an `@font-face` rule.
+//
+// Until 4.0.0 a format it did not know fell through both branches and the
+// function returned an empty list, so the caller's own declaration failed with
+// Sass's `() isn't a valid CSS value`, which names neither the function nor
+// the format. `font-face` checks its list before calling this and says so in a
+// comment, but this is public API with a page of its own, and a guard that
+// lives only in the caller is not a guard. The format is also read in any
+// case now, as CSS reads its own keywords: `WOFF2` used to fall through in the
+// same silence.
 @function fontSource($font-family, $file-path, $file-formats) {
+  $format: null;
+  @if meta.type-of($file-formats) == "string" {
+    $format: string.to-lower-case(string.unquote("#{$file-formats}"));
+  }
+  @if not map.has-key($map-for-font-formats, $format) {
+    @error "`#{meta.inspect($file-formats)}` is not a valid $file-formats for `fontSource`. Pass one of: #{map.keys($map-for-font-formats)}.";
+  }
   $list: ();
-  @if map.has-key($map-for-font-formats, $file-formats) {
-    @if list.index(eot woff2 woff ttf, $file-formats) {
-      $src-value: url('#{$file-path}.#{if(not list.index(eot, $file-formats), $file-formats, $file-formats+"?#iefix")}')
-        #{map.get($map-for-font-formats, $file-formats)};
-      $list: list.append($list, $src-value, comma);
-    } @else if list.index(svg, $file-formats) {
-      $font-family: clearWhitespace($font-family);
-      $src-value: url('#{$file-path}.#{$file-formats + "#" + $font-family}')
-        #{map.get($map-for-font-formats, $file-formats)};
-      $list: list.append($list, $src-value, comma);
+  @if $format == "svg" {
+    // The family goes in the URL fragment, which is how an SVG font names the
+    // glyph set to use, so its spaces have to go.
+    $font-family: clearWhitespace($font-family);
+    $src-value: url('#{$file-path}.#{$format + "#" + $font-family}')
+      #{map.get($map-for-font-formats, $format)};
+    $list: list.append($list, $src-value, comma);
+  } @else {
+    // The IE fragment belongs to EOT alone.
+    $extension: $format;
+    @if $format == "eot" {
+      $extension: $format + "?#iefix";
     }
+    $src-value: url('#{$file-path}.#{$extension}') #{map.get($map-for-font-formats, $format)};
+    $list: list.append($list, $src-value, comma);
   }
   @return $list;
 }

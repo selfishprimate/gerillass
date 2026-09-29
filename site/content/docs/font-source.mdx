@@ -18,7 +18,7 @@ Builds one src entry for an @font-face rule.
 <Arguments of="fontSource">
   <Argument name="$font-family" type="string">Accepts the family name.</Argument>
   <Argument name="$file-path" type="string">Accepts path without an extension.</Argument>
-  <Argument name="$file-formats" type="string">Accepts one of eot, woff2, woff, ttf, svg.</Argument>
+  <Argument name="$file-formats" type="string">One of <code>eot</code>, <code>woff2</code>, <code>woff</code>, <code>ttf</code>, <code>otf</code> or <code>svg</code>, in any case. The format supplies the extension, so the path is given without one.</Argument>
 </Arguments>
 
 ## Examples
@@ -32,6 +32,19 @@ Builds one src entry for an @font-face rule.
 }
 ```
 </Example>
+
+## What it refuses
+
+A format the function does not know used to fall through both of its branches and come back as an empty list, so the failure surfaced at your own declaration as Sass's `() isn't a valid CSS value`, naming neither the function nor the format. [Font Face](/docs/font-face) checked its list before calling this, but a guard that lives only in the caller is no guard for a function you can call yourself.
+
+```scss
+.a {
+  src: fontSource("Inter", "/fonts/inter", nonsense);
+}
+```
+```text
+Error: `nonsense` is not a valid $file-formats for `fontSource`. Pass one of: eot, woff2, woff, ttf, otf, svg.
+```
 
 ## Related Links
 

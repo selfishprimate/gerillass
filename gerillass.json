@@ -1238,7 +1238,7 @@
         ".a { @include font-face(\"Inter\", \"/fonts/inter\"); }",
         "@include font-face(42, \"/fonts/x\");",
         "@include font-face(\"Inter\", 42);",
-        "@include font-face(\"Inter\", \"/fonts/inter\", $file-formats: otf);",
+        "@include font-face(\"Inter\", \"/fonts/inter\", $file-formats: nonsense);",
         "@include font-face(\"Inter\", \"/fonts/inter\", $file-formats: woff2 wof);",
         "@include font-face(\"Inter\", \"/fonts/inter\", $file-formats: null);",
         "@include font-face(\"Inter\", var(--font-path));",
@@ -3114,31 +3114,41 @@
           "name": "$font-family",
           "required": true,
           "accepts": [
-            "the family name"
+            "the family name, which SVG puts in the URL fragment without its spaces"
           ]
         },
         {
           "name": "$file-path",
           "required": true,
           "accepts": [
-            "path without an extension"
+            "the path without an extension; the format supplies that"
           ]
         },
         {
           "name": "$file-formats",
           "required": true,
           "accepts": [
-            "one of eot, woff2, woff, ttf, svg"
+            "one of eot, woff2, woff, ttf, otf, svg, read in any case",
+            "anything else is refused: it used to return an empty list in silence"
           ]
         }
       ],
       "file": "scss/utilities/_font-source.scss",
       "signature": "fontSource($font-family, $file-path, $file-formats)",
-      "summary": "Builds one src entry for an @font-face rule.",
-      "examples": [
-        ".a { content: \"#{fontSource(\"Inter\", \"/fonts/inter\", woff2)}\"; }"
+      "summary": "Builds one src entry for an @font-face rule, with the right format() beside it.",
+      "caveats": [
+        "Until 4.0.0 a format it did not know fell through both of its branches and the function returned an empty list, so the failure surfaced at the caller's own declaration as Sass's `() isn't a valid CSS value`, naming neither the function nor the format. `font-face` checked its list before calling this and said so in a comment, but a guard that lives only in the caller is not a guard for a public function.",
+        "`otf` was missing from `$map-for-font-formats` until 4.0.0, which left a project shipping OpenType with no way to use `font-face` short of restating the whole map, since `@use ... with` replaces a map rather than merging into it. Measured in Chrome 152 and Firefox 156, both keep `format(\"opentype\")` and drop an unknown format word."
       ],
-      "rejects": []
+      "examples": [
+        ".a { content: \"#{fontSource(\"Inter\", \"/fonts/inter\", woff2)}\"; }",
+        ".a { content: \"#{fontSource(\"Inter\", \"/fonts/inter\", otf)}\"; }",
+        ".a { content: \"#{fontSource(\"Fanwood Text\", \"/fonts/fw\", svg)}\"; }"
+      ],
+      "rejects": [
+        ".a { content: \"#{fontSource(\"Inter\", \"/fonts/inter\", nonsense)}\"; }",
+        ".a { content: \"#{fontSource(\"Inter\", \"/fonts/inter\", null)}\"; }"
+      ]
     },
     {
       "name": "gradientValue",
