@@ -308,6 +308,10 @@ a dropped declaration rather than an error.
 - The fallback keeps the tint's hue, so a white tint gives a near white panel. Text chosen to sit on glass over a dark photograph disappears into it, and that call should pass a dark `$fallback` of its own.
 - It writes no `box-shadow`. A glass card usually wants a drop shadow as well, and owning the property would mean a caller could not add one without repeating what the mixin wrote.
 
+**`gradient`**
+
+- The mixin writes declarations, so it needs a rule to write them into. A call at the root failed with Sass's own "Declarations may only be used within style rules", pointing at a line inside the library; it raises with the mixin's own message since 4.0.0. `gradientValue` is the one to reach for where a gradient is a value rather than a rule.
+
 **`hide`**
 
 - The hidden element is absolutely positioned. With no positioned ancestor it escapes a container that clips it, such as a horizontal carousel or a collapsed `height: 0; overflow: hidden` panel, and widens or lengthens the page in Chrome and Safari. Put `position: relative` on that container.
@@ -466,6 +470,7 @@ a dropped declaration rather than an error.
 **`text-gradient`**
 
 - The letters have no colour of their own: the gradient is the only thing painting them. In forced colours the browser forces `background-image: none` and forces `color`, but `-webkit-text-fill-color` is not a forced property, so the transparent fill survived and the text disappeared. Since 4.0.0 a `@media (forced-colors: active)` block gives both back: measured with forced colours on, the computed fill colour was `rgba(0, 0, 0, 0)` before and is black now, in Chrome 152 and Firefox 156. Safari has no way to turn forced colours on from automation, so it was not measured there.
+- The mixin writes declarations, so it needs a rule to write them into. A call at the root failed with Sass's own "Declarations may only be used within style rules", pointing at a line inside the library; it raises with the mixin's own message since 4.0.0.
 
 **`text-image`**
 

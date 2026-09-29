@@ -27,6 +27,11 @@
   $in: null,
   $repeating: false
 ) {
+  // It writes declarations, so it needs a rule to write them into. Sass's own
+  // message at the root pointed at the `background` line inside this file.
+  @if not & {
+    @error "`text-gradient` fills the letters of the element it is called in, so call it inside a selector, such as `.headline { @include text-gradient((red, blue)); }`.";
+  }
   @if gradientDirection($colors) != null and not list.index("linear" "radial" "conic", string.to-lower-case("#{$type}")) {
     $written: meta.inspect($type);
     @if list.separator($type) == "comma" {

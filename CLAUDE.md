@@ -1016,7 +1016,8 @@ Two pieces of work are open:
   and `sizer` refusing a call at the root, and `smartphone` and `tablet`
   refusing a call with no block and reading the orientation in any case, and
   `sprite` refusing a call at the root, and `stretched-link` reading its
-  argument in any case and refusing a call at the root,
+  argument in any case and refusing a call at the root, and `gradient` and
+  `text-gradient` refusing one too,
   all on
   `docs-examples-review`;
   and the demos and prose

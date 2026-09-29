@@ -1417,6 +1417,9 @@
       "file": "scss/library/_gradient.scss",
       "signature": "gradient($colors, $type: linear, $direction: null, $shape: null, $position: null, $from: null, $in: null, $repeating: false)",
       "summary": "A linear, radial or conic gradient as background-image, plain or repeating, with an optional colour interpolation space. Replaced linear-gradient and radial-gradient in 3.0.0.",
+      "caveats": [
+        "The mixin writes declarations, so it needs a rule to write them into. A call at the root failed with Sass's own \"Declarations may only be used within style rules\", pointing at a line inside the library; it raises with the mixin's own message since 4.0.0. `gradientValue` is the one to reach for where a gradient is a value rather than a rule."
+      ],
       "examples": [
         ".a { @include gradient((red, blue)); }",
         ".a { @include gradient((red, blue), $direction: \"top-right\"); }",
@@ -1440,7 +1443,8 @@
         ".a { @include gradient((huge, blue)); }",
         ".a { @include gradient((red, blue), $in: rgb); }",
         ".a { @include gradient((red, blue), $in: \"oklab longer hue\"); }",
-        ".a { @include gradient((red, blue), $repeating: yes); }"
+        ".a { @include gradient((red, blue), $repeating: yes); }",
+        "@include gradient((red, blue));"
       ],
       "warns": [
         ".a { @include gradient(red); }"
@@ -2378,7 +2382,8 @@
       "signature": "text-gradient($colors, $type: linear, $direction: null, $shape: null, $position: null, $from: null, $in: null, $repeating: false)",
       "summary": "Fills the text with a gradient through background-clip: text. It takes the gradient mixin's arguments, colours first: a linear, radial or conic gradient, plain or repeating, with an optional colour space.",
       "caveats": [
-        "The letters have no colour of their own: the gradient is the only thing painting them. In forced colours the browser forces `background-image: none` and forces `color`, but `-webkit-text-fill-color` is not a forced property, so the transparent fill survived and the text disappeared. Since 4.0.0 a `@media (forced-colors: active)` block gives both back: measured with forced colours on, the computed fill colour was `rgba(0, 0, 0, 0)` before and is black now, in Chrome 152 and Firefox 156. Safari has no way to turn forced colours on from automation, so it was not measured there."
+        "The letters have no colour of their own: the gradient is the only thing painting them. In forced colours the browser forces `background-image: none` and forces `color`, but `-webkit-text-fill-color` is not a forced property, so the transparent fill survived and the text disappeared. Since 4.0.0 a `@media (forced-colors: active)` block gives both back: measured with forced colours on, the computed fill colour was `rgba(0, 0, 0, 0)` before and is black now, in Chrome 152 and Firefox 156. Safari has no way to turn forced colours on from automation, so it was not measured there.",
+        "The mixin writes declarations, so it needs a rule to write them into. A call at the root failed with Sass's own \"Declarations may only be used within style rules\", pointing at a line inside the library; it raises with the mixin's own message since 4.0.0."
       ],
       "examples": [
         ".a { @include text-gradient((red, blue), $direction: top); }",
@@ -2390,7 +2395,8 @@
         ".a { @include text-gradient(red blue, $direction: sideways); }",
         ".a { @include text-gradient((huge, blue)); }",
         ".a { @include text-gradient((\"red\", blue)); }",
-        ".a { @include text-gradient(red blue, $from: 45deg); }"
+        ".a { @include text-gradient(red blue, $from: 45deg); }",
+        "@include text-gradient((red, blue));"
       ],
       "warns": [
         ".a { @include text-gradient(red); }"

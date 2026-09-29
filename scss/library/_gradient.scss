@@ -20,6 +20,11 @@
   $in: null,
   $repeating: false
 ) {
+  // It writes declarations, so it needs a rule to write them into. Sass's own
+  // message at the root pointed at a `background-image` line inside this file.
+  @if not & {
+    @error "`gradient` writes its declarations into the rule it is called in, so call it inside a selector, such as `.panel { @include gradient((red, blue)); }`. For a gradient as a value, in `background` or anywhere else, use `gradientValue`.";
+  }
   $value: gradientOf($colors, $type, $direction, $shape, $position, $from, $in, $repeating);
   // Written without the space first. A browser that does not know `in` drops
   // the second declaration and keeps this one; measured in Chrome by giving it

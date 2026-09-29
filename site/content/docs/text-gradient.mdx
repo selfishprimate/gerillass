@@ -253,6 +253,17 @@ Error: `huge, blue` is not a valid $colors for `text-gradient`: `huge` is not a 
 
 </Hint>
 
+The mixin fills the letters of the element it is called in, so it needs a rule to write
+them into. A call at the root used to fail with Sass's own message, which
+pointed at a line inside the library and named neither the mixin nor the fix.
+
+```scss
+@include text-gradient((red, blue));
+```
+```text
+Error: `text-gradient` fills the letters of the element it is called in, so call it inside a selector, such as `.headline { @include text-gradient((red, blue)); }`.
+```
+
 ## Related Links
 * [Using CSS Gradients](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Images/Using_CSS_gradients)
 * [Linear Gradient](https://developer.mozilla.org/en-US/docs/Web/CSS/linear-gradient)

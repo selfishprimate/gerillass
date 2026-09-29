@@ -95,6 +95,10 @@
     ".a { @include gradient((huge, blue)); }",
     ".a { @include gradient((red, blue), $in: rgb); }",
     ".a { @include gradient((red, blue), $in: \"oklab longer hue\"); }",
-    ".a { @include gradient((red, blue), $repeating: yes); }"
+    ".a { @include gradient((red, blue), $repeating: yes); }",
+    "@include gradient((red, blue));"
+  ],
+  "caveats": [
+    "The mixin writes declarations, so it needs a rule to write them into. A call at the root failed with Sass's own \"Declarations may only be used within style rules\", pointing at a line inside the library; it raises with the mixin's own message since 4.0.0. `gradientValue` is the one to reach for where a gradient is a value rather than a rule."
   ]
 }
