@@ -28,6 +28,16 @@
 
 $_fluid-root-size: 16px;
 
+// `rem` is turned into px against the stated root. Every other unit that
+// reaches here is absolute, and `0px + $value` is what converts it: the sum
+// takes the unit of its left operand, so the pixels have to be on the left.
+@function -in-px($value) {
+  @if math.unit($value) == "rem" {
+    @return clearUnit($value) * $_fluid-root-size;
+  }
+  @return 0px + $value;
+}
+
 @function fluid($min, $max, $min-viewport: 320px, $max-viewport: 1280px) {
   // Pairs rather than a map: two arguments can legitimately hold the same
   // length, and a map would reject that as a duplicate key.
@@ -35,25 +45,27 @@ $_fluid-root-size: 16px;
   @each $pair in $given {
     $value: list.nth($pair, 1);
     $label: list.nth($pair, 2);
+    // An absolute length or rem. The absolute units convert between themselves
+    // in Sass, so `12pt` has one right answer and used to be refused with a
+    // reason that was not true of it: the page said the function has to
+    // convert between the units, which it can, unlike `em`, `vw` and `%`,
+    // whose size the stylesheet cannot know. `rem` is the exception it is
+    // worth making, against the stated 16px root below.
     @if meta.type-of($value) != "number" or math.is-unitless($value) {
-      @error "`#{$value}` is not a valid #{$label} for `fluid`. Pass a length in px or rem.";
+      @error "`#{meta.inspect($value)}` is not a valid #{$label} for `fluid`. Pass an absolute length such as `16px`, or a `rem`.";
     }
-    @if math.unit($value) != "px" and math.unit($value) != "rem" {
-      @error "`#{$value}` is not a valid #{$label} for `fluid`. Pass a length in px or rem, not #{math.unit($value)}.";
+    @if math.unit($value) != "rem" and not math.compatible($value, 1px) {
+      @error "`#{meta.inspect($value)}` is not a valid #{$label} for `fluid`: `#{math.unit($value)}` has no size this stylesheet can work out. Pass an absolute length such as `16px`, or a `rem`.";
     }
   }
 
   // Everything is compared in px, because Sass cannot convert rem to px on its
   // own: it has no way to know the root font size, so the assumption is stated
   // here rather than hidden.
-  $min-px: $min;
-  $max-px: $max;
-  $from-px: $min-viewport;
-  $to-px: $max-viewport;
-  @if math.unit($min) == "rem" { $min-px: clearUnit($min) * $_fluid-root-size; }
-  @if math.unit($max) == "rem" { $max-px: clearUnit($max) * $_fluid-root-size; }
-  @if math.unit($min-viewport) == "rem" { $from-px: clearUnit($min-viewport) * $_fluid-root-size; }
-  @if math.unit($max-viewport) == "rem" { $to-px: clearUnit($max-viewport) * $_fluid-root-size; }
+  $min-px: -in-px($min);
+  $max-px: -in-px($max);
+  $from-px: -in-px($min-viewport);
+  $to-px: -in-px($max-viewport);
 
   @if $from-px >= $to-px {
     @error "`fluid` needs $min-viewport to be smaller than $max-viewport, and was given #{$min-viewport} and #{$max-viewport}.";

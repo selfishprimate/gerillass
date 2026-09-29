@@ -263,6 +263,12 @@ never hand-edit either.
 | File | Built by | From |
 |---|---|---|
 | `gerillass.json` | `tools/build-manifest.js` | signatures parsed from `scss/`, semantics from `meta/*.json` |
+
+The parser takes a file's **first public** declaration of its kind. A name
+starting with `-` or `_` is private to its own file by Sass's own rules, so it
+is skipped: `_fluid.scss` gained a private `-in-px` helper above `fluid`, and
+before that skip the helper became the member, which left the manifest carrying
+one with no metadata and `llms.txt` failing on its missing summary.
 | `SKILL.md` | `tools/build-skill.js` | `gerillass.json` |
 | `llms.txt` | `tools/build-llms-txt.js` | `gerillass.json` |
 
@@ -1056,7 +1062,8 @@ Two pieces of work are open:
   and which it refused, and `fillNulls` checking `$skip` as a boolean, which
   was read by truthiness so a `0` dropped the nulls it was meant to fill,
   reading its separator in any case, and returning an empty list rather than
-  failing with Sass's index message,
+  failing with Sass's index message, and `fluid` taking any absolute length
+  rather than px and rem alone, since Sass converts between all of them,
   all on
   `docs-examples-review`;
   and the demos and prose

@@ -33,6 +33,15 @@
     );
   }
 
+  // Every absolute unit reduces to the same scale in Sass, so each has one
+  // right answer; `pt`, `pc`, `in`, `cm`, `mm` and `q` used to be refused with
+  // a reason that was not true of them. 12pt is 16px and 18pt is 24px, so this
+  // is the first case above written another way.
+  @include it('Takes any absolute unit, not only px.') {
+    @include assert-equal(fluid(12pt, 18pt, 320px, 1280px), fluid(16px, 24px, 320px, 1280px));
+    @include assert-equal(fluid(16px, 24px, 20pc, 80rem), fluid(16px, 24px, 320px, 1280px));
+  }
+
   @include it('Collapses to a constant when both ends are equal.') {
     @include assert-equal(
       fluid(18px, 18px, 320px, 1280px),

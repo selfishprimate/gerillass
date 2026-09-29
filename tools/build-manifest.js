@@ -74,8 +74,21 @@ function splitArgs(text) {
 }
 
 function parseMember(source, kind) {
-  const re = new RegExp(`^@${kind}\\s+([\\w-]+)`, "m");
-  const m = re.exec(source);
+  // A name starting with `-` or `_` is private to its own file, by Sass's own
+  // rules, so it is never API and must not be mistaken for the member the file
+  // is named after. This matched the first declaration of the kind, and
+  // `_fluid.scss` gained a private `-in-px` helper above `fluid`, which then
+  // became the member: the manifest carried a member with no metadata and
+  // `llms.txt` failed on its missing summary. The file's own member is the
+  // first public one.
+  const re = new RegExp(`^@${kind}\\s+([\\w-]+)`, "gm");
+  let m = null;
+  for (const found of source.matchAll(re)) {
+    if (!found[1].startsWith("-") && !found[1].startsWith("_")) {
+      m = found;
+      break;
+    }
+  }
   if (!m) return null;
 
   const name = m[1];

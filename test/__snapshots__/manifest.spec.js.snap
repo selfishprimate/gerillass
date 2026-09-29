@@ -1529,6 +1529,12 @@ exports[`Manifest examples fluid: .title { font-size: fluid(1rem, 3rem, 320px, 1
 }"
 `;
 
+exports[`Manifest examples fluid: .title { font-size: fluid(12pt, 18pt); } 1`] = `
+".title {
+  font-size: clamp(1rem, 0.8333rem + 0.8333vw, 1.5rem);
+}"
+`;
+
 exports[`Manifest examples fluid: .title { font-size: fluid(24px, 48px); } 1`] = `
 ".title {
   font-size: clamp(1.5rem, 1rem + 2.5vw, 3rem);

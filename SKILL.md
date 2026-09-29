@@ -544,6 +544,11 @@ a dropped declaration rather than an error.
 - `$skip` is checked as a boolean since 4.0.0. It used to be read by truthiness, and in Sass everything but `false` and `null` is true, so `fillNulls($list, space, 0)` dropped the nulls: the opposite of what somebody writing `0` means, with nothing to say so.
 - An empty list used to fail with Sass's own `Invalid index 1 for a list with 0 elements`, from inside the library, because `@for $i from 1 through 0` counts down rather than running no times. It comes back empty now, and an empty list is refused where it is written into a declaration, which is where the fault is.
 
+**`fluid`**
+
+- `pt`, `pc`, `in`, `cm`, `mm` and `q` used to be refused, with a reason that was not true of them: the page said the function has to convert between the units, and Sass converts every absolute unit on its own. `fluid(12pt, 18pt)` is the same clamp as `fluid(16px, 24px)`, which the spec pins. `em`, `vw`, `ch` and `%` stay refused, because their size is not something the stylesheet can work out.
+- `rem` is turned into px against a stated 16px root, since Sass has no way to know the real one. That assumption is in the source rather than hidden.
+
 **`isNumber`**
 
 - Until 4.0.0 a value that was not a number only warned, and the function then ended with nothing to return, so the build stopped with Sass's own "Function finished without @return" instead of a message naming the argument. It now raises, which is what `isColor` and `isTime` do.

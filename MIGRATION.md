@@ -137,6 +137,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `convertToNumber` reads a sign and a decimal point | not breaking |
 | `fillNulls` refuses a `$skip` that is not a boolean | breaking, loud; a `0` there dropped the nulls |
 | `fillNulls` reads its separator in any case, and returns an empty list unchanged | fixes a refusal and a Sass index error |
+| `fluid` takes any absolute length, not only px and rem | fixes a false refusal; not breaking |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -3009,6 +3010,26 @@ never heard of. Both work, under either spelling of the argument.
 Compiled across 36 calls: 26 identical, three separator spellings that now
 work, five `$skip` values newly refused, one message improved and one call that
 now works where the old argument name was passed in capitals.
+
+
+## Not breaking: `fluid` takes any absolute length
+
+`pt`, `pc`, `in`, `cm`, `mm` and `q` were refused, and the page gave a reason
+that is not true of them: it said the function has to convert between the
+units, and Sass converts every absolute unit on its own.
+
+```scss
+font-size: fluid(12pt, 18pt);   // 3.x: stopped the build
+```
+
+12pt is 16px, so that is the same clamp as `fluid(16px, 24px)`, which the spec
+now pins. `em`, `vw`, `ch` and `%` stay refused, because their size is not
+something the stylesheet can work out, and `rem` is still turned into px
+against a stated 16px root.
+
+Compiled across 39 calls: 20 identical, seven where one of those six units now
+works, 12 where a value that was already refused is refused with the reworded
+message. Nothing is newly refused and no returned value changed.
 
 
 ---

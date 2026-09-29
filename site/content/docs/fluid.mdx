@@ -39,11 +39,11 @@ Checked against hand arithmetic at a real 900px viewport: the floor came out at 
 
 ## Arguments
 
-<Arguments of="fluid" footnote="Lengths must be px or rem. Other units are refused, because the function has to convert between them to build the line.">
-  <Argument name="$min" type="number (with unit)">Accepts a length in px or rem, the value at <code>$min-viewport</code>.</Argument>
-  <Argument name="$max" type="number (with unit)">Accepts a length in px or rem, the value at <code>$max-viewport</code>, no smaller than <code>$min</code>.</Argument>
-  <Argument name="$min-viewport (320px)" type="number (with unit)">Accepts a length in px or rem, the width below which the value stops shrinking.</Argument>
-  <Argument name="$max-viewport (1280px)" type="number (with unit)">Accepts a length in px or rem, larger than <code>$min-viewport</code>.</Argument>
+<Arguments of="fluid" footnote="Any absolute length works, and so does `rem`. A unit whose size the stylesheet cannot work out, such as `em`, `vw` or `%`, is refused: the line has to be built from real numbers.">
+  <Argument name="$min" type="number (with unit)">An absolute length, <code>px</code>, <code>pt</code>, <code>pc</code>, <code>in</code>, <code>cm</code>, <code>mm</code> or <code>q</code>, or a <code>rem</code>. The value at <code>$min-viewport</code>.</Argument>
+  <Argument name="$max" type="number (with unit)">The same units, and the value at <code>$max-viewport</code>, no smaller than <code>$min</code>.</Argument>
+  <Argument name="$min-viewport (320px)" type="number (with unit)">The width below which the value stops shrinking.</Argument>
+  <Argument name="$max-viewport (1280px)" type="number (with unit)">Larger than <code>$min-viewport</code>.</Argument>
 </Arguments>
 
 ## Examples
@@ -108,7 +108,7 @@ Error: `fluid` needs $min to be no larger than $max, and was given 40px and 20px
 }
 ```
 ```text
-Error: `16` is not a valid $min for `fluid`. Pass a length in px or rem.
+Error: `16` is not a valid $min for `fluid`. Pass an absolute length such as `16px`, or a `rem`.
 ```
 
 ```scss
@@ -117,8 +117,10 @@ Error: `16` is not a valid $min for `fluid`. Pass a length in px or rem.
 }
 ```
 ```text
-Error: `1em` is not a valid $min for `fluid`. Pass a length in px or rem, not em.
+Error: `1em` is not a valid $min for `fluid`: `em` has no size this stylesheet can work out. Pass an absolute length such as `16px`, or a `rem`.
 ```
+
+The absolute units are not in that group, and used to be refused with the same message although Sass converts between all of them: `fluid(12pt, 18pt)` is the same clamp as `fluid(16px, 24px)`, because 12pt is 16px. `rem` is the one exception, turned into px against a stated 16px root, since Sass has no way to know the real one.
 
 ## Related Links
 * [clamp()](https://developer.mozilla.org/en-US/docs/Web/CSS/clamp)
