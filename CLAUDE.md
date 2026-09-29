@@ -1015,7 +1015,8 @@ Two pieces of work are open:
   `screen-agent` refusing a call with no block, which emitted nothing at all,
   and `sizer` refusing a call at the root, and `smartphone` and `tablet`
   refusing a call with no block and reading the orientation in any case, and
-  `sprite` refusing a call at the root,
+  `sprite` refusing a call at the root, and `stretched-link` reading its
+  argument in any case and refusing a call at the root,
   all on
   `docs-examples-review`;
   and the demos and prose

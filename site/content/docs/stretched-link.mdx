@@ -101,6 +101,33 @@ It can be useful with HTML radio buttons or checkbox list design patterns, to co
 
 </Hint>
 
+The mixin hangs a pseudo-element off the selector it is called in, so it needs
+one. A call at the root used to fail with Sass's own message, which pointed at
+a line inside the library and named neither the mixin nor the fix.
+
+```scss
+@include stretched-link;
+```
+```text
+Error: `stretched-link` spreads the link it is called in over its positioned parent, so call it inside a selector, such as `.card a { @include stretched-link; }`.
+```
+
+**The argument is matched in any case**, so `BEFORE` and `After` work as well as
+the lower-case forms. That is what the library does everywhere a CSS keyword is
+an argument: `STICKY` reaches [Position](/docs/position) and `BOTH` reaches
+[Resizable](/docs/resizable). Until 4.0.0 only the lower-case spelling was read,
+and anything else raised a message that named neither the mixin nor what it had
+been given.
+
+```scss
+.card a {
+  @include stretched-link(middle);
+}
+```
+```text
+Error: `middle` is not a valid argument for `stretched-link`. Pass `before` or `after`, in any case, to say which pseudo-element carries the stretched layer, or nothing at all for `::before`.
+```
+
 ## Related Links
 
 - [Position](/docs/position)

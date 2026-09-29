@@ -450,6 +450,8 @@ a dropped declaration rather than an error.
 - Until 4.0.0 the overlay also carried `background-color: rgba(0, 0, 0, 0)`, which is IE10's, where a transparent pseudo-element did not take the click. Measured in Chrome 152, Firefox 156 and Safari 26.6.2 by asking what a click in the far corner of the card would hit: the answer was the link with the line and without it, in all three.
 - `pointer-events: auto` stays and is not decoration: with an ancestor at `pointer-events: none`, the corner answered the link with it and the body without it, in all three browsers.
 - The overlay sits above the card's text, so the text inside the card cannot be selected with the mouse. That is the trade every version of this technique makes.
+- The argument is matched in any case since 4.0.0, as the library does everywhere a CSS keyword is one: `STICKY` reaches `position` and `BOTH` reaches `resizable`, so `BEFORE` reaches here.
+- The mixin hangs a pseudo-element off `&`, so it needs a selector. A call at the root failed with Sass's own "Top-level selectors may not contain the parent selector &", pointing at a line inside the library; it raises with the mixin's own message since 4.0.0.
 
 **`tablet`**
 

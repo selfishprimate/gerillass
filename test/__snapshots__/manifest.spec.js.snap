@@ -2621,6 +2621,16 @@ exports[`Manifest examples stretched-link: .card a { @include stretched-link("af
 }"
 `;
 
+exports[`Manifest examples stretched-link: .card a { @include stretched-link(AFTER); } 1`] = `
+".card a::after {
+  content: "";
+  position: absolute;
+  pointer-events: auto;
+  inset: 0;
+  z-index: 1;
+}"
+`;
+
 exports[`Manifest examples stretched-link: .card a { @include stretched-link; } 1`] = `
 ".card a::before {
   content: "";

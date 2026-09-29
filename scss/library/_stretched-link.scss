@@ -1,6 +1,8 @@
 @charset "UTF-8";
 
 @use "sass:list";
+@use "sass:meta";
+@use "sass:string";
 
 // Spreads a link over its positioned parent, so the whole card is clickable
 // while the markup keeps one link with its own text.
@@ -19,8 +21,17 @@
 // `pointer-events: none` the corner answered "the link" with it and "the body"
 // without it, again in all three.
 @mixin stretched-link($value: "before") {
-  @if list.index("before" "after", $value) {
-    &#{"::" + $value} {
+  // It hangs a pseudo-element off `&`, so it needs a selector. Sass's own
+  // message at the root, "Top-level selectors may not contain the parent
+  // selector &", pointed at a line inside this file.
+  @if not & {
+    @error "`stretched-link` spreads the link it is called in over its positioned parent, so call it inside a selector, such as `.card a { @include stretched-link; }`.";
+  }
+  // Matched in any case, as the library does everywhere a CSS keyword is an
+  // argument: `STICKY` reaches `position` and `BOTH` reaches `resizable`.
+  $pseudo: if($value == null, null, string.to-lower-case("#{$value}"));
+  @if list.index("before" "after", $pseudo) {
+    &#{"::" + $pseudo} {
       content: "";
       position: absolute;
       pointer-events: auto;
@@ -28,6 +39,6 @@
       z-index: 1;
     }
   } @else {
-    @error "'#{$value}' is a wrong argument. This mixin accepts 'before' or 'after' as an argument. If you don't pass any argument default it will target the '::before' pseudo-element of the selected element.";
+    @error "`#{meta.inspect($value)}` is not a valid argument for `stretched-link`. Pass `before` or `after`, in any case, to say which pseudo-element carries the stretched layer, or nothing at all for `::before`.";
   }
 }

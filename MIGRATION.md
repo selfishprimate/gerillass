@@ -110,6 +110,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `smartphone` and `tablet` refuse a call with no block | breaking, loud |
 | `smartphone` and `tablet` read the orientation in any case | fixes a refusal; not breaking |
 | `sprite` refuses a call at the root | a better message; not breaking |
+| `stretched-link` reads its argument in any case | fixes a refusal; not breaking |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
