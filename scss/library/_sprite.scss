@@ -74,6 +74,12 @@ $-places: "left" "center" "right" "top" "bottom";
 }
 
 @mixin sprite($params...) {
+  // It writes declarations, so it needs a rule to write them into. Sass's own
+  // message at the root pointed at the `display: inline-block` line inside this
+  // file.
+  @if not & {
+    @error "`sprite` writes its declarations into the rule it is called in, so call it inside a selector, such as `.icon { @include sprite(\"/img/sprite.png\", 0 -40px); }`.";
+  }
   @if list.length($params) == 1 {
     $value: list.nth($params, 1);
     $position: -unquoted($value);

@@ -442,6 +442,7 @@ a dropped declaration rather than an error.
 - With one argument the mixin has to tell an image from a position, and both can be strings. Until 4.0.0 it read the last four characters and took only `.png`, `.jpg` and `.svg`, so `.webp`, `.avif`, `.gif`, `.jpeg`, an upper case `.PNG`, a path with a query such as `a.png?v=2` and a data URI were all refused. It now asks whether the value is a position, and a string that is not one is the path.
 - A `var()` with one argument is read as the position, since that is what a single `var()` usually is. For an image in a custom property, pass it with a position: `sprite(var(--sprite), 0 0)`.
 - A quoted position is unquoted rather than refused: `background-position: "center"` is dropped in Chrome 152, Firefox 156 and Safari 26.6.2, all three falling back to `0% 0%`.
+- The mixin writes declarations, so it needs a rule to write them into. A call at the root failed with Sass's own "Declarations may only be used within style rules", pointing at the `display: inline-block` line inside the library; it raises with the mixin's own message since 4.0.0.
 
 **`stretched-link`**
 

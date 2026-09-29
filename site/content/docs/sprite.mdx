@@ -118,6 +118,17 @@ A position the browser drops stops the build too. Measured in Chrome 152, `backg
 Error: `auto` is not a valid position for `sprite`: `auto` is not a length or one of left, center, right, top or bottom. A browser drops the declaration.
 ```
 
+The mixin writes declarations, so it needs a rule to write them into. A call at
+the root used to fail with Sass's own message, which pointed at a line inside
+the library and named neither the mixin nor the fix.
+
+```scss
+@include sprite("/img/sprite.png");
+```
+```text
+Error: `sprite` writes its declarations into the rule it is called in, so call it inside a selector, such as `.icon { @include sprite("/img/sprite.png", 0 -40px); }`.
+```
+
 ## Related Links
 
 - [Implementing Image Sprites in CSS](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Images/Implementing_image_sprites_in_CSS)

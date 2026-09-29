@@ -1014,7 +1014,8 @@ Two pieces of work are open:
   below zero, which pointed the cut outwards and took nothing off, and
   `screen-agent` refusing a call with no block, which emitted nothing at all,
   and `sizer` refusing a call at the root, and `smartphone` and `tablet`
-  refusing a call with no block and reading the orientation in any case,
+  refusing a call with no block and reading the orientation in any case, and
+  `sprite` refusing a call at the root,
   all on
   `docs-examples-review`;
   and the demos and prose
