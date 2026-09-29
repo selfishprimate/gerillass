@@ -530,6 +530,8 @@ a dropped declaration rather than an error.
 **`convertToEm`**
 
 - Until 4.0.0 the unit was added as text, so the function returned the string `1.5em` rather than a number: it printed the same, and `convertToEm(24px) * 2` stopped the build with Sass's "Undefined operation". It now returns a number, as `remify` always has.
+- `em` is relative to the element's own font size, and that is the whole difference between it and `rem`. Until 4.0.0 the 16px base could not be changed, so inside `.card { font-size: 14px }` a `padding: convertToEm(24px)` was 21px on the page and nothing said so. Pass `$base` to say what the result is read in.
+- Any absolute length converts, not only pixels: Sass reduces `pt`, `pc`, `in`, `cm`, `mm` and `q` to the same scale, so `convertToEm(24pt)` is the same as `convertToEm(32px)`. All six used to be refused although each has one right answer. The relative units stay refused, because they have none.
 
 **`fillNulls`**
 
@@ -633,7 +635,7 @@ and camelCase is what tells them apart from the kebab-case mixins above.
 |---|---|
 | `clearUnit($value)` | Strips the unit off a number, returning it unitless. |
 | `clearWhitespace($string)` | Removes every whitespace character from a string, keeping it quoted or unquoted as it was. |
-| `convertToEm($value)` | Converts a pixel length to em, against a 16px base. |
+| `convertToEm($value, $base: 16px)` | Converts an absolute length to em, against the font size it will be read in. |
 | `convertToNumber($value)` | Parses a string of digits into a number. |
 | `fillNulls($value, $separation: comma, $skip: false, $seperation: null)` | Replaces null entries in a list with 0, or drops them. |
 | `fluid($min, $max, $min-viewport: 320px, $max-viewport: 1280px)` | A clamp() value that grows with the viewport between two widths, then stops. The preferred value keeps a rem term rather than being pure vw, because a vw-only value ignores browser text zoom and fails WCAG 1.4.4. It is a function rather than a mixin because the value is the hard part and belongs to any property, not only font-size. |

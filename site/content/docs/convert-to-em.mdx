@@ -1,7 +1,7 @@
 ---
 title: "Convert To Em"
 page_title: "Convert To Em Sass Function"
-page_description: "The convertToEm Sass function converts a pixel length to em against a 16px base, so a size written in px stays relative in the output."
+page_description: "The convertToEm Sass function converts an absolute length to em against the font size it will be read in, so a size written in px stays relative in the output."
 page_keywords: "Gerillass convertToEm, Sass convertToEm, Sass Functions, SCSS Functions, Sass Utility Functions, Gerillass Utilities"
 ---
 
@@ -9,19 +9,20 @@ page_keywords: "Gerillass convertToEm, Sass convertToEm, Sass Functions, SCSS Fu
 
 <Member name="convertToEm">
 
-Converts a pixel length to em, against a 16px base.
+Converts an absolute length to em, against the font size it will be read in.
 
 </Member>
 
 ## Arguments
 
 <Arguments of="convertToEm">
-  <Argument name="$value" type="number (with unit)">Accepts a pixel length.</Argument>
+  <Argument name="$value" type="number (with unit)">An absolute length: <code>px</code>, <code>pt</code>, <code>pc</code>, <code>in</code>, <code>cm</code>, <code>mm</code> or <code>q</code>. A relative one such as <code>rem</code> or <code>vw</code> is refused, because it has no fixed size to convert.</Argument>
+  <Argument name="$base (16px)" type="number (with unit)">The font size the result will be read in. <code>em</code> is measured against it, so this is what makes the answer right in a context that is not 16px.</Argument>
 </Arguments>
 
 ## Examples
 
-<Example caption="Spacing written in px, emitted in em.">
+<Example caption="Spacing written in px, emitted in em. With no `$base` the answer is measured against 16px, the browser's default, which is right as long as the element is at that size.">
 ```scss
 .card {
   padding: convertToEm(24px);
@@ -30,11 +31,56 @@ Converts a pixel length to em, against a 16px base.
 ```
 </Example>
 
+<Example caption="**`$base` is what makes the answer right.** `em` is relative to the element's own font size, so the same `24px` is a different `em` in an element set to 14px. Pass the size the value will be read in and the padding is 24px on the page either way.">
+```scss
+.note {
+  font-size: 14px;
+  padding: convertToEm(24px, 14px);
+}
+
+.lead {
+  font-size: 20px;
+  padding: convertToEm(24px, 20px);
+}
+```
+```html
+<style>
+  .note, .lead { background: #f2f2eb; border-left: 3px solid #668f80; margin: 0 0 12px; font-family: Inter, ui-sans-serif, system-ui, sans-serif; }
+</style>
+<p class="note">Small type, 24px of padding.</p>
+<p class="lead">Large type, also 24px of padding.</p>
+```
+</Example>
+
 <Hint kind="warning">
 
 **Changed in Gerillass 4.0.0.** The unit used to be added as text, so the function returned the string `1.5em` rather than a number. It printed the same, and `convertToEm(24px) * 2` stopped the build with Sass's "Undefined operation". It now returns a number, as [remify](/docs/remify) always has, so it can be used in arithmetic.
 
 </Hint>
+
+## What it refuses
+
+A relative length has no fixed size, so there is nothing to convert: `2rem` is whatever the root is set to, and `2em` is whatever the parent is. Every absolute unit works, and the six besides `px` used to be refused although each has one right answer: `convertToEm(24pt)` is the same as `convertToEm(32px)`.
+
+```scss
+.card {
+  padding: convertToEm(2rem);
+}
+```
+```text
+Error: `2rem` is not a valid $value for `convertToEm`. Pass an absolute length, such as `24px` or `18pt`; a relative one such as `2rem` has no fixed size to convert.
+```
+
+A base of zero is refused separately, since the value is divided by it.
+
+```scss
+.card {
+  padding: convertToEm(24px, 0px);
+}
+```
+```text
+Error: `$base: 0px` is not a valid base for `convertToEm`: em is measured against it, and nothing divides by zero. Pass the font size the result will be read in, such as `16px`.
+```
 
 ## Related Links
 

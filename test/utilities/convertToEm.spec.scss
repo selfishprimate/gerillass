@@ -14,4 +14,24 @@
   @include it('Returns a number, so it can be used in arithmetic.') {
     @include assert-equal(convertToEm(24px) * 2, 3em);
   }
+
+  // `em` is relative to the element's own font size, which is the whole
+  // difference between it and `rem`, and until 4.0.0 the 16px base could not
+  // be changed: inside an element set to 14px, `convertToEm(24px)` was 21px on
+  // the page and nothing said so.
+  @include it('Measures against the base it is given.') {
+    @include assert-equal(convertToEm(24px, 24px), 1em);
+    @include assert-equal(convertToEm(12px, 24px), 0.5em);
+    @include assert-equal(convertToEm(24px, 32px), 0.75em);
+  }
+
+  // Every absolute unit reduces to the same scale in Sass, so each has one
+  // right answer; all six used to be refused. The relative units have no fixed
+  // size and stay refused, which the rejects in meta/ cover.
+  @include it('Converts every absolute unit, not only pixels.') {
+    @include assert-equal(convertToEm(24pt), 2em);
+    @include assert-equal(convertToEm(1in), 6em);
+    @include assert-equal(convertToEm(1pc), 1em);
+    @include assert-equal(convertToEm(24pt), convertToEm(32px));
+  }
 }

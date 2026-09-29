@@ -1288,6 +1288,12 @@ exports[`Manifest examples container-query: .title { @include container-query(30
 }"
 `;
 
+exports[`Manifest examples convertToEm: .a { margin: convertToEm(24pt); } 1`] = `
+".a {
+  margin: 2em;
+}"
+`;
+
 exports[`Manifest examples convertToEm: .a { margin: convertToEm(24px) * 2; } 1`] = `
 ".a {
   margin: 3em;
@@ -1297,6 +1303,12 @@ exports[`Manifest examples convertToEm: .a { margin: convertToEm(24px) * 2; } 1`
 exports[`Manifest examples convertToEm: .a { margin: convertToEm(24px); } 1`] = `
 ".a {
   margin: 1.5em;
+}"
+`;
+
+exports[`Manifest examples convertToEm: .a { margin: convertToEm(24px, 14px); } 1`] = `
+".a {
+  margin: 1.7142857143em;
 }"
 `;
 

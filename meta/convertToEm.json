@@ -1,23 +1,37 @@
 {
   "name": "convertToEm",
-  "summary": "Converts a pixel length to em, against a 16px base.",
+  "summary": "Converts an absolute length to em, against the font size it will be read in.",
   "arguments": [
     {
       "name": "$value",
       "accepts": [
-        "a pixel length"
+        "an absolute length: px, pt, pc, in, cm, mm or q",
+        "a relative one such as rem, em, ch or vw is refused, since it has no fixed size"
+      ]
+    },
+    {
+      "name": "$base",
+      "accepts": [
+        "the font size the result is read in, 16px by default",
+        "an absolute length, and not zero"
       ]
     }
   ],
   "examples": [
     ".a { margin: convertToEm(24px); }",
-    ".a { margin: convertToEm(24px) * 2; }"
+    ".a { margin: convertToEm(24px) * 2; }",
+    ".a { margin: convertToEm(24px, 14px); }",
+    ".a { margin: convertToEm(24pt); }"
   ],
   "rejects": [
     ".a { margin: convertToEm(nonsense); }",
-    ".a { margin: convertToEm(24); }"
+    ".a { margin: convertToEm(24); }",
+    ".a { margin: convertToEm(2rem); }",
+    ".a { margin: convertToEm(24px, 0px); }"
   ],
   "caveats": [
-    "Until 4.0.0 the unit was added as text, so the function returned the string `1.5em` rather than a number: it printed the same, and `convertToEm(24px) * 2` stopped the build with Sass's \"Undefined operation\". It now returns a number, as `remify` always has."
+    "Until 4.0.0 the unit was added as text, so the function returned the string `1.5em` rather than a number: it printed the same, and `convertToEm(24px) * 2` stopped the build with Sass's \"Undefined operation\". It now returns a number, as `remify` always has.",
+    "`em` is relative to the element's own font size, and that is the whole difference between it and `rem`. Until 4.0.0 the 16px base could not be changed, so inside `.card { font-size: 14px }` a `padding: convertToEm(24px)` was 21px on the page and nothing said so. Pass `$base` to say what the result is read in.",
+    "Any absolute length converts, not only pixels: Sass reduces `pt`, `pc`, `in`, `cm`, `mm` and `q` to the same scale, so `convertToEm(24pt)` is the same as `convertToEm(32px)`. All six used to be refused although each has one right answer. The relative units stay refused, because they have none."
   ]
 }

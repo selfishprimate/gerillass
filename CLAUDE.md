@@ -1048,7 +1048,10 @@ Two pieces of work are open:
   root, and `clearWhitespace` taking out every whitespace character rather than
   the space alone, the non-breaking space included, which looks like a space in
   a font name and survived into the filename, and keeping the string quoted or
-  unquoted as it was passed,
+  unquoted as it was passed, and `convertToEm` taking a `$base`, since `em` is
+  measured against the element's own font size and the 16px it assumed was
+  right only at that size, and converting every absolute unit rather than
+  refusing the six besides `px` that reduce to the same scale,
   all on
   `docs-examples-review`;
   and the demos and prose

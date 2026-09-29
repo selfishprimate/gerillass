@@ -75,7 +75,7 @@ Arguments are validated and refused with a message naming what is accepted, so a
 
 - [clearUnit($value)](https://docs.gerillass.com/docs/clear-unit/): Strips the unit off a number, returning it unitless.
 - [clearWhitespace($string)](https://docs.gerillass.com/docs/clear-whitespace/): Removes every whitespace character from a string, keeping it quoted or unquoted as it was.
-- [convertToEm($value)](https://docs.gerillass.com/docs/convert-to-em/): Converts a pixel length to em, against a 16px base.
+- [convertToEm($value, $base: 16px)](https://docs.gerillass.com/docs/convert-to-em/): Converts an absolute length to em, against the font size it will be read in.
 - [convertToNumber($value)](https://docs.gerillass.com/docs/convert-to-number/): Parses a string of digits into a number.
 - [fillNulls($value, $separation: comma, $skip: false, $seperation: null)](https://docs.gerillass.com/docs/fill-nulls/): Replaces null entries in a list with 0, or drops them.
 - [fluid($min, $max, $min-viewport: 320px, $max-viewport: 1280px)](https://docs.gerillass.com/docs/fluid/): A clamp() value that grows with the viewport between two widths, then stops.

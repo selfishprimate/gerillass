@@ -132,6 +132,8 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `truncate` refuses a call at the root | a better message; not breaking |
 | `clearWhitespace` takes out every whitespace character, not only the space | fixes an invisible space that survived; silent |
 | `clearWhitespace` keeps the string quoted or unquoted as it was passed | breaking, silent, for an unquoted argument |
+| `convertToEm` takes a `$base`, so em is measured against the right font size | not breaking |
+| `convertToEm` converts every absolute unit, not only px | fixes a false refusal; not breaking |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -2922,6 +2924,40 @@ with a quoted and an unquoted family name and is byte for byte unchanged, as is
 Compiled across 72 calls: 56 identical, nine where a whitespace character is
 now removed, four where the quoting is kept, and three where `null` is named in
 the message rather than printed as an empty pair of backticks.
+
+
+## Not breaking: `convertToEm` can be told what it is measured against
+
+`em` is relative to the element's own font size, and that is the whole
+difference between it and `rem`. The 16px base was hard-coded, so the answer
+was right only in an element at that size.
+
+```scss
+.note { font-size: 14px; padding: convertToEm(24px); }
+// 3.x: padding: 1.5em, which is 21px on the page, not 24px
+```
+
+`$base` says what the result is read in, and defaults to 16px, so every call
+written before this compiles to the same thing.
+
+```scss
+.note { font-size: 14px; padding: convertToEm(24px, 14px); }  // 24px on the page
+```
+
+## Not breaking: `convertToEm` converts every absolute unit
+
+`pt`, `pc`, `in`, `cm`, `mm` and `q` were refused although Sass reduces all of
+them to the same scale, so each has one right answer: `convertToEm(24pt)` is
+`2em`, the same as `convertToEm(32px)`. The relative units are still refused,
+because they have none.
+
+Compiled across 62 calls covering every unit and value kind this function
+takes: 16 identical, 12 where one of those six units now works, and 34 where a
+value that was already refused is refused with the reworded message. Nothing is
+newly refused and no returned value changed.
+
+`remify` has the same needless restriction and is left for its own turn in this
+sweep.
 
 
 ---

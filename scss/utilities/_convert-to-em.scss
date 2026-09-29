@@ -3,18 +3,36 @@
 @use "sass:math";
 @use "sass:meta";
 
-// Converts a pixel length to em against a 16px base.
+// Converts an absolute length to em, against the font size it will be read in.
+//
+// `em` is relative to the element's own font size, and that is the whole
+// difference between it and `rem`. `$base` is what the result is measured
+// against, so `convertToEm(24px, 14px)` is the 24px a caller wants inside an
+// element set to 14px. It defaults to 16px, the browser's default, which is
+// what the function assumed and could not be told about before 4.0.0: inside
+// `.card { font-size: 14px }` a `padding: convertToEm(24px)` was 21px on the
+// page, and nothing said so.
+//
+// Any absolute length converts, not only pixels. Sass reduces `pt`, `pc`,
+// `in`, `cm`, `mm` and `q` to the same scale, so `convertToEm(24pt)` is `2em`
+// against the default base, the same as `convertToEm(32px)`; until 4.0.0 all
+// six were refused although each has one right answer. The relative units are
+// still refused, because they have none: `2rem` and `2em` are whatever the
+// page makes them, and dividing one by a pixel gives Sass's own
+// "isn't a valid CSS value".
 //
 // Until 4.0.0 the last line added the string "em" to the ratio, so the
 // function returned the string `1.5em` rather than the number: it printed
 // the same, and `convertToEm(24px) * 2` failed with Sass's "Undefined
 // operation". `remify` has always returned a number, and this now matches it.
-@function convertToEm($value) {
-  // Only a pixel length converts cleanly. A unitless number or another unit
-  // compiled to `calc(1.5 / 1px)em`, and a word or var() to `var(--x)/16pxem`.
-  @if meta.type-of($value) != "number" or math.unit($value) != "px" {
-    @error "`#{meta.inspect($value)}` is not a valid $value for `convertToEm`. Pass a pixel length, such as `24px`.";
+@function convertToEm($value, $base: 16px) {
+  @each $name, $length in ("$value": $value, "$base": $base) {
+    @if meta.type-of($length) != "number" or not math.compatible($length, 1px) or math.is-unitless($length) {
+      @error "`#{meta.inspect($length)}` is not a valid #{$name} for `convertToEm`. Pass an absolute length, such as `24px` or `18pt`; a relative one such as `2rem` has no fixed size to convert.";
+    }
   }
-  $base-value: 16px;
-  @return math.div($value, $base-value) * 1em;
+  @if $base == 0px {
+    @error "`$base: #{meta.inspect($base)}` is not a valid base for `convertToEm`: em is measured against it, and nothing divides by zero. Pass the font size the result will be read in, such as `16px`.";
+  }
+  @return math.div($value, $base) * 1em;
 }
