@@ -33,6 +33,44 @@ $-outer: "block" "inline" "run-in";
 $-inner: "flow" "flow-root" "table" "flex" "grid" "ruby" "math";
 $-alone: "none" "contents" "inline-block" "inline-table" "inline-flex" "inline-grid" "table-row-group" "table-header-group" "table-footer-group" "table-row" "table-cell" "table-column-group" "table-column" "table-caption" "ruby-base" "ruby-text" "ruby-base-container" "ruby-text-container";
 
+// Of the display values CSS takes, only some let the one-line form do what it
+// is for. Rendered on a 200px box in Chrome 152, Firefox 156 and Safari
+// 26.6.2, with the same sentence in every case, all three agreed:
+//
+// - **an ellipsis**: `block`, `inline-block`, `flow-root`, `inline flow-root`,
+//   `block flow`, `table-cell`, `table-caption`;
+// - **clipped at the edge, with no ellipsis**: `flex`, `grid`, `inline flex`,
+//   `inline-grid`. The text is an anonymous item there, and `text-overflow`
+//   has nothing to act on. Kept, since the box still holds;
+// - **not truncated at all**, the text running past the box: `inline`,
+//   `run-in`, `inline flow`, `run-in flow`, `table`, `inline-table`,
+//   `block table`, `table-row`, `table-column`, `ruby`, `ruby-base`,
+//   `ruby-text`, `math`;
+// - **not rendered**: `none`, `contents`.
+//
+// The last two groups are what this refuses: the caller asked to truncate and
+// got a full sentence, or nothing. `table-cell` and `table-caption` are the
+// reason the table keywords are named one by one rather than as a family.
+//
+// One disagreement, reported rather than averaged: `block flow list-item`
+// truncates in Chrome and Firefox and does not in Safari. It is kept, since
+// refusing would break a call that works in two engines out of three.
+$-cannot-truncate: "none" "contents" "table" "inline-table" "ruby" "math" "ruby-base" "ruby-text" "ruby-base-container" "ruby-text-container" "table-row" "table-row-group" "table-header-group" "table-footer-group" "table-column" "table-column-group";
+
+@function -cannot-truncate($words, $outer, $inner) {
+  @if list.length($words) == 1 and list.index($-cannot-truncate, list.nth($words, 1)) {
+    @return true;
+  }
+  @if list.index("table" "ruby" "math", $inner) {
+    @return true;
+  }
+  // A plain inline box: `max-width` and `overflow` do not apply to it.
+  @if list.index("inline" "run-in", $outer) and ($inner == "flow" or $inner == null) {
+    @return true;
+  }
+  @return false;
+}
+
 @function -display-problem($display) {
   $keywords: list.join(list.join(list.join($-outer, $-inner), $-alone), ("list-item",));
   $problem: keywordProblem($display, $keywords, 3, $vendor: true);
@@ -73,12 +111,34 @@ $-alone: "none" "contents" "inline-block" "inline-table" "inline-flex" "inline-g
   @if $list-items == 1 and $inner and not list.index("flow" "flow-root", $inner) {
     @return "`list-item` only goes with flow or flow-root, not `#{$inner}`";
   }
+  // See the note above $-cannot-truncate. A lower-cased copy of the words, so
+  // the check reads the same value the grammar above did.
+  $lowered: ();
+  $outer: null;
+  @each $word in $words {
+    $lower: string.to-lower-case(string.unquote($word));
+    $lowered: list.append($lowered, $lower);
+    @if list.index($-outer, $lower) {
+      $outer: $lower;
+    }
+  }
+  @if -cannot-truncate($lowered, $outer, $inner) {
+    @return "the text is not truncated at all with it, measured in Chrome 152, Firefox 156 and Safari 26.6.2; pass `block`, `inline-block`, `flow-root`, `table-cell` or `table-caption`";
+  }
   @return null;
 }
 
 @mixin truncate($lines: 1, $width: null, $display: inline-block) {
+  @if not & {
+    @error "`truncate` writes its declarations into the rule it is called in, so call it inside a selector, such as `.title { @include truncate(2); }`.";
+  }
   // `none` undoes a clamp, which is what a media query needs; var() is
-  // resolved by the browser, so only a literal count is checked.
+  // resolved by the browser, so only a literal count is checked. Read in any
+  // case, as CSS reads its own keywords: `NONE` used to be refused as though
+  // it were a word the mixin had never heard of.
+  @if meta.type-of($lines) == "string" and string.to-lower-case(string.unquote("#{$lines}")) == "none" {
+    $lines: none;
+  }
   $literal: $lines != none and not isCssFunction($lines, "var" "env");
   @if $literal {
     @if meta.type-of($lines) != "number" or not math.is-unitless($lines) {

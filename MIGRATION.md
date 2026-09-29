@@ -127,6 +127,9 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `triangle` refuses a colour list, a transparent colour and a third size | breaking, loud; none drew a triangle |
 | `triangle` reads its direction in any case | fixes a refusal; not breaking |
 | `triangle` refuses a call at the root | a better message; not breaking |
+| `truncate` refuses a `$display` that does not truncate | breaking, loud; the text ran past the box |
+| `truncate` reads `none` in any case, and unquotes it | fixes a refusal, and a clamp that was never undone |
+| `truncate` refuses a call at the root | a better message; not breaking |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -2829,6 +2832,52 @@ root raises with the mixin's own message in place of Sass's.
 Compiled across 87 calls covering the directions, colours and sizes this mixin
 takes: 75 identical, and the 12 that changed are the refusals above, the three
 directions that now work, and the reworded direction message.
+
+
+## Break: `truncate` refuses a `$display` that does not truncate
+
+The one-line form is `max-width` with `overflow` and `text-overflow`, and those
+need a box to act on. `$display` used to be checked against the CSS grammar,
+which asks whether a value is a valid `display`, not whether the mixin can do
+its job with it.
+
+```scss
+.a { @include truncate(1, 200px, inline); }
+// 3.x: compiled, and the sentence ran straight past the 200px box
+```
+
+Rendered on a 200px box in Chrome 152, Firefox 156 and Safari 26.6.2, all three
+agreed:
+
+| `$display` | what the box did |
+|---|---|
+| `block`, `inline-block`, `flow-root`, `table-cell`, `table-caption` | truncated, with an ellipsis |
+| `flex`, `grid`, `inline flex`, `inline-grid` | clipped at the edge, no ellipsis |
+| `inline`, `run-in`, `table`, `inline-table`, `block table`, `table-row`, `table-column`, `ruby`, `math` | not truncated at all |
+| `none`, `contents` | nothing rendered |
+
+The last two groups raise. The flex and grid row is kept: the box still holds
+and only the ellipsis glyph is missing, since the text is an anonymous item
+there. `table-cell` and `table-caption` working is why the table keywords are
+named one by one rather than as a family.
+
+One engine disagreed and is reported rather than averaged away:
+`block flow list-item` truncates in Chrome and Firefox and does not in Safari.
+It is accepted, since refusing would break a call that works in two engines out
+of three.
+
+## Fixed: `none` in any case, and a quoted one
+
+`truncate(NONE)` raised as though it were a word the mixin had never heard of,
+and `truncate("none")` wrote `-webkit-line-clamp: "none"`, quotes included,
+which Chrome drops: the clamp it was meant to undo stayed on and nothing said
+so. Both work now.
+
+A call at the root raises with the mixin's own message in place of Sass's.
+
+Compiled across 80 calls covering the line counts, widths and displays this
+mixin takes: 67 identical, 11 newly refused, and the two `none` spellings
+fixed.
 
 
 ---

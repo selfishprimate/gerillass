@@ -26,9 +26,9 @@ The **Truncate** Sass mixin cuts text off where it runs out of room: one line en
 ## Arguments
 
 <Arguments of="truncate" footnote="One line and several lines are different techniques, so a couple of the arguments only apply to one of them.">
-  <Argument name="$lines" type="number | keyword">How many lines to keep. <code>1</code> is the default and gives the one-line ellipsis; a larger whole number clamps to that many lines; <code>none</code> undoes a clamp, which is what a media query needs. A <code>var()</code> is written as it is, since the browser resolves it.</Argument>
+  <Argument name="$lines" type="number | keyword">How many lines to keep. <code>1</code> is the default and gives the one-line ellipsis; a larger whole number clamps to that many lines; <code>none</code> undoes a clamp, which is what a media query needs, and is read in any case and quoted or not. A <code>var()</code> is written as it is, since the browser resolves it.</Argument>
   <Argument name="$width" type="number">A <code>max-width</code> for the element. One line defaults to <code>100%</code>, because an inline box ignores a width it was never given; several lines write no width unless you pass one.</Argument>
-  <Argument name="$display" type="string">The display for the one-line form, <code>inline-block</code> by default. Passing it with more than one line raises: the clamp takes the display over.</Argument>
+  <Argument name="$display" type="string">The display for the one-line form, <code>inline-block</code> by default. <code>block</code>, <code>flow-root</code>, <code>table-cell</code> and <code>table-caption</code> truncate with an ellipsis too; <code>flex</code> and <code>grid</code> clip without one; a display that does not truncate at all is refused. Passing it with more than one line raises: the clamp takes the display over.</Argument>
 </Arguments>
 
 ## Why the line count changes the technique
@@ -146,6 +146,41 @@ A line count a browser cannot use stops the build, and so does an argument that 
 Error: `0` is not a valid $lines for `truncate`. Pass a whole number of lines that is at least 1, or `none` to undo a clamp.
 Error: `$display` does nothing for `truncate(3)`: clamping more than one line takes the display over, and the element is drawn as a box. Pass `$display` with one line, or leave it out.
 ```
+
+A display the text is not truncated at all with stops the build too. The one-line form is `max-width` with `overflow` and `text-overflow`, and those need a box to act on. Rendered on a 200px box in Chrome 152, Firefox 156 and Safari 26.6.2, all three agreed on which values give one.
+
+| `$display` | what the 200px box did |
+|---|---|
+| `block`, `inline-block`, `flow-root`, `table-cell`, `table-caption` | truncated, with an ellipsis |
+| `flex`, `grid`, `inline flex`, `inline-grid` | clipped at the edge, no ellipsis |
+| `inline`, `run-in`, `table`, `inline-table`, `table-row`, `ruby`, `math` | not truncated; the text ran past the box |
+| `none`, `contents` | nothing rendered |
+
+The last two rows are refused. The middle one is kept: the box still holds, and only the ellipsis glyph is missing, because the text is an anonymous item there and `text-overflow` has nothing to act on.
+
+```scss
+.a {
+  @include truncate(1, 200px, inline);
+}
+```
+```text
+Error: `inline` is not a valid $display for `truncate`: the text is not truncated at all with it, measured in Chrome 152, Firefox 156 and Safari 26.6.2; pass `block`, `inline-block`, `flow-root`, `table-cell` or `table-caption`. A browser drops the declaration.
+```
+
+The mixin writes declarations, so it needs a rule to write them into. A call at the root used to fail with Sass's own message, which named neither the mixin nor the fix.
+
+```scss
+@include truncate(2);
+```
+```text
+Error: `truncate` writes its declarations into the rule it is called in, so call it inside a selector, such as `.title { @include truncate(2); }`.
+```
+
+<Hint kind="warning">
+
+**`block flow list-item` is the one the engines disagree on.** It truncates in Chrome 152 and Firefox 156 and does not in Safari 26.6.2. It is accepted rather than refused, since refusing would break a call that works in two engines out of three.
+
+</Hint>
 
 <Hint kind="info">
 

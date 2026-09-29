@@ -1040,7 +1040,12 @@ Two pieces of work are open:
   empty value, which `var()` does not fall back for, and `triangle` refusing a
   colour list, which coloured a second border and drew a wedge beside the
   triangle in all three browsers, a transparent colour and a third size, and
-  reading its direction in any case, and refusing a call at the root,
+  reading its direction in any case, and refusing a call at the root, and
+  `truncate` refusing a `$display` the text is not truncated at all with,
+  measured over twenty-eight display values on a 200px box in all three
+  browsers, reading `none` in any case and unquoting it, which used to write
+  `line-clamp: "none"` and leave the clamp on, and refusing a call at the
+  root,
   all on
   `docs-examples-review`;
   and the demos and prose

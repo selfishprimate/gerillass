@@ -7,7 +7,7 @@
       "accepts": [
         "1, the default, for the one-line ellipsis",
         "a whole number of lines for the clamp",
-        "none to undo a clamp, inside a media query",
+        "none to undo a clamp, inside a media query, in any case and quoted or not",
         "var() or env(), which the browser resolves"
       ]
     },
@@ -21,6 +21,9 @@
       "name": "$display",
       "accepts": [
         "the display for the one-line form, inline-block by default",
+        "block, inline-block, flow-root, table-cell or table-caption, which truncate with an ellipsis",
+        "flex, grid and their inline forms, which clip without one",
+        "a display the text is not truncated at all with is refused, such as inline, table, ruby, contents or none",
         "refused with more than one line, where the clamp takes the display over"
       ]
     }
@@ -30,7 +33,8 @@
     ".a { @include truncate(3); }",
     ".a { @include truncate(2, 40ch); }",
     ".a { @include truncate(1, 100%, block); }",
-    ".a { @include truncate(none); }"
+    ".a { @include truncate(none); }",
+    ".a { @include truncate(1, 100%, table-cell); }"
   ],
   "rejects": [
     ".a { @include truncate(0); }",
@@ -38,11 +42,17 @@
     ".a { @include truncate(3px); }",
     ".a { @include truncate(3, 10deg); }",
     ".a { @include truncate(3, 100%, block); }",
-    ".a { @include truncate(1, 100%, nonsense); }"
+    ".a { @include truncate(1, 100%, nonsense); }",
+    ".a { @include truncate(1, 100%, inline); }",
+    ".a { @include truncate(1, 100%, table); }",
+    ".a { @include truncate(1, 100%, contents); }",
+    "@include truncate(2);"
   ],
   "caveats": [
     "One line and several lines are different techniques, and that is why this replaced `ellipsis` and `line-clamp` in 4.0.0. One line is `white-space: nowrap` with `text-overflow`, which leaves the display alone; several is the `-webkit-box` trio, which takes the display over. Measured in Chrome 152, Firefox 156 and Safari 26.6.2 on a 320px box, they look the same at one line and the element differs: `inline-block` against Safari's `-webkit-box`.",
     "The standard `line-clamp` property is written beside the prefixed one for the future. `CSS.supports(\"line-clamp: 3\")` still answers false in all three browsers, so the prefixed trio is what does the work.",
-    "All five declarations of the clamp are needed: measured on a paragraph of five lines with a clamp of three, dropping `-webkit-box-orient`, `display: -webkit-box` or using the standard property alone left all five lines showing, and dropping `overflow: hidden` left the box three lines tall with the rest spilling out below it."
+    "All five declarations of the clamp are needed: measured on a paragraph of five lines with a clamp of three, dropping `-webkit-box-orient`, `display: -webkit-box` or using the standard property alone left all five lines showing, and dropping `overflow: hidden` left the box three lines tall with the rest spilling out below it.",
+    "Of the display values CSS takes, only some let the one-line form do what it is for. Rendered on a 200px box in Chrome 152, Firefox 156 and Safari 26.6.2, all three agreed: `block`, `inline-block`, `flow-root`, `inline flow-root`, `block flow`, `table-cell` and `table-caption` truncate with an ellipsis; `flex`, `grid`, `inline flex` and `inline-grid` clip at the edge with no ellipsis, since the text is an anonymous item and `text-overflow` has nothing to act on; `inline`, `run-in`, `table`, `inline-table`, `block table`, `table-row`, `table-column`, `ruby`, `math` and their relatives do not truncate at all; `none` and `contents` render nothing. The last two groups raise since 4.0.0. `table-cell` and `table-caption` working is why the table keywords are named one by one rather than as a family.",
+    "One disagreement, reported rather than averaged away: `block flow list-item` truncates in Chrome 152 and Firefox 156 and does not in Safari 26.6.2. It is accepted, since refusing it would break a call that works in two engines out of three."
   ]
 }
