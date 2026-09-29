@@ -1,7 +1,7 @@
 ---
 title: "Convert To Number"
 page_title: "Convert To Number Sass Function"
-page_description: "The convertToNumber Sass function parses a string of digits into a number, which is what you need when a value arrives from interpolation as text."
+page_description: "The convertToNumber Sass function parses a number written as a string, with an optional sign and decimal point, which is what you need when a value arrives from interpolation as text."
 page_keywords: "Gerillass convertToNumber, Sass convertToNumber, Sass Functions, SCSS Functions, Sass Utility Functions, Gerillass Utilities"
 ---
 
@@ -9,22 +9,31 @@ page_keywords: "Gerillass convertToNumber, Sass convertToNumber, Sass Functions,
 
 <Member name="convertToNumber">
 
-Parses a string of digits into a number.
+Parses a number written as a string, with an optional sign and decimal point. Sass has no built-in way to do it, and a value arriving from interpolation, a map key or a data attribute is text, which cannot be multiplied.
 
 </Member>
 
 ## Arguments
 
 <Arguments of="convertToNumber">
-  <Argument name="$value" type="string">Accepts a string containing only digits.</Argument>
+  <Argument name="$value" type="string">A number written as a string: digits, with an optional leading <code>-</code> or <code>+</code> and an optional decimal point. The point needs a digit on each side, as Sass requires when the number is written out.</Argument>
 </Arguments>
 
 ## Examples
 
-<Example caption="A numeric string turned into a number you can do arithmetic with.">
+<Example caption="A numeric string turned into a number you can do arithmetic with. The string on its own is text, so `&quot;50&quot; * 1%` stops the build; the number multiplies.">
 ```scss
 .column {
   width: convertToNumber("50") * 1%;
+}
+```
+</Example>
+
+<Example caption="A sign and a decimal point are read too, which is what the name promises and what the function refused until 4.0.0.">
+```scss
+.figure {
+  width: convertToNumber("12.5") * 1%;
+  margin-left: convertToNumber("-5") * 1px;
 }
 ```
 </Example>
@@ -39,8 +48,21 @@ Arguments are checked, so a wrong value stops the build with a message instead o
 }
 ```
 ```text
-Error: `50` is not a valid $value for `convertToNumber`. Pass a string made only of digits, such as `"42"`.
+Error: `50` is not a valid $value for `convertToNumber`. Pass a number written as a string, such as `"42"`, `"12.5"` or `"-5"`.
 ```
+
+A string that is not a number is refused rather than folded into one. Before the characters were checked, a letter or a space came out as nonsense such as `40-1`, and an empty string or a bare sign failed with Sass's own "Undefined operation".
+
+```scss
+.column {
+  width: convertToNumber("4.5.6") * 1%;
+}
+```
+```text
+Error: `"4.5.6"` is not a valid $value for `convertToNumber`. Pass a number written as a string, such as `"42"`, `"12.5"` or `"-5"`.
+```
+
+A decimal point needs a digit on each side, so `".5"` and `"4."` are refused, as Sass refuses them written out. Scientific notation such as `"1e3"` is not read either.
 
 ## Related Links
 

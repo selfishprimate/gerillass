@@ -1,0 +1,41 @@
+@charset "UTF-8";
+
+// Since 4.0.0 this reads a sign and a single decimal point, not whole
+// non-negative numbers only: the function is called convertToNumber and refused
+// `"12.5"`, the same gap between a name and its behaviour that
+// `clearWhitespace` had. What was refused before and is still not a number is
+// refused now, which the rejects in meta/ cover; this pins what a stricter
+// parse written later must keep accepting, and the shapes that must stay out.
+@use 'true' as *;
+@use 'sass:string';
+@use '../../scss/utilities/convert-to-number' as *;
+
+@include describe('convertToNumber()') {
+  @include it('Reads a whole number, leading zeros and all.') {
+    @include assert-equal(convertToNumber('42'), 42);
+    @include assert-equal(convertToNumber('0'), 0);
+    @include assert-equal(convertToNumber('007'), 7);
+  }
+
+  @include it('Reads a sign.') {
+    @include assert-equal(convertToNumber('-5'), -5);
+    @include assert-equal(convertToNumber('+5'), 5);
+    @include assert-equal(convertToNumber('-0'), 0);
+  }
+
+  @include it('Reads a decimal point.') {
+    @include assert-equal(convertToNumber('12.5'), 12.5);
+    @include assert-equal(convertToNumber('0.5'), 0.5);
+    @include assert-equal(convertToNumber('-12.5'), -12.5);
+    @include assert-equal(convertToNumber('100.00'), 100);
+  }
+
+  @include it('Returns a number, so it can be used in arithmetic.') {
+    @include assert-equal(convertToNumber('50') * 1%, 50%);
+    @include assert-equal(convertToNumber('12.5') * 2, 25);
+  }
+
+  @include it('Reads an unquoted string, which is what interpolation gives.') {
+    @include assert-equal(convertToNumber(string.unquote('42')), 42);
+  }
+}

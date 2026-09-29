@@ -1,20 +1,32 @@
 {
   "name": "convertToNumber",
-  "summary": "Parses a string of digits into a number.",
+  "summary": "Parses a number written as a string, with an optional sign and decimal point.",
   "arguments": [
     {
       "name": "$value",
       "accepts": [
-        "a string containing only digits"
+        "a string of digits, quoted or not",
+        "a leading - or +",
+        "a single decimal point, with a digit on each side of it"
       ]
     }
   ],
   "examples": [
-    ".a { z-index: convertToNumber(\"42\"); }"
+    ".a { z-index: convertToNumber(\"42\"); }",
+    ".a { width: convertToNumber(\"12.5\") * 1%; }",
+    ".a { margin-left: convertToNumber(\"-5\") * 1px; }"
   ],
   "rejects": [
     ".a { --x: #{convertToNumber(42)}; }",
     ".a { z-index: convertToNumber(\"4a\"); }",
-    ".a { z-index: convertToNumber(\"\"); }"
+    ".a { z-index: convertToNumber(\"\"); }",
+    ".a { z-index: convertToNumber(\"4.5.6\"); }",
+    ".a { z-index: convertToNumber(\".\"); }",
+    ".a { z-index: convertToNumber(\".5\"); }",
+    ".a { z-index: convertToNumber(\"-\"); }"
+  ],
+  "caveats": [
+    "Until 4.0.0 it read whole non-negative numbers only, so `\"12.5\"` and `\"-5\"` stopped the build although the function is called convertToNumber: the same gap between a name and its behaviour that `clearWhitespace` had. A sign and a single decimal point are read now, and nothing that was accepted before changed.",
+    "A point needs a digit on each side, so `\"4.\"` and `\".5\"` are refused, as Sass refuses them written out. Scientific notation such as `\"1e3\"` is not read either."
   ]
 }

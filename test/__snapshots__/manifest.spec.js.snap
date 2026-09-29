@@ -1312,6 +1312,18 @@ exports[`Manifest examples convertToEm: .a { margin: convertToEm(24px, 14px); } 
 }"
 `;
 
+exports[`Manifest examples convertToNumber: .a { margin-left: convertToNumber("-5") * 1px; } 1`] = `
+".a {
+  margin-left: -5px;
+}"
+`;
+
+exports[`Manifest examples convertToNumber: .a { width: convertToNumber("12.5") * 1%; } 1`] = `
+".a {
+  width: 12.5%;
+}"
+`;
+
 exports[`Manifest examples convertToNumber: .a { z-index: convertToNumber("42"); } 1`] = `
 ".a {
   z-index: 42;

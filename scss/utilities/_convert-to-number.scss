@@ -1,45 +1,76 @@
 @charset "UTF-8";
 
 @use "sass:list";
+@use "sass:math";
 @use "sass:meta";
 @use "sass:string";
 
+$-digits: "0" "1" "2" "3" "4" "5" "6" "7" "8" "9";
+
+// Parses a number written as a string, which Sass has no built-in way to do.
+// A value arriving from interpolation, a map key or a data attribute is text,
+// and text cannot be multiplied.
+//
+// Until 4.0.0 it read whole non-negative numbers only, so `"12.5"` and `"-5"`
+// stopped the build although the function is called convertToNumber: the same
+// gap between a name and its behaviour that `clearWhitespace` had. A sign and
+// a single decimal point are read now. Everything that was refused before and
+// is still not a number is refused with the same message.
+//
+// Every character is checked before the parse runs. Otherwise an empty string
+// or a sign failed with Sass's own "Undefined operation", and a letter or a
+// space was folded into nonsense such as `40-1`.
 @function convertToNumber($value) {
-
   @if meta.type-of($value) != "string" {
-    @error "`#{$value}` is not a valid $value for `convertToNumber`. Pass a string made only of digits, such as `\"42\"`.";
+    @error "`#{meta.inspect($value)}` is not a valid $value for `convertToNumber`. Pass a number written as a string, such as `\"42\"`, `\"12.5\"` or `\"-5\"`.";
   }
 
-  $string-numerals: "0" "1" "2" "3" "4" "5" "6" "7" "8" "9";
-
-  // Every character has to be a digit before the parse runs. Otherwise an
-  // empty string or a sign failed with Sass's own "Undefined operation", and a
-  // letter or a space was folded into nonsense such as `40-1`. The empty case
-  // is checked first because `@for $i from 1 through 0` counts down, not zero
-  // times.
-  @if string.length($value) == 0 {
-    @error "`\"\"` is not a valid $value for `convertToNumber`. Pass a string made only of digits, such as `\"42\"`.";
+  $text: $value;
+  $sign: 1;
+  $first: string.slice($text, 1, 1);
+  @if $first == "-" or $first == "+" {
+    @if $first == "-" {
+      $sign: -1;
+    }
+    $text: string.slice($text, 2);
   }
-  @for $i from 1 through string.length($value) {
-    @if not list.index($string-numerals, string.slice($value, $i, $i)) {
-      @error "`#{meta.inspect($value)}` is not a valid $value for `convertToNumber`. Pass a string made only of digits, such as `\"42\"`.";
+
+  // The empty case is checked after the sign is taken off, so `"-"` alone is
+  // caught too, and before the loop, because `@for $i from 1 through 0` counts
+  // down rather than running no times.
+  @if string.length($text) == 0 {
+    @error "`#{meta.inspect($value)}` is not a valid $value for `convertToNumber`. Pass a number written as a string, such as `\"42\"`, `\"12.5\"` or `\"-5\"`.";
+  }
+
+  $whole: 0;
+  $fraction: 0;
+  $scale: 1;
+  $after-point: false;
+
+  @for $i from 1 through string.length($text) {
+    $character: string.slice($text, $i, $i);
+    @if $character == "." {
+      // One point, and a digit on each side of it: `"4."`, `".5"` and `"4.5.6"`
+      // are not numbers Sass would accept written out either.
+      @if $after-point or $i == 1 or $i == string.length($text) {
+        @error "`#{meta.inspect($value)}` is not a valid $value for `convertToNumber`. Pass a number written as a string, such as `\"42\"`, `\"12.5\"` or `\"-5\"`.";
+      }
+      $after-point: true;
+    } @else {
+      $index: list.index($-digits, $character);
+      @if not $index {
+        @error "`#{meta.inspect($value)}` is not a valid $value for `convertToNumber`. Pass a number written as a string, such as `\"42\"`, `\"12.5\"` or `\"-5\"`.";
+      }
+      // Sass lists are 1-based, so the index is one more than the digit.
+      $digit: $index - 1;
+      @if $after-point {
+        $scale: $scale * 10;
+        $fraction: $fraction + math.div($digit, $scale);
+      } @else {
+        $whole: $whole * 10 + $digit;
+      }
     }
   }
 
-  $calc: 0;
-
-  @for $i from 1 through string.length($value) {
-    //Takes every digits in the $value
-    $digit: string.slice($value, $i, $i);
-
-    //Finds the index position of $digit in the $value
-    $index-of-digit: list.index($string-numerals, $digit);
-
-    // That is because SASS strings are not "0" based but "1", the index position of every digits will be more by one. Here is the simple calculation to find the actual number.
-    $actual-digit: $index-of-digit - 1;
-
-    // Calculates the actual number.
-    $calc: $calc * 10 + $actual-digit;
-  }
-  @return $calc;
+  @return $sign * ($whole + $fraction);
 }

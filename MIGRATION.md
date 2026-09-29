@@ -134,6 +134,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `clearWhitespace` keeps the string quoted or unquoted as it was passed | breaking, silent, for an unquoted argument |
 | `convertToEm` takes a `$base`, so em is measured against the right font size | not breaking |
 | `convertToEm` converts every absolute unit, not only px | fixes a false refusal; not breaking |
+| `convertToNumber` reads a sign and a decimal point | not breaking |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -2958,6 +2959,25 @@ newly refused and no returned value changed.
 
 `remify` has the same needless restriction and is left for its own turn in this
 sweep.
+
+
+## Not breaking: `convertToNumber` reads a sign and a decimal point
+
+It read whole non-negative numbers only, so `"12.5"` and `"-5"` stopped the
+build although the function is called `convertToNumber`: the same gap between a
+name and its behaviour that `clearWhitespace` had.
+
+```scss
+width: convertToNumber("12.5") * 1%;   // 3.x: stopped the build
+margin-left: convertToNumber("-5") * 1px;
+```
+
+A point needs a digit on each side, so `".5"` and `"4."` stay refused, as Sass
+refuses them written out, and scientific notation such as `"1e3"` is not read.
+
+Compiled across 41 calls: nine identical, ten that now work, and 22 where a
+value that was already refused is refused with the reworded message. Nothing is
+newly refused and no returned value changed.
 
 
 ---

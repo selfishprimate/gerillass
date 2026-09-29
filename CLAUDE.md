@@ -1051,7 +1051,9 @@ Two pieces of work are open:
   unquoted as it was passed, and `convertToEm` taking a `$base`, since `em` is
   measured against the element's own font size and the 16px it assumed was
   right only at that size, and converting every absolute unit rather than
-  refusing the six besides `px` that reduce to the same scale,
+  refusing the six besides `px` that reduce to the same scale, and
+  `convertToNumber` reading a sign and a decimal point, which its name promises
+  and which it refused,
   all on
   `docs-examples-review`;
   and the demos and prose
