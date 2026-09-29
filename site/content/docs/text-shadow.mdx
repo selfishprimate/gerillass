@@ -204,8 +204,8 @@ The **Text Shadow Sass mixin** writes one or more text shadows. Each one is a di
 ```scss
 .title {
   @include text-shadow(
-    left rgb(102 143 128 / 0.9) 3px,
-    right rgb(237 106 90 / 0.9) 3px
+    left rgb(0 209 255 / 0.9) 3px,
+    right rgb(255 0 90 / 0.9) 3px
   );
 }
 ```
@@ -383,8 +383,8 @@ A `text-shadow` transitions from one layer to another when both states have the 
 ```scss
 .glitch {
   @include text-shadow(
-    left rgb(102 143 128 / 0.9) 0px,
-    right rgb(237 106 90 / 0.9) 0px
+    left rgb(0 209 255 / 0.9) 0px,
+    right rgb(255 0 90 / 0.9) 0px
   );
 
   @include motion-safe {
@@ -393,15 +393,15 @@ A `text-shadow` transitions from one layer to another when both states have the 
 
   &:hover {
     @include text-shadow(
-      left rgb(102 143 128 / 0.9) 6px,
-      right rgb(237 106 90 / 0.9) 6px
+      left rgb(0 209 255 / 0.9) 6px,
+      right rgb(255 0 90 / 0.9) 6px
     );
   }
 }
 ```
 ```html
 <style>
-  .glitch { margin: 0; font: 800 40px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; color: #668f80; cursor: pointer; }
+  .glitch { margin: 0; font: 800 40px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; color: #2f3937; cursor: pointer; }
 </style>
 <h2 class="glitch">Hover me</h2>
 ```
