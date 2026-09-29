@@ -521,6 +521,12 @@ a dropped declaration rather than an error.
 
 - Dividing two values of the same unit already gives a plain number, so `math.div(36px, 24px)` is `1.5` and this function adds nothing there. What Sass will not do on its own is compare a length against zero (`0px == 0` is false), convert between units it cannot relate such as rem and px, and round to a number of decimal places, since `math.round` keeps the unit and goes to the nearest whole one.
 
+**`clearWhitespace`**
+
+- Until 4.0.0 only the space character was removed, although the function is called clearWhitespace: a tab, a newline, a carriage return and a form feed all survived it, and so did a non-breaking space. The last one is the trap, because it is the one nobody can see: a font name copied out of a design tool or a web page often carries U+00A0 where it looks like an ordinary space, and the filename built from the result then asked for a file nobody had.
+- The other Unicode spaces are left, which is a line rather than an oversight: an en space, an em space and the ideographic space are typographic characters somebody may have meant, and none of them is mistaken for a keyboard space the way the non-breaking space is.
+- The result is quoted if the argument was. Until 4.0.0 it was always quoted, because the string is rebuilt by interpolation, so an unquoted argument came back as a different kind of value from the one that was passed.
+
 **`convertToEm`**
 
 - Until 4.0.0 the unit was added as text, so the function returned the string `1.5em` rather than a number: it printed the same, and `convertToEm(24px) * 2` stopped the build with Sass's "Undefined operation". It now returns a number, as `remify` always has.
@@ -626,7 +632,7 @@ and camelCase is what tells them apart from the kebab-case mixins above.
 | Signature | What it does |
 |---|---|
 | `clearUnit($value)` | Strips the unit off a number, returning it unitless. |
-| `clearWhitespace($string)` | Removes every space from a string. |
+| `clearWhitespace($string)` | Removes every whitespace character from a string, keeping it quoted or unquoted as it was. |
 | `convertToEm($value)` | Converts a pixel length to em, against a 16px base. |
 | `convertToNumber($value)` | Parses a string of digits into a number. |
 | `fillNulls($value, $separation: comma, $skip: false, $seperation: null)` | Replaces null entries in a list with 0, or drops them. |

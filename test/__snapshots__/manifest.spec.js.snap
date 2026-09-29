@@ -1054,6 +1054,18 @@ exports[`Manifest examples clearUnit: .a { line-height: clearUnit(24px); } 1`] =
 }"
 `;
 
+exports[`Manifest examples clearWhitespace: .a { background-image: url("/fonts/#{clearWhitespace("Fanwood Text")}. 1`] = `
+".a {
+  background-image: url("/fonts/FanwoodText.svg");
+}"
+`;
+
+exports[`Manifest examples clearWhitespace: .a { content: clearWhitespace("Fanwood Text"); } 1`] = `
+".a {
+  content: "FanwoodText";
+}"
+`;
+
 exports[`Manifest examples clearWhitespace: .a { content: clearWhitespace("a b c"); } 1`] = `
 ".a {
   content: "abc";

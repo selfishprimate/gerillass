@@ -1,7 +1,7 @@
 ---
 title: "Clear Whitespace"
 page_title: "Clear Whitespace Sass Function"
-page_description: "The clearWhitespace Sass function removes every space from a string, so a value assembled by interpolation can be used as a single token."
+page_description: "The clearWhitespace Sass function removes every whitespace character from a string, the invisible non-breaking space included, so a value assembled by interpolation can be used as a single token."
 page_keywords: "Gerillass clearWhitespace, Sass clearWhitespace, Sass Functions, SCSS Functions, Sass Utility Functions, Gerillass Utilities"
 ---
 
@@ -9,19 +9,19 @@ page_keywords: "Gerillass clearWhitespace, Sass clearWhitespace, Sass Functions,
 
 <Member name="clearWhitespace">
 
-Removes every space from a string.
+Removes every whitespace character from a string, and hands it back quoted or unquoted as it was passed.
 
 </Member>
 
 ## Arguments
 
 <Arguments of="clearWhitespace">
-  <Argument name="$string" type="string">Accepts any string.</Argument>
+  <Argument name="$string" type="string">Any string, quoted or not. The result carries the same quoting, so the value you get back is the same kind as the one you passed.</Argument>
 </Arguments>
 
 ## Examples
 
-<Example caption="Turning a font family name into a filename.">
+<Example caption="Turning a font family name into a filename. This is what the function is for, and it is the one place a space is fatal: the name is part of the URL.">
 ```scss
 .brand {
   font-family: "Fanwood Text", serif;
@@ -29,6 +29,18 @@ Removes every space from a string.
 }
 ```
 </Example>
+
+<Hint kind="warning">
+
+**The character it exists for is the one you cannot see.** A font name copied out of a design tool or a web page often carries a non-breaking space, U+00A0, where it looks like an ordinary space. Until 4.0.0 only the space character was taken out, despite the name, so that name came back with the invisible one still in it and the filename asked for a file nobody had. A tab, a newline, a carriage return and a form feed survived too. All of them go now.
+
+</Hint>
+
+<Hint kind="info">
+
+**The typographic Unicode spaces are left**, an en space, an em space and the ideographic space among them. That is a line rather than an oversight: each is a character somebody may have meant, and none of them is mistaken for a keyboard space the way the non-breaking space is.
+
+</Hint>
 
 ## What it refuses
 

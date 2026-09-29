@@ -1,15 +1,40 @@
 @charset "UTF-8";
 
+@use "sass:list";
 @use "sass:meta";
 @use "sass:string";
 
+// The characters taken out. Until 4.0.0 only the space was, although the
+// function is called clearWhitespace: a tab, a newline, a carriage return and
+// a form feed all survived it, and so did a non-breaking space. That last one
+// is the trap worth closing, because it is the one nobody can see. A font name
+// copied out of a design tool or a web page often carries U+00A0 where it
+// looks like an ordinary space, and `clearWhitespace("Fanwood Text")` then
+// returned a string that still held it, so the filename built from it asked
+// for a file nobody had.
+//
+// The other Unicode spaces are left, and that is a line rather than an
+// oversight: an en space, an em space and the ideographic space are typographic
+// characters somebody may have meant, and none of them is mistaken for a
+// keyboard space the way U+00A0 is. A caller who wants them gone can say so.
+$-whitespace: " " "\9" "\a" "\d" "\c" "\a0";
+
 @function clearWhitespace($string) {
   @if meta.type-of($string) != "string" {
-    @error "`#{$string}` is not a valid $string for `clearWhitespace`. Pass a string.";
+    @error "`#{meta.inspect($string)}` is not a valid $string for `clearWhitespace`. Pass a string.";
   }
-  @while (string.index($string, " ") != null) {
-    $index: string.index($string, " ");
-    $string: "#{string.slice($string, 0, $index - 1)}#{string.slice($string, $index + 1)}";
+  // The quotedness is put back at the end. Building the result with
+  // interpolation always gives a quoted string, so an unquoted argument used to
+  // come back quoted, which is a different value from the one that was passed.
+  $quoted: string.slice(meta.inspect($string), 1, 1) == "\"";
+  @each $character in $-whitespace {
+    @while string.index($string, $character) != null {
+      $index: string.index($string, $character);
+      $string: "#{string.slice($string, 0, $index - 1)}#{string.slice($string, $index + 1)}";
+    }
   }
-  @return $string;
+  @if $quoted {
+    @return $string;
+  }
+  @return string.unquote($string);
 }

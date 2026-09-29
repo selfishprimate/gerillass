@@ -130,6 +130,8 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `truncate` refuses a `$display` that does not truncate | breaking, loud; the text ran past the box |
 | `truncate` reads `none` in any case, and unquotes it | fixes a refusal, and a clamp that was never undone |
 | `truncate` refuses a call at the root | a better message; not breaking |
+| `clearWhitespace` takes out every whitespace character, not only the space | fixes an invisible space that survived; silent |
+| `clearWhitespace` keeps the string quoted or unquoted as it was passed | breaking, silent, for an unquoted argument |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -2878,6 +2880,48 @@ A call at the root raises with the mixin's own message in place of Sass's.
 Compiled across 80 calls covering the line counts, widths and displays this
 mixin takes: 67 identical, 11 newly refused, and the two `none` spellings
 fixed.
+
+
+## Change: `clearWhitespace` lives up to its name
+
+Until 4.0.0 it took out the space character and nothing else, although it is
+called `clearWhitespace`. A tab, a newline, a carriage return and a form feed
+all survived it, and so did a non-breaking space.
+
+```scss
+// $name holds "Fanwood Text" with a U+00A0 between the words
+url("/fonts/#{clearWhitespace($name)}.svg")
+// 3.x: url("/fonts/Fanwood Text.svg") — the space is still there, invisibly
+```
+
+That last one is the reason this was worth changing: a font name copied out of
+a design tool or a web page often carries U+00A0 where it looks like an
+ordinary space, so the filename asked for a file nobody had and the name in the
+source looked correct.
+
+The typographic Unicode spaces are deliberately left, an en space, an em space
+and the ideographic space among them. Each is a character somebody may have
+meant, and none of them is mistaken for a keyboard space the way U+00A0 is.
+
+## Change: `clearWhitespace` keeps the quoting it was given
+
+The string is rebuilt by interpolation, which always produces a quoted one, so
+an unquoted argument came back quoted: a different kind of value from the one
+that was passed.
+
+```scss
+content: clearWhitespace(string.unquote("a b"));
+// 3.x: "ab"      4.0.0: ab
+```
+
+A quoted argument is unaffected, which is every documented use. `fontSource`,
+the one place inside the library that calls this, was compiled before and after
+with a quoted and an unquoted family name and is byte for byte unchanged, as is
+`font-face` through it.
+
+Compiled across 72 calls: 56 identical, nine where a whitespace character is
+now removed, four where the quoting is kept, and three where `null` is named in
+the message rather than printed as an empty pair of backticks.
 
 
 ---

@@ -1045,7 +1045,10 @@ Two pieces of work are open:
   measured over twenty-eight display values on a 200px box in all three
   browsers, reading `none` in any case and unquoting it, which used to write
   `line-clamp: "none"` and leave the clamp on, and refusing a call at the
-  root,
+  root, and `clearWhitespace` taking out every whitespace character rather than
+  the space alone, the non-breaking space included, which looks like a space in
+  a font name and survived into the filename, and keeping the string quoted or
+  unquoted as it was passed,
   all on
   `docs-examples-review`;
   and the demos and prose

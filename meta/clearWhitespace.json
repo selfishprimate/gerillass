@@ -1,18 +1,26 @@
 {
   "name": "clearWhitespace",
-  "summary": "Removes every space from a string.",
+  "summary": "Removes every whitespace character from a string, keeping it quoted or unquoted as it was.",
   "arguments": [
     {
       "name": "$string",
       "accepts": [
-        "any string"
+        "any string, quoted or not, which comes back the way it went in"
       ]
     }
   ],
   "examples": [
-    ".a { content: clearWhitespace(\"a b c\"); }"
+    ".a { content: clearWhitespace(\"a b c\"); }",
+    ".a { content: clearWhitespace(\"Fanwood Text\"); }",
+    ".a { background-image: url(\"/fonts/#{clearWhitespace(\"Fanwood Text\")}.svg\"); }"
   ],
   "rejects": [
-    ".a { --x: #{clearWhitespace(42)}; }"
+    ".a { --x: #{clearWhitespace(42)}; }",
+    ".a { --x: #{clearWhitespace(null)}; }"
+  ],
+  "caveats": [
+    "Until 4.0.0 only the space character was removed, although the function is called clearWhitespace: a tab, a newline, a carriage return and a form feed all survived it, and so did a non-breaking space. The last one is the trap, because it is the one nobody can see: a font name copied out of a design tool or a web page often carries U+00A0 where it looks like an ordinary space, and the filename built from the result then asked for a file nobody had.",
+    "The other Unicode spaces are left, which is a line rather than an oversight: an en space, an em space and the ideographic space are typographic characters somebody may have meant, and none of them is mistaken for a keyboard space the way the non-breaking space is.",
+    "The result is quoted if the argument was. Until 4.0.0 it was always quoted, because the string is rebuilt by interpolation, so an unquoted argument came back as a different kind of value from the one that was passed."
   ]
 }

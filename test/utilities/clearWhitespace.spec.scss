@@ -1,0 +1,35 @@
+@charset "UTF-8";
+
+// Since 4.0.0 this takes out every whitespace character, not only the space,
+// and keeps the string quoted or unquoted as it was passed. The non-breaking
+// space is the one that matters: it is indistinguishable from a space in a font
+// name copied out of a design tool, and it used to survive, so the filename built
+// from the result asked for a file nobody had. The other Unicode spaces are
+// deliberately left, which this pins as well.
+@use 'true' as *;
+@use 'sass:meta';
+@use 'sass:string';
+@use '../../scss/gerillass' as *;
+
+@include describe('clearWhitespace()') {
+  @include it('Takes out a space, a tab, a newline and a non-breaking space.') {
+    @include assert-equal(clearWhitespace('a b'), 'ab');
+    @include assert-equal(clearWhitespace("a	b"), "ab");
+    @include assert-equal(clearWhitespace("a b"), "ab");
+  }
+
+  @include it('Leaves the typographic Unicode spaces alone.') {
+    @include assert-equal(clearWhitespace("a b"), "a b");
+    @include assert-equal(clearWhitespace("a　b"), "a　b");
+  }
+
+  @include it('Keeps the string quoted or unquoted as it was passed.') {
+    @include assert-equal(meta.inspect(clearWhitespace('a b')), '"ab"');
+    @include assert-equal(meta.inspect(clearWhitespace(string.unquote('a b'))), 'ab');
+  }
+
+  @include it('Leaves a string with nothing to remove as it is.') {
+    @include assert-equal(clearWhitespace('abc'), 'abc');
+    @include assert-equal(clearWhitespace(''), '');
+  }
+}
