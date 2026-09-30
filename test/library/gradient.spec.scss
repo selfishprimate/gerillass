@@ -80,4 +80,21 @@
       }
     }
   }
+
+  // `$type` was read in any case and `$direction` was not, so `RIGHT` and
+  // `TOP-LEFT` were refused while `LINEAR` and `"TO RIGHT"` were taken: the
+  // same function disagreeing with itself. Shared by `gradientValue`,
+  // `text-gradient` and `background-image`'s filter direction.
+  @include it('Reads a direction keyword in any case.') {
+    @include assert {
+      @include output {
+        .a { @include gradient((red, blue), $direction: RIGHT); }
+        .b { @include gradient((red, blue), $direction: Top-Left); }
+      }
+      @include expect {
+        .a { background-image: linear-gradient(to right, red, blue); }
+        .b { background-image: linear-gradient(to top left, red, blue); }
+      }
+    }
+  }
 }

@@ -179,8 +179,18 @@ $-places: "left" "center" "right" "top" "bottom";
 // The CSS for a linear gradient's $direction, or null when a browser would
 // drop it. background-image checks its $filter-direction with this.
 @function gradientDirection($direction) {
-  @if map.has-key($map-for-directions, $direction) {
-    @return map.get($map-for-directions, $direction);
+  // Looked up in lower case, as CSS reads its own keywords and as `$type` here
+  // already did: `RIGHT` and `TOP-LEFT` were refused while `LINEAR` and
+  // `"TO RIGHT"` were taken, which is the same function disagreeing with
+  // itself. The `to ...` form is passed through as it is written, because the
+  // browser normalises it: measured in Chrome 152, `linear-gradient(TO RIGHT,
+  // red, blue)` computes to `linear-gradient(to right, red, blue)`.
+  $name: $direction;
+  @if meta.type-of($direction) == "string" {
+    $name: string.to-lower-case(string.unquote("#{$direction}"));
+  }
+  @if map.has-key($map-for-directions, $name) {
+    @return map.get($map-for-directions, $name);
   }
   @if -is-angle($direction) {
     @return $direction;

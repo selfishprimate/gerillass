@@ -1069,7 +1069,9 @@ Two pieces of work are open:
   `fontSource` refusing a format it does not know rather than returning an
   empty list whose failure surfaced at the caller's declaration, reading the
   format in any case, and `otf` joining `$map-for-font-formats`, which it had
-  never been in,
+  never been in, and the shared gradient builder reading a direction keyword in
+  any case, which `$type` already did, so `LINEAR` was taken while `RIGHT` was
+  refused,
   all on
   `docs-examples-review`;
   and the demos and prose

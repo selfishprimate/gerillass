@@ -311,6 +311,7 @@ a dropped declaration rather than an error.
 **`gradient`**
 
 - The mixin writes declarations, so it needs a rule to write them into. A call at the root failed with Sass's own "Declarations may only be used within style rules", pointing at a line inside the library; it raises with the mixin's own message since 4.0.0. `gradientValue` is the one to reach for where a gradient is a value rather than a rule.
+- A direction keyword is read in any case since 4.0.0. `$type` already was, so `LINEAR` was taken while `RIGHT` and `TOP-LEFT` were refused. The `"to ..."` form is passed through as written, because the browser normalises it: measured in Chrome 152, `linear-gradient(TO RIGHT, red, blue)` computes to `linear-gradient(to right, red, blue)`.
 
 **`hide`**
 
@@ -558,6 +559,10 @@ a dropped declaration rather than an error.
 
 - Until 4.0.0 a format it did not know fell through both of its branches and the function returned an empty list, so the failure surfaced at the caller's own declaration as Sass's `() isn't a valid CSS value`, naming neither the function nor the format. `font-face` checked its list before calling this and said so in a comment, but a guard that lives only in the caller is not a guard for a public function.
 - `otf` was missing from `$map-for-font-formats` until 4.0.0, which left a project shipping OpenType with no way to use `font-face` short of restating the whole map, since `@use ... with` replaces a map rather than merging into it. Measured in Chrome 152 and Firefox 156, both keep `format("opentype")` and drop an unknown format word.
+
+**`gradientValue`**
+
+- A direction keyword is read in any case since 4.0.0. `$type` already was, so `LINEAR` was taken while `RIGHT` and `TOP-LEFT` were refused. The `"to ..."` form is passed through as written, because the browser normalises it: measured in Chrome 152, `linear-gradient(TO RIGHT, red, blue)` computes to `linear-gradient(to right, red, blue)`.
 
 **`isNumber`**
 

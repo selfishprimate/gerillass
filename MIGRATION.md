@@ -141,6 +141,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `fontSizer`'s second argument is `$factor`, not `$time` | not breaking; the old name warns |
 | `fontSource` refuses a format it does not know | breaking, loud; it used to return an empty list |
 | `otf` joins `$map-for-font-formats`, and a format is read in any case | not breaking |
+| a gradient direction keyword is read in any case | fixes a false refusal; not breaking |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -3088,6 +3089,30 @@ A format is also read in any case now, in the function and the mixin, so
 
 Compiled across 48 calls through both: 24 identical, ten that now work, none
 newly refused, 14 where a silent empty list became a named message.
+
+
+## Not breaking: a gradient direction keyword in any case
+
+`$type` was read in any case and `$direction` was not, so the same call could
+take `LINEAR` and refuse `RIGHT`.
+
+```scss
+background-image: gradientValue((red, blue), $direction: RIGHT);
+// 3.x: stopped the build
+```
+
+The check lives in `scss/internal/_gradient.scss`, so this reaches `gradient`,
+`gradientValue`, `text-gradient` and `background-image`'s `$filter-direction`
+alike.
+
+The `"to ..."` form is still passed through as written rather than normalised,
+and that is deliberate: measured in Chrome 152,
+`linear-gradient(TO RIGHT, red, blue)` computes to
+`linear-gradient(to right, red, blue)`, so the browser tidies it and there is
+nothing to fix.
+
+Compiled across 100 calls over those four members: 76 identical, 24 where one
+of six case spellings now works, none newly refused and no output changed.
 
 
 ---

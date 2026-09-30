@@ -9,13 +9,53 @@
         "a single colour warns, because browsers before Chrome 135, Firefox 136 and Safari 18.4 drop that gradient"
       ]
     },
-    { "name": "$type", "accepts": ["linear, the default", "radial", "conic"] },
-    { "name": "$direction", "accepts": ["linear only, in the forms the gradient mixin takes"] },
-    { "name": "$shape", "accepts": ["radial only, circle or ellipse with an optional size"] },
-    { "name": "$position", "accepts": ["radial or conic, a position name or at followed by a position"] },
-    { "name": "$from", "accepts": ["conic only, an angle"] },
-    { "name": "$in", "accepts": ["a colour space, with a hue method for a polar one", "var()"] },
-    { "name": "$repeating", "accepts": ["false, the default", "true"] }
+    {
+      "name": "$type",
+      "accepts": [
+        "linear, the default",
+        "radial",
+        "conic"
+      ]
+    },
+    {
+      "name": "$direction",
+      "accepts": [
+        "linear only, in the forms the gradient mixin takes",
+        "a keyword is read in any case, so RIGHT and TOP-LEFT work"
+      ]
+    },
+    {
+      "name": "$shape",
+      "accepts": [
+        "radial only, circle or ellipse with an optional size"
+      ]
+    },
+    {
+      "name": "$position",
+      "accepts": [
+        "radial or conic, a position name or at followed by a position"
+      ]
+    },
+    {
+      "name": "$from",
+      "accepts": [
+        "conic only, an angle"
+      ]
+    },
+    {
+      "name": "$in",
+      "accepts": [
+        "a colour space, with a hue method for a polar one",
+        "var()"
+      ]
+    },
+    {
+      "name": "$repeating",
+      "accepts": [
+        "false, the default",
+        "true"
+      ]
+    }
   ],
   "examples": [
     ".a { background-image: gradientValue((rgba(0, 0, 0, 0.75), transparent), $direction: top), url(\"/img/hero.jpg\"); }",
@@ -30,5 +70,8 @@
     ".a { background-image: gradientValue((red, blue), $shape: circle); }",
     ".a { background-image: gradientValue((red 10px, blue), conic); }",
     ".a { background-image: gradientValue((red, blue), $in: rgb); }"
+  ],
+  "caveats": [
+    "A direction keyword is read in any case since 4.0.0. `$type` already was, so `LINEAR` was taken while `RIGHT` and `TOP-LEFT` were refused. The `\"to ...\"` form is passed through as written, because the browser normalises it: measured in Chrome 152, `linear-gradient(TO RIGHT, red, blue)` computes to `linear-gradient(to right, red, blue)`."
   ]
 }
