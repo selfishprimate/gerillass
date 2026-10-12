@@ -1,17 +1,26 @@
 {
   "name": "isGutter",
-  "summary": "True for anything that can sit where a CSS length is expected: a number, a calculation, or a CSS function such as var().",
+  "summary": "True for a value a browser keeps where a length is expected: a number with a unit, a unitless zero, a percentage, a calculation, or a CSS function such as var().",
   "arguments": [
     {
       "name": "$value",
       "accepts": [
-        "any value"
+        "any value; the answer is a boolean rather than an error",
+        "true for a length, a unitless zero, a percentage, a calculation and an unquoted var(), env() or attr()",
+        "true for a length built by interpolation, such as #{$n}px",
+        "false for a quoted string, a unitless number other than zero, and a wrong unit such as 10deg"
       ]
     }
   ],
   "examples": [
     ".a { --x: #{isGutter(20px)}; }",
-    ".a { --x: #{isGutter(var(--gap))}; }"
+    ".a { --x: #{isGutter(var(--gap))}; }",
+    ".a { --x: #{isGutter(calc(1rem + 2px))}; }",
+    ".a { --x: #{isGutter(\"20px\")}; }"
   ],
-  "rejects": []
+  "rejects": [],
+  "caveats": [
+    "Four faults until 4.0.0, found because `columnizer` stopped calling this over the first and left a comment saying so; the function itself was never fixed. A length built by interpolation was false, since `#{$n}px` arrives as an unquoted string with no parenthesis and the old check only let a string through when it held one. A quoted string was true, because the check quoted the value before looking for the parenthesis, which erased the difference it needed. And a unitless number and a wrong unit were true. Measured in Chrome 152 and Firefox 156: `gap: \"var(--gap)\"`, `gap: \"20px\"`, `gap: 20` and `gap: 10deg` are all dropped, while `var(--gap)`, `20px` and `gap: 0` are kept.",
+    "The set is wide on purpose: a percentage, a negative length and `anchor-size()` all pass, because this answers for a length slot in general rather than for `gap` in particular, which takes none of the three. Measured in Chrome 152, `width` and `margin-left` keep `anchor-size()` where `gap` drops it."
+  ]
 }

@@ -1,24 +1,36 @@
 @charset "UTF-8";
 
-@use "sass:meta";
-@use "sass:string";
+@use "../internal/length-problem" as *;
 
-// True for anything that can legally sit where a CSS length is expected: a
-// number, a Sass calculation such as calc() or clamp(), or an unquoted string
-// holding a parenthesis, which is how var() and env() arrive.
+// True for a value a browser keeps where a length is expected: a number with a
+// unit, a unitless zero, a percentage, a calculation such as calc() or
+// clamp(), or a CSS function such as var(), env() or attr().
 //
-// Written because `meta.type-of($value) == number` rejects `var(--gap)`, and a
-// gutter expressed as a custom property is perfectly reasonable CSS.
-
+// It used to decide this itself, with three faults that the shared check in
+// `scss/internal/_length-problem.scss` does not have. `columnizer` stopped
+// calling it over the first of them and left a comment saying so, which is how
+// this was found; the function itself was never fixed.
+//
+// - **An interpolated length was false.** `#{$n}px` arrives as an unquoted
+//   string with no parenthesis in it, and the old check only let a string
+//   through when it held one. So a length a browser keeps was reported as not
+//   a length.
+// - **A quoted string was true.** The check ran `string.quote($value)` before
+//   looking for the parenthesis, which erases the difference it needed: a
+//   quoted `"var(--gap)"` is text, not a call. Measured in Chrome 152 and
+//   Firefox 156, `gap: "var(--gap)"` and `gap: "20px"` are both dropped, while
+//   `var(--gap)` and `20px` are kept.
+// - **A unitless number and an angle were true.** `gap: 20` and `gap: 10deg`
+//   are dropped by both engines; a unitless `0` is kept, and still passes.
+//
+// The set is deliberately wide: a percentage, a negative length and
+// `anchor-size()` all pass, because this answers for a length slot in general
+// rather than for `gap` in particular. `gap` takes none of the three, measured
+// in Chrome 152, while `width` and `margin-left` keep `anchor-size()`; a
+// caller that needs the narrower set should say so itself. `anchor-size` is
+// named explicitly because the shared check defaults to refusing the sizing
+// functions, and the sweep for this change caught it turning from true to
+// false.
 @function isGutter($value) {
-  @if meta.type-of($value) == "number" {
-    @return true;
-  }
-  @if meta.type-of($value) == "calculation" {
-    @return true;
-  }
-  @if meta.type-of($value) == "string" and string.index(string.quote($value), "(") {
-    @return true;
-  }
-  @return false;
+  @return lengthProblem($value, $functions: "anchor-size") == null;
 }

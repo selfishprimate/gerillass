@@ -1,0 +1,54 @@
+@charset "UTF-8";
+
+// Four faults fixed in 4.0.0, each measured in Chrome 152 and Firefox 156
+// against what the browser keeps in a length slot. `columnizer` stopped
+// calling this over the first of them and left a comment saying so; the
+// function itself was never fixed.
+@use 'true' as *;
+@use '../../scss/utilities/is-gutter' as *;
+
+@include describe('isGutter()') {
+  @include it('Takes a length, a percentage and a zero.') {
+    @include assert-true(isGutter(20px));
+    @include assert-true(isGutter(0));
+    @include assert-true(isGutter(1.5rem));
+    @include assert-true(isGutter(50%));
+    @include assert-true(isGutter(-10px));
+  }
+
+  @include it('Takes a calculation and a CSS function.') {
+    @include assert-true(isGutter(calc(1rem + 2px)));
+    @include assert-true(isGutter(clamp(1px, 1vw, 4px)));
+    @include assert-true(isGutter(var(--gap)));
+    @include assert-true(isGutter(env(safe-area-inset-top)));
+  }
+
+  // An interpolated length arrives as an unquoted string with no parenthesis
+  // in it, and the old check only let a string through when it held one.
+  @include it('Takes a length built by interpolation.') {
+    $n: 20;
+    @include assert-true(isGutter(#{$n}px));
+    @include assert-true(isGutter(#{20}px));
+  }
+
+  // The old check quoted the value before looking for the parenthesis, which
+  // erased the difference it needed. `gap: "var(--gap)"` is dropped by both
+  // engines; `var(--gap)` is kept.
+  @include it('Refuses a quoted string, which a browser drops.') {
+    @include assert-false(isGutter("var(--gap)"));
+    @include assert-false(isGutter("20px"));
+  }
+
+  // `gap: 20` and `gap: 10deg` are dropped by both engines; `gap: 0` is kept.
+  @include it('Refuses a unitless number and a wrong unit.') {
+    @include assert-false(isGutter(20));
+    @include assert-false(isGutter(10deg));
+  }
+
+  @include it('Refuses what is not a length at all.') {
+    @include assert-false(isGutter(auto));
+    @include assert-false(isGutter(red));
+    @include assert-false(isGutter(null));
+    @include assert-false(isGutter(1px 2px));
+  }
+}

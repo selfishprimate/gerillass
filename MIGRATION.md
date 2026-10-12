@@ -143,6 +143,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `otf` joins `$map-for-font-formats`, and a format is read in any case | not breaking |
 | a gradient direction keyword is read in any case | fixes a false refusal; not breaking |
 | `isColor` returns the value it was given, and names what it refuses | breaking only for a space-separated list |
+| `isGutter` answers by what a browser keeps, not by a parenthesis | breaking, silent, for a guard built on it |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -3143,6 +3144,39 @@ this would only move their failure into a Sass internal message.
 Compiled across 100 calls through `isColor`, `tint` and `shade`: 33 identical,
 58 where the message improved, nine value changes of which eight are visible
 only through `meta.inspect`, and none newly refused or newly accepted.
+
+
+## Change: `isGutter` answers by what a browser keeps
+
+It decided for itself whether a value could sit where a length is expected, by
+looking for a parenthesis in the string. Three answers were wrong, and
+`columnizer` stopped calling it over the first of them and left a comment
+saying so; the function itself was never fixed.
+
+```scss
+isGutter(#{$n}px)      // 3.x: false — a length a browser keeps
+isGutter("var(--gap)") // 3.x: true  — CSS a browser drops
+isGutter(20)           // 3.x: true  — gap: 20 is dropped
+isGutter(10deg)        // 3.x: true  — dropped as well
+```
+
+An interpolated length arrives as an unquoted string with no parenthesis in it,
+and the check only let a string through when it held one. A quoted string was
+accepted because the check ran `string.quote()` before looking, which erases the
+difference it needed. Measured in Chrome 152 and Firefox 156: `gap: "var(--gap)"`,
+`gap: "20px"`, `gap: 20` and `gap: 10deg` are all dropped, while `var(--gap)`,
+`20px` and `gap: 0` are kept.
+
+It is the shared `lengthProblem` check now, the one the mixins already use.
+
+The set stays wide on purpose: a percentage, a negative length and
+`anchor-size()` all pass, because the question is a length slot in general
+rather than `gap` in particular. `anchor-size` is named explicitly, because the
+shared check refuses the sizing functions by default and the sweep for this
+change caught it turning from true to false.
+
+Compiled across 38 values: 33 identical and five changed, which are the four
+wrong answers above and the interpolated length in both its spellings.
 
 
 ---

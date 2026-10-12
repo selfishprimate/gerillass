@@ -1845,7 +1845,19 @@ exports[`Manifest examples isColor: .a { color: isColor(red); } 1`] = `
 }"
 `;
 
+exports[`Manifest examples isGutter: .a { --x: #{isGutter("20px")}; } 1`] = `
+".a {
+  --x: false;
+}"
+`;
+
 exports[`Manifest examples isGutter: .a { --x: #{isGutter(20px)}; } 1`] = `
+".a {
+  --x: true;
+}"
+`;
+
+exports[`Manifest examples isGutter: .a { --x: #{isGutter(calc(1rem + 2px))}; } 1`] = `
 ".a {
   --x: true;
 }"

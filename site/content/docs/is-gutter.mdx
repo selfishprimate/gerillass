@@ -1,7 +1,7 @@
 ---
 title: "Is Gutter"
 page_title: "Is Gutter Sass Function"
-page_description: "True for anything that can sit where a CSS length is expected: a number, a calculation, or a CSS function such as var()."
+page_description: "The isGutter Sass function answers true for a value a browser keeps where a length is expected: a number with a unit, a unitless zero, a percentage, a calculation, or a CSS function such as var()."
 page_keywords: "Gerillass isGutter, Sass isGutter, Sass Functions, SCSS Functions, Sass Utility Functions, Gerillass Utilities"
 ---
 
@@ -9,14 +9,16 @@ page_keywords: "Gerillass isGutter, Sass isGutter, Sass Functions, SCSS Function
 
 <Member name="isGutter">
 
-True for anything that can sit where a CSS length is expected: a number, a calculation, or a CSS function such as var().
+True for a value a browser keeps where a length is expected: a number with a unit, a unitless zero, a percentage, a calculation such as `calc()` or `clamp()`, or a CSS function such as `var()`, `env()` or `attr()`.
+
+It answers rather than raises, which is what makes it a guard you can branch on. [isColor](/docs/is-color), [isNumber](/docs/is-number) and [isTime](/docs/is-time) are the other half of that idea: they return the value and raise instead.
 
 </Member>
 
 ## Arguments
 
 <Arguments of="isGutter">
-  <Argument name="$value" type="value">Accepts any value.</Argument>
+  <Argument name="$value" type="value">Any value. The answer is a boolean, so nothing is refused and nothing raises.</Argument>
 </Arguments>
 
 ## Examples
@@ -35,6 +37,37 @@ True for anything that can sit where a CSS length is expected: a number, a calcu
 }
 ```
 </Example>
+
+<Example caption="What it answers, and why. Each row was measured against what the browser keeps in a length slot, in Chrome 152 and Firefox 156.">
+```scss
+.a {
+  --length:        #{isGutter(20px)};              // true
+  --zero:          #{isGutter(0)};                 // true
+  --percentage:    #{isGutter(50%)};               // true
+  --calculation:   #{isGutter(calc(1rem + 2px))};  // true
+  --custom:        #{isGutter(var(--gap))};        // true
+  --interpolated:  #{isGutter(#{20}px)};           // true
+  --quoted:        #{isGutter("20px")};            // false, the browser drops it
+  --unitless:      #{isGutter(20)};                // false, gap: 20 is dropped
+  --wrong-unit:    #{isGutter(10deg)};             // false
+  --keyword:       #{isGutter(auto)};              // false
+}
+```
+</Example>
+
+<Hint kind="warning">
+
+**Three of those answers changed in 4.0.0.** A length built by interpolation, `#{$n}px`, used to answer false, because it arrives as an unquoted string with no parenthesis in it and the old check only let a string through when it held one. A quoted `"var(--gap)"` used to answer true, because the check quoted the value before looking for that parenthesis and erased the difference it needed. And a unitless number or a wrong unit used to answer true.
+
+[Columnizer](/docs/columnizer) stopped calling this over the first of them and left a comment saying so, which is how the rest were found.
+
+</Hint>
+
+<Hint kind="info">
+
+**The set is wide on purpose.** A percentage, a negative length and `anchor-size()` all pass, because the question is whether a value works in a length slot rather than in `gap`, which takes none of the three. Measured in Chrome 152, `width` and `margin-left` keep `anchor-size()` where `gap` drops it. A guard that needs the narrower set should say so itself.
+
+</Hint>
 
 ## Related Links
 

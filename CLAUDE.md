@@ -1075,7 +1075,9 @@ Two pieces of work are open:
   into line with for 4.0.0, which left it with Sass's index message for an empty
   list, an empty pair of quotes for `null` and the library's only error in that
   shape, and returning the value it was given rather than rebuilding it as a
-  comma list,
+  comma list, and `isGutter` answering from the shared `lengthProblem` rather
+  than by looking for a parenthesis, which called an interpolated length no
+  length and a quoted `"var(--gap)"` one,
   all on
   `docs-examples-review`;
   and the demos and prose

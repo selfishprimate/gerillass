@@ -570,6 +570,11 @@ a dropped declaration rather than an error.
 - It returns the value it was given since 4.0.0. It used to rebuild it as a comma list, so `isColor(red blue)` answered `red, blue`. A single colour emits the same CSS either way.
 - `var()` and `currentColor` are refused on purpose. `tint` and `shade` pass the colour straight to `color.mix`, which needs a real colour, so widening this would move their failure to a Sass internal message. `scss/internal/_color-problem.scss` is the looser check the mixins use.
 
+**`isGutter`**
+
+- Four faults until 4.0.0, found because `columnizer` stopped calling this over the first and left a comment saying so; the function itself was never fixed. A length built by interpolation was false, since `#{$n}px` arrives as an unquoted string with no parenthesis and the old check only let a string through when it held one. A quoted string was true, because the check quoted the value before looking for the parenthesis, which erased the difference it needed. And a unitless number and a wrong unit were true. Measured in Chrome 152 and Firefox 156: `gap: "var(--gap)"`, `gap: "20px"`, `gap: 20` and `gap: 10deg` are all dropped, while `var(--gap)`, `20px` and `gap: 0` are kept.
+- The set is wide on purpose: a percentage, a negative length and `anchor-size()` all pass, because this answers for a length slot in general rather than for `gap` in particular, which takes none of the three. Measured in Chrome 152, `width` and `margin-left` keep `anchor-size()` where `gap` drops it.
+
 **`isNumber`**
 
 - Until 4.0.0 a value that was not a number only warned, and the function then ended with nothing to return, so the build stopped with Sass's own "Function finished without @return" instead of a message naming the argument. It now raises, which is what `isColor` and `isTime` do.
@@ -676,7 +681,7 @@ and camelCase is what tells them apart from the kebab-case mixins above.
 | `fontSource($font-family, $file-path, $file-formats)` | Builds one src entry for an @font-face rule, with the right format() beside it. |
 | `gradientValue($colors, $type: linear, $direction: null, $shape: null, $position: null, $from: null, $in: null, $repeating: false)` | The gradient mixin's gradient as a value, for layering it with an image in one background-image, or using it as a mask-image or border-image. It takes the same arguments and refuses the same input, but cannot write the fallback the mixin writes before a gradient with $in. |
 | `isColor($value)` | Returns the value when every part of it is a colour, and raises when one is not. |
-| `isGutter($value)` | True for anything that can sit where a CSS length is expected: a number, a calculation, or a CSS function such as var(). |
+| `isGutter($value)` | True for a value a browser keeps where a length is expected: a number with a unit, a unitless zero, a percentage, a calculation, or a CSS function such as var(). |
 | `isNumber($value)` | Returns the value when it is a number, and raises when it is not. |
 | `isTime($value)` | Returns the value if every part of it is a time in s or ms, and errors otherwise. |
 | `mapDeepGet($map, $keys...)` | Reads a value out of a nested map by following a chain of keys. |
