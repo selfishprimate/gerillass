@@ -84,7 +84,7 @@ Arguments are validated and refused with a message naming what is accepted, so a
 - [gradientValue($colors, $type: linear, $direction: null, $shape: null, $position: null, $from: null, $in: null, $repeating: false)](https://docs.gerillass.com/docs/gradient-value/): The gradient mixin's gradient as a value, for layering it with an image in one background-image, or using it as a mask-image or border-image.
 - [isColor($value)](https://docs.gerillass.com/docs/is-color/): Returns the value when every part of it is a colour, and raises when one is not.
 - [isGutter($value)](https://docs.gerillass.com/docs/is-gutter/): True for a value a browser keeps where a length is expected: a number with a unit, a unitless zero, a percentage, a calculation, or a CSS function such as var().
-- [isNumber($value)](https://docs.gerillass.com/docs/is-number/): Returns the value when it is a number, and raises when it is not.
+- [isNumber($value)](https://docs.gerillass.com/docs/is-number/): Returns the value when every part of it is a number, and raises when one is not.
 - [isTime($value)](https://docs.gerillass.com/docs/is-time/): Returns the value if every part of it is a time in s or ms, and errors otherwise.
 - [mapDeepGet($map, $keys...)](https://docs.gerillass.com/docs/map-deep-get/): Reads a value out of a nested map by following a chain of keys.
 - [pixelify($value)](https://docs.gerillass.com/docs/pixelify/): Returns the value in pixels: a unitless number takes a px, and a length in another unit is converted.

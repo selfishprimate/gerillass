@@ -9,33 +9,46 @@ page_keywords: "Gerillass isNumber, Sass isNumber, Sass Functions, SCSS Function
 
 <Member name="isNumber">
 
-Returns the value when it is a number, and stops the build with a message when it is not.
+Returns the value when every part of it is a number, and stops the build with a message when one is not. [isColor](/docs/is-color) and [isTime](/docs/is-time) are the same guard for their own types.
 
 </Member>
 
 ## Arguments
 
 <Arguments of="isNumber">
-  <Argument name="$value" type="value">Accepts any value.</Argument>
+  <Argument name="$value" type="number | list">A number, with or without a unit, or a list of them. The value comes back as it was given, with the separator it was given.</Argument>
 </Arguments>
 
 ## Examples
 
-<Example caption="Validating a numeric argument in a mixin of your own.">
+<Example caption="Checking a numeric argument in a mixin of your own. The call stands where the value does, so the guard costs no extra line.">
 ```scss
 @mixin z($layer) {
   position: relative;
   z-index: isNumber($layer);
 }
+
 .modal {
   @include z(100);
 }
 ```
 </Example>
 
+<Example caption="A list passes when every item in it is a number, so a shorthand can go through the same guard.">
+```scss
+@mixin inset($space) {
+  padding: isNumber($space);
+}
+
+.card {
+  @include inset(12px 20px);
+}
+```
+</Example>
+
 ## What it refuses
 
-Anything that is not a Sass number, `var()` and `calc()` included, since neither is a number Sass can read.
+Anything that is not a Sass number, `var()` and `calc(1rem + 2px)` included, and an interpolated `#{5}`, which arrives as a string. That is the contract rather than an oversight: a number that comes back from here can be multiplied. [isGutter](/docs/is-gutter) is the guard for the other question, whether a browser keeps the value where a length is expected, and it takes all three of those.
 
 ```scss
 .modal {
@@ -48,7 +61,9 @@ Error: `"100"` is not a number. Pass a number, with or without a unit, such as `
 
 <Hint kind="warning">
 
-**Changed in Gerillass 4.0.0.** A value that was not a number used to print a warning and then fall out of the function with nothing to return, so the build stopped with Sass's own "Function finished without @return" rather than a message naming the argument. It now raises, which is what [isColor](/docs/is-color) and [isTime](/docs/is-time) do.
+**Changed in Gerillass 4.0.0, twice.** A value that was not a number used to print a warning and then fall out of the function with nothing to return, so the build stopped with Sass's own "Function finished without @return" rather than a message naming the argument. It raises now, which is what [isColor](/docs/is-color) and [isTime](/docs/is-time) do.
+
+It was also the one of the three that refused a list: `isColor(red blue)` answers both colours and `isTime(0.2s 0.4s)` both times, while `isNumber(10px 20px)` raised, although that is a shorthand anybody writes. All three take a list now, and name the item at fault rather than the whole list.
 
 </Hint>
 

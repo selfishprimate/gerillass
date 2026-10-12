@@ -1077,7 +1077,8 @@ Two pieces of work are open:
   shape, and returning the value it was given rather than rebuilding it as a
   comma list, and `isGutter` answering from the shared `lengthProblem` rather
   than by looking for a parenthesis, which called an interpolated length no
-  length and a quoted `"var(--gap)"` one,
+  length and a quoted `"var(--gap)"` one, and `isNumber` taking a list, the
+  last of the three type guards that refused one,
   all on
   `docs-examples-review`;
   and the demos and prose

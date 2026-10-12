@@ -1869,6 +1869,12 @@ exports[`Manifest examples isGutter: .a { --x: #{isGutter(var(--gap))}; } 1`] = 
 }"
 `;
 
+exports[`Manifest examples isNumber: .a { margin: isNumber(10px 20px); } 1`] = `
+".a {
+  margin: 10px 20px;
+}"
+`;
+
 exports[`Manifest examples isNumber: .a { width: isNumber(1.5rem); } 1`] = `
 ".a {
   width: 1.5rem;

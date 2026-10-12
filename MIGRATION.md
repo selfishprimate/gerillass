@@ -144,6 +144,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | a gradient direction keyword is read in any case | fixes a false refusal; not breaking |
 | `isColor` returns the value it was given, and names what it refuses | breaking only for a space-separated list |
 | `isGutter` answers by what a browser keeps, not by a parenthesis | breaking, silent, for a guard built on it |
+| `isNumber` takes a list, as `isColor` and `isTime` do | not breaking |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -3177,6 +3178,29 @@ change caught it turning from true to false.
 
 Compiled across 38 values: 33 identical and five changed, which are the four
 wrong answers above and the interpolated length in both its spellings.
+
+
+## Not breaking: `isNumber` takes a list
+
+It was the one of the three type guards that refused one. `isColor(red blue)`
+answers both colours and `isTime(0.2s 0.4s)` both times, the second of those
+fixed earlier in 4.0.0 after a list of perfectly good times raised, while:
+
+```scss
+padding: isNumber(10px 20px);   // 3.x: Error: `10px 20px` is not a number
+```
+
+`margin: 10px 20px` is a shorthand anybody writes. All three take a list now,
+all three refuse an empty one with a message of their own rather than Sass's,
+and all three name the item at fault rather than the whole list.
+
+What stays refused is the contract rather than an oversight: a `var()`, a
+`calc()` Sass cannot reduce, and an interpolated `#{5}`, which arrives as a
+string. A number that comes back from here can be multiplied, and none of those
+can. `isGutter` is the guard for the other question.
+
+Compiled across 28 values: 20 identical, five lists that now work, three where
+the message names the item instead of the list, and none newly refused.
 
 
 ---

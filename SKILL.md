@@ -578,7 +578,8 @@ a dropped declaration rather than an error.
 **`isNumber`**
 
 - Until 4.0.0 a value that was not a number only warned, and the function then ended with nothing to return, so the build stopped with Sass's own "Function finished without @return" instead of a message naming the argument. It now raises, which is what `isColor` and `isTime` do.
-- A `var()` or a `calc()` is not a Sass number and is refused. Pass those straight to the property rather than through a type guard.
+- It was also the one of the three that refused a list: `isColor(red blue)` answers both colours and `isTime(0.2s 0.4s)` both times, while `isNumber(10px 20px)` raised, although `margin: 10px 20px` is a shorthand anybody writes. All three take a list since 4.0.0, and all three refuse an empty one with a message of their own.
+- A `var()`, a `calc()` Sass cannot reduce, and an interpolated `#{5}`, which arrives as a string, are all refused. That is the contract rather than an oversight, and it is what separates this from `isGutter`: a number that comes back from here can be multiplied, and one of those cannot.
 
 **`isTime`**
 
@@ -682,7 +683,7 @@ and camelCase is what tells them apart from the kebab-case mixins above.
 | `gradientValue($colors, $type: linear, $direction: null, $shape: null, $position: null, $from: null, $in: null, $repeating: false)` | The gradient mixin's gradient as a value, for layering it with an image in one background-image, or using it as a mask-image or border-image. It takes the same arguments and refuses the same input, but cannot write the fallback the mixin writes before a gradient with $in. |
 | `isColor($value)` | Returns the value when every part of it is a colour, and raises when one is not. |
 | `isGutter($value)` | True for a value a browser keeps where a length is expected: a number with a unit, a unitless zero, a percentage, a calculation, or a CSS function such as var(). |
-| `isNumber($value)` | Returns the value when it is a number, and raises when it is not. |
+| `isNumber($value)` | Returns the value when every part of it is a number, and raises when one is not. |
 | `isTime($value)` | Returns the value if every part of it is a time in s or ms, and errors otherwise. |
 | `mapDeepGet($map, $keys...)` | Reads a value out of a nested map by following a chain of keys. |
 | `pixelify($value)` | Returns the value in pixels: a unitless number takes a px, and a length in another unit is converted. |

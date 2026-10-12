@@ -3312,26 +3312,32 @@
           "name": "$value",
           "required": true,
           "accepts": [
-            "any value"
+            "a number, with or without a unit",
+            "a list of numbers, which comes back with the separator it was given",
+            "not a value that is only a number in CSS: var(), calc(1rem + 2px) and an interpolated #{5} are refused"
           ]
         }
       ],
       "file": "scss/utilities/_is-number.scss",
       "signature": "isNumber($value)",
-      "summary": "Returns the value when it is a number, and raises when it is not.",
+      "summary": "Returns the value when every part of it is a number, and raises when one is not.",
       "caveats": [
         "Until 4.0.0 a value that was not a number only warned, and the function then ended with nothing to return, so the build stopped with Sass's own \"Function finished without @return\" instead of a message naming the argument. It now raises, which is what `isColor` and `isTime` do.",
-        "A `var()` or a `calc()` is not a Sass number and is refused. Pass those straight to the property rather than through a type guard."
+        "It was also the one of the three that refused a list: `isColor(red blue)` answers both colours and `isTime(0.2s 0.4s)` both times, while `isNumber(10px 20px)` raised, although `margin: 10px 20px` is a shorthand anybody writes. All three take a list since 4.0.0, and all three refuse an empty one with a message of their own.",
+        "A `var()`, a `calc()` Sass cannot reduce, and an interpolated `#{5}`, which arrives as a string, are all refused. That is the contract rather than an oversight, and it is what separates this from `isGutter`: a number that comes back from here can be multiplied, and one of those cannot."
       ],
       "examples": [
         ".a { z-index: isNumber(5); }",
-        ".a { width: isNumber(1.5rem); }"
+        ".a { width: isNumber(1.5rem); }",
+        ".a { margin: isNumber(10px 20px); }"
       ],
       "rejects": [
         ".a { z-index: isNumber(\"5\"); }",
         ".a { z-index: isNumber(red); }",
         ".a { z-index: isNumber(null); }",
-        ".a { z-index: isNumber(var(--z)); }"
+        ".a { z-index: isNumber(var(--z)); }",
+        ".a { z-index: isNumber(()); }",
+        ".a { margin: isNumber(1px null); }"
       ]
     },
     {

@@ -1,17 +1,36 @@
 @charset "UTF-8";
 
+@use "sass:list";
 @use "sass:meta";
 
-// Returns the value when it is a number, and raises when it is not, which is
-// what `isColor` and `isTime` do with their own types.
+// Returns the value when every part of it is a number, and raises when one is
+// not, which is what `isColor` and `isTime` do with their own types.
 //
-// Until 4.0.0 the else branch only warned, and then fell out of the function
-// with nothing to return, so `isNumber("a")` ended the build with Sass's own
-// "Function finished without @return" rather than with a message naming the
-// argument.
+// Two rounds of bringing the three into line. Until 4.0.0 the else branch only
+// warned, and then fell out of the function with nothing to return, so
+// `isNumber("a")` ended the build with Sass's own "Function finished without
+// @return" rather than with a message naming the argument.
+//
+// And this was the one of the three that refused a list. `isColor(red blue)`
+// answers both colours and `isTime(0.2s 0.4s)` both times -- that second one
+// was fixed for 4.0.0 after a list of perfectly good times raised -- while
+// `isNumber(10px 20px)` raised, although `margin: 10px 20px` is a shorthand
+// anybody writes. All three take a list now, and all three refuse an empty one
+// with a message of their own rather than Sass's.
+//
+// What it does not take is a value that is not a Sass number: `var()`,
+// `calc(1rem + 2px)` and an interpolated `#{5}`, which arrives as a string.
+// That is the contract rather than an oversight, and it is what separates this
+// from `isGutter`, which answers for what a browser keeps in a length slot. A
+// number that comes back from here can be multiplied; one of those cannot.
 @function isNumber($value) {
-  @if meta.type-of($value) != "number" {
-    @error "`#{meta.inspect($value)}` is not a number. Pass a number, with or without a unit, such as `100` or `1.5rem`.";
+  @if list.length($value) == 0 {
+    @error "`()` is not a number. Pass a number, with or without a unit, such as `100` or `1.5rem`.";
+  }
+  @each $item in $value {
+    @if meta.type-of($item) != "number" {
+      @error "`#{meta.inspect($item)}` is not a number. Pass a number, with or without a unit, such as `100` or `1.5rem`.";
+    }
   }
   @return $value;
 }
