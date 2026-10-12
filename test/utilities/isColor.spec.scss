@@ -1,0 +1,30 @@
+@charset "UTF-8";
+
+// `isNumber` and `isTime` were brought into line for 4.0.0 and this was left
+// behind, so it kept the three faults they had: an empty list reaching Sass's
+// own index message, a message that interpolated the item rather than
+// inspecting it, and the only error in the library written in that shape. It
+// also rebuilt the value as a comma list rather than returning what it was
+// given.
+//
+// `var()` and `currentColor` stay refused, which this pins: `tint` and `shade`
+// pass the colour straight to `color.mix`, so widening it would move their
+// failure to a Sass internal message.
+@use 'true' as *;
+@use 'sass:meta';
+@use '../../scss/utilities/is-color' as *;
+
+@include describe('isColor()') {
+  @include it('Returns the value it was given, not a rebuilt list.') {
+    @include assert-equal(isColor(red), red);
+    @include assert-equal(meta.inspect(isColor(red)), 'red');
+    @include assert-equal(meta.inspect(isColor(red blue)), 'red blue');
+    @include assert-equal(meta.inspect(isColor((red, blue))), 'red, blue');
+  }
+
+  @include it('Takes a colour from any space, and transparent.') {
+    @include assert-equal(isColor(#db504a), #db504a);
+    @include assert-equal(isColor(oklch(0.5 0.1 200)), oklch(0.5 0.1 200));
+    @include assert-equal(isColor(transparent), transparent);
+  }
+}

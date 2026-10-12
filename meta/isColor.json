@@ -1,18 +1,30 @@
 {
   "name": "isColor",
-  "summary": "Returns the value if every item in it is a colour, and errors otherwise.",
+  "summary": "Returns the value when every part of it is a colour, and raises when one is not.",
   "arguments": [
     {
       "name": "$value",
       "accepts": [
-        "a colour, or a list of colours"
+        "a colour, in any colour space, or transparent",
+        "a list of colours, which comes back with the separator it was given",
+        "var() and currentColor are refused: tint and shade pass the result to color.mix, which needs a real colour"
       ]
     }
   ],
   "examples": [
-    ".a { color: isColor(red); }"
+    ".a { color: isColor(red); }",
+    ".a { color: isColor(oklch(0.5 0.1 200)); }",
+    ".a { border-color: isColor(#db504a); }"
   ],
   "rejects": [
-    ".a { color: isColor(nonsense); }"
+    ".a { color: isColor(nonsense); }",
+    ".a { color: isColor(()); }",
+    ".a { color: isColor(var(--c)); }",
+    ".a { color: isColor(currentColor); }"
+  ],
+  "caveats": [
+    "`isNumber` and `isTime` were brought into line for 4.0.0 and this was left behind. It kept their three faults: `isColor(())` reached Sass's own `Invalid index 1 for a list with 0 elements`, because `@for $i from 1 through 0` counts down rather than running no times; the message interpolated the item rather than inspecting it, so `isColor(null)` said `'' is not a color value`; and it was the only error in the library written in that shape, single-quoted and naming neither the function nor the argument.",
+    "It returns the value it was given since 4.0.0. It used to rebuild it as a comma list, so `isColor(red blue)` answered `red, blue`. A single colour emits the same CSS either way.",
+    "`var()` and `currentColor` are refused on purpose. `tint` and `shade` pass the colour straight to `color.mix`, which needs a real colour, so widening this would move their failure to a Sass internal message. `scss/internal/_color-problem.scss` is the looser check the mixins use."
   ]
 }

@@ -1,7 +1,7 @@
 ---
 title: "Is Color"
 page_title: "Is Color Sass Function"
-page_description: "Returns the value if every item in it is a colour, and errors otherwise."
+page_description: "The isColor Sass function returns the value when every part of it is a colour, and raises when one is not, so a mixin of your own can check a colour argument in one line."
 page_keywords: "Gerillass isColor, Sass isColor, Sass Functions, SCSS Functions, Sass Utility Functions, Gerillass Utilities"
 ---
 
@@ -9,27 +9,42 @@ page_keywords: "Gerillass isColor, Sass isColor, Sass Functions, SCSS Functions,
 
 <Member name="isColor">
 
-Returns the value if every item in it is a colour, and errors otherwise.
+Returns the value when every part of it is a colour, and raises when one is not. It is the colour half of a family: [isNumber](/docs/is-number) and [isTime](/docs/is-time) do the same for their own types.
 
 </Member>
 
 ## Arguments
 
 <Arguments of="isColor">
-  <Argument name="$value" type="color | list">Accepts a colour, or a list of colours.</Argument>
+  <Argument name="$value" type="color | list">A colour, in any colour space, or a list of them. The value comes back as it was given, with the separator it was given.</Argument>
 </Arguments>
 
 ## Examples
 
-<Example caption="Validating a colour argument in a mixin of your own.">
+<Example caption="Checking a colour argument in a mixin of your own. The call stands where the value does, so the guard costs no extra line, and a wrong value stops the build with a message naming it.">
 ```scss
 @mixin badge($color) {
   background-color: isColor($color);
-  color: white;
+  color: #fff;
 }
+
 .badge {
   @include badge(#db504a);
 }
+```
+```html
+<style>
+  .badge { display: inline-block; padding: 6px 14px; border-radius: 999px; font: 600 13px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; }
+</style>
+<span class="badge">Checked</span>
+```
+</Example>
+
+<Example caption="Any colour space counts, and so does `transparent`.">
+```scss
+.a { color: isColor(oklch(0.52 0.12 160)); }
+.b { color: isColor(rgb(219 80 74 / 0.9)); }
+.c { background-color: isColor(transparent); }
 ```
 </Example>
 
@@ -44,7 +59,18 @@ $brand: crimson;
 }
 ```
 ```text
-Error: 'brand' is not a color value, please replace it with a valid one.
+Error: `brand` is not a valid colour. Pass a colour such as `red` or `#bada55`; `var()` and `currentColor` are not colours this stylesheet can read.
+```
+
+`var()` and `currentColor` are refused on purpose, not by oversight. [Tint](/docs/tint) and [Shade](/docs/shade) pass the colour straight to Sass's own `color.mix`, which needs a real colour to mix, so widening this would only move their failure into a Sass internal message. A mixin that writes the colour out rather than mixing it uses the library's looser internal check instead.
+
+```scss
+.badge {
+  background-color: isColor(var(--brand));
+}
+```
+```text
+Error: `var(--brand)` is not a valid colour. Pass a colour such as `red` or `#bada55`; `var()` and `currentColor` are not colours this stylesheet can read.
 ```
 
 ## Related Links

@@ -1071,7 +1071,11 @@ Two pieces of work are open:
   format in any case, and `otf` joining `$map-for-font-formats`, which it had
   never been in, and the shared gradient builder reading a direction keyword in
   any case, which `$type` already did, so `LINEAR` was taken while `RIGHT` was
-  refused,
+  refused, and `isColor` joining the family `isNumber` and `isTime` were brought
+  into line with for 4.0.0, which left it with Sass's index message for an empty
+  list, an empty pair of quotes for `null` and the library's only error in that
+  shape, and returning the value it was given rather than rebuilding it as a
+  comma list,
   all on
   `docs-examples-review`;
   and the demos and prose

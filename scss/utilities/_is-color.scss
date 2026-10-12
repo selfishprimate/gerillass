@@ -3,14 +3,37 @@
 @use "sass:list";
 @use "sass:meta";
 
+// Returns the value when every part of it is a colour, and raises when one is
+// not, which is what `isNumber` and `isTime` do with their own types.
+//
+// Those two were brought into line for 4.0.0 and this one was left behind, so
+// it had the three faults they had:
+//
+// - the loop was `@for $i from 1 through list.length($value)`, which counts
+//   down rather than running no times for an empty list, so `isColor(())` ended
+//   the build with Sass's own `Invalid index 1 for a list with 0 elements`;
+// - the message interpolated the item rather than inspecting it, so
+//   `isColor(null)` said `'' is not a color value`, naming nothing at all;
+// - it was the only message in the library in that shape, single-quoted and
+//   naming neither the function nor the argument.
+//
+// It also rebuilt the value as a comma list, so `isColor(red blue)` answered
+// `red, blue` rather than the `red blue` it was given. It returns the value
+// itself now, as its two siblings do.
+//
+// What it does **not** do is accept `var()` or `currentColor`, and that is
+// deliberate: `tint` and `shade` pass the colour straight to `color.mix`,
+// which takes a real colour, so widening this would move their failure to a
+// Sass internal message. `scss/internal/_color-problem.scss` is the looser
+// check the mixins use, and says so at its head.
 @function isColor($value) {
-  $list: ();
-  @for $i from 1 through list.length($value) {
-    @if meta.type-of(list.nth($value, $i)) == "color" {
-      $list: list.append($list, list.nth($value, $i), comma);
-    } @else {
-      @error "'#{list.nth($value, $i)}' is not a color value, please replace it with a valid one.";
+  @if list.length($value) == 0 {
+    @error "`()` is not a valid colour. Pass a colour such as `red` or `#bada55`, or a list of them.";
+  }
+  @each $item in $value {
+    @if meta.type-of($item) != "color" {
+      @error "`#{meta.inspect($item)}` is not a valid colour. Pass a colour such as `red` or `#bada55`; `var()` and `currentColor` are not colours this stylesheet can read.";
     }
   }
-  @return $list;
+  @return $value;
 }

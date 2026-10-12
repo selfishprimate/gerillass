@@ -142,6 +142,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `fontSource` refuses a format it does not know | breaking, loud; it used to return an empty list |
 | `otf` joins `$map-for-font-formats`, and a format is read in any case | not breaking |
 | a gradient direction keyword is read in any case | fixes a false refusal; not breaking |
+| `isColor` returns the value it was given, and names what it refuses | breaking only for a space-separated list |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -3113,6 +3114,35 @@ nothing to fix.
 
 Compiled across 100 calls over those four members: 76 identical, 24 where one
 of six case spellings now works, none newly refused and no output changed.
+
+
+## Change: `isColor` joins its own family
+
+`isNumber` and `isTime` were brought into line for 4.0.0 and this one was left
+behind, so it still had the three faults they had.
+
+```scss
+isColor(())      // 3.x: Error: $n: Invalid index 1 for a list with 0 elements.
+isColor(null)    // 3.x: Error: '' is not a color value, please replace it with a valid one.
+```
+
+The first is the `@for $i from 1 through 0` trap, which counts down rather than
+running no times. The second interpolated the item instead of inspecting it. And
+the message was the only one in the library written in that shape, single-quoted
+and naming neither the function nor the argument.
+
+It also rebuilt the value as a comma list, so `isColor(red blue)` answered
+`red, blue`. It returns what it was given now, as its two siblings do. A single
+colour emits the same CSS either way, and that is every documented use; a
+space-separated list of colours is the only call whose output changes.
+
+`var()` and `currentColor` are still refused, deliberately: `tint` and `shade`
+pass the colour straight to `color.mix`, which needs a real colour, so widening
+this would only move their failure into a Sass internal message.
+
+Compiled across 100 calls through `isColor`, `tint` and `shade`: 33 identical,
+58 where the message improved, nine value changes of which eight are visible
+only through `meta.inspect`, and none newly refused or newly accepted.
 
 
 ---

@@ -1827,6 +1827,18 @@ exports[`Manifest examples hide: @media (max-width: 599.98px) { .nav-label { @in
 }"
 `;
 
+exports[`Manifest examples isColor: .a { border-color: isColor(#db504a); } 1`] = `
+".a {
+  border-color: #db504a;
+}"
+`;
+
+exports[`Manifest examples isColor: .a { color: isColor(oklch(0.5 0.1 200)); } 1`] = `
+".a {
+  color: oklch(50% 0.1 200deg);
+}"
+`;
+
 exports[`Manifest examples isColor: .a { color: isColor(red); } 1`] = `
 ".a {
   color: red;
