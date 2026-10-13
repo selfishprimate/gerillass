@@ -609,10 +609,18 @@ a dropped declaration rather than an error.
 - Any absolute length converts, not only pixels: Sass reduces `pt`, `pc`, `in`, `cm`, `mm` and `q` to the same scale, so `remify(18pt)` is the same as `remify(24px)`. All six used to be refused although each has one right answer. The relative units stay refused, because they have none.
 - `pixelify` converts back against the same 16px default, so `pixelify(remify(24px))` is `24px` again. That round trip holds for the default root only; a `$root` of your own has no matching argument there.
 
+**`shade`**
+
+- A unitless $percentage is read as that many per cent, which is what color.mix's own deprecation warning asks for. It is not a fraction: shade($c, 0.5) is half a per cent, not half.
+
 **`shorthandProperty`**
 
 - Until 4.0.0 only a fifth value was checked. An empty list ended the build with Sass's own "Function finished without @return", and a map was read as its keys and values in turn, so `(a: 1, b: 2)` came out as `a 1 b 2 a 1 b 2`. Both raise now.
 - A `null` is passed through on purpose, because a caller can read the four values back and skip the ones that are unset, which is what `position` does: `position(absolute, null)` writes the position and no offsets. In a declaration of your own a `null` simply disappears from the list, so `margin: shorthandProperty(1px null)` is `margin: 1px 1px`.
+
+**`tint`**
+
+- A unitless $percentage is read as that many per cent, which is what color.mix's own deprecation warning asks for. It is not a fraction: tint($c, 0.5) is half a per cent, not half.
 
 **`validateScissors`**
 

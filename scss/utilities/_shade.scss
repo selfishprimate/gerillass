@@ -2,18 +2,58 @@
 
 @use "sass:color";
 @use "sass:list";
+@use "sass:math";
 @use "sass:meta";
 @use "../utilities/is-color" as *;
 
-// Mixes a colour towards black. See `tint` for why the list is checked here.
+// Mixes a colour towards black.
+//
+// Three things it used to get wrong, each of them reported by Sass rather than
+// by this function:
+//
+// - **a colour from a modern space stopped the build.** `color.mix` refuses a
+//   non-legacy colour without a space to mix in, so `shade(oklch(0.5 0.1 200),
+//   20%)` ended with `To use color.mix() with non-legacy color oklch...`, while
+//   `isColor` had already said the colour was fine. Such a colour is now mixed
+//   in its own space, and comes back in it: `oklch` stays `oklch` rather than
+//   turning into an out-of-gamut `rgb()`. The arguments are reversed for that
+//   branch, since `color.mix` takes the result's space from the first of them,
+//   and the weight is inverted to match -- `color.mix($c, black, 80%)` is
+//   `color.mix(black, $c, 20%)`. A legacy colour keeps the original order,
+//   so its result is unchanged to the last decimal place;
+// - **every fault in `$percentage` was `color.mix`'s to report**, under the
+//   name `$weight`, which is not an argument of this function: `$weight:
+//   Expected 120% to be within 0% and 100%`, `$weight: "20%" is not a number`,
+//   and Sass's own `Missing argument $percentage`. A length such as `20px` was
+//   not reported at all, and was read as that many per cent;
+// - **a unitless percentage printed a deprecation warning** from inside
+//   `color.mix`, which the library is otherwise free of. The percentage is
+//   given its unit here now, which is what that warning asks for, so
+//   `shade(red, 50)` is quiet and still means 50%.
 @function shade($color, $percentage) {
   @if list.length($color) > 1 {
     @error "`#{meta.inspect($color)}` is not a single colour for `shade`. Pass one colour, such as `red` or `#bada55`.";
   }
-  // `isColor` raises this library's message for anything that is not a colour.
-  // The mix takes the value itself, since `isColor` answers a list.
-  @if not isColor($color) {
-    @error "`#{meta.inspect($color)}` is not a valid $color for `shade`. Pass a colour, such as `red` or `#bada55`.";
+  // `isColor` raises this library's message for anything that is not a colour,
+  // and answers the value it was given.
+  $checked: isColor($color);
+
+  @if meta.type-of($percentage) != "number" {
+    @error "`#{meta.inspect($percentage)}` is not a valid $percentage for `shade`. Pass a percentage, such as `20%`.";
   }
-  @return color.mix(black, $color, $percentage);
+  @if not (math.is-unitless($percentage) or math.unit($percentage) == "%") {
+    @error "`#{meta.inspect($percentage)}` is not a valid $percentage for `shade`: `#{math.unit($percentage)}` is not a proportion. Pass a percentage, such as `20%`.";
+  }
+  $amount: $percentage;
+  @if math.is-unitless($amount) {
+    $amount: $amount * 1%;
+  }
+  @if $amount < 0% or $amount > 100% {
+    @error "`#{meta.inspect($percentage)}` is not a valid $percentage for `shade`: it is outside 0% to 100%, and there is no colour past either end of the mix.";
+  }
+
+  @if color.is-legacy($checked) {
+    @return color.mix(black, $checked, $amount);
+  }
+  @return color.mix($checked, black, 100% - $amount, color.space($checked));
 }

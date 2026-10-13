@@ -16,40 +16,93 @@ Mixes a colour towards white by a percentage.
 ## Arguments
 
 <Arguments of="tint">
-  <Argument name="$color" type="color">Accepts a colour.</Argument>
-  <Argument name="$percentage" type="number (percentage)">Accepts a percentage.</Argument>
+  <Argument name="$color" type="color">A single colour, from any colour space. A list is refused, and so are <code>var()</code> and <code>currentColor</code>, which this stylesheet cannot read.</Argument>
+  <Argument name="$percentage" type="number (percentage)">How far towards white to mix, from <code>0%</code> to <code>100%</code>. A unitless number is read as that many per cent, so <code>20</code> and <code>20%</code> are the same call.</Argument>
 </Arguments>
 
 ## Examples
 
-<Example caption="A pale background derived from the same brand colour.">
+<Example caption="A scale off one colour, which is the usual reason to reach for this: five steps from a single value in the palette rather than five hex codes to keep in step with each other.">
 ```scss
-$brand: crimson;
-.notice {
-  border: 1px solid $brand;
-  background-color: tint($brand, 80%);
-}
+$brand: #668f80;
+
+.swatch--1 { background-color: $brand; }
+.swatch--2 { background-color: tint($brand, 20%); }
+.swatch--3 { background-color: tint($brand, 40%); }
+.swatch--4 { background-color: tint($brand, 60%); }
+.swatch--5 { background-color: tint($brand, 80%); }
+```
+```html
+<style>
+  :where(.scale) { display: flex; border-radius: 8px; overflow: hidden; }
+  :where(.scale > div) { flex: 1; height: 88px; }
+</style>
+<div class="scale">
+  <div class="swatch--1"></div>
+  <div class="swatch--2"></div>
+  <div class="swatch--3"></div>
+  <div class="swatch--4"></div>
+  <div class="swatch--5"></div>
+</div>
 ```
 </Example>
 
+<Example caption="A notice whose background and border come from the same colour, so the pale fill cannot drift away from the line around it.">
+```scss
+$brand: #db504a;
+
+.notice {
+  border: 1px solid $brand;
+  background-color: tint($brand, 85%);
+  color: shade($brand, 40%);
+}
+```
+```html
+<style>
+  :where(.notice) { border-radius: 8px; padding: 14px 18px; font: 15px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+</style>
+<p class="notice">The card could not be saved. Check the expiry date and try again.</p>
+```
+</Example>
+
+<Example caption="A colour from a modern space is mixed in that space and comes back in it, rather than being flattened to `rgb()`.">
+```scss
+.a { color: tint(oklch(0.52 0.12 160), 20%); }
+.b { color: tint(lab(50% 20 -30), 20%); }
+```
+</Example>
+
+<Hint kind="warning">
+
+**Changed in Gerillass 4.0.0.** A colour from a modern space used to stop the build with Sass's own `To use color.mix() with non-legacy color…`, although `isColor` had already accepted it. A legacy colour's result is unchanged to the last decimal place.
+
+</Hint>
+
 ## What it refuses
 
-Arguments are checked, so a wrong value stops the build with a message instead of quietly producing the wrong CSS.
+**A length or any other unit in `$percentage`.** Until 4.0.0 `tint(red, 20px)` answered the same colour as `tint(red, 20%)`: the unit was thrown away and the number read as per cent, with only a Sass deprecation warning naming `$weight`, an argument this function does not have. Sass is removing that reading, so the call was on its way to breaking anyway.
 
 ```scss
-$brand: crimson;
-.notice {
-  background-color: tint(brand, 85%);
+.a {
+  color: tint(red, 20px);
 }
 ```
 ```text
-Error: `brand` is not a valid colour. Pass a colour such as `red` or `#bada55`; `var()` and `currentColor` are not colours this stylesheet can read.
+Error: `20px` is not a valid $percentage for `tint`: `px` is not a proportion. Pass a percentage, such as `20%`.
 ```
 
-A list is refused too, and that is newer than it looks. `isColor` answers a
-list, because `isColor(red blue)` is a fair question, but `tint` mixes a
-single colour: until 4.0.0 a list walked past the guard and ended the build
-with Sass's own message, which names neither the function nor the argument.
+**A percentage past either end of the mix**, which used to fail as `$weight: Expected 120% to be within 0% and 100%` and name neither the function nor its own argument.
+
+```scss
+.a {
+  color: tint(red, 120%);
+}
+```
+```text
+Error: `120%` is not a valid $percentage for `tint`: it is outside 0% to 100%, and there is no colour past either end of the mix.
+```
+
+**Anything in `$color` that is not one colour.** `isColor` answers a list, because `isColor(red blue)` is a fair question, but `tint` mixes a single colour.
 
 ```scss
 .a {
@@ -60,8 +113,11 @@ with Sass's own message, which names neither the function nor the argument.
 Error: `red blue` is not a single colour for `tint`. Pass one colour, such as `red` or `#bada55`.
 ```
 
+A name that is not a colour is refused by `isColor` with its own message, and a `$percentage` that is not a number at all, such as `"20%"` in quotes, is refused too.
+
 ## Related Links
 
 - [Shade](/docs/shade)
+- [Is Color](/docs/is-color)
 - [CSS Color Values](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/color_value)
 - [CSS color-mix](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/color_value/color-mix)

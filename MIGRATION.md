@@ -3362,6 +3362,59 @@ Compiled across 65 calls through `remify` and `fluid`, the one place inside the
 library that calls it: nothing newly refused, no returned value changed, and
 `fluid` identical throughout.
 
+---
+
+## Change: `tint` and `shade` take a modern colour, and check the percentage
+
+Both are one function twice over, so both changed in the same way.
+
+**A colour from a modern space used to stop the build.** `color.mix` refuses a
+non-legacy colour without a space to mix in, and `isColor` had already said the
+colour was fine, so the pair disagreed with each other:
+
+```scss
+.a { color: shade(oklch(0.52 0.12 160), 20%); }
+// 3.x: Error: $color2: To use color.mix() with non-legacy color oklch(52% 0.12 160deg),
+//      you must provide a $method.
+```
+
+Such a colour is now mixed in its own space and comes back in it, so `oklch`
+stays `oklch`. The arguments are reversed for that branch, because `color.mix`
+takes the result's space from the first of them: mixed the other way round,
+`oklch(0.5 0.1 200)` answers an out-of-gamut `rgb(-26.09, 83.99, 88.59)`, which
+is a valid Sass colour and a broken one.
+
+**A legacy colour is untouched.** The original argument order is kept for it
+deliberately. Swapping it for every colour was tried first and moved twelve of
+130 swept results in their fourteenth significant digit, which is invisible on
+screen and still a change to the emitted bytes. Measured on Dart Sass 1.91 and
+1.103.1: of 126 calls, zero returned a different value.
+
+**Four calls now raise.** All four are a `$percentage` the function used to
+misread, and every fault in it used to be reported by `color.mix` under the
+name `$weight`, which is not an argument either function has:
+
+| Call | 3.x | 4.0.0 |
+|---|---|---|
+| `shade(red, 20px)` | `#cc0000`, the unit thrown away | refused, naming `px` |
+| `shade(red, 2em)` | `rgb(249.9, 0, 0)`, read as 2% | refused, naming `em` |
+| `shade(red, 120%)` | `$weight: Expected 120% to be within 0% and 100%` | refused, naming `$percentage` |
+| `shade(red, "20%")` | `$weight: "20%" is not a number` | refused, naming `$percentage` |
+
+The first two were already on their way out: Dart Sass prints
+`$weight: Passing a number without unit % (20px) is deprecated` for them in
+both 1.91 and 1.103.1, and is removing that reading. A length was never a
+proportion, and reading `2em` as 2% is not something a caller asked for.
+
+**A unitless percentage is quiet now**, and still means per cent. `shade(red,
+50)` printed that same deprecation warning from inside `color.mix`, which the
+library is otherwise free of; the percentage is given its unit here instead, so
+the call compiles clean and returns exactly what it returned before. It is not
+a fraction: `shade($c, 0.5)` is half a per cent, not half.
+
+Nothing in `scss/` calls either function, so there is no knock-on inside the
+library. They are there for stylesheets, which is the whole of their audience.
+
 
 ---
 

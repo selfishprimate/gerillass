@@ -3549,20 +3549,29 @@
           "name": "$percentage",
           "required": true,
           "accepts": [
-            "a percentage"
+            "a percentage",
+            "a unitless number read as a percentage"
           ]
         }
       ],
       "file": "scss/utilities/_shade.scss",
       "signature": "shade($color, $percentage)",
       "summary": "Mixes a colour towards black by a percentage.",
+      "caveats": [
+        "A unitless $percentage is read as that many per cent, which is what color.mix's own deprecation warning asks for. It is not a fraction: shade($c, 0.5) is half a per cent, not half."
+      ],
       "examples": [
-        ".a { color: shade(red, 20%); }"
+        ".a { color: shade(red, 20%); }",
+        ".a { color: shade(oklch(0.52 0.12 160), 20%); }",
+        ".a { color: shade(red, 20); }"
       ],
       "rejects": [
         ".a { color: shade(notacolor, 20%); }",
         ".a { color: shade(var(--x), 20%); }",
-        ".a { color: shade(red blue, 20%); }"
+        ".a { color: shade(red blue, 20%); }",
+        ".a { color: shade(red, 20px); }",
+        ".a { color: shade(red, 120%); }",
+        ".a { color: shade(red, \"20%\"); }"
       ]
     },
     {
@@ -3611,20 +3620,29 @@
           "name": "$percentage",
           "required": true,
           "accepts": [
-            "a percentage"
+            "a percentage",
+            "a unitless number read as a percentage"
           ]
         }
       ],
       "file": "scss/utilities/_tint.scss",
       "signature": "tint($color, $percentage)",
       "summary": "Mixes a colour towards white by a percentage.",
+      "caveats": [
+        "A unitless $percentage is read as that many per cent, which is what color.mix's own deprecation warning asks for. It is not a fraction: tint($c, 0.5) is half a per cent, not half."
+      ],
       "examples": [
-        ".a { color: tint(red, 20%); }"
+        ".a { color: tint(red, 20%); }",
+        ".a { color: tint(oklch(0.52 0.12 160), 20%); }",
+        ".a { color: tint(red, 20); }"
       ],
       "rejects": [
         ".a { color: tint(notacolor, 20%); }",
         ".a { color: tint(var(--x), 20%); }",
-        ".a { color: tint(red blue, 20%); }"
+        ".a { color: tint(red blue, 20%); }",
+        ".a { color: tint(red, 20px); }",
+        ".a { color: tint(red, 120%); }",
+        ".a { color: tint(red, \"20%\"); }"
       ]
     },
     {

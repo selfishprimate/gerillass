@@ -1,0 +1,71 @@
+@charset "UTF-8";
+
+// `shade` and `tint` are one function twice over, so they are pinned together.
+//
+// Two things here are the point of the spec rather than a restatement of the
+// code. **A legacy colour's result must not move**: the fix for modern colour
+// spaces reverses `color.mix`'s arguments, and doing that for every colour
+// changed twelve of the sweep's 130 results in their fourteenth significant
+// digit. The legacy branch keeps the original order for exactly that reason,
+// and these assertions are what would catch it being tidied away. They compare
+// against the expression the function used to be rather than against a string:
+// Dart Sass 1.91 inspects a mixed colour as `rgb(199.8, 225.4, 119)` and
+// 1.103.1 as `rgb(78.35%, 88.39%, 46.67%)`, so a pinned literal fails on one of
+// the two compilers rather than saying anything about this library.
+//
+// And **a modern colour comes back in its own space**: mixing it the other way
+// round answers an out-of-gamut `rgb(-26.09, ...)`, which is a valid Sass
+// colour and a broken one.
+@use 'true' as *;
+@use 'sass:color';
+@use 'sass:meta';
+@use '../../scss/utilities/shade' as *;
+@use '../../scss/utilities/tint' as *;
+
+$-modern: oklch(0.5 0.1 200);
+
+@include describe('shade()') {
+  @include it('Keeps a legacy colour exactly as the original expression gave it.') {
+    @include assert-equal(shade(red, 20%), color.mix(black, red, 20%));
+    @include assert-equal(shade(#bada55, 20%), color.mix(black, #bada55, 20%));
+    @include assert-equal(shade(transparent, 20%), color.mix(black, transparent, 20%));
+    @include assert-equal(shade(rgba(10, 20, 30, 0.5), 33.333%), color.mix(black, rgba(10, 20, 30, 0.5), 33.333%));
+  }
+
+  @include it('Mixes a modern colour in its own space and returns it there.') {
+    @include assert-equal(color.space(shade($-modern, 20%)), 'oklch');
+    @include assert-equal(shade($-modern, 20%), color.mix($-modern, black, 80%, oklch));
+    @include assert-equal(color.space(shade(lab(50% 20 -30), 20%)), 'lab');
+    @include assert-equal(shade($-modern, 0%), $-modern);
+    @include assert-equal(shade($-modern, 100%), black);
+  }
+
+  @include it('Reads a unitless percentage as per cent, not as a fraction.') {
+    @include assert-equal(shade(red, 50), shade(red, 50%));
+    @include assert-equal(shade(red, 0), red);
+    @include assert-equal(shade(red, 100), black);
+  }
+}
+
+@include describe('tint()') {
+  @include it('Keeps a legacy colour exactly as the original expression gave it.') {
+    @include assert-equal(tint(red, 20%), color.mix(white, red, 20%));
+    @include assert-equal(tint(#bada55, 20%), color.mix(white, #bada55, 20%));
+    @include assert-equal(tint(transparent, 20%), color.mix(white, transparent, 20%));
+    @include assert-equal(tint(rgba(10, 20, 30, 0.5), 33.333%), color.mix(white, rgba(10, 20, 30, 0.5), 33.333%));
+  }
+
+  @include it('Mixes a modern colour in its own space and returns it there.') {
+    @include assert-equal(color.space(tint($-modern, 20%)), 'oklch');
+    @include assert-equal(tint($-modern, 20%), color.mix($-modern, white, 80%, oklch));
+    @include assert-equal(color.space(tint(lab(50% 20 -30), 20%)), 'lab');
+    @include assert-equal(tint($-modern, 0%), $-modern);
+    @include assert-equal(tint($-modern, 100%), white);
+  }
+
+  @include it('Reads a unitless percentage as per cent, not as a fraction.') {
+    @include assert-equal(tint(red, 50), tint(red, 50%));
+    @include assert-equal(tint(red, 0), red);
+    @include assert-equal(tint(red, 100), white);
+  }
+}

@@ -1091,7 +1091,15 @@ Two pieces of work are open:
   rather than asking for "one of the followings", and `remify` taking a
   `$root`, since a page that sets `html { font-size: 62.5% }` made its 16px
   assumption render 15px where 24px was asked for, and converting every
-  absolute unit, which is the pair `convertToEm` was given,
+  absolute unit, which is the pair `convertToEm` was given, and `shade` and
+  `tint` mixing a modern colour in its own space, which `color.mix` refused
+  outright although `isColor` had accepted it, and checking `$percentage`
+  themselves rather than leaving every fault in it to `color.mix` to report
+  under the name `$weight`, so a length is refused instead of having its unit
+  thrown away and a unitless number is given its own, which is what Sass's
+  deprecation warning asks for; a legacy colour keeps the original argument
+  order, since reversing it for every colour moved twelve of 130 swept results
+  in their fourteenth significant digit,
   all on
   `docs-examples-review`;
   and the demos and prose

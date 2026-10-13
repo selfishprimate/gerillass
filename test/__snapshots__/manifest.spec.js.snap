@@ -1646,12 +1646,6 @@ exports[`Manifest examples fontSource: .a { content: "#{fontSource("Inter", "/fo
 }"
 `;
 
-exports[`Manifest examples fontSource: .a { content: "#{fontSource(\\"Inter\\", \\"/fonts/inter\\", otf)}"; } 1`] = `
-".a {
-  content: "url('\\\\\\\\\\"/fonts/inter\\\\\\\\\\".otf') format(\\"opentype\\")";
-}"
-`;
-
 exports[`Manifest examples glass: .bar { @include glass(16px, rgb(15 23 42 / 0.45), 1.4, rgb(148 163 184 1`] = `
 ".bar {
   background: rgba(15, 23, 42, 0.88);
@@ -2597,7 +2591,19 @@ exports[`Manifest examples screen-agent: .a { @include screen-agent(2dppx) { bac
 }"
 `;
 
+exports[`Manifest examples shade: .a { color: shade(oklch(0.52 0.12 160), 20%); } 1`] = `
+".a {
+  color: oklch(41.6% 0.096 160deg);
+}"
+`;
+
 exports[`Manifest examples shade: .a { color: shade(red, 20%); } 1`] = `
+".a {
+  color: #cc0000;
+}"
+`;
+
+exports[`Manifest examples shade: .a { color: shade(red, 20); } 1`] = `
 ".a {
   color: #cc0000;
 }"
@@ -3073,7 +3079,19 @@ exports[`Manifest examples text-stroke: .a { @include text-stroke; } 1`] = `
 }"
 `;
 
+exports[`Manifest examples tint: .a { color: tint(oklch(0.52 0.12 160), 20%); } 1`] = `
+".a {
+  color: oklch(61.6% 0.096 160deg);
+}"
+`;
+
 exports[`Manifest examples tint: .a { color: tint(red, 20%); } 1`] = `
+".a {
+  color: #ff3333;
+}"
+`;
+
+exports[`Manifest examples tint: .a { color: tint(red, 20); } 1`] = `
 ".a {
   color: #ff3333;
 }"
