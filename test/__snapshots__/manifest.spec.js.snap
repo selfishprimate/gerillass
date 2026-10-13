@@ -3374,9 +3374,27 @@ exports[`Manifest examples validateBreakpoint: .a { width: validateBreakpoint(mi
 }"
 `;
 
+exports[`Manifest examples validateLength: .a { gap: validateLength(var(--gap)); } 1`] = `
+".a {
+  gap: var(--gap);
+}"
+`;
+
+exports[`Manifest examples validateLength: .a { width: validateLength("20px"); } 1`] = `
+".a {
+  width: 20px;
+}"
+`;
+
 exports[`Manifest examples validateLength: .a { width: validateLength(20px); } 1`] = `
 ".a {
   width: 20px;
+}"
+`;
+
+exports[`Manifest examples validateLength: .a { width: validateLength(revert-layer); } 1`] = `
+".a {
+  width: revert-layer;
 }"
 `;
 
@@ -3489,5 +3507,23 @@ exports[`Manifest warnings text-gradient warns: .a { @include text-gradient(red)
     color: revert;
     background-image: none;
   }
+}"
+`;
+
+exports[`Manifest warnings validateLength warns: .a { width: validateLength(600); } 1`] = `
+".a {
+  width: 600;
+}"
+`;
+
+exports[`Manifest warnings validateLength warns: .a { width: validateLength(fit-content); } 1`] = `
+".a {
+  width: fit-content;
+}"
+`;
+
+exports[`Manifest warnings validateLength warns: .a { width: validateLength(red); } 1`] = `
+".a {
+  width: red;
 }"
 `;

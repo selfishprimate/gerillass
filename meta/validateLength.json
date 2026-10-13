@@ -1,17 +1,34 @@
 {
   "name": "validateLength",
-  "summary": "Returns the value if it is a length or one of auto, inherit, initial, 0. Returns null quietly for null, so a caller can skip a value.",
+  "summary": "Warns about a value that does not look like a length and returns it either way. Returns null quietly for null, so a caller can skip a value.",
   "arguments": [
     {
       "name": "$value",
       "accepts": [
-        "a length with a unit, or auto, inherit, initial, 0",
+        "a number with a unit, or a unitless 0",
+        "auto, inherit, initial, unset, revert or revert-layer, in any case",
+        "a CSS function such as var(), env(), calc() or anchor()",
+        "any of the above in quotes or built by interpolation, returned unquoted",
         "null, returned as null without a warning"
       ]
     }
   ],
   "examples": [
-    ".a { width: validateLength(20px); }"
+    ".a { width: validateLength(20px); }",
+    ".a { width: validateLength(\"20px\"); }",
+    ".a { width: validateLength(revert-layer); }",
+    ".a { gap: validateLength(var(--gap)); }"
   ],
-  "rejects": []
+  "rejects": [],
+  "warns": [
+    ".a { width: validateLength(red); }",
+    ".a { width: validateLength(600); }",
+    ".a { width: validateLength(fit-content); }"
+  ],
+  "caveats": [
+    "It warns and returns the value; it never raises. That is deliberate, since it is public and nothing in the library calls it. `position` used to route its offsets through it and now checks them itself, because a mixin wants an error.",
+    "The warning used to stop the build for the two values it could not interpolate: `validateLength(())` and a map ended with Sass's own `() isn't a valid CSS value` from inside the `@warn`. It inspects the value now.",
+    "The sizing keywords are not in the list, so `fit-content` warns. Measured in Chrome 152 and Firefox 156, both kept `width: fit-content` and dropped `gap: fit-content` and `top: fit-content`, and this function serves offsets and gaps as much as widths. `validateBreakpoint` does accept them, because a breakpoint is only ever a width.",
+    "A unit that is no length, such as `10deg`, passes without a warning: any unit counts. It warns, it does not rule, and a mixin that needs certainty uses `scss/internal/_length-problem.scss`."
+  ]
 }

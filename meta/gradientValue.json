@@ -69,7 +69,8 @@
     ".a { background-image: gradientValue((red, blue), $direction: sideways); }",
     ".a { background-image: gradientValue((red, blue), $shape: circle); }",
     ".a { background-image: gradientValue((red 10px, blue), conic); }",
-    ".a { background-image: gradientValue((red, blue), $in: rgb); }"
+    ".a { background-image: gradientValue((red, blue), $in: rgb); }",
+    ".a { background-image: gradientValue(red blue, $direction: \"\"); }"
   ],
   "caveats": [
     "A direction keyword is read in any case since 4.0.0. `$type` already was, so `LINEAR` was taken while `RIGHT` and `TOP-LEFT` were refused. The `\"to ...\"` form is passed through as written, because the browser normalises it: measured in Chrome 152, `linear-gradient(TO RIGHT, red, blue)` computes to `linear-gradient(to right, red, blue)`."

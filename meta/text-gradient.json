@@ -72,7 +72,8 @@
     ".a { @include text-gradient((huge, blue)); }",
     ".a { @include text-gradient((\"red\", blue)); }",
     ".a { @include text-gradient(red blue, $from: 45deg); }",
-    "@include text-gradient((red, blue));"
+    "@include text-gradient((red, blue));",
+    ".a { @include text-gradient(red blue, $direction: \"\"); }"
   ],
   "warns": [
     ".a { @include text-gradient(red); }"

@@ -196,6 +196,12 @@ $-places: "left" "center" "right" "top" "bottom";
     @return $direction;
   }
   $words: wordsOf($direction);
+  // An empty string has no words, and `list.nth` on an empty list is Sass's
+  // own `Invalid index 1 for a list with 0 elements`, which names neither the
+  // mixin nor the argument.
+  @if list.length($words) == 0 {
+    @error "`#{meta.inspect($direction)}` is not a valid direction: it is empty. Pass an angle such as `45deg`, or a side such as `to right`.";
+  }
   @if meta.type-of($direction) == "string" and string.to-lower-case("#{list.nth($words, 1)}") == "to" and list.length($words) >= 2 and list.length($words) <= 3 {
     $vertical: 0;
     $horizontal: 0;
@@ -229,6 +235,9 @@ $-places: "left" "center" "right" "top" "bottom";
   $words: ();
   @each $word in wordsOf($in) {
     $words: list.append($words, string.to-lower-case("#{$word}"));
+  }
+  @if list.length($words) == 0 {
+    @return "it is empty";
   }
   $space: list.nth($words, 1);
   $count: list.length($words);
@@ -385,7 +394,7 @@ $-places: "left" "center" "right" "top" "bottom";
       $prelude: list.append($prelude, map.get($map-for-positions, $position), space);
     } @else {
       $problem: -position-problem($position);
-      @if not $problem and $kind == "conic" and not string.index($position, "(") and string.to-lower-case(list.nth(wordsOf($position), 1)) != "at" {
+      @if not $problem and $kind == "conic" and not string.index($position, "(") and list.length(wordsOf($position)) > 0 and string.to-lower-case(list.nth(wordsOf($position), 1)) != "at" {
         $problem: "a conic gradient has no size, so its position starts with `at`";
       }
       @if $problem {

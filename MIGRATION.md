@@ -3527,6 +3527,94 @@ A negative length still passes, which is the one case left: `(min-width:
 -600px)` is valid and simply matches every width, so `isConditionValue` keeps
 it, while `width: -600px` is dropped.
 
+---
+
+## Change: `validateLength` stops warning about working values
+
+It warns and returns the value, and it still does: it is public, nothing in the
+library calls it, and a caller may want to be told rather than stopped. What
+changed is that the warning is now right.
+
+Four kinds of correct value used to draw one, each measured as kept in Chrome
+152 and Firefox 156:
+
+```scss
+.a { width: validateLength(AUTO); }          // 3.x: warned, and `width: AUTO` works
+.b { width: validateLength(revert-layer); }  // 3.x: warned, and it was simply missing
+.c { width: validateLength("20px"); }        // 3.x: warned
+.d { width: validateLength(#{20}px); }       // 3.x: warned
+```
+
+Keywords are matched in lower case now, `revert-layer` is in the list, and a
+length written in quotes or built by interpolation is read through the same
+`isConditionValue` the condition mixins use. Twenty of the swept calls stopped
+warning and none started.
+
+**What it accepts comes back unquoted.** `validateLength("auto")` used to be
+accepted and handed back with its quotes, so `width: validateLength("auto")`
+wrote `width: "auto"`, which both engines drop. Six swept calls changed value,
+every one of them from CSS both engines drop to CSS both keep.
+
+**The warning no longer stops the build.** `validateLength(())` and a map ended
+with Sass's own `() isn't a valid CSS value` from inside the `@warn` itself,
+because neither interpolates. It inspects the value now, which is the opposite
+of what a warning should ever do.
+
+The sizing keywords stay out, so `fit-content` still warns. Both engines kept
+`width: fit-content` and dropped `gap: fit-content` and `top: fit-content`, and
+this function serves offsets and gaps as much as widths.
+
+### The shared check it uncovered
+
+`isConditionValue` read an **empty string as a valid zero length**, and that
+reaches twenty call sites. Two of them wrote broken CSS with no error at all:
+
+```scss
+.a { @include adaptive(""); }   // 3.x: max-width: calc(576px - * 2)
+.b { @include auto-grid(""); }  // 3.x: minmax(min(100%, ), 1fr)
+.c { @include gradient(red "" blue); }  // 3.x: linear-gradient(red, "", blue)
+```
+
+All three raise now. The cause is two traps meeting: the loop that reads a
+quoted length is `@for 1 through 0` for an empty string, which counts **down**
+rather than not running, and `string.index("0123456789", "")` is `1` for the
+empty slice it then reads, so an empty string looked like a run of digits with
+no unit, which is how a quoted zero is spelt.
+
+`""` is now one of `tools/audit.js`'s probe values, so the next fault of this
+shape is caught rather than reasoned about. `validateScissors` also inspects
+the value it names, since `scissors("")` said "`` is not a valid corner size"
+with nothing between the backticks.
+
+Measured on 301 compiled calls, across `validateLength`, a declaration built
+from it, and every mixin that reads `isConditionValue`, before and after: 265
+identical, 20 that stopped warning, 6 unquoted, 3 newly refused, 5 the same
+refusal with the value shown, and 2 that stopped stopping the build. Every
+changed declaration was tested in Chrome 152 and Firefox 156, which agreed on
+all 19 rows. Safari was not run.
+
+This member had no spec and no `warns` entry in `meta/`, so the only branch
+that does anything had no coverage at all. It has both now.
+
+### And what the new probe found
+
+Adding `""` to the audit turned nine calls from Sass's own message into this
+library's, and one of them was not an error at all:
+
+| Call | 3.x | 4.0.0 |
+|---|---|---|
+| `only("")` | `&`, so **every** sibling was styled, silently | refused |
+| `except("")` | `expected selector` | refused by name |
+| `gradient(…, $direction: "")` | `Invalid index 1 for a list with 0 elements` | refused by name |
+| `gradient(…, $in: "")` | the same | refused by name |
+| `text-gradient`, `gradientValue` | the same, through the shared builder | refused by name |
+| `font-face(…, $font-style: "")` | the same | refused by name |
+
+`only("")` is the one worth reading twice: a call asking to style one sibling
+styled all of them, and both the compile and the browser were happy. The guard
+answers `""`, `" "` and any run of spaces, through `wordsOf`, which returns an
+empty list for all of them.
+
 
 ---
 

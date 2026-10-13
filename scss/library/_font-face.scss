@@ -77,6 +77,9 @@
     @return null;
   }
   $words: wordsOf($style);
+  @if list.length($words) == 0 {
+    @return "it is empty";
+  }
   $first: list.nth($words, 1);
   $keyword: null;
   @if meta.type-of($first) == "string" {

@@ -210,6 +210,19 @@ are not the same; see [below](#counting-by-something-other-than-the-tag).
 
 ## What it refuses
 
+**An empty selector**, or one of nothing but spaces. Until 4.0.0 `except("")` wrote `&:not()` and ended with Sass's own `expected selector`, which names neither the mixin nor the argument.
+
+```scss
+.list-item {
+  @include except("") {
+    color: red;
+  }
+}
+```
+```text
+Error: `""` is not a valid argument for `except`: it is empty, so there is nothing to leave out. Pass a whole number such as `1` or `-2`, one of `first`, `last`, `odd`, `even`, or a selector such as `.foo`.
+```
+
 A position has to be a whole number. Until 2.3.1 anything numeric went into the selector as it was, and measured in Chrome 152, `:not(:nth-of-type(1.5))` is an invalid selector, so the browser drops the whole rule and nothing is styled.
 
 ```scss

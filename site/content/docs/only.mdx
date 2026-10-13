@@ -212,6 +212,19 @@ The demos below are a row of six chips, one call per row. The call is printed ab
 
 ## What it refuses
 
+**An empty selector**, or one of nothing but spaces. Until 4.0.0 `only("")` wrote a bare `&` and emitted the block with no restriction at all, so every sibling was styled and nothing said so.
+
+```scss
+.list-item {
+  @include only("") {
+    color: red;
+  }
+}
+```
+```text
+Error: `""` is not a valid argument for `only`: it is empty, so there is nothing to narrow the selector by. Pass a whole number such as `1` or `-2`, one of `first`, `last`, `odd`, `even`, or a selector such as `.foo`.
+```
+
 A position has to be a whole number. Until 2.3.1 anything numeric went into the selector as it was, and measured in Chrome 152, `:nth-of-type(10px)` and `:nth-of-type(1.5)` are invalid selectors, so the browser drops the whole rule. In a list of positions one bad value took the good ones with it: `only(1, 10deg)` styled nothing.
 
 ```scss

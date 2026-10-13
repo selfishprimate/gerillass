@@ -5,6 +5,7 @@
 @use "sass:meta";
 @use "sass:string";
 @use "../internal/nth-of" as *;
+@use "../internal/words" as *;
 @use "../internal/sibling-index" as *;
 
 // Styles every sibling but the ones named, by position.
@@ -60,6 +61,14 @@
         }
       }
     } @else if meta.type-of($value) == "string" {
+      // An empty selector, or one of nothing but spaces. `only("")` wrote `&`
+      // and emitted the block with no restriction at all, so every sibling was
+      // styled and nothing said so; `except("")` wrote `&:not()` and ended with
+      // Sass's own "expected selector", which names neither the mixin nor the
+      // argument. `wordsOf` answers an empty list for both.
+      @if list.length(wordsOf($value)) == 0 {
+        @error "`#{meta.inspect($value)}` is not a valid argument for `except`: it is empty, so there is nothing to leave out. Pass a whole number such as `1` or `-2`, one of `first`, `last`, `odd`, `even`, or a selector such as `.foo`.";
+      }
       @if $value == "odd" or $value == "even" {
         &:not(#{nthPseudo($value, $of)}) {
           @content;

@@ -631,6 +631,13 @@ a dropped declaration rather than an error.
 - The keys are case-sensitive, so `MEDIUM` raises with the key list rather than resolving. Reading them in any case was written and taken out: `breakpoint` calls `conditionWidth` for the refusal, throws the resolved width away and tests `map.has-key` itself, so a case-insensitive lookup here made `breakpoint(min, MEDIUM)` compile to `@media (min-width: MEDIUM)`, which never matches.
 - A negative length still passes, because `isConditionValue` keeps it for conditions, where `(min-width: -600px)` is valid and simply matches every width. `width: -600px` is dropped, so a declaration wants a check of its own.
 
+**`validateLength`**
+
+- It warns and returns the value; it never raises. That is deliberate, since it is public and nothing in the library calls it. `position` used to route its offsets through it and now checks them itself, because a mixin wants an error.
+- The warning used to stop the build for the two values it could not interpolate: `validateLength(())` and a map ended with Sass's own `() isn't a valid CSS value` from inside the `@warn`. It inspects the value now.
+- The sizing keywords are not in the list, so `fit-content` warns. Measured in Chrome 152 and Firefox 156, both kept `width: fit-content` and dropped `gap: fit-content` and `top: fit-content`, and this function serves offsets and gaps as much as widths. `validateBreakpoint` does accept them, because a breakpoint is only ever a width.
+- A unit that is no length, such as `10deg`, passes without a warning: any unit counts. It warns, it does not rule, and a mixin that needs certainty uses `scss/internal/_length-problem.scss`.
+
 **`validateScissors`**
 
 - Measured in Chrome 152, Firefox 156 and Safari 26.6.2: an octagon written with `var(--c)` set to 20px, and ones written with `calc(10px + 10px)`, `clamp(4px, 20px, 30px)` and `min(20px, 50px)`, each computed to exactly the polygon the literal `20px` gives and rendered the same. They were refused until 4.0.0, which was a false refusal.
@@ -725,7 +732,7 @@ and camelCase is what tells them apart from the kebab-case mixins above.
 | `shorthandProperty($value)` | Expands one to four values into the four-value CSS shorthand order. |
 | `tint($color, $percentage)` | Mixes a colour towards white by a percentage. |
 | `validateBreakpoint($value)` | Resolves a breakpoint name to its width, passing a length, a percentage or a CSS function through, and refusing a word that is not a key. |
-| `validateLength($value)` | Returns the value if it is a length or one of auto, inherit, initial, 0. Returns null quietly for null, so a caller can skip a value. |
+| `validateLength($value)` | Warns about a value that does not look like a length and returns it either way. Returns null quietly for null, so a caller can skip a value. |
 | `validateRatio($ratio)` | Turns an aspect ratio into a value for the CSS aspect-ratio property. |
 | `validateScissors($value)` | Normalises corner values for the scissors mixin, adding px where missing. |
 

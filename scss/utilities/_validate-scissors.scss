@@ -29,7 +29,7 @@
       // its message names its own parameter rather than the corner that was
       // wrong.
       @if $item != null and meta.type-of($item) != "number" {
-        @error "`#{$item}` is not a valid corner size. Pass a length such as `12px`, a unitless number which is treated as pixels, or a CSS function such as `var(--corner)`.";
+        @error "`#{meta.inspect($item)}` is not a valid corner size. Pass a length such as `12px`, a unitless number which is treated as pixels, or a CSS function such as `var(--corner)`.";
       }
       // A corner below zero points the cut outwards, so nothing is cut at all.
       // Measured in Chrome 152 and Firefox 156: a box clipped with `-20px`

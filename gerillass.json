@@ -1112,7 +1112,8 @@
         ".a { @include except(2, $count: \".card\") { margin: 0; } }",
         "li { @include except(1); }",
         "li { @include except(2, $of: \"::before\") { color: red; } }",
-        "@include except(1) { color: red; }"
+        "@include except(1) { color: red; }",
+        ".a { @include except(\"\") { color: red; } }"
       ]
     },
     {
@@ -1258,7 +1259,8 @@
         "@include font-face(\"Inter\", \"/fonts/inter\", $font-weight: bolder, $file-formats: woff2);",
         "@include font-face(\"Inter\", \"/fonts/inter\", $font-weight: 0, $file-formats: woff2);",
         "@include font-face(\"Inter\", \"/fonts/inter\", $font-weight: 100 200 300, $file-formats: woff2);",
-        "@include font-face(\"A\", \"/p\", $file-formats: ());"
+        "@include font-face(\"A\", \"/p\", $file-formats: ());",
+        "@include font-face(\"X\", \"/f/x\", $font-style: \"\");"
       ]
     },
     {
@@ -1450,7 +1452,9 @@
         ".a { @include gradient((red, blue), $in: rgb); }",
         ".a { @include gradient((red, blue), $in: \"oklab longer hue\"); }",
         ".a { @include gradient((red, blue), $repeating: yes); }",
-        "@include gradient((red, blue));"
+        "@include gradient((red, blue));",
+        ".a { @include gradient(red blue, $direction: \"\"); }",
+        ".a { @include gradient(red blue, $in: \"\"); }"
       ],
       "warns": [
         ".a { @include gradient(red); }"
@@ -1682,7 +1686,8 @@
         ".a { @include only(2, $count: \".card\") { margin: 0; } }",
         "li { @include only(1); }",
         "li { @include only(2, $of: \"::before\") { color: red; } }",
-        "@include only(1) { color: red; }"
+        "@include only(1) { color: red; }",
+        ".a { @include only(\"\") { color: red; } }"
       ]
     },
     {
@@ -2404,7 +2409,8 @@
         ".a { @include text-gradient((huge, blue)); }",
         ".a { @include text-gradient((\"red\", blue)); }",
         ".a { @include text-gradient(red blue, $from: 45deg); }",
-        "@include text-gradient((red, blue));"
+        "@include text-gradient((red, blue));",
+        ".a { @include text-gradient(red blue, $direction: \"\"); }"
       ],
       "warns": [
         ".a { @include text-gradient(red); }"
@@ -3235,7 +3241,8 @@
         ".a { background-image: gradientValue((red, blue), $direction: sideways); }",
         ".a { background-image: gradientValue((red, blue), $shape: circle); }",
         ".a { background-image: gradientValue((red 10px, blue), conic); }",
-        ".a { background-image: gradientValue((red, blue), $in: rgb); }"
+        ".a { background-image: gradientValue((red, blue), $in: rgb); }",
+        ".a { background-image: gradientValue(red blue, $direction: \"\"); }"
       ],
       "warns": [
         ".a { background-image: gradientValue(red); }"
@@ -3701,18 +3708,35 @@
           "name": "$value",
           "required": true,
           "accepts": [
-            "a length with a unit, or auto, inherit, initial, 0",
+            "a number with a unit, or a unitless 0",
+            "auto, inherit, initial, unset, revert or revert-layer, in any case",
+            "a CSS function such as var(), env(), calc() or anchor()",
+            "any of the above in quotes or built by interpolation, returned unquoted",
             "null, returned as null without a warning"
           ]
         }
       ],
       "file": "scss/utilities/_validate-length.scss",
       "signature": "validateLength($value)",
-      "summary": "Returns the value if it is a length or one of auto, inherit, initial, 0. Returns null quietly for null, so a caller can skip a value.",
-      "examples": [
-        ".a { width: validateLength(20px); }"
+      "summary": "Warns about a value that does not look like a length and returns it either way. Returns null quietly for null, so a caller can skip a value.",
+      "caveats": [
+        "It warns and returns the value; it never raises. That is deliberate, since it is public and nothing in the library calls it. `position` used to route its offsets through it and now checks them itself, because a mixin wants an error.",
+        "The warning used to stop the build for the two values it could not interpolate: `validateLength(())` and a map ended with Sass's own `() isn't a valid CSS value` from inside the `@warn`. It inspects the value now.",
+        "The sizing keywords are not in the list, so `fit-content` warns. Measured in Chrome 152 and Firefox 156, both kept `width: fit-content` and dropped `gap: fit-content` and `top: fit-content`, and this function serves offsets and gaps as much as widths. `validateBreakpoint` does accept them, because a breakpoint is only ever a width.",
+        "A unit that is no length, such as `10deg`, passes without a warning: any unit counts. It warns, it does not rule, and a mixin that needs certainty uses `scss/internal/_length-problem.scss`."
       ],
-      "rejects": []
+      "examples": [
+        ".a { width: validateLength(20px); }",
+        ".a { width: validateLength(\"20px\"); }",
+        ".a { width: validateLength(revert-layer); }",
+        ".a { gap: validateLength(var(--gap)); }"
+      ],
+      "rejects": [],
+      "warns": [
+        ".a { width: validateLength(red); }",
+        ".a { width: validateLength(600); }",
+        ".a { width: validateLength(fit-content); }"
+      ]
     },
     {
       "name": "validateRatio",

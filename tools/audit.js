@@ -41,7 +41,11 @@ let lastWarning = null;
 // `huge`, `10deg` and `-10px` came from todos/silent-values.md, which found
 // that the first six missed most of what compiles into CSS a browser drops: a
 // word that is not a breakpoint, a number with the wrong unit, a negative size.
-const PROBES = ["nonsense", "16 9", "true", "#ff0000", "42", '"a b"', "huge", "10deg", "-10px"];
+// `""` was added in 4.0.0, with the fault it would have caught: the shared
+// `isConditionValue` read an empty string as a quoted zero, so `adaptive("")`
+// wrote `calc(576px - * 2)` and `auto-grid("")` wrote `minmax(min(100%, ),
+// 1fr)`, both of them silently.
+const PROBES = ["nonsense", "16 9", "true", "#ff0000", "42", '"a b"', "huge", "10deg", "-10px", '""'];
 
 // The other direction: values modern CSS takes that a mixin might wrongly
 // refuse, or accept and mangle. These feed their own two buckets and none of

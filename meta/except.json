@@ -54,6 +54,7 @@
     ".a { @include except(2, $count: \".card\") { margin: 0; } }",
     "li { @include except(1); }",
     "li { @include except(2, $of: \"::before\") { color: red; } }",
-    "@include except(1) { color: red; }"
+    "@include except(1) { color: red; }",
+    ".a { @include except(\"\") { color: red; } }"
   ]
 }

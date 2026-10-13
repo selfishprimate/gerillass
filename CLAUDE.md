@@ -1115,7 +1115,25 @@ Two pieces of work are open:
   untouched and then failed with Sass's own message; the keys stay
   case-sensitive, since reading them in any case made `breakpoint(min, MEDIUM)`
   write a query that never matches, `breakpoint` calling `conditionWidth` for
-  its refusal alone and testing `map.has-key` itself,
+  its refusal alone and testing `map.has-key` itself, and `validateLength`
+  warning only about values that do not work, having warned about a keyword in
+  another case, about `revert-layer`, which was missing from its list, and
+  about a length in quotes or built by interpolation, and returning what it
+  takes without its quotes, and inspecting the value it names, since its own
+  `@warn` stopped the build for an empty list and a map; it still warns rather
+  than raising, which is the standing decision below, and it had neither a spec
+  nor a `warns` entry, so its only working branch had no coverage. Writing it
+  found that the shared `isConditionValue` read an empty string as a quoted
+  zero, through a `@for 1 through 0` that counts down and a `string.index` of an
+  empty needle, so `adaptive("")` wrote `calc(576px - * 2)`, `auto-grid("")`
+  wrote `minmax(min(100%, ), 1fr)` and `gradient(red "" blue)` wrote a stop of
+  nothing, all three silently; `""` is a probe value in `tools/audit.js` now,
+  and it found nine more calls answering with Sass's own index message rather
+  than the library's, in `only`, `except`, the shared gradient builder's
+  direction and colour space, and `font-face`'s style, each now refused by
+  name, `only("")` among them having written a bare `&` and styled every
+  sibling with nothing to say so, and `validateScissors` inspecting the value
+  it names,
   all on
   `docs-examples-review`;
   and the demos and prose

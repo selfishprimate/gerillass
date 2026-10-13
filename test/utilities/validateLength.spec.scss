@@ -1,0 +1,69 @@
+@charset "UTF-8";
+
+// This had no spec and no `warns` entry, so the only branch that does anything
+// -- the warning -- had no coverage at all. What it pins is the four kinds of
+// correct value that drew a warning until 4.0.0, each measured in Chrome 152
+// and Firefox 156: a keyword in another case, `revert-layer`, a quoted or
+// interpolated length, and a quoted keyword handed back with its quotes.
+//
+// A warning that fires on working CSS is worse than no warning, because the
+// reader learns to ignore it.
+@use 'true' as *;
+@use 'sass:meta';
+@use '../../scss/utilities/validate-length' as *;
+
+@include describe('validateLength()') {
+  @include it('Takes a keyword in any case, revert-layer included.') {
+    @include assert {
+      @include output {
+        .a { width: validateLength(AUTO); }
+        .b { width: validateLength(INHERIT); }
+        .c { width: validateLength(revert-layer); }
+        .d { width: validateLength(REVERT-LAYER); }
+      }
+      @include expect {
+        .a { width: AUTO; }
+        .b { width: INHERIT; }
+        .c { width: revert-layer; }
+        .d { width: REVERT-LAYER; }
+      }
+    }
+  }
+
+  @include it('Reads a quoted or interpolated length, and drops the quotes.') {
+    $built: #{20}px;
+    @include assert {
+      @include output {
+        .a { width: validateLength("20px"); }
+        .b { width: validateLength($built); }
+        .c { width: validateLength("50%"); }
+        .d { width: validateLength("auto"); }
+        .e { width: validateLength("var(--gap)"); }
+      }
+      @include expect {
+        .a { width: 20px; }
+        .b { width: 20px; }
+        .c { width: 50%; }
+        .d { width: auto; }
+        .e { width: var(--gap); }
+      }
+    }
+  }
+
+  @include it('Takes a number with any unit, a unitless zero and a CSS function.') {
+    @include assert-equal(validateLength(20px), 20px);
+    @include assert-equal(validateLength(0), 0);
+    @include assert-equal(validateLength(50%), 50%);
+    @include assert-equal(meta.inspect(validateLength(var(--gap))), 'var(--gap)');
+    @include assert-equal(meta.inspect(validateLength(anchor(top))), 'anchor(top)');
+  }
+
+  @include it('Returns null for null, without a warning, so a caller can skip a value.') {
+    @include assert-equal(validateLength(null), null);
+  }
+
+  @include it('Returns what it warns about, rather than stopping the build.') {
+    @include assert-equal(validateLength(red), red);
+    @include assert-equal(meta.inspect(validateLength(())), '()');
+  }
+}

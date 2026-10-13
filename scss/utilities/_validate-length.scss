@@ -4,22 +4,57 @@
 @use "sass:math";
 @use "sass:meta";
 @use "sass:string";
+@use "../internal/is-condition-value" as *;
 
+// Warns about a value that does not look like a length, and returns it either
+// way. It warns rather than raising on purpose: it is public, nothing in the
+// library calls it, and a caller may want to be told rather than stopped.
+// `position` used to route its offsets through it and now checks them itself,
+// because a mixin wants an error.
+//
+// A warning is only worth anything if it is right, and until 4.0.0 four kinds
+// of correct value drew one. Each was measured in Chrome 152 and Firefox 156,
+// which agreed on every row:
+//
+// - **a keyword in another case.** CSS reads its keywords in any case and both
+//   engines kept `width: AUTO` and `width: INHERIT`, while this warned about
+//   them. The list is matched in lower case now;
+// - **`revert-layer`**, which was simply missing from the list although both
+//   engines kept it on `width`, `top` and `gap` alike;
+// - **a quoted or interpolated length.** `"20px"` and `#{20}px` both reach a
+//   function as a string, and this saw a string with no parenthesis and warned.
+//   They are read as lengths now, through the same `isConditionValue` the
+//   condition mixins use;
+// - **a quoted keyword**, such as `"auto"`, which was accepted and handed back
+//   with its quotes, so `width: validateLength("auto")` wrote `width: "auto"`
+//   and both engines dropped it. What it accepts comes back unquoted.
+//
+// The warning itself could stop the build, which is the opposite of its job:
+// `validateLength(())` and a map ended with Sass's own `() isn't a valid CSS
+// value` from inside the `@warn`, since neither interpolates. It inspects the
+// value now, which also gives `""` something to show instead of empty
+// backticks.
+//
+// The sizing keywords are deliberately not in the list. `fit-content` is a
+// length nowhere: both engines kept `width: fit-content` and dropped
+// `gap: fit-content` and `top: fit-content`, and this function serves offsets
+// and gaps as much as widths. `validateBreakpoint` does accept them, because a
+// breakpoint is only ever a width.
+//
+// null means "leave this out": `position` skips an edge given null, as its
+// documentation shows. It is not a mistake to warn about, and the warning
+// printed empty backticks, because null interpolates to nothing.
 @function validateLength($value) {
-  // null means "leave this out": `position` skips an edge given null, as its
-  // documentation shows. It is not a mistake to warn about, and the warning
-  // printed empty backticks, because null interpolates to nothing.
   @if $value == null {
     @return null;
   }
 
-  $keywords: ("auto", "inherit", "initial", "unset", "revert", 0);
-
-  @if list.index($keywords, $value) {
-    @return $value;
-  }
-  @if meta.type-of($value) == "number" and not math.is-unitless($value) {
-    @return $value;
+  @if meta.type-of($value) == "number" {
+    // A unit of any kind, or a unitless zero. A unit that is no length is left
+    // to the caller: this warns, it does not rule.
+    @if not math.is-unitless($value) or $value == 0 {
+      @return $value;
+    }
   }
   // calc(), clamp(), min() and max() arrive as Sass calculations; var() and
   // env() arrive as unquoted strings holding a parenthesis. Both are valid
@@ -28,10 +63,21 @@
   @if meta.type-of($value) == "calculation" {
     @return $value;
   }
-  @if meta.type-of($value) == "string" and string.index(string.quote($value), "(") {
-    @return $value;
+  @if meta.type-of($value) == "string" {
+    $keywords: "auto" "inherit" "initial" "unset" "revert" "revert-layer";
+    // Returned without its quotes, since `width: "auto"` is dropped.
+    $text: string.unquote($value);
+    @if list.index($keywords, string.to-lower-case($text)) {
+      @return $text;
+    }
+    @if string.index($text, "(") {
+      @return $text;
+    }
+    @if isConditionValue($text, "length-percentage") {
+      @return $text;
+    }
   }
 
-  @warn "`#{$value}` does not look like a length. Pass a number with a unit such as `20px`, a CSS function such as `var(--gap)` or `calc(1rem + 2px)`, or one of: auto, inherit, initial, unset, revert, 0.";
+  @warn "`#{meta.inspect($value)}` does not look like a length. Pass a number with a unit such as `20px`, a CSS function such as `var(--gap)` or `calc(1rem + 2px)`, or one of: auto, inherit, initial, unset, revert, revert-layer, 0.";
   @return $value;
 }

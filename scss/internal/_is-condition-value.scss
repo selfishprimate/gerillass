@@ -70,6 +70,16 @@ $-time-units: "s" "ms";
   }
 
   $text: string.to-lower-case(string.unquote($value));
+  // An empty string is no value, and it used to answer true: the loop below is
+  // `@for 1 through 0`, which counts down rather than not running, and
+  // `string.index("0123456789", "")` is 1 for the empty slice it reads, so an
+  // empty string looked like a run of digits with no unit, which is how a
+  // quoted zero is spelt. `adaptive("")` wrote `calc(576px - * 2)` and
+  // `auto-grid("")` wrote `minmax(min(100%, ), 1fr)` on the strength of it.
+  @if string.length($text) == 0 {
+    @return false;
+  }
+
   @each $function in "calc(" "clamp(" "min(" "max(" {
     @if string.index($text, $function) == 1 {
       @return true;

@@ -1,7 +1,7 @@
 ---
 title: "Validate Length"
 page_title: "Validate Length Sass Function"
-page_description: "Returns the value if it is a length or one of auto, inherit, initial, 0."
+page_description: "Warns about a value that does not look like a length and returns it either way, so a mixin of your own can tell a caller without stopping the build."
 page_keywords: "Gerillass validateLength, Sass validateLength, Sass Functions, SCSS Functions, Sass Utility Functions, Gerillass Utilities"
 ---
 
@@ -9,30 +9,67 @@ page_keywords: "Gerillass validateLength, Sass validateLength, Sass Functions, S
 
 <Member name="validateLength">
 
-Returns the value if it is a length or one of auto, inherit, initial, 0.
+Warns about a value that does not look like a length, and returns it either way. It never stops the build, which is the point: a mixin of your own can tell a caller that an argument looks wrong and still compile. `null` comes back as `null` with no warning, so a caller can skip a value.
 
 </Member>
 
 ## Arguments
 
 <Arguments of="validateLength">
-  <Argument name="$value" type="number (with unit)">Accepts a length with a unit, or auto, inherit, initial, 0. <code>null</code> is returned as it is, without a warning, so a caller can skip a value.</Argument>
+  <Argument name="$value" type="number (with unit)">A number with a unit, or a unitless <code>0</code>; <code>auto</code>, <code>inherit</code>, <code>initial</code>, <code>unset</code>, <code>revert</code> or <code>revert-layer</code>, in any case; or a CSS function such as <code>var()</code>, <code>env()</code>, <code>calc()</code> or <code>anchor()</code>. Any of those in quotes, or built by interpolation, is read and returned without its quotes. <code>null</code> comes back as <code>null</code>.</Argument>
 </Arguments>
 
 ## Examples
 
-<Example caption="Validating a length argument in a mixin of your own.">
+<Example caption="Checking a length argument in a mixin of your own. The call stands where the value does, so the check costs no extra line.">
 ```scss
 @mixin inset($amount) {
   padding: validateLength($amount);
 }
+
 .panel {
   @include inset(2rem);
 }
 ```
 </Example>
 
+<Example caption="A value that reaches a function as a string is read as the length it is. `&quot;20px&quot;` out of a map and `#{$n}px` built by interpolation are both strings to Sass, and both come back without their quotes.">
+```scss
+$space: "20px";
+
+.a { padding: validateLength($space); }
+.b { margin: validateLength("auto"); }
+.c { gap: validateLength("var(--gap)"); }
+```
+</Example>
+
+## What it warns about
+
+A value that is none of the kinds above. It is a warning rather than an error on purpose: this function is public, nothing in the library calls it, and a caller may want to be told rather than stopped. A mixin that wants certainty should raise instead, which is what [Position](/docs/position) does with its offsets.
+
+```scss
+.panel {
+  padding: validateLength(red);
+}
+```
+```text
+WARNING: `red` does not look like a length. Pass a number with a unit such as `20px`, a CSS function such as `var(--gap)` or `calc(1rem + 2px)`, or one of: auto, inherit, initial, unset, revert, revert-layer, 0.
+```
+
+<Hint kind="warning">
+
+**Changed in Gerillass 4.0.0.** Four kinds of working value used to draw a warning, each measured as kept in Chrome 152 and Firefox 156: a keyword in another case such as `AUTO`, `revert-layer`, which was missing from the list, and a length written in quotes or built by interpolation. A quoted keyword was accepted and handed back with its quotes, so `width: validateLength("auto")` wrote `width: "auto"`, which both engines drop.
+
+</Hint>
+
+<Hint kind="info">
+
+**The sizing keywords are not in the list**, so `fit-content` warns. Both engines kept `width: fit-content` and dropped `gap: fit-content` and `top: fit-content`, and this function serves offsets and gaps as much as widths. [Validate Breakpoint](/docs/validate-breakpoint) does accept them, because a breakpoint is only ever a width.
+
+</Hint>
+
 ## Related Links
 
+- [Validate Breakpoint](/docs/validate-breakpoint)
 - [Sizer](/docs/sizer)
 - [CSS length](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/length)
