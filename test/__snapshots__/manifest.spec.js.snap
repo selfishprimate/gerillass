@@ -2243,9 +2243,21 @@ exports[`Manifest examples pseudoSelector: .a { content: "#{pseudoSelector(("but
 }"
 `;
 
+exports[`Manifest examples remify: .a { font-size: remify(18pt); } 1`] = `
+".a {
+  font-size: 1.5rem;
+}"
+`;
+
 exports[`Manifest examples remify: .a { font-size: remify(24px); } 1`] = `
 ".a {
   font-size: 1.5rem;
+}"
+`;
+
+exports[`Manifest examples remify: .a { font-size: remify(24px, 10px); } 1`] = `
+".a {
+  font-size: 2.4rem;
 }"
 `;
 

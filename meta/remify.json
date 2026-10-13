@@ -1,20 +1,36 @@
 {
   "name": "remify",
-  "summary": "Converts a pixel length to rem, against a 16px root.",
+  "summary": "Converts an absolute length to rem, against the root font size.",
   "arguments": [
     {
       "name": "$value",
       "accepts": [
-        "a pixel length"
+        "an absolute length: px, pt, pc, in, cm, mm or q",
+        "a relative one such as em, rem or % is refused, since it has no fixed size"
+      ]
+    },
+    {
+      "name": "$root",
+      "accepts": [
+        "the page's root font size, 16px by default",
+        "an absolute length, and not zero"
       ]
     }
   ],
   "examples": [
-    ".a { font-size: remify(24px); }"
+    ".a { font-size: remify(24px); }",
+    ".a { font-size: remify(24px, 10px); }",
+    ".a { font-size: remify(18pt); }"
   ],
   "rejects": [
     ".a { font-size: remify(nonsense); }",
     ".a { font-size: remify(1.5rem); }",
-    ".a { font-size: remify(24); }"
+    ".a { font-size: remify(24); }",
+    ".a { font-size: remify(24px, 0px); }"
+  ],
+  "caveats": [
+    "`rem` is relative to the root, and the 16px this assumed could not be changed until 4.0.0. On a page that sets `html { font-size: 62.5% }`, a common trick for easy arithmetic, `remify(24px)` wrote `1.5rem`: measured in Chrome 152 and Firefox 156, that renders as 15px of padding rather than 24px, while `remify(24px, 10px)` renders 24px. Pass `$root` to say what the page's root is.",
+    "Any absolute length converts, not only pixels: Sass reduces `pt`, `pc`, `in`, `cm`, `mm` and `q` to the same scale, so `remify(18pt)` is the same as `remify(24px)`. All six used to be refused although each has one right answer. The relative units stay refused, because they have none.",
+    "`pixelify` converts back against the same 16px default, so `pixelify(remify(24px))` is `24px` again. That round trip holds for the default root only; a `$root` of your own has no matching argument there."
   ]
 }

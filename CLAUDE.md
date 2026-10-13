@@ -1088,7 +1088,10 @@ Two pieces of work are open:
   element's own font size, and `pseudoSelector` checking the name it is given,
   which had no checks at all, so a leading colon wrote `button::hover` and a
   comma injected a selector of its own, and `all-buttons` naming its argument
-  rather than asking for "one of the followings",
+  rather than asking for "one of the followings", and `remify` taking a
+  `$root`, since a page that sets `html { font-size: 62.5% }` made its 16px
+  assumption render 15px where 24px was asked for, and converting every
+  absolute unit, which is the pair `convertToEm` was given,
   all on
   `docs-examples-review`;
   and the demos and prose

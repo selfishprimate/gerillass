@@ -1,0 +1,38 @@
+@charset "UTF-8";
+
+// Two fixes in 4.0.0, the same pair `convertToEm` was given. `rem` is relative
+// to the root, and the 16px this assumed could not be changed: on a page that
+// sets `html { font-size: 62.5% }`, a common trick for easy arithmetic,
+// `remify(24px)` wrote `1.5rem`, which renders as 15px rather than 24px. And
+// every absolute unit reduces to the same scale in Sass, so each has one right
+// answer; all six besides `px` used to be refused.
+@use 'true' as *;
+@use '../../scss/utilities/remify' as *;
+
+@include describe('remify()') {
+  @include it('Converts a pixel length against a 16px root.') {
+    @include assert-equal(remify(24px), 1.5rem);
+    @include assert-equal(remify(16px), 1rem);
+    @include assert-equal(remify(8px), 0.5rem);
+  }
+
+  @include it('Returns a number, so it can be used in arithmetic.') {
+    @include assert-equal(remify(24px) * 2, 3rem);
+  }
+
+  // Measured in Chrome 152 and Firefox 156 on a page with a 10px root:
+  // `remify(24px)` rendered 15px of padding and `remify(24px, 10px)` rendered
+  // 24px.
+  @include it('Measures against the root it is given.') {
+    @include assert-equal(remify(24px, 10px), 2.4rem);
+    @include assert-equal(remify(24px, 24px), 1rem);
+    @include assert-equal(remify(12px, 24px), 0.5rem);
+  }
+
+  @include it('Converts every absolute unit, not only pixels.') {
+    @include assert-equal(remify(18pt), 1.5rem);
+    @include assert-equal(remify(18pt), remify(24px));
+    @include assert-equal(remify(1in), 6rem);
+    @include assert-equal(remify(1pc), 1rem);
+  }
+}

@@ -603,6 +603,12 @@ a dropped declaration rather than an error.
 - It had no checks at all until 4.0.0, and each of the three ways to get it wrong was silent in the stylesheet. Measured in Chrome 152 and Firefox 156 by reading the parsed rules back: a colon written in front of the name gave `button::hover`, a pseudo-element that does not exist, and both engines dropped the whole rule; an empty name gave `button:` and was dropped the same way; and a comma in the name gave `button:hover, .x`, which both engines kept and which styled every `.x` on the page, so one argument reached past the selectors it was given.
 - `all-buttons` and `all-text-inputs` both pick the pseudo from a fixed list before calling this, so neither mixin was ever affected; the guard was missing only from the function a user calls directly.
 
+**`remify`**
+
+- `rem` is relative to the root, and the 16px this assumed could not be changed until 4.0.0. On a page that sets `html { font-size: 62.5% }`, a common trick for easy arithmetic, `remify(24px)` wrote `1.5rem`: measured in Chrome 152 and Firefox 156, that renders as 15px of padding rather than 24px, while `remify(24px, 10px)` renders 24px. Pass `$root` to say what the page's root is.
+- Any absolute length converts, not only pixels: Sass reduces `pt`, `pc`, `in`, `cm`, `mm` and `q` to the same scale, so `remify(18pt)` is the same as `remify(24px)`. All six used to be refused although each has one right answer. The relative units stay refused, because they have none.
+- `pixelify` converts back against the same 16px default, so `pixelify(remify(24px))` is `24px` again. That round trip holds for the default root only; a `$root` of your own has no matching argument there.
+
 **`shorthandProperty`**
 
 - Until 4.0.0 only a fifth value was checked. An empty list ended the build with Sass's own "Function finished without @return", and a map was read as its keys and values in turn, so `(a: 1, b: 2)` came out as `a 1 b 2 a 1 b 2`. Both raise now.
@@ -697,7 +703,7 @@ and camelCase is what tells them apart from the kebab-case mixins above.
 | `mapDeepGet($map, $keys...)` | Reads a value out of a nested map by following a chain of keys, and raises when a key is not there. |
 | `pixelify($value)` | Returns the value in pixels: a unitless number takes a px, and a length in another unit is converted. |
 | `pseudoSelector($elements, $pseudo: null)` | Appends a pseudo-class to every selector in a list, and refuses a name that would write a selector the browser drops. |
-| `remify($value)` | Converts a pixel length to rem, against a 16px root. |
+| `remify($value, $root: 16px)` | Converts an absolute length to rem, against the root font size. |
 | `shade($color, $percentage)` | Mixes a colour towards black by a percentage. |
 | `shorthandProperty($value)` | Expands one to four values into the four-value CSS shorthand order. |
 | `tint($color, $percentage)` | Mixes a colour towards white by a percentage. |

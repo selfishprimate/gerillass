@@ -149,6 +149,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `mapDeepGet` raises on a key that is not there | breaking, loud; it used to answer `null` |
 | `pixelify` says which of three faults a unit has | a better message; not breaking |
 | `pseudoSelector` refuses a name that writes a selector the browser drops | breaking, loud; all three were silent |
+| `remify` takes a `$root`, and converts every absolute unit | not breaking |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -3326,6 +3327,40 @@ guard was missing only from the function a user calls directly.
 Compiled across 42 calls through the function and both mixins: 34 identical,
 eight newly refused -- every one of them a dropped rule or an injected selector
 -- and not a single call through either mixin changed.
+
+
+## Not breaking: `remify` can be told what the root is
+
+`rem` is relative to the root font size, and the 16px this assumed could not be
+changed. `html { font-size: 62.5% }` is a common trick for easy arithmetic, and
+it makes a rem 10px.
+
+```scss
+html { font-size: 62.5%; }
+.card { padding: remify(24px); }
+// 3.x: padding: 1.5rem, which renders as 15px, not 24px
+```
+
+Measured in Chrome 152 and Firefox 156 on a page with a 10px root:
+`remify(24px)` rendered 15px of padding and `remify(24px, 10px)` rendered 24px.
+`$root` defaults to 16px, so every call written before this compiles to the
+same thing.
+
+`pt`, `pc`, `in`, `cm`, `mm` and `q` are converted as well, rather than
+refused: Sass reduces every absolute unit to the same scale, so `remify(18pt)`
+is `1.5rem`, the same as `remify(24px)`. The relative units are still refused,
+because they have none.
+
+This is the pair `convertToEm` was given earlier in 4.0.0, and the item that
+commit said was left for this member's own turn.
+
+The round trip with `pixelify` holds for the default root only:
+`pixelify(remify(24px))` is `24px` again, and a `$root` of your own has no
+matching argument there.
+
+Compiled across 65 calls through `remify` and `fluid`, the one place inside the
+library that calls it: nothing newly refused, no returned value changed, and
+`fluid` identical throughout.
 
 
 ---

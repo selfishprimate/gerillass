@@ -1,7 +1,7 @@
 ---
 title: "Remify"
 page_title: "Remify Sass Function"
-page_description: "The remify Sass function converts a pixel length to rem against a 16px root, so a size written in px still answers the reader's own text size."
+page_description: "The remify Sass function converts an absolute length to rem against the root font size, so a size written in px still answers the reader's own text size."
 page_keywords: "Gerillass remify, Sass remify, Sass Functions, SCSS Functions, Sass Utility Functions, Gerillass Utilities"
 page_image: "gerillass-remify.jpg"
 ---
@@ -10,9 +10,15 @@ page_image: "gerillass-remify.jpg"
 
 <Member name="remify">
 
-Converts a pixel length to rem, against a 16px root.
+Converts an absolute length to rem, against the root font size, so a size written in px still answers the reader's own text size. [Convert To Em](/docs/convert-to-em) is the same function for the other unit, and [Pixelify](/docs/pixelify) converts back.
 
 </Member>
+
+<Hint kind="warning">
+
+**Changed in Gerillass 4.0.0.** It takes a `$root`, since the 16px it assumed is wrong on a page that sets its own, and it converts every absolute unit rather than refusing the six besides `px`.
+
+</Hint>
 
 <Hint kind="warning">
 
@@ -23,12 +29,13 @@ Converts a pixel length to rem, against a 16px root.
 ## Arguments
 
 <Arguments of="remify">
-  <Argument name="$value" type="number (with unit)">Accepts a pixel length.</Argument>
+  <Argument name="$value" type="number (with unit)">An absolute length: <code>px</code>, <code>pt</code>, <code>pc</code>, <code>in</code>, <code>cm</code>, <code>mm</code> or <code>q</code>. A relative one such as <code>em</code> or <code>%</code> is refused, because it has no fixed size to convert.</Argument>
+  <Argument name="$root (16px)" type="number (with unit)">The page's root font size. <code>rem</code> is measured against it, so this is what makes the answer right when the page sets its own root.</Argument>
 </Arguments>
 
 ## Examples
 
-<Example caption="Pixel sizes emitted as rem.">
+<Example caption="Pixel sizes emitted as rem. With no `$root` the answer is measured against 16px, the browser's own, which is right as long as the page has not changed it.">
 ```scss
 .title {
   font-size: remify(30px);
@@ -36,6 +43,48 @@ Converts a pixel length to rem, against a 16px root.
 }
 ```
 </Example>
+
+<Example caption="**`$root` is what makes the answer right on a page that sets its own.** `html { font-size: 62.5% }` is a common trick for easy arithmetic, and it makes a rem 10px. Without `$root` the padding below would be 15px rather than 24px.">
+```scss
+html {
+  font-size: 62.5%;
+}
+
+.card {
+  padding: remify(24px, 10px);
+}
+```
+</Example>
+
+## What it refuses
+
+A relative length has no fixed size, so there is nothing to convert: `2em` is whatever the parent is, and `50%` whatever it is a percentage of. Every absolute unit works, and the six besides `px` used to be refused although each has one right answer: `remify(18pt)` is the same as `remify(24px)`.
+
+```scss
+.title {
+  font-size: remify(2em);
+}
+```
+```text
+Error: `2em` is not a valid $value for `remify`. Pass an absolute length, such as `24px` or `18pt`; a relative one such as `2em` has no fixed size to convert.
+```
+
+A root of zero is refused separately, since the value is divided by it.
+
+```scss
+.title {
+  font-size: remify(24px, 0px);
+}
+```
+```text
+Error: `$root: 0px` is not a valid root for `remify`: rem is measured against it, and nothing divides by zero. Pass the page's root font size, such as `16px`.
+```
+
+<Hint kind="info">
+
+**The round trip holds for the default root.** `pixelify(remify(24px))` is `24px` again, because [Pixelify](/docs/pixelify) converts a rem against the same 16px. A `$root` of your own has no matching argument there, so that pair no longer cancels out.
+
+</Hint>
 
 ## Related Links
 

@@ -3,14 +3,32 @@
 @use "sass:math";
 @use "sass:meta";
 
-@function remify($value) {
-  // Only a pixel length converts cleanly. Anything else used to reach the
-  // arithmetic unchecked: a word failed with Sass's own "Undefined operation",
-  // and a unitless number or another unit compiled to `calc(1.5rem / 1px)`.
-  @if meta.type-of($value) != "number" or math.unit($value) != "px" {
-    @error "`#{meta.inspect($value)}` is not a valid $value for `remify`. Pass a pixel length, such as `24px`.";
+// Converts an absolute length to rem, against the root font size.
+//
+// `rem` is relative to the root, and `$root` is what the result is measured
+// against. It defaults to 16px, the browser's own, which is what this assumed
+// and could not be told about before 4.0.0: a page that sets
+// `html { font-size: 62.5% }` has a 10px root, a common trick for making the
+// arithmetic easy, and there `remify(24px)` wrote `1.5rem`, which renders as
+// 15px rather than 24px.
+//
+// Any absolute length converts, not only pixels. Sass reduces `pt`, `pc`,
+// `in`, `cm`, `mm` and `q` to the same scale, so `remify(18pt)` is `1.5rem`
+// against the default root, the same as `remify(24px)`; until 4.0.0 all six
+// were refused although each has one right answer. The relative units are
+// still refused, because they have none: `2em` and `50%` are whatever the page
+// makes them.
+//
+// `convertToEm` is the same function for the other unit, and was given the
+// same two fixes; `pixelify` converts back, against the same default root.
+@function remify($value, $root: 16px) {
+  @each $name, $length in ("$value": $value, "$root": $root) {
+    @if meta.type-of($length) != "number" or not math.compatible($length, 1px) or math.is-unitless($length) {
+      @error "`#{meta.inspect($length)}` is not a valid #{$name} for `remify`. Pass an absolute length, such as `24px` or `18pt`; a relative one such as `2em` has no fixed size to convert.";
+    }
   }
-  $base-value: 16px;
-  $rem-value: math.div($value, $base-value);
-  @return $rem-value * 1rem;
+  @if $root == 0px {
+    @error "`$root: #{meta.inspect($root)}` is not a valid root for `remify`: rem is measured against it, and nothing divides by zero. Pass the page's root font size, such as `16px`.";
+  }
+  @return math.div($value, $root) * 1rem;
 }
