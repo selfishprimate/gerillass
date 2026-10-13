@@ -2144,6 +2144,16 @@ exports[`Manifest examples placeholder-shown: @include all-text-inputs { @includ
 }"
 `;
 
+exports[`Manifest examples position: .a { @include position(absolute, "10px 20px"); } 1`] = `
+".a {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  bottom: 10px;
+  left: 20px;
+}"
+`;
+
 exports[`Manifest examples position: .a { @include position(absolute, #{16}px AUTO revert-layer); } 1`] = `
 ".a {
   position: absolute;
@@ -2615,9 +2625,21 @@ exports[`Manifest examples shorthandProperty: .a { border-radius: shorthandPrope
 }"
 `;
 
+exports[`Manifest examples shorthandProperty: .a { margin: shorthandProperty("calc(1rem + 2px)"); } 1`] = `
+".a {
+  margin: calc(1rem + 2px) calc(1rem + 2px) calc(1rem + 2px) calc(1rem + 2px);
+}"
+`;
+
 exports[`Manifest examples shorthandProperty: .a { margin: shorthandProperty(10px 20px); } 1`] = `
 ".a {
   margin: 10px 20px 10px 20px;
+}"
+`;
+
+exports[`Manifest examples shorthandProperty: .a { padding: shorthandProperty("10px 20px"); } 1`] = `
+".a {
+  padding: 10px 20px 10px 20px;
 }"
 `;
 

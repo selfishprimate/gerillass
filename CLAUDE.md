@@ -1099,7 +1099,14 @@ Two pieces of work are open:
   thrown away and a unitless number is given its own, which is what Sass's
   deprecation warning asks for; a legacy colour keeps the original argument
   order, since reversing it for every colour moved twelve of 130 swept results
-  in their fourteenth significant digit,
+  in their fourteenth significant digit, and `shorthandProperty` reading a
+  string as its own values rather than repeating it whole with its quotes,
+  which wrote four quoted strings or eight values into a shorthand both engines
+  drop, through a paren-aware `topLevelWordsOf` beside `wordsOf` in
+  `scss/internal/_words.scss`, so a quoted `calc(1rem + 2px)` stays one value,
+  and refusing a value that is itself a list, which wrote six; a CSS-wide
+  keyword is deliberately still repeated, since the four longhands `position`
+  writes from it are kept where the shorthand is not,
   all on
   `docs-examples-review`;
   and the demos and prose

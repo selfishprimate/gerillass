@@ -1,6 +1,16 @@
+@charset "UTF-8";
+
 // The four-value order, and the null that `position` depends on: it reads the
 // four values back and writes a declaration only for the ones that are set.
+//
+// The string cases are the 4.0.0 fix and the reason this spec is worth more
+// than its snapshot. Sass counts a string as one value however many it holds,
+// so a quoted `"10px 20px"` used to be repeated with its quotes and wrote eight
+// values, which Chrome 152 and Firefox 156 both drop. Reading it is only
+// correct if parentheses are respected, which the last assertion of each group
+// pins: a quoted `calc(1rem + 2px)` is one value, not three.
 @use 'true' as *;
+@use 'sass:meta';
 @use '../../scss/utilities/shorthand-property' as *;
 
 @include describe('shorthandProperty()') {
@@ -17,5 +27,27 @@
   @include it('Carries a null through to every position it belongs in.') {
     @include assert-equal(shorthandProperty(null), null null null null);
     @include assert-equal(shorthandProperty(1px null), 1px null 1px null);
+  }
+
+  @include it('Reads a string as its own values, without its quotes.') {
+    @include assert-equal(meta.inspect(shorthandProperty("16px")), '16px 16px 16px 16px');
+    @include assert-equal(meta.inspect(shorthandProperty("10px 20px")), '10px 20px 10px 20px');
+    @include assert-equal(meta.inspect(shorthandProperty("8px 12px 16px")), '8px 12px 16px 12px');
+    @include assert-equal(meta.inspect(shorthandProperty("  10px  ")), '10px 10px 10px 10px');
+  }
+
+  @include it('Keeps a space inside parentheses, which belongs to a CSS function.') {
+    @include assert-equal(
+      meta.inspect(shorthandProperty("calc(1rem + 2px)")),
+      'calc(1rem + 2px) calc(1rem + 2px) calc(1rem + 2px) calc(1rem + 2px)'
+    );
+    @include assert-equal(
+      meta.inspect(shorthandProperty("min(10px, 2vw) auto")),
+      'min(10px, 2vw) auto min(10px, 2vw) auto'
+    );
+  }
+
+  @include it('Leaves a CSS-wide keyword repeated, which is what position needs.') {
+    @include assert-equal(shorthandProperty(inherit), inherit inherit inherit inherit);
   }
 }

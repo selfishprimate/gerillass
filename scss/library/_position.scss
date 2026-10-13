@@ -47,7 +47,10 @@
   // and the inset-* properties kept a length, a negative length, a percentage,
   // 0, auto and a CSS-wide keyword in any case, var(), maths functions, anchor()
   // and anchor-size(), and dropped any other word, a unitless number, a unit
-  // that is not a length, a colour, an image and a quoted length. This used to
+  // that is not a length, a colour, an image and a quoted length. A quoted
+  // offset never reaches this check since 4.0.0: `shorthandProperty` reads a
+  // string as its own values, so `position(absolute, "10px 20px")` arrives
+  // here as two lengths rather than as one string. This used to
   // go through validateLength, which only warns, and warned about working
   // values such as AUTO and revert-layer while saying nothing about 10deg or
   // url(); validateLength itself is unchanged, for callers who want a warning.

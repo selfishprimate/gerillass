@@ -2,23 +2,58 @@
 
 @use "sass:list";
 @use "sass:meta";
+@use "../internal/words" as *;
 
 // Expands one to four values into the four-value shorthand order, the way CSS
 // reads `margin`, `padding` and their neighbours.
 //
-// Until 4.0.0 only the fifth value was checked, and two shapes below that went
-// through silently: an empty list matched no branch and ended the build with
-// Sass's own "Function finished without @return", and a map was read as its
-// keys and values in turn, so `(a: 1, b: 2)` came out as `a 1 b 2 a 1 b 2`.
+// Until 4.0.0 only the fifth value was checked, and four shapes below that went
+// through silently, each measured as dropped in Chrome 152 and Firefox 156:
+//
+// - **an empty list** matched no branch and ended the build with Sass's own
+//   "Function finished without @return";
+// - **a map** was read as its keys and values in turn, so `(a: 1, b: 2)` came
+//   out as `a 1 b 2 a 1 b 2`;
+// - **a quoted value** was repeated with its quotes, so `shorthandProperty
+//   ("16px")` wrote `margin: "16px" "16px" "16px" "16px"`. Sass counts a string
+//   as one value however many it holds, so `"10px 20px"` wrote eight. The
+//   string is read as its own values now, the way `container` and `truncate`
+//   read a quoted keyword, and parentheses are respected so a quoted
+//   `calc(1rem + 2px)` stays one value rather than becoming three;
+// - **a value that is itself a list**, such as `((10px 20px) 30px)`, wrote six.
+//   There is no four-value reading of it, so it raises.
 //
 // `null` is left alone, and that is deliberate: `position` reads the four
 // offsets back out and writes a declaration only for the ones that are set, so
 // `position(absolute, null)` is `position: absolute` with no offsets at all.
+//
+// A CSS-wide keyword is **not** refused, although `margin: inherit inherit
+// inherit inherit` is dropped by all three browsers. The same four values are
+// correct for the library's own caller: `position(absolute, inherit)` writes
+// `top: inherit` and its three neighbours, which Chrome keeps. A keyword has no
+// four-value form, so write `margin: inherit` yourself rather than through
+// this function; the caveat in `meta/` says so too.
 @function shorthandProperty($value) {
   @if meta.type-of($value) == "map" {
     @error "`#{meta.inspect($value)}` is not a valid $value for `shorthandProperty`: a map is read as its keys and values in turn. Pass one to four values, such as `16px 24px`.";
   }
-  $length: list.length($value);
+
+  // Sass counts a string as one value, so the values are collected before they
+  // are counted rather than after.
+  $values: ();
+  @each $item in $value {
+    @if meta.type-of($item) == "map" {
+      @error "`#{meta.inspect($item)}` is not a valid value for `shorthandProperty`: a map is read as its keys and values in turn. Pass one to four single values, such as `16px 24px`.";
+    }
+    @if meta.type-of($item) == "list" and list.length($item) > 1 {
+      @error "`#{meta.inspect($item)}` is not a valid value for `shorthandProperty`: it is a list of #{list.length($item)} values where one belongs, so the shorthand would be written with more than four. Pass the values side by side, such as `16px 24px`.";
+    }
+    @each $word in topLevelWordsOf($item) {
+      $values: list.append($values, $word);
+    }
+  }
+
+  $length: list.length($values);
   @if $length == 0 {
     @error "`shorthandProperty` was given an empty list. Pass one to four values, such as `16px 24px`.";
   }
@@ -27,12 +62,12 @@
   }
 
   @if $length == 1 {
-    $all: list.nth($value, 1);
+    $all: list.nth($values, 1);
     @return $all $all $all $all;
   } @else if $length == 2 {
-    @return list.nth($value, 1) list.nth($value, 2) list.nth($value, 1) list.nth($value, 2);
+    @return list.nth($values, 1) list.nth($values, 2) list.nth($values, 1) list.nth($values, 2);
   } @else if $length == 3 {
-    @return list.nth($value, 1) list.nth($value, 2) list.nth($value, 3) list.nth($value, 2);
+    @return list.nth($values, 1) list.nth($values, 2) list.nth($values, 3) list.nth($values, 2);
   }
-  @return list.nth($value, 1) list.nth($value, 2) list.nth($value, 3) list.nth($value, 4);
+  @return list.nth($values, 1) list.nth($values, 2) list.nth($values, 3) list.nth($values, 4);
 }

@@ -33,3 +33,53 @@
   }
   @return $words;
 }
+
+// The same, but a space inside parentheses belongs to a CSS function rather
+// than separating two values, so `"calc(1rem + 2px)"` is one word and
+// `"10px 20px"` is two. `shorthandProperty` needs this reading, because it
+// counts the values it was given: through `wordsOf`, a quoted `calc()` became
+// three words and expanded into CSS the browser drops.
+//
+// `wordsOf` itself is not paren-aware, and is left that way deliberately: its
+// twelve callers check keyword grammars, where a parenthesis does not appear,
+// and `_gradient.scss` works around the one case that can by testing for a
+// `(` before it calls.
+@function topLevelWordsOf($value) {
+  @if meta.type-of($value) == "list" and list.separator($value) != "comma" {
+    @return $value;
+  }
+  @if meta.type-of($value) != "string" {
+    @return ($value,);
+  }
+  $string: string.unquote($value);
+  $length: string.length($string);
+  // `@for 1 through 0` counts down rather than not running, so an empty string
+  // has to be answered before the loop.
+  @if $length == 0 {
+    @return ();
+  }
+  $words: ();
+  $depth: 0;
+  $word: "";
+  @for $i from 1 through $length {
+    $char: string.slice($string, $i, $i);
+    @if $char == "(" {
+      $depth: $depth + 1;
+      $word: $word + $char;
+    } @else if $char == ")" {
+      $depth: $depth - 1;
+      $word: $word + $char;
+    } @else if $char == " " and $depth == 0 {
+      @if string.length($word) > 0 {
+        $words: list.append($words, string.unquote($word));
+      }
+      $word: "";
+    } @else {
+      $word: $word + $char;
+    }
+  }
+  @if string.length($word) > 0 {
+    $words: list.append($words, string.unquote($word));
+  }
+  @return $words;
+}

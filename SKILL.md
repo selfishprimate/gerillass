@@ -371,6 +371,7 @@ a dropped declaration rather than an error.
 
 - `static` writes no offsets, because a static box ignores all four. Measured in Chrome 152, Firefox 156 and Safari 26.6.2, a static box carrying `top/right/bottom/left: 30px` sits exactly where a static box with none sits, while the same offsets move a `relative` box by 30px. Until 4.0.0 the default `0` meant every `position(static)` wrote four dead declarations. An offset that is not zero raises rather than being dropped quietly.
 - The mixin writes declarations, so it needs a rule to write them into. A call at the root failed with Sass's own "Declarations may only be used within style rules", which pointed at a line inside the library; it raises with the mixin's own message since 4.0.0.
+- A quoted offset used to be refused and is read now: `shorthandProperty` expands the offsets, and since 4.0.0 it reads a string as its own values, so `position(absolute, "10px 20px")` writes top and bottom 10px and the sides 20px. A quoted keyword in $position is still written without its quotes.
 
 **`remove`**
 
@@ -615,7 +616,9 @@ a dropped declaration rather than an error.
 
 **`shorthandProperty`**
 
-- Until 4.0.0 only a fifth value was checked. An empty list ended the build with Sass's own "Function finished without @return", and a map was read as its keys and values in turn, so `(a: 1, b: 2)` came out as `a 1 b 2 a 1 b 2`. Both raise now.
+- Sass counts a string as one value however many it holds, so until 4.0.0 a quoted value was repeated with its quotes: `shorthandProperty("16px")` wrote `margin: "16px" "16px" "16px" "16px"` and `"10px 20px"` wrote eight values. Both were dropped by Chrome 152 and Firefox 156. A string is read as its own values now, and parentheses are respected, so `"calc(1rem + 2px)"` is one value rather than three.
+- A value that is itself a list, such as `((10px 20px) 30px)`, wrote six values into the shorthand and was dropped. It raises now; pass the values side by side.
+- A CSS-wide keyword is not refused, although `margin: inherit inherit inherit inherit` is dropped. The same four values are correct for `position`, which writes them as four longhands: `top: inherit` is kept. A keyword has no four-value form, so write `margin: inherit` directly rather than through this function.
 - A `null` is passed through on purpose, because a caller can read the four values back and skip the ones that are unset, which is what `position` does: `position(absolute, null)` writes the position and no offsets. In a declaration of your own a `null` simply disappears from the list, so `margin: shorthandProperty(1px null)` is `margin: 1px 1px`.
 
 **`tint`**

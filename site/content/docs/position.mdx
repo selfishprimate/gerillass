@@ -157,6 +157,8 @@ Error: `huge` is not a valid $position for `position`: it is not one of: static,
 
 An offset the browser drops stops the build too. Measured in Chrome 152, `top`, `left` and the `inset-*` properties drop a word other than `auto` or a CSS-wide keyword, a unitless number other than `0`, a unit that is not a length, a colour, an image and a quoted length. Until 2.3.1 these compiled, some with a warning and some without, and the warning also fired for working values such as `AUTO` and `revert-layer`; it is gone.
 
+A **quoted** offset no longer reaches that check. [Shorthand Property](/docs/shorthand-property), which expands the offsets, reads a string as its own values since 4.0.0, so `position(absolute, "10px 20px")` arrives as two lengths and writes `top: 10px` with `right: 20px`. It used to stop the build.
+
 ```scss
 .element {
   @include position(absolute, 0 10deg);

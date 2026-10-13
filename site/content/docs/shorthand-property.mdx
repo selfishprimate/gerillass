@@ -9,38 +9,50 @@ page_keywords: "Gerillass shorthandProperty, Sass shorthandProperty, Sass Functi
 
 <Member name="shorthandProperty">
 
-Expands one to four values into the four-value CSS shorthand order.
+Expands one to four values into the four-value CSS shorthand order, so a mixin of your own can take either form and read the four values back by position.
 
 </Member>
 
 ## Arguments
 
 <Arguments of="shorthandProperty">
-  <Argument name="$value" type="list">Accepts one to four values.</Argument>
+  <Argument name="$value" type="list">One to four values, in the order CSS reads them: all, then block and inline, then top and sides and bottom, then top right bottom left. A string holding them works too and is read as its own values.</Argument>
 </Arguments>
 
 ## Examples
 
-<Example caption="One to four values expanded to the full four-value shorthand.">
+<Example caption="Three values become four, the second standing in for both sides. The box below has 8px above, 24px each side and 32px below.">
 ```scss
-.card {
-  padding: shorthandProperty(16px 24px);
+.box {
+  padding: shorthandProperty(8px 24px 32px);
 }
+```
+```html
+<style>
+  :where(.box) { background: #668f80; border-radius: 8px; }
+  :where(.box > span) { display: block; background: #f2f2eb; border-radius: 4px; padding: 10px; font: 14px/1.4 Inter, ui-sans-serif, system-ui, sans-serif; }
+</style>
+<div class="box"><span>The green is the padding</span></div>
 ```
 </Example>
 
 <Example caption="A `null` is carried through to the position it belongs in, which is what lets a caller skip a side. [Position](/docs/position) reads the four values back and writes a declaration only for the ones that are set.">
 ```scss
-.card {
-  padding: shorthandProperty(16px);
-  margin: shorthandProperty(8px 12px 16px);
-}
+.a { margin: shorthandProperty(16px); }
+.b { margin: shorthandProperty(1px null); }
+```
+</Example>
+
+<Example caption="A string is read as its own values, so a value built by interpolation or read out of a map works. A space inside parentheses belongs to the function, not to the next value.">
+```scss
+.a { padding: shorthandProperty("10px 20px"); }
+.b { margin: shorthandProperty("calc(1rem + 2px)"); }
 ```
 </Example>
 
 ## What it refuses
 
-Arguments are checked, so a wrong value stops the build with a message instead of quietly producing the wrong CSS.
+**More than four values**, however they arrive. A string is counted after it is read, so `"1px 2px 3px 4px 5px"` reaches the same message.
 
 ```scss
 .card {
@@ -51,11 +63,28 @@ Arguments are checked, so a wrong value stops the build with a message instead o
 Error: `shorthandProperty` was given 5 values. Pass one to four, in the order CSS reads them: all, block and inline, top and sides and bottom, or top right bottom left.
 ```
 
-An empty list and a map raise as well.
+**A value that is itself a list.** There is no four-value reading of it, and until 4.0.0 it wrote six, which Chrome 152 and Firefox 156 both drop.
+
+```scss
+.card {
+  padding: shorthandProperty(((10px 20px) 30px));
+}
+```
+```text
+Error: `10px 20px` is not a valid value for `shorthandProperty`: it is a list of 2 values where one belongs, so the shorthand would be written with more than four. Pass the values side by side, such as `16px 24px`.
+```
+
+An empty list, an empty string and a map raise as well.
 
 <Hint kind="warning">
 
-**Changed in Gerillass 4.0.0.** Only a fifth value used to be checked. An empty list ended the build with Sass's own "Function finished without @return", and a map was read as its keys and values in turn, so `(a: 1, b: 2)` came out as `a 1 b 2 a 1 b 2`. A `null` is still passed through, on purpose.
+**Changed in Gerillass 4.0.0.** Sass counts a string as one value however many it holds, so `shorthandProperty("16px")` used to write `padding: "16px" "16px" "16px" "16px"` and `"10px 20px"` wrote eight values. Both were dropped. Only a fifth value used to be checked at all: an empty list ended the build with Sass's own "Function finished without @return", and a map was read as its keys and values in turn.
+
+</Hint>
+
+<Hint kind="info">
+
+**A CSS-wide keyword is not refused, and `margin: inherit` is better written by hand.** `shorthandProperty(inherit)` gives four copies, and `margin: inherit inherit inherit inherit` is dropped by both engines. Those same four are right for [Position](/docs/position), which writes them as four longhands where `top: inherit` is kept, so the function cannot tell the two apart.
 
 </Hint>
 

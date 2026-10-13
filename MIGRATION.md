@@ -3415,6 +3415,63 @@ a fraction: `shade($c, 0.5)` is half a per cent, not half.
 Nothing in `scss/` calls either function, so there is no knock-on inside the
 library. They are there for stylesheets, which is the whole of their audience.
 
+---
+
+## Change: `shorthandProperty` reads a string, and refuses a nested list
+
+Sass counts a string as **one** value however many it holds, so a quoted value
+was repeated with its quotes:
+
+```scss
+.card { padding: shorthandProperty("16px"); }
+// 3.x: padding: "16px" "16px" "16px" "16px"
+.card { padding: shorthandProperty("10px 20px"); }
+// 3.x: padding: "10px 20px" "10px 20px" "10px 20px" "10px 20px"
+```
+
+Chrome 152 and Firefox 156 drop both. A string is read as its own values now,
+the way `container` and `truncate` already read a quoted keyword, so the first
+is `16px 16px 16px 16px` and the second `10px 20px 10px 20px`. Parentheses are
+respected, which matters because a plain split on spaces would turn
+`"calc(1rem + 2px)"` into three values: it stays one.
+
+`position` gains from the same fix, since it expands its offsets through this
+function. `position(absolute, "10px 20px")` used to raise and now writes
+`top: 10px; right: 20px; bottom: 10px; left: 20px`.
+
+**Two shapes now raise**, and both wrote CSS the browsers drop:
+
+| Call | 3.x | 4.0.0 |
+|---|---|---|
+| `shorthandProperty(((10px 20px) 30px))` | `10px 20px 30px 10px 20px 30px` | refused |
+| `shorthandProperty("")` | `"" "" "" ""` | refused as an empty list |
+
+A string holding more than four values reaches the existing message for five,
+rather than being repeated whole: `shorthandProperty("1px 2px 3px 4px 5px")`
+now says it was given 5 values.
+
+**A CSS-wide keyword is deliberately left alone.** `shorthandProperty(inherit)`
+still gives four copies, and `margin: inherit inherit inherit inherit` is
+dropped by both engines, so write `margin: inherit` yourself. Those same four
+values are correct for `position`, which writes them as four longhands where
+`top: inherit` is kept, and the function has no way to tell the two callers
+apart. Refusing it would have broken `position(absolute, inherit)`, which works
+today.
+
+One message moved rather than changed: `position(absolute, ((10px 20px) 30px))`
+used to be refused by `position` and is now refused by `shorthandProperty`,
+which it calls first. The fault named is the same one.
+
+Measured on 74 compiled calls through both members, before and after: 54
+identical, 9 that wrote dropped CSS now write CSS both engines keep, 4
+`position` calls that used to raise now work, 6 newly refused, all of which
+were dropped before. Every changed declaration was tested in Chrome 152 and
+Firefox 156, which agreed on all sixteen. Safari was not run.
+
+The paren-aware split lives in `scss/internal/_words.scss` as
+`topLevelWordsOf`, beside `wordsOf`. `wordsOf` itself is unchanged: its twelve
+callers check keyword grammars where a parenthesis does not appear.
+
 
 ---
 
