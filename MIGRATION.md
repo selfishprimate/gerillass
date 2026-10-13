@@ -147,6 +147,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `isNumber` takes a list, as `isColor` and `isTime` do | not breaking |
 | `isTime` reads its unit in any case, and takes an interpolated time | not breaking |
 | `mapDeepGet` raises on a key that is not there | breaking, loud; it used to answer `null` |
+| `pixelify` says which of three faults a unit has | a better message; not breaking |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -3268,6 +3269,33 @@ not a map`. All three are the function's own now.
 Compiled across 23 calls: five identical, three that the new `$default` makes
 work, six newly refused -- every one of them a missing key that used to answer
 `null` -- nine where the message improved, and no value changed.
+
+
+## Not breaking: `pixelify` says which fault a unit has
+
+One message served three different faults and was only right about the first,
+so `pixelify(10deg)` was told that `deg` is measured against the element's own
+font size, and `pixelify(2PX)` that `PX` is.
+
+```text
+3.x, for all three:
+  `…` cannot be converted to pixels by `pixelify`: `…` is measured against
+  something only the browser knows, the element's own font size for `em`, …
+```
+
+It now says which it is. A unit whose size only the browser knows keeps that
+reason; a unit that is not a length at all, `deg` or `s`, is told so; and a unit
+this function would convert if the case matched, `2PX` or `2REM`, is told that
+Sass reads it as a unit of its own.
+
+That last one is refused rather than converted on purpose: Sass reads a unit
+case-sensitively, so `2PX + 1px` fails in plain Sass too, and converting it here
+would make this function disagree with every other piece of Sass arithmetic.
+
+Compiled across 42 calls, through `pixelify` and `scissors`, which is the one
+place inside the library that calls it: 29 identical and 13 where only the
+message changed. Nothing newly refused, nothing newly accepted, and no returned
+value different.
 
 
 ---

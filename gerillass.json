@@ -3423,7 +3423,8 @@
           "accepts": [
             "a unitless number, which takes a `px`",
             "a length in `px`, or in an absolute unit: `in`, `cm`, `mm`, `pt`, `pc`, `q`",
-            "a `rem`, converted against a 16px base, as `remify` assumes"
+            "a `rem`, converted against a 16px base, as `remify` assumes",
+            "a unit in upper case is refused, because Sass reads `PX` as a unit of its own and cannot convert it"
           ]
         }
       ],
@@ -3432,7 +3433,8 @@
       "summary": "Returns the value in pixels: a unitless number takes a px, and a length in another unit is converted.",
       "caveats": [
         "Until 4.0.0 the unit was thrown away and `px` written in its place, so `2rem` gave `2px`, `1in` gave `1px`, `12pt` gave `12px` and `50%` gave `50px`. The conversions are now real: measured in Chrome 152, Firefox 156 and Safari 26.6.2, `2rem` is 32px, `1in` is 96px and `12pt` is 16px in all three.",
-        "`em`, `%` and the viewport units are refused rather than guessed at: they are measured against the element's own font size, its parent and the window, none of which Sass can know. `rem` is converted against a 16px root, the same assumption `remify` and `convertToEm` make, so it is wrong for a page that sets another root size."
+        "`em`, `%` and the viewport units are refused rather than guessed at: they are measured against the element's own font size, its parent and the window, none of which Sass can know. `rem` is converted against a 16px root, the same assumption `remify` and `convertToEm` make, so it is wrong for a page that sets another root size.",
+        "One message used to serve three different faults and was only right about the first, so `pixelify(10deg)` was told that `deg` is measured against the element's own font size and `pixelify(2PX)` that `PX` is. It now says which it is: a unit that is not a length, one whose size only the browser knows, or one this function would convert if the case matched. Sass reads a unit case-sensitively, so `2PX + 1px` fails in plain Sass too, and converting it here would make this function disagree with every other piece of Sass arithmetic."
       ],
       "examples": [
         ".a { width: pixelify(24); }",
@@ -3446,7 +3448,9 @@
         ".a { width: pixelify(2em); }",
         ".a { width: pixelify(50%); }",
         ".a { width: pixelify(10vw); }",
-        ".a { width: pixelify(10deg); }"
+        ".a { width: pixelify(10deg); }",
+        ".a { width: pixelify(2PX); }",
+        ".a { width: pixelify(2s); }"
       ]
     },
     {

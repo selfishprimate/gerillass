@@ -67,7 +67,29 @@ Error: `"24"` is not a valid $value for `pixelify`. Pass a number, with or witho
 }
 ```
 ```text
-Error: `2em` cannot be converted to pixels by `pixelify`: `em` is measured against something only the browser knows, the element's own font size for `em`, its parent for `%`, and the window for the viewport units. Pass a unitless number, or a length in `px`, `rem`, or an absolute unit such as `in`, `cm`, `mm`, `pt`, `pc` or `q`.
+Error: `2em` cannot be converted to pixels by `pixelify`: `em` is measured against something only the browser knows: the element's own font size for `em`, its parent for `%`, the line box for `lh`, the font for `ch` and `ex`, and the window for the viewport units. Pass a unitless number, or a length in `px`, `rem`, or an absolute unit such as `in`, `cm`, `mm`, `pt`, `pc` or `q`.
+```
+
+A unit that is not a length at all gets its own reason rather than that one. Until 4.0.0 a single message served all of these, so `pixelify(10deg)` was told that `deg` is measured against the element's own font size.
+
+```scss
+.icon {
+  width: pixelify(10deg);
+}
+```
+```text
+Error: `10deg` cannot be converted to pixels by `pixelify`: `deg` is not a length. Pass a unitless number, or a length in `px`, `rem`, or an absolute unit such as `in`, `cm`, `mm`, `pt`, `pc` or `q`.
+```
+
+And so does a unit this function would convert if the case matched. Sass reads a unit case-sensitively, so `2PX` and `1px` are different units to it and `2PX + 1px` fails in plain Sass too; converting it here would make this function disagree with every other piece of Sass arithmetic.
+
+```scss
+.icon {
+  width: pixelify(2PX);
+}
+```
+```text
+Error: `2PX` cannot be converted to pixels by `pixelify`: Sass reads `PX` as a unit of its own, not as `px`, so it cannot convert it; write the unit in lower case. Pass a unitless number, or a length in `px`, `rem`, or an absolute unit such as `in`, `cm`, `mm`, `pt`, `pc` or `q`.
 ```
 
 ## Related Links

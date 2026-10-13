@@ -1,7 +1,9 @@
 @charset "UTF-8";
 
 @use "sass:math";
+@use "sass:list";
 @use "sass:meta";
+@use "sass:string";
 @use "../utilities/clear-unit" as *;
 
 // Returns the value in pixels: a unitless number takes a `px`, and a length in
@@ -18,6 +20,13 @@
 // `convertToEm` assume, so `pixelify(remify(24px))` is `24px` again. The rest
 // are refused: `em` follows the element's own font size, `%` its parent, and
 // the viewport units the window, none of which Sass can know.
+// The lengths whose size only the browser knows, and the ones this function
+// does convert, so the message can say which of the three faults it is: a unit
+// that is not a length at all, one that is relative, or one it could convert if
+// the case matched.
+$-relative: "em" "ex" "rex" "ch" "rch" "cap" "rcap" "ic" "ric" "lh" "rlh" "%" "vw" "vh" "vi" "vb" "vmin" "vmax" "svw" "svh" "svi" "svb" "svmin" "svmax" "lvw" "lvh" "lvi" "lvb" "lvmin" "lvmax" "dvw" "dvh" "dvi" "dvb" "dvmin" "dvmax" "cqw" "cqh" "cqi" "cqb" "cqmin" "cqmax";
+$-convertible: "px" "in" "cm" "mm" "pt" "pc" "q" "rem";
+
 @function pixelify($value) {
   @if meta.type-of($value) != "number" {
     @error "`#{meta.inspect($value)}` is not a valid $value for `pixelify`. Pass a number, with or without a unit.";
@@ -31,5 +40,20 @@
   @if math.unit($value) == "rem" {
     @return clearUnit($value) * 16px;
   }
-  @error "`#{meta.inspect($value)}` cannot be converted to pixels by `pixelify`: `#{math.unit($value)}` is measured against something only the browser knows, the element's own font size for `em`, its parent for `%`, and the window for the viewport units. Pass a unitless number, or a length in `px`, `rem`, or an absolute unit such as `in`, `cm`, `mm`, `pt`, `pc` or `q`.";
+  // One message used to serve three different faults, and it was only right
+  // about the first: `pixelify(10deg)` was told that `deg` is measured against
+  // the element's own font size, and `pixelify(2PX)` that `PX` is.
+  $unit: math.unit($value);
+  $lower: string.to-lower-case($unit);
+  $why: "`#{$unit}` is not a length";
+  @if list.index($-relative, $lower) {
+    $why: "`#{$unit}` is measured against something only the browser knows: the element's own font size for `em`, its parent for `%`, the line box for `lh`, the font for `ch` and `ex`, and the window for the viewport units";
+  } @else if list.index($-convertible, $lower) {
+    // Sass reads a unit case-sensitively, so `2PX` and `1px` are incompatible
+    // and `2PX + 1px` fails in plain Sass too. Converting it here would make
+    // this function disagree with every other piece of Sass arithmetic, so it
+    // says what is wrong instead.
+    $why: "Sass reads `#{$unit}` as a unit of its own, not as `#{$lower}`, so it cannot convert it; write the unit in lower case";
+  }
+  @error "`#{meta.inspect($value)}` cannot be converted to pixels by `pixelify`: #{$why}. Pass a unitless number, or a length in `px`, `rem`, or an absolute unit such as `in`, `cm`, `mm`, `pt`, `pc` or `q`.";
 }
