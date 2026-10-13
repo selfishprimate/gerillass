@@ -9,15 +9,15 @@ page_keywords: "Gerillass pseudoSelector, Sass pseudoSelector, Sass Functions, S
 
 <Member name="pseudoSelector">
 
-Appends a pseudo-class to every selector in a list.
+Appends a pseudo-class to every selector in a list, so one rule can carry a state on all of them. The colon is added for you, and a name that would write a selector the browser drops stops the build.
 
 </Member>
 
 ## Arguments
 
 <Arguments of="pseudoSelector">
-  <Argument name="$elements" type="list">Accepts a list of selectors.</Argument>
-  <Argument name="$pseudo (null)" type="string">Accepts a pseudo-class name, without the colon.</Argument>
+  <Argument name="$elements" type="list">One selector, or a list of them, each a string. An empty list is refused.</Argument>
+  <Argument name="$pseudo (null)" type="string">The name of a pseudo-class, <strong>without its colon</strong>, which the function adds. A functional one such as <code>not(:disabled)</code> or <code>nth-child(2)</code> works. Left out, the selectors come back as they were.</Argument>
 </Arguments>
 
 ## Examples
@@ -30,6 +30,46 @@ Appends a pseudo-class to every selector in a list.
 }
 ```
 </Example>
+
+<Example caption="A functional pseudo-class is a name like any other, so the parenthesis in it is no obstacle.">
+```scss
+#{pseudoSelector(("button", ".btn"), "not(:disabled)")} {
+  cursor: pointer;
+}
+```
+</Example>
+
+## What it refuses
+
+**The colon, written in front of the name.** The function adds it, so a leading one makes `button::hover`, a pseudo-element that does not exist. Measured in Chrome 152 and Firefox 156 by reading the parsed rules back, both engines drop the whole rule, so the styles simply never appear and nothing says why. It is the likeliest slip of the three, since the argument is the name without its colon.
+
+```scss
+#{pseudoSelector(("button", "a"), ":hover")} {
+  color: #db504a;
+}
+```
+```text
+Error: `":hover"` is not a valid $pseudo for `pseudoSelector`: the colon is added for you, so this writes `button::hover`, which is a pseudo-element that does not exist and which both Chrome and Firefox drop. Pass `hover`.
+```
+
+**A comma in the name**, which adds a selector of its own. `"hover, .x"` writes `button:hover, .x`, which both engines keep and which styles every `.x` on the page: one argument then reaches past the selectors it was given.
+
+```scss
+#{pseudoSelector(("button", "a"), "hover, .x")} {
+  color: #db504a;
+}
+```
+```text
+Error: `"hover, .x"` is not a valid $pseudo for `pseudoSelector`: a comma in it adds a selector of its own, so this would style everything after the comma as well, not only the selectors it was given. Pass one pseudo-class name.
+```
+
+An empty name is refused too, since it writes a selector ending in a bare colon, which both engines drop.
+
+<Hint kind="info">
+
+**[All Buttons](/docs/all-buttons) and [All Text Inputs](/docs/all-text-inputs) were never affected.** Each picks its pseudo from a fixed list before calling this, so the guard was missing only from the function you call yourself.
+
+</Hint>
 
 ## Related Links
 

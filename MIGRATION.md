@@ -148,6 +148,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `isTime` reads its unit in any case, and takes an interpolated time | not breaking |
 | `mapDeepGet` raises on a key that is not there | breaking, loud; it used to answer `null` |
 | `pixelify` says which of three faults a unit has | a better message; not breaking |
+| `pseudoSelector` refuses a name that writes a selector the browser drops | breaking, loud; all three were silent |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -3296,6 +3297,35 @@ Compiled across 42 calls, through `pixelify` and `scissors`, which is the one
 place inside the library that calls it: 29 identical and 13 where only the
 message changed. Nothing newly refused, nothing newly accepted, and no returned
 value different.
+
+
+## Break: `pseudoSelector` checks the name it is given
+
+It had no checks at all, and three ways of getting it wrong were silent in the
+stylesheet. Measured in Chrome 152 and Firefox 156 by reading the parsed rules
+back:
+
+```scss
+pseudoSelector($list, ":hover")      // 3.x: button::hover — both engines drop the rule
+pseudoSelector($list, "")            // 3.x: button:       — dropped as well
+pseudoSelector($list, "hover, .x")   // 3.x: button:hover, .x — kept, and styles every .x
+```
+
+The first is the likeliest slip, since the argument is the name **without** its
+colon and the function adds it; the styles then simply never appear and nothing
+says why. The third is worse than broken: one argument reaches past the
+selectors it was given and styles something else on the page.
+
+An empty `$elements`, a `null` one and a selector that is not a string are
+refused too.
+
+`all-buttons` and `all-text-inputs` were never affected, which the sweep
+confirms: each picks its pseudo from a fixed list before calling this, so the
+guard was missing only from the function a user calls directly.
+
+Compiled across 42 calls through the function and both mixins: 34 identical,
+eight newly refused -- every one of them a dropped rule or an injected selector
+-- and not a single call through either mixin changed.
 
 
 ---

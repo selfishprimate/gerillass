@@ -88,7 +88,7 @@ Arguments are validated and refused with a message naming what is accepted, so a
 - [isTime($value)](https://docs.gerillass.com/docs/is-time/): Returns the value if every part of it is a time in s or ms, and errors otherwise.
 - [mapDeepGet($map, $keys...)](https://docs.gerillass.com/docs/map-deep-get/): Reads a value out of a nested map by following a chain of keys, and raises when a key is not there.
 - [pixelify($value)](https://docs.gerillass.com/docs/pixelify/): Returns the value in pixels: a unitless number takes a px, and a length in another unit is converted.
-- [pseudoSelector($elements, $pseudo: null)](https://docs.gerillass.com/docs/pseudo-selector/): Appends a pseudo-class to every selector in a list.
+- [pseudoSelector($elements, $pseudo: null)](https://docs.gerillass.com/docs/pseudo-selector/): Appends a pseudo-class to every selector in a list, and refuses a name that would write a selector the browser drops.
 - [remify($value)](https://docs.gerillass.com/docs/remify/): Converts a pixel length to rem, against a 16px root.
 - [shade($color, $percentage)](https://docs.gerillass.com/docs/shade/): Mixes a colour towards black by a percentage.
 - [shorthandProperty($value)](https://docs.gerillass.com/docs/shorthand-property/): Expands one to four values into the four-value CSS shorthand order.

@@ -3461,24 +3461,37 @@
           "name": "$elements",
           "required": true,
           "accepts": [
-            "a list of selectors"
+            "one selector, or a list of them, each a string",
+            "an empty list and null are refused"
           ]
         },
         {
           "name": "$pseudo",
           "default": "null",
           "accepts": [
-            "a pseudo-class name, without the colon"
+            "the name of a pseudo-class, without its colon",
+            "a functional one such as not(:disabled) or nth-child(2)",
+            "null, the default, which leaves the selectors alone",
+            "a leading colon, an empty name and a comma are refused"
           ]
         }
       ],
       "file": "scss/utilities/_pseudo-selector.scss",
       "signature": "pseudoSelector($elements, $pseudo: null)",
-      "summary": "Appends a pseudo-class to every selector in a list.",
-      "examples": [
-        ".a { content: \"#{pseudoSelector((\"button\", \"a\"), \"hover\")}\"; }"
+      "summary": "Appends a pseudo-class to every selector in a list, and refuses a name that would write a selector the browser drops.",
+      "caveats": [
+        "It had no checks at all until 4.0.0, and each of the three ways to get it wrong was silent in the stylesheet. Measured in Chrome 152 and Firefox 156 by reading the parsed rules back: a colon written in front of the name gave `button::hover`, a pseudo-element that does not exist, and both engines dropped the whole rule; an empty name gave `button:` and was dropped the same way; and a comma in the name gave `button:hover, .x`, which both engines kept and which styled every `.x` on the page, so one argument reached past the selectors it was given.",
+        "`all-buttons` and `all-text-inputs` both pick the pseudo from a fixed list before calling this, so neither mixin was ever affected; the guard was missing only from the function a user calls directly."
       ],
-      "rejects": []
+      "examples": [
+        ".a { content: \"#{pseudoSelector((\"button\", \"a\"), \"hover\")}\"; }",
+        ".a { content: \"#{pseudoSelector((\"button\",), \"not(:disabled)\")}\"; }"
+      ],
+      "rejects": [
+        ".a { content: \"#{pseudoSelector((\"button\", \"a\"), \":hover\")}\"; }",
+        ".a { content: \"#{pseudoSelector((\"button\", \"a\"), \"hover, .x\")}\"; }",
+        ".a { content: \"#{pseudoSelector((), \"hover\")}\"; }"
+      ]
     },
     {
       "name": "remify",

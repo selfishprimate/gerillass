@@ -1,0 +1,45 @@
+@charset "UTF-8";
+
+// This had no checks at all until 4.0.0. `all-buttons` and `all-text-inputs`
+// both pick the pseudo from a fixed list before calling it, so the two mixins
+// were safe and the function was not, and it is public API with a page of its
+// own. Each of the three refusals below was measured in Chrome 152 and
+// Firefox 156 by reading the parsed rules back.
+@use 'true' as *;
+@use 'sass:meta';
+@use '../../scss/utilities/pseudo-selector' as *;
+
+@include describe('pseudoSelector()') {
+  @include it('Appends the pseudo-class to every selector.') {
+    @include assert-equal(
+      meta.inspect(pseudoSelector(('button', 'a'), 'hover')),
+      '"button:hover", "a:hover"'
+    );
+  }
+
+  @include it('Leaves the selectors alone when no pseudo is given.') {
+    @include assert-equal(meta.inspect(pseudoSelector(('button', 'a'))), '"button", "a"');
+    @include assert-equal(meta.inspect(pseudoSelector(('button', 'a'), null)), '"button", "a"');
+  }
+
+  // A functional pseudo-class is a name like any other, and the parenthesis in
+  // it must not be mistaken for a fault. A one-element list inspects with its
+  // trailing comma, which is Sass showing it is a list and not a string.
+  @include it('Takes a functional pseudo-class.') {
+    @include assert-equal(
+      meta.inspect(pseudoSelector(('button',), 'not(:disabled)')),
+      '("button:not(:disabled)",)'
+    );
+    @include assert-equal(
+      meta.inspect(pseudoSelector(('button',), 'nth-child(2)')),
+      '("button:nth-child(2)",)'
+    );
+  }
+
+  @include it('Keeps a selector that is more than a tag.') {
+    @include assert-equal(
+      meta.inspect(pseudoSelector(('a[href]', 'button'), 'hover')),
+      '"a[href]:hover", "button:hover"'
+    );
+  }
+}

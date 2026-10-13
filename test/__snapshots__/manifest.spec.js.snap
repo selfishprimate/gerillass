@@ -2237,6 +2237,12 @@ exports[`Manifest examples pseudoSelector: .a { content: "#{pseudoSelector(("but
 }"
 `;
 
+exports[`Manifest examples pseudoSelector: .a { content: "#{pseudoSelector(("button",), "not(:disabled)")}"; } 1`] = `
+".a {
+  content: "button:not(:disabled)";
+}"
+`;
+
 exports[`Manifest examples remify: .a { font-size: remify(24px); } 1`] = `
 ".a {
   font-size: 1.5rem;

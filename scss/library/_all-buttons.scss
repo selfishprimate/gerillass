@@ -1,6 +1,7 @@
 @charset "UTF-8";
 
 @use "sass:list";
+@use "sass:meta";
 @use "../lists/list-of-buttons" as *;
 @use "../utilities/pseudo-selector" as *;
 
@@ -21,6 +22,6 @@
       @content;
     }
   } @else {
-    @error "The argument must be `null` or one of the followings: #{$list}.";
+    @error "`#{meta.inspect($pseudo)}` is not a valid $pseudo for `all-buttons`. Pass one of #{$list}, or leave it out for the resting state.";
   }
 }

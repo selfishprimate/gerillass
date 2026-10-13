@@ -1085,7 +1085,10 @@ Two pieces of work are open:
   declaration out with nothing to say why, with `$default` as the explicit way
   to ask for the old answer, and `pixelify` saying which of three faults a unit
   has rather than telling `10deg` and `2PX` that they are measured against the
-  element's own font size,
+  element's own font size, and `pseudoSelector` checking the name it is given,
+  which had no checks at all, so a leading colon wrote `button::hover` and a
+  comma injected a selector of its own, and `all-buttons` naming its argument
+  rather than asking for "one of the followings",
   all on
   `docs-examples-review`;
   and the demos and prose

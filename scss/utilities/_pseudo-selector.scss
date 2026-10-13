@@ -1,12 +1,59 @@
 @charset "UTF-8";
 
 @use "sass:list";
+@use "sass:meta";
+@use "sass:string";
 
+// Appends a pseudo-class to every selector in a list.
+//
+// It had no checks at all, and `all-buttons` and `all-text-inputs` both pick
+// the pseudo from a fixed list before calling it, so the two mixins were safe
+// and the function was not. It is public API with a page of its own, and the
+// three things that went wrong are each silent in the stylesheet, measured in
+// Chrome 152 and Firefox 156 by reading the parsed rules back:
+//
+// - **a colon written in front of the name.** The function adds the colon, so
+//   `pseudoSelector($list, ":hover")` wrote `button::hover`, a pseudo-element
+//   that does not exist. Both engines dropped the whole rule, so the styles
+//   simply never appeared. It is the likeliest slip of the three, since the
+//   argument is the name without its colon;
+// - **an empty name**, which wrote `button:` and was dropped the same way;
+// - **a comma in the name.** `pseudoSelector($list, "hover, .x")` wrote
+//   `button:hover, .x`, and both engines kept it and styled every `.x` on the
+//   page. One argument then reaches past the selectors it was given.
 @function pseudoSelector($elements, $pseudo: null) {
+  @if $elements == null or list.length($elements) == 0 {
+    @error "`pseudoSelector` needs at least one selector. Pass one, or a list of them, such as `(\"button\", \"a\")`.";
+  }
+  @each $element in $elements {
+    @if meta.type-of($element) != "string" {
+      @error "`#{meta.inspect($element)}` is not a valid selector for `pseudoSelector`. Pass a selector as a string, such as `\"button\"`.";
+    }
+  }
+
+  @if $pseudo != null {
+    @if meta.type-of($pseudo) != "string" {
+      @error "`#{meta.inspect($pseudo)}` is not a valid $pseudo for `pseudoSelector`. Pass the name of a pseudo-class as a string, without its colon, such as `\"hover\"`.";
+    }
+    $name: string.unquote($pseudo);
+    @if string.length($name) == 0 {
+      @error "`pseudoSelector` was given an empty $pseudo, which writes a selector ending in a bare colon. Both Chrome and Firefox drop that rule. Pass the name of a pseudo-class, such as `\"hover\"`, or leave the argument out.";
+    }
+    @if string.slice($name, 1, 1) == ":" {
+      @error "`#{meta.inspect($pseudo)}` is not a valid $pseudo for `pseudoSelector`: the colon is added for you, so this writes `#{list.nth($elements, 1)}:#{$name}`, which is a pseudo-element that does not exist and which both Chrome and Firefox drop. Pass `#{string.slice($name, 2)}`.";
+    }
+    @if string.index($name, ",") {
+      @error "`#{meta.inspect($pseudo)}` is not a valid $pseudo for `pseudoSelector`: a comma in it adds a selector of its own, so this would style everything after the comma as well, not only the selectors it was given. Pass one pseudo-class name.";
+    }
+  }
+
   $list: ();
   @each $element in $elements {
-    $element: if($pseudo, $element + ":" + $pseudo, $element);
-    $list: list.append($list, $element, comma);
+    @if $pseudo == null {
+      $list: list.append($list, $element, comma);
+    } @else {
+      $list: list.append($list, $element + ":" + $pseudo, comma);
+    }
   }
   @return $list;
 }

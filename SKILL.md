@@ -598,6 +598,11 @@ a dropped declaration rather than an error.
 - `em`, `%` and the viewport units are refused rather than guessed at: they are measured against the element's own font size, its parent and the window, none of which Sass can know. `rem` is converted against a 16px root, the same assumption `remify` and `convertToEm` make, so it is wrong for a page that sets another root size.
 - One message used to serve three different faults and was only right about the first, so `pixelify(10deg)` was told that `deg` is measured against the element's own font size and `pixelify(2PX)` that `PX` is. It now says which it is: a unit that is not a length, one whose size only the browser knows, or one this function would convert if the case matched. Sass reads a unit case-sensitively, so `2PX + 1px` fails in plain Sass too, and converting it here would make this function disagree with every other piece of Sass arithmetic.
 
+**`pseudoSelector`**
+
+- It had no checks at all until 4.0.0, and each of the three ways to get it wrong was silent in the stylesheet. Measured in Chrome 152 and Firefox 156 by reading the parsed rules back: a colon written in front of the name gave `button::hover`, a pseudo-element that does not exist, and both engines dropped the whole rule; an empty name gave `button:` and was dropped the same way; and a comma in the name gave `button:hover, .x`, which both engines kept and which styled every `.x` on the page, so one argument reached past the selectors it was given.
+- `all-buttons` and `all-text-inputs` both pick the pseudo from a fixed list before calling this, so neither mixin was ever affected; the guard was missing only from the function a user calls directly.
+
 **`shorthandProperty`**
 
 - Until 4.0.0 only a fifth value was checked. An empty list ended the build with Sass's own "Function finished without @return", and a map was read as its keys and values in turn, so `(a: 1, b: 2)` came out as `a 1 b 2 a 1 b 2`. Both raise now.
@@ -691,7 +696,7 @@ and camelCase is what tells them apart from the kebab-case mixins above.
 | `isTime($value)` | Returns the value if every part of it is a time in s or ms, and errors otherwise. |
 | `mapDeepGet($map, $keys...)` | Reads a value out of a nested map by following a chain of keys, and raises when a key is not there. |
 | `pixelify($value)` | Returns the value in pixels: a unitless number takes a px, and a length in another unit is converted. |
-| `pseudoSelector($elements, $pseudo: null)` | Appends a pseudo-class to every selector in a list. |
+| `pseudoSelector($elements, $pseudo: null)` | Appends a pseudo-class to every selector in a list, and refuses a name that would write a selector the browser drops. |
 | `remify($value)` | Converts a pixel length to rem, against a 16px root. |
 | `shade($color, $percentage)` | Mixes a colour towards black by a percentage. |
 | `shorthandProperty($value)` | Expands one to four values into the four-value CSS shorthand order. |
