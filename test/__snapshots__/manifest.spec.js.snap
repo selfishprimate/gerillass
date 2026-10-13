@@ -3350,9 +3350,27 @@ exports[`Manifest examples truncate: .a { @include truncate; } 1`] = `
 }"
 `;
 
+exports[`Manifest examples validateBreakpoint: .a { max-width: validateBreakpoint(none); } 1`] = `
+".a {
+  max-width: none;
+}"
+`;
+
+exports[`Manifest examples validateBreakpoint: .a { width: validateBreakpoint("600px"); } 1`] = `
+".a {
+  width: 600px;
+}"
+`;
+
 exports[`Manifest examples validateBreakpoint: .a { width: validateBreakpoint("medium"); } 1`] = `
 ".a {
   width: 768px;
+}"
+`;
+
+exports[`Manifest examples validateBreakpoint: .a { width: validateBreakpoint(min(100%, 40rem)); } 1`] = `
+".a {
+  width: min(100%, 40rem);
 }"
 `;
 

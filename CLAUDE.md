@@ -1106,7 +1106,16 @@ Two pieces of work are open:
   `scss/internal/_words.scss`, so a quoted `calc(1rem + 2px)` stays one value,
   and refusing a value that is itself a list, which wrote six; a CSS-wide
   keyword is deliberately still repeated, since the four longhands `position`
-  writes from it are kept where the shorthand is not,
+  writes from it are kept where the shorthand is not, and `validateBreakpoint`
+  returning what it was given without its quotes, which a condition
+  interpolates away and a declaration does not, so `width: "600px"` was
+  dropped, and refusing a colour, a boolean, a number no width can be through
+  the shared `isConditionValue`, an empty string, which a `string.index` of an
+  empty needle had called a digit, and a map or an empty list, which came back
+  untouched and then failed with Sass's own message; the keys stay
+  case-sensitive, since reading them in any case made `breakpoint(min, MEDIUM)`
+  write a query that never matches, `breakpoint` calling `conditionWidth` for
+  its refusal alone and testing `map.has-key` itself,
   all on
   `docs-examples-review`;
   and the demos and prose

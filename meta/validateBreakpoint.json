@@ -6,15 +6,30 @@
       "name": "$value",
       "accepts": [
         "a key from $map-for-breakpoints",
-        "a length, a percentage or a CSS function such as var() or min(), returned as it is"
+        "a length, a percentage or a CSS function such as var() or min(), returned without its quotes"
       ]
     }
   ],
   "examples": [
-    ".a { width: validateBreakpoint(\"medium\"); }"
+    ".a { width: validateBreakpoint(\"medium\"); }",
+    ".a { width: validateBreakpoint(\"600px\"); }",
+    ".a { max-width: validateBreakpoint(none); }",
+    ".a { width: validateBreakpoint(min(100%, 40rem)); }"
   ],
   "rejects": [
     ".a { width: validateBreakpoint(\"huge\"); }",
-    ".a { width: validateBreakpoint(\"small\" \"medium\"); }"
+    ".a { width: validateBreakpoint(\"small\" \"medium\"); }",
+    ".a { width: validateBreakpoint(\"\"); }",
+    ".a { width: validateBreakpoint(()); }",
+    ".a { width: validateBreakpoint((a: 1)); }",
+    ".a { width: validateBreakpoint(red); }",
+    ".a { width: validateBreakpoint(true); }",
+    ".a { width: validateBreakpoint(10deg); }",
+    ".a { width: validateBreakpoint(600); }"
+  ],
+  "caveats": [
+    "What it returns carries no quotes since 4.0.0. A condition interpolates them away, so `breakpoint(min, \"600px\")` always worked, but a declaration does not: `width: validateBreakpoint(\"600px\")` wrote `width: \"600px\"`, which Chrome 152 and Firefox 156 both drop.",
+    "The keys are case-sensitive, so `MEDIUM` raises with the key list rather than resolving. Reading them in any case was written and taken out: `breakpoint` calls `conditionWidth` for the refusal, throws the resolved width away and tests `map.has-key` itself, so a case-insensitive lookup here made `breakpoint(min, MEDIUM)` compile to `@media (min-width: MEDIUM)`, which never matches.",
+    "A negative length still passes, because `isConditionValue` keeps it for conditions, where `(min-width: -600px)` is valid and simply matches every width. `width: -600px` is dropped, so a declaration wants a check of its own."
   ]
 }

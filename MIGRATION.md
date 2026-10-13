@@ -3472,6 +3472,61 @@ The paren-aware split lives in `scss/internal/_words.scss` as
 `topLevelWordsOf`, beside `wordsOf`. `wordsOf` itself is unchanged: its twelve
 callers check keyword grammars where a parenthesis does not appear.
 
+---
+
+## Change: `validateBreakpoint` returns no quotes, and refuses what no width can be
+
+**What it returns is unquoted now.** A condition interpolates the quotes away,
+so `breakpoint(min, "600px")` has always written `(min-width: 600px)`. A
+declaration does not interpolate, and that is where the quotes showed:
+
+```scss
+.card { width: validateBreakpoint("600px"); }
+// 3.x: width: "600px", which Chrome 152 and Firefox 156 both drop
+```
+
+Every query the condition mixins write is unchanged; 18 of the swept calls
+changed, all of them a quoted value in a declaration, and all of them from CSS
+both engines drop to CSS both keep.
+
+**Six shapes now raise**, and each compiled into a declaration the browsers
+drop, or into Sass's own error from a value this function had handed back:
+
+| Call | 3.x | 4.0.0 |
+|---|---|---|
+| `validateBreakpoint(600)` | `width: 600` | refused, a number no width can be |
+| `validateBreakpoint(10deg)` | `width: 10deg` | the same message |
+| `validateBreakpoint(red)` | `width: red` | refused, a colour is not a width |
+| `validateBreakpoint(true)` | `width: true` | refused |
+| `validateBreakpoint("")` | `width: ""` | refused as an empty string |
+| `validateBreakpoint(())`, `((a: 1))` | `() isn't a valid CSS value` | refused by name |
+
+The empty string was a bug rather than an omission: the test for a value that
+starts like a number asked `string.index("0123456789.+-", "")`, and Sass answers
+`1` for an empty needle, so an empty string looked like a digit.
+
+A number is checked through the same `isConditionValue` the condition mixins
+use, so a length, a percentage and a unitless `0` stay accepted. `0` matters:
+it is `$map-for-breakpoints`'s own `xsmall`.
+
+**The keys stay case-sensitive**, and `MEDIUM` still raises with the key list.
+Reading them in any case was written and then taken out, because `breakpoint`
+calls `conditionWidth` only for its refusal, throws the resolved width away and
+tests `map.has-key` itself: with a case-insensitive lookup here,
+`breakpoint(min, MEDIUM)` compiled to `@media (min-width: MEDIUM)`, which never
+matches, where it used to raise. Unlike everything above, a wrong case was
+never a silent failure.
+
+Measured on 167 compiled calls through the function, a declaration built from
+it, `breakpoint` and `container-query`, before and after: 118 identical, 18
+unquoted, 24 newly refused, 7 the same refusal with a clearer message, and
+none that started working. Every changed declaration was tested in Chrome 152
+and Firefox 156, which agreed on all 27 rows. Safari was not run.
+
+A negative length still passes, which is the one case left: `(min-width:
+-600px)` is valid and simply matches every width, so `isConditionValue` keeps
+it, while `width: -600px` is dropped.
+
 
 ---
 

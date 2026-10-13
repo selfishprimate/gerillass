@@ -4,6 +4,7 @@
 @use "sass:map";
 @use "sass:meta";
 @use "sass:string";
+@use "../internal/is-condition-value" as *;
 @use "../maps/map-for-breakpoints" as *;
 
 // Returns the width of a key from $map-for-breakpoints, and anything else as it
@@ -12,9 +13,36 @@
 //
 // What it refuses is what cannot be a breakpoint anywhere. A word that is not a
 // key used to come back unchanged, so `breakpoint(min, huge)` compiled to
-// `@media (min-width: huge)`, which never matches, without a word; the keys are
-// case-sensitive, so `"MEDIUM"` did the same. A list used to give its first
-// item, because the loop here returned on its first pass.
+// `@media (min-width: huge)`, which never matches, without a word. A list used
+// to give its first item, because the loop here returned on its first pass.
+//
+// The keys stay case-sensitive, and that is a decision rather than an
+// oversight. Reading them in any case was written and then taken out: unlike
+// every other fault below it is not silent, since `MEDIUM` raises with the key
+// list in the message, and `breakpoint` does not use what `conditionWidth`
+// resolves. It calls it for the refusal, throws the width away and tests
+// `map.has-key` itself, so with a case-insensitive lookup here
+// `breakpoint(min, MEDIUM)` compiled to `@media (min-width: MEDIUM)`, which
+// never matches, where it used to raise. That is `breakpoint`'s to fix first.
+//
+// Four shapes did go through silently until 4.0.0, each measured in Chrome 152
+// and Firefox 156, which agreed on every one:
+//
+// - **a quoted value kept its quotes**, so `width: validateBreakpoint("600px")`
+//   wrote `width: "600px"`, which both engines drop. The quotes only disappear
+//   in a condition, because a condition interpolates; a declaration does not.
+//   What it returns is unquoted now, and the queries are unchanged;
+// - **an empty string** came back as `""`. The test for a value that starts
+//   like a number asked `string.index("0123456789.+-", "")`, and Sass answers
+//   `1` for an empty needle, so an empty string looked like a digit;
+// - **a map and an empty list** came back untouched and then stopped the build
+//   with Sass's own `() isn't a valid CSS value`, from a value this function
+//   had handed back;
+// - **a colour, a boolean and a number that is no width.** `width: red`,
+//   `width: true`, `width: 10deg` and `width: 600` were all dropped. A number
+//   is checked through the same `isConditionValue` the condition mixins use, so
+//   a length, a percentage and a unitless `0` stay accepted; `0` matters
+//   because it is `$map-for-breakpoints`'s own `xsmall`.
 //
 // null comes back as null, as it always did, so `width: validateBreakpoint(null)`
 // still leaves the declaration out. The condition mixins refuse it themselves.
@@ -25,17 +53,50 @@
   @if map.has-key($map-for-breakpoints, $value) {
     @return map.get($map-for-breakpoints, $value);
   }
+  @if meta.type-of($value) == "map" {
+    @error "`#{meta.inspect($value)}` is not a breakpoint: a map is not a width. $map-for-breakpoints has #{map.keys($map-for-breakpoints)}; pass one of those, or a length such as `600px`.";
+  }
   @if list.length($value) > 1 {
     @error "`#{meta.inspect($value)}` is not a breakpoint. Pass one key from $map-for-breakpoints or one length; a range is written with `between`, such as `breakpoint(between, small large)`.";
   }
-  // A quoted length such as "600px" starts with a digit, a dot or a sign, and a
-  // CSS function holds a parenthesis. Of the words, the sizing keywords stay
-  // accepted, because `max-width: validateBreakpoint(none)` is valid CSS; a
-  // condition mixin still refuses them through conditionWidth. Anything else is
-  // a word that cannot be a breakpoint.
-  $sizing-keywords: "auto" "none" "min-content" "max-content" "fit-content" "stretch" "inherit" "initial" "unset" "revert" "revert-layer";
-  @if meta.type-of($value) == "string" and not list.index($sizing-keywords, string.to-lower-case($value)) and not string.index($value, "(") and not string.index("0123456789.+-", string.slice($value, 1, 1)) {
-    @error "`#{$value}` is not a breakpoint. $map-for-breakpoints has #{map.keys($map-for-breakpoints)}; pass one of those, or a length such as `600px`.";
+  @if list.length($value) == 0 {
+    @error "`validateBreakpoint` was given an empty list. Pass one key from $map-for-breakpoints or one length, such as `600px`.";
   }
-  @return $value;
+  @if meta.type-of($value) == "color" {
+    @error "`#{meta.inspect($value)}` is not a breakpoint: a colour is not a width. $map-for-breakpoints has #{map.keys($map-for-breakpoints)}; pass one of those, or a length such as `600px`.";
+  }
+  @if meta.type-of($value) == "bool" {
+    @error "`#{meta.inspect($value)}` is not a breakpoint: true and false are not widths. $map-for-breakpoints has #{map.keys($map-for-breakpoints)}; pass one of those, or a length such as `600px`.";
+  }
+  @if meta.type-of($value) == "number" and not isConditionValue($value, "length-percentage") {
+    @error "`#{meta.inspect($value)}` is not a breakpoint: it is a number no width can be. A browser drops the declaration. Pass a length such as `600px`, a percentage, or a key from $map-for-breakpoints.";
+  }
+
+  @if meta.type-of($value) != "string" {
+    @return $value;
+  }
+
+  // Returned without its quotes: a condition interpolates them away, a
+  // declaration does not, and `width: "600px"` is dropped.
+  $text: string.unquote($value);
+  @if string.length($text) == 0 {
+    @error "`validateBreakpoint` was given an empty string. Pass one key from $map-for-breakpoints or one length, such as `600px`.";
+  }
+  // Of the words, the sizing keywords stay accepted, because
+  // `max-width: validateBreakpoint(none)` is valid CSS; a condition mixin still
+  // refuses them through conditionWidth. A CSS function holds a parenthesis and
+  // is taken on trust, since `var()` and `env()` resolve to anything.
+  $sizing-keywords: "auto" "none" "min-content" "max-content" "fit-content" "stretch" "inherit" "initial" "unset" "revert" "revert-layer";
+  @if list.index($sizing-keywords, string.to-lower-case($text)) or string.index($text, "(") {
+    @return $text;
+  }
+  // What is left either starts like a number, and is checked as one, or is a
+  // word that cannot be a breakpoint.
+  @if string.index("0123456789.+-", string.slice($text, 1, 1)) {
+    @if not isConditionValue($text, "length-percentage") {
+      @error "`#{$text}` is not a breakpoint: it is a number no width can be. A browser drops the declaration. Pass a length such as `600px`, a percentage, or a key from $map-for-breakpoints.";
+    }
+    @return $text;
+  }
+  @error "`#{$text}` is not a breakpoint. $map-for-breakpoints has #{map.keys($map-for-breakpoints)}; pass one of those, or a length such as `600px`.";
 }

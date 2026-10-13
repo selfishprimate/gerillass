@@ -45,3 +45,33 @@
     }
   }
 }
+
+// The 4.0.0 fixes. Each value below compiled into a declaration that Chrome 152
+// and Firefox 156 both drop, and the quoted ones are the reason this is a spec
+// rather than a snapshot: a condition interpolates the quotes away, so they only
+// ever showed up in a declaration.
+@include describe('validateBreakpoint() returns') {
+  @include it('A quoted value without its quotes, so a declaration can use it.') {
+    @include assert {
+      @include output {
+        .a { width: validateBreakpoint("600px"); }
+        .b { width: validateBreakpoint("50%"); }
+        .c { width: validateBreakpoint("auto"); }
+        .d { width: validateBreakpoint("var(--w)"); }
+        .e { width: validateBreakpoint("40em"); }
+      }
+      @include expect {
+        .a { width: 600px; }
+        .b { width: 50%; }
+        .c { width: auto; }
+        .d { width: var(--w); }
+        .e { width: 40em; }
+      }
+    }
+  }
+
+  @include it('A zero untouched, which is $map-for-breakpoints own xsmall.') {
+    @include assert-equal(validateBreakpoint(xsmall), 0);
+    @include assert-equal(validateBreakpoint(0), 0);
+  }
+}

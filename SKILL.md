@@ -625,6 +625,12 @@ a dropped declaration rather than an error.
 
 - A unitless $percentage is read as that many per cent, which is what color.mix's own deprecation warning asks for. It is not a fraction: tint($c, 0.5) is half a per cent, not half.
 
+**`validateBreakpoint`**
+
+- What it returns carries no quotes since 4.0.0. A condition interpolates them away, so `breakpoint(min, "600px")` always worked, but a declaration does not: `width: validateBreakpoint("600px")` wrote `width: "600px"`, which Chrome 152 and Firefox 156 both drop.
+- The keys are case-sensitive, so `MEDIUM` raises with the key list rather than resolving. Reading them in any case was written and taken out: `breakpoint` calls `conditionWidth` for the refusal, throws the resolved width away and tests `map.has-key` itself, so a case-insensitive lookup here made `breakpoint(min, MEDIUM)` compile to `@media (min-width: MEDIUM)`, which never matches.
+- A negative length still passes, because `isConditionValue` keeps it for conditions, where `(min-width: -600px)` is valid and simply matches every width. `width: -600px` is dropped, so a declaration wants a check of its own.
+
 **`validateScissors`**
 
 - Measured in Chrome 152, Firefox 156 and Safari 26.6.2: an octagon written with `var(--c)` set to 20px, and ones written with `calc(10px + 10px)`, `clamp(4px, 20px, 30px)` and `min(20px, 50px)`, each computed to exactly the polygon the literal `20px` gives and rendered the same. They were refused until 4.0.0, which was a false refusal.
