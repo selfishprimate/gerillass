@@ -1905,6 +1905,12 @@ exports[`Manifest examples isTime: .a { transition-duration: isTime((0.2s, 0.4s)
 }"
 `;
 
+exports[`Manifest examples isTime: .a { transition-duration: isTime(2S); } 1`] = `
+".a {
+  transition-duration: 2S;
+}"
+`;
+
 exports[`Manifest examples loadify: .a { @include loadify(-0.25s); } 1`] = `
 ".a {
   animation: loadify 0.5s -0.25s backwards;

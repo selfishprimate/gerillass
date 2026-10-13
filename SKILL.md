@@ -584,6 +584,7 @@ a dropped declaration rather than an error.
 **`isTime`**
 
 - A unitless `0` is not a time and is refused since 4.0.0. Measured in Chrome 152, Firefox 156 and Safari 26.6.2: `animation-delay: 0` and `transition-duration: 0` are dropped, and in the `animation` shorthand a bare `0` is read as the iteration count, so `loadify 0.5s 0 backwards` never runs. Write `0s`.
+- The unit is read in any case since 4.0.0, and a time built by interpolation is answered rather than refused. `#{$n}s` reaches the check as an unquoted string, which is the trap the length and colour checks were fixed for in 2.3.1 and times were never swept for. Measured in Chrome 152 and Firefox 156 with each written after a working `5s`: `animation-duration: 2S` and `300MS` are kept and normalised to lower case. A quoted `"0.2s"` stays refused, since written into a duration it is text the browser drops.
 
 **`mapDeepGet`**
 

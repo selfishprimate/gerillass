@@ -3350,7 +3350,9 @@
           "accepts": [
             "a duration such as 0.2s or 300ms",
             "a list of them, as transition-duration takes",
-            "a var(), env() or calc()"
+            "a var(), env() or calc()",
+            "a unit in any case, so 2S and 300MS work",
+            "a time built by interpolation, such as #{$n}s, which arrives as an unquoted string"
           ]
         }
       ],
@@ -3358,12 +3360,14 @@
       "signature": "isTime($value)",
       "summary": "Returns the value if every part of it is a time in s or ms, and errors otherwise.",
       "caveats": [
-        "A unitless `0` is not a time and is refused since 4.0.0. Measured in Chrome 152, Firefox 156 and Safari 26.6.2: `animation-delay: 0` and `transition-duration: 0` are dropped, and in the `animation` shorthand a bare `0` is read as the iteration count, so `loadify 0.5s 0 backwards` never runs. Write `0s`."
+        "A unitless `0` is not a time and is refused since 4.0.0. Measured in Chrome 152, Firefox 156 and Safari 26.6.2: `animation-delay: 0` and `transition-duration: 0` are dropped, and in the `animation` shorthand a bare `0` is read as the iteration count, so `loadify 0.5s 0 backwards` never runs. Write `0s`.",
+        "The unit is read in any case since 4.0.0, and a time built by interpolation is answered rather than refused. `#{$n}s` reaches the check as an unquoted string, which is the trap the length and colour checks were fixed for in 2.3.1 and times were never swept for. Measured in Chrome 152 and Firefox 156 with each written after a working `5s`: `animation-duration: 2S` and `300MS` are kept and normalised to lower case. A quoted `\"0.2s\"` stays refused, since written into a duration it is text the browser drops."
       ],
       "examples": [
         ".a { animation-duration: isTime(0.4s); }",
         ".a { transition-duration: isTime((0.2s, 0.4s)); }",
-        ".a { animation-duration: isTime(var(--duration)); }"
+        ".a { animation-duration: isTime(var(--duration)); }",
+        ".a { transition-duration: isTime(2S); }"
       ],
       "rejects": [
         ".a { animation-duration: isTime(400px); }",

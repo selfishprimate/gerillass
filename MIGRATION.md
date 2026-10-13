@@ -145,6 +145,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `isColor` returns the value it was given, and names what it refuses | breaking only for a space-separated list |
 | `isGutter` answers by what a browser keeps, not by a parenthesis | breaking, silent, for a guard built on it |
 | `isNumber` takes a list, as `isColor` and `isTime` do | not breaking |
+| `isTime` reads its unit in any case, and takes an interpolated time | not breaking |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -3201,6 +3202,34 @@ can. `isGutter` is the guard for the other question.
 
 Compiled across 28 values: 20 identical, five lists that now work, three where
 the message names the item instead of the list, and none newly refused.
+
+
+## Not breaking: `isTime` reads a unit in any case, and an interpolated time
+
+Two refusals left over after the rest of this function was reworked earlier in
+4.0.0.
+
+```scss
+isTime(2S)        // 3.x: Error: `S` is not a time unit
+isTime(#{$n}s)    // 3.x: Error: it is not a number
+```
+
+The unit was compared as written, and CSS reads its own in any case: measured
+in Chrome 152 and Firefox 156, each written after a working `5s`,
+`animation-duration: 2S` and `300MS` are both kept and normalised to lower
+case. And a time built by interpolation reaches the check as an unquoted string
+rather than a number, which is the trap the length and colour checks were fixed
+for in 2.3.1; times were never swept for it.
+
+A quoted `"0.2s"` stays refused, which is the distinction the second fix had to
+keep: written into a duration a quoted string is text the browser drops.
+
+The parsing comes from the shared `isConditionValue`, which gained a `time`
+kind. That is additive, and the sweep proves it: compiled across 164 calls
+through `isTime`, `loadify`, `reveal`, `breakpoint`, `container-query`,
+`screen-agent`, `sizer`, `validateBreakpoint` and `font-face`, 152 are
+identical and the 12 that changed are the four new values across the three
+members that take a time. Nothing newly refused.
 
 
 ---

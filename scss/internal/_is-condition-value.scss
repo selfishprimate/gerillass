@@ -21,6 +21,14 @@ $-resolution-units: "dpi" "dpcm" "dppx" "x";
 // rule and `oblique 10`, unitless, was dropped.
 $-angle-units: "deg" "grad" "rad" "turn";
 
+// Times, for a duration or a delay. Measured in Chrome 152 and Firefox 156
+// with each declaration written after a working `5s`: `animation-duration: 2S`
+// and `300MS` are both kept and normalised to lower case, so the unit is read
+// in any case here as every other unit above is. A unitless number is never a
+// time, not even `0`; `scss/internal/_time-problem.scss` carries that
+// measurement, since it is the file that explains it.
+$-time-units: "s" "ms";
+
 // True for a value a @media or @container condition can match: a number in one
 // of the units above, a calculation, or either written as a quoted string, which
 // Sass writes into a condition without its quotes, so `breakpoint(min, "600px")`
@@ -41,6 +49,8 @@ $-angle-units: "deg" "grad" "rad" "turn";
     $units: list.append($-length-units, "%");
   } @else if $kind == "angle" {
     $units: $-angle-units;
+  } @else if $kind == "time" {
+    $units: $-time-units;
   }
 
   @if meta.type-of($value) == "calculation" {
@@ -81,6 +91,10 @@ $-angle-units: "deg" "grad" "rad" "turn";
     }
   }
   @if $digits == 0 {
+    @return false;
+  }
+  @if $kind == "time" and $unit-start == null {
+    // A time always needs its unit, `0` included.
     @return false;
   }
   @if $unit-start == null {

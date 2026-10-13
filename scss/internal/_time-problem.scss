@@ -3,6 +3,8 @@
 @use "sass:list";
 @use "sass:math";
 @use "sass:meta";
+@use "sass:string";
+@use "is-condition-value" as *;
 @use "is-css-function" as *;
 
 // Why a value is not a time, or null when it is one. `isTime` reads it for its
@@ -22,10 +24,24 @@
   @if meta.type-of($item) == "calculation" or isCssFunction($item, "var" "env") {
     @return null;
   }
+  // A time built by interpolation, `#{$n}s`, reaches here as an unquoted
+  // string rather than a number, which is the trap the length and colour
+  // checks were fixed for in 2.3.1 and times were never swept for. A quoted
+  // `"0.2s"` stays refused: written into a duration it is text, which the
+  // browser drops.
+  @if meta.type-of($item) == "string" {
+    @if string.slice(meta.inspect($item), 1, 1) != "\"" and isConditionValue($item, "time") {
+      @return null;
+    }
+    @return "it is not a number";
+  }
   @if meta.type-of($item) != "number" {
     @return "it is not a number";
   }
-  @if list.index("s" "ms", math.unit($item)) == null {
+  // The unit is read in any case, as CSS reads its own: measured in Chrome 152
+  // and Firefox 156, `animation-duration: 2S` and `300MS` are kept and
+  // normalised to lower case.
+  @if list.index("s" "ms", string.to-lower-case(math.unit($item))) == null {
     @if math.is-unitless($item) {
       @if $item == 0 {
         @return "a time needs its unit, and a bare `0` is read as the iteration count in the `animation` shorthand, where it stops the animation from running at all. Write `0s`";

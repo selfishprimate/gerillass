@@ -15,14 +15,14 @@ Returns the value if every part of it is a time in s or ms, and errors otherwise
 
 <Hint kind="warning">
 
-**Changed in Gerillass 4.0.0.** A list of times is answered rather than refused, a `var()` or a `calc()` passes through, and a unitless `0` is refused. The section below has the measurements.
+**Changed in Gerillass 4.0.0.** A list of times is answered rather than refused, a `var()` or a `calc()` passes through, and a unitless `0` is refused. The unit is also read in any case, and a time built by interpolation is answered. The section below has the measurements.
 
 </Hint>
 
 ## Arguments
 
 <Arguments of="isTime">
-  <Argument name="$value" type="time | list">Accepts a duration such as <code>0.2s</code> or <code>300ms</code>, a list of them, as <code>transition-duration</code> takes, or a <code>var()</code>, <code>env()</code> or <code>calc()</code>, which the browser resolves.</Argument>
+  <Argument name="$value" type="time | list">Accepts a duration such as <code>0.2s</code> or <code>300ms</code>, a list of them, as <code>transition-duration</code> takes, or a <code>var()</code>, <code>env()</code> or <code>calc()</code>, which the browser resolves. The unit is read in any case, and a time built by interpolation such as <code>#{$n}s</code> is answered too.</Argument>
 </Arguments>
 
 ## Examples
@@ -82,6 +82,25 @@ Error: `0` is not a valid time: a time needs its unit, and a bare `0` is read as
 <Hint kind="danger">
 
 **A bare `0` is not a time in any browser.** `transition-duration: 0`, `animation-duration: 0` and `animation-delay: 0` are each dropped, and the expensive one is the shorthand: `animation: fade 0.5s 0 backwards` is kept, with the bare number read as the iteration count, so the animation never runs and nothing warns. `0s` does what was meant.
+
+</Hint>
+
+<Example caption="The unit is read in any case, and a time built by interpolation is answered. Both were refused until 4.0.0: the first because the unit was compared as written, the second because an interpolated value reaches the check as a string rather than a number.">
+```scss
+$speed: 0.4;
+
+.panel {
+  transition-duration: isTime(2S);
+  animation-duration: isTime(#{$speed}s);
+}
+```
+</Example>
+
+<Hint kind="info">
+
+**A quoted time stays refused.** `isTime("0.2s")` raises, because written into a duration a quoted string is text and the browser drops it. That is the difference the interpolation fix had to keep: `#{$speed}s` is an unquoted string and works, `"0.2s"` is a quoted one and does not.
+
+Measured in Chrome 152 and Firefox 156, each written after a working `5s`: `animation-duration: 2S` and `300MS` are kept and normalised to lower case, and `0.2s` from interpolation is kept as itself.
 
 </Hint>
 

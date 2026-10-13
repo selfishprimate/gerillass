@@ -4,6 +4,7 @@
 // takes one: the refusals it now writes are covered by the `rejects` entries in
 // `meta/isTime.json`, and these are the forms that must keep compiling.
 @use 'true' as *;
+@use 'sass:meta';
 @use '../../scss/utilities/is-time' as *;
 
 @include describe('isTime()') {
@@ -25,5 +26,24 @@
 
   @include it('Answers a calculation, which Sass has already reduced.') {
     @include assert-equal(isTime(calc(0.2s + 0.3s)), 0.5s);
+  }
+
+  // The unit is read in any case, as CSS reads its own. Measured in Chrome 152
+  // and Firefox 156 with each written after a working `5s`:
+  // `animation-duration: 2S` and `300MS` are kept and normalised to lower case.
+  @include it('Reads the unit in any case.') {
+    @include assert-equal(isTime(2S), 2S);
+    @include assert-equal(isTime(300MS), 300MS);
+  }
+
+  // A time built by interpolation reaches here as an unquoted string rather
+  // than a number, the trap the length and colour checks were fixed for in
+  // 2.3.1 and times were never swept for. A quoted one stays refused, since
+  // written into a duration it is text the browser drops, and a bare `0`
+  // stays refused with it even interpolated.
+  @include it('Answers a time built by interpolation.') {
+    $n: 0.2;
+    @include assert-equal(meta.inspect(isTime(#{$n}s)), '0.2s');
+    @include assert-equal(meta.inspect(isTime(#{0}s)), '0s');
   }
 }

@@ -1078,7 +1078,9 @@ Two pieces of work are open:
   comma list, and `isGutter` answering from the shared `lengthProblem` rather
   than by looking for a parenthesis, which called an interpolated length no
   length and a quoted `"var(--gap)"` one, and `isNumber` taking a list, the
-  last of the three type guards that refused one,
+  last of the three type guards that refused one, and `isTime` reading its unit
+  in any case and answering a time built by interpolation, through a `time`
+  kind added to the shared `isConditionValue`,
   all on
   `docs-examples-review`;
   and the demos and prose
