@@ -1,10 +1,79 @@
 @charset "UTF-8";
 
+@use "sass:list";
 @use "sass:map";
+@use "sass:meta";
+
+// Reads a value out of a nested map by following a chain of keys.
+//
+// Every way of getting it wrong used to fail badly, and one of them did not
+// fail at all:
+//
+// - **a key that is not there returned `null`**, so `padding: mapDeepGet($t,
+//   card, padnig)` wrote no declaration and said nothing. A deep read is where
+//   a typo is most likely, since there are several keys to get right, and it
+//   is the one place the mistake is invisible;
+// - **a key that is not there part of the way down** fell into `map.get(null,
+//   …)` and stopped the build with Sass's own `$map: null is not a map`, which
+//   names neither this function, nor the key that was missing, nor the one it
+//   was looking for next;
+// - **one key too many** did the same with the value it had already reached,
+//   `$map: 16px is not a map`;
+// - **a `$map` that is not a map** likewise, `$map: red is not a map`.
+//
+// A missing key now raises and names the path, the key and the keys that are
+// there. `$default` is the way to ask for the old answer, and it is deliberate
+// that it has to be asked for: `map.get` returning null is useful when a
+// caller writes the fallback, and silent when it forgets.
+@function -is-map($value) {
+  @return meta.type-of($value) == "map" or (meta.type-of($value) == "list" and list.length($value) == 0);
+}
 
 @function mapDeepGet($map, $keys...) {
-  @each $key in $keys {
-    $map: map.get($map, $key);
+  $keywords: meta.keywords($keys);
+  @each $name, $value in $keywords {
+    @if $name != "default" {
+      @error "`$#{$name}` is not an argument of `mapDeepGet`. It takes a map, then one key per level, and `$default` for the value to answer when a key is not there.";
+    }
   }
-  @return $map;
+  $has-default: map.has-key($keywords, "default");
+  $default: map.get($keywords, "default");
+
+  // `()` is an empty map and an empty list at once, and Sass types it as a
+  // list, so it is let through rather than refused: `map.get((), a)` works.
+  @if not -is-map($map) {
+    @error "`#{meta.inspect($map)}` is not a valid $map for `mapDeepGet`. Pass a map, such as `(card: (padding: 16px))`.";
+  }
+
+  $here: $map;
+  $trail: "";
+  @each $key in $keys {
+    @if not -is-map($here) {
+      @error "`mapDeepGet` cannot read `#{meta.inspect($key)}` from `#{$trail}`, which is `#{meta.inspect($here)}` rather than a map. That is one key more than the map goes deep.";
+    }
+    @if not map.has-key($here, $key) {
+      @if $has-default {
+        @return $default;
+      }
+      $where: "the map";
+      @if $trail != "" {
+        $where: "`#{$trail}`";
+      }
+      // An empty list interpolates to nothing a declaration can hold, so the
+      // keys are only named when there are some: `map.keys(())` raised Sass's
+      // own "() isn't a valid CSS value" from inside this very message.
+      $has: " It has no keys at all.";
+      @if list.length(map.keys($here)) > 0 {
+        $has: " Its keys are: #{map.keys($here)}.";
+      }
+      @error "`mapDeepGet` found no key `#{meta.inspect($key)}` in #{$where}.#{$has} Pass `$default` if a missing key should answer rather than stop the build.";
+    }
+    $here: map.get($here, $key);
+    @if $trail == "" {
+      $trail: "#{$key}";
+    } @else {
+      $trail: "#{$trail}.#{$key}";
+    }
+  }
+  @return $here;
 }

@@ -588,6 +588,8 @@ a dropped declaration rather than an error.
 
 **`mapDeepGet`**
 
+- A key that is not there raised nothing until 4.0.0: it answered `null`, so `padding: mapDeepGet($t, card, padnig)` wrote no declaration and said nothing. A deep read is where a typo is most likely, since there are several keys to get right, and it was the one place the mistake was invisible. It raises now and names the path, the key and the keys that are there; `$default` is the explicit way to ask for the old answer, `$default: null` included.
+- The other three ways to get it wrong all stopped the build with Sass's own message from inside `map.get`, naming neither the function nor the key: a key missing part of the way down gave `$map: null is not a map`, one key too many gave `$map: 16px is not a map`, and a `$map` that is not a map gave `$map: red is not a map`.
 - No map the library ships is nested any more: the phone and tablet maps held one entry per device until 4.0.0 and now hold the screen as two lengths. The function is for a map of your own.
 
 **`pixelify`**
@@ -686,7 +688,7 @@ and camelCase is what tells them apart from the kebab-case mixins above.
 | `isGutter($value)` | True for a value a browser keeps where a length is expected: a number with a unit, a unitless zero, a percentage, a calculation, or a CSS function such as var(). |
 | `isNumber($value)` | Returns the value when every part of it is a number, and raises when one is not. |
 | `isTime($value)` | Returns the value if every part of it is a time in s or ms, and errors otherwise. |
-| `mapDeepGet($map, $keys...)` | Reads a value out of a nested map by following a chain of keys. |
+| `mapDeepGet($map, $keys...)` | Reads a value out of a nested map by following a chain of keys, and raises when a key is not there. |
 | `pixelify($value)` | Returns the value in pixels: a unitless number takes a px, and a length in another unit is converted. |
 | `pseudoSelector($elements, $pseudo: null)` | Appends a pseudo-class to every selector in a list. |
 | `remify($value)` | Converts a pixel length to rem, against a 16px root. |

@@ -22,4 +22,19 @@ $theme: (
   @include it('Returns the inner map when the chain stops short.') {
     @include assert-equal(mapDeepGet($theme, card), (padding: 16px, radius: 8px));
   }
+
+  // A key that is not there raised nothing until 4.0.0: it answered `null`, so
+  // the declaration was simply left out. `$default` is the explicit way to ask
+  // for an answer instead, and it is what the old behaviour becomes.
+  @include it('Answers $default when a key is not there.') {
+    @include assert-equal(mapDeepGet($theme, card, nope, $default: 0), 0);
+    @include assert-equal(mapDeepGet($theme, nope, $default: 4px), 4px);
+    @include assert-equal(mapDeepGet($theme, card, nope, $default: null), null);
+  }
+
+  // $default is only reached when a key is missing, never instead of a value
+  // that is there.
+  @include it('Ignores $default when the key is there.') {
+    @include assert-equal(mapDeepGet($theme, card, radius, $default: 0), 8px);
+  }
 }

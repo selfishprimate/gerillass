@@ -146,6 +146,7 @@ Chrome 152, Firefox 156 and Safari 26.6.2.
 | `isGutter` answers by what a browser keeps, not by a parenthesis | breaking, silent, for a guard built on it |
 | `isNumber` takes a list, as `isColor` and `isTime` do | not breaking |
 | `isTime` reads its unit in any case, and takes an interpolated time | not breaking |
+| `mapDeepGet` raises on a key that is not there | breaking, loud; it used to answer `null` |
 
 The first break stops the build with a message naming both replacements. The
 second compiles and changes where a query stops, so read its section. To find
@@ -3230,6 +3231,43 @@ through `isTime`, `loadify`, `reveal`, `breakpoint`, `container-query`,
 `screen-agent`, `sizer`, `validateBreakpoint` and `font-face`, 152 are
 identical and the 12 that changed are the four new values across the three
 members that take a time. Nothing newly refused.
+
+
+## Break: `mapDeepGet` raises on a key that is not there
+
+It answered `null`, so Sass left the declaration out and nothing said why.
+
+```scss
+.card { padding: mapDeepGet($theme, card, padnig); }
+// 3.x: no padding, no warning, no error
+```
+
+A deep read is exactly where a typo is likely, since there are several keys to
+get right, and it was the one place the mistake was invisible. It now names the
+path it reached, the key it wanted and the keys that are there:
+
+```text
+Error: `mapDeepGet` found no key `padnig` in `card`. Its keys are: padding, radius.
+Pass `$default` if a missing key should answer rather than stop the build.
+```
+
+**`$default` is the old behaviour, asked for explicitly.** A caller that wants a
+missing key to answer rather than raise passes it, and `$default: null` is the
+pre-4.0.0 result exactly.
+
+```scss
+gap: mapDeepGet($theme, card, gap, $default: 4px);
+```
+
+The other three ways to get it wrong stopped the build with Sass's own message
+from inside `map.get`, naming neither the function nor the key: a key missing
+part of the way down gave `$map: null is not a map`, one key too many gave
+`$map: 16px is not a map`, and a `$map` that is not a map gave `$map: red is
+not a map`. All three are the function's own now.
+
+Compiled across 23 calls: five identical, three that the new `$default` makes
+work, six newly refused -- every one of them a missing key that used to answer
+`null` -- nine where the message improved, and no value changed.
 
 
 ---

@@ -1,7 +1,7 @@
 ---
 title: "Map Deep Get"
 page_title: "Map Deep Get Sass Function"
-page_description: "The mapDeepGet Sass function reads a value out of a nested map by following a chain of keys, instead of nesting map.get calls by hand."
+page_description: "The mapDeepGet Sass function reads a value out of a nested map by following a chain of keys, and raises when a key is not there instead of answering null."
 page_keywords: "Gerillass mapDeepGet, Sass mapDeepGet, Sass Functions, SCSS Functions, Sass Utility Functions, Gerillass Utilities"
 ---
 
@@ -9,15 +9,22 @@ page_keywords: "Gerillass mapDeepGet, Sass mapDeepGet, Sass Functions, SCSS Func
 
 <Member name="mapDeepGet">
 
-Reads a value out of a nested map by following a chain of keys.
+Reads a value out of a nested map by following a chain of keys, instead of nesting `map.get` calls by hand. A key that is not there stops the build and names the path, rather than answering `null`.
 
 </Member>
+
+<Hint kind="warning">
+
+**Changed in Gerillass 4.0.0.** A key that is not there used to answer `null`, so a declaration built from it was simply left out and nothing said so. It raises now, and `$default` is the way to ask for the old answer.
+
+</Hint>
 
 ## Arguments
 
 <Arguments of="mapDeepGet">
-  <Argument name="$map" type="map">Accepts a map.</Argument>
-  <Argument name="$keys…" type="string">Accepts one key per level of nesting.</Argument>
+  <Argument name="$map" type="map">A map, or an empty one.</Argument>
+  <Argument name="$keys…" type="string">One key per level of nesting. A key that is not there raises, and the message names the path it got to, the key it wanted and the keys that are there.</Argument>
+  <Argument name="$default" type="value">Optional, and a named argument. The value to answer when a key is not there, instead of raising. Pass <code>$default: null</code> to ask for the pre-4.0.0 answer explicitly.</Argument>
 </Arguments>
 
 ## Examples
@@ -37,6 +44,49 @@ $theme: (
 }
 ```
 </Example>
+
+<Example caption="`$default` is how a key that may not be there is read. It is only reached when the key is missing, never instead of a value that is there.">
+```scss
+$theme: (
+  card: (
+    padding: 16px,
+  ),
+);
+
+.card {
+  padding: mapDeepGet($theme, card, padding, $default: 8px);
+  gap: mapDeepGet($theme, card, gap, $default: 4px);
+}
+```
+</Example>
+
+## What it refuses
+
+A key that is not there. This is the one worth knowing about, because until 4.0.0 it was not a refusal at all: the function answered `null`, Sass left the declaration out, and a typo in a key produced a page missing a value with nothing anywhere to say why. A deep read is exactly where a typo is likely, since there are several keys to get right.
+
+```scss
+$theme: (card: (padding: 16px, radius: 8px));
+
+.card {
+  padding: mapDeepGet($theme, card, padnig);
+}
+```
+```text
+Error: `mapDeepGet` found no key `padnig` in `card`. Its keys are: padding, radius. Pass `$default` if a missing key should answer rather than stop the build.
+```
+
+One key more than the map goes deep, which used to stop the build with Sass's own `$map: 16px is not a map` from inside `map.get`, naming neither this function nor the key.
+
+```scss
+$theme: (card: (padding: 16px));
+
+.card {
+  padding: mapDeepGet($theme, card, padding, extra);
+}
+```
+```text
+Error: `mapDeepGet` cannot read `extra` from `card.padding`, which is `16px` rather than a map. That is one key more than the map goes deep.
+```
 
 <Hint kind="info">
 

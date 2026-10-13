@@ -1080,7 +1080,10 @@ Two pieces of work are open:
   length and a quoted `"var(--gap)"` one, and `isNumber` taking a list, the
   last of the three type guards that refused one, and `isTime` reading its unit
   in any case and answering a time built by interpolation, through a `time`
-  kind added to the shared `isConditionValue`,
+  kind added to the shared `isConditionValue`, and `mapDeepGet` raising on a
+  key that is not there rather than answering `null`, which left the
+  declaration out with nothing to say why, with `$default` as the explicit way
+  to ask for the old answer,
   all on
   `docs-examples-review`;
   and the demos and prose

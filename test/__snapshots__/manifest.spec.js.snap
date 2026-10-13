@@ -2006,6 +2006,12 @@ exports[`Manifest examples long-shadow: .tile { @include long-shadow(hsl(38 92% 
 }"
 `;
 
+exports[`Manifest examples mapDeepGet: $theme: (card: (padding: 16px)); .a { padding: mapDeepGet($theme, card 1`] = `
+".a {
+  padding: 8px;
+}"
+`;
+
 exports[`Manifest examples mapDeepGet: $theme: (card: (padding: 16px, radius: 8px)); .a { padding: mapDeepGet 1`] = `
 ".a {
   padding: 16px;
